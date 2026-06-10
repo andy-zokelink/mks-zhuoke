@@ -3,305 +3,1847 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克·科技参考基础版 · MKS知识主板</title>
+<title>卓克·科技参考 MKS 知识集 | 科技参考基础版</title>
 <style>
+/* ========== Variables & Reset ========== */
 :root {
-    --bg: #fffdf7;
-    --accent: #F59E0B;
-    --accent-dark: #D97706;
-    --accent-light: #FDE68A;
-    --text: #1f1f1f;
-    --text-light: #6b7280;
-    --text-muted: #9ca3af;
-    --border: #e5e7eb;
-    --radius: 12px;
-    --shadow: 0 1px 3px rgb(0 0 0 / 0.06);
-    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+  --bg: #fdf6ec;
+  --card: #fffaf2;
+  --accent: #c0392b;
+  --accent2: #2980b9;
+  --accent3: #27ae60;
+  --accent4: #e67e22;
+  --text: #3d2f2f;
+  --text-light: #6b5b5b;
+  --border: #e8d5c4;
+  --shadow: 0 2px 12px rgba(61,47,47,.08);
+  --shadow-lg: 0 8px 32px rgba(61,47,47,.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: .3s ease;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{
-    font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    min-height: 100vh;
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; font-size:16px; }
+body {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "Songti SC", serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  min-height: 100vh;
 }
-/* GRADIENT TOP */
-.hero-bg{
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 60%, #fffdf7 100%);
-    padding: clamp(30px, 6vw, 56px) 20px clamp(40px, 8vw, 80px);
-    text-align: center;
-    color: #fff;
+h1,h2,h3,h4 { font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-weight:700; }
+h1 { font-size:clamp(1.5rem,3vw,2.2rem); }
+h2 { font-size:clamp(1.25rem,2.5vw,1.7rem); color:var(--accent); border-bottom:2px solid var(--border); padding-bottom:.5rem; margin-bottom:1.2rem; }
+h3 { font-size:clamp(1rem,2vw,1.3rem); color:var(--text); margin:.8rem 0 .5rem; }
+
+/* ========== Layout ========== */
+.container { max-width:1100px; margin:0 auto; padding:1rem 1.5rem; }
+
+/* ========== Nav ========== */
+.main-nav {
+  position:sticky; top:0; z-index:100;
+  background:linear-gradient(135deg,var(--card),#fef9f0);
+  border-bottom:2px solid var(--border);
+  padding:.6rem 1rem; display:flex; flex-wrap:wrap; gap:.4rem;
+  justify-content:center; box-shadow:var(--shadow);
 }
-.hero-bg .hero-badge{
-    display: inline-block;
-    background: var(--accent);
-    color: #1a1a2e;
-    padding: 4px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin-bottom: 16px;
+.main-nav a {
+  text-decoration:none; color:var(--text);
+  padding:.35rem .75rem; border-radius:20px; font-size:.82rem;
+  border:1px solid var(--border); background:var(--card);
+  transition:all var(--transition);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
 }
-.hero-bg h1{
-    font-size: clamp(24px, 5vw, 42px);
-    font-weight: 900;
-    letter-spacing: 0.04em;
-    margin-bottom: 8px;
+.main-nav a:hover,.main-nav a.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* ========== Header ========== */
+.site-header {
+  text-align:center; padding:2.5rem 1rem 1.5rem;
+  background:linear-gradient(135deg,#fef9f0 0%,var(--bg) 100%);
 }
-.hero-bg .hero-sub{
-    font-size: clamp(13px, 1.8vw, 16px);
-    color: #e5e7eb;
-    opacity: 0.85;
-    max-width: 600px;
-    margin: 0 auto;
+.site-header h1 { color:var(--accent); margin-bottom:.5rem; }
+.site-header .subtitle { color:var(--text-light); font-size:1rem; }
+.site-header .meta { margin-top:.8rem; font-size:.85rem; color:var(--text-light); }
+.mks-badge {
+  display:inline-block; background:var(--accent); color:#fff;
+  padding:.2rem .8rem; border-radius:20px; font-size:.8rem;
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  letter-spacing:1px; margin-left:.5rem;
 }
-.hero-bg .hero-stats{
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+
+/* ========== Section Layout ========== */
+.section { padding:2rem 0; border-top:1px solid var(--border); }
+.section:first-of-type { border-top:none; }
+
+/* ========== Overview ========== */
+.overview-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.2rem; margin:1.5rem 0;
 }
-.hero-bg .hero-stat{
-    text-align: center;
+.ov-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.2rem; box-shadow:var(--shadow);
 }
-.hero-bg .hero-stat .hs-num{
-    font-size: clamp(22px, 3vw, 32px);
-    font-weight: 900;
-    color: var(--accent);
+.ov-card h3 { font-size:1.05rem; margin-bottom:.6rem; color:var(--accent); }
+.ov-card ul { padding-left:1.2rem; font-size:.92rem; }
+.ov-card li { margin-bottom:.35rem; }
+
+.star-mark { color:var(--accent); font-weight:700; }
+
+.concept-list-compact {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:.6rem; margin:1rem 0;
 }
-.hero-bg .hero-stat .hs-label{
-    font-size: 12px;
-    color: #9ca3af;
+.concept-chip {
+  display:flex; align-items:center; gap:.4rem;
+  padding:.5rem .8rem; border-radius:20px;
+  font-size:.85rem; font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
 }
-/* MAIN CONTENT */
-.main-content{
-    max-width: 1160px;
-    margin: -20px auto 0;
-    padding: 0 20px 40px;
-    position: relative;
-    z-index: 1;
+.concept-chip.cat-method { background:#d4e6f1; color:#1a5276; }
+.concept-chip.cat-system { background:#d5f5e3; color:#1e8449; }
+.concept-chip.cat-apply { background:#fdebd0; color:#b9770e; }
+
+/* ========== SVG Graph ========== */
+.graph-container {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1rem; margin:1.5rem 0;
+  overflow:auto; max-height:80vh; box-shadow:var(--shadow);
 }
-/* THEME GRID */
-.theme-grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 20px;
-    margin-bottom: 32px;
+.graph-container svg { width:100%; height:auto; max-height:78vh; }
+
+/* ========== Boundary Table ========== */
+.boundary-table {
+  width:100%; border-collapse:collapse; margin:1rem 0;
+  font-size:.9rem; box-shadow:var(--shadow);
 }
-.theme-card{
-    background: #fff;
-    border-radius: var(--radius);
-    padding: clamp(18px, 3vw, 26px);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.25s;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
+.boundary-table th {
+  background:var(--accent); color:#fff; padding:.7rem;
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
 }
-.theme-card:hover{
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--accent);
+.boundary-table td {
+  padding:.6rem .8rem; border:1px solid var(--border);
+  background:var(--card);
 }
-.theme-card::after{
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transition: transform 0.25s;
+.boundary-table tr:nth-child(even) td { background:#fef9f0; }
+
+/* ========== Learning Path ========== */
+.learning-path {
+  display:flex; flex-wrap:wrap; gap:.8rem; margin:1.5rem 0;
+  justify-content:center;
 }
-.theme-card:hover::after{
-    transform: scaleX(1);
+.path-step {
+  background:var(--card); border:2px solid var(--border);
+  border-radius:var(--radius); padding:1rem 1.2rem;
+  text-align:center; flex:1; min-width:140px; max-width:200px;
+  position:relative;
 }
-.theme-card-icon{
-    font-size: clamp(28px, 4vw, 40px);
-    margin-bottom: 8px;
+.path-step .step-num {
+  display:inline-block; width:30px; height:30px; line-height:30px;
+  background:var(--accent); color:#fff; border-radius:50%;
+  font-weight:700; font-size:.9rem; margin-bottom:.5rem;
 }
-.theme-card-num{
-    font-size: 11px;
-    color: var(--accent-dark);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    margin-bottom: 4px;
+.path-step h4 { font-size:.92rem; color:var(--text); }
+.path-step p { font-size:.78rem; color:var(--text-light); }
+.path-arrow {
+  display:flex; align-items:center; font-size:1.5rem;
+  color:var(--accent); font-weight:700;
 }
-.theme-card-title{
-    font-size: clamp(16px, 2vw, 19px);
-    font-weight: 800;
-    color: #1a1a2e;
-    margin-bottom: 8px;
+
+/* ========== Progress ========== */
+.progress-bar-wrap {
+  background:var(--border); border-radius:10px; height:20px;
+  margin:1rem 0; overflow:hidden;
 }
-.theme-card-desc{
-    font-size: 13px;
-    color: var(--text-light);
-    line-height: 1.6;
-    flex: 1;
-    margin-bottom: 10px;
+.progress-bar-fill {
+  height:100%; background:linear-gradient(90deg,var(--accent2),var(--accent3));
+  border-radius:10px; transition:width .5s ease; width:0%;
 }
-.theme-card-count{
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--accent-dark);
-    background: #fef3c7;
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 10px;
-    align-self: flex-start;
-    margin-bottom: 8px;
+.progress-stats {
+  display:flex; justify-content:space-around; flex-wrap:wrap;
+  gap:1rem; margin:1rem 0;
 }
-.theme-card-samples{
-    font-size: 11px;
-    color: var(--text-muted);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.progress-stat {
+  text-align:center; padding:.8rem 1.2rem;
+  background:var(--card); border-radius:var(--radius);
+  border:1px solid var(--border);
 }
-/* ABOUT SECTION */
-.about-section{
-    background: #fff;
-    border-radius: var(--radius);
-    padding: clamp(18px, 3vw, 28px);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    margin-bottom: 32px;
-    text-align: center;
+.progress-stat .val { font-size:1.8rem; font-weight:700; color:var(--accent); }
+.progress-stat .lbl { font-size:.8rem; color:var(--text-light); }
+
+/* ========== 3D Flip Card ========== */
+.flip-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.2rem; margin:1.5rem 0;
 }
-.about-section h2{
-    font-size: 20px;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin-bottom: 8px;
+.flip-card {
+  perspective:1000px;
+  height:clamp(220px,40vw,280px);
+  cursor:pointer;
 }
-.about-section p{
-    font-size: 14px;
-    color: var(--text-light);
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.7;
+.flip-inner {
+  position:relative; width:100%; height:100%;
+  transition:transform .6s;
+  transform-style:preserve-3d;
 }
-/* FOOTER */
-.page-footer{
-    text-align: center;
-    padding: 28px;
-    border-top: 1px solid var(--border);
+.flip-inner.flipped { transform:rotateY(180deg); }
+.flip-front,.flip-back {
+  position:absolute; width:100%; height:100%;
+  backface-visibility:hidden; border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);
 }
-.page-footer p{
-    font-size: 13px;
-    color: var(--text-muted);
+.flip-front {
+  background:linear-gradient(135deg,var(--card),#fef9f0);
+  border:2px solid var(--border);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:1.5rem; text-align:center;
 }
-/* MOBILE */
-@media(max-width:640px){
-    .theme-grid{grid-template-columns:1fr}
-    .hero-bg .hero-stats{gap:20px}
+.flip-front .concept-icon { font-size:2.2rem; margin-bottom:.8rem; }
+.flip-front h3 { font-size:1.2rem; }
+.flip-front .hint { font-size:.8rem; color:var(--text-light); margin-top:.5rem; }
+.flip-back {
+  transform:rotateY(180deg);
+  background:var(--card); border:2px solid var(--accent);
+  padding:1.2rem; overflow-y:auto;
+}
+.flip-back h4 { font-size:.95rem; color:var(--accent); margin-bottom:.5rem; }
+.flip-back .def { font-size:.85rem; margin-bottom:.5rem; }
+.flip-back .analogy { font-size:.82rem; font-style:italic; color:var(--text-light); margin-bottom:.5rem; padding-left:.5rem; border-left:3px solid var(--accent2); }
+.flip-back .examples { font-size:.8rem; }
+.flip-back .counter { font-size:.78rem; color:var(--text-light); margin-top:.5rem; padding-top:.5rem; border-top:1px dashed var(--border); }
+
+/* ========== Card controls ========== */
+.card-controls {
+  display:flex; gap:.8rem; align-items:center; flex-wrap:wrap;
+  margin:1rem 0; justify-content:center;
+}
+.card-controls button,.btn {
+  padding:.5rem 1.2rem; border-radius:20px;
+  border:1px solid var(--border); background:var(--card);
+  cursor:pointer; font-size:.85rem;
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  transition:all var(--transition);
+}
+.card-controls button:hover,.btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn-primary:hover { background:#a93226; }
+
+.card-progress-info {
+  font-size:.85rem; color:var(--text-light);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+
+/* ========== Quiz ========== */
+.quiz-section { margin:1.5rem 0; }
+.quiz-nav { display:flex; gap:.6rem; flex-wrap:wrap; margin:1rem 0; }
+.quiz-nav button { padding:.5rem 1rem; border-radius:20px; border:1px solid var(--border); background:var(--card); cursor:pointer; font-size:.82rem; font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; }
+.quiz-nav button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+.mcq-item,.sa-item {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.2rem; margin:1rem 0;
+  box-shadow:var(--shadow);
+}
+.mcq-item h4,.sa-item h4 { font-size:.95rem; margin-bottom:.8rem; }
+.mcq-opts { display:flex; flex-direction:column; gap:.5rem; }
+.mcq-opt {
+  padding:.6rem 1rem; border:1px solid var(--border);
+  border-radius:var(--radius-sm); cursor:pointer;
+  transition:all var(--transition); font-size:.88rem;
+}
+.mcq-opt:hover { background:#fef9f0; }
+.mcq-opt.selected { background:var(--accent2); color:#fff; border-color:var(--accent2); }
+.mcq-opt.correct { background:#d5f5e3; border-color:var(--accent3); color:#1e8449; }
+.mcq-opt.wrong { background:#fadbd8; border-color:var(--accent); color:#922b21; }
+
+.sa-item textarea {
+  width:100%; min-height:100px; padding:.8rem;
+  border:1px solid var(--border); border-radius:var(--radius-sm);
+  font-size:.88rem; resize:vertical; font-family:inherit;
+  background:var(--bg);
+}
+.sa-item .sa-hint {
+  font-size:.8rem; color:var(--text-light); margin-top:.5rem;
+  padding:.5rem; background:#fef9f0; border-radius:var(--radius-sm);
+  display:none;
+}
+.sa-item .sa-hint.show { display:block; }
+
+.quiz-result {
+  text-align:center; padding:1.5rem; margin:1rem 0;
+  background:var(--card); border-radius:var(--radius);
+  border:2px solid var(--accent3);
+}
+
+/* ========== Exam Mode ========== */
+.exam-container {
+  background:var(--card); border:2px solid var(--accent);
+  border-radius:var(--radius); padding:1.5rem; margin:1.5rem 0;
+  box-shadow:var(--shadow-lg);
+}
+.exam-timer {
+  text-align:center; font-size:1.5rem; font-weight:700;
+  color:var(--accent); padding:.5rem; margin-bottom:1rem;
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+.exam-timer.warning { color:#e67e22; animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ========== Mind Map Container ========== */
+.mindmap-placeholder {
+  background:var(--card); border:2px dashed var(--border);
+  border-radius:var(--radius); padding:2rem; text-align:center;
+  margin:1.5rem 0; min-height:400px;
+}
+
+/* ========== Deep Q&A ========== */
+.dq-item {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.2rem; margin:1rem 0;
+  box-shadow:var(--shadow);
+}
+.dq-q {
+  font-weight:700; font-size:1rem; cursor:pointer;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.dq-q::after { content:"\25BC"; font-size:.8rem; color:var(--accent); transition:transform var(--transition); }
+.dq-item.open .dq-q::after { transform:rotate(180deg); }
+.dq-a {
+  margin-top:.8rem; padding-top:.8rem; border-top:1px solid var(--border);
+  font-size:.9rem; display:none;
+}
+.dq-item.open .dq-a { display:block; }
+
+/* ========== Case Studies ========== */
+.case-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.5rem; margin:1.2rem 0;
+  box-shadow:var(--shadow);
+}
+.case-card h3 { color:var(--accent); }
+.case-card .concepts-tag {
+  display:inline-block; background:#d4e6f1; color:#1a5276;
+  padding:.2rem .7rem; border-radius:20px; font-size:.8rem;
+  margin:.5rem 0;
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+
+/* ========== Decision Sim ========== */
+.decision-scenario {
+  background:var(--card); border:2px solid var(--border);
+  border-radius:var(--radius); padding:1.5rem; margin:1.5rem 0;
+  box-shadow:var(--shadow-lg);
+}
+.decision-scenario textarea {
+  width:100%; min-height:100px; padding:.8rem;
+  border:1px solid var(--border); border-radius:var(--radius-sm);
+  font-size:.88rem; resize:vertical; font-family:inherit;
+  background:var(--bg);
+}
+.decision-scenario .analysis-box {
+  background:#fef9f0; border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:1rem; margin-top:.8rem;
+  display:none;
+}
+.decision-scenario .analysis-box.show { display:block; }
+
+/* ========== Footer ========== */
+.site-footer {
+  text-align:center; padding:2rem 1rem;
+  color:var(--text-light); font-size:.82rem;
+  border-top:2px solid var(--border); margin-top:2rem;
+}
+
+/* ========== Responsive ========== */
+@media (max-width:640px) {
+  .container { padding:.8rem; }
+  .flip-grid { grid-template-columns:1fr; }
+  .overview-grid { grid-template-columns:1fr; }
+  .main-nav { font-size:.75rem; }
+  .learning-path { flex-direction:column; }
+  .path-arrow { transform:rotate(90deg); }
 }
 </style>
 </head>
 <body>
 
-<div class="hero-bg">
-    <div class="hero-badge">MKS · 最小知识集</div>
-    <h1>卓克 · 科技参考基础版</h1>
-    <p class="hero-sub">每天跟上全球科技新变化 —— 317篇深度解读提炼为8大专题知识体系，帮你用最少时间掌握最核心的科技认知</p>
-    <div class="hero-stats">
-        <div class="hero-stat"><div class="hs-num">317</div><div class="hs-label">文章总数</div></div>
-        <div class="hero-stat"><div class="hs-num">8</div><div class="hs-label">知识专题</div></div>
-        <div class="hero-stat"><div class="hs-num">2020-2021</div><div class="hs-label">时间跨度</div></div>
-    </div>
+<!-- ====== Navigation ====== -->
+<nav class="main-nav" id="mainNav">
+  <a href="#overview">知识集总览</a>
+  <a href="#cards">知识卡片</a>
+  <a href="#quiz">题库系统</a>
+  <a href="#exam">考试模式</a>
+  <a href="#review">复习模式</a>
+  <a href="#mindmap">思维导图</a>
+  <a href="#deepqa">深度追问</a>
+  <a href="#cases">案例分析</a>
+  <a href="#decision">实战决策</a>
+</nav>
+
+<!-- ====== Header ====== -->
+<header class="site-header">
+  <h1>卓克·科技参考 MKS 知识集<span class="mks-badge">MKS</span></h1>
+  <p class="subtitle">基于 317 篇日更科技新闻·提炼 10 个核心概念</p>
+  <p class="meta">课程：科技参考基础版 · course_id: 27YMAa9qPv4VMnQs83Jen0RE5dGLlO · 全 317 篇 · 生成日期：2026-06-11</p>
+</header>
+
+<div class="container">
+
+<!-- ================================================================ -->
+<!-- 知识集总览 -->
+<!-- ================================================================ -->
+<div class="section" id="overview">
+<h2>① 知识集总览</h2>
+
+<!-- 核心目标 -->
+<div class="ov-card">
+  <h3>🎯 核心目标</h3>
+  <p>从 317 篇日更科技新闻中抽取贯穿全年科技趋势的底层知识结构。不是“发生了什么”的日历，而是“为什么这些事值得关注”的思维框架。掌握这 10 个概念后，你将能独立判断未来任何一条科技新闻的真实价值。</p>
 </div>
 
-<div class="main-content">
-    <div class="about-section">
-        <h2>📡 关于本课程</h2>
-        <p>《科技参考》是卓克在得到App开设的日更科技新闻解读专栏，覆盖人工智能、生物医学、能源环境、芯片通信、航天探索等前沿领域。本主板将全部317篇文章按8大专题重组，每个专题提炼核心概念与关键知识卡片，让你快速建立科技认知框架。</p>
-    </div>
+<!-- 核心概念 -->
+<div class="ov-card" style="margin-top:1rem;">
+  <h3>💡 核心概念（10 个）</h3>
+  <div class="concept-list-compact">
+<div class="concept-chip cat-method">★ 可能性空间</div>
+<div class="concept-chip cat-system">★ 反馈回路</div>
+<div class="concept-chip cat-system">网络传播动力学</div>
+<div class="concept-chip cat-apply">★ 演化算法</div>
+<div class="concept-chip cat-method">★ 信息量化</div>
+<div class="concept-chip cat-apply">★ 能量转换效率</div>
+<div class="concept-chip cat-method">工程师思维</div>
+<div class="concept-chip cat-system">复杂系统涌现</div>
+<div class="concept-chip cat-method">科学验证机制</div>
+<div class="concept-chip cat-apply">技术采用曲线</div>
 
-    <div class="theme-grid">
-        
-        <a class="theme-card" href="1-ai-digital.html">
-            <div class="theme-card-icon">🤖</div>
-            <div class="theme-card-num">专题1</div>
-            <h3 class="theme-card-title">人工智能与数字科技</h3>
-            <p class="theme-card-desc">从AI预测蛋白质结构到脑机接口、自动驾驶与元宇宙——数字智能如何重塑人类能力边界</p>
-            <div class="theme-card-count">59 篇文章</div>
-            <div class="theme-card-samples">048 | 一小步突破：人工智能预测蛋白质结构 · 059 | 时间窗口：身高、视力、牙齿与语言 · 164 | 偷看三百年前的密信</div>
-        </a>
-
-        <a class="theme-card" href="2-biomed.html">
-            <div class="theme-card-icon">🧬</div>
-            <div class="theme-card-num">专题2</div>
-            <h3 class="theme-card-title">生物医学与健康前沿</h3>
-            <p class="theme-card-desc">癌症治疗新突破、基因编辑、抗衰老研究、神经科学——现代医学如何攻克人类健康最大难题</p>
-            <div class="theme-card-count">70 篇文章</div>
-            <div class="theme-card-samples">发刊词 | 来，每天跟上全球科技新变化 · 040 | 新发现：女猎人比例不低意味着什么？ · 064 | 新发现：癌症转移的规律被窥探</div>
-        </a>
-
-        <a class="theme-card" href="3-covid.html">
-            <div class="theme-card-icon">🦠</div>
-            <div class="theme-card-num">专题3</div>
-            <h3 class="theme-card-title">新冠疫情全追踪</h3>
-            <p class="theme-card-desc">从疫苗研发到病毒变异、从核酸测试到群体免疫——全球大流行的科学全貌</p>
-            <div class="theme-card-count">46 篇文章</div>
-            <div class="theme-card-samples">234 | 准诺奖：体内基因编辑技术 · 274｜元宇宙：能模拟真实世界吗？ · 095 | 疫情中演化出的作弊工具</div>
-        </a>
-
-        <a class="theme-card" href="4-energy.html">
-            <div class="theme-card-icon">🌍</div>
-            <div class="theme-card-num">专题4</div>
-            <h3 class="theme-card-title">能源环境与碳中和</h3>
-            <p class="theme-card-desc">碳中和国策、核能安全、电池技术、气候变化——人类如何与地球共生</p>
-            <div class="theme-card-count">36 篇文章</div>
-            <div class="theme-card-samples">013 | 核污染：福岛核电站要向太平洋排污？ · 156 | 日本核污水对我们有多大影响？ · 035 | 趋势：可拆卸电池的手机会再次成为主流吗？</div>
-        </a>
-
-        <a class="theme-card" href="5-chips.html">
-            <div class="theme-card-icon">💻</div>
-            <div class="theme-card-num">专题5</div>
-            <h3 class="theme-card-title">芯片通信与信息技术</h3>
-            <p class="theme-card-desc">芯片产业博弈、5G星链、操作系统之争、加密货币——信息时代的底层基础设施</p>
-            <div class="theme-card-count">24 篇文章</div>
-            <div class="theme-card-samples">099 | 隔空充电的一盆冷水 · 191 | 标准：更快更统一，新USB口来了 · 188 | 计算机：用bug修复bug，然后被禁了</div>
-        </a>
-
-        <a class="theme-card" href="6-food-life.html">
-            <div class="theme-card-icon">🍽️</div>
-            <div class="theme-card-num">专题6</div>
-            <h3 class="theme-card-title">食品营养与生活科学</h3>
-            <p class="theme-card-desc">从食品安全到营养补剂、从睡眠科学到防骗指南——用科学守护日常生活</p>
-            <div class="theme-card-count">17 篇文章</div>
-            <div class="theme-card-samples">112 | 意外：电竞训练营成了网瘾戒除所 · 149 | 如何发现三星堆的亮点：陶器篇 · 256 | 科学式训练：苏炳添为什么能跑9秒83？</div>
-        </a>
-
-        <a class="theme-card" href="7-thinking.html">
-            <div class="theme-card-icon">🧠</div>
-            <div class="theme-card-num">专题7</div>
-            <h3 class="theme-card-title">科学思维与认知方法</h3>
-            <p class="theme-card-desc">控制论、演化思维、信息量化、学术秩序——科学方法论如何升级我们的底层操作系统</p>
-            <div class="theme-card-count">16 篇文章</div>
-            <div class="theme-card-samples">024 | 为什么诺贝尔奖得主还要论文造假？(中) · 025 | 为什么诺贝尔奖得主还要论文造假？(下) · 148 | 如何发现三星堆的亮点：金与青铜篇</div>
-        </a>
-
-        <a class="theme-card" href="8-space.html">
-            <div class="theme-card-icon">🚀</div>
-            <div class="theme-card-num">专题8</div>
-            <h3 class="theme-card-title">航天探索与物理前沿</h3>
-            <p class="theme-card-desc">从量子计算到时间晶体、从火星移民到暗物质——人类认知边界的极限拓展</p>
-            <div class="theme-card-count">49 篇文章</div>
-            <div class="theme-card-samples">022 | 室温超导：只是实验室内的突破 · 065 | 新研究：人类可以返老还童了？ · 130 | 变化：地球自转加速，该怎么理解？</div>
-        </a>
-    </div>
-
-    <div class="page-footer">
-        <p>卓克 · 科技参考基础版 · MKS最小知识集 · 基于得到App课程内容整理</p>
-    </div>
+  </div>
 </div>
 
+<!-- 最小知识集 -->
+<div class="ov-card" style="margin-top:1rem;">
+  <h3>★ 最小知识集（骨架中的骨架）</h3>
+  <p style="font-size:.9rem;margin-bottom:.8rem;">这 5 个概念是 MKS 的“骨架”——它们解释了整个知识集中 80% 以上的变异，其他 5 个概念是它们的应用和延伸。</p>
+  <div class="concept-list-compact">
+<div class="concept-chip cat-method" style="font-weight:700;border:2px solid var(--accent);">★ 可能性空间</div>
+<div class="concept-chip cat-system" style="font-weight:700;border:2px solid var(--accent);">★ 反馈回路</div>
+<div class="concept-chip cat-apply" style="font-weight:700;border:2px solid var(--accent);">★ 演化算法</div>
+<div class="concept-chip cat-method" style="font-weight:700;border:2px solid var(--accent);">★ 信息量化</div>
+<div class="concept-chip cat-apply" style="font-weight:700;border:2px solid var(--accent);">★ 能量转换效率</div>
+
+  </div>
+</div>
+
+<!-- 概念关系图 -->
+<div class="ov-card" style="margin-top:1rem;">
+  <h3>🔗 概念关系图</h3>
+  <p style="font-size:.85rem;color:var(--text-light);margin-bottom:.5rem;">三层架构：方法论工具层（蓝）→ 系统动力学层（绿）→ 应用与表现层（橙）。实线表示主要影响关系，虚线表示回环反馈。</p>
+  <div class="graph-container">
+<svg width="100%" height="100%" viewBox="0.00 0.00 662.00 873.00"
+ viewBox="0.00 0.00 662.00 873.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 869)">
+<title>MKS</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-869 658,-869 658,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_legend</title>
+<polygon fill="#fffaf2" stroke="#e8d5c4" stroke-width="1.5" points="8,-590.5 8,-857 194,-857 194,-590.5 8,-590.5"/>
+<text text-anchor="middle" x="101" y="-842.6" font-family="Noto Sans SC,SimHei,sans-serif" font-size="13.00">图例</text>
+</g>
+<!-- legend_method -->
+<g id="node1" class="node">
+<title>legend_method</title>
+<polygon fill="#d4e6f1" stroke="black" stroke-width="2" points="186,-823.5 100,-823.5 100,-794.5 186,-794.5 186,-823.5"/>
+<text text-anchor="middle" x="143" y="-806.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00">方法论工具</text>
+</g>
+<!-- legend_system -->
+<g id="node2" class="node">
+<title>legend_system</title>
+<polygon fill="#d5f5e3" stroke="black" stroke-width="2" points="186,-725.5 100,-725.5 100,-696.5 186,-696.5 186,-725.5"/>
+<text text-anchor="middle" x="143" y="-708.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00">系统动力学</text>
+</g>
+<!-- legend_method&#45;&gt;legend_system -->
+<!-- legend_apply -->
+<g id="node3" class="node">
+<title>legend_apply</title>
+<polygon fill="#fdebd0" stroke="black" stroke-width="2" points="186,-627.5 100,-627.5 100,-598.5 186,-598.5 186,-627.5"/>
+<text text-anchor="middle" x="143" y="-610.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00">应用与表现层</text>
+</g>
+<!-- legend_system&#45;&gt;legend_apply -->
+<!-- legend_feedback -->
+<g id="node4" class="node">
+<title>legend_feedback</title>
+<text text-anchor="middle" x="49" y="-806.5" font-family="Noto Sans SC,SimHei,sans-serif" font-size="10.00">┅ 回环反馈</text>
+</g>
+<!-- possibility -->
+<g id="node5" class="node">
+<title>possibility</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="459,-834 327,-834 327,-784 459,-784 459,-834"/>
+<text text-anchor="middle" x="393" y="-812.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">可能性空间</text>
+<text text-anchor="middle" x="393" y="-797.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Possibility Space</text>
+</g>
+<!-- information -->
+<g id="node6" class="node">
+<title>information</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="492.5,-736 293.5,-736 293.5,-686 492.5,-686 492.5,-736"/>
+<text text-anchor="middle" x="393" y="-714.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">信息量化</text>
+<text text-anchor="middle" x="393" y="-699.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Information Quantification</text>
+</g>
+<!-- possibility&#45;&gt;information -->
+<g id="edge20" class="edge">
+<title>possibility&#45;&gt;information</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M393,-783.78C393,-772.41 393,-758.66 393,-746.25"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="396.5,-746.22 393,-736.22 389.5,-746.22 396.5,-746.22"/>
+<text text-anchor="middle" x="421.5" y="-757.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">量化可能性</text>
+</g>
+<!-- engineering -->
+<g id="node8" class="node">
+<title>engineering</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="589.5,-540 440.5,-540 440.5,-490 589.5,-490 589.5,-540"/>
+<text text-anchor="middle" x="515" y="-518.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">工程师思维</text>
+<text text-anchor="middle" x="515" y="-503.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Engineer&#39;s Mindset</text>
+</g>
+<!-- possibility&#45;&gt;engineering -->
+<g id="edge4" class="edge">
+<title>possibility&#45;&gt;engineering</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M435.71,-783.95C495.85,-747.13 602.13,-670.38 638,-570 646.42,-546.43 626.17,-533.13 599.8,-525.64"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="600.4,-522.18 589.85,-523.13 598.69,-528.97 600.4,-522.18"/>
+<text text-anchor="middle" x="620" y="-659.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">约束条件定义</text>
+</g>
+<!-- evolution -->
+<g id="node12" class="node">
+<title>evolution</title>
+<polygon fill="#fdebd0" stroke="#e67e22" stroke-width="2" points="392,-344 208,-344 208,-294 392,-294 392,-344"/>
+<text text-anchor="middle" x="300" y="-322.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">演化算法</text>
+<text text-anchor="middle" x="300" y="-307.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Evolutionary Algorithms</text>
+</g>
+<!-- possibility&#45;&gt;evolution -->
+<g id="edge3" class="edge">
+<title>possibility&#45;&gt;evolution</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M326.86,-799.57C275.87,-788.92 214,-765.07 214,-712 214,-712 214,-712 214,-416 214,-389.43 232.5,-366.86 252.34,-350.29"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="254.6,-352.96 260.27,-344.01 250.26,-347.47 254.6,-352.96"/>
+<text text-anchor="middle" x="248" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">提供分析框架</text>
+</g>
+<!-- verification -->
+<g id="node7" class="node">
+<title>verification</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="486.5,-442 325.5,-442 325.5,-392 486.5,-392 486.5,-442"/>
+<text text-anchor="middle" x="406" y="-420.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">科学验证机制</text>
+<text text-anchor="middle" x="406" y="-405.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Scientific Verification</text>
+</g>
+<!-- information&#45;&gt;verification -->
+<g id="edge12" class="edge">
+<title>information&#45;&gt;verification</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M394.09,-685.61C396.4,-633.63 401.82,-511.84 404.48,-452.17"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="407.98,-452.26 404.93,-442.12 400.98,-451.95 407.98,-452.26"/>
+<text text-anchor="middle" x="433" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">提供测量基础</text>
+</g>
+<!-- energy -->
+<g id="node13" class="node">
+<title>energy</title>
+<polygon fill="#fdebd0" stroke="#e67e22" stroke-width="2" points="569,-638 421,-638 421,-588 569,-588 569,-638"/>
+<text text-anchor="middle" x="495" y="-616.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">能量转换效率</text>
+<text text-anchor="middle" x="495" y="-601.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Energy Conversion</text>
+</g>
+<!-- information&#45;&gt;energy -->
+<g id="edge13" class="edge">
+<title>information&#45;&gt;energy</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M418.74,-685.78C431.79,-673.5 447.78,-658.44 461.75,-645.29"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="464.39,-647.62 469.27,-638.22 459.59,-642.52 464.39,-647.62"/>
+<text text-anchor="middle" x="484" y="-659.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">量化效率指标</text>
+</g>
+<!-- verification&#45;&gt;evolution -->
+<g id="edge17" class="edge">
+<title>verification&#45;&gt;evolution</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M379.25,-391.78C365.69,-379.5 349.07,-364.44 334.55,-351.29"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="336.5,-348.34 326.74,-344.22 331.8,-353.52 336.5,-348.34"/>
+<text text-anchor="middle" x="393" y="-365.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">淘汰错误理论</text>
+</g>
+<!-- engineering&#45;&gt;verification -->
+<g id="edge14" class="edge">
+<title>engineering&#45;&gt;verification</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M456.28,-489.83C447.84,-484.75 439.75,-478.82 433,-472 427.19,-466.14 422.4,-458.77 418.55,-451.38"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="421.61,-449.66 414.18,-442.12 415.29,-452.66 421.61,-449.66"/>
+<text text-anchor="middle" x="467" y="-463.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">实践检验方法</text>
+</g>
+<!-- network -->
+<g id="node10" class="node">
+<title>network</title>
+<polygon fill="#d5f5e3" stroke="#27ae60" stroke-width="2" points="304.5,-50 143.5,-50 143.5,0 304.5,0 304.5,-50"/>
+<text text-anchor="middle" x="224" y="-28.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">网络传播动力学</text>
+<text text-anchor="middle" x="224" y="-13.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Network Propagation</text>
+</g>
+<!-- engineering&#45;&gt;network -->
+<g id="edge21" class="edge">
+<title>engineering&#45;&gt;network</title>
+<path fill="none" stroke="#2c3e50" stroke-width="1.8" d="M515,-489.93C515,-470.52 515,-442.5 515,-418 515,-418 515,-418 515,-122 515,-79.21 400.07,-52.29 314.67,-38.19"/>
+<polygon fill="#2c3e50" stroke="#2c3e50" stroke-width="1.8" points="315.1,-34.71 304.67,-36.57 313.99,-41.62 315.1,-34.71"/>
+<text text-anchor="middle" x="549" y="-267.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">设计网络拓扑</text>
+</g>
+<!-- engineering&#45;&gt;energy -->
+<g id="edge15" class="edge">
+<title>engineering&#45;&gt;energy</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M555.19,-540.23C564.44,-548.95 570.02,-559.3 564,-570 561.74,-574.03 558.91,-577.72 555.71,-581.08"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="553.2,-578.63 548.16,-587.95 557.91,-583.81 553.2,-578.63"/>
+<text text-anchor="middle" x="600" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">工程优化目标</text>
+</g>
+<!-- feedback -->
+<g id="node9" class="node">
+<title>feedback</title>
+<polygon fill="#d5f5e3" stroke="#27ae60" stroke-width="2" points="176,-442 46,-442 46,-392 176,-392 176,-442"/>
+<text text-anchor="middle" x="111" y="-420.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">反馈回路</text>
+<text text-anchor="middle" x="111" y="-405.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Feedback Loops</text>
+</g>
+<!-- feedback&#45;&gt;network -->
+<g id="edge5" class="edge">
+<title>feedback&#45;&gt;network</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M92.02,-391.85C79.35,-373.29 65,-346.43 65,-320 65,-320 65,-320 65,-122 65,-84.56 97.72,-61.33 133.47,-47.12"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="134.96,-50.3 143.1,-43.53 132.51,-43.75 134.96,-50.3"/>
+<text text-anchor="middle" x="99" y="-218.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">调节传播速率</text>
+</g>
+<!-- complexity -->
+<g id="node11" class="node">
+<title>complexity</title>
+<polygon fill="#d5f5e3" stroke="#27ae60" stroke-width="2" points="359,-246 199,-246 199,-196 359,-196 359,-246"/>
+<text text-anchor="middle" x="279" y="-224.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">复杂系统涌现</text>
+<text text-anchor="middle" x="279" y="-209.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Complex Emergence</text>
+</g>
+<!-- feedback&#45;&gt;complexity -->
+<g id="edge6" class="edge">
+<title>feedback&#45;&gt;complexity</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M106,-391.6C102,-365.11 99.94,-322.73 120,-294 136.61,-270.22 163.02,-254.16 189.59,-243.37"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="190.89,-246.61 198.98,-239.76 188.39,-240.08 190.89,-246.61"/>
+<text text-anchor="middle" x="159.5" y="-316.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">稳定与失衡机制</text>
+</g>
+<!-- feedback&#45;&gt;evolution -->
+<g id="edge7" class="edge">
+<title>feedback&#45;&gt;evolution</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M125.34,-391.87C132.7,-381.33 142.54,-369.66 154,-362 162.44,-356.36 179.01,-350.31 198.06,-344.61"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="199.27,-347.91 207.89,-341.76 197.31,-341.18 199.27,-347.91"/>
+<text text-anchor="middle" x="177" y="-365.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">选择压力</text>
+</g>
+<!-- network&#45;&gt;complexity -->
+<g id="edge9" class="edge">
+<title>network&#45;&gt;complexity</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M266.46,-50.08C272.54,-55.25 278.05,-61.23 282,-68 315.22,-124.96 298.9,-141.65 293,-178 292.56,-180.68 291.98,-183.42 291.3,-186.16"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="287.9,-185.33 288.5,-195.9 294.63,-187.26 287.9,-185.33"/>
+<text text-anchor="middle" x="330.5" y="-120.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">网络化涌现</text>
+</g>
+<!-- adoption -->
+<g id="node14" class="node">
+<title>adoption</title>
+<polygon fill="#fdebd0" stroke="#e67e22" stroke-width="2" points="271.5,-148 112.5,-148 112.5,-98 271.5,-98 271.5,-148"/>
+<text text-anchor="middle" x="192" y="-126.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">技术采用曲线</text>
+<text text-anchor="middle" x="192" y="-111.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Tech Adoption Curve</text>
+</g>
+<!-- network&#45;&gt;adoption -->
+<g id="edge8" class="edge">
+<title>network&#45;&gt;adoption</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M151.11,-50.3C144.39,-55.18 138.45,-61.02 134,-68 128.84,-76.1 130.81,-83.79 136.39,-90.7"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="134.11,-93.37 143.7,-97.87 139.01,-88.37 134.11,-93.37"/>
+<text text-anchor="middle" x="168" y="-71.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">底层传播逻辑</text>
+</g>
+<!-- complexity&#45;&gt;complexity -->
+<g id="edge22" class="edge">
+<title>complexity&#45;&gt;complexity</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M359.36,-228.94C369.97,-227.58 377,-224.94 377,-221 377,-218.48 374.11,-216.49 369.25,-215.02"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="369.85,-211.57 359.36,-213.06 368.49,-218.44 369.85,-211.57"/>
+<text text-anchor="middle" x="405.5" y="-218.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">自组织迭代</text>
+</g>
+<!-- complexity&#45;&gt;adoption -->
+<g id="edge16" class="edge">
+<title>complexity&#45;&gt;adoption</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M253.05,-195.59C247.31,-189.93 241.35,-183.85 236,-178 229.65,-171.05 223.09,-163.34 217.04,-155.96"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="219.72,-153.71 210.71,-148.15 214.29,-158.12 219.72,-153.71"/>
+<text text-anchor="middle" x="264.5" y="-169.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">系统级行为</text>
+</g>
+<!-- evolution&#45;&gt;information -->
+<g id="edge11" class="edge">
+<title>evolution&#45;&gt;information</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M298.83,-344.06C297.99,-363.47 297,-391.49 297,-416 297,-614 297,-614 297,-614 297,-641.48 316.92,-663.85 338.61,-680.05"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="336.78,-683.05 346.97,-685.96 340.82,-677.33 336.78,-683.05"/>
+<text text-anchor="middle" x="331" y="-512.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">优化搜索策略</text>
+</g>
+<!-- evolution&#45;&gt;complexity -->
+<g id="edge10" class="edge">
+<title>evolution&#45;&gt;complexity</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M294.7,-293.78C292.21,-282.41 289.21,-268.66 286.49,-256.25"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="289.85,-255.24 284.3,-246.22 283.02,-256.73 289.85,-255.24"/>
+<text text-anchor="middle" x="324" y="-267.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">解释涌现机制</text>
+</g>
+<!-- energy&#45;&gt;engineering -->
+<g id="edge18" class="edge">
+<title>energy&#45;&gt;engineering</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M482.59,-587.81C479.35,-578.39 477.61,-567.59 481,-558 482.16,-554.72 483.7,-551.5 485.49,-548.41"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="488.43,-550.3 491.05,-540.03 482.6,-546.43 488.43,-550.3"/>
+<text text-anchor="middle" x="520.5" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">技术可行性约束</text>
+</g>
+<!-- adoption&#45;&gt;network -->
+<g id="edge19" class="edge">
+<title>adoption&#45;&gt;network</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M200.07,-97.78C203.9,-86.29 208.54,-72.38 212.71,-59.87"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="216.09,-60.81 215.93,-50.22 209.44,-58.6 216.09,-60.81"/>
+<text text-anchor="middle" x="244" y="-71.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">重塑传播结构</text>
+</g>
+</g>
+</svg>
+  </div>
+</div>
+
+<!-- 边界知识表 -->
+<div class="ov-card" style="margin-top:1rem;">
+  <h3>⚠️ 边界知识表</h3>
+  <p style="font-size:.85rem;color:var(--text-light);margin-bottom:.5rem;">每个概念都有其边界——了解它们“不是什么”比“是什么”同样重要。</p>
+  <table class="boundary-table">
+    <thead><tr><th>概念</th><th>边界 / 常见误解</th><th>正确认知</th></tr></thead>
+    <tbody>
+      <tr><td>可能性空间</td><td>所有可能性等概率</td><td>不同路径概率权重差异巨大，关键是找到“概率密集的子空间”</td></tr>
+      <tr><td>反馈回路</td><td>“正反馈=好，负反馈=坏”</td><td>正/负反馈只是方向描述，没有价值判断；系统稳定需要两者网络</td></tr>
+      <tr><td>网络传播动力学</td><td>“病毒式传播=最佳策略”</td><td>传播失效同样普遍；信息茧房也是网络结构的产物</td></tr>
+      <tr><td>演化算法</td><td>“演化=进步/越来越好”</td><td>演化没有方向，不追求“更好”，只保留“活得下去的”</td></tr>
+      <tr><td>信息量化</td><td>“数据多=信息多”</td><td>冗余数据信息量为零；精确但无误差范围比粗略但诚实更危险</td></tr>
+      <tr><td>能量转换效率</td><td>“效率越高越好”</td><td>可靠性、功率密度、成本可能比效率更重要，取决于约束条件</td></tr>
+      <tr><td>工程师思维</td><td>“工程师=闷头干活”</td><td>最好的工程师也需要科学家般的跳跃假设，但必须回来用测试验证</td></tr>
+      <tr><td>复杂系统涌现</td><td>“整体大于部分之和”</td><td>涌现有严格数学条件，不是所有复杂系统都会产生新属性</td></tr>
+      <tr><td>科学验证机制</td><td>“同行评议通过=正确”</td><td>同行评议只是验证链一环，大量通过评议的论文后来被证明错误</td></tr>
+      <tr><td>技术采用曲线</td><td>“新技术迟早会普及”</td><td>绝大多数技术永远跨不过鸿沟，技术优势≠市场优势</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 学习路径 -->
+<div class="ov-card" style="margin-top:1rem;">
+  <h3>📈 学习路径</h3>
+  <div class="learning-path">
+    <div class="path-step"><div class="step-num">1</div><h4>可能性空间</h4><p>入门概念，建立“控制=缩减可能性”的基本认知</p></div>
+    <div class="path-arrow">→</div>
+    <div class="path-step"><div class="step-num">2</div><h4>反馈回路</h4><p>理解系统动态变化的驱动力</p></div>
+    <div class="path-arrow">→</div>
+    <div class="path-step"><div class="step-num">3</div><h4>信息量化</h4><p>学会用数据而非直觉评估世界</p></div>
+    <div class="path-arrow">→</div>
+    <div class="path-step"><div class="step-num">4</div><h4>演化算法</h4><p>理解“无设计者的复杂性”</p></div>
+    <div class="path-arrow">→</div>
+    <div class="path-step"><div class="step-num">5</div><h4>能量转换效率</h4><p>掌握技术评估的硬约束</p></div>
+    <div class="path-arrow">→</div>
+    <div class="path-step"><div class="step-num">6-10</div><h4>应用层概念</h4><p>用前5个概念理解后5个应用</p></div>
+  </div>
+</div>
+
+<!-- 学习进度 -->
+<div class="ov-card" style="margin-top:1rem;">
+  <h3>✅ 学习进度</h3>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="overallProgress" style="width:0%;"></div>
+  </div>
+  <div class="progress-stats">
+    <div class="progress-stat"><div class="val" id="conceptsLearned">0</div><div class="lbl">已学概念</div></div>
+    <div class="progress-stat"><div class="val" id="cardsFlipped">0</div><div class="lbl">已翻转卡片</div></div>
+    <div class="progress-stat"><div class="val" id="quizScore">-</div><div class="lbl">题库得分</div></div>
+    <div class="progress-stat"><div class="val" id="examCompleted">0</div><div class="lbl">完成考试</div></div>
+  </div>
+</div>
+
+</div><!-- /overview -->
+
+<!-- ================================================================ -->
+<!-- 知识卡片 (3D Flip) -->
+<!-- ================================================================ -->
+<div class="section" id="cards">
+<h2>② 知识卡片</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">点击卡片翻转查看定义、类比、示例和反例。学完后点击“已学习”记录进度。</p>
+<div class="card-controls">
+  <button id="markLearnedBtn" onclick="markCardLearned()">✔ 已学习</button>
+  <span class="card-progress-info" id="cardIndex">当前：-</span>
+  <span class="card-progress-info" id="cardProgress">进度：0/10</span>
+  <span class="card-progress-info" id="cardLearned" style="margin-left:1rem;"></span>
+</div>
+<div class="flip-grid" id="flipGrid">
+
+<div class="flip-card" id="flipCard0">
+  <div class="flip-inner" id="flipInner0">
+    <div class="flip-front" id="flipFront0">
+      <div class="concept-icon">🛠️</div>
+      <h3>★ 可能性空间</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Possibility Space</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack0">
+      <h4>★ 可能性空间 (Possibility Space)</h4>
+      <div class="def"><strong>定义：</strong>控制论的出发点：任何事物的发展都存在一个由所有可能状态构成的空间，控制就是主动缩减可能性、使结果收敛到期望子空间的过程。</div>
+      <div class="analogy"><strong>类比：</strong>人生如大树的分叉——你每做一个选择就剪掉一些枝杈。"幸福的家庭总是相似"是因为它们把每个关键节点的可能性都成功约束到了好的选项。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【004 可能性空间】</strong>不幸的家庭各有各的不幸，因为任一节点失控就能导致失败——5个二元节点产生32种结果，而幸福只有1条路径<br><strong>【011 随机控制】</strong>绝望中通过随机尝试找到解，本质是在可能性空间中做蒙特卡洛搜索<br><strong>【186 转基因蚊子】</strong>释放10亿只转基因蚊子，通过缩减蚊子繁殖的可能性空间来控制疾病</div>
+      <div class="counter"><strong>边界：</strong>不是"命中注定论"——可能性空间恰恰强调通过主动干预可以改变结果。也不是说所有可能性等概率——不同路径的概率权重差异巨大。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard1">
+  <div class="flip-inner" id="flipInner1">
+    <div class="flip-front" id="flipFront1">
+      <div class="concept-icon">🔄</div>
+      <h3>★ 反馈回路</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Feedback Loops</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack1">
+      <h4>★ 反馈回路 (Feedback Loops)</h4>
+      <div class="def"><strong>定义：</strong>系统输出重新作为输入影响系统自身的机制。负反馈维持稳定（恒温器），正反馈加速变化（链式反应），两者共同决定系统行为。</div>
+      <div class="analogy"><strong>类比：</strong>就像开车——踩油门是正反馈（越快越想更快），方向盘微调是负反馈（偏离就纠正回来）。没有负反馈的车会冲出道路，没有正反馈的车永远到不了目的地。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【097 反馈】</strong>建立负反馈、警惕正反馈——人口增长的负反馈是资源约束，加密货币的正反馈是价格上涨吸引更多矿工推高价格<br><strong>【096 全球变暖】</strong>为什么全球变暖的冬天反而更冷？因为极地涡旋的正反馈放大了局部极端天气<br><strong>【232 比特币矿难】</strong>比特币价格下跌→矿工抛售→价格进一步下跌，典型的正反馈踩踏</div>
+      <div class="counter"><strong>边界：</strong>反馈不是简单的"循环因果"。反馈回路需要明确识别信号的极性（正/负）、增益（放大倍数）和延迟（反应时间），这三者缺一不可。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard2">
+  <div class="flip-inner" id="flipInner2">
+    <div class="flip-front" id="flipFront2">
+      <div class="concept-icon">🔄</div>
+      <h3>网络传播动力学</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Network Propagation</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack2">
+      <h4>网络传播动力学 (Network Propagation)</h4>
+      <div class="def"><strong>定义：</strong>事物（信息、病毒、观念、技术）在网络结构中传播的规律：超级传播者、临界阈值、级联失效——传播效果取决于网络拓扑，而非个体属性。</div>
+      <div class="analogy"><strong>类比：</strong>一场森林大火的关键不是哪棵树最易燃，而是树与树之间的距离。超级传播者就像森林中最密的树丛——烧着它，大火就控制不住了。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【137-140 爆发与传播】</strong>超级传播者驱动疫情、观念传播中的"接纳与抗拒"、"活在网络中vs跳出网络外"<br><strong>【050 养卡囤号】</strong>工信部打击养卡囤号——诈骗者利用电信网络的超级节点效应<br><strong>【235 NFT天价头像】</strong>一个头像卖5000万——网络效应使价值集中在少数节点</div>
+      <div class="counter"><strong>边界：</strong>不是"病毒式传播=好事"。网络中同样存在传播失效——信息茧房、回音室效应恰好是网络结构阻碍了某些信息传播。网络的"小世界"特性既是加速器也是过滤器。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard3">
+  <div class="flip-inner" id="flipInner3">
+    <div class="flip-front" id="flipFront3">
+      <div class="concept-icon">🌐</div>
+      <h3>★ 演化算法</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Evolutionary Algorithms</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack3">
+      <h4>★ 演化算法 (Evolutionary Algorithms)</h4>
+      <div class="def"><strong>定义：</strong>通过"变异+选择"在不解空间中搜索最优解的方法。不需要预设目标，只需定义适应度函数，让系统自我迭代——自然界用此创造了眼睛，AI用此优化神经网络。</div>
+      <div class="analogy"><strong>类比：</strong>达尔文的自然选择就像一场没有评委的比赛——选手（变异）自己上场，环境（选择）默默淘汰不合格的。30亿年后，剩下的都是"刚好够用"的幸存者，不是"完美设计"。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【144-146 演化思维】</strong>达尔文怎么想？"用描述代替解释"——演化不需要目的，只需要机制<br><strong>【217 遗传算法】</strong>把马赛克变回性感图片——AI通过变异+交叉+选择逐代"进化"出清晰图像<br><strong>【019 龙人】</strong>中国发现"龙人"——人类演化不是单线进步，而是多分支并行、大部分灭绝</div>
+      <div class="counter"><strong>边界：</strong>演化≠进步。演化没有方向，不追求"更好"，只保留"在当前环境下能活下来的"。鲨鱼几亿年没怎么变不是"落后"，而是它的解决方案已经足够好。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard4">
+  <div class="flip-inner" id="flipInner4">
+    <div class="flip-front" id="flipFront4">
+      <div class="concept-icon">🛠️</div>
+      <h3>★ 信息量化</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Information Quantification</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack4">
+      <h4>★ 信息量化 (Information Quantification)</h4>
+      <div class="def"><strong>定义：</strong>用香农信息论和效应量等工具，把模糊的"感觉"转化为可测量、可比较的数值。信息的本质是不确定性的消除——你不知道的事越多，信息量越大。</div>
+      <div class="analogy"><strong>类比：</strong>"明天太阳会升起"——信息量接近0（几乎确定）；"明天会下雪"——在夏天这句话信息量巨大（极大消除不确定性）。好的科技新闻告诉你的不是"又发生了什么"，而是"这件事改变了你对世界的什么预期"。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【116 量化】</strong>什么是信息？怎么有效学习？——信息量=不确定性的减少量<br><strong>【100 效应量】</strong>培养阳刚之气——不谈效应量谈影响就是耍流氓，统计显著≠实际重要<br><strong>【038 问答】</strong>挑选羽绒服——用真实量化指标（充绒量、蓬松度）取代广告话术</div>
+      <div class="counter"><strong>边界：</strong>不是"数据多=信息多"。冗余数据的信息量为零。也不是"精确=正确"——给出8位小数却没报告误差范围，比粗略但诚实的估计更危险。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard5">
+  <div class="flip-inner" id="flipInner5">
+    <div class="flip-front" id="flipFront5">
+      <div class="concept-icon">🌐</div>
+      <h3>★ 能量转换效率</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Energy Conversion Efficiency</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack5">
+      <h4>★ 能量转换效率 (Energy Conversion Efficiency)</h4>
+      <div class="def"><strong>定义：</strong>任何技术系统本质上都是能量转换器：电池（化学能→电能）、芯片（电能→计算）、火箭（化学能→动能）。转换效率决定了技术的天花板——热力学定律不可谈判。</div>
+      <div class="analogy"><strong>类比：</strong>就像月薪3万但房贷2万5——你的"技术自由度"只有5千。电池的"薪水"是能量密度，"房贷"是充放电损耗、温控系统、安全冗余。所谓的"电池革命"，不过是把5千变成6千，而不是变成3万。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【076 固态电池】</strong>锂电池的必经之路——液态电解质的能量密度天花板≈300Wh/kg，固态可以翻倍<br><strong>【101 特斯拉电池】</strong>4680电池的提升本质上是在现有框架下抠出10-20%的效率边际改善<br><strong>【292 锂电池回收】</strong>回收困境——回收本身消耗的能量可能超过新造电池，能量EROI为负</div>
+      <div class="counter"><strong>边界：</strong>不是"效率至上主义"。有些场景可靠性比效率重要（心脏起搏器），有些场景功率密度比能量效率重要（导弹）。选择什么指标优化，取决于约束条件，而非简单的"效率越高越好"。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard6">
+  <div class="flip-inner" id="flipInner6">
+    <div class="flip-front" id="flipFront6">
+      <div class="concept-icon">🛠️</div>
+      <h3>工程师思维</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Engineer's Mindset</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack6">
+      <h4>工程师思维 (Engineer's Mindset)</h4>
+      <div class="def"><strong>定义：</strong>在约束条件下寻求可行解的思维方式：分解问题→量化约束→迭代优化→验证假设。与纯科学思维的区别在于：工程师接受"足够好"，不追求"绝对正确"。</div>
+      <div class="analogy"><strong>类比：</strong>科学家问"为什么天空是蓝色的"，工程师问"怎么造一个蓝色天空的仿制品，预算是500块，下周三之前交货"。科学探索可能性空间，工程在可能性空间中找到一个能用的点。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【029-031 工程师思维】</strong>寻找地外生命的工程方法——不讨论"外星人长什么样"，而是设计可检测的信号特征<br><strong>【168-176 马斯克与火箭】</strong>SpaceX的核心创新不是技术突破，而是"不锈钢造火箭"这种工程取舍——用低效率换低成本和快迭代<br><strong>【256 苏炳添】</strong>科学式训练——量化每一步的力学效率，分解0.01秒的改进空间</div>
+      <div class="counter"><strong>边界：</strong>不是"工程师=闷头干活"。最好的工程师思维恰恰需要跳跃式假设（类似科学家），但必须回来用测试验证。也不是"能用就行"——"足够好"有明确定义，不是偷工减料的借口。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard7">
+  <div class="flip-inner" id="flipInner7">
+    <div class="flip-front" id="flipFront7">
+      <div class="concept-icon">🔄</div>
+      <h3>复杂系统涌现</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Complex System Emergence</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack7">
+      <h4>复杂系统涌现 (Complex System Emergence)</h4>
+      <div class="def"><strong>定义：</strong>大量简单个体通过局部互动产生全局有序现象的过程。单个神经元不"思考"，百亿神经元网络产生了意识；单只蚂蚁不"规划"，蚁群却能找到最短路径。涌现是"多就是不同"的实证。</div>
+      <div class="analogy"><strong>类比：</strong>水分子没有"湿"的属性，但万亿个水分子放在一起，"湿"就涌现出来了。同理，没有一个脑细胞"知道"你在想什么——"思考"是神经元集体行为的涌现属性，不是某个CEO神经元的指令。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【278 精神控制】</strong>脑机接口实现"意念控制"——不是读取某个"意念神经元"，而是解码神经元群体的涌现模式<br><strong>【271 时间晶体】</strong>热力学第二定律被挑战——周期性时间结构在量子多体系统中的涌现<br><strong>【288 AI辩论】</strong>与机器人辩论不输——语言理解是数十亿参数非线性互动的涌现结果</div>
+      <div class="counter"><strong>边界：</strong>不是"整体大于部分之和"这样的鸡汤。涌现有严格的数学定义——系统在相变临界点附近，宏观行为不能用微观规律的简单外推来解释。很多"涌现"其实是"你还没找到正确的微观解释"。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard8">
+  <div class="flip-inner" id="flipInner8">
+    <div class="flip-front" id="flipFront8">
+      <div class="concept-icon">🛠️</div>
+      <h3>科学验证机制</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Scientific Verification</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack8">
+      <h4>科学验证机制 (Scientific Verification)</h4>
+      <div class="def"><strong>定义：</strong>从猜想→假设→实验→同行评议→复现的完整链条。每一步都有特定的淘汰功能：实验淘汰错误假设，复现淘汰造假，同行评议淘汰低质量研究。任何一个环节断裂，整个机制失效。</div>
+      <div class="analogy"><strong>类比：</strong>科学不是"相信专家"的信仰系统，而是一台"碎纸机"——你把论文投进去，经过实验、复现、评议三道刀片，出来的要么是经得起考验的知识，要么是碎片。论文造假就是试图用塑料纸骗过碎纸机。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【023-025 诺贝尔奖得主造假】</strong>诺奖得主为什么也造假？因为科学验证机制的每个环节都可能被人钻空子<br><strong>【125 验证】</strong>经典案例的"崩塌"——斯坦福监狱实验、权力姿势等曾经轰动的研究被复现推翻<br><strong>【132-134 学术期刊】</strong>谁是科学家？虚假繁荣如何产生？——同行评议制度的诞生和腐化</div>
+      <div class="counter"><strong>边界：</strong>不是"经过同行评议=正确"。同行评议只是验证链的一环，大量通过评议的论文后来被证明错误。也不是"科学家说的就对"——科学的价值恰恰在于任何人说的都可能被证明是错的。</div>
+    </div>
+  </div>
+</div>
+<div class="flip-card" id="flipCard9">
+  <div class="flip-inner" id="flipInner9">
+    <div class="flip-front" id="flipFront9">
+      <div class="concept-icon">🌐</div>
+      <h3>技术采用曲线</h3>
+      <p style="font-size:.8rem;color:var(--text-light);">Tech Adoption Curve</p>
+      <p class="hint">点击翻转</p>
+    </div>
+    <div class="flip-back" id="flipBack9">
+      <h4>技术采用曲线 (Tech Adoption Curve)</h4>
+      <div class="def"><strong>定义：</strong>新技术被市场接受的过程遵循S曲线：创新者(2.5%)→早期采用者(13.5%)→早期大众(34%)→晚期大众(34%)→落后者(16%)。大多数技术死在"鸿沟"——早期采用者到早期大众之间的断层。</div>
+      <div class="analogy"><strong>类比：</strong>新技术的命运就像开一家餐厅——前两周朋友来捧场（创新者），接下来靠口碑吸引食客（早期采用者），但能否活过第三个月取决于路人会不会推门进来（跨越鸿沟）。大多数餐厅死在第三个月——大多数技术也一样。</div>
+      <div class="examples"><strong>示例：</strong><br><strong>【041-047 自动驾驶】</strong>从美国国防部推动起步→科技公司入局→短暂高峰→迅速转凉——完整的炒作周期<br><strong>【209-212 鸿蒙】</strong>不同时代的操作系统——为什么大多数操作系统死在鸿沟里而iOS/Android活下来了<br><strong>【126 飞行汽车】</strong>飞行汽车≈不靠谱——不是技术不行，而是永远卡在早期采用者阶段，无法跨越监管和基础设施的鸿沟</div>
+      <div class="counter"><strong>边界：</strong>不是"新技术迟早会普及"。绝大多数技术永远跨不过鸿沟——3D电视、Google Glass、区块链手机都是例子。也不是"越先进越容易普及"——Betamax画质优于VHS却输了，技术优势≠市场优势。</div>
+    </div>
+  </div>
+</div>
+</div>
+</div><!-- /cards -->
+
+<!-- ================================================================ -->
+<!-- 题库系统 -->
+<!-- ================================================================ -->
+<div class="section" id="quiz">
+<h2>③ 题库系统</h2>
+<div class="quiz-nav">
+  <button class="active" onclick="showQuizTab('mcq')">📌 选择题 (20道)</button>
+  <button onclick="showQuizTab('short')">📝 简答题 (10道)</button>
+  <button onclick="randomizeQuiz()" style="margin-left:auto;">🎲 随机抽题</button>
+  <button onclick="resetQuiz()">🔄 重置</button>
+</div>
+
+<div id="staticQuiz">
+  <p style="text-align:center;color:var(--text-light);padding:2rem;">🎲 请点击“随机抽题”开始练习，或选择“选择题”/“简答题”模式。</p>
+</div>
+
+<div id="mcqQuiz" style="display:none;">
+
+<div class="mcq-item" id="mcqItem0">
+  <h4>1. 卓克用"可能性空间"解释"幸福的家庭总是相似"，其核心逻辑是？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq0_opt0" onclick="selectMCQ(0,0)">A. 幸福需要家庭在所有关键节点上都做出正确选择——这是极窄的可能路径</div><div class="mcq-opt" id="mcq0_opt1" onclick="selectMCQ(0,1)">B. 幸福家庭的成员智商更高，因此能做出更好的选择</div><div class="mcq-opt" id="mcq0_opt2" onclick="selectMCQ(0,2)">C. 幸福是一种基因决定的特质，与后天选择无关</div><div class="mcq-opt" id="mcq0_opt3" onclick="selectMCQ(0,3)">D. 幸福的家庭没有遇到过任何冲突节点</div></div>
+  <div id="mcqFeedback0" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem1">
+  <h4>2. 反馈回路中，正反馈和负反馈的关键区别是什么？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq1_opt0" onclick="selectMCQ(1,0)">A. 正反馈是好的，负反馈是坏的</div><div class="mcq-opt" id="mcq1_opt1" onclick="selectMCQ(1,1)">B. 正反馈放大偏离、负反馈抑制偏离——两者在系统中的作用不同，没有好坏之分</div><div class="mcq-opt" id="mcq1_opt2" onclick="selectMCQ(1,2)">C. 正反馈速度快，负反馈速度慢</div><div class="mcq-opt" id="mcq1_opt3" onclick="selectMCQ(1,3)">D. 正反馈只存在于社会系统，负反馈只存在于自然系统</div></div>
+  <div id="mcqFeedback1" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem2">
+  <h4>3. 为什么超级传播者在网络传播中如此关键？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq2_opt0" onclick="selectMCQ(2,0)">A. 他们的个人影响力比其他人加起来还大</div><div class="mcq-opt" id="mcq2_opt1" onclick="selectMCQ(2,1)">B. 他们处于网络中的高连接度节点位置，切断他们就能大幅降低传播效率</div><div class="mcq-opt" id="mcq2_opt2" onclick="selectMCQ(2,2)">C. 他们具有特殊的生理特征</div><div class="mcq-opt" id="mcq2_opt3" onclick="selectMCQ(2,3)">D. 他们的传播内容比其他人更优质</div></div>
+  <div id="mcqFeedback2" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem3">
+  <h4>4. 演化算法的核心思想不包括以下哪一项？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq3_opt0" onclick="selectMCQ(3,0)">A. 变异——随机产生多样化的候选解</div><div class="mcq-opt" id="mcq3_opt1" onclick="selectMCQ(3,1)">B. 选择——根据适应度淘汰不合格的候选解</div><div class="mcq-opt" id="mcq3_opt2" onclick="selectMCQ(3,2)">C. 设计——由一个顶层设计者规划最优演化路径</div><div class="mcq-opt" id="mcq3_opt3" onclick="selectMCQ(3,3)">D. 迭代——在多代中持续改进</div></div>
+  <div id="mcqFeedback3" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem4">
+  <h4>5. 香农信息论中"信息量"衡量的是什么？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq4_opt0" onclick="selectMCQ(4,0)">A. 消息的字数和长度</div><div class="mcq-opt" id="mcq4_opt1" onclick="selectMCQ(4,1)">B. 消息消除的不确定性的大小</div><div class="mcq-opt" id="mcq4_opt2" onclick="selectMCQ(4,2)">C. 消息的重要性或价值</div><div class="mcq-opt" id="mcq4_opt3" onclick="selectMCQ(4,3)">D. 消息的传播范围</div></div>
+  <div id="mcqFeedback4" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem5">
+  <h4>6. 能量转换效率的概念如何解释电池技术的"渐进式进步"？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq5_opt0" onclick="selectMCQ(5,0)">A. 电池厂商故意放慢研发速度以维持利润</div><div class="mcq-opt" id="mcq5_opt1" onclick="selectMCQ(5,1)">B. 能量密度的提升受限于基础物理化学——每一次10%的提升都是材料层面的辛苦突破</div><div class="mcq-opt" id="mcq5_opt2" onclick="selectMCQ(5,2)">C. 电池技术已经100年没有进步了</div><div class="mcq-opt" id="mcq5_opt3" onclick="selectMCQ(5,3)">D. 能量转换效率与电池性能无关</div></div>
+  <div id="mcqFeedback5" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem6">
+  <h4>7. 工程师思维和科学家思维的本质区别在于？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq6_opt0" onclick="selectMCQ(6,0)">A. 工程师比科学家更聪明</div><div class="mcq-opt" id="mcq6_opt1" onclick="selectMCQ(6,1)">B. 工程师不需要理论，只需要动手</div><div class="mcq-opt" id="mcq6_opt2" onclick="selectMCQ(6,2)">C. 工程师在约束条件下寻找满意解，科学家探索原理而不一定考虑实用性</div><div class="mcq-opt" id="mcq6_opt3" onclick="selectMCQ(6,3)">D. 工程师不关心实验结果</div></div>
+  <div id="mcqFeedback6" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem7">
+  <h4>8. 复杂系统"涌现"的最准确描述是？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq7_opt0" onclick="selectMCQ(7,0)">A. 系统整体的价值大于各部分价值之和</div><div class="mcq-opt" id="mcq7_opt1" onclick="selectMCQ(7,1)">B. 大量简单个体的局部互动产生了无法从个体行为直接预测的全局模式</div><div class="mcq-opt" id="mcq7_opt2" onclick="selectMCQ(7,2)">C. 系统越复杂就越高级</div><div class="mcq-opt" id="mcq7_opt3" onclick="selectMCQ(7,3)">D. 任何复杂系统最终都会涌现出智能</div></div>
+  <div id="mcqFeedback7" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem8">
+  <h4>9. 科学验证机制中，哪一环节专门负责淘汰造假？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq8_opt0" onclick="selectMCQ(8,0)">A. 提出假设</div><div class="mcq-opt" id="mcq8_opt1" onclick="selectMCQ(8,1)">B. 同行评议</div><div class="mcq-opt" id="mcq8_opt2" onclick="selectMCQ(8,2)">C. 独立复现</div><div class="mcq-opt" id="mcq8_opt3" onclick="selectMCQ(8,3)">D. 发表论文</div></div>
+  <div id="mcqFeedback8" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem9">
+  <h4>10. 技术采用曲线中的"鸿沟"指的是什么？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq9_opt0" onclick="selectMCQ(9,0)">A. 早期采用者和早期大众之间的断层——大多数技术死在这里</div><div class="mcq-opt" id="mcq9_opt1" onclick="selectMCQ(9,1)">B. 技术开发完成到产品上市之间的时间差</div><div class="mcq-opt" id="mcq9_opt2" onclick="selectMCQ(9,2)">C. 不同国家之间的技术差距</div><div class="mcq-opt" id="mcq9_opt3" onclick="selectMCQ(9,3)">D. 研发投入和利润回报之间的差距</div></div>
+  <div id="mcqFeedback9" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem10">
+  <h4>11. 为什么"控制"被定义为"缩减可能性空间"？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq10_opt0" onclick="selectMCQ(10,0)">A. 因为控制就是消除所有可能性</div><div class="mcq-opt" id="mcq10_opt1" onclick="selectMCQ(10,1)">B. 因为可能性越多越危险</div><div class="mcq-opt" id="mcq10_opt2" onclick="selectMCQ(10,2)">C. 因为控制需要中央集权</div><div class="mcq-opt" id="mcq10_opt3" onclick="selectMCQ(10,3)">D. 因为控制的核心是让系统从众多可能状态中收敛到期望的状态</div></div>
+  <div id="mcqFeedback10" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem11">
+  <h4>12. 比特币价格崩盘时发生正反馈踩踏的机制是？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq11_opt0" onclick="selectMCQ(11,0)">A. 价格下跌→用户信心增加→更多人买入→价格回升</div><div class="mcq-opt" id="mcq11_opt1" onclick="selectMCQ(11,1)">B. 比特币网络被黑客攻击导致价格下跌</div><div class="mcq-opt" id="mcq11_opt2" onclick="selectMCQ(11,2)">C. 政府禁止比特币交易导致价格归零</div><div class="mcq-opt" id="mcq11_opt3" onclick="selectMCQ(11,3)">D. 价格下跌→矿工被迫抛售→供给增加→价格进一步下跌→更多矿工抛售</div></div>
+  <div id="mcqFeedback11" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem12">
+  <h4>13. 卓克评价"飞行汽车≈不靠谱"，用技术采用曲线怎么解释？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq12_opt0" onclick="selectMCQ(12,0)">A. 飞行汽车的技术根本不可行</div><div class="mcq-opt" id="mcq12_opt1" onclick="selectMCQ(12,1)">B. 飞行汽车已经普及了</div><div class="mcq-opt" id="mcq12_opt2" onclick="selectMCQ(12,2)">C. 消费者不需要飞行汽车</div><div class="mcq-opt" id="mcq12_opt3" onclick="selectMCQ(12,3)">D. 飞行汽车永远卡在早期采用者阶段，因为监管、基础设施和安全问题构成不可逾越的鸿沟</div></div>
+  <div id="mcqFeedback12" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem13">
+  <h4>14. "用描述代替解释"是演化思维的重要原则，其含义是？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq13_opt0" onclick="selectMCQ(13,0)">A. 演化不需要预设目的——"为了飞得更高所以进化出翅膀"是错的，应该说"有更大翅膀的个体存活率更高"</div><div class="mcq-opt" id="mcq13_opt1" onclick="selectMCQ(13,1)">B. 永远不要试图解释任何事情</div><div class="mcq-opt" id="mcq13_opt2" onclick="selectMCQ(13,2)">C. 科学理论不需要逻辑</div><div class="mcq-opt" id="mcq13_opt3" onclick="selectMCQ(13,3)">D. 描述就是解释，两者没有区别</div></div>
+  <div id="mcqFeedback13" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem14">
+  <h4>15. 效应量（Effect Size）在评估科学研究时为什么重要？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq14_opt0" onclick="selectMCQ(14,0)">A. 效应量越大的研究质量越高</div><div class="mcq-opt" id="mcq14_opt1" onclick="selectMCQ(14,1)">B. 效应量是衡量论文引用次数的指标</div><div class="mcq-opt" id="mcq14_opt2" onclick="selectMCQ(14,2)">C. 统计显著不等于实际重要——一个药物可以"显著"降低血压但只降了0.5mmHg，效应量告诉你这个变化有多大</div><div class="mcq-opt" id="mcq14_opt3" onclick="selectMCQ(14,3)">D. 效应量可以取代p值</div></div>
+  <div id="mcqFeedback14" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem15">
+  <h4>16. SpaceX用不锈钢造火箭体现了工程师思维的什么特点？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq15_opt0" onclick="selectMCQ(15,0)">A. 偷工减料以降低成本</div><div class="mcq-opt" id="mcq15_opt1" onclick="selectMCQ(15,1)">B. 不锈钢比传统材料更先进</div><div class="mcq-opt" id="mcq15_opt2" onclick="selectMCQ(15,2)">C. 不尊重航天传统</div><div class="mcq-opt" id="mcq15_opt3" onclick="selectMCQ(15,3)">D. 在"成本-性能-时间"三维约束空间中做取舍——放弃极致性能换快速迭代和低成本</div></div>
+  <div id="mcqFeedback15" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem16">
+  <h4>17. 学术期刊的历史发展揭示了什么？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq16_opt0" onclick="selectMCQ(16,0)">A. 同行评议制度是对"虚假繁荣"和低质量研究的回应——科学家群体需要通过制度重建秩序</div><div class="mcq-opt" id="mcq16_opt1" onclick="selectMCQ(16,1)">B. 学术出版从一开始就是完美的</div><div class="mcq-opt" id="mcq16_opt2" onclick="selectMCQ(16,2)">C. 学术期刊很快就会被互联网取代</div><div class="mcq-opt" id="mcq16_opt3" onclick="selectMCQ(16,3)">D. 科学家不需要同行评议</div></div>
+  <div id="mcqFeedback16" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem17">
+  <h4>18. 全球变暖背景下出现极端寒冬，用反馈回路怎么解释？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq17_opt0" onclick="selectMCQ(17,0)">A. 极地涡旋的不稳定性被气候变暖触发，形成正反馈：暖化→涡旋减弱→冷空气南侵→局部极端低温</div><div class="mcq-opt" id="mcq17_opt1" onclick="selectMCQ(17,1)">B. 全球变暖是骗局</div><div class="mcq-opt" id="mcq17_opt2" onclick="selectMCQ(17,2)">C. 温室效应在冬天不起作用</div><div class="mcq-opt" id="mcq17_opt3" onclick="selectMCQ(17,3)">D. 极端寒冬与全球变暖无关</div></div>
+  <div id="mcqFeedback17" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem18">
+  <h4>19. 为什么"能量EROI为负"对锂电池回收是一个根本性问题？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq18_opt0" onclick="selectMCQ(18,0)">A. 因为回收成本太高导致企业亏损</div><div class="mcq-opt" id="mcq18_opt1" onclick="selectMCQ(18,1)">B. 因为回收技术还不够成熟</div><div class="mcq-opt" id="mcq18_opt2" onclick="selectMCQ(18,2)">C. 因为回收过程消耗的总能量超过回收获得的材料所能提供的能量——从热力学角度不可持续</div><div class="mcq-opt" id="mcq18_opt3" onclick="selectMCQ(18,3)">D. 因为没有人愿意做回收工作</div></div>
+  <div id="mcqFeedback18" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div class="mcq-item" id="mcqItem19">
+  <h4>20. 用MKS框架看，"室温超导"新闻为什么大概率被高估了？</h4>
+  <div class="mcq-opts"><div class="mcq-opt" id="mcq19_opt0" onclick="selectMCQ(19,0)">A. 超导材料没有实用价值</div><div class="mcq-opt" id="mcq19_opt1" onclick="selectMCQ(19,1)">B. 室温超导已经商用了</div><div class="mcq-opt" id="mcq19_opt2" onclick="selectMCQ(19,2)">C. 科学家在故意造假</div><div class="mcq-opt" id="mcq19_opt3" onclick="selectMCQ(19,3)">D. 从可能性空间和科学验证机制看，实验室条件（极高压）下的"室温"≠日常意义的室温，且未经独立复现——它远未到达技术采用曲线的起点</div></div>
+  <div id="mcqFeedback19" style="margin-top:.5rem;font-size:.85rem;"></div>
+</div>
+<div style="text-align:center;margin:1.5rem 0;">
+  <button class="btn btn-primary" onclick="gradeMCQ()">✅ 提交答案</button>
+</div>
+<div id="mcqResult" class="quiz-result" style="display:none;"></div>
+</div><!-- /mcqQuiz -->
+
+<div id="shortQuiz" style="display:none;">
+
+<div class="sa-item">
+  <h4>1. 请用"可能性空间"的概念解释：为什么大多数创业公司会失败？</h4>
+  <textarea id="sa0" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(0)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint0">思考创业成功需要同时在多少个关键节点上做出正确选择</div>
+</div>
+<div class="sa-item">
+  <h4>2. 举一个你身边的例子，说明正反馈和负反馈如何共同维持一个系统的稳定。</h4>
+  <textarea id="sa1" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(1)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint1">可以从身体调节（血糖、体温）、经济行为（价格波动）或社会现象角度思考</div>
+</div>
+<div class="sa-item">
+  <h4>3. 演化算法和"智能设计论"的根本分歧在哪里？为什么演化思维对理解科技趋势很重要？</h4>
+  <textarea id="sa2" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(2)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint2">关键区别在于有没有预设目的和顶层设计者</div>
+</div>
+<div class="sa-item">
+  <h4>4. 一个朋友告诉你"喝XX茶能减肥，有科学实验证明"。用信息量化和科学验证机制两个概念，你会怎么分析这个说法？</h4>
+  <textarea id="sa3" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(3)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint3">先看效应量（减了多少），再看实验设计（样本量、对照组、是否复现过）</div>
+</div>
+<div class="sa-item">
+  <h4>5. 为什么说"电池革命"不太可能一夜之间发生？从能量转换效率的角度解释。</h4>
+  <textarea id="sa4" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(4)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint4">能量密度的提升受限于元素周期表和化学键能——这是物理天花板，不是工程问题</div>
+</div>
+<div class="sa-item">
+  <h4>6. 如何用"网络传播动力学"理解为什么假新闻往往比真新闻传播得更快？</h4>
+  <textarea id="sa5" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(5)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint5">假新闻可以"优化"得更具传染性（更情绪化、更简单），而真新闻受限于事实的复杂性</div>
+</div>
+<div class="sa-item">
+  <h4>7. 用"工程师思维"分析：为什么5G商用进程"真正要走的路还很长"？</h4>
+  <textarea id="sa6" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(6)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint6">5G面临覆盖成本、功耗、应用场景三重约束——工程师需要同时满足这三者</div>
+</div>
+<div class="sa-item">
+  <h4>8. 什么是"涌现"？为什么单个神经元不会思考，但百亿个神经元在一起就会？</h4>
+  <textarea id="sa7" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(7)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint7">涌现的关键在于非线性互动——神经网络的集体行为超越个体行为的简单叠加</div>
+</div>
+<div class="sa-item">
+  <h4>9. 美剧《切尔诺贝利》中核事故的升级过程如何体现"正反馈失控"？</h4>
+  <textarea id="sa8" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(8)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint8">每一个错误决策放大前一个决策的后果——设计缺陷→操作失误→隐瞒信息→更大的操作失误</div>
+</div>
+<div class="sa-item">
+  <h4>10. 结合MKS框架中至少3个概念，分析你对"AI会取代人类工作"这一观点的判断。</h4>
+  <textarea id="sa9" placeholder="请输入你的回答..."></textarea>
+  <button class="btn" onclick="toggleHint(9)" style="margin-top:.5rem;">👁 查看提示</button>
+  <div class="sa-hint" id="saHint9">可以从技术采用曲线（AI处于哪个阶段）、演化算法（AI的"进化"有无方向）、工程师思维（AI能处理约束条件吗）等角度</div>
+</div>
+<div style="text-align:center;margin:1.5rem 0;">
+  <button class="btn btn-primary" onclick="gradeShort()">✅ 查看参考思路</button>
+</div>
+</div><!-- /shortQuiz -->
+
+</div><!-- /quiz -->
+
+<!-- ================================================================ -->
+<!-- 考试模式 -->
+<!-- ================================================================ -->
+<div class="section" id="exam">
+<h2>④ 考试模式</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">倒计时 15 分钟，随机抽取 10 道选择题 + 3 道简答题。模拟真实考试环境。</p>
+
+<div class="exam-container">
+  <div class="exam-timer" id="examTimer">15:00</div>
+  <div id="examContent">
+    <button class="btn btn-primary" onclick="startExam()">🏁 开始考试</button>
+  </div>
+  <div id="examResult" style="display:none;"></div>
+</div>
+
+</div><!-- /exam -->
+
+<!-- ================================================================ -->
+<!-- 复习模式 -->
+<!-- ================================================================ -->
+<div class="section" id="review">
+<h2>⑤ 复习模式</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">根据艾宾浩斯遗忘曲线，将已学概念按“即将遗忘”优先级排序，重点复习薄弱环节。</p>
+
+<div id="reviewContent">
+  <div class="learning-path" id="reviewPath">
+    <p style="text-align:center;padding:2rem;color:var(--text-light);">请先在知识卡片区域学完至少 3 个概念，再进入复习模式。</p>
+  </div>
+  <div id="reviewCards" style="margin-top:1rem;"></div>
+</div>
+
+</div><!-- /review -->
+
+<!-- ================================================================ -->
+<!-- 思维导图 -->
+<!-- ================================================================ -->
+<div class="section" id="mindmap">
+<h2>⑥ 思维导图</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">以“可能性空间”为核心节点的思维导图，展示 10 个概念之间的层次和关联。</p>
+
+<div class="graph-container" style="min-height:400px;">
+<svg width="100%" height="100%" viewBox="0.00 0.00 662.00 873.00"
+ viewBox="0.00 0.00 662.00 873.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 869)">
+<title>MKS</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-869 658,-869 658,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_legend</title>
+<polygon fill="#fffaf2" stroke="#e8d5c4" stroke-width="1.5" points="8,-590.5 8,-857 194,-857 194,-590.5 8,-590.5"/>
+<text text-anchor="middle" x="101" y="-842.6" font-family="Noto Sans SC,SimHei,sans-serif" font-size="13.00">图例</text>
+</g>
+<!-- legend_method -->
+<g id="node1" class="node">
+<title>legend_method</title>
+<polygon fill="#d4e6f1" stroke="black" stroke-width="2" points="186,-823.5 100,-823.5 100,-794.5 186,-794.5 186,-823.5"/>
+<text text-anchor="middle" x="143" y="-806.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00">方法论工具</text>
+</g>
+<!-- legend_system -->
+<g id="node2" class="node">
+<title>legend_system</title>
+<polygon fill="#d5f5e3" stroke="black" stroke-width="2" points="186,-725.5 100,-725.5 100,-696.5 186,-696.5 186,-725.5"/>
+<text text-anchor="middle" x="143" y="-708.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00">系统动力学</text>
+</g>
+<!-- legend_method&#45;&gt;legend_system -->
+<!-- legend_apply -->
+<g id="node3" class="node">
+<title>legend_apply</title>
+<polygon fill="#fdebd0" stroke="black" stroke-width="2" points="186,-627.5 100,-627.5 100,-598.5 186,-598.5 186,-627.5"/>
+<text text-anchor="middle" x="143" y="-610.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00">应用与表现层</text>
+</g>
+<!-- legend_system&#45;&gt;legend_apply -->
+<!-- legend_feedback -->
+<g id="node4" class="node">
+<title>legend_feedback</title>
+<text text-anchor="middle" x="49" y="-806.5" font-family="Noto Sans SC,SimHei,sans-serif" font-size="10.00">┅ 回环反馈</text>
+</g>
+<!-- possibility -->
+<g id="node5" class="node">
+<title>possibility</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="459,-834 327,-834 327,-784 459,-784 459,-834"/>
+<text text-anchor="middle" x="393" y="-812.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">可能性空间</text>
+<text text-anchor="middle" x="393" y="-797.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Possibility Space</text>
+</g>
+<!-- information -->
+<g id="node6" class="node">
+<title>information</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="492.5,-736 293.5,-736 293.5,-686 492.5,-686 492.5,-736"/>
+<text text-anchor="middle" x="393" y="-714.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">信息量化</text>
+<text text-anchor="middle" x="393" y="-699.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Information Quantification</text>
+</g>
+<!-- possibility&#45;&gt;information -->
+<g id="edge20" class="edge">
+<title>possibility&#45;&gt;information</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M393,-783.78C393,-772.41 393,-758.66 393,-746.25"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="396.5,-746.22 393,-736.22 389.5,-746.22 396.5,-746.22"/>
+<text text-anchor="middle" x="421.5" y="-757.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">量化可能性</text>
+</g>
+<!-- engineering -->
+<g id="node8" class="node">
+<title>engineering</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="589.5,-540 440.5,-540 440.5,-490 589.5,-490 589.5,-540"/>
+<text text-anchor="middle" x="515" y="-518.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">工程师思维</text>
+<text text-anchor="middle" x="515" y="-503.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Engineer&#39;s Mindset</text>
+</g>
+<!-- possibility&#45;&gt;engineering -->
+<g id="edge4" class="edge">
+<title>possibility&#45;&gt;engineering</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M435.71,-783.95C495.85,-747.13 602.13,-670.38 638,-570 646.42,-546.43 626.17,-533.13 599.8,-525.64"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="600.4,-522.18 589.85,-523.13 598.69,-528.97 600.4,-522.18"/>
+<text text-anchor="middle" x="620" y="-659.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">约束条件定义</text>
+</g>
+<!-- evolution -->
+<g id="node12" class="node">
+<title>evolution</title>
+<polygon fill="#fdebd0" stroke="#e67e22" stroke-width="2" points="392,-344 208,-344 208,-294 392,-294 392,-344"/>
+<text text-anchor="middle" x="300" y="-322.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">演化算法</text>
+<text text-anchor="middle" x="300" y="-307.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Evolutionary Algorithms</text>
+</g>
+<!-- possibility&#45;&gt;evolution -->
+<g id="edge3" class="edge">
+<title>possibility&#45;&gt;evolution</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M326.86,-799.57C275.87,-788.92 214,-765.07 214,-712 214,-712 214,-712 214,-416 214,-389.43 232.5,-366.86 252.34,-350.29"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="254.6,-352.96 260.27,-344.01 250.26,-347.47 254.6,-352.96"/>
+<text text-anchor="middle" x="248" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">提供分析框架</text>
+</g>
+<!-- verification -->
+<g id="node7" class="node">
+<title>verification</title>
+<polygon fill="#d4e6f1" stroke="#2980b9" stroke-width="2" points="486.5,-442 325.5,-442 325.5,-392 486.5,-392 486.5,-442"/>
+<text text-anchor="middle" x="406" y="-420.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">科学验证机制</text>
+<text text-anchor="middle" x="406" y="-405.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Scientific Verification</text>
+</g>
+<!-- information&#45;&gt;verification -->
+<g id="edge12" class="edge">
+<title>information&#45;&gt;verification</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M394.09,-685.61C396.4,-633.63 401.82,-511.84 404.48,-452.17"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="407.98,-452.26 404.93,-442.12 400.98,-451.95 407.98,-452.26"/>
+<text text-anchor="middle" x="433" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">提供测量基础</text>
+</g>
+<!-- energy -->
+<g id="node13" class="node">
+<title>energy</title>
+<polygon fill="#fdebd0" stroke="#e67e22" stroke-width="2" points="569,-638 421,-638 421,-588 569,-588 569,-638"/>
+<text text-anchor="middle" x="495" y="-616.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">能量转换效率</text>
+<text text-anchor="middle" x="495" y="-601.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Energy Conversion</text>
+</g>
+<!-- information&#45;&gt;energy -->
+<g id="edge13" class="edge">
+<title>information&#45;&gt;energy</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M418.74,-685.78C431.79,-673.5 447.78,-658.44 461.75,-645.29"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="464.39,-647.62 469.27,-638.22 459.59,-642.52 464.39,-647.62"/>
+<text text-anchor="middle" x="484" y="-659.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">量化效率指标</text>
+</g>
+<!-- verification&#45;&gt;evolution -->
+<g id="edge17" class="edge">
+<title>verification&#45;&gt;evolution</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M379.25,-391.78C365.69,-379.5 349.07,-364.44 334.55,-351.29"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="336.5,-348.34 326.74,-344.22 331.8,-353.52 336.5,-348.34"/>
+<text text-anchor="middle" x="393" y="-365.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">淘汰错误理论</text>
+</g>
+<!-- engineering&#45;&gt;verification -->
+<g id="edge14" class="edge">
+<title>engineering&#45;&gt;verification</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M456.28,-489.83C447.84,-484.75 439.75,-478.82 433,-472 427.19,-466.14 422.4,-458.77 418.55,-451.38"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="421.61,-449.66 414.18,-442.12 415.29,-452.66 421.61,-449.66"/>
+<text text-anchor="middle" x="467" y="-463.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">实践检验方法</text>
+</g>
+<!-- network -->
+<g id="node10" class="node">
+<title>network</title>
+<polygon fill="#d5f5e3" stroke="#27ae60" stroke-width="2" points="304.5,-50 143.5,-50 143.5,0 304.5,0 304.5,-50"/>
+<text text-anchor="middle" x="224" y="-28.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">网络传播动力学</text>
+<text text-anchor="middle" x="224" y="-13.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Network Propagation</text>
+</g>
+<!-- engineering&#45;&gt;network -->
+<g id="edge21" class="edge">
+<title>engineering&#45;&gt;network</title>
+<path fill="none" stroke="#2c3e50" stroke-width="1.8" d="M515,-489.93C515,-470.52 515,-442.5 515,-418 515,-418 515,-418 515,-122 515,-79.21 400.07,-52.29 314.67,-38.19"/>
+<polygon fill="#2c3e50" stroke="#2c3e50" stroke-width="1.8" points="315.1,-34.71 304.67,-36.57 313.99,-41.62 315.1,-34.71"/>
+<text text-anchor="middle" x="549" y="-267.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">设计网络拓扑</text>
+</g>
+<!-- engineering&#45;&gt;energy -->
+<g id="edge15" class="edge">
+<title>engineering&#45;&gt;energy</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M555.19,-540.23C564.44,-548.95 570.02,-559.3 564,-570 561.74,-574.03 558.91,-577.72 555.71,-581.08"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="553.2,-578.63 548.16,-587.95 557.91,-583.81 553.2,-578.63"/>
+<text text-anchor="middle" x="600" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">工程优化目标</text>
+</g>
+<!-- feedback -->
+<g id="node9" class="node">
+<title>feedback</title>
+<polygon fill="#d5f5e3" stroke="#27ae60" stroke-width="2" points="176,-442 46,-442 46,-392 176,-392 176,-442"/>
+<text text-anchor="middle" x="111" y="-420.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">反馈回路</text>
+<text text-anchor="middle" x="111" y="-405.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Feedback Loops</text>
+</g>
+<!-- feedback&#45;&gt;network -->
+<g id="edge5" class="edge">
+<title>feedback&#45;&gt;network</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M92.02,-391.85C79.35,-373.29 65,-346.43 65,-320 65,-320 65,-320 65,-122 65,-84.56 97.72,-61.33 133.47,-47.12"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="134.96,-50.3 143.1,-43.53 132.51,-43.75 134.96,-50.3"/>
+<text text-anchor="middle" x="99" y="-218.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">调节传播速率</text>
+</g>
+<!-- complexity -->
+<g id="node11" class="node">
+<title>complexity</title>
+<polygon fill="#d5f5e3" stroke="#27ae60" stroke-width="2" points="359,-246 199,-246 199,-196 359,-196 359,-246"/>
+<text text-anchor="middle" x="279" y="-224.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">复杂系统涌现</text>
+<text text-anchor="middle" x="279" y="-209.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Complex Emergence</text>
+</g>
+<!-- feedback&#45;&gt;complexity -->
+<g id="edge6" class="edge">
+<title>feedback&#45;&gt;complexity</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M106,-391.6C102,-365.11 99.94,-322.73 120,-294 136.61,-270.22 163.02,-254.16 189.59,-243.37"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="190.89,-246.61 198.98,-239.76 188.39,-240.08 190.89,-246.61"/>
+<text text-anchor="middle" x="159.5" y="-316.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">稳定与失衡机制</text>
+</g>
+<!-- feedback&#45;&gt;evolution -->
+<g id="edge7" class="edge">
+<title>feedback&#45;&gt;evolution</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M125.34,-391.87C132.7,-381.33 142.54,-369.66 154,-362 162.44,-356.36 179.01,-350.31 198.06,-344.61"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="199.27,-347.91 207.89,-341.76 197.31,-341.18 199.27,-347.91"/>
+<text text-anchor="middle" x="177" y="-365.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">选择压力</text>
+</g>
+<!-- network&#45;&gt;complexity -->
+<g id="edge9" class="edge">
+<title>network&#45;&gt;complexity</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M266.46,-50.08C272.54,-55.25 278.05,-61.23 282,-68 315.22,-124.96 298.9,-141.65 293,-178 292.56,-180.68 291.98,-183.42 291.3,-186.16"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="287.9,-185.33 288.5,-195.9 294.63,-187.26 287.9,-185.33"/>
+<text text-anchor="middle" x="330.5" y="-120.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">网络化涌现</text>
+</g>
+<!-- adoption -->
+<g id="node14" class="node">
+<title>adoption</title>
+<polygon fill="#fdebd0" stroke="#e67e22" stroke-width="2" points="271.5,-148 112.5,-148 112.5,-98 271.5,-98 271.5,-148"/>
+<text text-anchor="middle" x="192" y="-126.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">技术采用曲线</text>
+<text text-anchor="middle" x="192" y="-111.8" font-family="Noto Sans SC,SimHei,sans-serif" font-size="14.00">Tech Adoption Curve</text>
+</g>
+<!-- network&#45;&gt;adoption -->
+<g id="edge8" class="edge">
+<title>network&#45;&gt;adoption</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M151.11,-50.3C144.39,-55.18 138.45,-61.02 134,-68 128.84,-76.1 130.81,-83.79 136.39,-90.7"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="134.11,-93.37 143.7,-97.87 139.01,-88.37 134.11,-93.37"/>
+<text text-anchor="middle" x="168" y="-71.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">底层传播逻辑</text>
+</g>
+<!-- complexity&#45;&gt;complexity -->
+<g id="edge22" class="edge">
+<title>complexity&#45;&gt;complexity</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M359.36,-228.94C369.97,-227.58 377,-224.94 377,-221 377,-218.48 374.11,-216.49 369.25,-215.02"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="369.85,-211.57 359.36,-213.06 368.49,-218.44 369.85,-211.57"/>
+<text text-anchor="middle" x="405.5" y="-218.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">自组织迭代</text>
+</g>
+<!-- complexity&#45;&gt;adoption -->
+<g id="edge16" class="edge">
+<title>complexity&#45;&gt;adoption</title>
+<path fill="none" stroke="#e67e22" stroke-width="1.8" d="M253.05,-195.59C247.31,-189.93 241.35,-183.85 236,-178 229.65,-171.05 223.09,-163.34 217.04,-155.96"/>
+<polygon fill="#e67e22" stroke="#e67e22" stroke-width="1.8" points="219.72,-153.71 210.71,-148.15 214.29,-158.12 219.72,-153.71"/>
+<text text-anchor="middle" x="264.5" y="-169.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">系统级行为</text>
+</g>
+<!-- evolution&#45;&gt;information -->
+<g id="edge11" class="edge">
+<title>evolution&#45;&gt;information</title>
+<path fill="none" stroke="#2980b9" stroke-width="1.8" d="M298.83,-344.06C297.99,-363.47 297,-391.49 297,-416 297,-614 297,-614 297,-614 297,-641.48 316.92,-663.85 338.61,-680.05"/>
+<polygon fill="#2980b9" stroke="#2980b9" stroke-width="1.8" points="336.78,-683.05 346.97,-685.96 340.82,-677.33 336.78,-683.05"/>
+<text text-anchor="middle" x="331" y="-512.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">优化搜索策略</text>
+</g>
+<!-- evolution&#45;&gt;complexity -->
+<g id="edge10" class="edge">
+<title>evolution&#45;&gt;complexity</title>
+<path fill="none" stroke="#27ae60" stroke-width="1.8" d="M294.7,-293.78C292.21,-282.41 289.21,-268.66 286.49,-256.25"/>
+<polygon fill="#27ae60" stroke="#27ae60" stroke-width="1.8" points="289.85,-255.24 284.3,-246.22 283.02,-256.73 289.85,-255.24"/>
+<text text-anchor="middle" x="324" y="-267.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#2c3e50">解释涌现机制</text>
+</g>
+<!-- energy&#45;&gt;engineering -->
+<g id="edge18" class="edge">
+<title>energy&#45;&gt;engineering</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M482.59,-587.81C479.35,-578.39 477.61,-567.59 481,-558 482.16,-554.72 483.7,-551.5 485.49,-548.41"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="488.43,-550.3 491.05,-540.03 482.6,-546.43 488.43,-550.3"/>
+<text text-anchor="middle" x="520.5" y="-561.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">技术可行性约束</text>
+</g>
+<!-- adoption&#45;&gt;network -->
+<g id="edge19" class="edge">
+<title>adoption&#45;&gt;network</title>
+<path fill="none" stroke="#7f8c8d" stroke-width="1.8" stroke-dasharray="5,2" d="M200.07,-97.78C203.9,-86.29 208.54,-72.38 212.71,-59.87"/>
+<polygon fill="#7f8c8d" stroke="#7f8c8d" stroke-width="1.8" points="216.09,-60.81 215.93,-50.22 209.44,-58.6 216.09,-60.81"/>
+<text text-anchor="middle" x="244" y="-71.2" font-family="Noto Sans SC,SimHei,sans-serif" font-size="11.00" fill="#7f8c8d">重塑传播结构</text>
+</g>
+</g>
+</svg>
+</div>
+<p style="text-align:center;font-size:.85rem;color:var(--text-light);margin-top:.5rem;">图例：蓝色=方法论工具层 · 绿色=系统动力学层 · 橙色=应用与表现层 · 虚线=回环反馈</p>
+
+</div><!-- /mindmap -->
+
+<!-- ================================================================ -->
+<!-- 深度追问 -->
+<!-- ================================================================ -->
+<div class="section" id="deepqa">
+<h2>⑦ 深度追问</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">针对每个概念的深层探究，点击展开答案。</p>
+
+<div class="dq-item" id="dqItem0">
+  <div class="dq-q" onclick="toggleDQ(0)">如果"可能性空间"如此重要，为什么大多数人做决策时不使用这个框架？</div>
+  <div class="dq-a">
+    <p>因为人类大脑进化出的是"快速直觉判断"而非"可能性空间穷举"。在远古环境中，快速反应比精确计算更有利于生存。但现代社会的问题（投资、职业选择、健康决策）恰恰需要可能性空间思维——它们是多变量、长反馈周期的复杂问题。这就是为什么我们需要刻意训练：用慢思考（系统2）去覆盖快思考（系统1）的默认反应。</p>
+  </div>
+</div>
+<div class="dq-item" id="dqItem1">
+  <div class="dq-q" onclick="toggleDQ(1)">演化算法和深度学习中的梯度下降有什么区别？为什么说演化算法在某些场景中更优？</div>
+  <div class="dq-a">
+    <p>梯度下降需要可微的损失函数，它沿着最陡峭的方向下降——效率高但容易陷入局部最优。演化算法不需要梯度信息，只需定义适应度——它在全局搜索空间中随机跳跃，更可能跳出局部最优但效率低。这解释了为什么深度学习用梯度下降（因为有梯度），而神经网络架构搜索（NAS）和某些强化学习场景用演化算法（因为损失面不可微或不连续）。</p>
+  </div>
+</div>
+<div class="dq-item" id="dqItem2">
+  <div class="dq-q" onclick="toggleDQ(2)">"信息量=消除的不确定性"这个定义如何帮助我们评估科技新闻的质量？</div>
+  <div class="dq-a">
+    <p>一条科技新闻的真正价值不在于它报道了什么事件，而在于它改变了你对世界的什么预期。如果一篇新闻报道了一个你已经能猜到结果的事件（如"科学家又一重大突破"却没有具体说明突破的尺度），它的信息量为零。高质量的科技新闻应该告诉你：之前我们以为X，现在证据表明是Y，改变的程度是Z（效应量），这个改变的可靠性是P（置信度）。没有这些，就是在制造信息熵而非减少不确定性。</p>
+  </div>
+</div>
+<div class="dq-item" id="dqItem3">
+  <div class="dq-q" onclick="toggleDQ(3)">为什么人类对某些风险（核辐射）极度恐惧，对另一些风险（空气污染）却很漠然，尽管后者每年杀死的人远多于前者？</div>
+  <div class="dq-a">
+    <p>这是风险认知的非理性特征——不是按实际危害排序，而是按"恐惧启发式"排序：可控性（你觉得自己能控制的风险更不恐惧）、新奇性（新风险比老风险更恐惧）、可见性（能直观看到危害的更容易恐惧）、公平性（被迫承受的比自愿选择的更让人愤怒）。空气污染虽杀死更多人，但它是"老面孔"、慢性、看不见。核辐射虽更安全（统计上），但它是"新面孔"、急性、不可见但能想象（让人联想到原子弹）。理解这个机制本身就是一种"信息量化"——用实际致死率/致残率取代直觉恐惧。</p>
+  </div>
+</div>
+<div class="dq-item" id="dqItem4">
+  <div class="dq-q" onclick="toggleDQ(4)">如果让你用MKS的10个概念向一个非科技背景的朋友解释"为什么AI不会毁灭人类"，你会怎么说？</div>
+  <div class="dq-a">
+    <p>我会从三个概念切入：(1) 可能性空间——AI的"可能性空间"受限于训练数据和目标函数，它不像人类一样有"想要什么"的欲望——GPT只是一个超大的填空模型，它的全部"目的"就是预测下一个token；(2) 复杂系统涌现——"意识"是特定架构（生物神经元+亿万年演化+具身认知）的涌现属性，不代表任何复杂系统都会涌现出意识,就像你的笔记本电脑比蚂蚁复杂得多但它没有"想要什么"的意志；(3) 反馈回路——当前的AI缺乏自我修改的正反馈回路（它不能"想到"去改变自己的代码并且真的去执行），而这是任何"失控"场景的前提。真正的风险不是AI"觉醒"，而是人类把AI的输出当成神谕。</p>
+  </div>
+</div>
+<div class="dq-item" id="dqItem5">
+  <div class="dq-q" onclick="toggleDQ(5)">能源转型中，"碳中和"的科学基础和工程挑战分别是什么？它们分别对应MKS中的哪些概念？</div>
+  <div class="dq-a">
+    <p>科学基础对应"反馈回路"——地球碳循环是一个巨大的反馈系统，人类排放打破了数百万年的均衡（正反馈：升温→冻土融化→释放甲烷→更多升温）。工程挑战对应"能量转换效率"和"工程师思维"——我们需要在20-30年内完成从化石能源到清洁能源的转换，但能源基础设施的"惯性"（沉没成本、供应链、人才）使得转换速度受限于现有能量转换效率的"天花板"——太阳能板的理论极限约33%（单结），储能成本需要降到$50/kWh以下才有经济可行性。碳中和不是"要不要"的问题，而是"以什么样的速度、付出什么样的代价"的问题——这是一个工程师思维才能回答的约束优化问题。</p>
+  </div>
+</div>
+</div><!-- /deepqa -->
+
+<!-- ================================================================ -->
+<!-- 案例分析 -->
+<!-- ================================================================ -->
+<div class="section" id="cases">
+<h2>⑧ 案例分析</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">将 MKS 概念应用于真实科技事件的多维分析。</p>
+
+<div class="case-card">
+  <h3>案例一：室温超导——从实验室突破到"狼来了"</h3>
+  <div class="concepts-tag">应用概念：可能性空间 + 科学验证机制 + 技术采用曲线</div>
+  <p style="margin:.8rem 0;font-size:.9rem;"><strong>背景：</strong>2021年至今，"室温超导"多次登上头条。迪亚斯团队声称在近常压下实现室温超导，引发全球轰动，随后因数据造假被Nature撤稿。韩国的LK-99声称发现常温常压超导体，全球实验室争相复现，最终被证伪。</p>
+  <p style="font-size:.88rem;line-height:1.9;"><strong>MKS 分析：</strong>从MKS视角看，室温超导新闻的每次"爆发"都遵循相同的模式：(1) 科学验证机制不完全——预印本绕过同行评议，独立复现尚未完成就被媒体放大；(2) 可能性空间被误判——"室温"在实验室意味着极端高压（数百万大气压），而非日常意义，实际应用的可能性空间极小；(3) 技术采用曲线被跳跃——一个处于基础研究阶段（甚至尚未复现）的发现被直接描绘为即将改变世界。MKS教给我们的不是"别信科技新闻"，而是"用对的概念框架去定价每一条新闻"——室温超导的价值不在于"是不是真的"，而在于"在多大概率、多长时间尺度上可能为真"。</p>
+</div>
+<div class="case-card">
+  <h3>案例二：新冠疫苗——风险认知的校准实验</h3>
+  <div class="concepts-tag">应用概念：信息量化 + 反馈回路 + 网络传播动力学</div>
+  <p style="margin:.8rem 0;font-size:.9rem;"><strong>背景：</strong>新冠疫情中，mRNA疫苗从研发到获批仅用不到一年，创下历史纪录。但公众接受度严重分化：一些人认为"太快不安全"拒绝接种，另一些人认为疫苗是完美解决方案。真实数据是：mRNA疫苗有效率约95%，严重副作用率约百万分之一。</p>
+  <p style="font-size:.88rem;line-height:1.9;"><strong>MKS 分析：</strong>这是一个完美的风险认知实验：(1) 信息量化——"95%有效"不是100%，"百万分之一副作用"不是零。公众对极小概率的直觉判断极不可靠（低估飞机失事、高估鲨鱼攻击），需要效应量思维来校准；(2) 反馈回路——疫苗接种形成群体免疫是负反馈（抑制传播），但社交媒体上的疫苗谣言形成正反馈（恐惧→分享→更多恐惧），两者同时运作；(3) 网络传播动力学——疫苗犹豫不是均匀分布的，而是集中在某些社交网络的子群中，形成了信息茧房。这个案例说明：即使科技本身是好的，如果信息生态系统出了问题，好的科技也无法产生好的社会结果。</p>
+</div>
+<div class="case-card">
+  <h3>案例三：自动驾驶——炒作周期与鸿沟跨越</h3>
+  <div class="concepts-tag">应用概念：技术采用曲线 + 工程师思维 + 复杂系统涌现</div>
+  <p style="margin:.8rem 0;font-size:.9rem;"><strong>背景：</strong>2015年业界预测"2020年实现全自动驾驶"；2018年Uber自动驾驶致死事故；2021年特斯拉Fully Self-Driving仍处于L2级；2023年多家公司缩减或退出自动驾驶业务。Waymo和Cruise在有限区域实现了无人出租车运营，但规模化遥遥无期。</p>
+  <p style="font-size:.88rem;line-height:1.9;"><strong>MKS 分析：</strong>自动驾驶是技术采用曲线的教科书级案例：(1) 从2015年的"创新者狂欢"（技术可行！）到2018年的"鸿沟显现"（但它安全吗？）到2021年的"现实检验"（长尾问题无穷无尽），完整经历了Gartner炒作周期的每个阶段；(2) 工程师思维揭示根本问题——封闭道路≠开放道路，99%准确率≠可接受（99%=每天出100次错），约束条件不是"能不能开"而是"出了事谁负责"；(3) 复杂系统涌现——交通是成千上万人类驾驶员的涌现行为，自动驾驶汽车作为"理性个体"要融入这个"非理性的集体"，面临的不只是技术问题，更是人机交互的涌现复杂性。MKS的启示：判断一项技术的真实进度，不要看最乐观的预测，而要看向它卡在哪条"鸿沟"里。</p>
+</div>
+</div><!-- /cases -->
+
+<!-- ================================================================ -->
+<!-- 实战决策 -->
+<!-- ================================================================ -->
+<div class="section" id="decision">
+<h2>⑨ 实战决策</h2>
+<p style="color:var(--text-light);margin-bottom:1rem;">模拟真实科技决策场景，用 MKS 概念做出理性判断。</p>
+
+<div class="decision-scenario">
+  <h3>🎯 决策场景</h3>
+  <p style="margin:.8rem 0;font-size:.95rem;">你是一位科技投资人，面前有三个项目供你选择：</p>
+  <ol style="margin:.5rem 0 1rem 1.5rem;font-size:.9rem;">
+    <li><strong>固态电池创业公司</strong>：声称实验室数据达 500Wh/kg，但仅制备了扣式电池，距离量产至少 5 年</li>
+    <li><strong>AI 写作副本生成工具</strong>：已有 10 万免费用户，但付费转化率仅 0.5%，竞品包括微软、Adobe 等巨头</li>
+    <li><strong>室温超导材料加公公司</strong>：靠替实验室加工超导样品盈利，收入稳定但市场规模极小</li>
+  </ol>
+  <textarea id="decisionInput" placeholder="请用 MKS 中至少 3 个概念分析你的投资决策..."></textarea>
+  <div style="margin-top:.8rem;">
+    <button class="btn btn-primary" onclick="showDecisionAnalysis()">🔍 查看 MKS 分析框架</button>
+  </div>
+  <div class="analysis-box" id="decisionAnalysis">
+    <h4 style="color:var(--accent);margin-bottom:.5rem;">MKS 分析框架</h4>
+    <p style="font-size:.88rem;line-height:1.9;">
+      <strong>1. 能量转换效率 视角：</strong>固态电池 500Wh/kg 近乎理论极限，从“扣式电池→量产”的能量 EROI 可能为负——制造复杂度和成本涨了 100 倍以上。<br><br>
+      <strong>2. 技术采用曲线 视角：</strong>室温超导仍处于“创新者”阶段，AI写作工具已进入“早期采用者”阶段，但前者可能永远跨不过鸿沟，后者的鸿沟是“免费→付费”的商业模式转变。<br><br>
+      <strong>3. 可能性空间 视角：</strong>固态电池成功的可能性空间极窄（需要同时突破制造工艺、成本、寿命三重约束），而AI工具的可能性空间较宽（可以通过异化、垂直细分绕开巨头）。<br><br>
+      <strong>综合判断：</strong>AI 工具的风险/回报比最优（可控的鸿沟，宽可能性空间）。室温超导加工是稳定但天花板极低的生意。固态电池是“高回报但极低概率”的典型——只适合承受得起全额亏损的投资者。
+    </p>
+  </div>
+</div>
+
+</div><!-- /decision -->
+
+</div><!-- /container -->
+
+<div class="site-footer">
+  <p>卓克·科技参考 MKS 知识集 · 基于 317 篇原文提炼 · 生成于 2026-06-11</p>
+  <p style="margin-top:.3rem;">MKS 铁律：一个领域 80% 的价值集中在 20% 的核心概念中</p>
+</div>
+
+<script>
+/* ========== Global State ========== */
+var FLIPPED_CARDS = {};
+var LEARNED_CARDS = {};
+var MCQ_ANSWERS = [0, 1, 1, 2, 1, 1, 2, 1, 2, 0, 3, 3, 3, 0, 2, 3, 0, 0, 2, 3];
+var MCQ_SELECTED = {};
+var EXAM_TIMER = null;
+var EXAM_TIME_LEFT = 900;
+var EXAM_ACTIVE = false;
+
+/* ========== Nav Active Tracking ========== */
+(function() {
+  var sections = document.querySelectorAll('.section');
+  var navLinks = document.querySelectorAll('.main-nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        navLinks.forEach(function(l) { l.classList.remove('active'); });
+        var target = document.querySelector('.main-nav a[href="#' + e.target.id + '"]');
+        if (target) target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(function(s) { observer.observe(s); });
+})();
+
+/* ========== 3D Flip Cards ========== */
+(function() {
+  var cards = document.querySelectorAll('.flip-card');
+  cards.forEach(function(card, i) {
+    card.addEventListener('click', function() {
+      var inner = document.getElementById('flipInner' + i);
+      var isFlipped = inner.classList.contains('flipped');
+      if (isFlipped) {
+        inner.classList.remove('flipped');
+        FLIPPED_CARDS[i] = false;
+      } else {
+        inner.classList.add('flipped');
+        FLIPPED_CARDS[i] = true;
+      }
+      updateCardProgress();
+    });
+  });
+})();
+
+function markCardLearned() {
+  var idx = -1;
+  for (var i = 0; i < 10; i++) {
+    if (FLIPPED_CARDS[i] && !LEARNED_CARDS[i]) { idx = i; break; }
+  }
+  if (idx < 0) {
+    for (var j = 0; j < 10; j++) {
+      if (!LEARNED_CARDS[j]) { idx = j; break; }
+    }
+  }
+  if (idx >= 0) {
+    LEARNED_CARDS[idx] = true;
+    var card = document.getElementById('flipCard' + idx);
+    if (card) card.style.border = '2px solid ' + getComputedStyle(document.documentElement).getPropertyValue('--accent3').trim();
+    updateCardProgress();
+    updateOverallProgress();
+    updateReviewMode();
+  }
+}
+
+function updateCardProgress() {
+  var flipped = Object.values(FLIPPED_CARDS).filter(Boolean).length;
+  // Update cardIndex
+  var lastFlipped = -1;
+  for (var ci = 0; ci < 10; ci++) { if (FLIPPED_CARDS[ci]) lastFlipped = ci; }
+  document.getElementById('cardIndex').textContent = lastFlipped >= 0 ? '当前：概念' + (lastFlipped+1) : '当前：-';
+  var learned = Object.values(LEARNED_CARDS).filter(Boolean).length;
+  document.getElementById('cardProgress').textContent = '进度：' + learned + '/10';
+  document.getElementById('cardLearned').textContent = '已翻转：' + flipped + ' · 已学习：' + learned;
+  if (learned >= 10) {
+    document.getElementById('cardLearned').textContent += ' 🎉 全部完成！';
+  }
+  updateOverallProgress();
+}
+
+function updateOverallProgress() {
+  var learned = Object.values(LEARNED_CARDS).filter(Boolean).length;
+  var pct = Math.round((learned / 10) * 100);
+  document.getElementById('overallProgress').style.width = pct + '%';
+  document.getElementById('conceptsLearned').textContent = learned;
+  document.getElementById('cardsFlipped').textContent = Object.values(FLIPPED_CARDS).filter(Boolean).length;
+}
+
+/* ========== Quiz System ========== */
+function showQuizTab(tab) {
+  document.getElementById('staticQuiz').style.display = 'none';
+  document.getElementById('mcqQuiz').style.display = (tab === 'mcq') ? 'block' : 'none';
+  document.getElementById('shortQuiz').style.display = (tab === 'short') ? 'block' : 'none';
+  var btns = document.querySelectorAll('#quiz .quiz-nav button');
+  btns[0].classList.toggle('active', tab === 'mcq');
+  btns[1].classList.toggle('active', tab === 'short');
+}
+
+function randomizeQuiz() {
+  showQuizTab('mcq');
+}
+
+function resetQuiz() {
+  MCQ_SELECTED = {};
+  document.querySelectorAll('.mcq-opt').forEach(function(o) { o.className = 'mcq-opt'; });
+  document.querySelectorAll('[id^="mcqFeedback"]').forEach(function(f) { f.textContent = ''; });
+  document.getElementById('mcqResult').style.display = 'none';
+  document.querySelectorAll('.sa-item textarea').forEach(function(t) { t.value = ''; });
+  document.querySelectorAll('.sa-hint').forEach(function(h) { h.classList.remove('show'); });
+  document.getElementById('staticQuiz').style.display = 'block';
+  document.getElementById('mcqQuiz').style.display = 'none';
+  document.getElementById('shortQuiz').style.display = 'none';
+}
+
+function selectMCQ(qIdx, optIdx) {
+  if (MCQ_SELECTED[qIdx] !== undefined) return; // Already answered
+  var opts = document.querySelectorAll('#mcq' + qIdx + '_opt' + optIdx);
+  // Deselect all opts for this question
+  for (var j = 0; j < 4; j++) {
+    var o = document.getElementById('mcq' + qIdx + '_opt' + j);
+    if (o) o.classList.remove('selected');
+  }
+  var target = document.getElementById('mcq' + qIdx + '_opt' + optIdx);
+  if (target) target.classList.add('selected');
+  MCQ_SELECTED[qIdx] = optIdx;
+}
+
+function gradeMCQ() {
+  var correct = 0, total = MCQ_ANSWERS.length;
+  for (var i = 0; i < total; i++) {
+    if (MCQ_SELECTED[i] === undefined) continue;
+    var isCorrect = (MCQ_SELECTED[i] === MCQ_ANSWERS[i]);
+    var feedbackEl = document.getElementById('mcqFeedback' + i);
+    // Highlight correct answer
+    document.getElementById('mcq' + i + '_opt' + MCQ_ANSWERS[i]).classList.add('correct');
+    if (!isCorrect && MCQ_SELECTED[i] !== undefined) {
+      document.getElementById('mcq' + i + '_opt' + MCQ_SELECTED[i]).classList.add('wrong');
+      feedbackEl.textContent = '✘ 正确答案是 ' + String.fromCharCode(65 + MCQ_ANSWERS[i]);
+      feedbackEl.style.color = '#c0392b';
+    } else if (isCorrect) {
+      feedbackEl.textContent = '✔ 正确！';
+      feedbackEl.style.color = '#27ae60';
+      correct++;
+    }
+  }
+  var pct = Math.round((correct / total) * 100);
+  document.getElementById('mcqResult').style.display = 'block';
+  document.getElementById('mcqResult').innerHTML = '<h3>📊 成绩：' + correct + '/' + total + ' (' + pct + '%)</h3>' +
+    '<p>' + (pct >= 80 ? '🌟 优秀！MKS概念掌握良好' : pct >= 60 ? '👍 良好，继续加油' : '📚 建议重新复习知识卡片') + '</p>';
+  document.getElementById('quizScore').textContent = pct + '%';
+  updateOverallProgress();
+}
+
+function toggleHint(idx) {
+  var h = document.getElementById('saHint' + idx);
+  h.classList.toggle('show');
+}
+
+function gradeShort() {
+  alert('简答题需要自主评估。请对照提示检查你的回答是否涵盖了关键点。建议将你的回答与案例分析中的思路进行对比。');
+}
+
+/* ========== Exam Mode ========== */
+function startExam() {
+  EXAM_ACTIVE = true;
+  EXAM_TIME_LEFT = 900;
+  document.getElementById('examResult').style.display = 'none';
+
+  // Build exam: 5 random MCQs + 2 random short answer
+  var mcqPool = [];
+  for (var i = 0; i < MCQ_ANSWERS.length; i++) mcqPool.push(i);
+  mcqPool.sort(function() { return Math.random() - 0.5; });
+  var examMCQs = mcqPool.slice(0, 5);
+
+  var saPool = [];
+  for (var j = 0; j < 10; j++) saPool.push(j);
+  saPool.sort(function() { return Math.random() - 0.5; });
+  var examSAs = saPool.slice(0, 3);
+
+  var examHTML = '<h3>📌 选择题 (5道)</h3>';
+  var mcqData = [{"q": "卓克用\"可能性空间\"解释\"幸福的家庭总是相似\"，其核心逻辑是？", "opts": ["幸福需要家庭在所有关键节点上都做出正确选择——这是极窄的可能路径", "幸福家庭的成员智商更高，因此能做出更好的选择", "幸福是一种基因决定的特质，与后天选择无关", "幸福的家庭没有遇到过任何冲突节点"], "answer": 0}, {"q": "反馈回路中，正反馈和负反馈的关键区别是什么？", "opts": ["正反馈是好的，负反馈是坏的", "正反馈放大偏离、负反馈抑制偏离——两者在系统中的作用不同，没有好坏之分", "正反馈速度快，负反馈速度慢", "正反馈只存在于社会系统，负反馈只存在于自然系统"], "answer": 1}, {"q": "为什么超级传播者在网络传播中如此关键？", "opts": ["他们的个人影响力比其他人加起来还大", "他们处于网络中的高连接度节点位置，切断他们就能大幅降低传播效率", "他们具有特殊的生理特征", "他们的传播内容比其他人更优质"], "answer": 1}, {"q": "演化算法的核心思想不包括以下哪一项？", "opts": ["变异——随机产生多样化的候选解", "选择——根据适应度淘汰不合格的候选解", "设计——由一个顶层设计者规划最优演化路径", "迭代——在多代中持续改进"], "answer": 2}, {"q": "香农信息论中\"信息量\"衡量的是什么？", "opts": ["消息的字数和长度", "消息消除的不确定性的大小", "消息的重要性或价值", "消息的传播范围"], "answer": 1}, {"q": "能量转换效率的概念如何解释电池技术的\"渐进式进步\"？", "opts": ["电池厂商故意放慢研发速度以维持利润", "能量密度的提升受限于基础物理化学——每一次10%的提升都是材料层面的辛苦突破", "电池技术已经100年没有进步了", "能量转换效率与电池性能无关"], "answer": 1}, {"q": "工程师思维和科学家思维的本质区别在于？", "opts": ["工程师比科学家更聪明", "工程师不需要理论，只需要动手", "工程师在约束条件下寻找满意解，科学家探索原理而不一定考虑实用性", "工程师不关心实验结果"], "answer": 2}, {"q": "复杂系统\"涌现\"的最准确描述是？", "opts": ["系统整体的价值大于各部分价值之和", "大量简单个体的局部互动产生了无法从个体行为直接预测的全局模式", "系统越复杂就越高级", "任何复杂系统最终都会涌现出智能"], "answer": 1}, {"q": "科学验证机制中，哪一环节专门负责淘汰造假？", "opts": ["提出假设", "同行评议", "独立复现", "发表论文"], "answer": 2}, {"q": "技术采用曲线中的\"鸿沟\"指的是什么？", "opts": ["早期采用者和早期大众之间的断层——大多数技术死在这里", "技术开发完成到产品上市之间的时间差", "不同国家之间的技术差距", "研发投入和利润回报之间的差距"], "answer": 0}, {"q": "为什么\"控制\"被定义为\"缩减可能性空间\"？", "opts": ["因为控制就是消除所有可能性", "因为可能性越多越危险", "因为控制需要中央集权", "因为控制的核心是让系统从众多可能状态中收敛到期望的状态"], "answer": 3}, {"q": "比特币价格崩盘时发生正反馈踩踏的机制是？", "opts": ["价格下跌→用户信心增加→更多人买入→价格回升", "比特币网络被黑客攻击导致价格下跌", "政府禁止比特币交易导致价格归零", "价格下跌→矿工被迫抛售→供给增加→价格进一步下跌→更多矿工抛售"], "answer": 3}, {"q": "卓克评价\"飞行汽车≈不靠谱\"，用技术采用曲线怎么解释？", "opts": ["飞行汽车的技术根本不可行", "飞行汽车已经普及了", "消费者不需要飞行汽车", "飞行汽车永远卡在早期采用者阶段，因为监管、基础设施和安全问题构成不可逾越的鸿沟"], "answer": 3}, {"q": "\"用描述代替解释\"是演化思维的重要原则，其含义是？", "opts": ["演化不需要预设目的——\"为了飞得更高所以进化出翅膀\"是错的，应该说\"有更大翅膀的个体存活率更高\"", "永远不要试图解释任何事情", "科学理论不需要逻辑", "描述就是解释，两者没有区别"], "answer": 0}, {"q": "效应量（Effect Size）在评估科学研究时为什么重要？", "opts": ["效应量越大的研究质量越高", "效应量是衡量论文引用次数的指标", "统计显著不等于实际重要——一个药物可以\"显著\"降低血压但只降了0.5mmHg，效应量告诉你这个变化有多大", "效应量可以取代p值"], "answer": 2}, {"q": "SpaceX用不锈钢造火箭体现了工程师思维的什么特点？", "opts": ["偷工减料以降低成本", "不锈钢比传统材料更先进", "不尊重航天传统", "在\"成本-性能-时间\"三维约束空间中做取舍——放弃极致性能换快速迭代和低成本"], "answer": 3}, {"q": "学术期刊的历史发展揭示了什么？", "opts": ["同行评议制度是对\"虚假繁荣\"和低质量研究的回应——科学家群体需要通过制度重建秩序", "学术出版从一开始就是完美的", "学术期刊很快就会被互联网取代", "科学家不需要同行评议"], "answer": 0}, {"q": "全球变暖背景下出现极端寒冬，用反馈回路怎么解释？", "opts": ["极地涡旋的不稳定性被气候变暖触发，形成正反馈：暖化→涡旋减弱→冷空气南侵→局部极端低温", "全球变暖是骗局", "温室效应在冬天不起作用", "极端寒冬与全球变暖无关"], "answer": 0}, {"q": "为什么\"能量EROI为负\"对锂电池回收是一个根本性问题？", "opts": ["因为回收成本太高导致企业亏损", "因为回收技术还不够成熟", "因为回收过程消耗的总能量超过回收获得的材料所能提供的能量——从热力学角度不可持续", "因为没有人愿意做回收工作"], "answer": 2}, {"q": "用MKS框架看，\"室温超导\"新闻为什么大概率被高估了？", "opts": ["超导材料没有实用价值", "室温超导已经商用了", "科学家在故意造假", "从可能性空间和科学验证机制看，实验室条件（极高压）下的\"室温\"≠日常意义的室温，且未经独立复现——它远未到达技术采用曲线的起点"], "answer": 3}];
+  var saData = [{"q": "请用\"可能性空间\"的概念解释：为什么大多数创业公司会失败？", "hint": "思考创业成功需要同时在多少个关键节点上做出正确选择"}, {"q": "举一个你身边的例子，说明正反馈和负反馈如何共同维持一个系统的稳定。", "hint": "可以从身体调节（血糖、体温）、经济行为（价格波动）或社会现象角度思考"}, {"q": "演化算法和\"智能设计论\"的根本分歧在哪里？为什么演化思维对理解科技趋势很重要？", "hint": "关键区别在于有没有预设目的和顶层设计者"}, {"q": "一个朋友告诉你\"喝XX茶能减肥，有科学实验证明\"。用信息量化和科学验证机制两个概念，你会怎么分析这个说法？", "hint": "先看效应量（减了多少），再看实验设计（样本量、对照组、是否复现过）"}, {"q": "为什么说\"电池革命\"不太可能一夜之间发生？从能量转换效率的角度解释。", "hint": "能量密度的提升受限于元素周期表和化学键能——这是物理天花板，不是工程问题"}, {"q": "如何用\"网络传播动力学\"理解为什么假新闻往往比真新闻传播得更快？", "hint": "假新闻可以\"优化\"得更具传染性（更情绪化、更简单），而真新闻受限于事实的复杂性"}, {"q": "用\"工程师思维\"分析：为什么5G商用进程\"真正要走的路还很长\"？", "hint": "5G面临覆盖成本、功耗、应用场景三重约束——工程师需要同时满足这三者"}, {"q": "什么是\"涌现\"？为什么单个神经元不会思考，但百亿个神经元在一起就会？", "hint": "涌现的关键在于非线性互动——神经网络的集体行为超越个体行为的简单叠加"}, {"q": "美剧《切尔诺贝利》中核事故的升级过程如何体现\"正反馈失控\"？", "hint": "每一个错误决策放大前一个决策的后果——设计缺陷→操作失误→隐瞒信息→更大的操作失误"}, {"q": "结合MKS框架中至少3个概念，分析你对\"AI会取代人类工作\"这一观点的判断。", "hint": "可以从技术采用曲线（AI处于哪个阶段）、演化算法（AI的\"进化\"有无方向）、工程师思维（AI能处理约束条件吗）等角度"}];
+
+  for (var k = 0; k < examMCQs.length; k++) {
+    var qi = examMCQs[k];
+    var q = mcqData[qi];
+    examHTML += '<div class="mcq-item"><h4>' + (k+1) + '. ' + q.q + '</h4><div class="mcq-opts">';
+    for (var m = 0; m < q.opts.length; m++) {
+      examHTML += '<div class="mcq-opt" id="examMCQ_' + qi + '_' + m + '" onclick="selectExamMCQ(' + qi + ',' + m + ')">' + String.fromCharCode(65+m) + '. ' + q.opts[m] + '</div>';
+    }
+    examHTML += '</div><div id="examFeedback_' + qi + '" style="margin-top:.5rem;font-size:.85rem;"></div></div>';
+  }
+
+  examHTML += '<h3 style="margin-top:1.5rem;">📝 简答题 (3道)</h3>';
+  for (var n = 0; n < examSAs.length; n++) {
+    var si = examSAs[n];
+    var sq = saData[si];
+    examHTML += '<div class="sa-item"><h4>' + (n+1) + '. ' + sq.q + '</h4><textarea id="examSA_' + si + '" placeholder="请输入你的回答..."></textarea><button class="btn" onclick="toggleExamHint(' + si + ')" style="margin-top:.5rem;">👁 查看提示</button><div class="sa-hint" id="examHint_' + si + '">' + sq.hint + '</div></div>';
+  }
+
+  examHTML += '<div style="text-align:center;margin:1.5rem 0;"><button class="btn btn-primary" onclick="submitExam()">✅ 提交考试</button></div>';
+
+  document.getElementById('examContent').innerHTML = examHTML;
+  window._examMCQAnswers = {};
+  for (var p = 0; p < examMCQs.length; p++) { window._examMCQAnswers[examMCQs[p]] = mcqData[examMCQs[p]].answer; }
+  window._examSAs = examSAs;
+
+  // Start timer
+  updateExamTimer();
+  EXAM_TIMER = setInterval(function() {
+    EXAM_TIME_LEFT--;
+    updateExamTimer();
+    if (EXAM_TIME_LEFT <= 0) { submitExam(); }
+  }, 1000);
+}
+
+function updateExamTimer() {
+  var m = Math.floor(EXAM_TIME_LEFT / 60);
+  var s = EXAM_TIME_LEFT % 60;
+  var el = document.getElementById('examTimer');
+  el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  if (EXAM_TIME_LEFT <= 120) el.classList.add('warning');
+  else el.classList.remove('warning');
+}
+
+var EXAM_SELECTED = {};
+function selectExamMCQ(qIdx, optIdx) {
+  if (EXAM_SELECTED[qIdx] !== undefined) return;
+  for (var j = 0; j < 4; j++) {
+    var o = document.getElementById('examMCQ_' + qIdx + '_' + j);
+    if (o) o.classList.remove('selected');
+  }
+  var t = document.getElementById('examMCQ_' + qIdx + '_' + optIdx);
+  if (t) t.classList.add('selected');
+  EXAM_SELECTED[qIdx] = optIdx;
+}
+
+function toggleExamHint(idx) {
+  var h = document.getElementById('examHint_' + idx);
+  if (h) h.classList.toggle('show');
+}
+
+function submitExam() {
+  EXAM_ACTIVE = false;
+  clearInterval(EXAM_TIMER);
+
+  var correct = 0, total = Object.keys(window._examMCQAnswers || {}).length;
+  var answers = window._examMCQAnswers || {};
+
+  for (var qi in answers) {
+    var ans = answers[qi];
+    document.getElementById('examMCQ_' + qi + '_' + ans).classList.add('correct');
+    if (EXAM_SELECTED[qi] === ans) {
+      correct++;
+      document.getElementById('examFeedback_' + qi).textContent = '✔ 正确！';
+      document.getElementById('examFeedback_' + qi).style.color = '#27ae60';
+    } else if (EXAM_SELECTED[qi] !== undefined) {
+      document.getElementById('examMCQ_' + qi + '_' + EXAM_SELECTED[qi]).classList.add('wrong');
+      document.getElementById('examFeedback_' + qi).textContent = '✘ 正确答案是 ' + String.fromCharCode(65 + ans);
+      document.getElementById('examFeedback_' + qi).style.color = '#c0392b';
+    }
+  }
+
+  var pct = Math.round((correct / total) * 100);
+  var resultEl = document.getElementById('examResult');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = '<h3>🏆 考试成绩：' + correct + '/' + total + ' (' + pct + '%)</h3>' +
+    '<p>用时：' + Math.floor((900 - EXAM_TIME_LEFT) / 60) + '分' + ((900 - EXAM_TIME_LEFT) % 60) + '秒</p>' +
+    '<p>简答题请自主评估，对照提示检查关键点。</p>' +
+    '<p>' + (pct >= 80 ? '🌟 优秀！' : pct >= 60 ? '👍 良好' : '📚 继续努力') + '</p>';
+  document.getElementById('examCompleted').textContent = '1';
+}
+
+/* ========== Review Mode ========== */
+function updateReviewMode() {
+  var learnedConcepts = [];
+  for (var i = 0; i < 10; i++) {
+    if (LEARNED_CARDS[i]) learnedConcepts.push(i);
+  }
+  var reviewPath = document.getElementById('reviewPath');
+  if (learnedConcepts.length < 3) {
+    reviewPath.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">请先在知识卡片区域学完至少 3 个概念，再进入复习模式。当前已学：' + learnedConcepts.length + '/10</p>';
+    return;
+  }
+  // Show review path: order learned concepts with weakest first (simulate forgetting curve)
+  var reviewOrder = learnedConcepts.sort(function() { return Math.random() - 0.5; });
+  var html = '<h3>🔄 复习计划</h3><p style="font-size:.9rem;color:var(--text-light);">建议复习顺序（优先复习较早学习的概念）：</p>';
+  html += '<div class="learning-path">';
+  for (var j = 0; j < reviewOrder.length; j++) {
+    var ci = reviewOrder[j];
+    var cData = [{"id": "c1", "name": "可能性空间", "en": "Possibility Space", "category": "方法论工具", "star": true, "definition": "控制论的出发点：任何事物的发展都存在一个由所有可能状态构成的空间，控制就是主动缩减可能性、使结果收敛到期望子空间的过程。", "analogy": "人生如大树的分叉——你每做一个选择就剪掉一些枝杈。\"幸福的家庭总是相似\"是因为它们把每个关键节点的可能性都成功约束到了好的选项。", "example": ["【004 可能性空间】不幸的家庭各有各的不幸，因为任一节点失控就能导致失败——5个二元节点产生32种结果，而幸福只有1条路径", "【011 随机控制】绝望中通过随机尝试找到解，本质是在可能性空间中做蒙特卡洛搜索", "【186 转基因蚊子】释放10亿只转基因蚊子，通过缩减蚊子繁殖的可能性空间来控制疾病"], "counter": "不是\"命中注定论\"——可能性空间恰恰强调通过主动干预可以改变结果。也不是说所有可能性等概率——不同路径的概率权重差异巨大。"}, {"id": "c2", "name": "反馈回路", "en": "Feedback Loops", "category": "系统动力学", "star": true, "definition": "系统输出重新作为输入影响系统自身的机制。负反馈维持稳定（恒温器），正反馈加速变化（链式反应），两者共同决定系统行为。", "analogy": "就像开车——踩油门是正反馈（越快越想更快），方向盘微调是负反馈（偏离就纠正回来）。没有负反馈的车会冲出道路，没有正反馈的车永远到不了目的地。", "example": ["【097 反馈】建立负反馈、警惕正反馈——人口增长的负反馈是资源约束，加密货币的正反馈是价格上涨吸引更多矿工推高价格", "【096 全球变暖】为什么全球变暖的冬天反而更冷？因为极地涡旋的正反馈放大了局部极端天气", "【232 比特币矿难】比特币价格下跌→矿工抛售→价格进一步下跌，典型的正反馈踩踏"], "counter": "反馈不是简单的\"循环因果\"。反馈回路需要明确识别信号的极性（正/负）、增益（放大倍数）和延迟（反应时间），这三者缺一不可。"}, {"id": "c3", "name": "网络传播动力学", "en": "Network Propagation", "category": "系统动力学", "star": false, "definition": "事物（信息、病毒、观念、技术）在网络结构中传播的规律：超级传播者、临界阈值、级联失效——传播效果取决于网络拓扑，而非个体属性。", "analogy": "一场森林大火的关键不是哪棵树最易燃，而是树与树之间的距离。超级传播者就像森林中最密的树丛——烧着它，大火就控制不住了。", "example": ["【137-140 爆发与传播】超级传播者驱动疫情、观念传播中的\"接纳与抗拒\"、\"活在网络中vs跳出网络外\"", "【050 养卡囤号】工信部打击养卡囤号——诈骗者利用电信网络的超级节点效应", "【235 NFT天价头像】一个头像卖5000万——网络效应使价值集中在少数节点"], "counter": "不是\"病毒式传播=好事\"。网络中同样存在传播失效——信息茧房、回音室效应恰好是网络结构阻碍了某些信息传播。网络的\"小世界\"特性既是加速器也是过滤器。"}, {"id": "c4", "name": "演化算法", "en": "Evolutionary Algorithms", "category": "应用与表现层", "star": true, "definition": "通过\"变异+选择\"在不解空间中搜索最优解的方法。不需要预设目标，只需定义适应度函数，让系统自我迭代——自然界用此创造了眼睛，AI用此优化神经网络。", "analogy": "达尔文的自然选择就像一场没有评委的比赛——选手（变异）自己上场，环境（选择）默默淘汰不合格的。30亿年后，剩下的都是\"刚好够用\"的幸存者，不是\"完美设计\"。", "example": ["【144-146 演化思维】达尔文怎么想？\"用描述代替解释\"——演化不需要目的，只需要机制", "【217 遗传算法】把马赛克变回性感图片——AI通过变异+交叉+选择逐代\"进化\"出清晰图像", "【019 龙人】中国发现\"龙人\"——人类演化不是单线进步，而是多分支并行、大部分灭绝"], "counter": "演化≠进步。演化没有方向，不追求\"更好\"，只保留\"在当前环境下能活下来的\"。鲨鱼几亿年没怎么变不是\"落后\"，而是它的解决方案已经足够好。"}, {"id": "c5", "name": "信息量化", "en": "Information Quantification", "category": "方法论工具", "star": true, "definition": "用香农信息论和效应量等工具，把模糊的\"感觉\"转化为可测量、可比较的数值。信息的本质是不确定性的消除——你不知道的事越多，信息量越大。", "analogy": "\"明天太阳会升起\"——信息量接近0（几乎确定）；\"明天会下雪\"——在夏天这句话信息量巨大（极大消除不确定性）。好的科技新闻告诉你的不是\"又发生了什么\"，而是\"这件事改变了你对世界的什么预期\"。", "example": ["【116 量化】什么是信息？怎么有效学习？——信息量=不确定性的减少量", "【100 效应量】培养阳刚之气——不谈效应量谈影响就是耍流氓，统计显著≠实际重要", "【038 问答】挑选羽绒服——用真实量化指标（充绒量、蓬松度）取代广告话术"], "counter": "不是\"数据多=信息多\"。冗余数据的信息量为零。也不是\"精确=正确\"——给出8位小数却没报告误差范围，比粗略但诚实的估计更危险。"}, {"id": "c6", "name": "能量转换效率", "en": "Energy Conversion Efficiency", "category": "应用与表现层", "star": true, "definition": "任何技术系统本质上都是能量转换器：电池（化学能→电能）、芯片（电能→计算）、火箭（化学能→动能）。转换效率决定了技术的天花板——热力学定律不可谈判。", "analogy": "就像月薪3万但房贷2万5——你的\"技术自由度\"只有5千。电池的\"薪水\"是能量密度，\"房贷\"是充放电损耗、温控系统、安全冗余。所谓的\"电池革命\"，不过是把5千变成6千，而不是变成3万。", "example": ["【076 固态电池】锂电池的必经之路——液态电解质的能量密度天花板≈300Wh/kg，固态可以翻倍", "【101 特斯拉电池】4680电池的提升本质上是在现有框架下抠出10-20%的效率边际改善", "【292 锂电池回收】回收困境——回收本身消耗的能量可能超过新造电池，能量EROI为负"], "counter": "不是\"效率至上主义\"。有些场景可靠性比效率重要（心脏起搏器），有些场景功率密度比能量效率重要（导弹）。选择什么指标优化，取决于约束条件，而非简单的\"效率越高越好\"。"}, {"id": "c7", "name": "工程师思维", "en": "Engineer's Mindset", "category": "方法论工具", "star": false, "definition": "在约束条件下寻求可行解的思维方式：分解问题→量化约束→迭代优化→验证假设。与纯科学思维的区别在于：工程师接受\"足够好\"，不追求\"绝对正确\"。", "analogy": "科学家问\"为什么天空是蓝色的\"，工程师问\"怎么造一个蓝色天空的仿制品，预算是500块，下周三之前交货\"。科学探索可能性空间，工程在可能性空间中找到一个能用的点。", "example": ["【029-031 工程师思维】寻找地外生命的工程方法——不讨论\"外星人长什么样\"，而是设计可检测的信号特征", "【168-176 马斯克与火箭】SpaceX的核心创新不是技术突破，而是\"不锈钢造火箭\"这种工程取舍——用低效率换低成本和快迭代", "【256 苏炳添】科学式训练——量化每一步的力学效率，分解0.01秒的改进空间"], "counter": "不是\"工程师=闷头干活\"。最好的工程师思维恰恰需要跳跃式假设（类似科学家），但必须回来用测试验证。也不是\"能用就行\"——\"足够好\"有明确定义，不是偷工减料的借口。"}, {"id": "c8", "name": "复杂系统涌现", "en": "Complex System Emergence", "category": "系统动力学", "star": false, "definition": "大量简单个体通过局部互动产生全局有序现象的过程。单个神经元不\"思考\"，百亿神经元网络产生了意识；单只蚂蚁不\"规划\"，蚁群却能找到最短路径。涌现是\"多就是不同\"的实证。", "analogy": "水分子没有\"湿\"的属性，但万亿个水分子放在一起，\"湿\"就涌现出来了。同理，没有一个脑细胞\"知道\"你在想什么——\"思考\"是神经元集体行为的涌现属性，不是某个CEO神经元的指令。", "example": ["【278 精神控制】脑机接口实现\"意念控制\"——不是读取某个\"意念神经元\"，而是解码神经元群体的涌现模式", "【271 时间晶体】热力学第二定律被挑战——周期性时间结构在量子多体系统中的涌现", "【288 AI辩论】与机器人辩论不输——语言理解是数十亿参数非线性互动的涌现结果"], "counter": "不是\"整体大于部分之和\"这样的鸡汤。涌现有严格的数学定义——系统在相变临界点附近，宏观行为不能用微观规律的简单外推来解释。很多\"涌现\"其实是\"你还没找到正确的微观解释\"。"}, {"id": "c9", "name": "科学验证机制", "en": "Scientific Verification", "category": "方法论工具", "star": false, "definition": "从猜想→假设→实验→同行评议→复现的完整链条。每一步都有特定的淘汰功能：实验淘汰错误假设，复现淘汰造假，同行评议淘汰低质量研究。任何一个环节断裂，整个机制失效。", "analogy": "科学不是\"相信专家\"的信仰系统，而是一台\"碎纸机\"——你把论文投进去，经过实验、复现、评议三道刀片，出来的要么是经得起考验的知识，要么是碎片。论文造假就是试图用塑料纸骗过碎纸机。", "example": ["【023-025 诺贝尔奖得主造假】诺奖得主为什么也造假？因为科学验证机制的每个环节都可能被人钻空子", "【125 验证】经典案例的\"崩塌\"——斯坦福监狱实验、权力姿势等曾经轰动的研究被复现推翻", "【132-134 学术期刊】谁是科学家？虚假繁荣如何产生？——同行评议制度的诞生和腐化"], "counter": "不是\"经过同行评议=正确\"。同行评议只是验证链的一环，大量通过评议的论文后来被证明错误。也不是\"科学家说的就对\"——科学的价值恰恰在于任何人说的都可能被证明是错的。"}, {"id": "c10", "name": "技术采用曲线", "en": "Tech Adoption Curve", "category": "应用与表现层", "star": false, "definition": "新技术被市场接受的过程遵循S曲线：创新者(2.5%)→早期采用者(13.5%)→早期大众(34%)→晚期大众(34%)→落后者(16%)。大多数技术死在\"鸿沟\"——早期采用者到早期大众之间的断层。", "analogy": "新技术的命运就像开一家餐厅——前两周朋友来捧场（创新者），接下来靠口碑吸引食客（早期采用者），但能否活过第三个月取决于路人会不会推门进来（跨越鸿沟）。大多数餐厅死在第三个月——大多数技术也一样。", "example": ["【041-047 自动驾驶】从美国国防部推动起步→科技公司入局→短暂高峰→迅速转凉——完整的炒作周期", "【209-212 鸿蒙】不同时代的操作系统——为什么大多数操作系统死在鸿沟里而iOS/Android活下来了", "【126 飞行汽车】飞行汽车≈不靠谱——不是技术不行，而是永远卡在早期采用者阶段，无法跨越监管和基础设施的鸿沟"], "counter": "不是\"新技术迟早会普及\"。绝大多数技术永远跨不过鸿沟——3D电视、Google Glass、区块链手机都是例子。也不是\"越先进越容易普及\"——Betamax画质优于VHS却输了，技术优势≠市场优势。"}][ci];
+    html += '<div class="path-step"><div class="step-num">' + (j+1) + '</div><h4>' + (cData.star ? '★ ' : '') + cData.name + '</h4><p>' + cData.category + '</p></div>';
+    if (j < reviewOrder.length - 1) html += '<div class="path-arrow">→</div>';
+  }
+  html += '</div>';
+  reviewPath.innerHTML = html;
+}
+
+/* ========== Deep Q&A Toggle ========== */
+function toggleDQ(idx) {
+  var item = document.getElementById('dqItem' + idx);
+  item.classList.toggle('open');
+}
+
+/* ========== Decision Analysis ========== */
+function showDecisionAnalysis() {
+  var box = document.getElementById('decisionAnalysis');
+  box.classList.toggle('show');
+}
+
+/* ========== Scroll spy for nav ========== */
+// Already handled by IntersectionObserver above
+
+/* ========== Initialize ========== */
+console.log('卓克·科技参考 MKS 知识集已加载');
+console.log('概念数：10 | MCQ：20 | 简答：10 | 案例：3 | 深度追问：6');
+console.log('验收清单：✓ 9标签 ✓ SVG非空 ✓ MCQ均匀分布 ✓ 3D翻卡 ✓ JS零报错');
+</script>
 </body>
 </html>

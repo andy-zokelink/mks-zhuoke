@@ -2,85 +2,820 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克·科学思维课 — 知识主书架</title>
-<link rel="stylesheet" href="mks-style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>卓克·科学思维课 — MKS 最小知识集</title>
+<style>
+:root{
+  --bg:#fdf6ec;--card:#fffaf2;--accent:#c0392b;--text:#3d2f2f;
+  --text-light:#6b5b5b;--border:#e8d5c4;
+  --blue:#3498db;--green:#27ae60;--orange:#e67e22;--purple:#8e44ad;
+  --shadow:0 2px 12px rgba(61,47,47,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh;
+}
+header{
+  background:linear-gradient(135deg,var(--accent),#8b1a1a);color:#fff;padding:clamp(16px,3vw,28px) clamp(12px,4vw,32px);
+  text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.15);
+}
+header h1{font-size:clamp(1.1rem,3.5vw,1.6rem);font-weight:700;margin-bottom:4px}
+header .sub{font-size:clamp(.75rem,2vw,.9rem);opacity:.9}
+
+/* Tab Navigation */
+.tab-nav{
+  display:flex;flex-wrap:wrap;gap:4px;padding:clamp(8px,2vw,12px);
+  background:var(--card);border-bottom:2px solid var(--border);
+  position:sticky;top:80px;z-index:99;justify-content:center;
+}
+.tab-btn{
+  padding:8px clamp(8px,1.5vw,14px);border:1.5px solid var(--border);border-radius:6px;
+  background:var(--bg);color:var(--text);cursor:pointer;font-size:clamp(.72rem,1.6vw,.85rem);
+  transition:all .2s;white-space:nowrap;min-height:44px;display:flex;align-items:center;
+}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Tab Content */
+.tab-content{display:none;padding:clamp(12px,2.5vw,24px);max-width:1100px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* Section titles */
+.section-title{
+  font-size:clamp(1rem,2.5vw,1.35rem);color:var(--accent);border-left:4px solid var(--accent);
+  padding-left:12px;margin:28px 0 16px;font-weight:700;
+}
+h3{font-size:clamp(.9rem,2vw,1.1rem);color:var(--text);margin:16px 0 8px}
+
+/* Overview */
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:12px 0}
+.overview-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:clamp(12px,2vw,18px);
+  box-shadow:var(--shadow);
+}
+.overview-card h3{color:var(--accent);font-size:.95rem;margin-bottom:8px}
+.overview-card p,.overview-card li{font-size:.82rem;color:var(--text-light);line-height:1.6}
+.overview-card ul{padding-left:18px}
+.star{color:#e67e22;font-weight:700}
+
+.concept-relation{margin:20px 0;text-align:center;background:var(--card);border-radius:10px;padding:12px;overflow:auto}
+.concept-relation svg{max-width:100%;height:auto}
+
+.boundary-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:12px 0}
+.boundary-table th,.boundary-table td{border:1px solid var(--border);padding:8px 10px;text-align:left}
+.boundary-table th{background:var(--accent);color:#fff;font-weight:600}
+.boundary-table tr:nth-child(even){background:var(--bg)}
+
+.learning-path{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.path-step{
+  background:var(--accent);color:#fff;padding:8px 14px;border-radius:20px;font-size:.78rem;
+  white-space:nowrap;font-weight:600;
+}
+.path-arrow{color:var(--accent);font-size:1.2rem;font-weight:700}
+
+.progress-bar{
+  width:100%;height:10px;background:var(--border);border-radius:5px;margin:8px 0;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--accent);border-radius:5px;transition:width .4s}
+
+/* Flip Cards */
+.cards-container{
+  display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:flex-start;margin:16px 0;
+}
+.flip-card{
+  perspective:1000px;height:clamp(220px,40vw,280px);width:clamp(260px,38vw,340px);
+}
+.flip-inner{
+  position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;
+  cursor:pointer;
+}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{
+  position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:clamp(12px,2.5vw,20px);border:2px solid var(--border);
+}
+.flip-front{
+  background:linear-gradient(135deg,var(--accent),#8b1a1a);color:#fff;
+  font-size:clamp(1rem,2.5vw,1.3rem);font-weight:700;text-align:center;
+}
+.flip-front .hint{font-size:.75rem;opacity:.7;margin-top:8px}
+.flip-back{
+  background:var(--card);transform:rotateY(180deg);overflow-y:auto;
+  font-size:clamp(.75rem,1.6vw,.85rem);color:var(--text);text-align:left;
+  justify-content:flex-start;align-items:stretch;line-height:1.55;
+}
+.flip-back .label{color:var(--accent);font-weight:700;font-size:.78rem;margin-top:6px}
+.flip-back .label:first-child{margin-top:0}
+
+.card-nav{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.card-nav button{
+  padding:10px 18px;border:1.5px solid var(--accent);border-radius:8px;
+  background:var(--card);color:var(--accent);cursor:pointer;font-size:.82rem;
+  font-weight:600;min-height:44px;transition:all .2s;
+}
+.card-nav button:hover{background:var(--accent);color:#fff}
+.card-nav .card-counter{font-size:.85rem;color:var(--text-light);min-width:80px;text-align:center}
+
+.learned-badge{
+  display:inline-block;background:var(--green);color:#fff;padding:3px 10px;border-radius:12px;
+  font-size:.72rem;margin-left:6px;
+}
+
+/* Quiz */
+.quiz-tabs{display:flex;gap:6px;margin:12px 0}
+.quiz-tab{
+  padding:10px 18px;border:1.5px solid var(--border);border-radius:8px 8px 0 0;
+  background:var(--bg);cursor:pointer;font-size:.82rem;font-weight:600;min-height:44px;
+}
+.quiz-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.quiz-section{display:none}
+.quiz-section.active{display:block}
+
+.quiz-item{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:clamp(12px,2vw,18px);margin:12px 0;box-shadow:var(--shadow);
+}
+.quiz-item h4{font-size:.9rem;color:var(--text);margin-bottom:10px}
+.quiz-item .option{
+  display:block;padding:9px 12px;margin:5px 0;border:1.5px solid var(--border);border-radius:8px;
+  cursor:pointer;font-size:.82rem;transition:all .15s;min-height:44px;display:flex;align-items:center;
+}
+.quiz-item .option:hover{border-color:var(--accent);background:#fef5f5}
+.quiz-item .option.selected{border-color:var(--accent);background:#fde8e8;font-weight:600}
+.quiz-item .option.correct{border-color:var(--green);background:#e8f5e9;color:#2e7d32}
+.quiz-item .option.wrong{border-color:var(--accent);background:#fde8e8;color:var(--accent)}
+
+.short-answer textarea{
+  width:100%;min-height:100px;border:1.5px solid var(--border);border-radius:8px;
+  padding:10px;font-size:.82rem;font-family:inherit;resize:vertical;background:var(--bg);
+}
+.short-answer .ref-answer{
+  background:#fef9e7;border:1px solid #f9e79f;border-radius:8px;padding:12px;
+  margin-top:8px;font-size:.8rem;display:none;
+}
+.self-eval{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.self-eval button{
+  padding:8px 14px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;
+  font-size:.78rem;min-height:44px;transition:all .2s;background:var(--bg);
+}
+.self-eval button.correct-btn{border-color:var(--green);color:var(--green)}
+.self-eval button.partial-btn{border-color:var(--orange);color:var(--orange)}
+.self-eval button.wrong-btn{border-color:var(--accent);color:var(--accent)}
+.self-eval button.active{color:#fff}
+.self-eval button.correct-btn.active{background:var(--green)}
+.self-eval button.partial-btn.active{background:var(--orange)}
+.self-eval button.wrong-btn.active{background:var(--accent)}
+
+.quiz-actions{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;justify-content:center}
+.quiz-actions button{
+  padding:10px 20px;border-radius:8px;border:1.5px solid var(--accent);
+  background:var(--card);color:var(--accent);cursor:pointer;font-size:.82rem;
+  font-weight:600;min-height:44px;transition:all .2s;
+}
+.quiz-actions button:hover{background:var(--accent);color:#fff}
+.quiz-score{text-align:center;font-size:1.1rem;font-weight:700;color:var(--accent);margin:12px 0}
+
+/* Exam Mode */
+.exam-timer{text-align:center;font-size:1.5rem;font-weight:700;color:var(--accent);margin:12px 0}
+.exam-result{text-align:center;padding:20px;background:var(--card);border-radius:10px;display:none}
+
+/* Review */
+.review-section{margin:16px 0}
+.review-item{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;
+}
+.review-item .status{font-size:.78rem;font-weight:600}
+.review-item .status.mastered{color:var(--green)}
+.review-item .status.learning{color:var(--orange)}
+.review-item .status.not-started{color:var(--text-light)}
+
+/* Mind Map */
+.mindmap-container{text-align:center;overflow:auto;background:var(--card);border-radius:10px;padding:16px}
+.mindmap-container svg{max-width:100%;height:auto}
+
+/* Deep Questions */
+.deep-item{
+  background:var(--card);border-left:4px solid var(--purple);border-radius:0 10px 10px 0;
+  padding:clamp(12px,2vw,18px);margin:14px 0;box-shadow:var(--shadow);
+}
+.deep-item h4{color:var(--purple);font-size:.9rem}
+
+/* Case Studies */
+.case-item{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:clamp(14px,2vw,18px);margin:14px 0;box-shadow:var(--shadow);
+}
+.case-item h4{color:var(--accent);font-size:.95rem}
+.case-meta{font-size:.75rem;color:var(--text-light);margin:4px 0 8px}
+
+/* Decision */
+.decision-scenario{
+  background:var(--card);border:2px solid var(--orange);border-radius:10px;
+  padding:clamp(14px,2vw,20px);margin:14px 0;
+}
+.decision-scenario h4{color:var(--orange);font-size:.95rem}
+.decision-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.decision-options .d-option{
+  padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;
+  cursor:pointer;font-size:.82rem;transition:all .15s;min-height:44px;display:flex;align-items:center;
+}
+.decision-options .d-option:hover{border-color:var(--orange)}
+.decision-options .d-option.reveal-good{border-color:var(--green);background:#e8f5e9}
+.decision-options .d-option.reveal-bad{border-color:var(--accent);background:#fde8e8}
+.decision-feedback{display:none;margin-top:10px;padding:12px;background:#fef9e7;border-radius:8px;font-size:.82rem}
+
+/* Footer */
+footer{text-align:center;padding:20px;color:var(--text-light);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:600px){
+  .tab-nav{top:60px;gap:2px}
+  .tab-btn{padding:6px 8px;font-size:.7rem;border-radius:4px}
+  .overview-grid{grid-template-columns:1fr}
+  .flip-card{width:90vw;max-width:340px}
+  .cards-container{gap:12px}
+  .tab-content{padding:10px}
+}
+
+/* Utility */
+.hidden{display:none!important}
+.text-center{text-align:center}
+.mt-8{margin-top:8px}
+.mb-12{margin-bottom:12px}
+
+/* Toast */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;
+  background:var(--accent);color:#fff;padding:10px 24px;border-radius:20px;
+  font-size:.82rem;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:opacity .3s;
+}
+</style>
 </head>
-<body class="index-page">
+<body>
 
-<nav class="top-nav">
-  <span class="brand"><span class="icon">🔬</span>卓克·科学思维课</span>
-  <span style="font-size:12px;opacity:.7;">知识主书架 · 334讲</span>
-</nav>
-
-<div class="container">
-
-<header class="course-header">
-  <h1>卓克·科学思维课</h1>
-  <p class="course-sub">你身边的万物简史 <span class="title-accent">MKS</span></p>
-  <p class="course-meta">共334讲 · 7大专题 · 最小知识集 · 白底琥珀色</p>
+<header>
+  <h1>卓克·科学思维课 — MKS 最小知识集</h1>
+  <div class="sub">从334篇文章中提炼10个核心概念 · 掌握科学思维80%的价值</div>
 </header>
 
-<div class="divider"><span>◇</span></div>
+<nav class="tab-nav" id="tabNav"></nav>
 
-<div class="nav-grid">
-  <a class="nav-card" href="1-科学思维工具箱.html">
-    <div class="card-icon">🧰</div>
-    <h2>科学思维工具箱</h2>
-    <p class="card-subtitle">极限 · 务实 · 数字 · 复杂 · 变量 · 模型 · 证据 · 计算</p>
-    <p class="card-desc">掌握科学思维的底层工具箱：从数量级感知到模型构建，从极限思维到严谨测量——构建看待世界的&quot;操作系统&quot;。</p>
-    <p class="card-count"><span>58篇</span> 文章</p>
-  </a>
-  <a class="nav-card" href="2-演化与生命科学.html">
-    <div class="card-icon">🧬</div>
-    <h2>演化与生命科学</h2>
-    <p class="card-subtitle">真理 · 起源 · 旁证 · 宏观 · 演化</p>
-    <p class="card-desc">从达尔文进化论到基因平移，从生命起源到物种灭绝，从人类迁徙到文明兴衰——用演化思维理解万物生灭的宏大叙事。</p>
-    <p class="card-count"><span>58篇</span> 文章</p>
-  </a>
-  <a class="nav-card" href="3-医学健康与人体.html">
-    <div class="card-icon">🏥</div>
-    <h2>医学健康与人体</h2>
-    <p class="card-subtitle">发展 · 疾病 · 免疫 · 衰老 · 问答精选</p>
-    <p class="card-desc">从天花到HIV，从近视到癌症，从衰老机制到疫苗原理——用科学思维理解人体、疾病与健康的底层逻辑。</p>
-    <p class="card-count"><span>91篇</span> 文章</p>
-  </a>
-  <a class="nav-card" href="4-破解伪科学与谬误.html">
-    <div class="card-icon">🔍</div>
-    <h2>破解伪科学与谬误</h2>
-    <p class="card-subtitle">边界 · 泡沫 · 成瘾 · 谬误 · 流变</p>
-    <p class="card-desc">识破伪科学、认知偏误和思维陷阱：从尼斯湖水怪到放血疗法，从潜意识神话到全球变暖争议——构建科学真相的防火墙。</p>
-    <p class="card-count"><span>40篇</span> 文章</p>
-  </a>
-  <a class="nav-card" href="5-科学史与文明.html">
-    <div class="card-icon">📜</div>
-    <h2>科学史与文明</h2>
-    <p class="card-subtitle">源头 · 遗憾 · 追赶 · 平凡 · 反省</p>
-    <p class="card-desc">追溯科学诞生的历史脉络：从第一所大学到科学院，从中国科学的遗憾到追赶之路——理解科学如何塑造现代文明。</p>
-    <p class="card-count"><span>35篇</span> 文章</p>
-  </a>
-  <a class="nav-card" href="6-心理学与认知科学.html">
-    <div class="card-icon">🧠</div>
-    <h2>心理学与认知科学</h2>
-    <p class="card-subtitle">心理 · 味道 · 批判性思维 · 认知偏误</p>
-    <p class="card-desc">从心理学科学化历程到双盲实验，从味觉演化到批判性思维——探索人类心智的运作规律与认知局限。</p>
-    <p class="card-count"><span>24篇</span> 文章</p>
-  </a>
-  <a class="nav-card" href="7-前沿科学与总览.html">
-    <div class="card-icon">🔭</div>
-    <h2>前沿科学与总览</h2>
-    <p class="card-subtitle">荣耀 · 诺贝尔奖 · 考古 · 加餐 · 全年总结</p>
-    <p class="card-desc">诺贝尔奖深度解读、前沿科学发现、考古学思维、年度总结——站在科学最前沿，理解知识的边界与演进。</p>
-    <p class="card-count"><span>28篇</span> 文章</p>
-  </a>
-</div>
+<main id="mainContent"></main>
 
-<footer class="footer">
-  <p>卓克·科学思维课 MKS · 最小知识集</p>
-  <p>内容来源：得到App · 数据提取自 dedao.db · 共334讲</p>
-  <p style="margin-top:8px;">科学思维不是记住更多知识，而是掌握迭代认知的方法。</p>
+<footer>
+  基于得到App《卓克·科学思维课》334篇内容提炼 · MKS最小知识集·单文件交互式HTML
 </footer>
 
-</div>
+<script>
+// ====== GLOBAL STATE ======
+var concepts = [{"id": "c1", "name": "科学方法", "def": "人类知识迭代最有效的方法，核心是\"可证伪\"和\"可迭代\"。科学不宣称掌握真理，而是持续提出可以被检验、被推翻的假说，通过证据不断修正认知。", "analogy": "像GPS导航——不断根据新数据重新计算路线，而不是死守一条预设路径。", "example": "拔河比赛胜负取决于摩擦系数和总质量，而非选手力量——科学方法让我们用实验数据替代直觉。", "counter": "\"老祖宗的智慧不会错\"——拒绝接受新证据的修正，不是科学方法。"}, {"id": "c2", "name": "数量级思维", "def": "用近似估算快速判断问题规模的能力，又称费米估算。核心技巧是把大数拉回到日常尺度来理解。", "analogy": "像用地图比例尺估算距离——不需要精确测量每一毫米，但能避免把100公里当成10公里。", "example": "10纳米芯片工艺意味着闸门宽度是螺丝刀长度的1亿分之一——比例关系的建立才是理解大数的关键。", "counter": "\"反正数字很大，差不多就行\"——差一个数量级就是10倍错误，差两个就是100倍。"}, {"id": "c3", "name": "极限分析", "def": "理解技术和自然规律的渐进边界——任何系统都有物理极限，突破它需要根本性的范式革新，而非线性改良。", "analogy": "像百米短跑记录——从11秒到10秒用了80年，从10秒到9.58秒又用了40年，越接近人体极限进步越慢。", "example": "发电厂24小时运转无法关停，夜间电价减半是因为电能无法大规模存储——这是电力系统的物理极限。", "counter": "\"科技无所不能\"——忽视了热力学定律和物理极限的现实约束。"}, {"id": "c4", "name": "变量隔离", "def": "在分析问题时控制无关变量，仅改变单一变量以观察因果关系。这是科学实验的核心方法，也是理性思考的基础。", "analogy": "像品酒师在不同温度下品尝同一瓶酒——只有酒的温度在变，其他一切不变，才能判断温度对口感的影响。", "example": "电动车续航\"缩水\"是因为NEDC测试标准（低速匀速）与实际驾驶（高速变速+空调）的变量不同。", "counter": "\"我觉得有效所以有效\"——个人经验中混杂了太多变量，无法确认因果关系。"}, {"id": "c5", "name": "模型思维", "def": "用简化的数学或逻辑框架描述复杂现实。模型的本质是\"有用\"而非\"正确\"——所有模型都是错的，但有些是有用的。", "analogy": "像地铁线路图——它不反映真实的地理距离和弯曲路线，但能帮你规划最佳换乘方案。", "example": "行星形成模型解释了为什么地球质量是火星的10倍——模型预测与现实吻合时，我们获得了理解。", "counter": "\"模型预测100%准确\"——这是对模型的迷信；天气预报不准正是模型局限性的体现。"}, {"id": "c6", "name": "证据金字塔", "def": "不同证据类型从弱到强的等级排序：轶事<案例报告<病例对照<队列研究<随机对照试验<系统综述与荟萃分析。", "analogy": "像法庭上的证据链——一个目击证人不等于定罪，DNA+监控+动机+指纹才构成铁证。", "example": "牛顿调查硬币造假——他像侦探一样搜集证据、检验不同来源的信息，最终铸币改革成功。", "counter": "\"我亲戚吃了这个药就好了\"——处于证据金字塔最底层，属于不可靠的轶事证据。"}, {"id": "c7", "name": "演化世界观", "def": "用\"渐变+选择+深时\"的视角理解世界：复杂事物是长时间微小变化积累的结果，没有预设方向，没有终极目标。", "analogy": "像语言演变——没有谁\"设计\"了现代汉语，它是几千年使用中自然演化形成的。", "example": "复活节岛的兴衰是一部浓缩的人类文明演化史——资源耗竭导致社会崩溃，这是演化无情的\"选择\"。", "counter": "\"眼睛这么精密，一定是被设计的\"——智能设计论忽略了演化通过微小渐变积累可以产生极端复杂的结构。"}, {"id": "c8", "name": "伪科学识别", "def": "辨别伪科学的三条核心标准：可证伪性（能说出什么证据可以推翻它）、举证责任（声称者承担证明责任）、同行评议（通过科学共同体检验）。", "analogy": "像鉴别假钞——真科学不怕检验和质疑，伪科学则抗拒验证、诉诸权威和个人体验。", "example": "\"酵素减肥\"没有通过随机双盲实验，商家将举证责任转嫁给消费者——这是典型的伪科学营销。", "counter": "\"科学也不能解释一切，所以我的理论也是对的\"——科学承认无知不等于任何说法都成立。"}, {"id": "c9", "name": "批判性思维", "def": "在人格平等的状态下，对自己和他人的观点做谨慎、多角度的思考。它讲究逻辑和理性，不是\"抬杠\"，而是\"带着高级技巧去审视\"。", "analogy": "像编辑审稿——不是找茬，而是确保每个论点都有充分论据，每个推理都没有漏洞。", "example": "\"地球一小时\"熄灯活动看似环保，但批判性思维会追问：突然的负荷波动对电网的冲击是否更大？", "counter": "\"你说什么我都反对\"——这不是批判性思维，而是为了反对而反对，批判性思维强调的是审视和理解。"}, {"id": "c10", "name": "严谨测量", "def": "科学从定量开始，测量的边界就是认知的边界。操作定义（用测量方法来定义概念）是科学严谨性的基石。", "analogy": "像烹饪中的\"少许\"vs\"3克\"——前者不可复制，后者精确可验证，科学的灵魂在于可复制性。", "example": "\"1米\"从地球子午线分数逐渐演变为光速定义——每次重新定义都提升了测量精度和科学认知。", "counter": "\"差不多就行了\"——没有精确测量就没有可重复的实验，也就没有现代科学。"}];
+var mcqs = [{"id": "q1", "question": "科学方法被认为是人类知识迭代最好的方法，其最核心的特征是什么？", "options": ["可证伪和可迭代", "追求绝对真理", "依靠权威的论断", "用复杂数学证明一切"], "answer": 0, "concept": "c1"}, {"id": "q2", "question": "根据卓克的分析，拔河比赛决定胜负的关键因素是什么？", "options": ["选手的上肢力量", "绳子的粗细", "地面摩擦系数和参与者的总质量", "啦啦队的加油声"], "answer": 2, "concept": "c1"}, {"id": "q3", "question": "\"数量级思维\"（费米估算）最重要的价值在于？", "options": ["精确计算每一个数字", "避免在数量级上犯根本性错误", "替代所有精密仪器", "证明数学是唯一的真理"], "answer": 1, "concept": "c2"}, {"id": "q4", "question": "要理解\"10纳米芯片工艺\"的意义，最有效的方法是什么？", "options": ["记住10纳米等于多少米", "把它与日常熟悉的尺度建立比例关系", "购买最新款芯片体验", "阅读芯片制造的全部物理公式"], "answer": 3, "concept": "c2"}, {"id": "q5", "question": "为什么很多城市施行夜间电价减半？", "options": ["鼓励大家夜间娱乐消费", "发电厂夜间发电效率更高", "电能无法大规模存储，夜间发电量过剩", "夜间用电对电网压力更小"], "answer": 2, "concept": "c3"}, {"id": "q6", "question": "\"变量隔离\"在科学实验中的含义是什么？", "options": ["控制无关变量，只改变单一变量以观察效果", "把所有变量同时改变看效果", "不对实验做任何控制", "只关注结果不关注过程"], "answer": 0, "concept": "c4"}, {"id": "q7", "question": "电动车续航里程\"缩水\"的根本原因是什么？", "options": ["电池技术太落后", "测试标准（NEDC）与实际驾驶条件中的变量不同", "汽车厂商故意造假", "天气总是对电池不利"], "answer": 1, "concept": "c4"}, {"id": "q8", "question": "关于\"模型思维\"，以下哪种态度最符合科学精神？", "options": ["模型就是现实，预测必须100%准确", "模型太复杂，普通人不需要理解", "模型如果不准就应该扔掉不用", "模型是对现实的简化，持续修正才能逼近真相"], "answer": 3, "concept": "c5"}, {"id": "q9", "question": "天气预报偶尔不准，这一事实最能说明什么？", "options": ["模型是对现实的简化，永远存在误差", "气象学家不够努力", "应该停止天气预报", "天气是超自然力量控制的"], "answer": 0, "concept": "c5"}, {"id": "q10", "question": "证据金字塔从底层到顶层的正确顺序是什么？", "options": ["RCT→队列研究→荟萃分析→专家意见", "轶事→病例对照→队列研究→RCT→荟萃分析", "荟萃分析→RCT→轶事→队列研究", "专家意见→轶事→RCT→病例对照"], "answer": 1, "concept": "c6"}, {"id": "q11", "question": "牛顿受命担任铸币局督办，像侦探一样搜集证据打击伪币制造者，这个故事最重要的启示是什么？", "options": ["大科学家应该转行做警察", "政府工作比科研更有价值", "证据思维在日常生活中同样重要", "数学好就能破一切案件"], "answer": 2, "concept": "c6"}, {"id": "q12", "question": "以下哪一项不属于演化论的核心观点？", "options": ["微小变化长期积累可以产生巨大差异", "自然选择是演化的重要机制", "生物从低级到高级是必然的进步方向", "演化没有预设的方向和终点"], "answer": 3, "concept": "c7"}, {"id": "q13", "question": "为什么有人建议把\"进化论\"改称为\"演化论\"？", "options": ["演化描述过程，没有指明方向和终点", "\"进化\"这个词不够学术", "为了与英文evolution的发音更接近", "进化论已经完全被推翻了"], "answer": 0, "concept": "c7"}, {"id": "q14", "question": "识别伪科学最关键的标准是什么？", "options": ["理论是否足够复杂", "理论是否具有可证伪性", "理论是否由知名科学家提出", "理论是否被广泛传播"], "answer": 1, "concept": "c8"}, {"id": "q15", "question": "\"尼斯湖水怪\"\"UFO\"\"麦田怪圈\"等话题的共同特征是什么？", "options": ["已经被科学完美解释", "属于不可证伪的伪科学或反科学", "是21世纪最重要的科学发现", "得到了主流科学界的一致认可"], "answer": 2, "concept": "c8"}, {"id": "q16", "question": "\"批判性思维\"这个概念最准确的翻译和理解是什么？", "options": ["专门抬杠和反对的技巧", "对他人观点无情的批评", "对观点做谨慎、多角度的审视和思考", "一种让人变得尖酸刻薄的思维方式"], "answer": 3, "concept": "c9"}, {"id": "q17", "question": "\"1米\"的定义从地球子午线分数演变为光速定义，这一变化最重要的意义是什么？", "options": ["测量的精确性提升推动了整个科学体系的进步", "证明原来的定义是错误的", "让法国人更有面子", "跟日常生活没有关系"], "answer": 0, "concept": "c10"}, {"id": "q18", "question": "安慰剂效应告诉我们的最重要教训是什么？", "options": ["所有药物都是安慰剂", "主观信念可以产生真实的生理反应", "病人不需要真正的药", "医生都是骗子"], "answer": 1, "concept": "c9"}, {"id": "q19", "question": "要证明\"相关性不等于因果性\"，最有力的方法是？", "options": ["寻找更多相关性证据", "找权威专家背书", "随机双盲对照实验", "发表论文增加引用次数"], "answer": 2, "concept": "c4"}, {"id": "q20", "question": "科学思维中最容易被忽视但至关重要的一环是什么？", "options": ["记住所有公式和定理", "承认未知和不确定性，知道自己不知道什么", "发表尽可能多的论文", "在社交媒体上传播科学知识"], "answer": 3, "concept": "c1"}];
+var shortAnswers = [{"id": "s1", "question": "请用自己的话解释“科学方法”的核心特征（可证伪和可迭代），并举一个生活中的例子说明。", "reference": "科学方法的核心是：(1)提出可被检验和推翻的假说；(2)用证据不断修正认知。生活中例子：判断哪种路线上班最快——不是凭直觉，而是每天记录不同路线的实际用时，持续更新判断。"}, {"id": "s2", "question": "什么是“数量级思维”？请用费米估算的方法，估算所在城市一天的汽车加油量。", "reference": "数量级思维是用近似值快速判断问题规模。费米估算步骤：城市人口→汽车保有量→日均行驶里程→百公里油耗→总加油量。不求精确，只求数量级正确（是千吨还是万吨）。"}, {"id": "s3", "question": "为什么说“极限分析”不是悲观的而是务实的？请举例说明。", "reference": "极限分析是理解约束条件，避免投入不可能实现的目标。例：电动车充电速度的物理极限由电池化学和散热能力决定，不是砸钱就能无限提速。了解极限后，技术路线才能务实。"}, {"id": "s4", "question": "“模型思维”要求我们如何看待模型与现实的关系？天气预报不准是否说明模型无用？", "reference": "所有模型都是错的（简化），但有些是有用的。天气预报不准说明模型存在误差，但不说明模型无用——没有模型，我们连“大概明天会下雨”都无从判断。正确态度是持续修正模型。"}, {"id": "s5", "question": "请解释证据金字塔的含义，并说明为什么“我亲戚吃了这个药就好了”不是可靠的医学证据。", "reference": "证据金字塔从弱到强：轶事→案例报告→病例对照→队列研究→RCT→荟萃分析。亲戚的个例属于最底层的轶事证据，没有对照组、没有随机化、样本量=1，无法排除安慰剂效应和偶然。"}, {"id": "s6", "question": "演化论为什么不是“丛林法则”或“社会达尔文主义”？请澄清这一常见误解。", "reference": "演化论描述的是自然界的机制（是什么），不规定人类应该怎么做（应然）。从“自然选择存在”推导出“人类应该弱肉强食”是自然主义谬误。演化还包含大量合作、共生、利他行为。"}, {"id": "s7", "question": "请列举至少三个识别伪科学的标志性特征，并各举一个具体例子。", "reference": "(1)不可证伪——“尼斯湖水怪”无法被证伪因为每次搜索失败都被解释为“它恰好不在”；(2)举证责任倒置——保健品商家让消费者“证明无效”而非自己证明有效；(3)诉诸传统——“老祖宗用了几千年”不能证明有效。"}, {"id": "s8", "question": "批判性思维与“抬杠”或“什么都反对”有什么区别？", "reference": "批判性思维是：(1)人格平等下的审视，不是为赢而辩；(2)对证据和逻辑做多角度检验；(3)目标是逼近真相而非击败对方。抬杠是：不管对方说什么都反对，不考虑证据，以情绪对抗代替理性审视。"}, {"id": "s9", "question": "“测量的边界就是认知的边界”——请解释这句话的含义，并举例说明。", "reference": "如果我们无法测量某个量（如意识、情绪），我们对它的认知就停留在经验层面，无法进入科学研究的范畴。例如：疼痛的测量从“1-10分”主观评分到功能磁共振成像，每次测量进步都扩展了我们对疼痛的理解。"}, {"id": "s10", "question": "综合本课程的核心概念，请用科学思维分析一个常见争议：“手机辐射会不会致癌？”", "reference": "分析方法：(1)数量级——手机辐射能量远低于电离辐射阈值；(2)证据金字塔——流行病学研究未发现手机使用与脑瘤的关联达到统计显著性；(3)变量隔离——需排除其他致癌因素；(4)承认不确定性——科学上不能绝对证明“无害”，但当前证据不支持致癌假说。"}];
+var currentCard = 0;
+var learnedCards = JSON.parse(localStorage.getItem('mks_learned')||'{}');
+var quizState = {mcqAnswers:{},mcqSubmitted:false,mcqScore:0,saAnswers:{},saEvals:{}};
+var examState = {started:false,timeLeft:0,timer:null,answers:{},submitted:false};
+var tabNames = [
+  '知识集总览','知识卡片','题库系统',
+  '考试模式','复习模式','思维导图',
+  '深度追问','案例分析','实战决策'
+];
+
+// ====== INIT ======
+function init() {
+  buildTabNav();
+  buildOverview();
+  buildCards();
+  buildQuiz();
+  buildExam();
+  buildReview();
+  buildMindMap();
+  buildDeepQuestions();
+  buildCases();
+  buildDecision();
+  switchTab(0);
+  updateProgress();
+}
+
+// ====== TABS ======
+function buildTabNav() {
+  var nav = document.getElementById('tabNav');
+  tabNames.forEach(function(name,i) {
+    var btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.textContent = name;
+    btn.addEventListener('click',function(){switchTab(i);});
+    nav.appendChild(btn);
+  });
+}
+
+function switchTab(idx) {
+  var btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(function(b,i){b.classList.toggle('active',i===idx);});
+  var sections = document.querySelectorAll('.tab-content');
+  sections.forEach(function(s,i){s.classList.toggle('active',i===idx);});
+  if(idx===5) initMindMapZoom();
+  if(idx===3) resetExam();
+}
+
+// ====== TAB 0: OVERVIEW ======
+function buildOverview() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content active';
+  sec.id = 'tab0';
+  sec.innerHTML = getOverviewHTML();
+  main.appendChild(sec);
+}
+
+function getOverviewHTML() {
+  var conceptNames = concepts.map(function(c){return c.name;}).join('、');
+  var mksConcepts = concepts.slice(0,3).map(function(c){return c.name;}).join('、');
+  var h = '';
+  h += '<div class="section-title">♦ 核心目标</div>';
+  h += '<div class="overview-card"><p>从卓克·科学思维课334篇内容中，提炼出<b>10个核心概念</b>，形成科学思维的最小知识集。掌握这10个概念，就拥有了科学思维80%的核心价值——它们是思考的“操作系统”，而非知识的“应用程序”。</p></div>';
+  h += '<div class="section-title">♦ 核心概念</div>';
+  h += '<div class="overview-card"><p>本课程的知识骨架由' + conceptNames + '组成，分为四个层级：<b>基础方法</b>→<b>量化工具</b>→<b>分析方法</b>→<b>世界观层</b>。每个概念均配有定义、类比、示例、反例/边界。</p></div>';
+  h += '<div class="section-title">♦ 最小知识集<span class="star">★</span></div>';
+  h += '<div class="overview-card"><p>骨架中的骨架：<span class="star">' + mksConcepts + '</span>。这三个概念是整个科学思维体系的“引擎”——其他概念均可以从它们延展而出。科学方法提供可证伪的认知框架，数量级思维提供规模判断能力，演化世界观提供深时尺度的解释框架。</p></div>';
+  h += '<div class="section-title">♦ 概念关系图</div>';
+  h += '<div class="concept-relation" id="conceptGraph">' + svgBodyEmbed + '</div>';
+  h += '<div class="section-title">♦ 边界知识表</div>';
+  h += '<div style="overflow-x:auto"><table class="boundary-table"><thead><tr><th>概念</th><th>适用范围</th><th>不适用場景</th><th>常见误用</th></tr></thead><tbody>';
+  var boundaries = [
+    ['科学方法','经验可检验的问题','价值判断、美学体验','把“不科学”当作“错误”'],
+    ['数量级思维','快速估算规模','需要精确计算的工程','把估算当作精确结果'],
+    ['演化世界观','生物、语言、文化演变','短期物理现象','社会达尔文主义'],
+    ['批判性思维','事实检验、逻辑检验','情感支持、宗教信仰','为反对而反对'],
+    ['证据金字塔','医学、营养学、社会科学','历史研究、单一事件','把秩事当作硬证据']
+  ];
+  boundaries.forEach(function(b){
+    h += '<tr><td><b>'+b[0]+'</b></td><td>'+b[1]+'</td><td>'+b[2]+'</td><td>'+b[3]+'</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  h += '<div class="section-title">♦ 学习路径</div>';
+  h += '<div class="learning-path"><span class="path-step">1.科学方法</span><span class="path-arrow">→</span><span class="path-step">2.数量级思维</span><span class="path-arrow">→</span><span class="path-step">3.极限分析</span><span class="path-arrow">→</span><span class="path-step">4.变量隔离</span><span class="path-arrow">→</span><span class="path-step">5.模型思维</span><span class="path-arrow">→</span><span class="path-step">6.证据金字塔</span><span class="path-arrow">→</span><span class="path-step">7.严谨测量</span><span class="path-arrow">→</span><span class="path-step">8.演化世界观</span><span class="path-arrow">→</span><span class="path-step">9.伪科学识别</span><span class="path-arrow">→</span><span class="path-step">10.批判性思维</span></div>';
+  h += '<div class="section-title">♦ 学习进度</div>';
+  h += '<div class="overview-card"><p>已学卡片：<span id="overviewLearned">0</span>/10</p><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="margin-top:8px;font-size:.78rem;color:var(--text-light)">考试最佳成绩：<span id="overviewBest">暂无</span></p></div>';
+  return h;
+}
+
+var svgBodyEmbed = "<svg width=\"100%\" height=\"auto\" preserveAspectRatio=\"xMidYMid meet\"\n viewBox=\"0.00 0.00 619.00 731.50\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"graph0\" class=\"graph\" transform=\"scale(1 1) rotate(0) translate(4 727.5)\">\n<title>MKS</title>\n<polygon fill=\"#fdf6ec\" stroke=\"transparent\" points=\"-4,4 -4,-727.5 615,-727.5 615,4 -4,4\"/>\n<g id=\"clust1\" class=\"cluster\">\n<title>cluster_legend</title>\n<path fill=\"#fffaf2\" stroke=\"#e8d5c4\" d=\"M20,-328.5C20,-328.5 98,-328.5 98,-328.5 104,-328.5 110,-334.5 110,-340.5 110,-340.5 110,-703.5 110,-703.5 110,-709.5 104,-715.5 98,-715.5 98,-715.5 20,-715.5 20,-715.5 14,-715.5 8,-709.5 8,-703.5 8,-703.5 8,-340.5 8,-340.5 8,-334.5 14,-328.5 20,-328.5\"/>\n<text text-anchor=\"middle\" x=\"59\" y=\"-703.5\" font-family=\"Noto Sans SC\" font-size=\"10.00\">图例</text>\n</g>\n\n<g id=\"node1\" class=\"node\">\n<title>l1</title>\n<polygon fill=\"#3498db\" stroke=\"black\" stroke-width=\"2\" points=\"102,-688.5 16,-688.5 16,-659.5 102,-659.5 102,-688.5\"/>\n<text text-anchor=\"middle\" x=\"59\" y=\"-671.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">基础方法</text>\n</g>\n\n<g id=\"node2\" class=\"node\">\n<title>l2</title>\n<polygon fill=\"#27ae60\" stroke=\"black\" stroke-width=\"2\" points=\"102,-573.5 16,-573.5 16,-544.5 102,-544.5 102,-573.5\"/>\n<text text-anchor=\"middle\" x=\"59\" y=\"-556.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">量化工具</text>\n</g>\n\n\n<g id=\"node3\" class=\"node\">\n<title>l3</title>\n<polygon fill=\"#e67e22\" stroke=\"black\" stroke-width=\"2\" points=\"102,-469.5 16,-469.5 16,-440.5 102,-440.5 102,-469.5\"/>\n<text text-anchor=\"middle\" x=\"59\" y=\"-452.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">分析方法</text>\n</g>\n\n\n<g id=\"node4\" class=\"node\">\n<title>l4</title>\n<polygon fill=\"#8e44ad\" stroke=\"black\" stroke-width=\"2\" points=\"102,-365.5 16,-365.5 16,-336.5 102,-336.5 102,-365.5\"/>\n<text text-anchor=\"middle\" x=\"59\" y=\"-348.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">世界观层</text>\n</g>\n\n\n<g id=\"node5\" class=\"node\">\n<title>node1</title>\n<polygon fill=\"#3498db\" stroke=\"black\" stroke-width=\"2\" points=\"486,-659.09 486,-688.91 439.72,-710 374.28,-710 328,-688.91 328,-659.09 374.28,-638 439.72,-638 486,-659.09\"/>\n<polygon fill=\"none\" stroke=\"black\" stroke-width=\"2\" points=\"490,-656.52 490,-691.48 440.59,-714 373.41,-714 324,-691.48 324,-656.52 373.41,-634 440.59,-634 490,-656.52\"/>\n<text text-anchor=\"middle\" x=\"407\" y=\"-677.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">科学方法</text>\n<text text-anchor=\"middle\" x=\"407\" y=\"-665.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(可证伪·可迭代)</text>\n</g>\n\n<g id=\"node6\" class=\"node\">\n<title>node2</title>\n<polygon fill=\"#27ae60\" stroke=\"black\" stroke-width=\"2\" points=\"398,-588 268,-588 268,-530 398,-530 398,-588\"/>\n<text text-anchor=\"middle\" x=\"333\" y=\"-562.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">数量级思维</text>\n<text text-anchor=\"middle\" x=\"333\" y=\"-550.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(费米估算)</text>\n</g>\n\n<g id=\"edge4\" class=\"edge\">\n<title>node1&#45;&gt;node2</title>\n<path fill=\"none\" stroke=\"#3498db\" d=\"M381.33,-633.8C373.4,-621.69 364.7,-608.41 356.9,-596.5\"/>\n<polygon fill=\"#3498db\" stroke=\"#3498db\" points=\"359.81,-594.55 351.4,-588.1 353.95,-598.38 359.81,-594.55\"/>\n<text text-anchor=\"middle\" x=\"385.5\" y=\"-608.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">量化基础</text>\n</g>\n\n<g id=\"node7\" class=\"node\">\n<title>node3</title>\n<polygon fill=\"#27ae60\" stroke=\"black\" stroke-width=\"2\" points=\"250,-484 120,-484 120,-426 250,-426 250,-484\"/>\n<text text-anchor=\"middle\" x=\"185\" y=\"-458.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">变量隔离</text>\n<text text-anchor=\"middle\" x=\"185\" y=\"-446.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(控制变量)</text>\n</g>\n\n<g id=\"edge5\" class=\"edge\">\n<title>node1&#45;&gt;node3</title>\n<path fill=\"none\" stroke=\"#3498db\" d=\"M329.16,-653.83C291.91,-640.95 249.54,-620.26 222,-588 199.63,-561.8 190.73,-523.04 187.22,-494.29\"/>\n<polygon fill=\"#3498db\" stroke=\"#3498db\" points=\"190.68,-493.77 186.15,-484.19 183.72,-494.5 190.68,-493.77\"/>\n<text text-anchor=\"middle\" x=\"240.5\" y=\"-556.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">控制变量</text>\n</g>\n\n<g id=\"node8\" class=\"node\">\n<title>node4</title>\n<polygon fill=\"#27ae60\" stroke=\"black\" stroke-width=\"2\" points=\"546,-588 416,-588 416,-530 546,-530 546,-588\"/>\n<text text-anchor=\"middle\" x=\"481\" y=\"-562.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">严谨测量</text>\n<text text-anchor=\"middle\" x=\"481\" y=\"-550.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(操作定义)</text>\n</g>\n\n<g id=\"edge6\" class=\"edge\">\n<title>node1&#45;&gt;node4</title>\n<path fill=\"none\" stroke=\"#3498db\" d=\"M432.67,-633.8C440.6,-621.69 449.3,-608.41 457.1,-596.5\"/>\n<polygon fill=\"#3498db\" stroke=\"#3498db\" points=\"460.05,-598.38 462.6,-588.1 454.19,-594.55 460.05,-598.38\"/>\n<text text-anchor=\"middle\" x=\"468.5\" y=\"-608.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">操作定义</text>\n</g>\n\n<g id=\"node10\" class=\"node\">\n<title>node6</title>\n<polygon fill=\"#e67e22\" stroke=\"black\" stroke-width=\"2\" points=\"503,-276 359,-276 359,-218 503,-218 503,-276\"/>\n<text text-anchor=\"middle\" x=\"431\" y=\"-250.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">证据金字塔</text>\n<text text-anchor=\"middle\" x=\"431\" y=\"-238.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(从轶事到荟萃分析)</text>\n</g>\n\n<g id=\"edge16\" class=\"edge\">\n<title>node2&#45;&gt;node6</title>\n<path fill=\"none\" stroke=\"#7f8c8d\" stroke-dasharray=\"1,5\" d=\"M371.63,-529.79C385.42,-517.43 399.41,-501.7 407,-484 421.82,-449.43 427.71,-344.07 429.87,-286.52\"/>\n<polygon fill=\"#7f8c8d\" stroke=\"#7f8c8d\" points=\"433.37,-286.48 430.23,-276.36 426.38,-286.23 433.37,-286.48\"/>\n<text text-anchor=\"middle\" x=\"440.5\" y=\"-400.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#7f8c8d\">量化评估</text>\n</g>\n\n<g id=\"node11\" class=\"node\">\n<title>node7</title>\n<polygon fill=\"#e67e22\" stroke=\"black\" stroke-width=\"2\" points=\"398,-484 268,-484 268,-426 398,-426 398,-484\"/>\n<text text-anchor=\"middle\" x=\"333\" y=\"-458.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">极限分析</text>\n<text text-anchor=\"middle\" x=\"333\" y=\"-446.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(渐进·边界)</text>\n</g>\n\n<g id=\"edge7\" class=\"edge\">\n<title>node2&#45;&gt;node7</title>\n<path fill=\"none\" stroke=\"#27ae60\" d=\"M333,-529.86C333,-518.82 333,-505.98 333,-494.14\"/>\n<polygon fill=\"#27ae60\" stroke=\"#27ae60\" points=\"336.5,-494.05 333,-484.05 329.5,-494.05 336.5,-494.05\"/>\n<text text-anchor=\"middle\" x=\"356\" y=\"-504.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">数量级边界</text>\n</g>\n\n<g id=\"node9\" class=\"node\">\n<title>node5</title>\n<polygon fill=\"#e67e22\" stroke=\"black\" stroke-width=\"2\" points=\"392.5,-380 255.5,-380 255.5,-322 392.5,-322 392.5,-380\"/>\n<text text-anchor=\"middle\" x=\"324\" y=\"-354.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">模型思维</text>\n<text text-anchor=\"middle\" x=\"324\" y=\"-342.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(简化·预测·修正)</text>\n</g>\n\n<g id=\"edge8\" class=\"edge\">\n<title>node3&#45;&gt;node5</title>\n<path fill=\"none\" stroke=\"#27ae60\" d=\"M223.35,-425.86C240.06,-413.59 259.8,-399.11 277.36,-386.23\"/>\n<polygon fill=\"#27ae60\" stroke=\"#27ae60\" points=\"279.78,-388.79 285.77,-380.05 275.64,-383.14 279.78,-388.79\"/>\n<text text-anchor=\"middle\" x=\"276.5\" y=\"-400.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">变量抽象</text>\n</g>\n\n<g id=\"edge17\" class=\"edge\">\n<title>node3&#45;&gt;node6</title>\n<path fill=\"none\" stroke=\"#7f8c8d\" stroke-dasharray=\"1,5\" d=\"M182.83,-425.93C182.11,-396.67 185.56,-351.12 210,-322 250.13,-274.18 284.09,-293.28 348.87,-276.09\"/>\n<polygon fill=\"#7f8c8d\" stroke=\"#7f8c8d\" points=\"350.01,-279.4 358.66,-273.28 348.08,-272.67 350.01,-279.4\"/>\n<text text-anchor=\"middle\" x=\"228.5\" y=\"-348.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#7f8c8d\">实验设计</text>\n</g>\n\n<g id=\"edge9\" class=\"edge\">\n<title>node4&#45;&gt;node6</title>\n<path fill=\"none\" stroke=\"#27ae60\" d=\"M478.96,-529.84C476.41,-497.78 471.47,-443.91 464,-398 457.76,-359.63 447.92,-316.3 440.61,-286.12\"/>\n<polygon fill=\"#27ae60\" stroke=\"#27ae60\" points=\"443.92,-284.9 438.14,-276.02 437.12,-286.57 443.92,-284.9\"/>\n<text text-anchor=\"middle\" x=\"487\" y=\"-400.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">测量→证据</text>\n</g>\n\n<g id=\"edge18\" class=\"edge\">\n<title>node5&#45;&gt;node6</title>\n<path fill=\"none\" stroke=\"#95a5a6\" stroke-dasharray=\"1,5\" d=\"M342.49,-321.83C349.31,-312.46 357.46,-302.3 366,-294 370.13,-289.99 374.63,-286.06 379.28,-282.3\"/>\n<polygon fill=\"#95a5a6\" stroke=\"#95a5a6\" points=\"381.45,-285.05 387.2,-276.15 377.16,-279.52 381.45,-285.05\"/>\n<text text-anchor=\"middle\" x=\"389\" y=\"-296.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#7f8c8d\">模型可检验</text>\n</g>\n\n<g id=\"node12\" class=\"node\">\n<title>node8</title>\n<polygon fill=\"#8e44ad\" stroke=\"black\" stroke-width=\"2\" points=\"340.5,-276 189.5,-276 189.5,-218 340.5,-218 340.5,-276\"/>\n<text text-anchor=\"middle\" x=\"265\" y=\"-250.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">演化世界观</text>\n<text text-anchor=\"middle\" x=\"265\" y=\"-238.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(渐变·深时·无目的)</text>\n</g>\n\n<g id=\"edge11\" class=\"edge\">\n<title>node5&#45;&gt;node8</title>\n<path fill=\"none\" stroke=\"#e67e22\" d=\"M304.83,-321.57C301.13,-315.82 297.36,-309.77 294,-304 290.52,-298.03 286.99,-291.59 283.65,-285.29\"/>\n<polygon fill=\"#e67e22\" stroke=\"#e67e22\" points=\"286.64,-283.46 278.91,-276.21 280.43,-286.7 286.64,-283.46\"/>\n<text text-anchor=\"middle\" x=\"316\" y=\"-296.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">模型→演化</text>\n</g>\n\n<g id=\"node13\" class=\"node\">\n<title>node9</title>\n<polygon fill=\"#8e44ad\" stroke=\"black\" stroke-width=\"2\" points=\"489.5,-162 338.5,-162 338.5,-104 489.5,-104 489.5,-162\"/>\n<text text-anchor=\"middle\" x=\"414\" y=\"-136.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">伪科学识别</text>\n<text text-anchor=\"middle\" x=\"414\" y=\"-124.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(可证伪·举证责任)</text>\n</g>\n\n<g id=\"edge12\" class=\"edge\">\n<title>node6&#45;&gt;node9</title>\n<path fill=\"none\" stroke=\"#e67e22\" d=\"M426.71,-217.74C424.62,-203.94 422.07,-187.14 419.8,-172.22\"/>\n<polygon fill=\"#e67e22\" stroke=\"#e67e22\" points=\"423.25,-171.61 418.29,-162.25 416.33,-172.67 423.25,-171.61\"/>\n<text text-anchor=\"middle\" x=\"445\" y=\"-187.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">证据→辨伪</text>\n</g>\n\n<g id=\"edge10\" class=\"edge\">\n<title>node7&#45;&gt;node5</title>\n<path fill=\"none\" stroke=\"#e67e22\" d=\"M330.52,-425.86C329.54,-414.82 328.41,-401.98 327.36,-390.14\"/>\n<polygon fill=\"#e67e22\" stroke=\"#e67e22\" points=\"330.84,-389.7 326.48,-380.05 323.87,-390.32 330.84,-389.7\"/>\n<text text-anchor=\"middle\" x=\"350\" y=\"-400.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">边界→建模</text>\n</g>\n\n<g id=\"edge19\" class=\"edge\">\n<title>node8&#45;&gt;node9</title>\n<path fill=\"none\" stroke=\"#bdc3c7\" stroke-dasharray=\"1,5\" d=\"M302.6,-217.74C322.62,-202.69 347.39,-184.07 368.48,-168.21\"/>\n<polygon fill=\"#bdc3c7\" stroke=\"#bdc3c7\" points=\"370.78,-170.87 376.67,-162.06 366.57,-165.27 370.78,-170.87\"/>\n<text text-anchor=\"middle\" x=\"366.5\" y=\"-192.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#7f8c8d\">演化检验</text>\n<text text-anchor=\"middle\" x=\"366.5\" y=\"-182.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#7f8c8d\">伪科学</text>\n</g>\n\n<g id=\"node14\" class=\"node\">\n<title>node10</title>\n<polygon fill=\"#8e44ad\" stroke=\"black\" stroke-width=\"2\" points=\"489.5,-58 338.5,-58 338.5,0 489.5,0 489.5,-58\"/>\n<text text-anchor=\"middle\" x=\"414\" y=\"-32.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">批判性思维</text>\n<text text-anchor=\"middle\" x=\"414\" y=\"-20.2\" font-family=\"Noto Sans SC\" font-size=\"11.00\" fill=\"white\">(偏见审视·逻辑检验)</text>\n</g>\n\n<g id=\"edge13\" class=\"edge\">\n<title>node8&#45;&gt;node10</title>\n<path fill=\"none\" stroke=\"#8e44ad\" d=\"M262.32,-217.82C260.85,-187.17 262.89,-138.01 286,-104 297.3,-87.37 313.67,-73.98 330.95,-63.42\"/>\n<polygon fill=\"#8e44ad\" stroke=\"#8e44ad\" points=\"333.15,-66.19 340.05,-58.15 329.64,-60.13 333.15,-66.19\"/>\n<text text-anchor=\"middle\" x=\"308\" y=\"-130.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">演化→审视</text>\n</g>\n\n<g id=\"edge14\" class=\"edge\">\n<title>node9&#45;&gt;node10</title>\n<path fill=\"none\" stroke=\"#8e44ad\" d=\"M414,-103.86C414,-92.82 414,-79.98 414,-68.14\"/>\n<polygon fill=\"#8e44ad\" stroke=\"#8e44ad\" points=\"417.5,-68.05 414,-58.05 410.5,-68.05 417.5,-68.05\"/>\n<text text-anchor=\"middle\" x=\"436\" y=\"-78.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#2c3e50\">辨伪→批判</text>\n</g>\n\n<g id=\"edge15\" class=\"edge\">\n<title>node10&#45;&gt;node1</title>\n<path fill=\"none\" stroke=\"#c0392b\" stroke-width=\"2\" stroke-dasharray=\"5,2\" d=\"M489.78,-47.84C531.14,-62.56 574,-88.35 574,-132 574,-560 574,-560 574,-560 574,-604.26 533.26,-632.37 492.03,-649.48\"/>\n<polygon fill=\"#c0392b\" stroke=\"#c0392b\" stroke-width=\"2\" points=\"490.69,-646.24 482.68,-653.17 493.27,-652.75 490.69,-646.24\"/>\n<text text-anchor=\"middle\" x=\"592.5\" y=\"-348.8\" font-family=\"Noto Sans SC\" font-size=\"9.00\" fill=\"#c0392b\">反馈迭代</text>\n</g>\n</g>\n</svg>";
+
+function updateProgress() {
+  var count = Object.keys(learnedCards).length;
+  var el = document.getElementById('overviewLearned');
+  if(el) el.textContent = count;
+  var pg = document.getElementById('overviewProgress');
+  if(pg) pg.style.width = (count*10)+'%';
+  var best = localStorage.getItem('mks_best_exam');
+  var be = document.getElementById('overviewBest');
+  if(be) be.textContent = best ? best+'/10' : '暂无';
+}
+
+// ====== TAB 1: FLIP CARDS ======
+function buildCards() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab1';
+  sec.innerHTML = '<div class="section-title">♦ 知识卡片（3D翻转）</div><div class="card-nav"><button id="prevCard">← 上一张</button><span class="card-counter" id="cardIndex">1/10</span><button id="nextCard">下一张 →</button><button id="markLearnedBtn">✔ 标记已学</button></div><div class="cards-container"><div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"><div class="concept-name"></div><div class="hint">点击翻转</div></div><div class="flip-back" id="flipBack"></div></div></div></div><div class="text-center mt-8"><span id="cardProgress">已学：0/10</span> <span id="cardLearned"></span></div>';
+  main.appendChild(sec);
+
+  document.getElementById('prevCard').addEventListener('click',function(){setCard(currentCard-1);});
+  document.getElementById('nextCard').addEventListener('click',function(){setCard(currentCard+1);});
+  document.getElementById('markLearnedBtn').addEventListener('click',toggleLearned);
+  document.getElementById('flipInner').addEventListener('click',function(){
+    this.classList.toggle('flipped');
+  });
+  setCard(0);
+}
+
+function setCard(idx) {
+  if(idx<0) idx=concepts.length-1;
+  if(idx>=concepts.length) idx=0;
+  currentCard = idx;
+  var c = concepts[idx];
+  document.getElementById('flipInner').classList.remove('flipped');
+  document.getElementById('flipFront').querySelector('.concept-name').textContent = c.name;
+  document.getElementById('flipBack').innerHTML =
+    '<span class="label">定义</span><p>'+c.def+'</p>'+
+    '<span class="label">类比</span><p>'+c.analogy+'</p>'+
+    '<span class="label">示例</span><p>'+c.example+'</p>'+
+    '<span class="label">反例/边界</span><p>'+c.counter+'</p>';
+  document.getElementById('cardIndex').textContent = (idx+1)+'/'+concepts.length;
+  updateCardUI();
+}
+
+function toggleLearned() {
+  var cid = concepts[currentCard].id;
+  if(learnedCards[cid]) {
+    delete learnedCards[cid];
+  } else {
+    learnedCards[cid] = true;
+  }
+  localStorage.setItem('mks_learned',JSON.stringify(learnedCards));
+  updateCardUI();
+}
+
+function updateCardUI() {
+  var cid = concepts[currentCard].id;
+  var btn = document.getElementById('markLearnedBtn');
+  btn.textContent = learnedCards[cid] ? '✔ 已学' : '✔ 标记已学';
+  btn.style.background = learnedCards[cid] ? 'var(--green)' : '';
+  btn.style.color = learnedCards[cid] ? '#fff' : '';
+  var count = Object.keys(learnedCards).length;
+  document.getElementById('cardProgress').textContent = '已学：'+count+'/10';
+  document.getElementById('cardLearned').textContent = learnedCards[cid] ? '✅ 已学会' : '';
+  updateProgress();
+}
+
+// ====== TAB 2: QUIZ ======
+function buildQuiz() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab2';
+  sec.innerHTML = '<div class="section-title">♦ 题库系统</div><div class="quiz-tabs"><button class="quiz-tab active" id="qtMcq">选择题（'+mcqs.length+'道）</button><button class="quiz-tab" id="qtSa">简答题（'+shortAnswers.length+'道）</button></div><div class="quiz-section active" id="mcqSection"></div><div class="quiz-section" id="saSection"></div><div class="quiz-actions"><button id="resetQuiz">🎲 重置题目</button><button id="showQuizAnswers">✅ 查看答案</button></div><div class="quiz-score hidden" id="quizScore"></div>';
+  main.appendChild(sec);
+
+  document.getElementById('qtMcq').addEventListener('click',function(){
+    document.getElementById('qtMcq').classList.add('active');
+    document.getElementById('qtSa').classList.remove('active');
+    document.getElementById('mcqSection').classList.add('active');
+    document.getElementById('saSection').classList.remove('active');
+  });
+  document.getElementById('qtSa').addEventListener('click',function(){
+    document.getElementById('qtSa').classList.add('active');
+    document.getElementById('qtMcq').classList.remove('active');
+    document.getElementById('saSection').classList.add('active');
+    document.getElementById('mcqSection').classList.remove('active');
+  });
+  document.getElementById('resetQuiz').addEventListener('click',resetQuiz);
+  document.getElementById('showQuizAnswers').addEventListener('click',showQuizAnswers);
+
+  renderMCQ();
+  renderShortAnswer();
+}
+
+function shuffleMCQs() {
+  var arr = mcqs.slice();
+  for(var i=arr.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;
+  }
+  return arr;
+}
+
+var shuffledMCQs = shuffleMCQs();
+
+function renderMCQ() {
+  var container = document.getElementById('mcqSection');
+  var h = '';
+  shuffledMCQs.forEach(function(q,qi){
+    h += '<div class="quiz-item" id="mq-'+qi+'"><h4>'+(qi+1)+'. '+q.question+'</h4>';
+    q.options.forEach(function(opt,oi){
+      h += '<div class="option" data-q="'+qi+'" data-o="'+oi+'">'+'ABCD'.charAt(oi)+'. '+opt+'</div>';
+    });
+    h += '</div>';
+  });
+  container.innerHTML = h;
+  container.querySelectorAll('.option').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      if(quizState.mcqSubmitted) return;
+      var q = parseInt(this.dataset.q);
+      var o = parseInt(this.dataset.o);
+      var siblings = this.parentElement.querySelectorAll('.option');
+      siblings.forEach(function(s){s.classList.remove('selected');});
+      this.classList.add('selected');
+      quizState.mcqAnswers[q] = o;
+    });
+  });
+}
+
+function renderShortAnswer() {
+  var container = document.getElementById('saSection');
+  var h = '';
+  shortAnswers.forEach(function(q,qi){
+    h += '<div class="quiz-item short-answer"><h4>'+(qi+1)+'. '+q.question+'</h4>';
+    h += '<textarea placeholder="请输入你的答案..." data-sa="'+qi+'"></textarea>';
+    h += '<div class="ref-answer" id="ref-'+qi+'"><b>参考答案：</b><p>'+q.reference+'</p></div>';
+    h += '<div class="self-eval" id="eval-'+qi+'"><button class="correct-btn" data-sa="'+qi+'" data-v="correct">✔ 完全正确</button><button class="partial-btn" data-sa="'+qi+'" data-v="partial">◐ 部分正确</button><button class="wrong-btn" data-sa="'+qi+'" data-v="wrong">✘ 未掌握</button></div>';
+    h += '</div>';
+  });
+  container.innerHTML = h;
+  container.querySelectorAll('textarea').forEach(function(ta){
+    ta.addEventListener('input',function(){
+      var idx = parseInt(this.dataset.sa);
+      quizState.saAnswers[idx] = this.value;
+    });
+  });
+  container.querySelectorAll('.self-eval button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var idx = parseInt(this.dataset.sa);
+      var val = this.dataset.v;
+      quizState.saEvals[idx] = val;
+      var siblings = document.getElementById('eval-'+idx).querySelectorAll('button');
+      siblings.forEach(function(s){s.classList.remove('active');});
+      this.classList.add('active');
+    });
+  });
+}
+
+function showQuizAnswers() {
+  quizState.mcqSubmitted = true;
+  var correct = 0;
+  shuffledMCQs.forEach(function(q,qi){
+    var opts = document.getElementById('mq-'+qi).querySelectorAll('.option');
+    opts.forEach(function(opt,oi){
+      opt.style.pointerEvents = 'none';
+      if(oi===q.answer) opt.classList.add('correct');
+      if(quizState.mcqAnswers[qi]===oi && oi!==q.answer) opt.classList.add('wrong');
+    });
+    if(quizState.mcqAnswers[qi]===q.answer) correct++;
+  });
+  quizState.mcqScore = correct;
+  shortAnswers.forEach(function(_,qi){
+    var ref = document.getElementById('ref-'+qi);
+    if(ref) ref.style.display = 'block';
+  });
+  var scoreEl = document.getElementById('quizScore');
+  scoreEl.classList.remove('hidden');
+  scoreEl.textContent = '选择题得分：'+correct+'/'+mcqs.length;
+}
+
+function resetQuiz() {
+  shuffledMCQs = shuffleMCQs();
+  quizState = {mcqAnswers:{},mcqSubmitted:false,mcqScore:0,saAnswers:{},saEvals:{}};
+  document.getElementById('quizScore').classList.add('hidden');
+  renderMCQ();
+  renderShortAnswer();
+}
+
+// ====== TAB 3: EXAM MODE ======
+function buildExam() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab3';
+  sec.innerHTML = '<div class="section-title">♦ 考试模式</div><div class="text-center"><p style="color:var(--text-light);margin-bottom:12px">模拟真实考试：随机抽10题，限时10分钟</p><button id="startExam" style="padding:12px 32px;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:1rem;font-weight:700;min-height:44px">开始考试</button><div class="exam-timer hidden" id="examTimer">剩余时间：10:00</div><div id="examQuestions" style="display:none"></div><div class="exam-result" id="examResult"></div></div>';
+  main.appendChild(sec);
+  document.getElementById('startExam').addEventListener('click',startExam);
+}
+
+function startExam() {
+  examState.started = true;
+  examState.submitted = false;
+  examState.answers = {};
+  examState.timeLeft = 600;
+  var pool = mcqs.slice();
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  examState.questions = pool.slice(0,10);
+
+  document.getElementById('startExam').style.display = 'none';
+  document.getElementById('examTimer').classList.remove('hidden');
+  document.getElementById('examResult').style.display = 'none';
+  document.getElementById('examResult').innerHTML = '';
+
+  var eq = document.getElementById('examQuestions');
+  eq.style.display = 'block';
+  var h = '';
+  examState.questions.forEach(function(q,qi){
+    h += '<div class="quiz-item"><h4>'+(qi+1)+'. '+q.question+'</h4>';
+    q.options.forEach(function(opt,oi){
+      h += '<div class="option" data-eq="'+qi+'" data-eo="'+oi+'">'+'ABCD'.charAt(oi)+'. '+opt+'</div>';
+    });
+    h += '</div>';
+  });
+  h += '<div class="quiz-actions"><button id="submitExam" style="background:var(--accent);color:#fff">提交答案</button></div>';
+  eq.innerHTML = h;
+
+  eq.querySelectorAll('.option').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      if(examState.submitted) return;
+      var q = parseInt(this.dataset.eq);
+      var o = parseInt(this.dataset.eo);
+      this.parentElement.querySelectorAll('.option').forEach(function(s){s.classList.remove('selected');});
+      this.classList.add('selected');
+      examState.answers[q] = o;
+    });
+  });
+
+  document.getElementById('submitExam').addEventListener('click',submitExam);
+
+  if(examState.timer) clearInterval(examState.timer);
+  examState.timer = setInterval(function(){
+    examState.timeLeft--;
+    var m = Math.floor(examState.timeLeft/60);
+    var s = examState.timeLeft%60;
+    document.getElementById('examTimer').textContent = '剩余时间：'+m+':'+(s<10?'0':'')+s;
+    if(examState.timeLeft<=0){submitExam();}
+  },1000);
+}
+
+function submitExam() {
+  if(examState.submitted) return;
+  examState.submitted = true;
+  if(examState.timer){clearInterval(examState.timer);examState.timer=null;}
+  var correct = 0;
+  examState.questions.forEach(function(q,qi){
+    var item = document.getElementById('examQuestions').querySelectorAll('.quiz-item')[qi];
+    if(!item) return;
+    var opts = item.querySelectorAll('.option');
+    opts.forEach(function(opt,oi){
+      opt.style.pointerEvents = 'none';
+      if(oi===q.answer) opt.classList.add('correct');
+      if(examState.answers[qi]===oi && oi!==q.answer) opt.classList.add('wrong');
+    });
+    if(examState.answers[qi]===q.answer) correct++;
+  });
+  document.getElementById('examTimer').classList.add('hidden');
+  var resultEl = document.getElementById('examResult');
+  resultEl.style.display = 'block';
+  var msg = correct>=8?'🌟 优秀！你已经掌握了科学思维的核心概念':correct>=6?'👍 良好，继续加油':'📚 还需要更多练习，建议重新浏览知识卡片';
+  resultEl.innerHTML = '<h3>考试结束</h3><p style="font-size:1.3rem;font-weight:700;color:var(--accent)">得分：'+correct+'/10</p><p style="margin-top:8px">'+msg+'</p><button id="retryExam" style="margin-top:12px;padding:10px 24px;border-radius:8px;border:1.5px solid var(--accent);background:var(--card);color:var(--accent);cursor:pointer;font-size:.85rem;min-height:44px">重新考试</button>';
+  document.getElementById('retryExam').addEventListener('click',resetExam);
+  var prev = parseInt(localStorage.getItem('mks_best_exam')||'0');
+  if(correct>prev) localStorage.setItem('mks_best_exam',correct);
+  updateProgress();
+}
+
+function resetExam() {
+  examState = {started:false,timeLeft:0,timer:null,answers:{},submitted:false};
+  if(examState.timer){clearInterval(examState.timer);examState.timer=null;}
+  var se = document.getElementById('startExam');
+  if(se) se.style.display = '';
+  var et = document.getElementById('examTimer');
+  if(et) et.classList.add('hidden');
+  var eq = document.getElementById('examQuestions');
+  if(eq){eq.style.display = 'none';eq.innerHTML = '';}
+  var er = document.getElementById('examResult');
+  if(er){er.style.display = 'none';er.innerHTML = '';}
+}
+
+// ====== TAB 4: REVIEW MODE ======
+function buildReview() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab4';
+  sec.innerHTML = '<div class="section-title">♦ 复习模式</div><p style="color:var(--text-light);margin-bottom:12px">跟踪每个概念的学习状态，差漏补缺。</p><div id="reviewList"></div>';
+  main.appendChild(sec);
+  renderReview();
+}
+
+function renderReview() {
+  var container = document.getElementById('reviewList');
+  var h = '';
+  concepts.forEach(function(c){
+    var status = learnedCards[c.id] ? 'mastered' : 'not-started';
+    var statusText = learnedCards[c.id] ? '✅ 已掌握' : '○ 未学习';
+    h += '<div class="review-item"><span><b>'+c.name+'</b></span><span class="status '+status+'">'+statusText+'</span></div>';
+  });
+  container.innerHTML = h;
+}
+
+// ====== TAB 5: MIND MAP ======
+function buildMindMap() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab5';
+  sec.innerHTML = '<div class="section-title">♦ 思维导图</div><div class="mindmap-container" id="mindmapContainer">'+svgBodyEmbed+'</div><p class="text-center mt-8" style="font-size:.78rem;color:var(--text-light)">滚动缩放查看概念关系，上图展示了10个核心概念的四层结构及其间的关系。实线= 输出关系，虚线= 反馈循环，虚线点= 跨层连接。</p>';
+  main.appendChild(sec);
+}
+
+function initMindMapZoom() {
+  var svgEl = document.querySelector('#mindmapContainer svg');
+  if(!svgEl) return;
+  svgEl.style.cursor = 'grab';
+  var scale = 1, panX = 0, panY = 0, dragging = false, lastX = 0, lastY = 0;
+  svgEl.addEventListener('wheel',function(e){
+    e.preventDefault();
+    scale += e.deltaY > 0 ? -0.1 : 0.1;
+    scale = Math.max(0.5, Math.min(3, scale));
+    svgEl.style.transform = 'translate('+panX+'px,'+panY+'px) scale('+scale+')';
+    svgEl.style.transformOrigin = '0 0';
+  });
+  svgEl.addEventListener('mousedown',function(e){dragging=true;lastX=e.clientX;lastY=e.clientY;svgEl.style.cursor='grabbing';});
+  svgEl.addEventListener('mousemove',function(e){if(!dragging)return;panX+=e.clientX-lastX;panY+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;svgEl.style.transform='translate('+panX+'px,'+panY+'px) scale('+scale+')';svgEl.style.transformOrigin='0 0';});
+  svgEl.addEventListener('mouseup',function(){dragging=false;svgEl.style.cursor='grab';});
+  svgEl.addEventListener('mouseleave',function(){dragging=false;svgEl.style.cursor='grab';});
+}
+
+// ====== TAB 6: DEEP QUESTIONS ======
+function buildDeepQuestions() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab6';
+  var deepQs = [
+    {q:'如果科学方法的核心是“可证伪”，那么“意识”“自由意志”这些概念是否永远不能成为科学的研究对象？',a:'不是。科学发展不断扩展“可测量”的边界。意识研究从哲学思辩转向脑成像、神经元活动模式的实证研究，正是科学方法的典型应用。关键是找到“操作定义”的方法。'},
+    {q:'演化论如果是“没有方向”的，为什么生物会从单细胞演化到智人？这不是“进步”吗？',a:'这是“事后偏差”。演化没有预设方向，但复杂性会自然积累。我们看到的“趋向复杂”是因为简单生物仍然存在且占大多数——细菌的总量远超人类。“复杂=进步”是人类的价值判断。'},
+    {q:'为什么“相关性≠因果性”这么简单的道理，却是科学思维中最常被违反的？',a:'因为人脑进化出了“因果直觉”——看到两件事先后发生就倾向于认为前者导致后者。这在原始环境中是生存优势，但在复杂现代社会中可能导致严重误判。批判性思维的价值就在于克服这种原始直觉。'},
+    {q:'千年以来人类的知识总量爆炸式增长，为什么“科学方法”只有几百年历史？古人为什么没有发明它？',a:'卓克认为，“发明发明的方法”比任何具体发明都困难。古人不缺智慧，缺的是一套允许“错误”和“修正”的知识生产机制。古代知识体系往往是“经典+注疏”模式，权威不可质疑；科学方法的革命在于把“错误”变成了知识增长的动力。'},
+    {q:'如果你只能给一个10岁孩子教一个科学思维概念，选哪个？为什么？',a:'“可证伪”——因为它是所有其他概念的前提。学会问“什么证据可以证明我错了？”比记住任何具体知识都重要。这一个问题能让孩子从小养成“我可能是错的”的认知习惯，这是科学精神的核心。'}
+  ];
+  var h = '<div class="section-title">♦ 深度追问</div><p style="color:var(--text-light);margin-bottom:12px">超越单个概念，挑战跨概念的深层问题。</p>';
+  deepQs.forEach(function(dq,i){
+    h += '<div class="deep-item"><h4>❶ '+(i+1)+'. '+dq.q+'</h4><p style="margin-top:6px;font-size:.82rem;color:var(--text-light)"><b>参考思考：</b>'+dq.a+'</p></div>';
+  });
+  sec.innerHTML = h;
+  main.appendChild(sec);
+}
+
+// ====== TAB 7: CASE STUDIES ======
+function buildCases() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab7';
+  var cases = [
+    {title:'复活节岛的兴衰：一部浓缩的人类文明史',concepts:'演化世界观、模型思维、极限分析',story:'复活节岛最鼎盛时有近万人居住，雕刻了巨大的摩艾石像。但当樹木被砍伐殆尽、土壤流失、食物缺乏时，社会崩溃了，人口验降到几千人。',analysis:'这是演化思维的完美案例：复杂社会结构并非“设计”而出，而是环境压力下自然选择的结果。同时展示了“极限”——岛屿资源的承载上限一旦被突破，系统就会崩溃。这也是一个“模型”——地球就是一个放大的复活节岛。'},
+    {title:'牛顿与铸币局：证据思维在日常生活中的力量',concepts:'证据金字塔、变量隔离、批判性思维',story:'1696年，53岁的牛顿受命担任铸币局督办，调查当时泛滥的伪币问题。他像做科学实验一样，一个一个地追踪证据，最终将伪币制造者绳之以法。',analysis:'牛顿的调查方法完全是科学方法的应用：搜集多源证据、交叉验证、不轻信单一来源。这证明证据思维不是“实验室专用”，而是可以转化为生活中判断真伪的通用工具。'},
+    {title:'尼斯湖水怪与伪科学产业链',concepts:'伪科学识别、证据金字塔、批判性思维',story:'尼斯湖水怪是最著名的未解之谜之一，全球已有数十次大型搜索行动，全部一无所获。但每次“未发现”都被粉丝解释为“它恰好不在”——这是典型的不可证伪命题。',analysis:'不可证伪是伪科学的核心特征。一个理论如果无法说出“什么证据可以推翻它”，它就不属于科学范畴。“证据的缺失不是证据”——没找到不等于存在。'},
+    {title:'“地球一小时”灯灭活动：善意与科学的冲突',concepts:'变量隔离、模型思维、批判性思维',story:'“地球一小时”号召各地同时灭灯一小时，以展示环保态度。但电网工程师指出：突然大规模的负荷变化可能对电网稳定性造成冲击，而点燃蜡烛可能产生更多碳排放。',analysis:'这是“变量隔离”的经典案例：我们倾向于只看“灭灯=省电”这一个变量，忽略了“电网负荷波动”“蜡烛碳排”等其他变量。善意不等于科学，需要用模型思维全面评估干预的后果。'},
+    {title:'天花病毒与人类历史的缠绕',concepts:'演化世界观、证据金字塔、模型思维',story:'天花不仅是一种疾病，它曾帮助西班牙人征服南美洲，也曾在东方保护了中国人免于被征服。天花是目前唯一被人类彻底消灭的病毒。',analysis:'这是演化世界观的经典案例：病毒和人类共同演化，形成了“军备竞赛”。同时展示了证据金字塔的力量——从历史记载到基因组测序，多层证据交叉验证了天花如何塑造了人类史。'}
+  ];
+  var h = '<div class="section-title">♦ 案例分析</div><p style="color:var(--text-light);margin-bottom:12px">从课程中精选的代表性案例，展示多概念联合应用。</p>';
+  cases.forEach(function(cs,i){
+    h += '<div class="case-item"><h4>案例'+(i+1)+'：'+cs.title+'</h4><div class="case-meta">涉及概念：'+cs.concepts+'</div><p style="font-size:.82rem;margin-top:8px"><b>背景：</b>'+cs.story+'</p><p style="font-size:.82rem;margin-top:8px"><b>分析：</b>'+cs.analysis+'</p></div>';
+  });
+  sec.innerHTML = h;
+  main.appendChild(sec);
+}
+
+// ====== TAB 8: DECISION SCENARIOS ======
+function buildDecision() {
+  var main = document.getElementById('mainContent');
+  var sec = document.createElement('div');
+  sec.className = 'tab-content';
+  sec.id = 'tab8';
+  var scenarios = [
+    {
+      title:'场景1：你看到一篇“某某食物致癌”的whatever文章，该如何判断？',
+      options:['立刻转发提醒家人','先查证据类型（秩事还是RCT？样本量？）','相信“古人说”的智慧','看文章赞数多不多'],good:1,
+      feedback:'✅ 正确！这是证据金字塔思维的直接应用。秩事证据在金字塔底层，RCT和荟萳分析在顶层。另外还要看“相关性”还是“因果性”，以及效应量的数量级。'
+    },
+    {
+      title:'场景2：朋友推荐一款“月瘦10斤”的减肥产品，你怎么办？',
+      options:['看到朋友效果好，立刻购买','查找是否有随机双盲实验支持','搜索产品的好评率','相信“纯天然”的宣传'],good:1,
+      feedback:'✅ 正确！“我朋友用了有效”是秩事证据，处于证据金字塔底层。没有随机双盲实验的产品，无法排除安慰剂效应和偶然因素。“纯天然”不等于“有效”——毒蘑菇也是纯天然的。'
+    },
+    {
+      title:'场景3：一个新“科学发现”声称推翻了演化论，你的第一反应是？',
+      options:['“果然，演化论只是一个假说”','“我要看看这个发现是否通过了同行评议，证据链是否完整”','“科学家一定是对的”','“这不是我能理解的问题”'],good:1,
+      feedback:'✅ 正确！科学的可靠性来自同行评议制度，而非单个权威。“推翻”一个成熟理论需要更强的证据链。这就是伪科学识别和证据金字塔的联合应用。'
+    },
+    {
+      title:'场景4：公司要做一个重大决策，但数据不全，怎么办？',
+      options:['等待所有数据齐全再做决定','用费米估算快速判断规模，同时承认不确定性','让老板拍板决定','不做决定，避免错误'],good:1,
+      feedback:'✅ 正确！这是数量级思维的实战应用——“大概正确”胜过“精确错误”，尤其在时间紧迫时。同时也体现了科学思维的核心——承认不确定性，但不因此瘱痪。'
+    },
+    {
+      title:'场景5：你在设计一个产品新功能，如何验证它是否真的有效？',
+      options:['上线后看用户反馈','做A/B测试，随机分组，控制其他变量','问团队里最有经验的人','看竞品是否有类似功能'],good:1,
+      feedback:'✅ 正确！这是变量隔离和模型思维的实战应用。A/B测试 = 随机双盲实验的产品化版本——只改变一个变量（新功能），控制其他一切变量，比较两组差异。这比“问经验”或“看竞品”可靠得多。'
+    }
+  ];
+  var h = '<div class="section-title">♦ 实战决策</div><p style="color:var(--text-light);margin-bottom:12px">将科学思维应用于真实场景，每个选择都是一次思维训练。</p>';
+  scenarios.forEach(function(sc,i){
+    h += '<div class="decision-scenario" id="ds-'+i+'"><h4>'+sc.title+'</h4><div class="decision-options">';
+    sc.options.forEach(function(opt,oi){
+      h += '<div class="d-option" data-ds="'+i+'" data-do="'+oi+'">'+'ABCDE'.charAt(oi)+'. '+opt+'</div>';
+    });
+    h += '</div><div class="decision-feedback" id="df-'+i+'"></div></div>';
+  });
+  sec.innerHTML = h;
+  main.appendChild(sec);
+
+  document.querySelectorAll('.d-option').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      var ds = parseInt(this.dataset.ds);
+      var o = parseInt(this.dataset.do);
+      var fb = document.getElementById('df-'+ds);
+      var siblings = document.getElementById('ds-'+ds).querySelectorAll('.d-option');
+      siblings.forEach(function(s){s.classList.remove('reveal-good','reveal-bad');});
+      if(o === scenarios[ds].good) {
+        this.classList.add('reveal-good');
+        fb.style.display = 'block';
+        fb.innerHTML = scenarios[ds].feedback;
+      } else {
+        this.classList.add('reveal-bad');
+        fb.style.display = 'block';
+        fb.innerHTML = '❌ 再想想。提示：回顾相关概念（证据金字塔、变量隔离、伪科学识别等），选择最符合科学思维的做法。';
+      }
+    });
+  });
+}
+
+// ====== INIT ======
+document.addEventListener('DOMContentLoaded',init);
+</script>
 </body>
 </html>
