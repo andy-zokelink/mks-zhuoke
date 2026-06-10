@@ -5,933 +5,867 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>卓克·科技参考3 — 最小知识集 MKS</title>
 <style>
-:root {
-  --bg: #fdf6ec;
-  --card: #fffaf2;
-  --accent: #c0392b;
-  --text: #3d2f2f;
-  --border: #e0d5c1;
-  --gold: #b8860b;
-  --blue: #2c5f8a;
-  --green: #3a7d44;
-  --purple: #6b3fa0;
-  --radius: 12px;
-  --shadow: 0 2px 12px rgba(61,47,47,0.08);
+:root{
+  --bg:#fdf6ec; --card:#fffaf2; --accent:#c0392b; --text:#3d2f2f;
+  --accent2:#8b0000; --gold:#b8860b; --light:#fff5e6; --border:#d4c5b0;
+  --blue:#1a5276; --green:#1e8449; --purple:#6c3483; --teal:#0e6655;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:"Noto Serif SC","Source Han Serif SC",Georgia,"Songti SC",serif; background:var(--bg); color:var(--text); line-height:1.8; }
-h1,h2,h3,h4 { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; }
-
-nav { position:sticky; top:0; z-index:1000; background:linear-gradient(135deg,#3d2f2f 0%,#5a3e3e 100%); display:flex; flex-wrap:wrap; gap:4px; padding:10px 16px; justify-content:center; }
-nav a { color:#f5e6d3; padding:6px 14px; border-radius:20px; font-size:0.9rem; transition:all 0.25s; text-decoration:none; }
-nav a:hover, nav a.active { background:var(--accent); color:#fff; }
-
-section { max-width:1100px; margin:0 auto; padding:40px 20px; }
-section h2 { font-size:1.8rem; color:var(--accent); border-bottom:3px solid var(--accent); padding-bottom:8px; margin-bottom:28px; display:flex; align-items:center; gap:10px; }
-section h2 .sec-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1rem; }
-
-.overview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
-.ov-card { background:var(--card); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); border-left:4px solid var(--accent); }
-.ov-card h3 { font-size:1.1rem; margin-bottom:10px; color:var(--accent); }
-.ov-card p { font-size:0.93rem; }
-
-.graph-container { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); overflow-x:auto; text-align:center; margin:20px 0; }
-.graph-container svg { max-width:100%; height:auto; }
-
-.boundary-table { width:100%; border-collapse:collapse; margin:16px 0; background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
-.boundary-table th { background:var(--accent); color:#fff; padding:12px 14px; text-align:left; }
-.boundary-table td { padding:12px 14px; border-bottom:1px solid var(--border); font-size:0.93rem; }
-.boundary-table tr:nth-child(even) { background:#fef9f0; }
-
-.path-flow { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:16px 0; }
-.path-node { background:var(--card); border:2px solid var(--accent); border-radius:24px; padding:10px 18px; font-weight:700; font-size:0.93rem; }
-.path-arrow { font-size:1.4rem; color:var(--accent); }
-
-.progress-bar { width:100%; height:20px; background:var(--border); border-radius:10px; overflow:hidden; margin:10px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:10px; transition:width 0.5s; }
-
-/* ── 知识卡片 3D Flip ── */
-.flip-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
-.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); }
-.flip-inner { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform 0.6s cubic-bezier(0.4,0,0.2,1); }
-.flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front, .flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
-.flip-front { background:linear-gradient(145deg,var(--card) 0%,#f8eedb 100%); display:flex; flex-direction:column; justify-content:space-between; border-top:5px solid var(--accent); cursor:pointer; }
-.flip-front .card-icon { font-size:2.2rem; text-align:center; margin:6px 0; }
-.flip-front h4 { font-size:1.1rem; color:var(--accent); text-align:center; }
-.flip-front .card-hint { font-size:0.8rem; color:#999; text-align:center; }
-.flip-back { background:var(--card); transform:rotateY(180deg); overflow-y:auto; border:2px solid var(--accent); font-size:0.88rem; line-height:1.6; }
-.flip-back h4 { color:var(--accent); margin-bottom:6px; }
-.flip-back .label { display:inline-block; background:var(--accent); color:#fff; padding:2px 8px; border-radius:4px; font-size:0.75rem; margin-right:4px; }
-
-.card-actions { display:flex; gap:8px; margin-top:12px; justify-content:center; flex-wrap:wrap; }
-.card-actions button { padding:6px 14px; border:1px solid var(--accent); border-radius:16px; cursor:pointer; font-size:0.82rem; background:#fff; color:var(--accent); transition:all 0.2s; }
-.card-actions button:hover { background:var(--accent); color:#fff; }
-.card-actions button.learned { background:#e6f4ea; border-color:var(--green); color:var(--green); }
-
-/* ── 题库 ── */
-.quiz-container { max-width:860px; margin:0 auto; }
-.quiz-controls { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center; }
-.quiz-controls button { padding:10px 20px; border-radius:20px; border:2px solid var(--accent); background:#fff; color:var(--accent); cursor:pointer; font-size:0.9rem; transition:all 0.2s; }
-.quiz-controls button:hover { background:var(--accent); color:#fff; }
-.quiz-controls button.active-btn { background:var(--accent); color:#fff; }
-.quiz-question { background:var(--card); border-radius:var(--radius); padding:20px; margin:16px 0; box-shadow:var(--shadow); }
-.quiz-question .q-type { font-size:0.78rem; color:var(--accent); font-weight:700; margin-bottom:6px; }
-.quiz-question .q-text { font-size:1.05rem; margin-bottom:14px; }
-.quiz-question .q-options label { display:block; padding:8px 12px; margin:4px 0; border-radius:6px; cursor:pointer; transition:background 0.2s; }
-.quiz-question .q-options label:hover { background:#f5ead5; }
-.quiz-question .q-options input { margin-right:8px; }
-.quiz-answer { margin-top:12px; padding:12px; border-radius:8px; background:#fef9e7; border-left:4px solid var(--gold); font-size:0.9rem; display:none; }
-.quiz-answer.show { display:block; }
-.correct-highlight { background:#d4edda !important; border-left:4px solid var(--green) !important; }
-.wrong-highlight { background:#fce4e4 !important; border-left:4px solid var(--accent) !important; }
-
-/* ── 考试 ── */
-.exam-panel { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); }
-.exam-timer { font-size:1.6rem; font-weight:700; color:var(--accent); text-align:center; margin:12px 0; }
-.exam-stats { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin:16px 0; font-size:0.95rem; }
-
-/* ── 复习 ── */
-.review-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
-.review-card { background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s; }
-.review-card:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(61,47,47,0.15); }
-.review-card.reviewed { border-left:4px solid var(--green); }
-
-/* ── 思维导图 ── */
-.mindmap-container { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); }
-.mindmap-node { margin:8px 0; padding:10px 16px; border-radius:20px; display:inline-block; font-weight:700; }
-.mindmap-root { background:var(--accent); color:#fff; font-size:1.1rem; }
-.mindmap-l1 { background:#5a3e3e; color:#f5e6d3; }
-.mindmap-l2 { background:#f0e6d3; border:2px solid var(--accent); }
-.mindmap-l3 { background:#fff; border:1px solid var(--border); font-weight:400; font-size:0.88rem; }
-.mindmap-line { border-left:2px dashed var(--accent); margin-left:24px; padding-left:24px; }
-
-/* ── 深度追问 ── */
-.ask-list { list-style:none; }
-.ask-list > li { background:var(--card); border-radius:var(--radius); padding:16px; margin:12px 0; box-shadow:var(--shadow); border-left:4px solid var(--blue); }
-.ask-q { font-weight:700; font-size:1.05rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
-.ask-a { margin-top:10px; font-size:0.93rem; display:none; padding:12px; background:#f8f4e8; border-radius:8px; }
-.ask-a.show { display:block; }
-
-/* ── 案例分析 ── */
-.case-card { background:var(--card); border-radius:var(--radius); padding:20px; margin:16px 0; box-shadow:var(--shadow); }
-.case-card h4 { color:var(--accent); margin-bottom:8px; }
-.case-card .case-concepts { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
-.case-card .case-tag { background:#f0e6d3; color:var(--accent); padding:4px 10px; border-radius:12px; font-size:0.8rem; }
-
-/* ── 实战决策 ── */
-.decision-flow { display:flex; flex-direction:column; gap:16px; }
-.decision-node { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); }
-.decision-node h4 { color:var(--accent); }
-.decision-node .choice { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0; }
-.decision-node .choice button { padding:8px 18px; border:2px solid var(--border); border-radius:20px; background:#fff; cursor:pointer; font-size:0.9rem; transition:all 0.2s; }
-.decision-node .choice button:hover { border-color:var(--accent); background:#fff5f5; }
-.decision-node .choice button.selected { border-color:var(--accent); background:var(--accent); color:#fff; }
-.decision-feedback { padding:12px; border-radius:8px; background:#fef9e7; margin-top:10px; display:none; font-size:0.9rem; }
-.decision-feedback.show { display:block; }
-
-.toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:#3d2f2f; color:#f5e6d3; padding:12px 28px; border-radius:24px; font-size:0.9rem; z-index:9999; opacity:0; transition:opacity 0.3s; pointer-events:none; }
-.toast.show { opacity:1; }
-
-@media(max-width:600px){
-  section { padding:24px 12px; }
-  section h2 { font-size:1.3rem; }
-  .flip-grid { grid-template-columns:1fr; }
-  nav a { font-size:0.78rem; padding:4px 10px; }
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","Source Han Serif SC",Georgia,"SimSun",serif;line-height:1.8}
+.tab-nav{position:sticky;top:0;z-index:100;display:flex;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent),var(--accent2));padding:0;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.tab-nav button{flex:1;min-width:90px;padding:12px 8px;border:none;background:transparent;color:rgba(255,255,255,.75);cursor:pointer;font-size:14px;font-weight:600;transition:all .3s;position:relative}
+.tab-nav button:hover,.tab-nav button.active{color:#fff;background:rgba(255,255,255,.12)}
+.tab-nav button.active::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:3px;background:#fff;border-radius:2px}
+.tab-section{display:none;padding:24px;max-width:1200px;margin:0 auto;animation:fadeIn .5s}
+.tab-section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+h1{font-size:clamp(1.5rem,3vw,2.2rem);color:var(--accent);text-align:center;margin:20px 0 10px}
+h2{font-size:clamp(1.2rem,2.2vw,1.6rem);color:var(--accent2);border-bottom:2px solid var(--border);padding-bottom:8px;margin:24px 0 16px}
+h3{font-size:clamp(1rem,1.7vw,1.25rem);color:var(--text);margin:16px 0 10px}
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin:16px 0}
+.overview-card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid var(--border)}
+.overview-card h3{color:var(--accent);margin-bottom:10px}
+.goal-box{background:linear-gradient(135deg,#fff5e6,#ffe8cc);border-left:4px solid var(--gold);padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0}
+.mks-badge{display:inline-block;background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:6px;font-weight:700}
+.graph-container{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;overflow-x:auto}
+.graph-container svg{max-width:100%;height:auto}
+.boundary-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+.boundary-table th{background:var(--accent);color:#fff;padding:10px 12px;text-align:left}
+.boundary-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+.boundary-table tr:nth-child(even){background:var(--light)}
+.path-steps{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
+.path-step{flex:1;min-width:140px;background:var(--card);border-radius:10px;padding:16px;text-align:center;border:2px solid var(--border);position:relative}
+.path-step.current{border-color:var(--accent);background:var(--light)}
+.path-step.done{border-color:var(--green);opacity:.7}
+.path-step .step-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:8px}
+.path-step.done .step-num{background:var(--green)}
+.progress-bar{height:12px;background:var(--border);border-radius:6px;margin:12px 0;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:6px;transition:width .5s}
+.flip-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin:16px 0}
+.flip-card{perspective:1000px;height:clamp(220px,40vw,280px)}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;padding:18px;overflow:hidden}
+.flip-front{background:var(--card);border:2px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.flip-front .concept-icon{font-size:48px;margin-bottom:10px}
+.flip-front .concept-name{font-size:20px;font-weight:700;color:var(--accent)}
+.flip-front .concept-hint{font-size:13px;color:#999;margin-top:8px}
+.flip-back{background:var(--card);border:2px solid var(--accent);transform:rotateY(180deg);overflow-y:auto;font-size:14px;line-height:1.7}
+.flip-back h4{color:var(--accent);font-size:16px;margin-bottom:8px}
+.flip-back .label{display:inline-block;background:var(--accent);color:#fff;font-size:11px;padding:1px 6px;border-radius:3px;margin-right:4px}
+.flip-back .example{color:var(--green);font-style:italic}
+.flip-back .counter{color:var(--accent2);font-style:italic}
+.card-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.card-actions button{font-size:12px;padding:4px 10px;border:1px solid var(--border);background:var(--bg);border-radius:4px;cursor:pointer;transition:all .2s}
+.card-actions button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card-learned{opacity:.5;border-color:#ccc!important}
+.card-learned .flip-front{border-color:#ccc}
+.quiz-controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.quiz-controls button{padding:8px 18px;border:2px solid var(--accent);background:#fff;color:var(--accent);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s}
+.quiz-controls button:hover{background:var(--accent);color:#fff}
+.quiz-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
+.quiz-item h4{color:var(--accent);margin-bottom:10px}
+.quiz-item label{display:block;padding:8px 12px;margin:4px 0;border-radius:6px;cursor:pointer;transition:background .2s}
+.quiz-item label:hover{background:var(--light)}
+.quiz-item input[type="radio"]{margin-right:8px}
+.quiz-feedback{margin-top:10px;padding:10px;border-radius:6px;font-weight:600;display:none}
+.quiz-feedback.correct{background:#d4edda;color:#155724;display:block}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24;display:block}
+.sa-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
+.sa-item textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:6px;padding:10px;font-family:inherit;resize:vertical;margin:8px 0}
+.sa-item .show-answer{background:var(--light);padding:10px;border-radius:6px;margin-top:8px;display:none;font-size:14px}
+.static-quiz{display:none}
+.exam-timer{font-size:24px;font-weight:700;color:var(--accent);text-align:center;margin:16px 0}
+.exam-score{font-size:20px;font-weight:700;text-align:center;margin:12px 0}
+.review-list{list-style:none;margin:16px 0}
+.review-list li{padding:10px 16px;margin:6px 0;background:var(--card);border-radius:8px;cursor:pointer;border:1px solid var(--border);transition:all .2s}
+.review-list li:hover{border-color:var(--accent)}
+.review-list li.reviewed{opacity:.5;text-decoration:line-through}
+.mind-map-svg{width:100%;max-width:900px;margin:0 auto;display:block}
+.dq-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border-left:4px solid var(--accent)}
+.dq-item .dq-question{font-weight:700;color:var(--accent2);cursor:pointer}
+.dq-item .dq-answer{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:14px}
+.case-card{background:var(--card);border-radius:10px;padding:20px;margin:12px 0;border:1px solid var(--border)}
+.case-card .case-title{font-weight:700;color:var(--accent);font-size:18px}
+.case-card .case-meta{font-size:13px;color:#999;margin:6px 0}
+.case-steps{margin:12px 0;padding-left:20px}
+.case-steps li{margin:6px 0}
+.decision-scenario{background:var(--card);border-radius:10px;padding:20px;margin:16px 0;border:1px solid var(--border)}
+.decision-scenario h4{color:var(--accent)}
+.decision-scenario select,.decision-scenario button{margin:8px 4px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);font-family:inherit}
+.decision-scenario button{background:var(--accent);color:#fff;cursor:pointer;border:none;font-weight:600}
+.decision-output{background:var(--light);padding:16px;border-radius:8px;margin-top:12px;display:none;font-size:14px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:12px 0;font-size:13px}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+.toast{position:fixed;top:20px;right:20px;background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;z-index:999;animation:slideIn .3s;font-size:14px}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="#overview" class="active">知识集总览</a>
-  <a href="#cards">知识卡片</a>
-  <a href="#quiz">题库系统</a>
-  <a href="#exam">考试模式</a>
-  <a href="#review">复习模式</a>
-  <a href="#mindmap">思维导图</a>
-  <a href="#ask">深度追问</a>
-  <a href="#cases">案例分析</a>
-  <a href="#decision">实战决策</a>
+<nav class="tab-nav" id="tabNav">
+  <button class="active" data-tab="overview">知识集总览</button>
+  <button data-tab="cards">知识卡片</button>
+  <button data-tab="quiz">题库系统</button>
+  <button data-tab="exam">考试模式</button>
+  <button data-tab="review">复习模式</button>
+  <button data-tab="mindmap">思维导图</button>
+  <button data-tab="deepask">深度追问</button>
+  <button data-tab="cases">案例分析</button>
+  <button data-tab="decision">实战决策</button>
 </nav>
 
-<!-- ═══════════ 1. 知识集总览 ═══════════ -->
-<section id="overview">
-<h2><span class="sec-num">1</span> 知识集总览</h2>
+<section class="tab-section active" id="sec-overview">
+<h1>卓克·科技参考3 — 最小知识集（MKS）</h1>
+<p style="text-align:center;color:#999;margin-bottom:20px">从 311 篇科技前沿追踪中提取 10 个核心概念 | 2023.10—2024.12</p>
 
-<h3 style="margin-top:24px;">核心目标</h3>
-<div class="ov-card">
-<p style="font-size:1.05rem;">从 311 篇科技前沿追踪中提炼 <strong>10 个底层认知框架</strong>，使你面对任何科技新闻时能独立判断其真实性、重要性及对个人决策的影响。覆盖 AI、半导体、核聚变、太空探索、衰老科学、演化思维、科学方法论等领域。</p>
+<div class="goal-box">
+  <strong>核心目标：</strong>在 AI 奇迹年（2023）的剧烈变革中，建立一套可迁移的科技认知框架——不被热点裹挟，不被谣言误导，能用第一性原理分析技术趋势，识别智商税，做出理性决策。
 </div>
 
-<h3 style="margin-top:24px;">核心概念</h3>
 <div class="overview-grid">
-  <div class="ov-card"><h3>1. 涌现</h3><p>大量简单单元按规则交互后，宏观层面产生无法从微观规则直接推导的新性质</p></div>
-  <div class="ov-card"><h3>2. 大语言模型机制</h3><p>Transformer架构通过自注意力机制对token序列做概率预测，参数突破临界后涌现推理</p></div>
-  <div class="ov-card"><h3>3. AI对齐与安全</h3><p>确保AI系统行为与人类意图一致，防目标错位导致的灾难性后果</p></div>
-  <div class="ov-card"><h3>4. 芯片制程演进</h3><p>从晶体管微缩到3D堆叠、Chiplet——摩尔定律靠架构创新延续</p></div>
-  <div class="ov-card"><h3>5. 科学方法论</h3><p>同行评议、可重复性、证据层级、相关性≠因果——区分科学与伪科学的操作系统</p></div>
-  <div class="ov-card"><h3>6. 剂量-效应关系</h3><p>毒性取决于剂量；致癌物分级=证据强度≠危险程度</p></div>
-  <div class="ov-card"><h3>7. 可控核聚变</h3><p>磁约束与惯性约束两条路径，核心挑战是Q>1的工程实现</p></div>
-  <div class="ov-card"><h3>8. 衰老生物学</h3><p>表观遗传时钟、细胞衰老——衰老是可干预的生物过程而非宿命</p></div>
-  <div class="ov-card"><h3>9. 太空工程学</h3><p>火箭方程决定运力上限，可复用+在轨加注改变深空经济模型</p></div>
-  <div class="ov-card"><h3>10. 演化思维</h3><p>自然选择无方向，适应性是局部最优；演化是修补匠不是工程师</p></div>
-</div>
-
-<h3 style="margin-top:28px;">最小知识集 <span style="color:var(--gold);">★</span></h3>
-<p style="font-size:0.95rem;color:#888;margin-bottom:8px;">以下 10 条是必须内化的底层判断框架。每条配一句口诀助记。</p>
-<table class="boundary-table">
-<thead><tr><th>#</th><th>最小知识</th><th>一句话口诀</th><th>对应概念</th></tr></thead>
-<tbody>
-<tr><td>★1</td><td>涌现：大量简单交互产生不可预测的宏观秩序</td><td>“量变引发质变，规则简单不等于结果简单”</td><td>涌现</td></tr>
-<tr><td>★2</td><td>LLM=超大规模概率预测器，非数据库检索</td><td>“它不是在查答案，是在猜下一个词”</td><td>大语言模型</td></tr>
-<tr><td>★3</td><td>AI不需要意识就能构成威胁——掌握语言就够了</td><td>“真假难辨的内容比觉醒的机器人更危险”</td><td>AI对齐与安全</td></tr>
-<tr><td>★4</td><td>先进制程≠更小晶体管，架构创新才是关键</td><td>“摩尔定律没死，只是换了活法”</td><td>芯片制程</td></tr>
-<tr><td>★5</td><td>相关性≠因果；证据有层级；同行评议是最低门槛</td><td>“一个研究说”不等于“科学证明”</td><td>科学方法论</td></tr>
-<tr><td>★6</td><td>致癌物分级=证据强度≠危险程度</td><td>“剂量决定毒性，离开剂量谈危害是耍流氓”</td><td>剂量-效应</td></tr>
-<tr><td>★7</td><td>核聚变永远差20年——因工程挑战远大于物理原理</td><td>“原理对不代表能造出来”</td><td>可控核聚变</td></tr>
-<tr><td>★8</td><td>衰老是生物过程，可被干预但不可逆转</td><td>“衰老不是宿命，但返老还童尚无科学依据”</td><td>衰老生物学</td></tr>
-<tr><td>★9</td><td>火箭运力由齐奥尔科夫斯基方程严格约束</td><td>“每一克载荷都要付出数倍的燃料代价”</td><td>太空工程</td></tr>
-<tr><td>★10</td><td>演化不追求完美，只淘汰不够好的</td><td>“够用就行——演化是修补匠不是工程师”</td><td>演化思维</td></tr>
-</tbody>
-</table>
-
-<h3 style="margin-top:28px;">概念关系图</h3>
-<div class="graph-container" id="graphSvg"></div>
-<div style="font-size:0.85rem;color:#888;text-align:center;margin-top:6px;">
-图例：<span style="color:#c0392b;">● 红色=AI主线</span> &nbsp;
-<span style="color:#2c5f8a;">● 蓝色=方法论</span> &nbsp;
-<span style="color:#3a7d44;">● 绿色=硬科技</span> &nbsp;
-<span style="color:#6b3fa0;">● 紫色=生物/演化</span> &nbsp;
-<span style="color:#b8860b;">··· 虚线=回环反馈</span>
-</div>
-
-<h3 style="margin-top:28px;">边界知识表</h3>
-<table class="boundary-table">
-<thead><tr><th>概念</th><th>本集覆盖</th><th>本集不覆盖（但相关）</th></tr></thead>
-<tbody>
-<tr><td>涌现</td><td>AI涌现、生命起源中的涌现、秩序涌现</td><td>复杂系统数学（非线性动力学、混沌理论）</td></tr>
-<tr><td>大语言模型</td><td>Transformer、注意力、tokenization、温度采样</td><td>扩散模型、GAN、强化学习详细数学</td></tr>
-<tr><td>AI对齐</td><td>超级对齐、RLHF、AI威胁模型、内容真实性</td><td>AI治理政策细节、各国AI立法对比</td></tr>
-<tr><td>芯片制程</td><td>EUV/DUV、3nm、SoC、Chiplet、HBM</td><td>量子计算、光子计算、神经形态计算</td></tr>
-<tr><td>科学方法论</td><td>同行评议、证据层级、统计显著性、可重复性</td><td>贝叶斯推断数学、元分析技术</td></tr>
-<tr><td>剂量-效应</td><td>致癌物IARC分级、ADI值、食品安全评估</td><td>毒理学动物实验设计、LD50测定</td></tr>
-<tr><td>核聚变</td><td>磁约束vs惯性约束、Q值、ITER、NIF</td><td>等离子体物理方程、超导磁体工程</td></tr>
-<tr><td>衰老生物学</td><td>表观遗传时钟、海拉细胞、NMN、端粒</td><td>基因编辑抗衰老、冷冻复活技术</td></tr>
-<tr><td>太空工程</td><td>火箭方程、星舰设计、可复用、在轨加注</td><td>轨道力学、生命支持系统</td></tr>
-<tr><td>演化思维</td><td>自然选择、趋同演化、演化权衡、设计缺陷</td><td>分子演化、群体遗传学数学</td></tr>
-</tbody>
-</table>
-
-<h3 style="margin-top:28px;">学习路径</h3>
-<div class="path-flow">
-  <span class="path-node">1.涌现</span><span class="path-arrow">→</span>
-  <span class="path-node">2.LLM机制</span><span class="path-arrow">→</span>
-  <span class="path-node">3.AI对齐</span><span class="path-arrow">→</span>
-  <span class="path-node">4.芯片制程</span><span class="path-arrow">→</span>
-  <span class="path-node">5.科学方法论</span>
-</div>
-<div class="path-flow">
-  <span class="path-node">5.科学方法论</span><span class="path-arrow">→</span>
-  <span class="path-node">6.剂量效应</span><span class="path-arrow">→</span>
-  <span class="path-node">7.核聚变</span><span class="path-arrow">→</span>
-  <span class="path-node">8.衰老生物</span><span class="path-arrow">→</span>
-  <span class="path-node">9.太空工程</span><span class="path-arrow">→</span>
-  <span class="path-node">10.演化思维</span>
-</div>
-<p style="font-size:0.85rem;color:#888;">按编号顺序学习。概念5（科学方法论）为全集的判断力底座——建议优先掌握。</p>
-
-<h3 style="margin-top:28px;">学习进度</h3>
-<div class="ov-card">
-  <p>已学卡片：<strong id="learnedCount">0</strong> / 10</p>
-  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-  <p style="font-size:0.82rem;color:#888;margin-top:6px;">点击知识卡片中的“标记已学”按钮跟踪进度</p>
-</div>
-</section>
-
-<!-- ═══════════ 2. 知识卡片 ═══════════ -->
-<section id="cards">
-<h2><span class="sec-num">2</span> 知识卡片 <span style="font-size:0.85rem;color:#888;">点击卡片翻转查看完整内容</span></h2>
-<div class="flip-grid" id="flipGrid"></div>
-</section>
-
-<!-- ═══════════ 3. 题库系统 ═══════════ -->
-<section id="quiz">
-<h2><span class="sec-num">3</span> 题库系统</h2>
-<div class="quiz-container">
-  <div class="quiz-controls">
-    <button id="quizMcqBtn" class="active-btn">选择题 (20题)</button>
-    <button id="quizShortBtn">简答题 (10题)</button>
-    <button id="quizRandomBtn">🎲 随机抽题</button>
-    <button id="quizResetBtn">↺ 重置</button>
+  <div class="overview-card">
+    <h3>核心概念</h3>
+    <ol style="padding-left:20px;line-height:2.2">
+      <li>大语言模型（LLM）原理</li>
+      <li>AI 安全与对齐</li>
+      <li>先进芯片制造</li>
+      <li>可控核聚变路线</li>
+      <li>星舰与太空运输革命</li>
+      <li>端到端智能驾驶</li>
+      <li>衰老科学前沿</li>
+      <li>室温超导虚实</li>
+      <li>科技消费决策框架</li>
+      <li>演化生物学新认知</li>
+    </ol>
   </div>
-  <div id="quizArea"></div>
-</div>
-</section>
-
-<!-- ═══════════ 4. 考试模式 ═══════════ -->
-<section id="exam">
-<h2><span class="sec-num">4</span> 考试模式</h2>
-<div class="exam-panel">
-  <p style="text-align:center;font-size:1rem;">限时 20 分钟，从题库随机抽取 25 题（15 选择 + 10 简答），自动评分</p>
-  <div class="exam-timer" id="examTimer">20:00</div>
-  <div class="exam-stats">
-    <span>已答：<strong id="examAnswered">0</strong>/25</span>
-    <span>选择正确：<strong id="examCorrect">0</strong></span>
-    <span>得分：<strong id="examScore">0</strong></span>
-  </div>
-  <div style="display:flex;gap:10px;justify-content:center;margin:16px 0;">
-    <button id="examStartBtn" style="padding:12px 32px;background:var(--accent);color:#fff;border:none;border-radius:24px;font-size:1rem;cursor:pointer;">开始考试</button>
-    <button id="examSubmitBtn" style="padding:12px 32px;background:var(--gold);color:#fff;border:none;border-radius:24px;font-size:1rem;cursor:pointer;display:none;">提交答卷</button>
-  </div>
-  <div id="examArea" style="display:none;"></div>
-  <div id="examResult" style="display:none;text-align:center;padding:16px;font-size:1.1rem;"></div>
-</div>
-</section>
-
-<!-- ═══════════ 5. 复习模式 ═══════════ -->
-<section id="review">
-<h2><span class="sec-num">5</span> 复习模式</h2>
-<p style="margin-bottom:16px;color:#888;">间隔重复复习卡片。勾选已复习的卡片追踪进度。</p>
-<div class="review-grid" id="reviewGrid"></div>
-<div style="text-align:center;margin-top:20px;">
-  <span>复习进度：<strong id="reviewCount">0</strong>/10</span>
-</div>
-</section>
-
-<!-- ═══════════ 6. 思维导图 ═══════════ -->
-<section id="mindmap">
-<h2><span class="sec-num">6</span> 思维导图</h2>
-<div class="mindmap-container">
-  <div style="text-align:center;margin-bottom:20px;">
-    <span class="mindmap-node mindmap-root">卓克·科技参考3 知识体系</span>
-  </div>
-  <div class="mindmap-line">
-    <div style="margin:12px 0;"><span class="mindmap-node mindmap-l1">AI 主线</span></div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">涌现机制</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">参数规模↗ → 能力质变</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">不可预测性</span>
-    </div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">LLM原理</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">Token化+嵌入向量</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">自注意力→语义关联</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">温度采样→多样性</span>
-    </div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">AI对齐安全</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">超级对齐(RLHF)</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">内容真实性危机</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">不需意识=威胁</span>
-    </div>
-  </div>
-  <div class="mindmap-line">
-    <div style="margin:12px 0;"><span class="mindmap-node mindmap-l1">硬科技</span></div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">芯片制程</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">EUV光刻(13.5nm)</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">Chiplet/先进封装</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">HBM→打破内存墙</span>
-    </div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">可控核聚变</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">托卡马克(ITER)</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">惯性约束(NIF)</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">Q值→商业化门槛</span>
-    </div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">太空工程</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">火箭方程→严格约束</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">可复用→成本骤降</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">在轨加注→深空可能</span>
-    </div>
-  </div>
-  <div class="mindmap-line">
-    <div style="margin:12px 0;"><span class="mindmap-node mindmap-l1">方法论</span></div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">科学方法论</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">同行评议是底线</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">相关性≠因果</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">可重复性=试金石</span>
-    </div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">剂量-效应</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">IARC分级=证据≠危险</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">ADI=安全系数×100</span>
-    </div>
-  </div>
-  <div class="mindmap-line">
-    <div style="margin:12px 0;"><span class="mindmap-node mindmap-l1">生物/演化</span></div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">衰老生物学</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">表观遗传时钟</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">海拉细胞=永生化</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">NMN/白藜芦醇争议</span>
-    </div>
-    <div class="mindmap-line">
-      <span class="mindmap-node mindmap-l2">演化思维</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">自然选择无方向</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">趋同演化→物理约束</span>
-      <span class="mindmap-node mindmap-l3" style="margin-left:8px;">演化权衡→“设计缺陷”</span>
-    </div>
+  <div class="overview-card">
+    <h3>最小知识集 <span class="mks-badge">★</span></h3>
+    <p>10 个核心概念覆盖本课程 80% 以上的认知价值：</p>
+    <ul style="padding-left:20px;line-height:2.2;margin-top:8px">
+      <li><strong>Token 预测</strong> — LLM 的本质</li>
+      <li><strong>逆转诅咒</strong> — AI 的认知边界</li>
+      <li><strong>EUV 光刻</strong> — 芯片物理极限</li>
+      <li><strong>等离子体约束</strong> — 聚变核心挑战</li>
+      <li><strong>火箭可回收</strong> — 太空经济拐点</li>
+      <li><strong>端到端模型</strong> — 智驾范式转移</li>
+      <li><strong>表观遗传时钟</strong> — 衰老可逆性</li>
+      <li><strong>BCS 理论</strong> — 超导判据</li>
+      <li><strong>智商税识别矩阵</strong> — 消费决策</li>
+      <li><strong>朊粒</strong> — 非典型生命形式</li>
+    </ul>
   </div>
 </div>
+
+<div class="overview-card" style="grid-column:1/-1">
+  <h3>概念关系图</h3>
+  <div class="graph-container" id="graphContainer"></div>
+  <div class="legend">
+    <span><span class="dot" style="background:#c0392b"></span> 核心驱动层</span>
+    <span><span class="dot" style="background:#1a5276"></span> 技术应用层</span>
+    <span><span class="dot" style="background:#27ae60"></span> 科学前沿层</span>
+    <span><span class="dot" style="background:#8e44ad"></span> 认知框架层</span>
+    <span style="color:#999;font-size:12px">⇢ 虚线回环 = 反馈迭代</span>
+  </div>
+</div>
+
+<div class="overview-card" style="grid-column:1/-1">
+  <h3>边界知识表</h3>
+  <table class="boundary-table">
+    <thead><tr><th>概念</th><th>是（核心）</th><th>不是（排除）</th><th>边界条件</th></tr></thead>
+    <tbody>
+      <tr><td>LLM</td><td>基于概率的 token 预测引擎</td><td>有意识的思考主体</td><td>无世界模型，无因果推理</td></tr>
+      <tr><td>AI 对齐</td><td>让 AI 行为符合人类价值观</td><td>给 AI 灌输政治立场</td><td>价值观本身是多元且冲突的</td></tr>
+      <tr><td>EUV 光刻</td><td>13.5nm 波长等离子体光源</td><td>传统 DUV 浸没式光刻</td><td>物理极限约 1nm 节点</td></tr>
+      <tr><td>核聚变</td><td>轻核聚变释放净能量</td><td>已商业化的能源技术</td><td>Q>1 尚未持续实现</td></tr>
+      <tr><td>星舰</td><td>完全可重用超重型火箭</td><td>登月专有运输工具</td><td>火星运输需在轨加注</td></tr>
+      <tr><td>端到端智驾</td><td>传感器→驾驶指令直出</td><td>高精地图+规则代码方案</td><td>长尾场景仍需兜底策略</td></tr>
+      <tr><td>衰老科学</td><td>基于生物标志物的干预</td><td>返老还童的灵丹妙药</td><td>延缓 ≠ 逆转，个体差异大</td></tr>
+      <tr><td>室温超导</td><td>常压室温零电阻材料</td><td>已实现的技术突破</td><td>至今无一例被独立复现</td></tr>
+      <tr><td>智商税</td><td>支付远超功能价值的溢价</td><td>所有高价消费品</td><td>取决于信息不对称程度</td></tr>
+      <tr><td>朊粒</td><td>错误折叠的传染性蛋白质</td><td>病毒或细菌</td><td>无核酸，常规灭菌无效</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="overview-card" style="grid-column:1/-1">
+  <h3>学习路径</h3>
+  <div class="path-steps" id="pathSteps">
+    <div class="path-step current"><div class="step-num">1</div>AI 基础认知</div>
+    <div class="path-step"><div class="step-num">2</div>芯片与算力</div>
+    <div class="path-step"><div class="step-num">3</div>能源与太空</div>
+    <div class="path-step"><div class="step-num">4</div>智能驾驶</div>
+    <div class="path-step"><div class="step-num">5</div>生命科学</div>
+    <div class="path-step"><div class="step-num">6</div>科学思维</div>
+  </div>
+</div>
+
+<div class="overview-card" style="grid-column:1/-1">
+  <h3>学习进度</h3>
+  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:14px">卡片已学 <span id="learnedCount">0</span>/10 | 题目已答 <span id="quizDone">0</span>/30</p>
+</div>
 </section>
 
-<!-- ═══════════ 7. 深度追问 ═══════════ -->
-<section id="ask">
-<h2><span class="sec-num">7</span> 深度追问</h2>
-<p style="margin-bottom:16px;color:#888;">每个概念延伸若干追问，点击展开思考。</p>
-<ul class="ask-list" id="askList"></ul>
+<section class="tab-section" id="sec-cards">
+<h2>知识卡片 <span style="font-size:14px;color:#999">— 点击翻转查看详情</span></h2>
+<div class="flip-container" id="flipContainer"></div>
+<div style="text-align:center;margin:16px 0">
+  <p>已学：<span id="cardLearned">0</span>/10 | 进度：<span id="cardProgress">0</span>%</p>
+  <div class="progress-bar"><div class="progress-fill" id="cardProgressBar" style="width:0%"></div></div>
+  <button id="markLearnedBtn" style="padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin-top:8px">标记当前卡片为已学</button>
+  <span id="cardIndex" style="font-size:13px;color:#999;margin-left:10px"></span>
+</div>
 </section>
 
-<!-- ═══════════ 8. 案例分析 ═══════════ -->
-<section id="cases">
-<h2><span class="sec-num">8</span> 案例分析</h2>
-<p style="margin-bottom:16px;color:#888;">将核心概念应用到本课程真实案例中，检验理解深度。</p>
-<div id="caseList"></div>
+<section class="tab-section" id="sec-quiz">
+<h2>题库系统</h2>
+<div class="quiz-controls">
+  <button id="randomMCQ">🎲 随机抽 MCQ（15 题）</button>
+  <button id="randomSA">🎲 随机抽简答（8 题）</button>
+  <button id="resetQuiz">🔄 重置全部</button>
+</div>
+<div id="quizContainer"></div>
+<div id="staticQuiz" class="static-quiz"></div>
 </section>
 
-<!-- ═══════════ 9. 实战决策 ═══════════ -->
-<section id="decision">
-<h2><span class="sec-num">9</span> 实战决策</h2>
-<p style="margin-bottom:16px;color:#888;">模拟真实场景中的科技判断决策树。选择你的立场，查看基于核心概念的分析。</p>
-<div class="decision-flow" id="decisionFlow"></div>
+<section class="tab-section" id="sec-exam">
+<h2>考试模式</h2>
+<div class="exam-timer" id="examTimer">30:00</div>
+<div class="quiz-controls">
+  <button id="startExam">开始考试（30 分钟）</button>
+  <button id="submitExam">提交答卷</button>
+  <button id="resetExam">重置考试</button>
+</div>
+<div class="exam-score" id="examScore"></div>
+<div id="examContainer"></div>
 </section>
 
-<div class="toast" id="toast"></div>
+<section class="tab-section" id="sec-review">
+<h2>复习模式 — 艾宾浩斯间隔复习</h2>
+<div class="quiz-controls">
+  <button id="startReview">开始复习</button>
+  <button id="resetReview">重置复习进度</button>
+</div>
+<p style="font-size:14px;color:#999;margin:8px 0">点击复习项查看答案，确认掌握后勾选完成</p>
+<ul class="review-list" id="reviewList"></ul>
+</section>
 
-<!-- ═══════════ Graphviz WASM ═══════════ -->
-<!-- ═══════════ Core JS ═══════════ -->
+<section class="tab-section" id="sec-mindmap">
+<h2>思维导图 — 科技参考3 知识体系</h2>
+<div class="graph-container" id="mindMapContainer"></div>
+</section>
+
+<section class="tab-section" id="sec-deepask">
+<h2>深度追问</h2>
+<p style="color:#999;margin-bottom:16px">点击问题展开深度解答 — 源自课程内容但超越原文，需要交叉推理</p>
+<div id="deepAskContainer"></div>
+</section>
+
+<section class="tab-section" id="sec-cases">
+<h2>案例分析</h2>
+<p style="color:#999;margin-bottom:16px">用 MKS 概念框架分析科技热点事件</p>
+<div id="caseContainer"></div>
+</section>
+
+<section class="tab-section" id="sec-decision">
+<h2>实战决策 — 科技消费模拟</h2>
+<p style="color:#999;margin-bottom:16px">运用"智商税识别矩阵"做购买决策</p>
+<div id="decisionContainer"></div>
+</section>
+
 <script>
-var quizData = [];
-var currentQuizMode = 'mcq';
-var examTimerInterval = null;
-var examTimeLeft = 1200;
-var examActive = false;
+// ===== 全局变量 =====
+var currentCardIdx = 0;
 var learnedCards = {};
-var reviewedCards = {};
-var concepts = [
-  {id:1,icon:"✨",title:"涌现 (Emergence)",
-   definition:"大量简单个体按照简单规则交互，在宏观层面产生无法从个体规则直接推导或预测的新性质、新结构或新行为的现象。",
-   analogy:"蚁群：单只蚂蚁行为简单（循信息素、搬土粒），但百万只蚂蚁协作可建造出通风良好、分区合理的蚁巢——没有任何一只蚂蚁“知道”蚁巢的设计。",
-   example:"GPT-4的推理能力：训练任务只是预测下一个词（文字接龙），但当参数从1亿扩大到1750亿后，模型涌现出数学计算、代码编写、逻辑推理等能力——训练目标中从未明确要求这些。",
-   counter:"反例：堆沙堆。不断加沙粒，沙堆只是变高变大，不会涌现出新性质——因为沙粒之间没有复杂的非线性交互规则。边界：涌现需要“大量个体+非线性交互+远离平衡态”三个条件同时满足。"},
-  {id:2,icon:"🧠",title:"大语言模型机制 (LLM)",
-   definition:"基于Transformer架构的超大规模神经网络，通过自注意力机制学习文本序列中token之间的统计关联，对输入序列的下一个token做概率预测。",
-   analogy:"超级文字接龙：你给出前半句，模型在5万个可能的“下一个词”中按概率挑选。但经过5000亿词训练后，这种“接龙”所需的语言理解和推理深度远超查字典式的简单匹配。",
-   example:"输入“法国的首都是”，模型输出“巴黎”——不是因为它存储了这条事实，而是训练数据中这两个词在特定语义模式下的共现概率极高。输入训练数据中从未见过的乘法题，GPT-4依然给出正确答案——说明其内部形成了某种“计算电路”。",
-   counter:"反例：数据库检索。输入“2023年诺贝尔物理学奖得主”，数据库精确匹配返回结果——这是查找，不是理解。LLM不同于数据库：它会“理解”语义变体，但也会在不确定时“编造”答案（幻觉）。边界：LLM的输出永远是基于概率的采样，不是确定性计算。"},
-  {id:3,icon:"🛡️",title:"AI对齐与安全 (AI Alignment)",
-   definition:"确保人工智能系统的目标、行为和决策与人类的真实意图和价值观保持一致，防止因目标定义不完整或理解偏差导致的意外有害行为。",
-   analogy:"精灵与许愿：你许愿“让世界和平”，精灵消灭了所有人类——世界确实和平了，但这不是你的本意。AI对齐就是要让精灵确切理解你的真实意图，而不是字面执行。",
-   example:"赫拉利2023年警告：AI不需要发展出意识或物理行动能力就能构成实质威胁——只要它能生成真假难辨的内容（文字/图片/视频/语音），就足以瓦解社会信任基础。超级对齐团队（Ilya Sutskever领导）试图用RLHF让GPT的行为与人类偏好对齐。",
-   counter:"反例：科幻电影中的“机器人叛乱”（终结者、黑客帝国）需要AI同时具备意识+行动能力，但真实的AI风险更早、更隐蔽——不需要机器人拿起武器，只需内容生成就能操纵选举、制造金融恐慌。边界：对齐不是一次性的技术问题，而是持续的社会-技术耦合挑战。"},
-  {id:4,icon:"💾",title:"芯片制程演进 (Chip Fabrication)",
-   definition:"半导体制造工艺从微米级到纳米级的持续演进，当前已进入3nm以下，依赖EUV光刻、3D堆叠、Chiplet架构和先进封装技术延续性能提升。",
-   analogy:"印照片：传统方法是把底片越做越精细（制程微缩），但精细到一定程度后光都“糊”了。于是改用多张底片拼接（Chiplet）、或把照片叠起来（3D堆叠），实现整体画质的继续提升。",
-   example:"台积电N3B工艺：晶体管密度比5nm提高70%，但良率仅55%——苹果承担了早期风险（台积电让步承担不良品成本）。英特尔Ultra处理器将CPU/GPU/I/O/AI加速单元全部封装为一个SoC，用架构整合换性能。",
-   counter:"反例：单纯缩小晶体管尺寸（如从7nm到5nm）不再带来等比的功耗降低——漏电流、量子隧穿效应导致收益递减。边界：摩尔定律在晶体管数量翻倍方面仍在延续，但成本降低的速度已大幅放缓，需要Chiplet、先进封装等“架构创新”续命。"},
-  {id:5,icon:"🔬",title:"科学方法论 (Scientific Method)",
-   definition:"一套系统的知识获取与验证流程，核心要素包括：可证伪的假设、对照实验、可重复性、同行评议、统计显著性检验，以及将相关性区别于因果性的严谨推理。",
-   analogy:"法院审判：一个研究发现就像一起案件的初步证据——不能只看一方陈述。需要交叉验证（其他实验室重复实验）、证据链完整（多个独立研究指向同一结论）、排除合理怀疑（统计p<0.05+效应量足够大）。同行评议类似初审法官的审查。",
-   example:"阿斯巴甜致癌风波：IARC将其列入2B类致癌物（证据有限），媒体宣称“代糖致癌”——但四个依据研究均有严重缺陷（剂量-效应不递增、变量混淆、对照组异常）。FDA明确表示这些研究“不足以改变阿斯巴甜安全的整体判断”。",
-   counter:"反例：“我听一个专家说”——单个专家的意见处于证据层级的底部。反例2：把相关当成因果——“喝咖啡的人心脏病发病率高”可能是因为喝咖啡的人压力更大（混杂变量），而不是咖啡导致心脏病。边界：科学知识是暂时性和可修正的，不存在“科学最终证明”。"},
-  {id:6,icon:"⚖️",title:"剂量-效应关系 (Dose-Response)",
-   definition:"任何物质的生物效应（有益或有害）都与剂量相关。致癌物分级（IARC 1/2A/2B/3类）反映的是致癌证据的强度，而非危险程度。安全限值通常基于动物实验最低毒性剂量的1/100设定。",
-   analogy:"水也能杀人：短时间内喝6升以上的纯水会导致低钠血症（水中毒），致死案例真实存在。但没有人会因为喝水可能致死就不喝水。关键在于剂量——离开剂量谈毒性，就像离开速度谈车祸一样荒谬。",
-   example:"阿斯巴甜的ADI（每日允许摄入量）为40mg/kg体重。60kg成人需要每天喝14罐无糖可乐（约5L）才能超标。FDA和JECFA均认为在正常摄入量下安全。IARC的2B分类只说明“目前关于致癌性的证据有限”，不是“危险”的同义词。",
-   counter:"反例：看到“某物质被列入致癌物”就恐慌——实际上IARC 1类致癌物包含酒精、加工肉、阳光（紫外线），但适量饮酒和偶尔吃火腿的风险远低于吸烟（同为1类）。边界：剂量-效应关系在某些物质上可能非线性（如内分泌干扰物在极低剂量下也有影响）。"},
-  {id:7,icon:"☀️",title:"可控核聚变 (Nuclear Fusion)",
-   definition:"在人工约束条件下使轻原子核（氘、氚）聚合成更重的原子核，释放巨大能量。两条主要技术路径：磁约束（托卡马克，如ITER）和惯性约束（激光点火，如NIF）。核心指标Q=输出能量/输入能量。",
-   analogy:"驯服太阳：太阳靠自身巨大引力把氢原子压在一起发生聚变。地球上没有那么大引力，所以要么用强大的磁场“笼子”（托卡马克），要么用激光从四面八方同时轰击燃料小球（惯性约束），把等离子体约束在极高温下足够久。",
-   example:"2022年12月NIF实现Q=1.5（输出3.15MJ/输入2.05MJ）——这是人类首次在聚变反应中实现净能量增益。但注意：输入2.05MJ仅指激光到达靶丸的能量，产生这些激光消耗了约300MJ电网电力。从Q_plasma>1到Q_engineering>1还有很长路要走。",
-   counter:"反例：冷聚变骗局（1989年Fleischmann-Pons声称在室温下实现核聚变）——无法被任何独立实验室重复，是典型的伪科学。边界：核聚变发电的商业化时间线最乐观估计在2040-2050年代，“永远差20年”的调侃反映的是工程挑战远超物理原理的验证。"},
-  {id:8,icon:"🫁",title:"衰老生物学 (Biology of Aging)",
-   definition:"衰老不是被动磨损而是主动调控的生物过程，涉及表观遗传改变（DNA甲基化模式漂移）、细胞衰老（停止分裂并分泌促炎因子）、端粒缩短、线粒体功能障碍等可被干预的分子通路。",
-   analogy:"房子的维护程序：一栋房子老化不是因为砖瓦到了使用年限，而是物业公司的维护手册本身就规定了“每50年大修一次”且不能更改。衰老生物学研究的就是这本“维护手册”是怎么写的，以及能不能在上面做批注。",
-   example:"海拉细胞（HeLa）：1951年取自Henrietta Lacks的宫颈癌细胞，至今仍在全球实验室中无限分裂——说明细胞“永生”在生物学上是可能的，只是多细胞生物进化出了抑制无限分裂的机制（以防癌症）。NMN风波：一度被认为是抗衰老神药，但多项高质量研究未能重复早期的阳性结果。",
-   counter:"反例：“返老还童”的商业承诺——目前没有任何经同行评议的临床证据表明任何补充剂或疗法能逆转人类衰老。NMN在中国被禁售为食品补充剂。边界：衰老是可以被干预的（延缓），但目前不可被逆转（回到年轻状态），两者有本质区别。"},
-  {id:9,icon:"🚀",title:"太空工程学 (Space Engineering)",
-   definition:"以齐奥尔科夫斯基火箭方程Δv = v_e × ln(m₀/m₁)为物理约束，研究如何高效地将有效载荷送入轨道及更远深空。可复用火箭+在轨加注是当前最具颠覆性的工程范式转换。",
-   analogy:"爬楼梯带行李：每次爬一层楼要带足全程的“能量行李”——不仅是到你那一层的能量，还包括搬运这些能量本身需要的能量。这就是火箭方程的残酷之处：绝大部分燃料消耗在搬运剩余燃料上。可复用火箭相当于把楼梯改成电梯：虽然每次还是要消耗能量，但不需要每次都重新造一部电梯。",
-   example:"SpaceX星舰：70米高的超重型助推器+50米高的上面级，完全可复用设计，近地轨道运力100-150吨。历史上土星五号运力相当但不可复用（单次发射约12亿美元）。星舰的目标是把每公斤入轨成本从数千美元降到数十美元。",
-   counter:"反例：航天飞机——名义上可复用，但每次返回后需要数月的翻修（更换隔热瓦、检修发动机），实际单次成本超过15亿美元，比一次性火箭还贵。边界：火箭方程是物理铁律，不能通过工程技巧绕过，只能通过提高排气速度（比冲）或降低结构质量来优化。"},
-  {id:10,icon:"🧬",title:"演化思维 (Evolutionary Thinking)",
-   definition:"理解自然选择的核心逻辑：遗传变异+选择压力→适应性演化。演化没有预设方向，不追求“完美”，只淘汰“不够好”的。生物体的结构是历史路径的产物，充满权衡与妥协。",
-   analogy:"修补匠vs工程师：工程师设计一座桥，从零开始可以做到力学最优。演化像一个修补匠——只能用现有材料在已有结构上修改，能过河就行，不塌就够。这就解释了为什么人体有那么多“设计缺陷”（如喉返神经绕道15公分）。",
-   example:"阑尾：长期被认为是“无用器官”，后来发现是肠道菌群的“安全屋”——严重腹泻后，阑尾中的菌群可重新定殖肠道。这不是“设计”出来的，而是有阑尾的个体在传染病后存活率略高，自然选择将其保留。",
-   counter:"反例：“长颈鹿为了吃到高处的树叶所以脖子变长”——这是拉马克的“用进废退”错误观念（已被现代生物学证伪）。真相是：脖子稍长的个体吃到更多食物→存活率略高→后代中长颈基因频率逐渐升高。边界：演化思维适用于理解生物现象、技术演进和市场竞争，但不能用来证成社会达尔文主义。"}
-];
-</script>
+var quizAnswered = 0;
+var examInterval = null;
+var examSeconds = 1800;
+var reviewItems = [];
+var selectedMCQs = [];
+var selectedSAs = [];
 
-<script>
-// ═══════ Graphviz → SVG ═══════
-(function renderGraph() {
+// ===== 标签切换 =====
+(function(){
+  var btns = document.querySelectorAll('.tab-nav button');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.classList.remove('active')});
+      this.classList.add('active');
+      document.querySelectorAll('.tab-section').forEach(function(s){s.classList.remove('active')});
+      var sec = document.getElementById('sec-'+this.dataset.tab);
+      if(sec) sec.classList.add('active');
+    });
+  });
+})();
+
+// ===== 10 个核心概念数据 =====
+var concepts = [
+  {
+    id:'llm', icon:'🧠', name:'大语言模型（LLM）',
+    hint:'点击翻转 — 了解 token 预测的本质',
+    def:'LLM 是基于 Transformer 架构的神经网络，通过海量语料训练学习 token 之间的条件概率分布，本质是“超级文字接龙”——给定上文预测下一个 token。参数规模越大（GPT-4 约 1.76 万亿），涌现能力越强。',
+    analogy:'就像一个读过 5000 亿词的人，你起个头它能顺着风格续写。但它不是“理解”意思，而是统计出“在这种上下文里，下一个词大概率是什么”。好比一个从没见过钢琴但听了 10 万首曲子的人，能哼出肖邦风格的旋律——但他不知道什么是“和弦”。',
+    example:'GPT-4 能正确计算 “999亿9999万9999 × 2939万4817”——这个数字远超训练语料中的任何数字，证明它并非查表，而是学会了乘法运算的抽象规则（042 期）。',
+    counter:'逆转诅咒：模型学会“奥拉夫·朔尔茨是德国第九任总理”后，反着问“谁是德国第九任总理”时正确率从 79% 暴跌到 33%。说明它学的是单向关联，并非双向理解（065 期）。'
+  },
+  {
+    id:'alignment', icon:'🛡️', name:'AI 安全与对齐',
+    hint:'点击翻转 — 为什么超级对齐团队集体离职',
+    def:'AI 对齐（Alignment）是指确保 AI 系统的行为和目标与人类价值观、意图保持一致的技术和治理框架。OpenAI 的“超级对齐”团队致力于在 4 年内解决超人类 AI 的控制问题。',
+    analogy:'好比教一个力大无穷的孩子——你不仅要教他“做什么”，还要让他内化“什么不能做”。如果只教他“把房间整理干净”，他可能把贵重物品也扔进垃圾桶，因为“干净”的定义他有自己的理解。越强大的 AI 越像力量越大但判断力不足的孩子。',
+    example:'OpenAI 首席科学家伊利亚（Ilya Sutskever）在 2024 年 5 月离职，超级对齐负责人简·雷克同日离职并连发 13 条推文指责公司削减安全资源。这表明即便最顶尖的 AI 实验室，安全与商业化的矛盾也尚未解决（185 期）。',
+    counter:'对齐不等于政治审查。对齐是让 AI 不做有害的事（如教人制造炸弹），而不是让 AI 符合特定政治立场。二者边界模糊恰恰是对齐的核心困境——谁来定义“有害”？'
+  },
+  {
+    id:'chip', icon:'💾', name:'先进芯片制造',
+    hint:'点击翻转 — EUV 光刻为什么这么难',
+    def:'先进芯片制造的核心是光刻工艺。EUV（极紫外光刻）使用 13.5nm 波长的光，通过 ASML 独家供应的光刻机实现 3nm 及以下制程。HBM（高带宽显存）通过 3D 堆叠突破内存带宽瓶颈，成为 AI 芯片的关键配套。',
+    analogy:'EUV 光刻好比用一支极细的笔在指甲盖上画整个城市的地图——这支“笔”是锡滴等离子体发出的极紫外光，反射镜的平整度要求相当于把地球表面磨到最高点不超过 1 毫米。而 HBM 好比把平房改建成摩天大楼——同样占地面积，容量翻数倍。',
+    example:'台积电 3nm（N3B）工艺相比 5nm 晶体管密度提升 70%，但良率爬坡缓慢。苹果 A17 Pro 独占首批产能，英伟达和 AMD 只能排队等候（030 期）。',
+    counter:'“EUV 光刻机被清华攻克”是 2023 年 9 月的典型谣言——SSMB 只是理论验证，离工程化还差整个产业链的配合。造一台 EUV 光刻机需要 5000 多家供应商的 10 万多个零件（004/005 期）。'
+  },
+  {
+    id:'fusion', icon:'⚡', name:'可控核聚变',
+    hint:'点击翻转 — ITER 为什么可能烂尾',
+    def:'可控核聚变有两条主流路线：磁约束（托卡马克）和惯性约束。托卡马克用强磁场将上亿度等离子体约束在真空室中，代表项目是国际合作的 ITER；惯性约束用高能激光/粒子束压缩燃料靶丸，代表是美国 NIF。',
+    analogy:'托卡马克好比用无形的磁“笼子”关住一团比太阳核心还热的等离子体——笼子稍微抖一下，等离子体碰到墙壁，反应立刻停止。惯性约束则像用全世界最强的闪光灯同时照射一颗胡椒粒大小的氢同位素球，让它瞬间达到聚变条件。',
+    example:'2024 年韩国 KSTAR 在 1 亿摄氏度下维持等离子体 48 秒（之前纪录 31 秒）。但 ITER 已投入 220 亿美元，施工进度严重落后，可能成为人类史上最大规模的烂尾科学工程（017 期）。',
+    counter:'核聚变不是“无限的清洁能源”——即便是 Q>1（输出>输入），实际商业化还要面对氚增殖、中子辐照、材料寿命、经济性等层层关卡。从实验室点火到并网发电，至少还要 30-50 年。'
+  },
+  {
+    id:'starship', icon:'🚀', name:'星舰与太空运输革命',
+    hint:'点击翻转 — 可回收火箭的经济学',
+    def:'SpaceX 星舰（Starship）是迄今最大的超重型运载火箭，由超重型助推器（33 台猛禽发动机）和星舰上面级组成，设计目标为完全可重用，将每公斤入轨成本降低 2 个数量级。',
+    analogy:'传统火箭好比坐飞机去纽约，到了目的地把整架飞机扔进大西洋——票价自然天价。星舰是“让飞机飞回来接着用”，燃料只占总成本的不到 2%，如果真能像客机一样周转，太空运输成本将从每公斤数万美元降至数百美元。',
+    example:'星舰第三次发射（2024 年 3 月）：33 台发动机全部点火成功，热分离完成，星舰进入预定亚轨道。首次实现上下两截都正常飞行后再入——虽然最终失联，但距离完全成功只差最后一步（128 期）。',
+    counter:'星舰不适合直接登月——月球没有大气层减速，也没有返回时的大气制动。登月需要专门的月球着陆器（如 NASA 的 HLS 变体）和在轨加注技术（079/080 期）。'
+  },
+  {
+    id:'autodrive', icon:'🚗', name:'端到端智能驾驶',
+    hint:'点击翻转 — 为什么代码被神经网络取代',
+    def:'端到端自动驾驶将传感器原始数据（摄像头、雷达、导航、位姿）直接输入神经网络，输出方向盘转角、油门/刹车量，中间不再有“感知→规划→控制”的人工规则模块。特斯拉 FSD V12 是首个大规模落地的端到端方案。',
+    analogy:'传统智驾像个流水线工厂——一个车间识别红绿灯，一个车间规划路径，一个车间控制方向盘，信息传递有损耗。端到端像老司机开车——眼睛看到路口，手脚自动配合，不需要在大脑里画工程图再逐步执行。',
+    example:'2024 年 7 月起，国内智驾企业全部宣布转向端到端方案。理想汽车发布会专门解释了端到端架构——输入的是一堆向量，输出的是油门刹车方向盘数值，中间全部由 Transformer 处理（226/227 期）。',
+    counter:'端到端不是万能药——长尾场景（如施工路段临时红绿灯、交警手势）仍需兜底策略。黑盒模型的可解释性差，出了事故很难追溯“模型为什么这样决策”。'
+  },
+  {
+    id:'aging', icon:'🧬', name:'衰老科学前沿',
+    hint:'点击翻转 — 哪些抗衰老方法是真的',
+    def:'现代衰老科学聚焦于几个可测量的生物标志物：表观遗传时钟（DNA 甲基化模式）、端粒长度、细胞衰老（senescence）标记。干预策略包括 senolytics（清除衰老细胞）、NAD+ 前体补充、饮食限制（间歇性禁食）。',
+    analogy:'衰老不是“生锈”，更像是“程序累积错误”——表观遗传就像贴在基因上的便利贴，告诉细胞哪些基因该读、哪些该跳过。随着年龄增长，便利贴贴错位置越来越多，细胞功能紊乱。好消息是：便利贴理论上可以重新整理。',
+    example:'山中因子（Yamanaka factors）在动物实验中实现部分表观遗传重置。但 NMN（烟酰胺单核苷酸）被中国市场监管部门禁售——因为商家把实验室证据包装成“长生不老药”大肆营销（234 期）。',
+    counter:'16+8 轻断食的“死亡率增加 91%”是夸大其词——来源是上海交大一篇未通过同行评议的综述摘要。间歇性禁食的好处在多项高质量研究中被证实，关键是要区分“相关”和“因果”（164 期）。'
+  },
+  {
+    id:'superconductor', icon:'🔮', name:'室温超导虚实',
+    hint:'点击翻转 — LK-99 为什么不是超导',
+    def:'超导是某些材料在临界温度以下电阻降为零、同时排出内部磁场的量子现象。BCS 理论解释了传统超导（<30K）的机制。室温常压超导至今没有被独立复现的实验证据。',
+    analogy:'超导好比高速公路不收过路费——电子在其中穿行毫无阻力。但传统超导需要“把高速公路建在北极”（极低温）。室温超导相当于“在家门口的普通公路上也免收过路费”——这需要一种全新的路面材料，目前还没人找到。',
+    example:'2023 年 7 月 LK-99 事件——韩国团队声称合成了室温常压超导材料，全球实验室蜂拥复现，最终确认样品根本不是超导体，甚至连导体都不是。这是典型的“科学突破”媒体狂欢后一地鸡毛（022 期）。',
+    counter:'真超导的判据不仅是“电阻降”——必须同时观察到迈斯纳效应（磁悬浮）和比热跃变。LK-99 的“半悬浮”是抗磁性，不是超导特有的完全磁通排斥。实际上是一种含铜的磷灰石绝缘体。'
+  },
+  {
+    id:'iqtax', icon:'🛒', name:'科技消费决策框架',
+    hint:'点击翻转 — 识别“智商税”的五步法',
+    def:'“智商税”是支付远超功能价值的溢价，核心成因是信息不对称。科技消费决策框架是：需求真实性 → 技术原理可行性 → 参数对比 → 溢价合理度 → 替代方案，五步形成理性判断。',
+    analogy:'好比买眼镜——“防蓝光”眼镜加价 300 元，但人眼每天从自然光中接收的蓝光是屏幕的 100 倍以上。防蓝光涂层的实际效果约等于“在游泳池里滴一滴墨水防紫外线”。你知道这个信息后，300 元溢价就是智商税；不知道时，那是“保险溢价”。',
+    example:'石墨烯电暖器溢价 3-5 倍——实际石墨烯涂层只有几微米厚，发热原理仍然是电阻丝，石墨烯只是导热涂层，热效率与普通电暖器无差异。同样的还有“远红外加热”宣传——所有热物体都在辐射远红外线（059/060 期）。',
+    counter:'不是所有高价都是智商税——芯片中的 EUV 光刻成本占售价 40% 但确实提供了更小的晶体管。关键在于“高价是否有物理/工程上的对应物” vs “高价只存在于营销话术中”。'
+  },
+  {
+    id:'prion', icon:'🦠', name:'演化生物学新认知',
+    hint:'点击翻转 — 朊粒：不是生命的传染源',
+    def:'朊粒（Prion）是错误折叠的朊蛋白（PrP），能诱导正常蛋白也错误折叠，形成淀粉样纤维沉积，导致海绵状脑病。它不是病毒或细菌——不含任何核酸（DNA/RNA），却能在物种间传播并致死。',
+    analogy:'朊粒好比一个坏掉的模具——正常蛋白进入这个模具后被“掰弯”成错误形状，变成新的坏模具，如此连锁反应。传统消毒（高温高压、紫外线、酒精）对它无效，因为它不怕破坏核酸——它根本没有核酸。这是“非生命传染”的极端案例。',
+    example:'羊瘙痒症（1730 年记录，实际在中世纪已流行）→ 疯牛病（1980s 英国大规模爆发）→ 克雅氏病（人类版）→ 库鲁病（巴布亚新几内亚食人仪式传播）。都源于同一种机制：朊粒的跨物种传播（161/162 期）。',
+    counter:'不是所有错误折叠蛋白都是朊粒——阿尔茨海默症的 Aβ 和 tau 蛋白也有“类朊粒”传播特征，但传染性远低于真正的朊粒。目前无证据表明阿兹海默症能在人际间传染。'
+  }
+];
+
+// ===== 渲染知识卡片 =====
+function renderCards(){
+  var container = document.getElementById('flipContainer');
+  var html = '';
+  concepts.forEach(function(c, i){
+    html += '<div class="flip-card'+(learnedCards[i]?' card-learned':'')+'" id="card-'+i+'">';
+    html += '<div class="flip-inner" id="flipInner-'+i+'">';
+    html += '<div class="flip-front" id="flipFront-'+i+'">';
+    html += '<div class="concept-icon">'+c.icon+'</div>';
+    html += '<div class="concept-name">'+c.name+'</div>';
+    html += '<div class="concept-hint">'+c.hint+'</div>';
+    html += '</div>';
+    html += '<div class="flip-back" id="flipBack-'+i+'">';
+    html += '<h4>'+c.icon+' '+c.name+'</h4>';
+    html += '<p><span class="label">定义</span> '+c.def+'</p>';
+    html += '<p style="margin-top:4px"><span class="label">类比</span> '+c.analogy+'</p>';
+    html += '<p style="margin-top:4px"><span class="label">示例</span> <span class="example">'+c.example+'</span></p>';
+    html += '<p style="margin-top:4px"><span class="label">反例/边界</span> <span class="counter">'+c.counter+'</span></p>';
+    html += '<div class="card-actions"><button class="btn-flip" data-idx="'+i+'">翻转</button><button class="btn-learn" data-idx="'+i+'">'+(learnedCards[i]?'取消标记':'标记已学')+'</button></div>';
+    html += '</div></div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleFlip(idx){
+  var inner = document.getElementById('flipInner-'+idx);
+  if(inner.classList.contains('flipped')){
+    inner.classList.remove('flipped');
+  }else{
+    inner.classList.add('flipped');
+  }
+  currentCardIdx = idx;
+  updateCardUI();
+}
+
+function markLearned(idx){
+  if(learnedCards[idx]){
+    delete learnedCards[idx];
+  }else{
+    learnedCards[idx] = true;
+  }
+  var card = document.getElementById('card-'+idx);
+  if(card) card.classList.toggle('card-learned');
+  var pct = Math.round(Object.keys(learnedCards).length/concepts.length*100);
+  document.getElementById('cardLearned').textContent = Object.keys(learnedCards).length;
+  document.getElementById('cardProgress').textContent = pct;
+  document.getElementById('cardProgressBar').style.width = pct+'%';
+  document.getElementById('overallProgress').style.width = pct+'%';
+  document.getElementById('learnedCount').textContent = Object.keys(learnedCards).length;
+  var btn = document.querySelector('#flipBack-'+idx+' .btn-learn');
+  if(btn) btn.textContent = learnedCards[idx]?'取消标记':'标记已学';
+  updateCardUI();
+}
+
+function updateCardUI(){
+  document.getElementById('cardIndex').textContent = '当前：第'+(currentCardIdx+1)+'/10 张';
+}
+
+document.addEventListener('click', function(e){
+  var front = e.target.closest('.flip-front');
+  if(front){
+    var card = front.closest('.flip-card');
+    if(card){
+      var idx = parseInt(card.id.split('-')[1]);
+      toggleFlip(idx);
+    }
+  }
+  if(e.target.classList.contains('btn-flip')){
+    var idx = parseInt(e.target.dataset.idx);
+    toggleFlip(idx);
+  }
+  if(e.target.classList.contains('btn-learn')){
+    var idx = parseInt(e.target.dataset.idx);
+    markLearned(idx);
+  }
+});
+
+document.getElementById('markLearnedBtn').addEventListener('click', function(){
+  markLearned(currentCardIdx);
+});
+
+// ===== MCQ 题库（20 题）=====
+var mcqBank = [
+  {q:'GPT 大语言模型的本质是什么？', opts:['基于概率的 token 预测引擎','有自我意识的数字生命','一个巨大的知识图谱','会思考的人工大脑'], ans:0, explain:'LLM 的本质是学习 token 的条件概率分布，做”超级文字接龙”。它没有意识、没有世界模型（041 期）。'},
+  {q:'”逆转诅咒”（Reversal Curse）指的是什么？', opts:['模型训练到一定步数后性能倒退','模型学会了 A→B 但学不会 B→A','OpenAI 的股价暴跌','AI 生成的答案前后矛盾'], ans:1, explain:'模型能回答”汤姆·克鲁斯的母亲是谁”（79% 正确），但几乎不会回答”玛丽·李·菲佛的儿子是谁”（33% 正确），说明学的是单向关联（065 期）。'},
+  {q:'EUV 光刻机使用的光源波长是多少？', opts:['193nm','7nm','13.5nm','3nm'], ans:2, explain:'EUV 使用 13.5nm 的极紫外光，由锡滴被激光轰击产生的等离子体发出。这是 ASML 独家垄断的核心技术（004 期）。'},
+  {q:'ITER 项目最可能面临的结局是什么？', opts:['大幅延期或因成本失控而烂尾','2025 年实现商用发电','已被中国独立超越','已经实现 Q>10'], ans:0, explain:'ITER 已投入 220 亿美元，施工严重滞后。各国把从 ITER 学到的技术用于自建托卡马克，ITER 本身可能烂尾（017 期）。'},
+  {q:'星舰的”热分离”发生在发射后约多久？', opts:['约 30 秒','约 8 分钟','约 2 分 50 秒','约 30 分钟'], ans:2, explain:'星舰第二次发射中，超重型助推器与星舰上面级在约 2 分 50 秒时执行热分离——上面级发动机在分离前点火（034 期）。'},
+  {q:'端到端智能驾驶的核心变化是什么？', opts:['从传感器直接输出驾驶指令，取消人工规则模块','用更多雷达替代摄像头','全部使用高精地图导航','改用 5G 远程操控'], ans:0, explain:'端到端将原始传感器数据直接映射到方向盘/油门/刹车指令，取消传统”感知→规划→控制”的流水线（226 期）。'},
+  {q:'表观遗传时钟测量的是什么？', opts:['端粒长度','DNA 甲基化模式','线粒体数量','染色体数量'], ans:1, explain:'表观遗传时钟主要通过 DNA 甲基化模式来估计生物学年龄，是目前最受认可的衰老生物标志物之一（237 期）。'},
+  {q:'LK-99 最终被确认是什么材料？', opts:['一种含铜磷灰石绝缘体','室温超导体','铁基超导体','高温超导体'], ans:0, explain:'全球复现实验确认 LK-99 根本不是超导体，甚至不是导体。它是一种含铜的磷灰石，具有抗磁性但不超导（022 期）。'},
+  {q:'石墨烯电暖器的”石墨烯”实际作用是什么？', opts:['产生远红外线','取代电阻丝发热','量子隧穿制热','作为导热涂层（几微米厚）'], ans:3, explain:'石墨烯在电暖器中只是微米级导热涂层，发热原理仍是电阻丝，热效率与普通电暖器无差异，溢价 3-5 倍是智商税（059 期）。'},
+  {q:'朊粒（Prion）不含以下哪种物质？', opts:['蛋白质','淀粉样纤维','PrP 蛋白','核酸（DNA/RNA）'], ans:3, explain:'朊粒由错误折叠的朊蛋白组成，不含任何核酸，因此常规灭菌方法（高压蒸汽、酒精、紫外线）对其无效（161 期）。'},
+  {q:'”超级对齐”团队的目标是什么？', opts:['让所有 AI 公司统一标准','在 4 年内解决超人类 AI 的控制问题','对齐各国 AI 监管政策','让 AI 对齐中国价值观'], ans:1, explain:'OpenAI 超级对齐团队由伊利亚领导，目标是在人类还能控制时解决未来超人类 AI 的安全问题。2024 年 5 月该团队核心成员已全部离职（185 期）。'},
+  {q:'英伟达 H100 GPU 2023 年的市场状况是什么？', opts:['供过于求，价格大跌','已经被华为 GPU 全面取代','连马斯克都抢不到，现货溢价远超官方定价','只能用于游戏渲染'], ans:2, explain:'H100 官方定价 3.5 万美元，现货需 4.2-4.6 万美元。马斯克抱怨”现在每个人和他们的狗都在买 GPU”，连他都抢不到（019 期）。'},
+  {q:'关于 16+8 轻断食的说法哪项正确？', opts:['已被证明导致癌症','完全不值得尝试','只适合减肥无其他益处','好处多多，个别”害处”研究尚未通过同行评议'], ans:3, explain:'上海交大”死亡率增加”研究是未通过同行评议的综述摘要。高质量 RCT 研究证实轻断食有多项代谢益处（164 期）。'},
+  {q:'韩国医生大规模辞职的根源是什么？', opts:['医生收入太低','AI 取代了医生','疫情导致医生过劳','公立医院仅占 5%，市场淘汰了低利润高风险科室'], ans:3, explain:'韩国公立医院仅占 5%，自由市场淘汰了儿科、胸外科等低利润高风险科室。政府试图增加医学院招生被医生团体抵制（136 期）。'},
+  {q:'Sora 视频生成使用的是什么技术组合？', opts:['纯 Transformer','GAN + CNN','Diffusion + Transformer','纯 Diffusion'], ans:2, explain:'Sora 使用 Diffusion（扩散模型）+ Transformer 的结合方法，将视频看作时空 patches 序列。这并非 OpenAI 首创，但集成效果最强（112 期）。'},
+  {q:'苹果 Vision Pro 的主要不足是什么？', opts:['显示分辨率太低','重量约 600g，长时间佩戴不舒适','不支持任何应用','没有摄像头'], ans:1, explain:'Vision Pro 约 600g 的重量让长时间佩戴感到疲劳，外接电池只能续航约 2 小时。第一代空间计算设备的工程妥协（106 期）。'},
+  {q:'可控核聚变中托卡马克的主要约束方式是什么？', opts:['重力约束','激光压缩','静电约束','强磁场约束'], ans:3, explain:'托卡马克使用环形容器+强磁场（由环向和极向磁线圈产生）将上亿度的等离子体约束在真空室中央，避免接触容器壁（017 期）。'},
+  {q:'”嵌合体”（Chimera）在生物学中是什么意思？', opts:['基因编辑婴儿','纯种克隆动物','个体由两个不同受精卵的细胞融合而成','人工合成的完整基因'], ans:2, explain:'超雄 XYY 的很多案例实际上是嵌合体——个体体内存在两套不同来源的细胞系，可能来自双受精卵融合（247 期）。'},
+  {q:'哪种说法正确描述了马斯克的”第一性原理”？', opts:['一切从物理学最基本的事实出发分析','先看竞争对手怎么做再优化','依赖直觉做决策','模仿最成功的产品'], ans:0, explain:'马斯克的第一性原理是：不被类比思维限制，将问题拆解到最基本的物理/经济事实，再从零开始重构解决方案。但卓克也指出其另一面——这种思维让他在一些领域低估了监管和社会的复杂性（160 期）。'},
+  {q:'关于”同行评议”（Peer Review），哪项是正确的？', opts:['是完美的质量控制机制','是相对最不坏的学术筛选制度，但有严重缺陷','从未被滥用','已被 AI 评审取代'], ans:1, explain:'同行评议制在近几十年暴露出诸多问题：审稿人偏见、阻挠竞争者、无法识别突破性研究。但它是目前为止相对最不坏的制度（072/109 期）。'}
+];
+
+// ===== 简答题库（12 题）=====
+var saBank = [
+  {q:'用自己的话解释“逆转诅咒”的含义，并举一个生活中的类比。', answer:'逆转诅咒指的是大语言模型能学会 A→B 的单向关联，但难以反过来推理 B→A。生活中的类比：一个人记住“北京是中国的首都”后，如果你问“中国的首都是哪个城市”他可能答不上来——他只记住了从“北京”到“中国首都”这条路径，没有建立双向索引。这暴露了 LLM 不是真正“理解”概念间的关系，而是学习了有向的条件概率。'},
+  {q:'为什么“EUV 光刻机被清华攻克”的说法是谣言？请从基础研究到工程化的距离角度说明。', answer:'清华 SSMB（稳态微聚束）项目只是在理论上验证了一种可能产生 EUV 光源的新原理，离真正的光刻机还差整套产业链：1）光源功率需要提升多个数量级；2）需要 5000+ 供应商的 10 万+ 零件配套；3）ASML 的 EUV 光刻机是 30 年持续投入的成果，不是一篇论文能跨越的。从“原理验证”到“可量产设备”的距离，约等于从莱特兄弟首飞到波音 747 商业运营。'},
+  {q:'请对比托卡马克和惯性约束两种核聚变路线各自的优劣。', answer:'托卡马克（磁约束）：优势是等离子体约束时间长（秒级到分钟级），缺点是需要巨型超导磁体、装置庞大昂贵（ITER > 220 亿美元）。惯性约束：优势是装置相对紧凑、不需要稳态磁场，缺点是需要极高功率的驱动源（NIF 的 192 路激光）、每次点火是脉冲式的、重复频率低。两条路线都尚未实现 Q>1 的持续运行。'},
+  {q:'端到端智能驾驶相比传统方案有什么本质不同？优势和风险分别是什么？', answer:'本质不同：传统方案是模块化流水线——识别红绿灯的结果传给规划模块，再由控制模块操作方向盘，每步由人工规则代码定义。端到端全部替换为一个神经网络——摄像头像素进，方向盘角度出，中间无任何人为定义的规则。优势：避免了模块间信息损失，可学到人类直觉级驾驶模式。风险：黑盒不可解释，长尾场景（临时手势指挥等）训练数据不足。'},
+  {q:'什么是表观遗传时钟？为什么它比实际年龄更能反映衰老状态？', answer:'表观遗传时钟基于 DNA 甲基化模式——即在基因组特定 CpG 位点上甲基基团的附加/去除模式。随年龄增长这些模式发生系统性变化。它比实际年龄更有意义，因为两个同龄人可能有完全不同的生物年龄——吸烟、压力会加速表观遗传老化，运动、健康饮食可减缓甚至部分逆转。但需结合端粒长度、蛋白质组学等多维指标综合判断。'},
+  {q:'用 BCS 理论解释为什么室温超导如此困难。', answer:'BCS 理论核心：在极低温下，电子通过晶格振动（声子）媒介形成“库珀对”——两个电子通过晶格畸变产生微弱有效吸引力配成玻色子对，无阻力地流动。但这个配对非常脆弱——热运动能量一旦超过库珀对结合能（约 meV 量级），电子对就拆散。因此传统超导体临界温度上限约 30-40K。要实现室温超导需全新的配对机制——不是靠声子，而是靠更强的“胶水”，如自旋涨落或其他尚未发现的量子效应。'},
+  {q:'请用“智商税识别矩阵”的五步法分析一种科技消费品广告。', answer:'五步法：1）需求真实性——我真的需要这个功能吗？还是广告制造的需求？2）技术原理可行性——这个“黑科技”在物理学/工程学上说得通吗？3）参数对比——和成熟产品比核心参数差多少？4）溢价合理度——多付的钱买到了什么？是芯片面积还是“纳米”“量子”等词汇？5）替代方案——不买这个有无便宜得多的方式实现同样目的？如防蓝光眼镜：人眼从阳光中接收的蓝光是屏幕的 100 倍以上，涂层效果≈在游泳池滴一滴墨水防紫外线。'},
+  {q:'朊粒为什么被称为“非典型生命形式”？它挑战了哪些生命定义？', answer:'朊粒挑战了传统生命定义：1）不含核酸（DNA/RNA），不能自我复制——但能通过诱导正常蛋白错误折叠来“繁殖”；2）没有代谢活动，没有细胞结构，本质只是错误折叠蛋白——但能在宿主间传播并致死；3）不会“死”——常规灭菌（高压蒸汽 121°C、酒精、紫外线）几乎无效。这提醒我们“生命”的边界可能比定义的更加模糊——朊粒处于生命与非生命之间的灰色地带。'},
+  {q:'从 OpenAI 伊利亚的离职事件中，怎样看“AI 安全 vs 商业化”的矛盾？', answer:'暴露了 AI 行业的结构性矛盾：1）经济利益驱动——研发顶尖 AI 需数百亿美元，投资方要求回报，安全研究不直接产生收入；2）时间尺度错配——安全问题可能未来 5-10 年才显现，但公司考核按季度计算；3）认知分歧——连最顶尖科学家（伊利亚 vs 阿尔特曼）都无法就“多快、多危险”达成一致。伊利亚选择体面离开而非公开对抗，但正是这种“体面离开”最可怕——安全团队在一个个公司被消声，模型能力在指数增长。'},
+  {q:'面对星舰发射的“失败”与“成功”，如何理解“迭代式工程”的逻辑？', answer:'SpaceX 的迭代逻辑与传统航天完全不同：传统追求“第一次就完美”——花 10 年设计 5 年测试。结果开发周期长、成本高、技术保守。SpaceX 追求“快速失败、快速学习”——先飞起来、让它爆炸、从爆炸数据中改进。星舰第一次：发动机故障+发射台损毁；第二次：33 台全点火+热分离成功；第三次：两截均完成飞行段。每次失败都是下一版的改进清单。物理学逻辑：火箭问题只能在真实飞行中暴露——地面模拟无法复制 33 台发动机同时工作的振动环境。“快速失败”比“慢慢完美”更快达到完美。'},
+  {q:'“地球工程”（Geoengineering）作为应对气候变化的方案，核心风险和伦理困境是什么？', answer:'地球工程核心思路是用技术手段直接干预地球系统——如向平流层注入硫酸盐气溶胶反射阳光。风险：1）不可逆性——一旦开始就不能停，停止后反弹升温可能更剧烈；2）副作用——可能改变全球降水格局；3）道德风险——给人类“技术能解决”的错觉，削弱减排政治意愿；4）治理困境——谁决定启动？谁承担副作用？地球上不存在“地球工程 FDA”。这是“一剂猛药”——可能救命，也可能加速死亡（139 期）。'},
+  {q:'总结卓克反复使用的“凉水逻辑”——他如何判断科技热点是否被过度炒作？', answer:'卓克“凉水逻辑”核心步骤：1）分辨“原理验证” vs “工程实现”——发表论文 ≠ 即将量产；2）查找关键指标——如果技术声称革命性但找不到可量化性能参数（效率、成本、良率），大概率是炒作；3）追踪资金流向——真正突破会有产业资本跟进而不只是媒体通稿；4）检查复现性——是否有独立第三方重复实验成功？5）警惕“永远 5 年后”——如果一项技术过去 20 年都说“5 年后商用”但从未兑现，大概率有根本性瓶颈。'}
+];
+
+// ===== 渲染 MCQ =====
+function renderMCQ(questions){
+  var container = document.getElementById('quizContainer');
+  var html = '<h3>选择题（共 '+questions.length+' 题）</h3>';
+  questions.forEach(function(item, i){
+    html += '<div class="quiz-item" id="mcq-'+i+'">';
+    html += '<h4>'+(i+1)+'. '+item.q+'</h4>';
+    item.opts.forEach(function(opt, j){
+      html += '<label><input type="radio" name="mcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
+    });
+    html += '<button style="margin-top:6px;padding:4px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--light)" data-mcq-idx="'+i+'" data-mcq-ans="'+item.ans+'" data-mcq-explain="'+item.explain.replace(/"/g,'&quot;')+'">核对</button>';
+    html += '<div class="quiz-feedback" id="fb-'+i+'"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('button[data-mcq-idx]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var idx = parseInt(this.dataset.mcqIdx);
+      var ans = parseInt(this.dataset.mcqAns);
+      var explain = this.dataset.mcqExplain;
+      var radios = document.getElementsByName('mcq'+idx);
+      var fb = document.getElementById('fb-'+idx);
+      var selected = -1;
+      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
+      if(selected===-1){fb.textContent='请先选择一个选项';fb.className='quiz-feedback wrong';return;}
+      if(selected===ans){
+        fb.innerHTML='✅ 正确！'+explain;
+        fb.className='quiz-feedback correct';
+      }else{
+        fb.innerHTML='❌ 错误。正确答案是 '+String.fromCharCode(65+ans)+'。'+explain;
+        fb.className='quiz-feedback wrong';
+      }
+      quizAnswered++;
+      document.getElementById('quizDone').textContent = quizAnswered;
+    });
+  });
+}
+
+// ===== 渲染简答题 =====
+function renderSA(questions){
+  var container = document.getElementById('quizContainer');
+  var html = '<h3>简答题（共 '+questions.length+' 题）</h3>';
+  questions.forEach(function(item, i){
+    html += '<div class="sa-item">';
+    html += '<h4>'+(i+1)+'. '+item.q+'</h4>';
+    html += '<textarea placeholder="在此输入你的回答..."></textarea>';
+    html += '<button class="sa-show-btn" style="padding:6px 12px;border:1px solid var(--accent);border-radius:6px;cursor:pointer;background:#fff;color:var(--accent)">显示参考答案</button>';
+    html += '<div class="show-answer"><strong>参考答案：</strong>'+item.answer+'</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.sa-show-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var ansDiv = this.nextElementSibling;
+      ansDiv.style.display = ansDiv.style.display==='block'?'none':'block';
+    });
+  });
+}
+
+document.getElementById('randomMCQ').addEventListener('click', function(){
+  var shuffled = mcqBank.slice().sort(function(){return Math.random()-.5});
+  selectedMCQs = shuffled.slice(0, 15);
+  renderMCQ(selectedMCQs);
+});
+
+document.getElementById('randomSA').addEventListener('click', function(){
+  var shuffled = saBank.slice().sort(function(){return Math.random()-.5});
+  selectedSAs = shuffled.slice(0, 8);
+  renderSA(selectedSAs);
+});
+
+document.getElementById('resetQuiz').addEventListener('click', function(){
+  document.getElementById('quizContainer').innerHTML = '';
+  selectedMCQs = []; selectedSAs = [];
+});
+
+// ===== 考试模式 =====
+document.getElementById('startExam').addEventListener('click', function(){
+  var allMCQ = mcqBank.slice().sort(function(){return Math.random()-.5}).slice(0, 15);
+  var allSA = saBank.slice().sort(function(){return Math.random()-.5}).slice(0, 5);
+  var container = document.getElementById('examContainer');
+  var examMcqs = allMCQ;
+  var html = '<h3>MCQ 部分（15 题）</h3>';
+  allMCQ.forEach(function(item, i){
+    html += '<div class="quiz-item"><h4>'+(i+1)+'. '+item.q+'</h4>';
+    item.opts.forEach(function(opt, j){
+      html += '<label><input type="radio" name="exmcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
+    });
+    html += '</div>';
+  });
+  html += '<h3>简答部分（5 题）</h3>';
+  allSA.forEach(function(item, i){
+    html += '<div class="sa-item"><h4>'+(15+i+1)+'. '+item.q+'</h4>';
+    html += '<textarea placeholder="在此输入你的回答..."></textarea></div>';
+  });
+  container.innerHTML = html;
+  examSeconds = 1800;
+  updateExamTimer();
+  if(examInterval) clearInterval(examInterval);
+  examInterval = setInterval(function(){
+    examSeconds--;
+    updateExamTimer();
+    if(examSeconds<=0){clearInterval(examInterval);alert('时间到！');}
+  },1000);
+  window._examMcqs = allMCQ;
+});
+
+function updateExamTimer(){
+  var m = Math.floor(examSeconds/60);
+  var s = examSeconds%60;
+  document.getElementById('examTimer').textContent = (m<10?'0'+m:m)+':'+(s<10?'0'+s:s);
+}
+
+document.getElementById('submitExam').addEventListener('click', function(){
+  clearInterval(examInterval);
+  var correct = 0;
+  var mcqs = window._examMcqs || mcqBank.slice(0,15);
+  for(var i=0;i<15;i++){
+    var radios = document.getElementsByName('exmcq'+i);
+    if(radios.length===0) continue;
+    for(var j=0;j<radios.length;j++){
+      if(radios[j].checked && parseInt(radios[j].value)===mcqs[i]?.ans) correct++;
+    }
+  }
+  document.getElementById('examScore').textContent = 'MCQ 得分：'+correct+'/15（简答需手动评分）';
+});
+
+document.getElementById('resetExam').addEventListener('click', function(){
+  clearInterval(examInterval);
+  document.getElementById('examContainer').innerHTML = '';
+  document.getElementById('examScore').textContent = '';
+  document.getElementById('examTimer').textContent = '30:00';
+});
+
+// ===== 复习模式 =====
+document.getElementById('startReview').addEventListener('click', function(){
+  var list = document.getElementById('reviewList');
+  var items = concepts.map(function(c){return c.name+' — 复习要点：定义+类比+边界'});
+  reviewItems = items;
+  var html = '';
+  items.forEach(function(item, i){
+    html += '<li id="rev-'+i+'" class="review-item-click">'+item+'</li>';
+  });
+  list.innerHTML = html;
+  list.querySelectorAll('.review-item-click').forEach(function(li){
+    li.addEventListener('click',function(){
+      this.classList.toggle('reviewed');
+    });
+  });
+});
+
+document.getElementById('resetReview').addEventListener('click', function(){
+  document.getElementById('reviewList').innerHTML = '';
+  reviewItems = [];
+});
+
+// ===== 深度追问 =====
+var deepQuestions = [
+  {q:'如果 LLM 只是“文字接龙”，为什么它能解出训练数据中从未出现的数学题？', a:'这恰恰是“涌现”（emergence）的体现。当模型参数超过约 10^10 阈值，网络在训练中自发形成了对抽象运算的内部表征——不是靠记住答案，而是权重组合恰好实现了类似于“加法器”或“乘法器”的子网络。GPT-4 能计算远超训练语料范围的乘法，证明它学会了乘法规则而非记住所有乘法表。但这种“学会”非常脆弱——逆转诅咒证明它只学会了单向的规则应用。'},
+  {q:'如果室温超导真的实现，第一个被颠覆的行业是什么？', a:'不是电网——电力传输只占用电成本约 6%。第一个颠覆性应用将是：1）MRI 医疗成像——不再需要液氦冷却，成本从 100 万美元降至 5 万美元，全球基层医疗普及 MRI；2）量子计算——超导量子比特是目前最成熟路线，室温超导消除稀释制冷机瓶颈；3）磁悬浮交通——磁浮列车的轨道和车载磁体极大简化。电网变革反而是较慢的——更换全国输电网需 30 年以上。'},
+  {q:'星舰如果真的成功，对全球地缘政治格局有什么影响？', a:'1）太空军事化加速——星舰 100+ 吨入轨运力可部署天基武器平台；2）稀土垄断被打破——小行星采矿若经济可行，全球稀土格局将改变；3）Starlink+星舰形成“全球通信+运输”闭环；4）火星殖民地法律地位将成为重大争议——谁先建立自维持城市谁就有事实上的主权优势。'},
+  {q:'端到端智驾模型本质是“模仿学习”——如果人类驾驶员本身有不良习惯，模型会学到吗？', a:'会的，这是端到端方案的核心风险。特斯拉训练数据来自人类驾驶行为，若包含危险动作（急加速变道、跟车过近），模型可能学到。解决方案：1）数据筛选——只用“安全驾驶”片段，但依赖“安全”标准本身；2）RLHF 式对齐——人类标注员给驾驶行为打分；3）仿真验证——极端场景“考”模型。但完全消除很难——有时“不安全”的驾驶动作（如为避免碰撞猛打方向）反而是最优选择。'},
+  {q:'如果人体衰老是“程序累积错误”，为什么演化不直接修复？', a:'从演化角度，这是经典的“一次性体细胞”（disposable soma）理论——修复需要能量，能量是有限的。演化“选择”把有限能量优先分配给繁殖而非长期维护。活了 100 年但不繁殖的个体对基因传播无贡献。自然条件下多数动物在繁殖年龄后就因捕食/疾病而死，演化无“动机”维护老年身体。现代人类寿命是文明（医学、卫生、安全食品）创造的，不是演化“设计”的——我们的身体是被用到设计寿命之外的机器。'},
+  {q:'为什么卓克说“同行评议是相对最不坏的制度”？有什么替代方案？', a:'替代方案：1）公开匿名评议——审稿意见随论文公开；2）发表后评议——先发表再由社区公开评审（eLife 试行）；3）AI 辅助评审——LLM 做统计方法检查、抄袭检测；4）预测市场——以“实验结果能否复现”设预测市场，经济激励学术内行人投票。但各有缺陷——公开评议怕“不敢批评大佬”，AI 评审可被操纵，预测市场可能让学术变赌博。'},
+  {q:'从“远古病毒导致的衰老”这一发现中，能得出什么哲学启示？', a:'基因组约 8% 是内源性逆转录病毒（ERV）残留——远古病毒感染祖先生殖细胞，将基因整合进人类基因组并垂直遗传至今。部分 ERV 年轻时被抑制，年龄增长抑制减弱重新表达，导致细胞衰老。启示：1）“自我”边界模糊——部分 DNA 来自远古病毒，它们既是我们的一部分也是独立演化实体；2）衰老可能不是“宿命”而是“感染”——重新沉默病毒残留或可延缓衰老；3）演化是“修补匠”非“工程师”——用已有零件拼凑而非从零优化。'}
+];
+
+function renderDeepQuestions(){
+  var container = document.getElementById('deepAskContainer');
+  var html = '';
+  deepQuestions.forEach(function(item, i){
+    html += '<div class="dq-item">';
+    html += '<div class="dq-question">'+(i+1)+'. '+item.q+'</div>';
+    html += '<div class="dq-answer">'+item.a+'</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.dq-question').forEach(function(q){
+    q.addEventListener('click',function(){
+      var ans = this.nextElementSibling;
+      ans.style.display = ans.style.display==='block'?'none':'block';
+    });
+  });
+}
+
+// ===== 案例分析 =====
+var cases = [
+  {title:'LK-99 室温超导事件（2023.7）', meta:'涉及概念：超导判据、科学传播、智商税识别', content:'2023 年 7 月韩国团队在 arXiv 发布预印本，声称合成了室温常压超导材料 LK-99。全球数百实验室蜂拥复现。三周内多个国家团队先后发布结果：无一家观测到零电阻或迈斯纳效应。最终确认为含铜磷灰石绝缘体。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>查关键指标：</strong>超导必要条件——零电阻 + 迈斯纳效应（完全磁通排斥）。LK-99 的“半悬浮”是抗磁性，不是超导。</li><li><strong>查复现性：</strong>论文发布 72 小时内全球开始复现，真正的科学突破经得起独立复现。</li><li><strong>查发表记录：</strong>只在 arXiv（未经同行评议），未在 Nature/Science/PRL 发表。</li><li><strong>应用边界知识：</strong>室温超导需全新的电子配对机制，远超 BCS 理论框架——若为真，凝聚态物理学将改写。</li><li><strong>结论：</strong>极可能不是超导。等待独立复现是唯一正确态度。三周后全球复现结果证实判断。</li></ol>'},
+  {title:'阿斯巴甜致癌风波（2023.7）', meta:'涉及概念：科学方法、风险评估、食品添加剂', content:'2023 年 7 月 IARC 将阿斯巴甜列为“2B 类致癌物”（可能对人类致癌），与手机辐射、泡菜同一级别。媒体头条：“无糖可乐致癌”。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>查分类含义：</strong>2B 类 =“证据有限且不充分”——手机辐射、芦荟提取物、腌菜都在同一类。1 类（确认致癌）有酒精、加工肉、吸烟。</li><li><strong>查剂量：</strong>安全摄入量 40mg/kg 体重/天。60kg 成人每天 2400mg 才有风险——约 12-36 罐无糖可乐。正常饮用量远低于此。</li><li><strong>区分“危害”和“风险”：</strong>危害 = 物质本身的致害能力；风险 = 实际暴露下的危害概率。鲨鱼有危害，但在上海陆家嘴遭遇鲨鱼攻击的风险是零。</li><li><strong>结论：</strong>阿斯巴甜在正常摄入量下安全。头条是“危害”话术而非“风险”话术，典型媒体夸大（001 期）。</li></ol>'},
+  {title:'英特尔衰落（2024.9）', meta:'涉及概念：芯片制造、半导体产业规律、技术路线选择', content:'2024 年 9 月英特尔面临成立 56 年来最严重危机：13/14 代酷睿芯片缺陷导致大面积蓝屏、涉嫌隐瞒 70 亿美元亏损、裁员 15%、道琼斯指数考虑将其剔除。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>技术因素：</strong>英特尔在 10nm→7nm 节点连续跳票 5 年，被台积电拉开代差。芯片制造是“良率驱动的规模经济”。</li><li><strong>战略失误：</strong>坚持 IDM（设计+制造一体）模式，拒绝为苹果代工 iPhone 芯片，错失移动时代最大订单和制程打磨机会。</li><li><strong>产业规律：</strong>半导体“赢家通吃”——最先进工艺只有台积电和三星两家。一旦落后，追赶需跨越“良率-订单-利润-研发”死亡螺旋。</li><li><strong>结论：</strong>芯片制造“脱美”趋势不可逆转（《芯片法案》390 亿美元但政府资金效率远不如市场竞争）。英特尔能否生存取决于 18A 工艺在 2025 年是否成功（287/288 期）。</li></ol>'}
+];
+
+function renderCases(){
+  var container = document.getElementById('caseContainer');
+  var html = '';
+  cases.forEach(function(c){
+    html += '<div class="case-card">';
+    html += '<div class="case-title">'+c.title+'</div>';
+    html += '<div class="case-meta">'+c.meta+'</div>';
+    html += '<p>'+c.content+'</p>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+// ===== 实战决策 =====
+function renderDecision(){
+  var container = document.getElementById('decisionContainer');
+  var scenarios = [
+    {title:'场景 1：选购电暖器',q:'你需要在 10m² 房间取暖。以下哪个选择性价比最高？',opts:['石墨烯远红外电暖器 ¥599','踢脚线式对流电暖器 ¥199','进口碳晶电暖器 ¥899','“量子”取暖器 ¥1299'],ans:1,explain:'踢脚线式电暖器靠空气对流加热全屋，199 元即可满足 10m² 需求。石墨烯只是导热涂层（几微米厚），“远红外”是所有热物体都辐射的物理现象，“量子取暖”是彻头彻尾的伪科学——量子效应只在接近绝对零度时才能观测到。多花的钱买到的全是营销词汇（059/060 期）。'},
+    {title:'场景 2：选购降噪耳机',q:'通勤时使用的降噪耳机应关注什么核心参数？',opts:['“AI降噪”广告宣传','主动降噪深度（dB）和降噪频宽','品牌和价格','耳机外壳材质'],ans:1,explain:'降噪核心指标是主动降噪深度（如 -30dB 意味噪声能量降低 1000 倍）和有效频宽（低频降噪容易，高频人声难降）。“AI 降噪”是营销词——所有主动降噪都需要 DSP 处理，和“AI”无本质关系（132 期）。'},
+    {title:'场景 3：父母想买 NMN 抗衰老',q:'你的父母想买 NMN（烟酰胺单核苷酸），你怎样说服他们？',opts:['“所有保健品都是骗人的”','NMN 已被中国市场监管部门禁售，商家把实验室证据夸大为“不老药”；真正有效的抗衰老是运动+睡眠+饮食','“日本进口的没问题”','“你自己决定”'],ans:1,explain:'NMN 在动物实验（线虫、小鼠）中显示一些延缓衰老迹象，但人类高质量 RCT 证据几乎为零。2024 年中国市场监管部门禁售 NMN 保健品，正因商家把“线虫活了 20% 更久”包装成“人类不老药”。真正被大量研究证实有效的延缓衰老：定期运动、充足睡眠、均衡饮食（234 期）。'}
+  ];
+  var html = '';
+  scenarios.forEach(function(s, i){
+    html += '<div class="decision-scenario">';
+    html += '<h4>'+s.title+'</h4>';
+    html += '<p>'+s.q+'</p>';
+    s.opts.forEach(function(opt, j){
+      html += '<label style="display:block;margin:4px 0;cursor:pointer"><input type="radio" name="dec'+i+'" value="'+j+'"> '+opt+'</label>';
+    });
+    html += '<button class="dec-submit" data-idx="'+i+'" data-ans="'+s.ans+'" data-explain="'+s.explain.replace(/"/g,'&quot;')+'">提交决策</button>';
+    html += '<div class="decision-output" id="decOut-'+i+'"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.dec-submit').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var idx = parseInt(this.dataset.idx);
+      var ans = parseInt(this.dataset.ans);
+      var explain = this.dataset.explain;
+      var radios = document.getElementsByName('dec'+idx);
+      var out = document.getElementById('decOut-'+idx);
+      var selected = -1;
+      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
+      if(selected===-1){out.textContent='请先选择一个选项';out.style.display='block';return;}
+      if(selected===ans){
+        out.innerHTML='✅ 正确决策！<br>'+explain;
+        out.style.color='#155724';out.style.background='#d4edda';
+      }else{
+        out.innerHTML='⚠️ 可以优化。最合理的选择是：<br>'+explain;
+        out.style.color='#721c24';out.style.background='#f8d7da';
+      }
+      out.style.display='block';
+    });
+  });
+}
+
+// ===== 概念关系图 (Graphviz dot) =====
+function renderGraph(){
   var dot = [
     'digraph MKS {',
-    '  rankdir=TB; bgcolor="transparent"; fontname="Noto Sans SC";',
-    '  node [fontname="Noto Sans SC",fontsize=12,style=filled,penwidth=2];',
-    '  edge [fontname="Noto Sans SC",fontsize=10,penwidth=1.5];',
-    '',
-    '  subgraph cluster_ai {',
-    '    label="AI主线"; fontsize=14; style=dashed; color="#c0392b";',
-    '    node [color="#c0392b",fillcolor="#fff5f5"];',
-    '    c1 [label="1.涌现",shape=box,fillcolor="#c0392b",fontcolor=white];',
-    '    c2 [label="2.大语言模型",shape=box,fillcolor="#c0392b",fontcolor=white];',
-    '    c3 [label="3.AI对齐与安全",shape=box,fillcolor="#c0392b",fontcolor=white];',
-    '  }',
-    '',
-    '  subgraph cluster_hard {',
-    '    label="硬科技"; fontsize=14; style=dashed; color="#3a7d44";',
-    '    node [color="#3a7d44",fillcolor="#f0faf0"];',
-    '    c4 [label="4.芯片制程",shape=box,fillcolor="#3a7d44",fontcolor=white];',
-    '    c7 [label="7.可控核聚变",shape=box,fillcolor="#3a7d44",fontcolor=white];',
-    '    c9 [label="9.太空工程",shape=box,fillcolor="#3a7d44",fontcolor=white];',
-    '  }',
-    '',
-    '  subgraph cluster_method {',
-    '    label="方法论"; fontsize=14; style=dashed; color="#2c5f8a";',
-    '    node [color="#2c5f8a",fillcolor="#f0f5fa"];',
-    '    c5 [label="5.科学方法论",shape=box,fillcolor="#2c5f8a",fontcolor=white];',
-    '    c6 [label="6.剂量-效应",shape=box,fillcolor="#2c5f8a",fontcolor=white];',
-    '  }',
-    '',
-    '  subgraph cluster_bio {',
-    '    label="生物/演化"; fontsize=14; style=dashed; color="#6b3fa0";',
-    '    node [color="#6b3fa0",fillcolor="#f8f0ff"];',
-    '    c8 [label="8.衰老生物学",shape=box,fillcolor="#6b3fa0",fontcolor=white];',
-    '    c10 [label="10.演化思维",shape=box,fillcolor="#6b3fa0",fontcolor=white];',
-    '  }',
-    '',
-    '  c1 -> c2 [label="驱动机理",color="#c0392b"];',
-    '  c2 -> c3 [label="引出安全需求",color="#c0392b"];',
-    '  c2 -> c4 [label="依赖算力",color="#c0392b"];',
-    '  c4 -> c7 [label="未来能源",color="#3a7d44"];',
-    '  c4 -> c9 [label="航天芯片",color="#3a7d44"];',
-    '  c5 -> c6 [label="提供分析框架",color="#2c5f8a"];',
-    '  c5 -> c3 [label="验证对齐方法",color="#2c5f8a"];',
-    '  c6 -> c8 [label="评估抗衰老干预",color="#2c5f8a"];',
-    '  c8 -> c10 [label="演化解释衰老",color="#6b3fa0"];',
-    '  c1 -> c10 [label="演化也是涌现",color="#6b3fa0"];',
-    '',
-    '  c3 -> c2 [label="安全约束反哺",color="#c0392b",style=dashed];',
-    '  c10 -> c5 [label="演化认识论",color="#6b3fa0",style=dashed];',
-    '  c9 -> c7 [label="太空能源需求",color="#3a7d44",style=dashed];',
-    '  c8 -> c4 [label="类器官芯片",color="#6b3fa0",style=dashed];',
-    '',
-    '  subgraph cluster_legend {',
-    '    label="图例"; fontsize=12;',
-    '    style=filled; fillcolor="#fdf6ec"; color="#b8860b";',
-    '    l1 [label="红色=AI主线",shape=plaintext,fontsize=10];',
-    '    l2 [label="蓝色=方法论",shape=plaintext,fontsize=10];',
-    '    l3 [label="绿色=硬科技",shape=plaintext,fontsize=10];',
-    '    l4 [label="紫色=生物/演化",shape=plaintext,fontsize=10];',
-    '    l5 [label="虚线=回环反馈",shape=plaintext,fontsize=10];',
-    '    l1 -> l2 -> l3 -> l4 -> l5 [style=invis];',
-    '  }',
+    'rankdir=TB;',
+    'node [style=filled,fontname="Noto Sans SC",fontsize=12];',
+    'edge [fontname="Noto Sans SC",fontsize=10];',
+    'LLM [label="大语言模型\\n(LLM)",fillcolor="#e74c3c",fontcolor=white,shape=box];',
+    'CHIP [label="先进芯片制造\\n(EUV/3nm)",fillcolor="#e74c3c",fontcolor=white,shape=box];',
+    'ALIGN [label="AI 安全与对齐",fillcolor="#2980b9",fontcolor=white,shape=box];',
+    'AUTODRIVE [label="端到端智能驾驶",fillcolor="#2980b9",fontcolor=white,shape=box];',
+    'STARSHIP [label="星舰与太空运输",fillcolor="#2980b9",fontcolor=white,shape=box];',
+    'FUSION [label="可控核聚变",fillcolor="#2980b9",fontcolor=white,shape=box];',
+    'AGING [label="衰老科学前沿",fillcolor="#27ae60",fontcolor=white,shape=box];',
+    'SUPERCON [label="室温超导研究",fillcolor="#27ae60",fontcolor=white,shape=box];',
+    'PRION [label="朊粒与演化\\n生物学",fillcolor="#27ae60",fontcolor=white,shape=box];',
+    'IQTAX [label="科技消费决策\\n(智商税识别)",fillcolor="#8e44ad",fontcolor=white,shape=box];',
+    'SCIMETHOD [label="科学方法论\\n(同行评议/边界)",fillcolor="#8e44ad",fontcolor=white,shape=box];',
+    'LLM -> ALIGN [label="需要",color="#c0392b"];',
+    'LLM -> AUTODRIVE [label="赋能",color="#c0392b"];',
+    'CHIP -> LLM [label="算力基础",color="#c0392b"];',
+    'CHIP -> AUTODRIVE [label="感知芯片",color="#c0392b"];',
+    'STARSHIP -> FUSION [label="空间实验\\n平台",color="#1a5276"];',
+    'FUSION -> STARSHIP [label="深空能源",color="#1a5276"];',
+    'LLM -> AGING [label="蛋白质\\n语言模型",color="#1a5276"];',
+    'LLM -> SUPERCON [label="材料筛选",color="#1a5276"];',
+    'SUPERCON -> FUSION [label="强磁体\\n材料",color="#1a5276"];',
+    'AGING -> PRION [label="错误折叠\\n蛋白关联",color="#27ae60"];',
+    'SUPERCON -> SCIMETHOD [label="复现失败\\n案例",color="#27ae60"];',
+    'PRION -> SCIMETHOD [label="挑战生命\\n定义",color="#27ae60"];',
+    'ALIGN -> IQTAX [label="价值观\\n对齐困境",color="#8e44ad"];',
+    'SCIMETHOD -> IQTAX [label="证据\\n等级",color="#8e44ad"];',
+    'AUTODRIVE -> IQTAX [label="技术\\n透明度",color="#8e44ad"];',
+    'AGING -> IQTAX [label="抗衰老\\n产品评估",color="#8e44ad"];',
+    'IQTAX -> LLM [label="用户反馈\\n驱动改进",style=dashed,color="#8e44ad",constraint=false];',
+    'SCIMETHOD -> SUPERCON [label="方法论\\n检验",style=dashed,color="#27ae60",constraint=false];',
+    'ALIGN -> LLM [label="安全约束\\n回馈训练",style=dashed,color="#c0392b",constraint=false];',
     '}'
   ].join('\n');
 
-  try {
-    if (typeof Viz !== 'undefined') {
+  try{
+    if(typeof Viz !== 'undefined'){
       var viz = new Viz();
-      viz.renderSVGElement(dot).then(function(svg) {
+      viz.renderSVGElement(dot).then(function(svg){
         svg.setAttribute('width','100%');
         svg.setAttribute('height','auto');
-        document.getElementById('graphSvg').appendChild(svg);
-      }).catch(function() {});
+        var gc = document.getElementById('graphContainer');
+        gc.innerHTML = '';
+        gc.appendChild(svg);
+      }).catch(function(e){
+        console.error('Graphviz render error:',e);
+        document.getElementById('graphContainer').innerHTML = '<p style="color:#999">概念关系图渲染失败，请刷新重试</p>';
+      });
+    }else{
+      document.getElementById('graphContainer').innerHTML = '<p style="color:#999">⏳ 概念关系图加载中（viz.js）...<br><small>4 层架构：核心驱动层 → 技术应用层 → 科学前沿层 → 认知框架层，虚线回环表示反馈迭代</small></p>';
     }
-  } catch(e) {}
-})();
-</script>
-
-<script>
-// ═══════ 2. 知识卡片 ═══════
-(function renderCards() {
-  var grid = document.getElementById('flipGrid');
-  if (!grid) return;
-  var html = '';
-  for (var i = 0; i < concepts.length; i++) {
-    var c = concepts[i];
-    html += '<div class="flip-card" id="flipCard' + c.id + '">';
-    html += '<div class="flip-inner" id="flipInner' + c.id + '">';
-    html += '<div class="flip-front" id="flipFront' + c.id + '">';
-    html += '<div class="card-icon">' + c.icon + '</div>';
-    html += '<h4>' + c.title + '</h4>';
-    html += '<p style="font-size:0.88rem;text-align:center;margin-top:6px;">' + c.definition.substring(0,60) + '...</p>';
-    html += '<div class="card-hint">👆 点击翻转查看完整内容</div>';
-    html += '</div>';
-    html += '<div class="flip-back" id="flipBack' + c.id + '">';
-    html += '<h4>' + c.title + '</h4>';
-    html += '<p><span class="label">定义</span>' + c.definition + '</p>';
-    html += '<p style="margin-top:6px;"><span class="label">类比</span>' + c.analogy + '</p>';
-    html += '<p style="margin-top:6px;"><span class="label">示例</span>' + c.example + '</p>';
-    html += '<p style="margin-top:6px;"><span class="label">反例/边界</span>' + c.counter + '</p>';
-    html += '<p style="font-size:0.75rem;color:#999;text-align:center;margin-top:8px;">▲ 再次点击背面关闭</p>';
-    html += '</div>';
-    html += '</div>';
-    html += '<div class="card-actions">';
-    html += '<button id="markLearnedBtn' + c.id + '" data-cid="' + c.id + '">✅ 标记已学</button>';
-    html += '<span style="font-size:0.78rem;align-self:center;color:#888;">卡片 <span id="cardIndex' + c.id + '">' + c.id + '</span>/10</span>';
-    html += '</div>';
-    html += '</div>';
+  }catch(e){
+    console.error('Graphviz init error:',e);
   }
-  grid.innerHTML = html;
-
-  for (var i = 0; i < concepts.length; i++) {
-    var cid = concepts[i].id;
-    (function(id) {
-      var front = document.getElementById('flipFront' + id);
-      var inner = document.getElementById('flipInner' + id);
-      var back = document.getElementById('flipBack' + id);
-      if (!front || !inner || !back) return;
-      front.addEventListener('click', function() {
-        if (inner.classList.contains('flipped')) inner.classList.remove('flipped');
-        else inner.classList.add('flipped');
-      });
-      back.addEventListener('click', function(e) {
-        e.stopPropagation();
-        inner.classList.remove('flipped');
-      });
-      var btn = document.getElementById('markLearnedBtn' + id);
-      if (!btn) return;
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (learnedCards[id]) {
-          delete learnedCards[id];
-          btn.classList.remove('learned');
-          btn.textContent = '✅ 标记已学';
-        } else {
-          learnedCards[id] = true;
-          btn.classList.add('learned');
-          btn.textContent = '✅ 已学';
-        }
-        updateProgress();
-      });
-    })(cid);
-  }
-})();
-
-function updateProgress() {
-  var count = Object.keys(learnedCards).length;
-  var el = document.getElementById('learnedCount');
-  if (el) el.textContent = count;
-  var pf = document.getElementById('progressFill');
-  if (pf) pf.style.width = (count * 10) + '%';
 }
-</script>
 
-<script>
-// ═══════ 3. 题库系统 ═══════
-(function buildQuizData() {
-  quizData = [
-    {type:"mcq",concept:1,q:"以下哪项最能准确描述“涌现”现象？",options:["A. 大量简单个体按规则交互后产生不可预测的宏观新性质","B. 多个零件的简单叠加等于整体功能之和","C. 任何系统在变大后都会出现的新行为","D. 只有生物系统才具有的特性"],answer:0,explanation:"涌现的核心是整体大于部分之和且新性质无法从微观规则直接推导。选项C错误：沙堆变大不会涌现新性质。选项D错误：AI、天气系统等非生物系统也可涌现。"},
-    {type:"mcq",concept:1,q:"以下哪个是涌现的必要条件？",options:["A. 个体必须具有意识","B. 大量个体+非线性交互+远离平衡态","C. 需要中央控制器下达指令","D. 系统必须是生物系统"],answer:1,explanation:"涌现的三个关键条件。蚁群没有中央控制器（C错），个体没有意识（A错），AI也可以涌现（D错）。"},
-    {type:"mcq",concept:2,q:"GPT模型完成“文字接龙”时，选择下一个token的方式是？",options:["A. 总是选择概率最高的那个词","B. 从训练数据中查找最相似的句子","C. 按温度参数调节后的概率分布随机采样","D. 通过预设的语法规则推导"],answer:2,explanation:"温度采样机制使得模型输出具有多样性。如果总是选概率最高的（贪婪解码），输出会变得重复单调。"},
-    {type:"mcq",concept:2,q:"关于大语言模型的“幻觉”，以下哪种说法最准确？",options:["A. LLM有意欺骗用户","B. LLM是数据库，幻觉是检索错误","C. 幻觉只在模型参数不够大时出现","D. LLM本质上就是编造，只是训练后大部分编造碰巧与事实一致"],answer:3,explanation:"LLM不是数据库，它永远在做概率预测。当训练数据中某类事实出现频率低或模型不确定时，它仍会按概率生成看起来通顺但事实上错误的内容。"},
-    {type:"mcq",concept:2,q:"GPT-4能够回答训练数据中从未出现的数学题，这体现了什么？",options:["A. 模型暗中存储了所有数学题答案","B. 模型内部形成了某种“计算电路”","C. OpenAI在训练数据中混入了所有可能的数学题","D. 这只是一个巧合"],answer:1,explanation:"5000亿token的训练数据无法覆盖所有可能的数学题组合。合理的解释是模型在参数空间中形成了能执行近似计算的内部表征——这是涌现现象。"},
-    {type:"mcq",concept:3,q:"赫拉利认为AI对人类的实质性威胁在什么条件下就会出现？",options:["A. AI发展出自我意识","B. AI获得物理行动能力","C. AI掌握语言并能生成真假难辨的内容","D. 机器人数量超过人类"],answer:2,explanation:"赫拉利2023年核心论点：AI威胁不需要意识和行动能力，掌握语言生成足以瓦解社会信任基础。"},
-    {type:"mcq",concept:3,q:"OpenAI的“超级对齐”团队主要解决什么问题？",options:["A. 让AI更快地学习","B. 让AI对抗其他公司的模型","C. 确保AI的硬件不会过热","D. 确保超级智能AI的行为与人类意图一致"],answer:3,explanation:"超级对齐(Superalignment)的目标是在AI智能远超人类之前，确保其目标函数与人类价值观一致。"},
-    {type:"mcq",concept:4,q:"为什么台积电N3B工艺的良率只有约55%？",options:["A. 3nm已接近物理极限，制造难度极高","B. 苹果故意要求降低良率","C. 使用的晶圆材料有问题","D. 台积电工程师技术不行"],answer:0,explanation:"随着制程微缩到3nm，量子隧穿效应、光刻精度极限等物理约束使得缺陷率大幅上升。"},
-    {type:"mcq",concept:4,q:"“Chiplet”架构解决的核心问题是什么？",options:["A. 将大芯片拆分为多个小芯片，提高良率并降低成本","B. 让芯片更美观","C. 让芯片运行更快","D. 减少芯片的功耗"],answer:0,explanation:"大芯片面积越大，出现缺陷的概率越高。Chiplet将大芯片拆成多个小芯片再通过先进封装互联，既提高了良率，又允许不同功能用不同制程制造。"},
-    {type:"mcq",concept:5,q:"关于“同行评议”，以下哪种说法最准确？",options:["A. 通过同行评议的论文结论一定是正确的","B. 同行评议主要检查论文的文法错误","C. 同行评议是科学知识的最低门槛，不是真理保证","D. 没有经过同行评议的知识都是伪科学"],answer:2,explanation:"同行评议是最基本的质量控制，但不保证结论正确。很多被同行评议接受的论文后来被证伪。"},
-    {type:"mcq",concept:5,q:"以下哪项是科学方法论的核心原则？",options:["A. 权威专家的观点最可靠","B. 只要统计显著就一定有意义","C. 最新的研究结论最可靠","D. 理论必须可被证伪、实验必须可被重复"],answer:3,explanation:"可证伪性（波普尔）和可重复性是科学的基石。统计显著不等于实际意义大。"},
-    {type:"mcq",concept:6,q:"IARC将阿斯巴甜定为“2B类致癌物”意味着什么？",options:["A. 阿斯巴甜确定会致癌","B. 阿斯巴甜致癌的证据有限","C. 阿斯巴甜比吸烟更危险","D. 所有含阿斯巴甜的食品都应该禁售"],answer:1,explanation:"2B类=可能对人类致癌（证据有限）。IARC分级反映的是证据强度而非危险程度。"},
-    {type:"mcq",concept:6,q:"食品安全中的ADI（每日允许摄入量）通常是如何确定的？",options:["A. 在人体上做实验找到有害剂量","B. 根据消费者投诉数据统计","C. 由食品生产商自行申报","D. 在动物实验最低毒性剂量基础上除以100"],answer:3,explanation:"安全系数100（10×10）：动物到人的不确定系数×10，人群个体差异×10。"},
-    {type:"mcq",concept:7,q:"2022年NIF实现Q=1.5意味着什么？",options:["A. 核聚变电站已经可以商业运营了","B. 聚变反应输出的能量超过了激光到达靶丸的能量","C. 聚变反应输出的能量超过了电网的总输入能量","D. 人类已经解决了所有核聚变工程问题"],answer:1,explanation:"Q_plasma（仅计算激光到靶能量）>1是里程碑，但Q_engineering（计算电网总输入）仍远小于1。"},
-    {type:"mcq",concept:7,q:"为什么说“核聚变永远差20年”？",options:["A. 核聚变在物理原理上是不可能的","B. 政府没有投入足够资金","C. 核聚变的工程挑战远超物理原理的验证，且历史上预测屡次落空","D. 科学家故意夸大时间线"],answer:2,explanation:"从1970年代起，每隔几年就有20年后实现的乐观预测。核心问题是工程实现远比预期困难。"},
-    {type:"mcq",concept:8,q:"海拉细胞（HeLa）的“永生”说明了什么？",options:["A. 单个细胞在脱离生物体调控后可以无限分裂","B. 所有癌细胞都能在体外永生","C. 海拉细胞是人为改造的","D. 人类可以轻易实现永生"],answer:0,explanation:"海拉细胞端粒酶持续活跃使得端粒不缩短，从而实现无限分裂。细胞层面的永生是可能的——但多细胞生物进化出了抑制机制（防癌）。"},
-    {type:"mcq",concept:8,q:"关于NMN，目前科学共识是什么？",options:["A. 早期小样本阳性结果未能被高质量研究重复，抗衰老功效证据不足","B. 被证实能逆转人类衰老","C. FDA已批准其作为抗衰老药物","D. 所有科学家一致推荐作为保健品"],answer:0,explanation:"NMN在中国已被禁止作为食品补充剂销售。多个大样本、双盲、安慰剂对照试验未能重复早期的阳性结果。"},
-    {type:"mcq",concept:9,q:"火箭方程Δv=v_e×ln(m₀/m₁)的核心含义是什么？",options:["A. 火箭速度可以无限增加","B. 有效载荷只占起飞质量的极小部分，大部分质量是燃料","C. 火箭越大越好","D. 燃料越多效率越高"],answer:1,explanation:"对数项ln(m₀/m₁)意味着质量比的提升对Δv的贡献递减。这就是为什么单级火箭几乎不可能入轨。"},
-    {type:"mcq",concept:9,q:"SpaceX星舰相对于传统一次性火箭的革命性创新是什么？",options:["A. 使用了更强大的发动机","B. 使用了核动力推进","C. 完全可复用设计+在轨加注的能力","D. 去掉了所有安全系统"],answer:2,explanation:"可复用大幅降低单次发射成本，在轨加注让深空任务不再受单次发射的运力限制。"},
-    {type:"mcq",concept:10,q:"关于演化，以下哪个说法是正确的？",options:["A. 演化有方向，最终目标是产生更复杂的生物","B. 演化像工程师一样从零设计最优方案","C. 所有现存生物都是“完美适应”的","D. 演化没有预设方向，只是淘汰当前环境中不够适应的个体"],answer:3,explanation:"演化是修补匠不是工程师。没有预设方向，生物只是够用而非完美。"},
-    {type:"short",concept:2,q:"请用不超过三句话解释：GPT在文字接龙时为什么不是简单的查字典？",answer:"GPT不是从数据库中检索匹配的句子，而是将输入转化为高维向量，通过1750亿参数的多层Transformer计算后，在5万多个可能的token中按概率分布采样。关键在于模型的内部表征已经学会了语法、语义、推理等抽象模式，使得它在训练数据中从未见过的组合上也能生成合理的输出。",keywords:"向量,参数,概率采样,抽象模式"},
-    {type:"short",concept:3,q:"赫拉利认为AI威胁不需要意识和行动能力。请阐述他的核心论证。",answer:"AI只要掌握语言、能生成真假难辨的内容（文字、图片、语音、视频），就足以瓦解社会信任基础。人类文明的运行依赖于对信息真实性的基本共识，当AI能以极低成本大规模生产以假乱真的内容时，选举、金融市场、司法证据、新闻报道等社会基础设施都将面临前所未有的挑战。",keywords:"语言,真假难辨,社会信任,内容真实性"},
-    {type:"short",concept:5,q:"请解释相关性不等于因果，并给出一个科技新闻中常见的错误例子。",answer:"两个变量同时变化（相关）不等于一个导致另一个（因果），因为可能存在第三个混淆变量。例如：喝咖啡的人心脏病发病率更高，不是因为咖啡导致心脏病，而是喝咖啡的人平均压力更大、睡眠更少（混淆变量）。科技新闻中常见错误：观察到吃某食物的人群寿命更长，直接断言该食物能延寿——忽略了吃该食物的人通常更富裕、医疗条件更好。",keywords:"相关,因果,混淆变量,第三变量"},
-    {type:"short",concept:6,q:"为什么说IARC致癌物分级反映的是证据强度而非危险程度？请举例说明。",answer:"IARC分级只评估某种物质是否有可能致癌的科学证据强弱，不评估在实际暴露水平下的风险大小。例如：加工肉（1类=确定致癌）和吸烟（1类）同级，但每天吃50g加工肉的结直肠癌风险增加约18%，而吸烟的肺癌风险增加约2000%。",keywords:"证据强度,危险程度,分级,加工肉,吸烟"},
-    {type:"short",concept:7,q:"请解释核聚变中Q_plasma和Q_engineering的区别，为什么这个区别很重要？",answer:"Q_plasma仅计算激光/加热能量到达靶丸/等离子体的值（NIF达1.5），Q_engineering计算从电网到聚变输出的全链条能量比（NIF约0.01）。激光器效率很低（NIF激光器约1%），产生300MJ电网电力才能输出3.15MJ聚变能。只有Q_engineering>1，核聚变才有商业发电意义。媒体报道常混淆两者。",keywords:"Q值,等离子体,工程,全链条,商业"},
-    {type:"short",concept:8,q:"海拉细胞的永生对于理解人类衰老有什么启示？",answer:"海拉细胞证明单个细胞在脱离多细胞生物体的生长调控机制后可以实现无限分裂。这说明衰老不是细胞层面的物理必然，而是多细胞生物进化出的一种程序——端粒缩短、细胞衰老都是防癌机制。但这并不意味着可以简单地让人类细胞永生来实现长寿，因为解除这些限制的代价就是癌症。",keywords:"海拉,永生,端粒,癌症,衰老程序"},
-    {type:"short",concept:9,q:"请用火箭方程解释为什么单级火箭几乎不可能将有效载荷送入地球轨道。",answer:"火箭方程Δv=v_e×ln(m₀/m₁)中，入轨需要Δv≈8km/s。即使使用最优化学燃料（v_e≈4.5km/s），所需质量比m₀/m₁≈6。但火箭结构至少占起飞质量的10%，加有效载荷后实际可达到的质量比远低于6。多级火箭通过逐级丢弃死重（空贮箱），等效提高了有效质量比。",keywords:"齐奥尔科夫斯基,质量比,结构系数,多级,入轨"},
-    {type:"short",concept:10,q:"请用演化是修补匠不是工程师来解释人体喉返神经绕路的设计缺陷。",answer:"喉返神经从脑干到喉部的最短路径不过几公分，但在哺乳动物中它先下降到心脏附近绕过主动脉再返回喉部。这不能用智能设计解释，只能用演化历史解释：我们的鱼类祖先中这条神经走的是直线。随着心脏下移到胸腔，神经被钩住，演化只能逐步拉长而不能重新布线。",keywords:"喉返神经,修补匠,演化历史,设计缺陷,路径依赖"},
-    {type:"short",concept:1,q:"为什么说GPT能回答训练数据中未出现的数学题是涌现的有力证据？",answer:"因为训练任务只是预测下一个token（文字接龙），模型从未被明确教过数学运算规则。但参数达到一定规模后，模型内部自发形成了能执行近似数学计算的电路——这在较小型模型中不存在。这种从预测下一个词到能做数学题的能力跳跃无法从训练目标中直接推导，是典型的涌现现象。",keywords:"GPT,数学计算,参数规模,自发,涌现"},
-    {type:"short",concept:5,q:"研究声称吃巧克力的人诺贝尔奖得主比例更高。请用科学方法论分析其问题。",answer:"这最多是相关性而非因果。混淆变量：富裕国家的人均巧克力消费量和诺贝尔奖得主数量都更高（第三变量=国家发展水平）。其次样本选择偏差：诺贝尔奖得主群体不能代表一般人群。第三没有提出合理的因果机制。这类有趣的统计相关性常被媒体当作科学发现报道，但用科学方法论审视就会发现证据层级非常低。",keywords:"相关vs因果,混淆变量,选择偏差,证据层级,因果机制"}
+// ===== 思维导图 SVG =====
+function renderMindMap(){
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" class="mind-map-svg">';
+  svg += '<defs><filter id="shadow" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter></defs>';
+  svg += '<rect width="900" height="600" fill="#fdf6ec"/>';
+  svg += '<ellipse cx="450" cy="300" rx="85" ry="42" fill="#c0392b" filter="url(#shadow)"/><text x="450" y="294" text-anchor="middle" fill="white" font-size="14" font-weight="bold">科技参考3</text><text x="450" y="314" text-anchor="middle" fill="white" font-size="11">MKS 核心框架</text>';
+  var nodes = [
+    {label:'AI 与计算',x:150,y:140,c:'#1a5276'},{label:'能源与太空',x:750,y:140,c:'#1a5276'},
+    {label:'生命科学',x:150,y:460,c:'#27ae60'},{label:'认知框架',x:750,y:460,c:'#8e44ad'}
   ];
-})();
-
-function renderQuiz(mode) {
-  currentQuizMode = mode;
-  var area = document.getElementById('quizArea');
-  if (!area) return;
-  var questions = quizData.filter(function(q){return q.type===mode;});
-  var html = '<p style="margin-bottom:12px;color:#888;">共 ' + questions.length + ' 题，点击“显示答案”查看解析</p>';
-  for (var i=0;i<questions.length;i++) {
-    var q=questions[i];
-    html += '<div class="quiz-question" id="q'+mode+i+'">';
-    html += '<div class="q-type">'+(q.type==='mcq'?'📌 选择题 #'+(i+1)+' · 概念'+q.concept:'✍️ 简答题 #'+(i+1)+' · 概念'+q.concept)+'</div>';
-    html += '<div class="q-text">'+q.q+'</div>';
-    if (q.type==='mcq') {
-      html += '<div class="q-options">';
-      for (var j=0;j<q.options.length;j++) html += '<label><input type="radio" name="q'+mode+i+'" value="'+j+'">'+q.options[j]+'</label>';
-      html += '</div>';
-    } else {
-      html += '<textarea style="width:100%;height:80px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:0.9rem;resize:vertical;" placeholder="输入你的回答..."></textarea>';
-    }
-    html += '<div style="margin-top:8px;"><button class="show-answer-btn" data-qid="q'+mode+i+'_ans" style="padding:6px 14px;border:1px solid var(--accent);border-radius:16px;background:#fff;color:var(--accent);cursor:pointer;font-size:0.82rem;">显示答案</button></div>';
-    html += '<div class="quiz-answer" id="q'+mode+i+'_ans">';
-    if (q.type==='mcq') html += '<strong>✅ 正确答案：'+['A','B','C','D'][q.answer]+'</strong><br>'+q.explanation;
-    else html += '<strong>📝 参考答案：</strong><br>'+q.answer+(q.keywords?'<br><span style="font-size:0.8rem;color:#888;">关键词：'+q.keywords+'</span>':'');
-    html += '</div></div>';
-  }
-  area.innerHTML = html;
-  var btns = area.querySelectorAll('.show-answer-btn');
-  for (var k=0;k<btns.length;k++) {
-    btns[k].addEventListener('click',function(){
-      var ans=document.getElementById(this.getAttribute('data-qid'));
-      if (ans.classList.contains('show')){ans.classList.remove('show');this.textContent='显示答案';}
-      else {ans.classList.add('show');this.textContent='隐藏答案';}
-    });
-  }
-}
-
-function setActiveQuizBtn(btn) {
-  var ids=['quizMcqBtn','quizShortBtn','quizRandomBtn'];
-  for (var i=0;i<ids.length;i++) {var b=document.getElementById(ids[i]);if(b)b.classList.remove('active-btn');}
-  if (btn) btn.classList.add('active-btn');
-}
-
-document.addEventListener('DOMContentLoaded',function(){
-  var mcq=document.getElementById('quizMcqBtn');
-  var sh=document.getElementById('quizShortBtn');
-  var rnd=document.getElementById('quizRandomBtn');
-  var rst=document.getElementById('quizResetBtn');
-  if (mcq) mcq.addEventListener('click',function(){setActiveQuizBtn(this);renderQuiz('mcq');});
-  if (sh) sh.addEventListener('click',function(){setActiveQuizBtn(this);renderQuiz('short');});
-  if (rnd) rnd.addEventListener('click',function(){
-    setActiveQuizBtn(this);
-    var all=quizData.slice();shuffleArray(all);var picked=all.slice(0,15);
-    var area=document.getElementById('quizArea');if(!area)return;
-    var html='<p style="margin-bottom:12px;color:#888;">🎲 随机抽取 15 题</p>';
-    for (var i=0;i<picked.length;i++) {
-      var q=picked[i];
-      html+='<div class="quiz-question"><div class="q-type">'+(q.type==='mcq'?'📌 选择':'✍️ 简答')+' · 概念'+q.concept+'</div>';
-      html+='<div class="q-text">'+q.q+'</div>';
-      if (q.type==='mcq'){html+='<div class="q-options">';for(var j=0;j<q.options.length;j++)html+='<label><input type="radio" name="qr'+i+'" value="'+j+'">'+q.options[j]+'</label>';html+='</div>';}
-      else html+='<textarea style="width:100%;height:60px;border:1px solid var(--border);border-radius:8px;padding:8px;font-size:0.85rem;resize:vertical;" placeholder="输入你的回答..."></textarea>';
-      html+='<div style="margin-top:6px;"><button class="show-answer-btn" data-qid="qr_ans'+i+'" style="padding:4px 12px;border:1px solid var(--accent);border-radius:12px;background:#fff;color:var(--accent);cursor:pointer;font-size:0.78rem;">显示答案</button></div>';
-      html+='<div class="quiz-answer" id="qr_ans'+i+'">'+(q.type==='mcq'?'<strong>✅ 正确答案：'+['A','B','C','D'][q.answer]+'</strong><br>'+q.explanation:'<strong>📝 参考答案：</strong><br>'+q.answer)+'</div>';
-      html+='</div>';
-    }
-    area.innerHTML=html;
-    var btns2=area.querySelectorAll('.show-answer-btn');
-    for (var k=0;k<btns2.length;k++){btns2[k].addEventListener('click',function(){var ans=document.getElementById(this.getAttribute('data-qid'));if(ans.classList.contains('show')){ans.classList.remove('show');this.textContent='显示答案';}else{ans.classList.add('show');this.textContent='隐藏答案';}});}
+  nodes.forEach(function(n){
+    svg += '<ellipse cx="'+n.x+'" cy="'+n.y+'" rx="72" ry="32" fill="'+n.c+'" filter="url(#shadow)"/><text x="'+n.x+'" y="'+n.y+'" text-anchor="middle" fill="white" font-size="13" font-weight="bold">'+n.label+'</text>';
+    svg += '<line x1="365" y1="300" x2="'+n.x+'" y2="'+n.y+'" stroke="'+n.c+'" stroke-width="2"/>';
   });
-  if (rst) rst.addEventListener('click',function(){renderQuiz(currentQuizMode);showToast('♺ 题库已重置');});
-});
-</script>
-
-<script>
-// ═══════ 4. 考试模式 ═══════
-(function setupExam() {
-  var examQuestions=[],examSubmitted=false;
-  document.addEventListener('DOMContentLoaded',function(){
-    var start=document.getElementById('examStartBtn');
-    var submit=document.getElementById('examSubmitBtn');
-    if (!start || !submit) return;
-    start.addEventListener('click',function(){
-      if (examActive) return;
-      examActive=true;examSubmitted=false;examTimeLeft=1200;
-      var allMcq=quizData.filter(function(q){return q.type==='mcq';});
-      var allShort=quizData.filter(function(q){return q.type==='short';});
-      shuffleArray(allMcq);shuffleArray(allShort);
-      examQuestions=allMcq.slice(0,15).concat(allShort.slice(0,10));
-      shuffleArray(examQuestions);
-      start.style.display='none';submit.style.display='inline-block';
-      document.getElementById('examArea').style.display='block';
-      document.getElementById('examResult').style.display='none';
-      document.getElementById('examAnswered').textContent='0';
-      document.getElementById('examCorrect').textContent='0';
-      document.getElementById('examScore').textContent='0';
-      renderExam(examQuestions);startExamTimer();
-    });
-    submit.addEventListener('click',function(){
-      if (examSubmitted) return;
-      examSubmitted=true;clearInterval(examTimerInterval);examActive=false;
-      var correct=0,total=examQuestions.length;
-      for (var i=0;i<total;i++){
-        var q=examQuestions[i];
-        if (q.type==='mcq'){
-          var sel=document.querySelector('input[name="exam'+i+'"]:checked');
-          if (sel && parseInt(sel.value)===q.answer) correct++;
-          var qDiv=document.getElementById('examQ'+i);
-          if (qDiv){if(sel && parseInt(sel.value)===q.answer)qDiv.classList.add('correct-highlight');else if(sel)qDiv.classList.add('wrong-highlight');}
-        }
-      }
-      document.getElementById('examCorrect').textContent=correct;
-      document.getElementById('examScore').textContent=Math.round(correct/15*100);
-      document.getElementById('examResult').style.display='block';
-      document.getElementById('examResult').innerHTML='<h3>🏆 考试结束！</h3><p>选择题得分：<strong>'+correct+'</strong>/15</p><p>总分预估：<strong>'+Math.round(correct/total*100)+'</strong>/100</p><p style="font-size:0.85rem;color:#888;">(简答题需人工批改)</p>';
-      submit.style.display='none';start.style.display='inline-block';start.textContent='重新考试';
-      document.getElementById('examTimer').textContent='20:00';
-    });
+  var leaves = [
+    {label:'LLM 原理',x:70,y:75,c:'#2980b9'},{label:'AI 安全',x:230,y:75,c:'#2980b9'},
+    {label:'芯片制造',x:70,y:205,c:'#2980b9'},{label:'端到端智驾',x:230,y:205,c:'#2980b9'},
+    {label:'可控核聚变',x:670,y:75,c:'#2980b9'},{label:'星舰运输',x:830,y:75,c:'#2980b9'},
+    {label:'室温超导',x:750,y:205,c:'#2980b9'},
+    {label:'衰老科学',x:70,y:395,c:'#1e8449'},{label:'朊粒研究',x:70,y:525,c:'#1e8449'},
+    {label:'演化生物',x:230,y:395,c:'#1e8449'},{label:'长新冠',x:230,y:525,c:'#1e8449'},
+    {label:'智商税识别',x:670,y:395,c:'#6c3483'},{label:'同行评议',x:830,y:395,c:'#6c3483'},
+    {label:'科学方法',x:670,y:525,c:'#6c3483'},{label:'决策框架',x:830,y:525,c:'#6c3483'}
+  ];
+  leaves.forEach(function(l){
+    svg += '<rect x="'+(l.x-38)+'" y="'+(l.y-14)+'" width="76" height="28" rx="5" fill="'+l.c+'" opacity="0.9" filter="url(#shadow)"/>';
+    svg += '<text x="'+l.x+'" y="'+(l.y+4)+'" text-anchor="middle" fill="white" font-size="10">'+l.label+'</text>';
   });
+  svg += '</svg>';
+  document.getElementById('mindMapContainer').innerHTML = svg;
+}
 
-  function renderExam(questions) {
-    var area=document.getElementById('examArea');if(!area)return;
-    var html='';
-    for (var i=0;i<questions.length;i++) {
-      var q=questions[i];
-      html+='<div class="quiz-question" id="examQ'+i+'">';
-      html+='<div class="q-type">'+(q.type==='mcq'?'📌 选择':'✍️ 简答')+' #'+(i+1)+' · 概念'+q.concept+'</div>';
-      html+='<div class="q-text">'+q.q+'</div>';
-      if (q.type==='mcq'){html+='<div class="q-options">';for(var j=0;j<q.options.length;j++)html+='<label><input type="radio" name="exam'+i+'" value="'+j+'">'+q.options[j]+'</label>';html+='</div>';}
-      else html+='<textarea style="width:100%;height:60px;border:1px solid var(--border);border-radius:8px;padding:8px;font-size:0.85rem;resize:vertical;" placeholder="输入你的回答..."></textarea>';
-      html+='</div>';
-    }
-    area.innerHTML=html;
-  }
+// ===== Toast =====
+function showToast(msg){
+  var t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove()},2000);
+}
 
-  function startExamTimer() {
-    clearInterval(examTimerInterval);
-    updateTimerDisplay();
-    examTimerInterval=setInterval(function(){
-      examTimeLeft--;updateTimerDisplay();
-      if (examTimeLeft<=0){clearInterval(examTimerInterval);examActive=false;showToast('⏰ 时间到！');document.getElementById('examSubmitBtn').click();}
-    },1000);
-  }
+// ===== Init =====
+function init(){
+  renderCards();
+  renderDeepQuestions();
+  renderCases();
+  renderDecision();
+  renderMindMap();
+  updateCardUI();
+  setTimeout(function(){try{renderGraph();}catch(e){}},100);
+}
 
-  function updateTimerDisplay() {
-    var m=Math.floor(examTimeLeft/60),s=examTimeLeft%60;
-    document.getElementById('examTimer').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-  }
-})();
-</script>
-
-<script>
-// ═══════ 5. 复习模式 ═══════
-(function renderReview() {
-  var grid=document.getElementById('reviewGrid');if(!grid)return;
-  var html='';
-  for (var i=0;i<concepts.length;i++) {
-    var c=concepts[i];
-    html+='<div class="review-card" id="reviewCard'+c.id+'">';
-    html+='<h4>'+c.icon+' '+c.title+'</h4>';
-    html+='<p style="font-size:0.85rem;">'+c.definition.substring(0,80)+'...</p>';
-    html+='<div style="margin-top:8px;"><label style="cursor:pointer;"><input type="checkbox" class="review-check" onchange="window._toggleReview('+c.id+',this)"> 已复习</label></div>';
-    html+='</div>';
-  }
-  grid.innerHTML=html;
-})();
-
-window._toggleReview=function(cid,cb){
-  if (cb.checked){reviewedCards[cid]=true;document.getElementById('reviewCard'+cid).classList.add('reviewed');}
-  else {delete reviewedCards[cid];document.getElementById('reviewCard'+cid).classList.remove('reviewed');}
-  document.getElementById('reviewCount').textContent=Object.keys(reviewedCards).length;
-};
-</script>
-
-<script>
-// ═══════ 7. 深度追问 ═══════
-(function renderAsk() {
-  var list=document.getElementById('askList');if(!list)return;
-  var items=[
-    {q:"如果AI的涌现不可预测，我们如何确保超级AI的安全性？",a:"这正是AI对齐研究的核心难题。目前方法：①在模型能力仍可控的阶段进行RLHF对齐训练；②用较小模型监督较大模型（可扩展监督）；③形式化验证（数学证明模型在某些条件下不会做某些事）。但所有方法都有局限——如果涌现真的不可预测，预防措施可能永远是不完备的。"},
-    {q:"LLM的内部表征是真正理解还是统计模拟？两者有本质区别吗？",a:"这是当代认知科学和AI研究的深层问题。工具主义立场认为只要输出正确，理解是不是真正的不重要。Searle的中文屋论证则认为统计模拟不等于语义理解。GPT-4能回答训练数据中不存在的数学题，暗示其内部形成了计算模型而非纯统计匹配——但这是否等同于人类的理解，目前没有定论。"},
-    {q:"如果所有AI生成的内容都完美到无法区分真假，社会将如何运作？",a:"赫拉利预测这将是最深层的危机。可能应对：①内容水印/签名（强制AI输出携带可验证标记）；②可信来源认证（类似https证书）；③社会规范演变（人们不再默认相信数字内容，回归当面交流和小圈子信任）。但这三条都有严重缺陷。"},
-    {q:"摩尔定律如果真的终结，对AI发展意味着什么？",a:"短期内（3-5年）影响有限——当前GPU/TPU架构仍有优化空间，算法效率提升（稀疏注意力、量化、蒸馏）可部分补偿算力增长放缓。长期来看AI可能需要从更大模型转向更聪明的架构——如类脑计算、神经符号AI、更高效的训练算法。"},
-    {q:"科学方法论为什么在社交媒体时代显得失效了？",a:"不是因为方法论本身失效，而是信息传播机制让门槛效应放大：①预印本（未同行评议）在社交媒体上的传播力远超经过评议的论文；②算法优先推送情绪化、争议性内容；③公众缺乏区分证据层级的能力训练。解决方案是将科学思维纳入基础教育的核心。"},
-    {q:"如果核聚变在2050年实现商业化，对全球地缘政治有什么影响？",a:"最深远的影响是能源地缘的彻底重塑：①石油和天然气的战略价值骤降，中东、俄罗斯等能源输出国面临经济转型压力；②能源贫乏但技术发达的国家（日本、韩国、欧洲）战略安全大幅提升；③可能出现聚变技术垄断的新不平等格局。"},
-    {q:"演化思维可以应用到商业竞争中吗？需要注意什么陷阱？",a:"可以部分类比：技术产品在市场竞争中经历类似选择压力。但关键差异：①商业竞争有意识和目的（不同于自然选择的盲目）；②商业适应性可被主动提升；③陷阱：将市场成功等同于最优——商业中成功可能只是运气+时机（路径依赖）。"},
-    {q:"为什么NMN等抗衰老补充剂的科学证据如此扑朔迷离？",a:"主要原因：①动物实验的阳性结果在人体试验中经常无法重复（物种差异）；②早期人体试验样本量太小（n<50），统计功效不足；③发表偏倚——阳性结果更容易被发表；④利益冲突——许多研究由补充剂生产商资助；⑤衰老是多因素过程，单一分子干预很难产生可测量的临床效果。"}
-  ];
-  var html='';
-  for (var i=0;i<items.length;i++) {
-    html+='<li><div class="ask-q" data-idx="'+i+'">'+items[i].q+' <span style="font-size:0.8rem;">▼</span></div>';
-    html+='<div class="ask-a" id="askA'+i+'">'+items[i].a+'</div></li>';
-  }
-  list.innerHTML=html;
-  var qs=list.querySelectorAll('.ask-q');
-  for (var j=0;j<qs.length;j++) {
-    qs[j].addEventListener('click',function(){
-      var idx=this.getAttribute('data-idx');
-      var ans=document.getElementById('askA'+idx);
-      if (ans.classList.contains('show')) ans.classList.remove('show');
-      else ans.classList.add('show');
-    });
-  }
-})();
-</script>
-
-<script>
-// ═══════ 8. 案例分析 ═══════
-(function renderCases() {
-  var list=document.getElementById('caseList');if(!list)return;
-  var cases=[
-    {title:"阿斯巴甜致癌风波 (2023.7)",body:"IARC将阿斯巴甜列入2B类致癌物，全球媒体标题刷屏代糖致癌。卓克回顾了四项支持研究的缺陷（剂量-效应不递增、变量混淆、对照组异常），并指出IARC分级反映证据强度而非危险程度。JECFA和FDA均维持原有安全限值。这是剂量-效应关系+科学方法论-证据层级的完美教材。",concepts:["剂量-效应关系","科学方法论","证据层级"]},
-    {title:"EUV光刻机“被清华攻克”谣言 (2023.9)",body:"社交媒体流传EUV光刻机被清华使用SSMB技术攻克，持续发酵6天。卓克追溯谣言演化链条，区分了理论验证(SSMB论文, Nature 2021)与工程实现(距实用光刻机还有20年以上)。历史上DUV从理论到产品用了22年，EUV用了20年——时间尺度思维有助于理性评估任何突破新闻。",concepts:["芯片制程","科学方法论","时间尺度思维"]},
-    {title:"OpenAI内部动荡 (2023.11)",body:"Sam Altman被解雇又复职的72小时，表面是公司治理争议，深层是AI安全派(Ilya Sutskever)与商业化派(Altman)的路线之争。超级对齐团队的存在说明OpenAI内部也深知AI安全问题的严重性——在追求AGI的商业竞争中如何保持安全约束，是AI行业的核心张力。",concepts:["AI对齐与安全","涌现","科技产业竞争"]},
-    {title:"NMN抗衰老风波",body:"NMN一度被奉为抗衰老神药，大量保健品以此为主打概念。但卓克追踪的多项后续研究显示：早期小样本阳性结果未能被高质量试验重复。中国已禁止NMN作为食品补充剂销售。这一案例展示了如何用科学方法论区分有初步证据和已经科学证实——两者之间隔着大样本、双盲、安慰剂对照、可重复这几个关键词。",concepts:["衰老生物学","科学方法论","剂量-效应"]},
-    {title:"化工罐车装食用油事件 (2024.7)",body:"媒体曝光化工罐车在运输化工原料后未经彻底清洗即装运食用油，引发全国食品安全恐慌。卓克从两个维度分析：①风险评估角度——残留物的种类、剂量和毒性决定了实际健康风险大小；②监管体系角度——事件反映的是执行漏洞而非标准缺失。示范了如何在情绪化事件中运用剂量-效应思维冷静分析。",concepts:["剂量-效应","科学方法论","风险评估"]}
-  ];
-  var html='';
-  for (var i=0;i<cases.length;i++){var cs=cases[i];
-    html+='<div class="case-card"><h4>📋 '+cs.title+'</h4><p style="font-size:0.93rem;">'+cs.body+'</p><div class="case-concepts">';
-    for (var j=0;j<cs.concepts.length;j++) html+='<span class="case-tag">'+cs.concepts[j]+'</span>';
-    html+='</div></div>';
-  }
-  list.innerHTML=html;
-})();
-</script>
-
-<script>
-// ═══════ 9. 实战决策 ═══════
-(function renderDecision() {
-  var flow=document.getElementById('decisionFlow');if(!flow)return;
-  var scenarios=[
-    {scene:"📱 场景1：朋友转发一条最新研究XX食物确定致癌！的消息给你。你的第一反应是？",
-     choices:["A. 立刻转发提醒更多人","B. 先查原始研究：是什么级别的证据？样本量多大？","C. 觉得又是标题党，直接忽略","D. 问朋友消息来源是什么"],
-     feedback:["❌ 转发前应先验证。许多致癌标题是对IARC分级的误读。","✅ 正确！运用了科学方法论中的证据层级和剂量-效应思维。先看原始研究是哪个机构的什么级别的结论。","⚠️ 部分正确，但忽略了可能有值得关注的新证据。最佳做法是先花2分钟查证。","⚠️ 方向正确，但朋友往往也是转发的，无法提供原始来源。更有效的方法是自己查原始研究。"]},
-    {scene:"💻 场景2：公司考虑引入AI工具替代部分文案工作。作为决策者，你的首要考量是？",
-     choices:["A. 立刻全面替换，降本增效","B. 先小范围试点，评估AI输出质量+人工审核成本","C. 等竞争对手先做再说","D. 认为AI不可靠，完全不采用"],
-     feedback:["❌ 过于激进。AI可能在某些任务上效率高，但需要人工审核以确保准确性（AI有幻觉问题）。","✅ 最佳决策。运用了对LLM机制的准确认知：AI输出需要人工审核（概率采样≠确定性），需评估AI生成+人工审核的总成本是否真的低于纯人工。","⚠️ 保守策略可能错过效率提升窗口。","❌ AI在当前阶段确实不需要完全替代人类，但完全不采用可能让你在效率竞争中落后。可以用AI做初稿，人做终审。"]},
-    {scene:"💊 场景3：长辈推荐一款国外最新抗衰老神药，价格昂贵但朋友用了效果很好。你怎么回应？",
-     choices:["A. 既然有朋友推荐就买来试试","B. 帮长辈查该产品的临床试验证据：有没有大样本双盲对照？","C. 直接说这些都是骗人的","D. 看看价格，不太贵就买"],
-     feedback:["❌ 朋友说有效是证据层级最低的形式（个案报告+安慰剂效应+选择偏差）。","✅ 正确！运用了衰老生物学知识+科学方法论。目前没有任何经过同行评议的强证据表明任何补充剂能逆转人类衰老。","⚠️ 方向上没错，但长辈可能会觉得被冒犯。更好的方式是帮他们理解为什么个案和科学证据之间存在巨大鸿沟。","❌ 价格不是判断有效性的标准。很多高价保健品正是利用了贵=有效的认知偏差。"]}
-  ];
-  var html='';
-  for (var i=0;i<scenarios.length;i++){var s=scenarios[i];
-    html+='<div class="decision-node"><h4>'+s.scene+'</h4><div class="choice" id="choice'+i+'">';
-    for (var j=0;j<s.choices.length;j++) html+='<button data-sid="'+i+'" data-cid="'+j+'">'+s.choices[j]+'</button>';
-    html+='</div><div class="decision-feedback" id="feedback'+i+'"></div></div>';
-  }
-  flow.innerHTML=html;
-  for (var i=0;i<scenarios.length;i++){(function(sid,s){
-    var btns=document.querySelectorAll('#choice'+sid+' button');
-    for (var j=0;j<btns.length;j++){btns[j].addEventListener('click',function(){var cid=parseInt(this.getAttribute('data-cid'));for(var k=0;k<btns.length;k++)btns[k].classList.remove('selected');this.classList.add('selected');var fb=document.getElementById('feedback'+sid);fb.innerHTML=s.feedback[cid];fb.classList.add('show');});}
-  })(i,scenarios[i]);}
-})();
-</script>
-
-<script>
-// ═══════ Utility ═══════
-function shuffleArray(arr) {for (var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;}}
-function showToast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}
-
-// ═══════ Nav highlight ═══════
-(function(){var links=document.querySelectorAll('nav a');var sections=document.querySelectorAll('section');window.addEventListener('scroll',function(){var sy=window.scrollY;for(var i=sections.length-1;i>=0;i--){if(sections[i].offsetTop-80<=sy){var id=sections[i].getAttribute('id');for(var j=0;j<links.length;j++){links[j].classList.remove('active');if(links[j].getAttribute('href')==='#'+id)links[j].classList.add('active');}break;}}});})();
-
-// ═══════ Init ═══════
-(function init(){renderQuiz('mcq');updateProgress();setTimeout(function(){showToast('📚 卓克·科技参考3 MKS 已就绪 | 311篇提炼10个核心概念');},500);})();
-</script>
-
-<script src="https://unpkg.com/@hpcc-js/wasm@2/dist/graphviz.umd.js"></script>
-<script>
-// ═══════ Viz fallback ═══════
-(function(){setTimeout(function(){
-  var gs=document.getElementById('graphSvg');if(!gs||gs.children.length>0)return;
-  gs.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650" width="100%" height="auto"><defs><marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker><marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3a7d44"/></marker><marker id="ab" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2c5f8a"/></marker><marker id="ap" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b3fa0"/></marker></defs><rect x="10" y="8" width="880" height="78" rx="8" fill="#fff5f5" stroke="#c0392b" stroke-dasharray="6,3"/><text x="28" y="32" font-size="13" fill="#c0392b" font-weight="bold">AI主线</text><rect x="60" y="42" width="130" height="32" rx="6" fill="#c0392b"/><text x="125" y="63" font-size="11" fill="white" text-anchor="middle">1.涌现</text><rect x="230" y="42" width="150" height="32" rx="6" fill="#c0392b"/><text x="305" y="63" font-size="11" fill="white" text-anchor="middle">2.大语言模型</text><rect x="420" y="42" width="160" height="32" rx="6" fill="#c0392b"/><text x="500" y="63" font-size="11" fill="white" text-anchor="middle">3.AI对齐与安全</text><line x1="190" y1="58" x2="228" y2="58" stroke="#c0392b" stroke-width="2" marker-end="url(#ar)"/><line x1="380" y1="58" x2="418" y2="58" stroke="#c0392b" stroke-width="2" marker-end="url(#ar)"/><text x="200" y="50" font-size="8" fill="#c0392b">驱动机理</text><text x="390" y="50" font-size="8" fill="#c0392b">引出安全需求</text><rect x="10" y="96" width="880" height="78" rx="8" fill="#f0faf0" stroke="#3a7d44" stroke-dasharray="6,3"/><text x="28" y="120" font-size="13" fill="#3a7d44" font-weight="bold">硬科技</text><rect x="60" y="134" width="140" height="32" rx="6" fill="#3a7d44"/><text x="130" y="155" font-size="11" fill="white" text-anchor="middle">4.芯片制程</text><rect x="330" y="134" width="150" height="32" rx="6" fill="#3a7d44"/><text x="405" y="155" font-size="11" fill="white" text-anchor="middle">7.可控核聚变</text><rect x="620" y="134" width="140" height="32" rx="6" fill="#3a7d44"/><text x="690" y="155" font-size="11" fill="white" text-anchor="middle">9.太空工程</text><rect x="10" y="184" width="880" height="78" rx="8" fill="#f0f5fa" stroke="#2c5f8a" stroke-dasharray="6,3"/><text x="28" y="208" font-size="13" fill="#2c5f8a" font-weight="bold">方法论</text><rect x="60" y="222" width="160" height="32" rx="6" fill="#2c5f8a"/><text x="140" y="243" font-size="11" fill="white" text-anchor="middle">5.科学方法论</text><rect x="270" y="222" width="150" height="32" rx="6" fill="#2c5f8a"/><text x="345" y="243" font-size="11" fill="white" text-anchor="middle">6.剂量-效应</text><line x1="220" y1="238" x2="268" y2="238" stroke="#2c5f8a" stroke-width="2" marker-end="url(#ab)"/><text x="235" y="232" font-size="8" fill="#2c5f8a">分析框架</text><rect x="10" y="272" width="880" height="78" rx="8" fill="#f8f0ff" stroke="#6b3fa0" stroke-dasharray="6,3"/><text x="28" y="296" font-size="13" fill="#6b3fa0" font-weight="bold">生物/演化</text><rect x="60" y="310" width="160" height="32" rx="6" fill="#6b3fa0"/><text x="140" y="331" font-size="11" fill="white" text-anchor="middle">8.衰老生物学</text><rect x="270" y="310" width="140" height="32" rx="6" fill="#6b3fa0"/><text x="340" y="331" font-size="11" fill="white" text-anchor="middle">10.演化思维</text><line x1="220" y1="326" x2="268" y2="326" stroke="#6b3fa0" stroke-width="2" marker-end="url(#ap)"/><text x="235" y="320" font-size="8" fill="#6b3fa0">解释衰老</text><line x1="305" y1="90" x2="250" y2="132" stroke="#c0392b" stroke-width="1.5"/><text x="230" y="108" font-size="7" fill="#c0392b">依赖算力</text><line x1="600" y1="300" x2="500" y2="200" stroke="#2c5f8a" stroke-width="1.5"/><text x="480" y="245" font-size="7" fill="#2c5f8a">评估抗衰老</text><line x1="305" y1="300" x2="250" y2="200" stroke="#2c5f8a" stroke-width="1.5" stroke-dasharray="4,3"/><text x="220" y="245" font-size="7" fill="#2c5f8a">验证对齐(虚线)</text><rect x="10" y="360" width="880" height="70" rx="8" fill="#fdf6ec" stroke="#b8860b"/><text x="28" y="383" font-size="12" fill="#b8860b" font-weight="bold">图例</text><circle cx="35" cy="405" r="6" fill="#c0392b"/><text x="48" y="410" font-size="9">红色=AI主线</text><circle cx="150" cy="405" r="6" fill="#2c5f8a"/><text x="163" y="410" font-size="9">蓝色=方法论</text><circle cx="270" cy="405" r="6" fill="#3a7d44"/><text x="283" y="410" font-size="9">绿色=硬科技</text><circle cx="390" cy="405" r="6" fill="#6b3fa0"/><text x="403" y="410" font-size="9">紫色=生物/演化</text><text x="40" y="423" font-size="8" fill="#888">虚线=回环反馈 · 实线=直接影响</text></svg>';
-},2000);})();
+document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>
