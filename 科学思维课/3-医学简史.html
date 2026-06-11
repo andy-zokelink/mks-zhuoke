@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>医学简史：疾病、药物与身体 · 最小知识集</title>
+<style>
+:root {
+  --bg:#fdf6ec;
+  --card:#fffaf2;
+  --accent:#c0392b;
+  --accent-light:#e74c3c;
+  --text:#3d2f2f;
+  --text-light:#6b5a5a;
+  --border:#e8d5c4;
+  --gold:#b8860b;
+  --success:#27ae60;
+  --warning:#e67e22;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height:1.8;
+  padding-bottom:60px;
+}
+.top-bar {
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:linear-gradient(135deg,#3d2f2f,#5a3e3e);
+  color:#fff;
+  padding:14px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.top-bar h1 { font-size:20px; font-weight:700; }
+.top-bar a { color:#e8d5c4; text-decoration:none; font-size:14px; }
+.top-bar a:hover { color:#fff; }
+.tab-bar {
+  position:sticky;
+  top:44px;
+  z-index:99;
+  background:var(--bg);
+  border-bottom:2px solid var(--border);
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:8px 12px;
+}
+.tab-btn {
+  padding:6px 14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+  font-size:13px;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.tab-btn:hover { background:var(--border); }
+.tab-btn.active {
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+.card h3 { font-size:16px; margin-bottom:8px; color:var(--text); }
+.card p { font-size:14px; color:var(--text-light); margin-bottom:6px; }
+.core-goal {
+  background:linear-gradient(135deg,#fff5ee,#fde8d0);
+  border:2px solid var(--gold);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  text-align:center;
+}
+.core-goal h2 { color:var(--accent); font-size:20px; }
+.core-goal p { font-size:15px; color:var(--text-light); max-width:700px; margin:8px auto 0; }
+.concept-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+.concept-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.concept-card:hover { border-color:var(--accent-light); box-shadow:0 2px 8px rgba(192,57,43,0.1); }
+.concept-card .label {
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:10px;
+  margin-bottom:6px;
+}
+.concept-card .label.mks { background:var(--gold); }
+.concept-card h3 { font-size:15px; margin-bottom:4px; }
+.concept-card .def { font-size:13px; color:var(--text-light); }
+.concept-card .extra { display:none; margin-top:8px; font-size:13px; color:var(--text-light); border-top:1px dashed var(--border); padding-top:8px; }
+.concept-card .extra.show { display:block; }
+.concept-card .extra strong { color:var(--text); }
+.mks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:20px; }
+.mks-core { background:var(--card); border:2px solid var(--gold); border-radius:12px; padding:16px; text-align:center; }
+.mks-core .icon { font-size:28px; }
+.mks-core h3 { font-size:15px; color:var(--accent); }
+.mks-core p { font-size:13px; color:var(--text-light); }
+.svg-wrap { margin:20px 0; text-align:center; }
+.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+.boundary-table th,.boundary-table td { border:1px solid var(--border); padding:10px 12px; text-align:left; font-size:13px; }
+.boundary-table th { background:var(--accent); color:#fff; font-weight:600; }
+.boundary-table tr:nth-child(even) { background:var(--card); }
+.learning-path { counter-reset:step; }
+.learning-path .step { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+.learning-path .step::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+.learning-path .step h3 { font-size:14px; margin-bottom:4px; }
+.learning-path .step p { font-size:13px; color:var(--text-light); }
+.progress-bar { height:8px; background:var(--border); border-radius:4px; margin:8px 0; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .5s; }
+
+/* Flip card */
+.flip-container { perspective:1000px; max-width:500px; margin:20px auto; }
+.flip-card { position:relative; width:100%; min-height:320px; transition:transform .6s; transform-style:preserve-3d; }
+.flip-card.flipped { transform:rotateY(180deg); }
+.flip-front,.flip-back { position:absolute; top:0; left:0; width:100%; min-height:320px; backface-visibility:hidden; border-radius:12px; padding:24px; border:1px solid var(--border); background:var(--card); }
+.flip-back { transform:rotateY(180deg); }
+.flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+.flip-card .nav button { padding:6px 16px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-size:13px; }
+.flip-card .nav button:hover { background:var(--border); }
+.flip-card .mark-btn { background:var(--accent); color:#fff; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
+.flip-card .mark-btn:hover { background:var(--accent-light); }
+.flip-card .counter { font-size:13px; color:var(--text-light); }
+
+/* Quiz */
+.quiz-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+.quiz-card h3 { font-size:15px; margin-bottom:10px; }
+.quiz-card .options { display:flex; flex-direction:column; gap:6px; }
+.quiz-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+.quiz-card .option:hover { background:var(--border); }
+.quiz-card .option.selected { border-color:var(--accent); background:#fde8d0; }
+.quiz-card .option.correct { border-color:var(--success); background:#e8f5e9; }
+.quiz-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.quiz-card .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
+.quiz-card .feedback.show { display:block; }
+.quiz-card .feedback.correct { background:#e8f5e9; border:1px solid #a5d6a7; }
+.quiz-card .feedback.wrong { background:#ffebee; border:1px solid #ef9a9a; }
+.quiz-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
+.quiz-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+
+/* Exam */
+.exam-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+.exam-card h3 { font-size:15px; margin-bottom:10px; }
+.exam-card .options { display:flex; flex-direction:column; gap:6px; }
+.exam-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; }
+.exam-card .option.selected { border-color:var(--accent); background:#fde8d0; }
+.exam-card .option.correct { border-color:var(--success); background:#e8f5e9; }
+.exam-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.exam-card .feedback { margin-top:8px; padding:8px; border-radius:6px; font-size:13px; display:none; }
+.exam-card .feedback.show { display:block; }
+.exam-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
+.exam-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+
+/* Review */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; }
+.stat-card .num { font-size:28px; font-weight:700; color:var(--accent); }
+.stat-card .label { font-size:13px; color:var(--text-light); margin-top:4px; }
+
+/* Mindmap */
+.mindmap { padding:10px 0; }
+.mindmap ul { list-style:none; padding-left:24px; }
+.mindmap li { position:relative; margin:4px 0; }
+.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; }
+.mindmap .tree-toggle:hover { color:var(--accent-light); }
+.mindmap .tree-node { padding:6px 10px; border-radius:6px; font-size:13px; display:inline-block; }
+.mindmap .tree-node.root { background:var(--accent); color:#fff; font-weight:700; }
+.mindmap .tree-node.branch { background:#d4a574; color:#fff; }
+.mindmap .tree-node.leaf { background:var(--card); border:1px solid var(--border); }
+.mindmap .tree-node.app { background:var(--success); color:#fff; }
+.mindmap .children { display:none; padding-left:20px; border-left:2px solid var(--border); margin:4px 0 4px 12px; }
+.mindmap .children.open { display:block; }
+
+/* Socratic */
+.socratic-card { background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
+.socratic-q { padding:14px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent); display:flex; justify-content:space-between; align-items:center; user-select:none; }
+.socratic-q:hover { background:#fde8d0; }
+.socratic-q .arrow { transition:transform .3s; font-size:12px; }
+.socratic-q .arrow.open { transform:rotate(180deg); }
+.socratic-a { display:none; padding:0 16px 14px; border-top:1px dashed var(--border); }
+.socratic-a.open { display:block; }
+.socratic-a p { font-size:13px; color:var(--text-light); margin-top:10px; }
+.socratic-a p strong { color:var(--text); }
+
+/* Case Study */
+.case-dim { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:10px; }
+.case-dim h3 { font-size:14px; color:var(--accent); margin-bottom:6px; }
+.case-dim p { font-size:13px; color:var(--text-light); }
+
+/* Decision */
+.decision-round { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+.decision-round h3 { font-size:15px; margin-bottom:10px; }
+.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:#fde8d0; border-radius:8px; }
+.decision-round .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-round .choice { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+.decision-round .choice:hover { background:var(--border); }
+.decision-round .choice.selected { border-color:var(--accent); background:#fde8d0; }
+.decision-round .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
+.decision-round .feedback.show { display:block; border-left:4px solid; }
+.decision-round .feedback.correct { background:#e8f5e9; border-left-color:var(--success); }
+.decision-round .feedback.wrong { background:#ffebee; border-left-color:var(--accent); }
+.decision-round .feedback.warning { background:#fff8e1; border-left-color:var(--warning); }
+.decision-round .choice.disabled { pointer-events:none; opacity:0.6; }
+
+/* Buttons */
+.btn {
+  display:inline-block;
+  padding:8px 20px;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+}
+.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary:hover { background:var(--accent-light); }
+.btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); }
+.btn-secondary:hover { background:var(--border); }
+.btn-success { background:var(--success); color:#fff; }
+.btn-success:hover { opacity:0.9; }
+.btn-warning { background:var(--warning); color:#fff; }
+.btn-warning:hover { opacity:0.9; }
+.btn-sm { padding:5px 12px; font-size:12px; }
+
+/* Responsive */
+@media(max-width:640px) {
+  .top-bar h1 { font-size:16px; }
+  .tab-btn { font-size:12px; padding:4px 10px; }
+  .concept-grid { grid-template-columns:1fr; }
+  .mks-grid { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+}
+/* SVG */
+svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <h1>医学简史：疾病、药物与身体</h1>
+  <a href="index.html">&larr; 返回课程首页</a>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="0">知识集总览</button>
+  <button class="tab-btn" data-tab="1">知识卡片</button>
+  <button class="tab-btn" data-tab="2">题库系统</button>
+  <button class="tab-btn" data-tab="3">考试模式</button>
+  <button class="tab-btn" data-tab="4">复习模式</button>
+  <button class="tab-btn" data-tab="5">思维导图</button>
+  <button class="tab-btn" data-tab="6">深度追问</button>
+  <button class="tab-btn" data-tab="7">案例分析</button>
+  <button class="tab-btn" data-tab="8">实战决策</button>
+</div>
+
+<!-- Tab Content -->
+<div class="tab-content">
+
+<!-- ===== TAB 0: 知识集总览 ===== -->
+<div class="tab-panel active" id="tab-0">
+  <div class="core-goal">
+    <h2>疾病视角下的人类文明</h2>
+    <p>理解天花如何塑造人类史、流感为什么反复爆发、疫苗和药物的真实原理——从疾病与医学的演化史中看到科学思维的胜利。天花杀死的人数超过所有战争之和；1918年西班牙流感杀死了5000万-1亿人；疫苗利用适应性免疫的记忆功能根除了天花——医学的每一滴进步都是科学方法的胜利。</p>
+  </div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">10个核心概念</h2>
+  <div class="concept-grid" id="concept-grid"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">MKS 核心（4个）</h2>
+  <div class="mks-grid" id="mks-grid"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">概念关系图</h2>
+  <div class="svg-wrap" id="svg-map"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">边界知识</h2>
+  <table class="boundary-table">
+    <thead><tr><th style="width:40px;">#</th><th>知识点</th><th>用途说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>天花病毒的"完美疫苗靶标"特性</td><td>全球性根除战略的理论基础</td></tr>
+      <tr><td>2</td><td>阿兹特克帝国因天花崩溃的人口数据</td><td>疾病史案例引用</td></tr>
+      <tr><td>3</td><td>1918年西班牙流感的三波浪潮</td><td>大流行传播动力学理解</td></tr>
+      <tr><td>4</td><td>"柏林病人"Timothy Brown的治愈之路</td><td>HIV治愈可能性的关键证据</td></tr>
+      <tr><td>5</td><td>CCR5-Δ32基因突变的人群分布</td><td>理解天然抗HIV免疫的地理差异</td></tr>
+      <tr><td>6</td><td>阿尔茨海默病与APOE4基因</td><td>复杂疾病的基因风险因子理解</td></tr>
+      <tr><td>7</td><td>狼孩/野孩案例与关键期</td><td>语言习得关键期的证据</td></tr>
+      <tr><td>8</td><td>安慰剂效应的神经生物学基础</td><td>理解双盲实验的必要性</td></tr>
+      <tr><td>9</td><td>抗生素耐药性的演化逻辑</td><td>合理使用抗生素的背景知识</td></tr>
+      <tr><td>10</td><td>mRNA疫苗从概念到COVID-19的速度突破</td><td>疫苗技术里程碑</td></tr>
+      <tr><td>11</td><td>梅毒影响了梵高、尼采、莫泊桑等人</td><td>艺术史与疾病交叉</td></tr>
+      <tr><td>12</td><td>陶罐中发现的羊皮卷微积分</td><td>学科交叉史</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习路径</h2>
+  <div class="learning-path">
+    <div class="step"><h3>先理解「天花与人类史」和「免疫系统」</h3><p>建立疾病塑造文明的框架性认知，理解免疫系统的工作原理是医学的核心基础</p></div>
+    <div class="step"><h3>掌握「流感大流行」与「疫苗原理」</h3><p>理解病毒为何不断变异和经济爆发的底层逻辑，以及人类对抗疾病的最强武器——疫苗</p></div>
+    <div class="step"><h3>深入「癌症的真相」与「HIV/AIDS」</h3><p>理解演化思维在医学中的应用——癌症是累积突变，HIV攻击免疫系统核心</p></div>
+    <div class="step"><h3>学习「药物研发」和「公共卫生」</h3><p>了解现代药物从放血疗法到双盲实验的进化，以及公共卫生视角下的"文明病"</p></div>
+    <div class="step"><h3>拓展「成瘾的脑科学」和「梅毒与文明」</h3><p>从脑科学和文明史两个维度理解疾病对个体和社会的深层影响</p></div>
+  </div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习进度</h2>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-light);">已掌握概念 <span id="learned-count">0</span>/10</p>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:4px;" id="progress-text">继续努力，掌握医学简史核心概念</p>
+  </div>
+</div>
+
+<!-- ===== TAB 1: 知识卡片 ===== -->
+<div class="tab-panel" id="tab-1">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">知识卡片 · 翻转学习</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
+  <div class="flip-container">
+    <div class="flip-card" id="flip-card">
+      <div class="flip-front" id="flip-front"></div>
+      <div class="flip-back" id="flip-back"></div>
+    </div>
+    <div class="nav">
+      <button onclick="prevCard()">&larr; 上一个</button>
+      <span class="counter" id="flip-counter">1/10</span>
+      <button onclick="nextCard()">下一个 &rarr;</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <button class="btn btn-primary btn-sm" onclick="markLearned()" id="mark-learned-btn">&#10003; 标记已学会</button>
+      <button class="btn btn-secondary btn-sm" onclick="flipCard()" style="margin-left:8px;">&#x1F504; 翻转卡片</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 2: 题库系统 ===== -->
+<div class="tab-panel" id="tab-2">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">题库系统</h2>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="btn btn-primary" onclick="startQuiz('random')">随机抽题</button>
+    <button class="btn btn-secondary" onclick="startQuiz('all')">全部题目</button>
+    <button class="btn btn-warning btn-sm" onclick="resetQuiz()">重置</button>
+    <span class="quiz-timer" id="quiz-timer"></span>
+  </div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-light);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
+  </div>
+  <div id="quiz-container"></div>
+  <div id="quiz-result" style="display:none;" class="card"></div>
+</div>
+
+<!-- ===== TAB 3: 考试模式 ===== -->
+<div class="tab-panel" id="tab-3">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">考试模式</h2>
+  <div style="margin-bottom:14px;">
+    <button class="btn btn-primary" id="start-exam-btn" onclick="startExam()">开始考试</button>
+    <span class="exam-timer" id="exam-timer"></span>
+  </div>
+  <div id="exam-container"></div>
+  <div id="exam-result" style="display:none;" class="card"></div>
+</div>
+
+<!-- ===== TAB 4: 复习模式 ===== -->
+<div class="tab-panel" id="tab-4">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">复习模式</h2>
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="num" id="stat-learned">0</div><div class="label">已学会概念</div></div>
+    <div class="stat-card"><div class="num" id="stat-total">10</div><div class="label">总概念</div></div>
+    <div class="stat-card"><div class="num" id="stat-quiz">0</div><div class="label">已答题数</div></div>
+    <div class="stat-card"><div class="num" id="stat-accuracy">0%</div><div class="label">正确率</div></div>
+    <div class="stat-card"><div class="num" id="stat-streak">0</div><div class="label">连续答对</div></div>
+    <div class="stat-card"><div class="num" id="stat-exam">0</div><div class="label">考试完成</div></div>
+  </div>
+  <h3 style="font-size:15px;margin-bottom:8px;color:var(--text);">错题本</h3>
+  <div id="wrong-book" class="card">
+    <p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
+  </div>
+  <h3 style="font-size:15px;margin:12px 0 8px;color:var(--text);">薄弱概念分析</h3>
+  <div id="weak-concepts" class="card">
+    <p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
+  </div>
+</div>
+
+<!-- ===== TAB 5: 思维导图 ===== -->
+<div class="tab-panel" id="tab-5">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">思维导图 · 医学简史</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
+  <div class="mindmap" id="mindmap"></div>
+</div>
+
+<!-- ===== TAB 6: 深度追问 ===== -->
+<div class="tab-panel" id="tab-6">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">深度追问 · 苏格拉底式问答</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
+  <div id="socratic-container"></div>
+</div>
+
+<!-- ===== TAB 7: 案例分析 ===== -->
+<div class="tab-panel" id="tab-7">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">案例分析 · 1918年西班牙流感大流行</h2>
+  <div class="card">
+    <h3>案例背景：1918-1920年，全球性H1N1流感大流行</h3>
+    <p>1918年西班牙流感的奇特之处：它杀死了5000万到1亿人，但死亡曲线呈"W"形——年轻人死亡率反常升高。传统流感死亡集中在婴幼儿和老年人（U形曲线），但西班牙流感最致命的人群竟然是20-40岁青壮年。</p>
+    <p style="margin-top:8px;">用MKS四维度拆解这个历史上最致命的大流行病：</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度一：变量分析——为什么年轻人死亡率反常升高？</h3>
+    <p>1918年H1N1病毒引发了"细胞因子风暴"——年轻人的免疫系统最活跃，过度反应导致自身免疫攻击肺部组织。老年人由于此前曾接触过类似H1类型的流感病毒，具备一定交叉免疫，反而受到保护。这是"强免疫系统反而有害"的反直觉案例。关键变量不是病毒毒性而是宿主的免疫反应强度。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度二：模型建构——大流行的传播动力学模型</h3>
+    <p>1918年流感的传播模式符合SEIR模型（易感-暴露-感染-恢复）。一战末期的大规模军队调动加速了病毒的全球传播。费城和圣路易斯的对比提供了天然实验：圣路易斯在发现首批病例两天内关闭学校、禁止公众集会，死亡率是费城的1/3。建模分析表明提前2周的干预可减少50%以上的死亡。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度三：证据挖掘——病毒起源之谜的追溯</h3>
+    <p>直到2005年，科学家才从阿拉斯加永久冻土中保存的1918年流感死者尸体内重建出完整的病毒基因组。基因分析显示它起源于禽流感病毒，在1918年左右获得了在人类中高效传播的能力。对于"西班牙流感源自中国"的说法——当时中国确实有疫情记录，但与核心传播路径无关。证据链指向美国堪萨斯州的哈斯克尔县为最早爆发点。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度四：科学方法总论——从大流行中学到的教训</h3>
+    <p>1918年西班牙流感催生了全球公共卫生体系。观察：一种异常致命的流感在年轻人中爆发。假设：某种特殊的免疫机制导致了年轻人死亡。验证：通过对1918年病毒的重建和动物实验，证实了细胞因子风暴假说。修正：现代大流行准备计划将"青壮年高死亡率"纳入应急预案。流感监测系统（WHO全球流感监测网络）正是从这次教训中建立起来的。</p>
+  </div>
+  <div class="card" style="background:#fde8d0;border-color:var(--gold);">
+    <h3>MKS启示</h3>
+    <p>1918年流感揭示了医学中最深刻的矛盾：有时最强大的防御系统反而造成最大的伤害。细胞因子风暴至今仍是治疗COVID-19等病毒感染的重大挑战。理解疾病需要同时考虑病原体、宿主和环境的相互作用——这是复杂系统思维的典型医学应用。西班牙流感的三个教训：不要以为年轻人就安全、非药物干预（口罩/社交距离/封城）有效、全球监测系统不可或缺。</p>
+  </div>
+
+  <h2 style="font-size:17px;margin:24px 0 12px;color:var(--text);">案例延伸：大流行应对的时间线对比</h2>
+  <table class="boundary-table">
+    <thead><tr><th>时间点</th><th>1918年西班牙流感</th><th>2009年H1N1</th><th>2019年COVID-19</th></tr></thead>
+    <tbody>
+      <tr><td>病例1到全球大流行</td><td>~6个月</td><td>~2个月</td><td>~1个月</td></tr>
+      <tr><td>病毒鉴定</td><td>1930年代才首次分离</td><td>2周内测序</td><td>7天测序</td></tr>
+      <tr><td>疫苗上市</td><td>无</td><td>~6个月</td><td>~11个月(mRNA)</td></tr>
+      <tr><td>非药物干预</td><td>关闭学校、禁止集会</td><td>有限</td><td>全面封城</td></tr>
+      <tr><td>全球协调</td><td>几乎无</td><td>WHO协调</td><td>WHO+COVAX</td></tr>
+      <tr><td>最终死亡估计</td><td>5000万-1亿</td><td>~28.4万</td><td>~700万+(官方)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== TAB 8: 实战决策 ===== -->
+<div class="tab-panel" id="tab-8">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">实战决策模拟 · 医学场景</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">模拟三个真实医学场景，测试你的科学思维应用能力。每个场景有三个选择，点击查看反馈。</p>
+  <div id="decision-container"></div>
+</div>
+
+</div><!-- /.tab-content -->
+
+<script>
+// ==================== DATA ====================
+const CONCEPTS = [
+  {id:'c0',name:'天花与人类史',def:'天花杀死的人数超过所有战争之和，也在客观上帮助欧洲殖民美洲——阿兹特克帝国因天花崩溃而非军事失败。天花病毒是人类历史上最致命的传染病之一，它也是唯一被人类彻底根除的传染病。消亡的原因：它只感染人类，没有动物储存库，疫苗可以有效阻断传播。',mks:true,analogy:'天花在历史上扮演的"最大杀手"角色，就像森林大火中一个无法控制的火源——它烧掉了90%的北美原住民人口，为欧洲殖民者清理了道路。',example:'1520年，一个感染天花的非洲黑奴随西班牙探险队进入墨西哥，在短短几年内，墨西哥人口从3000万骤降到300万。阿兹特克帝国军事上并未被打败，是天花击败了他们。',counter:'并不是所有病毒都像天花一样可以被根除。狂犬病有动物储存库，流感有禽类和猪的储存库，HIV有潜伏期——这决定了根除天花是人类抗击传染病中最可复制的成功，而非可重复的通用模式。'},
+  {id:'c1',name:'免疫系统',def:'固有免疫+适应性免疫的互补——疫苗就是利用适应性免疫的记忆功能。固有免疫是快速但非特异性的第一道防线（巨噬细胞、NK细胞等），适应性免疫是慢但精确的第二道防线（B细胞产生抗体、T细胞杀伤感染细胞）。HIV之所以致命正是因为攻击CD4+T细胞——适应性免疫的总指挥官。',mks:true,analogy:'免疫系统就像一支军队：固有免疫是边防哨兵（24小时巡逻，但只能识别"是不是入侵者"），适应性免疫是特种部队（需要时间识别目标，一旦识别就精确打击并记住敌人特征）。',example:'疫苗的原理：先给身体看"敌人的照片"（灭活的病毒/病毒蛋白），让免疫系统产生记忆细胞。当真正的病毒入侵时，记忆细胞迅速启动——这就是为什么打过疫苗的人即使感染也症状更轻。',counter:'免疫系统不是越强越好。细胞因子风暴（1918年流感中导致年轻人死亡的原因）就是免疫系统过度反应的结果。HIV的狡猾之处在于它直接攻击免疫系统的指挥中枢。'},
+  {id:'c2',name:'流感大流行',def:'1918西班牙流感杀死了5000万-1亿人。流感病毒的抗原漂移（小变异）和抗原转换（大重组）使它永远领先疫苗一步。抗原漂移是RNA复制时的小误差积累，每年都需要更新疫苗；抗原转换是不同毒株基因重组产生全新亚型，导致无免疫力的新一代病毒出现——这是大流行的根源。',mks:true,analogy:'流感病毒每年产生的"抗原漂移"就像印刷时出现的错别字——一两个词变了意思没太大变化；"抗原转换"则像用拼贴诗的方式从不同报纸上剪下句子拼成全新的文章——彻底换了一张脸。',example:'1918年西班牙流感的死亡率曲线呈W形——不是传统流感那样只杀老人和小孩，而是大量杀死20-40岁青壮年。原因是年轻人的免疫系统最强，引发了致命的细胞因子风暴。',counter:'流感疫苗不能100%预防感染，但可以显著降低重症率和死亡率。即使在疫苗与当期毒株匹配度不好的年份，接种疫苗者的住院率和死亡率仍显著低于未接种者。'},
+  {id:'c3',name:'癌症的真相',def:'癌症是累积突变导致的演化疾病——异常细胞逃离了凋亡机制。从统计数据了解最危险的癌症（肺癌死亡率远超其他）。癌症的本质不是"外来入侵"而是"内部叛变"——正常细胞因为DNA累积突变，逐渐失去生长控制，最终成为不受控制的增殖细胞。',mks:true,analogy:'癌症就像一栋大楼的安保系统出了问题——不是有贼从外面闯入，而是楼内有人偷偷伪造了身份牌，骗过了（或摧毁了）安检系统，开始在楼内无限复制自己的办公室。',example:'为什么肺癌是死亡最多的癌症？除了香烟中的致癌物直接导致突变外，还因为肺部的表面积大、环境暴露多、组织更新慢——累积突变的机会远高于其他器官。每年中国肺癌新发约80万例，死亡约65万。',counter:'"抗癌"这个说法本身可能误导——癌症不是单一疾病，而是上百种不同疾病的统称。没有一种"抗癌神药"可以治疗所有癌症。真正有效的是针对特定突变类型的精准药物和早期筛查。'},
+  {id:'c4',name:'成瘾的脑科学',def:'海洛因绑架了多巴胺奖赏通路，使自然奖赏完全失效。网游对青少年大脑的影响——前额叶皮层发育不全导致冲动控制弱。成瘾的本质不是意志力差，而是大脑奖赏系统被药物或行为劫持。自然奖赏（美食、社交、性）释放适度的多巴胺，但成瘾物质释放的多巴胺是自然奖赏的2-10倍，严重扭曲了价值判断系统。',mks:false,analogy:'多巴胺奖赏通路就像大脑的"快乐计量表"——自然奖赏让指针走到30-40，成瘾物质直接把它打到100。当大脑习惯了100的快感，30-40的日常快乐就变得索然无味。这就是为什么成瘾者会放弃所有正常生活追求下一次"冲刺"。',example:'青少年沉迷网游：前额叶皮层（负责冲动控制、长期规划）要到25岁左右才完全发育成熟。青少年的奖赏系统已经成熟但控制中枢尚未完工——就像拥有顶级发动机但刹车还没装好的赛车。',counter:'不是所有成瘾都一样。物质成瘾（海洛因/酒精）和过程成瘾（赌博/网游）的神经机制有差异，治疗策略也不同。前者需要替代疗法+阻断剂，后者需要认知行为治疗。'},
+  {id:'c5',name:'疫苗原理',def:'灭活疫苗、减毒活疫苗、mRNA疫苗各有优劣。天花被根除是因为它是"完美疫苗靶标"——只有一个宿主（人类）、没有动物储存库。灭活疫苗安全但免疫原性弱；减毒活疫苗免疫原性强但有毒力恢复风险；mRNA疫苗开发速度快但需要超低温储存。',mks:false,analogy:'不同疫苗就像不同的教练：灭活疫苗是"放PPT教学的教练"——安全但很难让学生产生深刻记忆；减毒活疫苗是"带你去实战的教练"——效果好但有少量受伤风险；mRNA疫苗是"发给你一本基因说明书让身体自己造出抗原"——这是最新的教学方式。',example:'天花疫苗的牛痘病毒——医生发现挤奶女工通常不会得天花，因为她们感染了牛痘（一种与天花类似但只引起轻微症状的病毒）。这就是第一支疫苗的起源。',counter:'mRNA疫苗中mRNA不会进入细胞核，不会改变人类基因组。这是一个广泛存在的误解。mRNA在细胞质中被翻译成蛋白质后不久就被降解了。'},
+  {id:'c6',name:'药物研发',def:'从放血疗法到双盲临床实验——现代药物研发的成功率仅约10%。神药越来越少是因为低垂的果实已被摘完。传统药物发现靠运气（如青霉素的意外发现），现代药物研发需要10-15年和超过10亿美元，从5000-10000个候选化合物中才能筛选出1个上市药物。',mks:false,analogy:'药物研发就像大海捞针——从1万个候选分子里最终找到一个安全有效的药物。而且这个"针"的尺寸还在变小：容易发现的药物（抗生素、降压药等）已经被发现了，剩下的"低垂果实"已经摘完。',example:'青霉素的发现：弗莱明1928年发现培养皿上的霉菌抑制了细菌生长——这是运气。但真正让青霉素成为药物是通过大规模发酵工程解决了量产问题——这是科学工程。从发现到量产用了14年。',counter:'"双盲"不是"双重盲从"——双盲临床试验指的是：医生和患者都不知道谁在用药谁在用安慰剂，这样可以排除心理暗示和观察者偏差。这是识别真正疗效的核心方法。'},
+  {id:'c7',name:'梅毒与文明',def:'梅毒改变了艺术史（大量艺术家因梅毒创作风格巨变）、推动了种族歧视（"白人病"的荒谬说法）、塑造了公共卫生体系。在抗生素出现之前，梅毒是人类最可怕的慢性传染病之一，第三期梅毒导致神经系统崩溃、精神失常。',mks:false,analogy:'梅毒在欧洲的传播就像一部悬疑小说：没人知道它从哪来（哥伦布从美洲带回？已在欧洲潜伏？），它在名人中蔓延（艺术家、作家、哲学家），最后被抗生素终结。',example:'梵高晚年独特画风的背后可能有梅毒的影响——神经系统的梅毒损害可能导致了他对色彩和线条的独特感知。尼采的疯狂、莫泊桑的精神失常都被认为与晚期梅毒有关。梅毒的"螺旋体"本身不会直接破坏组织，是人体免疫反应造成的损伤。',counter:'梅毒被称为"伟大的模仿者"——它的症状可以模拟其他几十种疾病。在早期，梅毒被误认为是麻风病；到了三期，又被误认为是老年痴呆。直到1905年才首次发现梅毒螺旋体。'},
+  {id:'c8',name:'HIV/AIDS',def:'感染HIV却不发病的人——CCR5-Δ32基因突变提供了天然免疫。骨髓移植治愈了"柏林病人"。HIV攻击CD4+T细胞，摧毁免疫系统指挥中枢。但大约1%的高加索人群携带CCR5-Δ32基因突变，使HIV无法进入免疫细胞——这是人类对自身基因多样性的最惊人发现之一。',mks:false,analogy:'CCR5-Δ32突变就像一栋大楼的门锁被改装了——HIV需要一把特定的钥匙（利用CCR5受体进入细胞），但突变后门锁形状变了，钥匙插不进去，病毒只能在门外徘徊。',example:'柏林病人Timothy Brown在2007年接受了一位携带CCR5-Δ32突变的骨髓捐献者的移植。移植后他的HIV完全消失，并且在随后的十几年中一直没有复发。这是世界上第一例HIV治愈病例。',counter:'骨髓移植不是HIV的通用治疗方案。这种疗法风险极高（移植物抗宿主病）、成本极高且需要匹配特定基因的捐献者。它证明了"治愈是可能的"，不是"每个人都能被治愈"。'},
+  {id:'c9',name:'公共卫生',def:'近视率的飙升不是遗传而是环境（户外活动<1小时/天）——这是"文明病"的公共卫生视角。中国青少年近视率超过80%，而同样的遗传背景下，新加坡通过鼓励每天户外活动2小时，将近视率从80%降至40%以下。许多"现代病"是环境和生活方式变化的结果，而非简单的基因问题。',mks:false,analogy:'公共卫生的视角就像从山顶看城市——医生关注的是某个病人得了什么病，但公共卫生关注的是为什么整个城市的人都在得同一种病。近视不是眼科问题，而是城市儿童生活方式问题。',example:'日光中的强光刺激视网膜释放多巴胺，多巴胺抑制眼轴的过度生长。每天户外活动少于1小时的儿童近视率是户外活动2小时以上的儿童的4倍。解决方案：不是更好的眼镜，而是更多的户外时间。',counter:'公共卫生干预往往见效慢，但效益巨大。清洁饮用水使人类寿命增加了约30年，远超过任何单个药物的贡献。但公共卫生措施的政治和社会阻力也最大（如疫苗犹豫、戴口罩争议）。'}
+];
+
+const MKS_IDS = ['c0','c1','c2','c3'];
+
+const QUIZ_DATA = [
+  // ===== Tab 0: 5 MCQs (天花与人类史, 免疫系统) =====
+  {q:'天花被人类彻底根除的最核心原因是什么？',options:['天花疫苗效果极好','天花病毒只感染人类，没有动物储存库','全球化让疫苗接种覆盖更广','天花病毒变异慢'],answer:1,explain:'天花是唯一被人类根除的传染病。核心原因是天花病毒只有人类一个宿主、没有动物储存库——只要所有人类接种疫苗或彻底消灭最后一例，病毒就无处可藏。狂犬病之所以无法根除就是因为有动物储存库。',type:'choice'},
+  {q:'阿兹特克帝国崩溃的最主要直接原因是什么？',options:['西班牙军队的武器优势','内部叛乱','天花病毒导致人口骤降','粮食短缺'],answer:2,explain:'1520年一个感染天花的非洲黑奴随西班牙探险队进入墨西哥，天花迅速传播。墨西哥人口从3000万骤降到300万，阿兹特克帝国的社会组织完全崩溃。西班牙人的军事征服只是最后的收尾工作。',type:'choice'},
+  {q:'适应性免疫和固有免疫的关系，以下说法正确的是？',options:['固有免疫比适应性免疫更重要','适应性免疫识别特异病原体并形成记忆','固有免疫需要T细胞激活','两者完全独立运作'],answer:1,explain:'固有免疫是快速非特异性的第一道防线，适应性免疫是精确但需要时间的第二道防线，其核心特征是"记忆"——B细胞产生抗体、T细胞杀伤感染细胞。疫苗正是利用这一记忆功能。',type:'choice'},
+  {q:'HIV攻击哪种免疫细胞导致获得性免疫缺陷？',options:['B细胞','巨噬细胞','CD4+T细胞','NK细胞'],answer:2,explain:'HIV的核心攻击目标是CD4+T细胞——它是适应性免疫的"总指挥官"，负责协调B细胞、CD8+T细胞等其他免疫细胞的反应。当CD4+T细胞数量下降到临界值以下，免疫系统全面崩溃，患者进入AIDS阶段。',type:'choice'},
+  {q:'为什么天花疫苗的牛痘病毒能在人体产生免疫保护却不引起严重疾病？',options:['牛痘病毒与天花病毒结构相似但致病性弱','牛痘病毒被科学家改造过','人体的固有免疫可以直接清除牛痘','牛痘只感染皮肤不感染内脏'],answer:0,explain:'牛痘病毒与天花病毒的抗原结构高度相似，足以激活适应性免疫产生针对天花的记忆细胞。但牛痘在人体中只引起轻微局部症状——这就是爱德华·琴纳1796年发现接种牛痘可以预防天花的基本原理。',type:'choice'},
+
+  // ===== Tab 1: 5 MCQs (流感大流行, 癌症的真相) =====
+  {q:'1918年西班牙流感死亡曲线呈"W"形而非"U"形的核心原因是？',options:['青壮年接触病毒更频繁','青壮年的免疫系统引发细胞因子风暴','医院优先救治儿童和老人','青壮年营养不良'],answer:1,explain:'1918年西班牙流感的独特之处是大量杀死20-40岁青壮年。原因是年轻人免疫系统最强，面对新型H1N1病毒产生"细胞因子风暴"——过度的免疫反应导致自身肺组织严重损伤。老年人因接触过类似H1病毒而有交叉免疫保护。',type:'choice'},
+  {q:'流感"抗原转换"（antigenic shift）导致的结果是？',options:['流感病毒逐渐变弱','产生全新的病毒亚型，人群无免疫力','流感疫苗效果越来越好','流感季节缩短'],answer:1,explain:'抗原转换是不同流感毒株基因重组产生全新亚型（如H1N1、H5N1），人类免疫系统从未见过这种组合，因此没有任何人群免疫力。这会导致全球大流行。抗原漂移是小变异，抗原转换是彻底换脸。',type:'choice'},
+  {q:'癌症的本质是什么？',options:['外来病原体入侵','遗传缺陷导致的先天性疾病','细胞累积突变导致失控增殖','免疫系统功能衰竭'],answer:2,explain:'癌症的本质是"内部叛乱"——正常细胞因DNA累积突变（通常是多个关键基因的突变），逐渐失去生长控制机制，最终成为不受控制的增殖细胞。它不是外来入侵，而是在免疫系统监管下"逃跑"的突变细胞。',type:'choice'},
+  {q:'为什么肺癌是中国死亡率最高的癌症？',options:['肺癌治疗最困难','肺癌早期症状明显导致确诊晚','肺表面积大、环境暴露多、累积突变机会高','肺癌种类最多'],answer:2,explain:'除了香烟致癌物外，肺部的特殊解剖结构也是重要原因：肺泡表面积巨大（约100平方米）直接接触外界环境，空气中的致癌物持续刺激上皮细胞，加上肺部组织更新慢，累积DNA突变的机会远高于其他器官。',type:'choice'},
+  {q:'抗原漂移（antigenic drift）和抗原转换（antigenic shift）的区别是？',options:['漂移是基因重组，转换是基因突变','漂移是点突变积累，转换是基因片段重组','漂移导致大流行，转换导致季节性流行','漂移在禽流感中发生，转换在人类流感中发生'],answer:1,explain:'抗原漂移是RNA复制时单个碱基错误累积导致的小变异，每年都需要更新疫苗。抗原转换是两个不同毒株感染同一宿主时基因片段重组产生全新亚型，导致没有免疫力的新一代病毒。漂移=小笔误累积，转换=拼贴重组。',type:'choice'},
+
+  // ===== Tab 2: 5 MCQs (成瘾的脑科学, 疫苗原理, 药物研发) =====
+  {q:'成瘾物质使多巴胺释放量约是自然奖赏的多少倍？',options:['1-2倍','2-10倍','10-50倍','50-100倍'],answer:1,explain:'自然奖赏（美食、社交、性）使多巴胺释放到"30-40"水平（以任意单位计），而成瘾物质（海洛因、可卡因等）释放的多巴胺是自然奖赏的2-10倍。这种极端的奖赏信号严重扭曲了大脑的价值判断系统。',type:'choice'},
+  {q:'青少年更容易沉迷网游的脑科学原因是？',options:['青少年多巴胺分泌更多','青少年前额叶皮层发育不全，冲动控制弱','青少年大脑更活跃','青少年社交需求更强'],answer:1,explain:'前额叶皮层（负责冲动控制、长期规划、风险评估）要到25岁左右才发育完全。青少年的奖赏系统已经成熟但控制中枢尚未完工——就像拥有顶级发动机但刹车还没装好的赛车，油门踩下就收不回来。',type:'choice'},
+  {q:'天花成为"完美疫苗靶标"的核心条件是？',options:['天花病毒结构简单','只有一个宿主（人类）且没有动物储存库','天花病毒不变异','天花疫苗副作用极小'],answer:1,explain:'天花之所以能被根除，是因为它满足两个关键条件：第一，只感染人类，没有动物储存库；第二，疫苗可以有效阻断传播。其他传染病如狂犬病（动物储存库）或HIV（潜伏期长、无有效疫苗）则无法根除。',type:'choice'},
+  {q:'mRNA疫苗的mRNA最终在人体内会怎样？',options:['进入细胞核改变人类基因','永久存在于细胞中','在细胞质中被翻译后快速降解','转化为DNA并整合到染色体'],answer:2,explain:'mRNA疫苗中的mRNA不会进入细胞核，更不会改变人类基因组。它在细胞质中被翻译成蛋白质（诱导免疫反应的抗原）后不久就被细胞自身的酶降解了。这是一个广泛存在的科学误解。',type:'choice'},
+  {q:'现代药物研发从一个候选化合物到最终上市的成功率约为？',options:['50%','25%','10%','1%'],answer:2,explain:'现代药物研发从5000-10000个候选化合物开始筛选，最终只有约1个能成功上市，成功率约10%。平均需要10-15年、超过10亿美元。低垂的果实已被摘完，现在的药物靶点越来越难。',type:'choice'},
+
+  // ===== Tab 3: 5 MCQs (梅毒与文明, HIV/AIDS, 公共卫生) =====
+  {q:'梅毒为什么被称为"伟大的模仿者"？',options:['梅毒病菌可以伪装成其他细菌','梅毒的症状可模拟几十种其他疾病','梅毒只模仿皮肤病的症状','梅毒可以模仿艾滋病'],answer:1,explain:'梅毒螺旋体感染后症状变化多端：一期是硬下疳（容易被忽略），二期是全身皮疹和发热（误诊为麻疹等），三期是神经和心血管系统损害（误诊为老年痴呆等）。它几乎可以模拟任何疾病的症状，直到1905年才被分离鉴定。',type:'choice'},
+  {q:'CCR5-Δ32基因突变如何阻止HIV感染？',options:['突变使免疫细胞产生抗HIV抗体','突变改变了CCR5受体的形状，HIV无法进入细胞','突变使HIV无法在细胞中复制','突变直接杀死HIV病毒'],answer:1,explain:'CCR5是HIV进入CD4+T细胞的主要"门锁"。CCR5-Δ32突变导致这个受体的形状改变，HIV的"钥匙"（包膜蛋白）插不进去——病毒在门外徘徊，无法感染细胞。约1%的高加索人群携带此突变的两份拷贝，他们对HIV具有天然免疫力。',type:'choice'},
+  {q:'柏林病人Timothy Brown的HIV治愈案例说明？',products:['骨髓移植应是HIV的常规治疗方法','HIV可以被治愈，但当前疗法风险极高不适用于所有人','CCR5-Δ32突变可以通过注射获得','HIV感染可以通过药物完全清除'],answer:1,explain:'柏林病人接受了来自CCR5-Δ32突变捐献者的骨髓移植，不仅治愈了白血病，也清除了HIV。但骨髓移植有极高的风险（移植物抗宿主病、高死亡率），不是通用方案。它证明了HIV治愈在技术上是可能的。',type:'choice'},
+  {q:'中国青少年近视率超过80%而新加坡仅约40%的关键区别是？',options:['中国学生使用电子产品更多','新加坡人基因不易近视','新加坡学校强制每天户外活动2小时','新加坡的照明条件更好'],answer:2,explain:'新加坡通过国家政策强制学校每天安排2小时户外活动，近视率从80%降至40%以下。日光中的强光刺激视网膜释放多巴胺，多巴胺抑制眼轴过度增长。这与基因无关——中国人的遗传背景在新加坡效果显著。',type:'choice'},
+  {q:'公共卫生干预中，对人类寿命贡献最大的措施是？',options:['疫苗接种','抗生素研发','清洁饮用水','手术技术'],answer:2,explain:'清洁饮用水的普及使人类平均寿命增加了约30年，远超任何单个药物或手术技术的贡献。减少水源性传染病（霍乱、伤寒等）是公共卫生史上最大的成就。但公共卫生措施往往面临最大的政治和社会阻力。',type:'choice'}
+];
+
+const SHORT_ANSWER_QUESTIONS = [
+  {q:'简述天花被全球根除的三个关键条件。为什么其他传染病（如狂犬病）无法用同样的方法根除？',ans:'三个关键条件：1) 天花病毒只有一个宿主（人类），没有动物储存库——这意味着一旦所有人类病例被消灭，病毒就无处藏身；2) 天花疫苗（牛痘）非常有效，可以产生长期免疫保护；3) 天花没有无症状长期携带者，发病特征明显。狂犬病有动物储存库（狗、蝙蝠、狐狸等），即使消灭了人类中的病例，动物中的病毒仍会持续传播给人类。'},
+  {q:'1918年西班牙流感的死亡曲线为什么是"W"形？细胞因子风暴在其中扮演了什么角色？',ans:'传统流感的死亡率曲线是"U"形——婴幼儿和老年人死亡率高、年轻人低。但1918年流感的死亡率曲线呈"W"形——除了两端的高死亡率外，20-40岁青壮年出现了一个异常的高死亡率峰。原因是：1918年H1N1病毒激发的细胞因子风暴——年轻人的免疫系统最活跃，面对新型病毒感染时产生过度反应，大量炎症因子涌入肺部，不但无法清除病毒反而严重损伤自身肺组织。老年人因接触过类似旧型H1病毒而有交叉免疫保护，免疫反应更温和。'},
+  {q:'"抗原漂移"与"抗原转换"的本质区别是什么？为什么后者更容易引发全球大流行？',ans:'抗原漂移（antigenic drift）是RNA病毒复制时单个碱基错误的累积，导致表面抗原的微小变化——就像印刷的错别字，每年都会有一点不同，需要更新疫苗。抗原转换（antigenic shift）是两个或以上不同亚型的流感病毒感染同一个宿主（如猪）时发生基因片段重组，产生全新的病毒亚型——就像用不同报纸的句子拼成一篇文章，面目全非。抗原转换产生的病毒是人类免疫系统从未见过的，因此所有人口都缺乏免疫力，极易引发全球大流行。'},
+  {q:'为什么说"癌症是演化疾病"？请从细胞突变和自然选择的角度解释。',ans:'癌症不是外来病原体引起的，而是体内细胞自身"演化"的结果。正常细胞在分裂过程中DNA会随机累积突变（复制误差、环境致癌物、氧化损伤等）。在突变库中，那些恰好获得了生长优势（增殖信号通路激活）且逃过了凋亡机制（程序性死亡关闭）的细胞会像自然选择一样被"选择"出来。随着更多突变的积累，这些细胞越来越独立于身体的调控，最终形成恶性肿瘤。这就是一个发生在体内的、微观的"自然选择"过程——癌细胞是最成功的"演化生物"，尽管这对宿主来说是致命的。'},
+  {q:'海洛因成瘾为什么被称为"绑架了多巴胺奖赏通路"？这对理解成瘾行为有何启示？',ans:'大脑的多巴胺奖赏系统是演化来鼓励对生存有利行为的——食物、社交、性等自然奖赏每次释放适量的多巴胺（约30-40单位）。海洛因直接刺激多巴胺大量释放（自然奖赏的2-10倍），让大脑的奖赏系统完全失衡。结果：自然奖赏变得索然无味，成瘾者只追求下一次药物刺激。这启示我们：成瘾不是道德问题或意志力差，而是大脑的神经化学系统被药物永久性地改变了。治疗成瘾需要医学干预而非道德说教。'},
+  {q:'减毒活疫苗、灭活疫苗和mRNA疫苗各有什么优缺点？',ans:'减毒活疫苗：优点是免疫原性强（模拟真实感染），通常一次接种即可终身免疫；缺点是有可能毒力恢复导致疾病，免疫缺陷者禁用。灭活疫苗：优点是安全性高，无感染风险；缺点是免疫原性弱，需要多次接种和佐剂辅助。mRNA疫苗：优点是开发速度快（仅需病毒基因序列）、生产能力大；缺点是超低温储存运输困难（早期版本），需要多次接种。三种疫苗都遵循同一个原理：让免疫系统先"认识"病原体。'},
+  {q:'双盲临床实验为什么要同时设置"双盲"和"安慰剂对照"？请用具体例子说明。',ans:'1) 安慰剂对照是为了排除"自然康复"和"安慰剂效应"——即使给的是糖丸，约30%的患者也会感觉好转，因为大脑的信念系统可以释放内啡肽等物质。2) 双盲（医生和患者都不知道谁在用真药谁在吃安慰剂）是为了排除观察者偏差和主观期望——如果医生知道患者在用药，可能会不自觉地更关注好转迹象而忽略副作用；如果患者知道自己吃了真药，可能因为期望而报告更好的结果。例如早期放血疗法的疗效研究——当双盲实验引入后，才揭示了它其实弊大于利。'},
+  {q:'梅毒如何塑造了现代公共卫生体系？',ans:'梅毒的流行推动了多个公共卫生制度的建立：1) 婚前和产前梅毒筛查成为历史上最早的强制性传染病筛查；2) 梅毒的接触追踪（通知患者性伴侣检查和治疗）成为流行病学调查的标准方法；3) 抗生素时代的梅毒治疗推动了免费公共性病诊所的建立。梅毒也是第一个被证明可以通过血清学检测（华氏反应/瓦色曼试验）大规模筛查的传染病，为后来的公共卫生筛查项目奠定了基础。'},
+  {q:'CCR5-Δ32基因突变为什么能使部分人天然抵抗HIV？这一发现对治疗有何启发？',ans:'HIV进入CD4+T细胞需要两个"钥匙孔"：CD4受体和辅助受体（主要是CCR5）。CCR5-Δ32突变导致CCR5蛋白在第32个氨基酸之后完全错了位——受体蛋白被截断，无法到达细胞表面。HIV的"钥匙"只能插入一半，无法进入细胞。约1%的欧洲后裔携带双份突变拷贝，完全抵抗CCR5-tropic的HIV。这启发了：1) 基因编辑技术（如CRISPR）有望在患者体内模拟这一突变；2) CCR5抑制剂（如马拉维罗）作为抗HIV药物已经上市。'},
+  {q:'为什么"每天户外活动2小时"可以显著降低近视率？请从生理机制和公共卫生两个角度解释。',ans:'生理机制：日光中的高强度光照刺激视网膜释放多巴胺，多巴胺作为信号分子可以抑制眼轴的过度增长。室内光线（约500勒克斯）远低于户外阴天的光照（约10000勒克斯），无法有效刺激多巴胺释放。公共卫生角度：新加坡通过国家政策强制学校安排每天户外活动时间，在相同遗传背景下将近视率从80%降至40%以下。这说明近视不是遗传决定的，而是生活方式疾病。解决近视的关键不是更好的眼镜或手术，而是改变环境——让孩子有更多时间在户外。'}
+];
+
+const SOCRATIC_DATA = [
+  {theme:'天花与根除',pairs:[{q:'为什么天花能根除但流感不能？',a:'关键变量有三个：1) 宿主范围——天花只感染人类，没有动物储存库；流感在禽类、猪和多种哺乳动物中循环。即使消灭了人类中的流感，动物中的病毒继续演化，随时可以"跳回"人类。2) 传播时机——天花在症状明显时才具传染性，容易隔离；流感在症状出现前24小时就能传播，防不胜防。3) 变异速度——天花病毒是DNA病毒，基因组稳定；流感是RNA病毒，变异极快。这三个变量决定了根除天花是可能的，而根除流感是不可能的。'},{q:'如果没有殖民者带入天花，美洲原住民文明今天会是什么样？',a:'这是一个深刻的反事实思考。1520年之前美洲没有天花、麻疹等旧大陆传染病。如果这些疾病从未到来，原住民人口不会骤降90%，阿兹特克和印加帝国的社会结构不会崩溃。欧洲殖民者将面对完全不同的力量对比——可能无法通过几百人的远征军征服上千万人的帝国。但也可能意味着更长时期、更具破坏性的战争。天花客观上加速了殖民进程，但不改变殖民的底层逻辑——技术差距和资源争夺才是更根本的动力。'}]},
+  {theme:'免疫的平衡',pairs:[{q:'免疫系统是越强越好吗？为什么？',a:'不是。免疫系统的核心原则是"精准"而非"强大"。1918年西班牙流感中年轻人大量死亡就是因为免疫系统太强——过度的炎症反应（细胞因子风暴）杀死了自己的肺组织。类似地，过敏反应、自身免疫疾病（类风湿关节炎、红斑狼疮等）都是免疫系统"过度工作"的结果。理想的免疫系统是在"不够"和"过激"之间精准平衡——既能清除病原体，又不会攻击自身组织。这就像恒温器——设置太低了冷，太高了热，关键是找到黄金温度。'},{q:'从演化的角度看，为什么人类没有演化出对感冒病毒的终身免疫？',a:'演化不是追求"完美"而是追求"足够好"。普通感冒病毒（鼻病毒等）致死率极低，被感染的人通常一周后自愈。如果一个病毒不会严重降低人类的繁殖成功率，自然选择就不会推动人类演化出针对它的终身免疫机制。更重要的是，感冒病毒变异快、种类多（200多种亚型），针对一种亚型的免疫记忆对下一种毫无用处。从病毒的角度看，引起轻微症状（让人继续活动、传播病毒）而不致命是最优策略——病毒和宿主在漫长的共演化中达成了这种"平衡"。'}]}
+];
+
+const DECISION_ROUNDS = [
+  {scenario:'你是一个卫生官员，收到报告说一种新型流感病毒在偏远村庄出现。初步数据显示它传播速度快但致死率低（0.1%，类似季节性流感）。但几周后一个邻近城市报告了变异株，致死率达到2%。你会优先采取什么行动？',choices:[{text:'暂时不采取行动，等更多数据确认变异株的真实危险性',feedback:'坐等会错失窗口期。1918年西班牙流感的教训是——费城延迟2周采取行动，死亡率是迅速行动的圣路易斯的3倍。在大流行早期，按最坏情况准备是最务实的选择。',type:'wrong'},{text:'立即对该城市实施封城、启动接触追踪、加速疫苗研发',feedback:'正确！变量分析表明：致死率从0.1%到2%是20倍的变化，传播快意味着指数增长，等待的成本极高。圣路易斯的经验证明早期干预最有效。务实判断：宁可过度反应也比反应不足好。',type:'correct'},{text:'只建议戴口罩和保持社交距离，不封城',feedback:'部分正确但不够彻底。在新型病毒面前，仅靠自愿措施可能不够——综合非药物干预（封城、检测、追踪、隔离配合在一起效果最好。单一措施往往不能阻断传播链。',type:'warning'}]
+  },
+  {scenario:'你身边有人确诊癌症（肺癌早期），医生建议立即做手术+化疗。但这个朋友听说有一种"天然疗法"——苦杏仁苷（维生素B17）可以治愈癌症且没有任何副作用，很多"案例"显示肿瘤缩小。朋友问你该怎么选。',choices:[{text:'建议朋友听从医生的建议，同时解释为什么"天然疗法案例"不可信',feedback:'正确！双盲实验从未证明苦杏仁苷有效，反而有氰化物中毒死亡的案例。那些"肿瘤缩小"的案例多半是自发缓解或测量误差。在生命安全问题上，循证医学是唯一的可靠标准。',type:'correct'},{text:'建议朋友先试试天然疗法，毕竟没有副作用',feedback:'这是危险的错误决策。早期肺癌手术5年生存率可达60-80%，而延迟治疗3个月就可能从可手术变成不可手术。"没有副作用"不等于安全——无效本身就是最大的副作用，因为它占用了有效治疗的时间窗口。',type:'wrong'},{text:'尊重朋友的决定，不发表意见',feedback:'作为朋友你有责任分享基于证据的建议。医疗决策涉及生死，保持沉默意味着将决定权交给伪科学。可以温和但坚定地分享医学共识。',type:'warning'}]
+  },
+  {scenario:'你是一个中学校长。学校报告过去一年学生近视率从50%飙升到75%。家长和老师都认为是手机和平板电脑导致的问题，强烈要求禁止所有电子设备。你怎么办？',choices:[{text:'全面禁止电子设备，恢复零电子教育',feedback:'方向对但归因错误。虽然屏幕使用时间有关系，但真正的关键变量是户外活动时间不足。研究表明户外活动2小时/天的效果远大于限制屏幕时间。禁设备而不增加户外时间，效果有限。',type:'warning'},{text:'制定政策：强制每天2小时户外活动，同时合理安排电子设备使用时间',feedback:'正确！公共卫生视角看近视：关键变量不是"电子产品"而是"户外光照不足"。日光中的高光照刺激视网膜释放多巴胺抑制眼轴生长。新加坡的政策已经证明了这个方案的有效性。变量分析把真正的关键变量和表面变量区分开。',type:'correct'},{text:'什么都不做，近视是遗传的无法改变',feedback:'错误。中国与新加坡的对比清楚表明：在相同遗传背景下，仅仅改变环境（增加户外时间）就可以将近视率降低一半。声称"遗传决定"是对公共卫生责任的逃避。',type:'wrong'}]
+  }
+];
+
+// ==================== STATE ====================
+let flipIndex = 0;
+let learnedSet = new Set();
+let wrongBook = [];
+let quizState = {active:false,questions:[],index:0,correct:0,total:0,streak:0,answered:false,selected:-1,shortAnswers:[],mode:'all',startTime:null};
+let examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
+let statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
+
+// ==================== UTILITY ====================
+function $(id){return document.getElementById(id);}
+function save(key,val){try{localStorage.setItem('zk3_mks_'+key,JSON.stringify(val));}catch(e){}}
+function load(key,def){try{let v=localStorage.getItem('zk3_mks_'+key);return v?JSON.parse(v):def;}catch(e){return def;}}
+
+function loadState(){
+  learnedSet=new Set(load('learned',[]));
+  wrongBook=load('wrongBook',[]);
+  statsData=load('stats',{learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0});
+}
+
+function saveState(){
+  save('learned',[...learnedSet]);
+  save('wrongBook',wrongBook);
+  save('stats',statsData);
+}
+
+// ==================== TABS ====================
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+    if(this.dataset.tab=='4') updateReviewStats();
+    if(this.dataset.tab=='5') renderMindmap();
+  });
+});
+
+// ==================== TAB 0: OVERVIEW ====================
+function renderConcepts(){
+  const grid=document.getElementById('concept-grid');
+  grid.innerHTML='';
+  CONCEPTS.forEach((c,i)=>{
+    const card=document.createElement('div');
+    card.className='concept-card';
+    card.innerHTML=`
+      <span class="label ${c.mks?'mks':''}">${c.mks?'MKS核心':'概念'}</span>
+      <h3>${c.name}</h3>
+      <div class="def">${c.def}</div>
+      <div class="extra" id="extra-${c.id}">
+        <p><strong>类比：</strong>${c.analogy}</p>
+        <p><strong>示例：</strong>${c.example}</p>
+        <p><strong>反例/边界：</strong>${c.counter}</p>
+      </div>
+    `;
+    card.addEventListener('click',()=>{
+      const extra=document.getElementById('extra-'+c.id);
+      extra.classList.toggle('show');
+    });
+    grid.appendChild(card);
+  });
+
+  const mg=document.getElementById('mks-grid');
+  mg.innerHTML='';
+  MKS_IDS.forEach(id=>{
+    const c=CONCEPTS.find(x=>x.id===id);
+    if(!c)return;
+    const card=document.createElement('div');
+    card.className='mks-core';
+    card.innerHTML=`<div class="icon">&#x1F489;</div><h3>${c.name}</h3><p>${c.def.substring(0,60)}...</p>`;
+    mg.appendChild(card);
+  });
+}
+
+function renderSVGMap(){
+  const svg=`<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#b8860b"/></marker>
+  </defs>
+  <rect width="900" height="620" fill="#fdf6ec" rx="12"/>
+
+  <!-- Edges -->
+  <line x1="450" y1="55" x2="150" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="320" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="570" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="740" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="150" y1="170" x2="90" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="150" y1="170" x2="210" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="320" y1="170" x2="280" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="320" y1="170" x2="370" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="570" y1="170" x2="520" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="570" y1="170" x2="620" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="740" y1="170" x2="700" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="740" y1="170" x2="790" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <line x1="210" y1="310" x2="280" y2="420" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="310" x2="450" y2="420" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="790" y1="310" x2="620" y2="420" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Bottom integration -->
+  <line x1="300" y1="450" x2="400" y2="550" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <line x1="600" y1="450" x2="500" y2="550" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+
+  <!-- Root -->
+  <ellipse cx="450" cy="30" rx="100" ry="22" fill="#c0392b"/>
+  <text x="450" y="35" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">医学简史MKS</text>
+
+  <!-- Branches -->
+  <rect x="60" y="145" rx="18" ry="18" width="180" height="40" fill="#d4a574"/>
+  <text x="150" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">天花与免疫</text>
+  <rect x="240" y="145" rx="18" ry="18" width="160" height="40" fill="#d4a574"/>
+  <text x="320" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">流感与病毒</text>
+  <rect x="490" y="145" rx="18" ry="18" width="160" height="40" fill="#d4a574"/>
+  <text x="570" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">癌症与演化</text>
+  <rect x="660" y="145" rx="18" ry="18" width="160" height="40" fill="#d4a574"/>
+  <text x="740" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">成瘾与脑</text>
+
+  <!-- Leaves -->
+  <rect x="20" y="260" rx="12" ry="12" width="140" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="90" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">疫苗原理</text>
+  <rect x="170" y="260" rx="12" ry="12" width="100" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="220" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">HIV/AIDS</text>
+  <rect x="230" y="260" rx="12" ry="12" width="100" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="280" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">药物研发</text>
+  <rect x="325" y="260" rx="12" ry="12" width="110" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="380" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">梅毒与文明</text>
+  <rect x="475" y="260" rx="12" ry="12" width="100" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="525" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">公共卫生</text>
+  <rect x="575" y="260" rx="12" ry="12" width="110" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="630" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">MKS核心01</text>
+  <rect x="735" y="260" rx="12" ry="12" width="110" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="790" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">MKS核心02</text>
+
+  <!-- Application nodes -->
+  <rect x="200" y="400" rx="14" ry="14" width="160" height="36" fill="#27ae60"/>
+  <text x="280" y="423" text-anchor="middle" fill="#fff" font-size="12">疾病·历史·文明</text>
+  <rect x="530" y="400" rx="14" ry="14" width="140" height="36" fill="#27ae60"/>
+  <text x="600" y="423" text-anchor="middle" fill="#fff" font-size="12">疫苗·药物·预防</text>
+
+  <!-- Bottom: Complex Systems -->
+  <ellipse cx="450" cy="558" rx="180" ry="28" fill="#c0392b"/>
+  <text x="450" y="563" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">科学思维与医学（整合层）</text>
+</svg>`;
+  document.getElementById('svg-map').innerHTML=svg;
+}
+
+function updateProgress(){
+  const count=learnedSet.size;
+  document.getElementById('learned-count').textContent=count;
+  const pct=Math.round(count/10*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-text').textContent=count>=10?'恭喜！你已掌握所有核心概念！':`已掌握 ${count}/10，继续努力！`;
+  statsData.learned=count;
+  saveState();
+}
+
+// ==================== TAB 1: FLIP CARDS ====================
+function renderFlipCard(idx){
+  const c=CONCEPTS[idx];
+  if(!c)return;
+  const front=document.getElementById('flip-front');
+  const back=document.getElementById('flip-back');
+  front.innerHTML=`
+    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name}</h3>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:10px;">${c.mks?'MKS核心概念':'核心概念'}</p>
+    <p style="font-size:14px;">${c.def}</p>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-light);text-align:center;">点击"翻转卡片"查看详情</div>
+  `;
+  back.innerHTML=`
+    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name} · 深层理解</h3>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>类比：</strong>${c.analogy}</p>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>示例：</strong>${c.example}</p>
+    <p style="font-size:13px;"><strong>反例/边界：</strong>${c.counter}</p>
+  `;
+  document.getElementById('flip-counter').textContent=`${idx+1}/${CONCEPTS.length}`;
+  document.getElementById('flip-card').classList.remove('flipped');
+  const btn=document.getElementById('mark-learned-btn');
+  if(learnedSet.has(c.id)){
+    btn.textContent='✓ 已学会';
+    btn.style.background='var(--success)';
+  } else {
+    btn.textContent='✓ 标记已学会';
+    btn.style.background='';
+  }
+}
+
+function flipCard(){
+  document.getElementById('flip-card').classList.toggle('flipped');
+}
+function prevCard(){flipIndex=(flipIndex-1+CONCEPTS.length)%CONCEPTS.length;renderFlipCard(flipIndex);}
+function nextCard(){flipIndex=(flipIndex+1)%CONCEPTS.length;renderFlipCard(flipIndex);}
+function markLearned(){
+  const c=CONCEPTS[flipIndex];
+  if(!c)return;
+  if(learnedSet.has(c.id)){
+    learnedSet.delete(c.id);
+  } else {
+    learnedSet.add(c.id);
+  }
+  saveState();
+  renderFlipCard(flipIndex);
+  updateProgress();
+}
+
+// ==================== TAB 2: QUIZ ====================
+function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startQuiz(mode){
+  quizState.mode=mode;
+  quizState.index=0;
+  quizState.correct=0;
+  quizState.total=0;
+  quizState.streak=0;
+  quizState.answered=false;
+  quizState.selected=-1;
+  quizState.shortAnswers=[];
+  quizState.startTime=Date.now();
+  quizState.active=true;
+
+  let qs=[];
+  if(mode==='random'){
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+  } else {
+    qs=[...QUIZ_DATA];
+  }
+  quizState.questions=qs;
+  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  document.getElementById('quiz-result').style.display='none';
+  renderQuizQuestion();
+  startQuizTimer();
+}
+
+function renderQuizQuestion(){
+  const container=document.getElementById('quiz-container');
+  const qs=quizState.questions;
+  const idx=quizState.index;
+  if(idx>=qs.length){
+    finishQuiz();
+    return;
+  }
+  const q=qs[idx];
+  container.innerHTML='';
+  const card=document.createElement('div');
+  card.className='quiz-card';
+
+  if(q.type==='choice'){
+    card.innerHTML=`
+      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
+      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <div class="options" id="quiz-options">
+        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
+      </div>
+      <div class="feedback" id="quiz-feedback"></div>
+    `;
+  } else {
+    card.innerHTML=`
+      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
+      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
+      <div style="margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
+      </div>
+      <div class="feedback" id="quiz-feedback"></div>
+    `;
+  }
+  container.appendChild(card);
+  quizState.answered=false;
+  quizState.selected=-1;
+}
+
+function selectChoice(i){
+  if(quizState.answered) return;
+  const q=quizState.questions[quizState.index];
+  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
+    el.classList.toggle('selected',idx===i);
+  });
+  quizState.selected=i;
+}
+
+function submitChoice(){
+  if(quizState.selected===-1) return;
+  const q=quizState.questions[quizState.index];
+  const fb=document.getElementById('quiz-feedback');
+  const options=document.querySelectorAll('#quiz-options .option');
+  options.forEach((el,idx)=>{
+    if(idx===q.answer) el.classList.add('correct');
+    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
+  });
+  quizState.total++;
+  if(quizState.selected===q.answer){
+    quizState.correct++;
+    quizState.streak++;
+    fb.className='feedback show correct';
+    fb.innerHTML=`&#10004; 回答正确！${q.explain||''}`;
+  } else {
+    quizState.streak=0;
+    fb.className='feedback show wrong';
+    fb.innerHTML=`&#10008; 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}`;
+    addWrongBook(q.q,q.options[q.answer],q.explain||'');
+  }
+  quizState.answered=true;
+  setTimeout(()=>{
+    quizState.index++;
+    renderQuizQuestion();
+  },2000);
+}
+
+function submitShortAnswer(){
+  const input=document.getElementById('short-input');
+  const val=input.value.trim();
+  const q=quizState.questions[quizState.index];
+  const fb=document.getElementById('quiz-feedback');
+  quizState.total++;
+  quizState.correct++;
+  fb.className='feedback show correct';
+  fb.innerHTML=`&#10004; 已记录你的回答。<br><strong>参考答案：</strong>${q.ans||''}`;
+  quizState.answered=true;
+  setTimeout(()=>{
+    quizState.index++;
+    renderQuizQuestion();
+  },2500);
+}
+
+function finishQuiz(){
+  quizState.active=false;
+  document.getElementById('quiz-container').innerHTML='';
+  const el=document.getElementById('quiz-result');
+  el.style.display='block';
+  const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
+  el.innerHTML=`
+    <h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>
+    <p>正确：${quizState.correct} / ${quizState.total}</p>
+    <p>正确率：${pct}%</p>
+    <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
+    <p>连续答对：${quizState.streak}</p>
+    <button class="btn btn-primary btn-sm" onclick="startQuiz('${quizState.mode}')" style="margin-top:10px;">重新开始</button>
+  `;
+  statsData.quizAnswered+=quizState.total;
+  statsData.accuracy=Math.round(((statsData.accuracy*(statsData.quizAnswered-quizState.total))+(pct*quizState.total))/Math.max(1,statsData.quizAnswered));
+  statsData.streak=Math.max(statsData.streak,quizState.streak);
+  saveState();
+  clearInterval(quizState._timer);
+  document.getElementById('quiz-timer').textContent='';
+}
+
+function startQuizTimer(){
+  clearInterval(quizState._timer);
+  quizState._timer=setInterval(()=>{
+    if(!quizState.active){clearInterval(quizState._timer);return;}
+    const elapsed=Math.floor((Date.now()-quizState.startTime)/1000);
+    const m=Math.floor(elapsed/60);
+    const s=elapsed%60;
+    document.getElementById('quiz-timer').textContent=`⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+
+function resetQuiz(){
+  quizState.active=false;
+  clearInterval(quizState._timer);
+  document.getElementById('quiz-container').innerHTML='';
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-timer').textContent='';
+  document.getElementById('quiz-info').textContent='包含20道选择题和10道简答题。点击"随机抽题"开始练习。';
+}
+
+function addWrongBook(q,correctAns,explain){
+  wrongBook.unshift({q,correctAns,explain,time:new Date().toLocaleString()});
+  if(wrongBook.length>50) wrongBook.pop();
+  saveState();
+}
+
+// ==================== TAB 3: EXAM ====================
+function startExam(){
+  const questions=shuffleArray([...QUIZ_DATA]).slice(0,7).map(q=>({...q,type:'choice'}));
+  const shortQs=shuffleArray([...SHORT_ANSWER_QUESTIONS]).slice(0,3).map((q,i)=>({q:q.q,ans:q.ans,type:'short',index:i}));
+  examState.questions=[...questions,...shortQs];
+  examState.answers=new Array(examState.questions.length).fill(null);
+  examState.active=true;
+  examState.startTime=Date.now();
+  document.getElementById('start-exam-btn').disabled=true;
+  document.getElementById('start-exam-btn').textContent='考试进行中...';
+  renderExam();
+  startExamTimer();
+}
+
+function renderExam(){
+  const container=document.getElementById('exam-container');
+  container.innerHTML='';
+  examState.questions.forEach((q,i)=>{
+    const card=document.createElement('div');
+    card.className='exam-card';
+    if(q.type==='choice'){
+      card.innerHTML=`
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(选择题)</span></h3>
+        <div class="options" id="exam-opt-${i}">
+          ${q.options.map((opt,j)=>`<div class="option" data-exam="${i}" data-idx="${j}" onclick="selectExamChoice(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</div>`).join('')}
+        </div>
+      `;
+    } else {
+      card.innerHTML=`
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(简答题)</span></h3>
+        <textarea class="short-input" data-exam="${i}" placeholder="输入你的回答..." oninput="examState.answers[${i}]=this.value"></textarea>
+      `;
+    }
+    container.appendChild(card);
+  });
+  const btnDiv=document.createElement('div');
+  btnDiv.style.marginTop='16px';
+  btnDiv.innerHTML=`<button class="btn btn-warning" onclick="submitExam()">📝 提交试卷</button>`;
+  container.appendChild(btnDiv);
+}
+
+function selectExamChoice(qIdx,optIdx){
+  document.querySelectorAll(`#exam-opt-${qIdx} .option`).forEach((el,i)=>{
+    el.classList.toggle('selected',i===optIdx);
+  });
+  examState.answers[qIdx]=optIdx;
+}
+
+function startExamTimer(){
+  clearInterval(examState.timer);
+  examState.minutes=15;
+  const update=()=>{
+    const elapsed=Math.floor((Date.now()-examState.startTime)/1000);
+    const remaining=examState.minutes*60-elapsed;
+    if(remaining<=0){
+      clearInterval(examState.timer);
+      submitExam();
+      return;
+    }
+    const m=Math.floor(remaining/60);
+    const s=remaining%60;
+    document.getElementById('exam-timer').textContent=`⏱ 剩余 ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(remaining<60){
+      document.getElementById('exam-timer').style.color='var(--accent)';
+    }
+  };
+  update();
+  examState.timer=setInterval(update,1000);
+}
+
+function submitExam(){
+  if(!examState.active) return;
+  examState.active=false;
+  clearInterval(examState.timer);
+  document.getElementById('start-exam-btn').disabled=false;
+  document.getElementById('start-exam-btn').textContent='开始考试';
+  document.getElementById('exam-timer').textContent='';
+
+  let correct=0,total=0;
+  const results=[];
+  examState.questions.forEach((q,i)=>{
+    const ans=examState.answers[i];
+    if(q.type==='choice'){
+      total++;
+      const isCorrect=ans===q.answer;
+      if(isCorrect) correct++;
+      results.push({index:i,question:q.q,userAns:ans!==null?String.fromCharCode(65+ans):'未作答',correctAns:String.fromCharCode(65+q.answer),isCorrect,type:'choice',explain:q.explain||''});
+    } else {
+      results.push({index:i,question:q.q,userAns:ans||'未作答',correctAns:'（见参考答案）',isCorrect:ans&&ans.trim().length>0,type:'short'});
+    }
+  });
+
+  const el=document.getElementById('exam-result');
+  const pct=total>0?Math.round(correct/total*100):0;
+  el.style.display='block';
+  let html=`
+    <h3 style="color:var(--accent);margin-bottom:8px;">考试结果</h3>
+    <p><strong>选择题：</strong>${correct} / ${total} 正确 (${pct}%)</p>
+    <p><strong>简答题：</strong>已答 ${results.filter(r=>r.type==='short'&&r.userAns!=='未作答').length} / ${results.filter(r=>r.type==='short').length}</p>
+    <p><strong>用时：</strong>${Math.round((Date.now()-examState.startTime)/1000)}秒</p>
+    <hr style="margin:12px 0;border-color:var(--border);">
+    <h4 style="margin-bottom:8px;">详细结果</h4>
+  `;
+  results.forEach(r=>{
+    if(r.type==='choice'){
+      const icon=r.isCorrect?'&#10004;':'&#10008;';
+      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'#e8f5e9':'#ffebee'};border-radius:6px;font-size:13px;">
+        <p><strong>${r.question}</strong></p>
+        <p>${icon} 你的答案：${r.userAns} ${r.isCorrect?'':'| 正确答案：'+r.correctAns}</p>
+        ${!r.isCorrect?`<p style="color:var(--text-light);">${r.explain}</p>`:''}
+      </div>`;
+    }
+  });
+  html+=`<button class="btn btn-primary btn-sm" onclick="document.getElementById('exam-result').style.display='none';" style="margin-top:10px;">关闭结果</button>`;
+  el.innerHTML=html;
+
+  statsData.examCount++;
+  saveState();
+}
+
+// ==================== TAB 4: REVIEW ====================
+function updateReviewStats(){
+  document.getElementById('stat-learned').textContent=statsData.learned||learnedSet.size;
+  document.getElementById('stat-total').textContent=10;
+  document.getElementById('stat-quiz').textContent=statsData.quizAnswered||0;
+  document.getElementById('stat-accuracy').textContent=(statsData.accuracy||0)+'%';
+  document.getElementById('stat-streak').textContent=statsData.streak||0;
+  document.getElementById('stat-exam').textContent=statsData.examCount||0;
+
+  const wb=document.getElementById('wrong-book');
+  if(wrongBook.length===0){
+    wb.innerHTML='<p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
+  } else {
+    wb.innerHTML=wrongBook.slice(0,10).map(item=>
+      `<div style="padding:8px;margin-bottom:6px;background:#ffebee;border-radius:6px;font-size:13px;">
+        <p><strong>${item.q}</strong></p>
+        <p>正确答案：${item.correctAns}</p>
+        ${item.explain?`<p style="color:var(--text-light);">${item.explain}</p>`:''}
+        <p style="font-size:11px;color:var(--text-light);">${item.time}</p>
+      </div>`
+    ).join('');
+  }
+
+  const weak=document.getElementById('weak-concepts');
+  const weakMap={};
+  wrongBook.forEach(item=>{
+    const match=QUIZ_DATA.find(q=>q.q===item.q);
+    if(match){
+      const idx=QUIZ_DATA.indexOf(match);
+      const conceptIdx=Math.floor(idx/2);
+      const c=CONCEPTS[conceptIdx%CONCEPTS.length];
+      if(c){
+        weakMap[c.name]=(weakMap[c.name]||0)+1;
+      }
+    }
+  });
+  const weakList=Object.entries(weakMap).sort((a,b)=>b[1]-a[1]);
+  if(weakList.length===0){
+    weak.innerHTML='<p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
+  } else {
+    weak.innerHTML=weakList.map(([name,count])=>
+      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#fde8d0;border-radius:6px;font-size:13px;">
+        <span>${name}</span>
+        <span style="color:var(--accent);font-weight:700;">错${count}题</span>
+      </div>`
+    ).join('');
+  }
+}
+
+// ==================== TAB 5: MINDMAP ====================
+function renderMindmap(){
+  const el=document.getElementById('mindmap');
+  el.innerHTML=`
+    <ul>
+      <li>
+        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+        <span class="tree-node root">医学简史：疾病、药物与身体</span>
+        <div class="children open">
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心：天花与免疫</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">天花：唯一被根除的人类传染病</span></li>
+              <li><span class="tree-node leaf">免疫系统：固有+适应性免疫</span></li>
+              <li><span class="tree-node leaf">疫苗原理：记忆B细胞与T细胞</span></li>
+              <li><span class="tree-node app">应用：全球根除战略、牛痘疫苗</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心：流感与病毒变异</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">抗原漂移：点突变积累</span></li>
+              <li><span class="tree-node leaf">抗原转换：基因片段重组</span></li>
+              <li><span class="tree-node leaf">1918大流行：W形死亡曲线</span></li>
+              <li><span class="tree-node app">应用：年度疫苗更新、大流行预警</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心：癌症与演化</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">癌症：细胞内部的自然选择</span></li>
+              <li><span class="tree-node leaf">累积突变 + 凋亡逃脱</span></li>
+              <li><span class="tree-node leaf">肺癌死亡率远高于其他</span></li>
+              <li><span class="tree-node app">应用：精准医疗、早期筛查</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">拓展概念</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">成瘾的脑科学：多巴胺奖赏劫持</span></li>
+              <li><span class="tree-node leaf">药物研发：双盲实验与10%成功率</span></li>
+              <li><span class="tree-node leaf">梅毒与文明：疾病改变了艺术史</span></li>
+              <li><span class="tree-node leaf">HIV/AIDS：CCR5突变与柏林病人</span></li>
+              <li><span class="tree-node leaf">公共卫生：户外活动与近视</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">科学思维整合</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">变量分析：识别关键致病因素</span></li>
+              <li><span class="tree-node leaf">模型建构：SEIR传播模型</span></li>
+              <li><span class="tree-node leaf">证据挖掘：病毒溯源与基因组重建</span></li>
+              <li><span class="tree-node leaf">务实判断：宁过度勿不足的大流行应对</span></li>
+            </div>
+          </li>
+        </div>
+      </li>
+    </ul>
+  `;
+}
+
+function toggleTree(el){
+  const parent=el.parentElement;
+  const children=parent.querySelector('.children');
+  if(!children) return;
+  children.classList.toggle('open');
+  el.textContent=children.classList.contains('open')?'[−]':'[+]';
+}
+
+// ==================== TAB 6: SOCRATIC ====================
+function renderSocratic(){
+  const container=document.getElementById('socratic-container');
+  container.innerHTML='';
+  SOCRATIC_DATA.forEach(theme=>{
+    const themeDiv=document.createElement('div');
+    themeDiv.className='card';
+    themeDiv.innerHTML=`<h3>主题：${theme.theme}</h3>`;
+    theme.pairs.forEach((pair,i)=>{
+      const card=document.createElement('div');
+      card.className='socratic-card';
+      card.innerHTML=`
+        <div class="socratic-q" onclick="toggleSocratic(this)">
+          <span>${pair.q}</span>
+          <span class="arrow">&#9660;</span>
+        </div>
+        <div class="socratic-a">
+          <p>${pair.a}</p>
+        </div>
+      `;
+      themeDiv.appendChild(card);
+    });
+    container.appendChild(themeDiv);
+  });
+}
+
+function toggleSocratic(el){
+  const answer=el.nextElementSibling;
+  const arrow=el.querySelector('.arrow');
+  answer.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ==================== TAB 8: DECISION ====================
+function renderDecision(){
+  const container=document.getElementById('decision-container');
+  container.innerHTML='';
+  DECISION_ROUNDS.forEach((round,ri)=>{
+    const div=document.createElement('div');
+    div.className='decision-round';
+    div.innerHTML=`
+      <h3>场景 ${ri+1}</h3>
+      <div class="scenario">${round.scenario}</div>
+      <div class="choices" id="decision-choices-${ri}">
+        ${round.choices.map((c,ci)=>`<div class="choice" onclick="selectDecision(${ri},${ci})">${String.fromCharCode(65+ci)}. ${c.text}</div>`).join('')}
+      </div>
+      <div class="feedback" id="decision-feedback-${ri}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function selectDecision(ri,ci){
+  const round=DECISION_ROUNDS[ri];
+  const choice=round.choices[ci];
+  const fb=document.getElementById(`decision-feedback-${ri}`);
+  document.querySelectorAll(`#decision-choices-${ri} .choice`).forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(i===ci) el.classList.add('selected');
+  });
+  fb.className=`feedback show ${choice.type}`;
+  const icon=choice.type==='correct'?'&#10004;':choice.type==='wrong'?'&#10008;':'&#9888;';
+  fb.innerHTML=`${icon} ${choice.feedback}`;
+}
+
+// ==================== INIT ====================
+loadState();
+renderConcepts();
+renderSVGMap();
+updateProgress();
+renderFlipCard(0);
+renderSocratic();
+renderDecision();
+updateReviewStats();
+
+// Override quiz submit on choice click
+document.addEventListener('click',function(e){
+  const opt=e.target.closest('#quiz-options .option');
+  if(opt && !quizState.answered){
+    submitChoice();
+  }
+});
+
+// ==================== EXAM TIMER AUTO-START CHECK ====================
+window.addEventListener('beforeunload',function(){
+  clearInterval(examState.timer);
+  clearInterval(quizState._timer);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>识破伪科学与信息鉴别 · 最小知识集</title>
+<style>
+:root {
+  --bg:#f0f4f8;
+  --card:#ffffff;
+  --accent:#8e44ad;
+  --accent-light:#9b59b6;
+  --text:#2c3e50;
+  --text-light:#5d6d7e;
+  --border:#d5dce3;
+  --gold:#b8860b;
+  --success:#27ae60;
+  --warning:#e67e22;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height:1.8;
+  padding-bottom:60px;
+}
+.top-bar {
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:linear-gradient(135deg,#2c3e50,#4a235a);
+  color:#fff;
+  padding:14px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.top-bar h1 { font-size:20px; font-weight:700; }
+.top-bar a { color:#d5dce3; text-decoration:none; font-size:14px; }
+.top-bar a:hover { color:#fff; }
+.tab-bar {
+  position:sticky;
+  top:44px;
+  z-index:99;
+  background:var(--bg);
+  border-bottom:2px solid var(--border);
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:8px 12px;
+}
+.tab-btn {
+  padding:6px 14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+  font-size:13px;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.tab-btn:hover { background:var(--border); }
+.tab-btn.active {
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+.card h3 { font-size:16px; margin-bottom:8px; color:var(--text); }
+.card p { font-size:14px; color:var(--text-light); margin-bottom:6px; }
+.core-goal {
+  background:linear-gradient(135deg,#f3eef8,#e8daef);
+  border:2px solid var(--gold);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  text-align:center;
+}
+.core-goal h2 { color:var(--accent); font-size:20px; }
+.core-goal p { font-size:15px; color:var(--text-light); max-width:700px; margin:8px auto 0; }
+.concept-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+.concept-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.concept-card:hover { border-color:var(--accent-light); box-shadow:0 2px 8px rgba(142,68,173,0.1); }
+.concept-card .label {
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:10px;
+  margin-bottom:6px;
+}
+.concept-card .label.mks { background:var(--gold); }
+.concept-card h3 { font-size:15px; margin-bottom:4px; }
+.concept-card .def { font-size:13px; color:var(--text-light); }
+.concept-card .extra { display:none; margin-top:8px; font-size:13px; color:var(--text-light); border-top:1px dashed var(--border); padding-top:8px; }
+.concept-card .extra.show { display:block; }
+.concept-card .extra strong { color:var(--text); }
+.mks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:20px; }
+.mks-core { background:var(--card); border:2px solid var(--gold); border-radius:12px; padding:16px; text-align:center; }
+.mks-core .icon { font-size:28px; }
+.mks-core h3 { font-size:15px; color:var(--accent); }
+.mks-core p { font-size:13px; color:var(--text-light); }
+.svg-wrap { margin:20px 0; text-align:center; }
+.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+.boundary-table th,.boundary-table td { border:1px solid var(--border); padding:10px 12px; text-align:left; font-size:13px; }
+.boundary-table th { background:var(--accent); color:#fff; font-weight:600; }
+.boundary-table tr:nth-child(even) { background:var(--card); }
+.learning-path { counter-reset:step; }
+.learning-path .step { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+.learning-path .step::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+.learning-path .step h3 { font-size:14px; margin-bottom:4px; }
+.learning-path .step p { font-size:13px; color:var(--text-light); }
+.progress-bar { height:8px; background:var(--border); border-radius:4px; margin:8px 0; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .5s; }
+
+/* Flip card */
+.flip-container { perspective:1000px; max-width:500px; margin:20px auto; }
+.flip-card { position:relative; width:100%; min-height:320px; transition:transform .6s; transform-style:preserve-3d; }
+.flip-card.flipped { transform:rotateY(180deg); }
+.flip-front,.flip-back { position:absolute; top:0; left:0; width:100%; min-height:320px; backface-visibility:hidden; border-radius:12px; padding:24px; border:1px solid var(--border); background:var(--card); }
+.flip-back { transform:rotateY(180deg); }
+.flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+.flip-card .nav button { padding:6px 16px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-size:13px; }
+.flip-card .nav button:hover { background:var(--border); }
+.flip-card .mark-btn { background:var(--accent); color:#fff; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
+.flip-card .mark-btn:hover { background:var(--accent-light); }
+.flip-card .counter { font-size:13px; color:var(--text-light); }
+
+/* Quiz */
+.quiz-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+.quiz-card h3 { font-size:15px; margin-bottom:10px; }
+.quiz-card .options { display:flex; flex-direction:column; gap:6px; }
+.quiz-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+.quiz-card .option:hover { background:var(--border); }
+.quiz-card .option.selected { border-color:var(--accent); background:#f3eef8; }
+.quiz-card .option.correct { border-color:var(--success); background:#e8f5e9; }
+.quiz-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.quiz-card .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
+.quiz-card .feedback.show { display:block; }
+.quiz-card .feedback.correct { background:#e8f5e9; border:1px solid #a5d6a7; }
+.quiz-card .feedback.wrong { background:#ffebee; border:1px solid #ef9a9a; }
+.quiz-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
+.quiz-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+
+/* Exam */
+.exam-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+.exam-card h3 { font-size:15px; margin-bottom:10px; }
+.exam-card .options { display:flex; flex-direction:column; gap:6px; }
+.exam-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; }
+.exam-card .option.selected { border-color:var(--accent); background:#f3eef8; }
+.exam-card .option.correct { border-color:var(--success); background:#e8f5e9; }
+.exam-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.exam-card .feedback { margin-top:8px; padding:8px; border-radius:6px; font-size:13px; display:none; }
+.exam-card .feedback.show { display:block; }
+.exam-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
+.exam-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+
+/* Review */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; }
+.stat-card .num { font-size:28px; font-weight:700; color:var(--accent); }
+.stat-card .label { font-size:13px; color:var(--text-light); margin-top:4px; }
+
+/* Mindmap */
+.mindmap { padding:10px 0; }
+.mindmap ul { list-style:none; padding-left:24px; }
+.mindmap li { position:relative; margin:4px 0; }
+.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; }
+.mindmap .tree-toggle:hover { color:var(--accent-light); }
+.mindmap .tree-node { padding:6px 10px; border-radius:6px; font-size:13px; display:inline-block; }
+.mindmap .tree-node.root { background:var(--accent); color:#fff; font-weight:700; }
+.mindmap .tree-node.branch { background:#8e44ad; color:#fff; }
+.mindmap .tree-node.leaf { background:var(--card); border:1px solid var(--border); }
+.mindmap .tree-node.app { background:var(--success); color:#fff; }
+.mindmap .children { display:none; padding-left:20px; border-left:2px solid var(--border); margin:4px 0 4px 12px; }
+.mindmap .children.open { display:block; }
+
+/* Socratic */
+.socratic-card { background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
+.socratic-q { padding:14px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent); display:flex; justify-content:space-between; align-items:center; user-select:none; }
+.socratic-q:hover { background:#f3eef8; }
+.socratic-q .arrow { transition:transform .3s; font-size:12px; }
+.socratic-q .arrow.open { transform:rotate(180deg); }
+.socratic-a { display:none; padding:0 16px 14px; border-top:1px dashed var(--border); }
+.socratic-a.open { display:block; }
+.socratic-a p { font-size:13px; color:var(--text-light); margin-top:10px; }
+.socratic-a p strong { color:var(--text); }
+
+/* Case Study */
+.case-dim { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:10px; }
+.case-dim h3 { font-size:14px; color:var(--accent); margin-bottom:6px; }
+.case-dim p { font-size:13px; color:var(--text-light); }
+
+/* Decision */
+.decision-round { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+.decision-round h3 { font-size:15px; margin-bottom:10px; }
+.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:#f3eef8; border-radius:8px; }
+.decision-round .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-round .choice { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+.decision-round .choice:hover { background:var(--border); }
+.decision-round .choice.selected { border-color:var(--accent); background:#f3eef8; }
+.decision-round .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
+.decision-round .feedback.show { display:block; border-left:4px solid; }
+.decision-round .feedback.correct { background:#e8f5e9; border-left-color:var(--success); }
+.decision-round .feedback.wrong { background:#ffebee; border-left-color:var(--accent); }
+.decision-round .feedback.warning { background:#fff8e1; border-left-color:var(--warning); }
+.decision-round .choice.disabled { pointer-events:none; opacity:0.6; }
+
+/* Buttons */
+.btn {
+  display:inline-block;
+  padding:8px 20px;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+}
+.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary:hover { background:var(--accent-light); }
+.btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); }
+.btn-secondary:hover { background:var(--border); }
+.btn-success { background:var(--success); color:#fff; }
+.btn-success:hover { opacity:0.9; }
+.btn-warning { background:var(--warning); color:#fff; }
+.btn-warning:hover { opacity:0.9; }
+.btn-sm { padding:5px 12px; font-size:12px; }
+
+/* Responsive */
+@media(max-width:640px) {
+  .top-bar h1 { font-size:16px; }
+  .tab-btn { font-size:12px; padding:4px 10px; }
+  .concept-grid { grid-template-columns:1fr; }
+  .mks-grid { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+}
+/* SVG */
+svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <h1>识破伪科学与信息鉴别</h1>
+  <a href="#">← 返回课程首页</a>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="0">知识集总览</button>
+  <button class="tab-btn" data-tab="1">知识卡片</button>
+  <button class="tab-btn" data-tab="2">题库系统</button>
+  <button class="tab-btn" data-tab="3">考试模式</button>
+  <button class="tab-btn" data-tab="4">复习模式</button>
+  <button class="tab-btn" data-tab="5">思维导图</button>
+  <button class="tab-btn" data-tab="6">深度追问</button>
+  <button class="tab-btn" data-tab="7">案例分析</button>
+  <button class="tab-btn" data-tab="8">实战决策</button>
+</div>
+
+<!-- Tab Content -->
+<div class="tab-content">
+
+<!-- ===== TAB 0: 知识集总览 ===== -->
+<div class="tab-panel active" id="tab-0">
+  <div class="core-goal">
+    <h2>在信息洪流中保持清醒</h2>
+    <p>掌握识别伪科学、民科和泡沫的方法论——从尼斯湖水怪到水素水保健品，从潜意识神话到全球变暖争论，学会用科学思维辨别真伪。卓克说："伪科学最擅长的不是编造事实，而是用科学的外衣包装非科学的逻辑。"</p>
+  </div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">10个核心概念</h2>
+  <div class="concept-grid" id="concept-grid"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">MKS 核心工具箱（4个）</h2>
+  <div class="mks-grid" id="mks-grid"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">概念关系图</h2>
+  <div class="svg-wrap" id="svg-map"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">边界知识</h2>
+  <table class="boundary-table">
+    <thead><tr><th style="width:40px;">#</th><th>知识点</th><th>用途说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>尼斯湖水怪照片的伪造史与数字时代反转</td><td>经典伪科学案例的演化</td></tr>
+      <tr><td>2</td><td>冷聚变的庞斯-弗莱施曼争议</td><td>泡沫科学典型案例</td></tr>
+      <tr><td>3</td><td>量子保健品骗局产业链</td><td>科学术语包装的商业化</td></tr>
+      <tr><td>4</td><td>全球变暖"数据伪造"争议始末</td><td>科学共识vs阴谋论</td></tr>
+      <tr><td>5</td><td>星座/血型与性格的心理学研究</td><td>巴纳姆效应与伪相关</td></tr>
+      <tr><td>6</td><td>水素水/酵素/小分子水的市场宣传</td><td>保健品话术分析</td></tr>
+      <tr><td>7</td><td>埃博拉病毒的阴谋论传播路径</td><td>公共卫生中的信息鉴别</td></tr>
+      <tr><td>8</td><td>林德治坏血病的医学史上首次对照试验</td><td>双盲实验的历史起源</td></tr>
+      <tr><td>9</td><td>键盘QWERTY布局的垄断历史</td><td>路径依赖与"最优化"神话</td></tr>
+      <tr><td>10</td><td>福岛核辐射后抢盐事件中的数量级错判</td><td>信息素养与恐慌传播</td></tr>
+      <tr><td>11</td><td>统计学P值误用与可复制性危机</td><td>科学内部的伪科学</td></tr>
+      <tr><td>12</td><td>莎士比亚作品的培根著作权阴谋论</td><td>推理谬误中的证据链断裂</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习路径</h2>
+  <div class="learning-path">
+    <div class="step"><h3>先掌握「伪科学识别法」和「民科心理画像」</h3><p>学会识别伪科学的三个核心特征，理解民科与真科学的本质区别</p></div>
+    <div class="step"><h3>理解「泡沫科学」和「严谨测量」</h3><p>知道科学突破如何被过度神化，理解测量标准的演变本身就是科学进步</p></div>
+    <div class="step"><h3>掌握「双盲实验」和「相关≠因果」</h3><p>建立科学验证的核心思维框架，区分因果关系与相关关系</p></div>
+    <div class="step"><h3>学习「科学共识」和「媒体科学素养」</h3><p>知道如何判断科学共识的真伪，培养刷屏文章鉴别力</p></div>
+    <div class="step"><h3>深入「神药陷阱」「谬误辨析」+ 综合应用</h3><p>在保健品陷阱和常见谬误中综合运用所有鉴别工具</p></div>
+  </div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习进度</h2>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-light);">已掌握概念 <span id="learned-count">0</span>/10</p>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:4px;" id="progress-text">继续努力，学习识别伪科学</p>
+  </div>
+</div>
+
+<!-- ===== TAB 1: 知识卡片 ===== -->
+<div class="tab-panel" id="tab-1">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">知识卡片 · 翻转学习</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
+  <div class="flip-container">
+    <div class="flip-card" id="flip-card">
+      <div class="flip-front" id="flip-front"></div>
+      <div class="flip-back" id="flip-back"></div>
+    </div>
+    <div class="nav">
+      <button onclick="prevCard()">← 上一个</button>
+      <span class="counter" id="flip-counter">1/10</span>
+      <button onclick="nextCard()">下一个 →</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <button class="btn btn-primary btn-sm" onclick="markLearned()" id="mark-learned-btn">✓ 标记已学会</button>
+      <button class="btn btn-secondary btn-sm" onclick="flipCard()" style="margin-left:8px;">🔄 翻转卡片</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 2: 题库系统 ===== -->
+<div class="tab-panel" id="tab-2">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">题库系统</h2>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="btn btn-primary" onclick="startQuiz('random')">随机抽题</button>
+    <button class="btn btn-secondary" onclick="startQuiz('all')">全部题目</button>
+    <button class="btn btn-warning btn-sm" onclick="resetQuiz()">重置</button>
+    <span class="quiz-timer" id="quiz-timer"></span>
+  </div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-light);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
+  </div>
+  <div id="quiz-container"></div>
+  <div id="quiz-result" style="display:none;" class="card"></div>
+</div>
+
+<!-- ===== TAB 3: 考试模式 ===== -->
+<div class="tab-panel" id="tab-3">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">考试模式</h2>
+  <div style="margin-bottom:14px;">
+    <button class="btn btn-primary" id="start-exam-btn" onclick="startExam()">开始考试</button>
+    <span class="exam-timer" id="exam-timer"></span>
+  </div>
+  <div id="exam-container"></div>
+  <div id="exam-result" style="display:none;" class="card"></div>
+</div>
+
+<!-- ===== TAB 4: 复习模式 ===== -->
+<div class="tab-panel" id="tab-4">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">复习模式</h2>
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="num" id="stat-learned">0</div><div class="label">已学会概念</div></div>
+    <div class="stat-card"><div class="num" id="stat-total">10</div><div class="label">总概念</div></div>
+    <div class="stat-card"><div class="num" id="stat-quiz">0</div><div class="label">已答题数</div></div>
+    <div class="stat-card"><div class="num" id="stat-accuracy">0%</div><div class="label">正确率</div></div>
+    <div class="stat-card"><div class="num" id="stat-streak">0</div><div class="label">连续答对</div></div>
+    <div class="stat-card"><div class="num" id="stat-exam">0</div><div class="label">考试完成</div></div>
+  </div>
+  <h3 style="font-size:15px;margin-bottom:8px;color:var(--text);">错题本</h3>
+  <div id="wrong-book" class="card">
+    <p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
+  </div>
+  <h3 style="font-size:15px;margin:12px 0 8px;color:var(--text);">薄弱概念分析</h3>
+  <div id="weak-concepts" class="card">
+    <p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
+  </div>
+</div>
+
+<!-- ===== TAB 5: 思维导图 ===== -->
+<div class="tab-panel" id="tab-5">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">思维导图 · 伪科学识别与信息鉴别</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
+  <div class="mindmap" id="mindmap"></div>
+</div>
+
+<!-- ===== TAB 6: 深度追问 ===== -->
+<div class="tab-panel" id="tab-6">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">深度追问 · 苏格拉底式问答</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
+  <div id="socratic-container"></div>
+</div>
+
+<!-- ===== TAB 7: 案例分析 ===== -->
+<div class="tab-panel" id="tab-7">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">案例分析 · 如何识别民科？</h2>
+  <div class="card">
+    <h3>案例场景：你遇到一位民科</h3>
+    <p>有人声称自己推翻了相对论，自创"统一场新理论"，但没有在任何学术期刊发表，而是在自己建的个人网站上发布。他贴出了大量手写公式，拒绝接受同行评议，声称"主流科学界都在打压我"。</p>
+    <p style="margin-top:8px;">用MKS四维度拆解：</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度一：伪科学识别法</h3>
+    <p>伪科学三大特征检验：(1)不可证伪——他的理论没有给出任何可检验的预测；(2)依赖个人见证——他的"证据"只有他自己的分析；(3)术语滥用——充满"场、量子、维度"等词汇但无清晰定义。三个特征全部命中，判断为伪科学。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度二：民科心理画像</h3>
+    <p>民科的典型特征识别：(1)缺乏同行评议——拒绝接受专业审查的挑战；(2)不会证伪自己——只寻找支持自己的证据；(3)迫害叙事——"因为我的理论太超前所以被主流打压"——这是民科最常见的自我辩护方式。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度三：泡沫科学判断</h3>
+    <p>判断这是"坏泡沫"还是真正的潜在突破——真突破不会只在个人网站发布，而是会经过同行评议、学术会议讨论、他人重复验证的过程。爱因斯坦的相对论在发表前就已经在物理学期刊上公开接受评议。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度四：双盲实验/科学方法检验</h3>
+    <p>科学方法检验：观察（他声称推翻了相对论）→ 假设（可能是民科或真突破）→ 验证（检查他的理论是否有可检验预测、是否经过同行评议）→ 修正（确认缺乏同行评议和可检验性，判断为民科）。</p>
+  </div>
+  <div class="card" style="background:#f3eef8;border-color:var(--gold);">
+    <h3>MKS启示</h3>
+    <p>识别民科的关键不是判断"他的理论对不对"——因为绝大多数伪科学理论复杂到难以直接驳斥。而是检查"他的方法对不对"：有同行评议吗？可证伪吗？自己尝试证伪过吗？方法是判断民科的捷径。</p>
+  </div>
+</div>
+
+<!-- ===== TAB 8: 实战决策 ===== -->
+<div class="tab-panel" id="tab-8">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">实战决策模拟</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">模拟三个现实场景，测试你的信息鉴别能力。每个场景有三个选择，点击查看反馈。</p>
+  <div id="decision-container"></div>
+</div>
+
+</div><!-- /.tab-content -->
+
+<script>
+// ==================== DATA ====================
+const CONCEPTS = [
+  {id:'c1',name:'伪科学识别法',def:'伪科学三大特征——(1)不可证伪：无法设计实验或观测来推翻它；(2)依赖个人见证而非统计证据：'我吃了有效'代替大规模双盲实验；(3)使用科学术语但定义模糊：用'量子、能量场、频率'等高大上词汇包装。',mks:true,analogy:'如同鉴别假钞——你不必懂油墨配方和造纸工艺，只需知道真钞的几个防伪特征。伪科学识别法就是信息领域的'验钞机'。',example:'尼斯湖水怪照片经几十年后被证实是模型和玩具潜艇——典型的个人见证式'证据'；星座的性格描述总是正确，因为巴纳姆效应让模糊描述适配每个人。',counter:'不可证伪 ≠ 所有尚未被证明的都是伪科学——有些确实是前沿科学但暂时无法验证（如弦理论），区别在于前沿科学承认自己的局限性并努力寻找可检验预测。'},
+  {id:'c2',name:'民科心理画像',def:'民科不是'民间科学家'而是'不会科学方法的科学爱好者'——他们往往缺乏同行评议经历、不会证伪自己的理论、有强烈迫害妄想（'主流科学界打压我'）。民科和真科学家的本质区别在于方法论而非智力。',mks:true,analogy:'如同业余围棋选手与职业棋手的区别——业余也可能很有天赋，但职业棋手经过系统的复盘、对局、教练反馈训练。民科缺的不是聪明，是科学方法的训练。',example:'推翻相对论的民科在个人网站发布理论，拒绝同行评议，称'爱因斯坦之后最大的突破'；一位民科自称证明哥德巴赫猜想，但手稿中充满未定义的术语。',counter:'民科 ≠ 业余科学家——历史上很多重要科学发现者是业余出身（达尔文、爱因斯坦在专利局），但他们遵循而不是拒绝科学方法。关键在于是否接受同行评议和证伪。'},
+  {id:'c3',name:'泡沫科学',def:'过度神化的'突破'——潜意识被弗洛伊德过度神化、放血疗法被视为万灵药。好泡沫（激发研究兴趣和资源） vs 坏泡沫（浪费资源，误导公众）。泡沫的本质是效应大小被夸大，但种子可能是真的。',mks:true,analogy:'如同股市泡沫——公司可能确实有价值，但股价远远超出了基本面。冷聚变宣称能常温核聚变，这个方向并非不可能，但庞斯-弗莱施曼夸大了结果几百倍。',example:'弗洛伊德的潜意识理论并非完全错误——潜意识确实存在且影响行为——但他把潜意识的解释力度推到极限，变成了'一切行为都能用潜意识解释'的泡沫。',counter:'泡沫科学 ≠ 纯谎言——泡沫里面往往有真实成分（潜意识真的存在），但被过度放大。这比纯谎言更危险，因为'有点道理'让普通人更难辨别。'},
+  {id:'c4',name:'严谨测量',def:'1米到底有多长？从'通过巴黎的子午线的1/10,000,000'到米原器再到'光在真空中1/299,792,458秒行进的距离'——测量的标准化本身就是科学进步的核心驱动力。',mks:true,analogy:'如同建筑需要统一的尺度标准——古代各地区的'尺'长度不同，导致建筑规格混乱。标准化测量让科学结果可复现、可比较、可积累。',example:'最初定义的米是地球子午线长度的四千万分之一，但测量有误差；1889年改用铂铱合金米原器；1983年改为光速定义——定义越来越精确、越来越普适。',counter:'严谨测量 ≠ 越精确越好——工程中精度够用即可。测量一个房间3米长，用卷尺就够了，不需要激光干涉仪。测量成本要匹配需求精度。'},
+  {id:'c5',name:'科学共识',def:'全球变暖为什么不是谣言——不是因为'多数科学家同意'而是因为多源独立证据（冰芯、树轮、卫星、海平面、大气成分）都指向同一结论。科学共识不是投票，而是独立证据的汇聚。',mks:false,analogy:'如同法医断案——不是多数法医投票说'他死于中毒'就算数，而是毒理检测、胃内容物、组织样本多个独立证据同时指向中毒。证据链汇聚才是共识的根基。',example:'全球变暖的证据：冰芯气泡显示CO2浓度上升、树轮宽度显示温度升高、卫星测量显示海平面每年上升3.3mm、南北极冰盖加速融化——四条独立证据链指向相同结论。',counter:'科学共识可以被推翻——但需要更强有力的新证据而非阴谋论。历史上地心说被推翻是因为新证据（伽利略望远镜观察）而非'多数人不信'。'},
+  {id:'c6',name:'媒体科学素养',def:'刷屏文章如何判断真伪？三步法：(1)查原始论文——文章有没有链接到原始研究？(2)看效应大小——'降低癌症风险50%'可能是从0.002%降到0.001%；(3)找利益冲突——文章作者是否在推销产品？',mks:false,analogy:'如同食品安全标签——不只看正面广告词'无添加'，要看背面配料表的真实成分。媒体科学素养就是新闻的'配料表阅读能力'。',example:'XX食物抗癌刷屏文——查原始论文发现是细胞实验而非人体实验，且使用浓度相当于每天吃10公斤该食物。效应大小被媒体放大了数千倍。',counter:'科学素养 ≠ 什么都不信——有科学素养不等于对所有研究持怀疑态度，而是知道如何分级信任：系统综述 > 随机对照试验 > 队列研究 > 病例报告 > 专家意见。'},
+  {id:'c7',name:'神药陷阱',def:'酵素/葡萄籽/胶原蛋白等保健品的共同模式：用科学术语包装（'分子'、'肽'、'纳米'）、依赖推荐而非科学证据（明星代言、用户证言）、赚取高额利润（售价是成本的几十倍）。',mks:false,analogy:'如同电线杆上的老军医广告——形式变了（从电线杆到互联网/电视购物），但核心套路不变：制造焦虑→包装术语→提供'解决方案'。',example:'酵素：人体自己生产消化酶，吃下去的酵素在胃里就被分解，无法直接进入血液起效。葡萄籽提取物抗氧化：体外实验有效，但人体内生物利用度极低，等于白吃。',counter:'有些保健品确实有效——如维生素D缺乏者补充维生素D、叶酸在孕早期预防神经管缺陷。但有效的是'有针对性的医疗补充'而非日常随便吃。'},
+  {id:'c8',name:'相关≠因果',def:'冰淇淋销量与溺水死亡高度相关——不是因为吃冰淇淋导致溺水，而是因为夏天人们更爱吃冰淇淋、也更经常游泳。再高的相关系数也不能替代因果实验。',mks:false,analogy:'如同公鸡打鸣和太阳升起——公鸡打鸣确实预示天亮，但杀死公鸡不会让太阳停升。相关性可以用于预测，但不能用于干预决策。',example:'教育年限与收入正相关——但可能是因为能力强的人既受教育多也赚得多，而非教育本身导致高收入；急救车出动次数与死亡人数正相关——因为急救车去的是病人快死的地方，而不是急救车导致死亡。',counter:'相关不一定是因果 ≠ 相关永远没用——在无法做因果实验时（如研究吸烟和癌症），精心控制混淆变量后的相关研究是最好证据。关键是要意识到相关不等于因果。'},
+  {id:'c9',name:'双盲实验',def:'科学最有力的思维武器——同时排除受试者期望（安慰剂效应）和研究者偏见（观察者偏差）。受试者和研究者都不知道谁在实验组谁在对照组，确保结果客观。',mks:false,analogy:'如同裁判和运动员都不知道谁是主队——如果裁判知道主队是谁，判罚可能不自觉偏向主队；如果运动员知道自己是主队，可能发挥更好。双盲就是让所有人都'不知道队伍分配'。',example:'林德1747年在船上用柠檬汁治疗坏血病——虽然不知道双盲设计，但这是医学史上首次对照试验的雏形；1954年脊髓灰质炎疫苗双盲试验是史上最大规模双盲试验，证实了疫苗有效。',counter:'双盲并非万能——有些干预无法双盲（如手术、心理治疗中受试者知道自己接受治疗），但可以用'盲法评估'（让评估结果的人不知道分组）来减少偏见。'},
+  {id:'c10',name:'谬误辨析',def:'北半球马桶冲水逆时针？假的——科里奥利力在这么小的尺度和流速下完全可以忽略。键盘的QWERTY布局是最优的吗？不是——只是路径依赖的历史偶然。',mks:false,analogy:'如同'鱼不会眨眼所以不睡觉'——听起来有道理，但鱼的生理结构根本没有眼睑，拿其他动物的标准套用是错误的。谬误往往来源于将一个领域的经验不恰当移用到另一个领域。',example:'科里奥利力效应需要飓风尺度（几百公里）才显著，马桶只有几十厘米，影响方向的是马桶形状和进水角度；QWERTY布局设计于1870年代，初衷是防止打字机卡键，而非打字速度最优。',counter:'有些常见说法确实是正确的——如苹果和橘子不能比营养？其实可以用单位重量的维生素、纤维含量等指标比较。'不是所有流行谬误都是假的'——需要具体分析。'}
+];
+
+const MKS_IDS = ['c1','c2','c3','c4'];
+
+const QUIZ_DATA = [
+  {q:'伪科学三大特征中，哪个是最核心的判断标准？',options:['使用专业术语','不可证伪','有商业目的','看起来很深奥'],answer:1,explain:'不可证伪是伪科学最核心的特征——如果无法设计实验或观测来推翻它，那它就不是科学。术语滥用和个人见证是辅助判断特征。',type:'choice'},
+  {q:'下面哪个最准确描述了"民科"的特征？',options:['民间科学家，所有业余科学爱好者','缺乏科学方法训练、拒绝同行评议的科学爱好者','没有名校学历的研究者','在野研究机构工作者'],answer:1,explain:'民科的核心特征不是学历或工作单位，而是方法论问题：缺乏同行评议经历、不会证伪自己、有迫害妄想。',type:'choice'},
+  {q:'泡沫科学和纯谎言的根本区别是什么？',options:['泡沫科学更有害','泡沫科学里面往往有真实的科学种子，但被过度放大','泡沫科学来自正规学者','泡沫科学没有商业目的'],answer:1,explain:'泡沫科学里面往往有真实成分（如潜意识确实存在），但效应被过度神化。这比纯谎言更危险，因为"有点道理"让普通人更难辨别。',type:'choice'},
+  {q:'目前1米的定义基于什么？',options:['地球子午线的四千万分之一','铂铱合金米原器','光在真空中299,792,458分之一秒行进的距离','某位国王手臂的长度'],answer:2,explain:'1983年起，1米定义为"光在真空中1/299,792,458秒行进的距离"。从地球测量到实物标准再到物理常数定义，越来越精确普适。',type:'choice'},
+  {q:'全球变暖的科学共识为什么可信？',options:['因为多数科学家同意','因为多源独立证据（冰芯、树轮、卫星、海平面）都指向同一结论','因为政府支持','因为没有人反对'],answer:1,explain:'科学共识不是投票——而是因为多源独立证据链都指向相同结论。冰芯、树轮、卫星、海平面四条证据独立汇聚才是共识的根基。',type:'choice'},
+  {q:'刷屏文章说"XX食物降低癌症风险50%"，你应该怎么做？',options:['立刻转发给家人','查原始论文，看效应大小是相对风险还是绝对风险','马上开始大量吃','看评论区的意见'],answer:1,explain:'三步法：查原始论文、看效应大小（相对风险vs绝对风险）、找利益冲突。"降低50%"可能只是从0.002%降到0.001%。',type:'choice'},
+  {q:'为什么吃酵素保健品不能帮助消化？',options:['酵素是假的','吃进去的酵素在胃里被分解，无法直接进入血液','酵素对消化没有作用','人体不生产酵素'],answer:1,explain:'人体自己生产消化酶，口服的酵素在胃的强酸环境中就被分解成氨基酸，无法以完整的酵素形式进入肠道或血液。',type:'choice'},
+  {q:'冰淇淋销量和溺水死亡人数高度相关，这是因为？',options:['冰淇淋导致溺水','溺水导致人们买冰淇淋','第三个变量（夏天）同时影响两个变量','这是巧合'],answer:2,explain:'夏天天气热，人们更爱吃冰淇淋也更多去游泳。这是"第三个变量驱动虚假相关"的经典例子。相关不等于因果。',type:'choice'},
+  {q:'双盲实验中，"双盲"指的是？',options:['实验人员和受试者都是盲人','受试者和研究执行者都不知道谁在实验组、谁在对照组','两只眼睛都蒙上','两组人都不知道实验目的'],answer:1,explain:'双盲：受试者不知道自己在实验组还是对照组（排除安慰剂效应），研究执行者也不知道（排除观察者偏差）。',type:'choice'},
+  {q:'北半球马桶冲水逆时针旋转的说法为什么是错的？',options:['因为中国在南半球','因为科里奥利力在马桶尺度可以忽略，影响方向的是马桶形状','因为马桶设计不同','因为水压不够'],answer:1,explain:'科里奥利力影响需要飓风尺度（几百公里）才显著，马桶只有几十厘米，影响方向的是马桶的进水角度和形状设计。',type:'choice'},
+  {q:'键盘QWERTY布局是最优打字布局吗？',options:['是的，经过科学优化','不是，只是1870年代为了防止打字机卡键的历史偶然','是的，符合人体工学','不是，但比其它布局都快'],answer:1,explain:'QWERTY布局的初衷是防止打字机卡键，把常用字母分散到不同手指以降低打字速度。这不是最优布局，而是路径依赖的结果。',type:'choice'},
+  {q:'星座性格描述让人觉得准确的主要心理效应是？',options:['自我实现预言','巴纳姆效应','认知失调','确认偏误'],answer:1,explain:'巴纳姆效应：人们容易接受模糊、笼统的人格描述，认为它准确地描述了自己。星座描述往往适用于所有人。',type:'choice'},
+  {q:'1747年林德治疗坏血病的实验最重要的贡献是什么？',options:['发现了维生素C','首次使用了对照试验的方法','证明了柠檬治疗坏血病','获得了诺贝尔奖'],answer:1,explain:'林德将12名坏血病船员分为6组，分别给不同治疗，这是医学史上首次有记载的对照试验，为后来的双盲实验奠定了基础。',type:'choice'},
+  {q:'冷聚变争议中，庞斯-弗莱施曼的主要问题是什么？',options:['他们造假数据','他们夸大了实验结果，且拒绝让同行重复验证','他们不是科学家','他们申请了专利'],answer:1,explain:'庞斯-弗莱施曼在新闻发布会上宣布了室温核聚变突破，但没有提供足够的实验细节让其他实验室重复，且后续无法被验证。这是泡沫科学的典型案例。',type:'choice'},
+  {q:'葡萄籽提取物抗氧化宣传的问题在于？',options:['葡萄籽没有抗氧化物','体外实验有效但人体生物利用度极低','葡萄籽有毒','抗氧化是伪概念'],answer:1,explain:'葡萄籽提取物在体外试管实验中确实可以抗氧化，但人体内的生物利用度极低——口服后大部分无法吸收，等于白吃。',type:'choice'},
+  {q:'"科学家不敢研究这个，因为会颠覆主流理论"——这种说法属于？',options:['科学怀疑精神','阴谋论/迫害叙事','合理的学术批评','科学问题'],answer:1,explain:'这是民科和伪科学典型的说辞——"迫害叙事"。真正的科学界对颠覆性理论是欢迎的（如爱因斯坦、普朗克），前提是理论有证据支撑。',type:'choice'},
+  {q:'双盲实验能排除以下哪种偏差？',options:['抽样误差','安慰剂效应和观察者偏差','实验设备误差','统计学误差'],answer:1,explain:'双盲设计专门排除两类偏差：受试者的安慰剂效应（知道自己吃了药所以感觉好转）和研究者的观察者偏差（知道谁在实验组所以更注意积极变化）。',type:'choice'},
+  {q:'教育年限与收入正相关，能否说"多读书就能多赚钱"？',options:['能，相关即因果','不能，可能有第三变量如能力影响两者','能，因为数据支持','不能，因为教育没用'],answer:1,explain:'教育年限与收入正相关，但可能因为能力强的人既受教育多也赚得多。相关不等于因果——这个经典谬误是伪科学论证的常见手法。',type:'choice'},
+  {q:'福岛核辐射后中国抢盐事件暴露了什么？',options:['盐的重要性','数量级感知缺失','政府引导','食盐紧缺'],answer:1,explain:'抢盐事件中，人们缺乏数量级感知——核辐射污染海水需要极大量放射性物质，太平洋的海水量稀释后浓度极低，且中国食盐多为井盐而非海盐。',type:'choice'},
+  {q:'以下哪项是"好泡沫"的例子？',options:['水素水宣称能抗衰老','潜意识最初被弗洛伊德提出时激发的研究兴趣','冷聚变的夸大宣传','量子手环保健'],answer:1,explain:'弗洛伊德的潜意识理论虽然不是完全科学，但它激发了大量后续研究，推动了心理学发展。好的泡沫能激发研究方向，尽管初始效应被过度夸大。',type:'choice'}
+];
+
+const SHORT_ANSWER_QUESTIONS = [
+  {q:'简述伪科学的三大识别特征，并各举一个例子。',ans:'(1)不可证伪——如占星术：无论你性格如何，都能找到对应的星座解释，没有任何一种情况能证伪它。(2)依赖个人见证而非统计证据——如保健品广告："我吃了有效"代替双盲试验数据。(3)使用科学术语但定义模糊——如"量子手环利用量子共振调节人体能量场"，量子、共振、能量场都是科学术语但在这里没有清晰定义。'},
+  {q:'民科和真科学家最本质的区别是什么？',ans:'最本质的区别不是智力或学历，而是方法论。(1)民科拒绝同行评议，真科学家欢迎同行质疑；(2)民科只找支持自己的证据（确认偏误），真科学家主动寻找可能证伪自己理论的证据；(3)民科用迫害叙事（"主流打压我"）解释为什么没人接受，真科学家用数据和实验说服同行。'},
+  {q:'什么是"泡沫科学"？好泡沫和坏泡沫有什么区别？',ans:'泡沫科学指那些效应被过度神化的科学突破。好泡沫（如弗洛伊德的潜意识理论）虽然初始被夸大了，但激发了后续研究方向，推动了领域发展。坏泡沫（如冷聚变未经核实的室温核聚变宣称、放血疗法）浪费了大量研究资源、误导了公众和患者，甚至造成伤害。关键是看泡沫是否最终导向了真知的积累。'},
+  {q:'为什么"1米"的定义经历了三次变化？这说明了什么？',ans:'从地球子午线（1790年代）→铂铱合金米原器（1889年）→光速定义（1983年）。每次变化都是为了更高的精确度和普适性。这说明：(1)测量的标准化本身就是科学进步；(2)科学定义是可修正的，随着技术进步而改进；(3)从宏观物体到物理常数的转变，体现了科学追求"不依赖于特定物体的普适标准"。'},
+  {q:'如何判断一篇刷屏的科学新闻是否可信？给出三个操作步骤。',ans:'三步法：(1)查原始论文——文章是否链接了原始研究？去PubMed或Google Scholar查原文；(2)看效应大小——"降低癌症风险50%"是相对风险还是绝对风险？可能从万分之二降到万分之一；(3)找利益冲突——作者是否在推销产品？研究是否由有明显利益关系的机构资助？'},
+  {q:'解释"相关不等于因果"，并给出一个日常生活中的例子。',ans:'相关关系不等于因果关系——两个事物共同变化，不一定是一个导致另一个。常见原因是第三个变量同时影响两者。例：急救车出动次数与死亡人数正相关——不是因为急救车导致死亡，而是因为重症病人多时两者都增加。但人们容易错误解读为"急救车增加了死亡风险"。'},
+  {q:'双盲实验为什么被认为是科学最有力的思维武器之一？',ans:'双盲实验同时排除了两大类偏差：(1)受试者期望（安慰剂效应）——不知道自己在实验组还是对照组的人，不会因为"知道吃了药"而感觉好转；(2)研究者偏见（观察者偏差）——不知道谁在实验组的研究者，不会不自觉地更关注实验组的积极变化。这使结果客观可靠。'},
+  {q:'北半球马桶冲水逆时针的说法是谬误，请用科学原理解释为什么。',ans:'科里奥利力是大尺度现象——需要飓风级别的尺度（上百公里）才会产生显著影响。马桶只有几十厘米，科里奥利力的影响比马桶内壁摩擦和进水角度的影响小几万倍，完全可忽略。马桶冲水的旋转方向取决于马桶的造型设计和进水喷嘴的角度，而非科里奥利力。'},
+  {q:'面对一个声称"量子XX"的保健品，你应该如何用科学思维判断？',ans:'(1)术语辨析——"量子"在物理学中有精确定义（最小不可分割的能量单位），但保健品中的"量子"往往没有定义，属于术语滥用；(2)不可证伪——"量子能量场调节人体"无法设计实验验证；(3)缺乏双盲实验——没有在同行评议期刊上发表的严格双盲试验数据；(4)依赖个人证言——"某某明星用了都说好"代替科学证据。满足多项伪科学特征。'},
+  {q:'科学共识和"多数人意见"有什么本质区别？为什么全球变暖的科学共识可信？',ans:'科学共识不是投票，而是多源独立证据的汇聚。全球变暖可信不是因为"97%的科学家同意"，而是因为：(1)冰芯气泡显示CO2浓度上升，(2)树轮宽度显示温度升高，(3)卫星测量显示海平面上升，(4)冰川加速消融。四条独立证据链从不同角度指向同一结论——这才是共识的真正基础。'}
+];
+
+const SOCRATIC_DATA = [
+  {theme:'伪科学与科学的界限',pairs:[{q:'为什么说"可证伪性"是科学最本质的特征？',a:'卡尔波普尔提出：一个理论要被称为科学，必须能够设计实验或观测来推翻它。爱因斯坦的广义相对论预测光在引力场中弯曲——如果观测结果不符，理论就被证伪。而占星术的预测模棱两可，无论发生什么都能解释——这就是不科学。可证伪性确保科学理论始终暴露在"被推翻的风险"中，这恰恰是科学不断进步的动力。'},{q:'为什么"不可证伪但尚未被证明"的理论不能直接说它是伪科学？',a:'科学前沿中存在一些暂时无法验证但并非伪科学的方向——如弦理论目前无法通过实验验证，但研究者承认这一点并努力寻找可检验的预测。这和伪科学的区别在于：前沿科学明确知道自己的局限性、主动寻找可检验预测、接受同行评议。伪科学则声称"已经被证明"而拒绝验证。'}]},
+  {theme:'信息鉴别与怀疑精神',pairs:[{q:'科学怀疑精神和阴谋论有什么区别？',a:'科学怀疑基于方法论：查原始证据、看效应大小、检查利益冲突、寻找替代解释。阴谋论也"怀疑"主流说法，但方式完全不同：选择性寻找支持证据、无视反证、将"缺乏证据"解释为"被隐瞒"、将所有质疑归因于少数人的恶意操纵。核心区别：科学怀疑的目的是寻找真相，阴谋论的目的是维持一个特定的叙事。'},{q:'面对"XX研究证实了XX保健品有效"的新闻，普通人最有效的鉴别步骤是什么？',a:'三步走：(1)找原始论文——不要只看新闻摘要，去PubMed/Google Scholar搜索论文原文；(2)看实验设计——是人还是细胞？样本量多大？有对照组吗？双盲吗？(3)算实际效果——"相对风险降低50%"不等于"你患病的概率降低一半"，如果原始风险是万分之二，降低50%后变成了万分之一——绝对值几乎没变。'}]}
+];
+
+const DECISION_ROUNDS = [
+  {scenario:'你妈妈在朋友圈看到一篇文章"这种常见蔬菜竟然能治愈癌症！",她正要转发并准备每天吃。你会怎么做？',choices:[{text:'让她转发，反正吃蔬菜没坏处',feedback:'虽然吃蔬菜有益健康，但转发未经证实的信息会传播伪科学。"吃XX蔬菜抗癌"可能让人们放弃正规治疗。',type:'wrong'},{text:'帮她查原始研究——看是细胞实验还是人体实验，效应大小如何，是否有利益冲突',feedback:'正确！查原始论文、看实验设计、评估效应大小——这是科学鉴别力的核心应用。',type:'correct'},{text:'不让她转发，但说不清为什么',feedback:'不转发是对的，但"说不清为什么"不够有力。如果能给出具体理由（"这是细胞实验，浓度相当于每天吃10公斤"），她更能接受。',type:'warning'}]},
+  {scenario:'有朋友向你推销一款"量子能量手环"，说可以改善血液循环、提高能量水平，售价2999元。你怎么办？',choices:[{text:'买一个试试，万一有效呢',feedback:'"万一有效"恰恰是伪科学利用的心理陷阱。高价购买未经科学验证的产品，实质上是在为伪科学买单。',type:'wrong'},{text:'用伪科学识别法检验：术语"量子"有清晰定义吗？有双盲实验吗？',feedback:'正确！术语模糊、缺乏双盲实验、高价格低效果——伪科学三大特征都符合。',type:'correct'},{text:'觉得贵，但相信可能有用',feedback:'价格是营销策略的一部分——高价格创造"贵即好"的心理暗示。如果真有科学疗效，应该有双盲实验数据而不是明星代言。',type:'warning'}]},
+  {scenario:'你看到一条微博说"最新研究：吃黑巧克力降低心脏病风险40%"。下面几万转发。你判断真伪的第一步最应该是？',choices:[{text:'去超市买黑巧克力',feedback:'在验证"降低40%"是相对风险还是绝对风险之前，任何行动都是盲目的。',type:'wrong'},{text:'找原始论文，看是观察性研究还是随机对照试验，看实际风险降低的绝对数值',feedback:'正确！辨别"相对风险"和"绝对风险"是科学素养的关键。"降低40%"如果绝对风险从0.5%降到0.3%，相当于降低0.2个百分点而非40个百分点。',type:'correct'},{text:'看看评论里有没有人反对',feedback:'评论区的意见不能代替原始研究。网络噪声中，点赞数不等于科学严谨性。',type:'warning'}]}
+];
+
+// ==================== STATE ====================
+let flipIndex = 0;
+let learnedSet = new Set();
+let wrongBook = [];
+let quizState = {active:false,questions:[],index:0,correct:0,total:0,streak:0,answered:false,selected:-1,shortAnswers:[],mode:'all',startTime:null};
+let examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
+let statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
+
+// ==================== UTILITY ====================
+function $(id){return document.getElementById(id);}
+function save(key,val){try{localStorage.setItem('zk4_mks_'+key,JSON.stringify(val));}catch(e){}}
+function load(key,def){try{let v=localStorage.getItem('zk4_mks_'+key);return v?JSON.parse(v):def;}catch(e){return def;}}
+
+function loadState(){
+  learnedSet=new Set(load('learned',[]));
+  wrongBook=load('wrongBook',[]);
+  statsData=load('stats',{learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0});
+}
+
+function saveState(){
+  save('learned',[...learnedSet]);
+  save('wrongBook',wrongBook);
+  save('stats',statsData);
+}
+
+// ==================== TABS ====================
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+    if(this.dataset.tab=='4') updateReviewStats();
+    if(this.dataset.tab=='5') renderMindmap();
+  });
+});
+
+// ==================== TAB 0: OVERVIEW ====================
+function renderConcepts(){
+  const grid=document.getElementById('concept-grid');
+  grid.innerHTML='';
+  CONCEPTS.forEach((c,i)=>{
+    const card=document.createElement('div');
+    card.className='concept-card';
+    card.innerHTML=`
+      <span class="label ${c.mks?'mks':''}">${c.mks?'MKS核心':'概念'}</span>
+      <h3>${c.name}</h3>
+      <div class="def">${c.def}</div>
+      <div class="extra" id="extra-${c.id}">
+        <p><strong>类比：</strong>${c.analogy}</p>
+        <p><strong>示例：</strong>${c.example}</p>
+        <p><strong>反例/边界：</strong>${c.counter}</p>
+      </div>
+    `;
+    card.addEventListener('click',()=>{
+      const extra=document.getElementById('extra-'+c.id);
+      extra.classList.toggle('show');
+    });
+    grid.appendChild(card);
+  });
+
+  const mg=document.getElementById('mks-grid');
+  mg.innerHTML='';
+  MKS_IDS.forEach(id=>{
+    const c=CONCEPTS.find(x=>x.id===id);
+    if(!c)return;
+    const card=document.createElement('div');
+    card.className='mks-core';
+    card.innerHTML=`<div class="icon">🔍</div><h3>${c.name}</h3><p>${c.def.substring(0,60)}...</p>`;
+    mg.appendChild(card);
+  });
+}
+
+function renderSVGMap(){
+  const svg=`<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#b8860b"/></marker>
+  </defs>
+  <rect width="900" height="620" fill="#f0f4f8" rx="12"/>
+
+  <!-- Edges -->
+  <line x1="450" y1="55" x2="150" y2="140" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="320" y2="140" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="570" y2="140" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="740" y2="140" stroke="#8e44ad" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="150" y1="170" x2="90" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="150" y1="170" x2="210" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="320" y1="170" x2="280" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="320" y1="170" x2="370" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="570" y1="170" x2="520" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="570" y1="170" x2="620" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="740" y1="170" x2="700" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="740" y1="170" x2="790" y2="280" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <line x1="210" y1="310" x2="280" y2="420" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="310" x2="450" y2="420" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="790" y1="310" x2="620" y2="420" stroke="#8e44ad" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Bottom integration -->
+  <line x1="300" y1="450" x2="400" y2="550" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <line x1="600" y1="450" x2="500" y2="550" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+
+  <!-- Root -->
+  <ellipse cx="450" cy="30" rx="100" ry="22" fill="#8e44ad"/>
+  <text x="450" y="35" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">识破伪科学与信息鉴别</text>
+
+  <!-- Branches -->
+  <rect x="60" y="145" rx="18" ry="18" width="180" height="40" fill="#8e44ad"/>
+  <text x="150" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">伪科学识别法</text>
+  <rect x="240" y="145" rx="18" ry="18" width="160" height="40" fill="#8e44ad"/>
+  <text x="320" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">民科心理画像</text>
+  <rect x="490" y="145" rx="18" ry="18" width="160" height="40" fill="#8e44ad"/>
+  <text x="570" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">泡沫科学</text>
+  <rect x="660" y="145" rx="18" ry="18" width="160" height="40" fill="#8e44ad"/>
+  <text x="740" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">严谨测量</text>
+
+  <!-- Leaves -->
+  <rect x="20" y="260" rx="12" ry="12" width="140" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="90" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">科学共识</text>
+  <rect x="170" y="260" rx="12" ry="12" width="100" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="220" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">媒体科学素养</text>
+  <rect x="230" y="260" rx="12" ry="12" width="100" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="280" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">神药陷阱</text>
+  <rect x="325" y="260" rx="12" ry="12" width="110" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="380" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">相关≠因果</text>
+  <rect x="475" y="260" rx="12" ry="12" width="100" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="525" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">双盲实验</text>
+  <rect x="575" y="260" rx="12" ry="12" width="110" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="630" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">谬误辨析</text>
+  <rect x="735" y="260" rx="12" ry="12" width="110" height="36" fill="#ffffff" stroke="#d5dce3"/>
+  <text x="790" y="283" text-anchor="middle" fill="#2c3e50" font-size="12">巴纳姆效应</text>
+
+  <!-- Application nodes -->
+  <rect x="200" y="400" rx="14" ry="14" width="160" height="36" fill="#27ae60"/>
+  <text x="280" y="423" text-anchor="middle" fill="#fff" font-size="12">识别·辟谣·判断</text>
+  <rect x="530" y="400" rx="14" ry="14" width="140" height="36" fill="#27ae60"/>
+  <text x="600" y="423" text-anchor="middle" fill="#fff" font-size="12">验证·实验·逻辑</text>
+
+  <!-- Bottom: Complex Systems -->
+  <ellipse cx="450" cy="558" rx="180" ry="28" fill="#8e44ad"/>
+  <text x="450" y="563" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">信息鉴别综合素养（整合层）</text>
+</svg>`;
+  document.getElementById('svg-map').innerHTML=svg;
+}
+
+function updateProgress(){
+  const count=learnedSet.size;
+  document.getElementById('learned-count').textContent=count;
+  const pct=Math.round(count/10*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-text').textContent=count>=10?'恭喜！你已掌握所有核心概念！':`已掌握 ${count}/10，继续努力！`;
+  statsData.learned=count;
+  saveState();
+}
+
+// ==================== TAB 1: FLIP CARDS ====================
+function renderFlipCard(idx){
+  const c=CONCEPTS[idx];
+  if(!c)return;
+  const front=document.getElementById('flip-front');
+  const back=document.getElementById('flip-back');
+  front.innerHTML=`
+    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name}</h3>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:10px;">${c.mks?'MKS核心概念':'核心概念'}</p>
+    <p style="font-size:14px;">${c.def}</p>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-light);text-align:center;">点击"翻转卡片"查看详情</div>
+  `;
+  back.innerHTML=`
+    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name} · 深层理解</h3>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>类比：</strong>${c.analogy}</p>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>示例：</strong>${c.example}</p>
+    <p style="font-size:13px;"><strong>反例/边界：</strong>${c.counter}</p>
+  `;
+  document.getElementById('flip-counter').textContent=`${idx+1}/${CONCEPTS.length}`;
+  document.getElementById('flip-card').classList.remove('flipped');
+  const btn=document.getElementById('mark-learned-btn');
+  if(learnedSet.has(c.id)){
+    btn.textContent='✓ 已学会';
+    btn.style.background='var(--success)';
+  } else {
+    btn.textContent='✓ 标记已学会';
+    btn.style.background='';
+  }
+}
+
+function flipCard(){
+  document.getElementById('flip-card').classList.toggle('flipped');
+}
+function prevCard(){flipIndex=(flipIndex-1+CONCEPTS.length)%CONCEPTS.length;renderFlipCard(flipIndex);}
+function nextCard(){flipIndex=(flipIndex+1)%CONCEPTS.length;renderFlipCard(flipIndex);}
+function markLearned(){
+  const c=CONCEPTS[flipIndex];
+  if(!c)return;
+  if(learnedSet.has(c.id)){
+    learnedSet.delete(c.id);
+  } else {
+    learnedSet.add(c.id);
+  }
+  saveState();
+  renderFlipCard(flipIndex);
+  updateProgress();
+}
+
+// ==================== TAB 2: QUIZ ====================
+function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startQuiz(mode){
+  quizState.mode=mode;
+  quizState.index=0;
+  quizState.correct=0;
+  quizState.total=0;
+  quizState.streak=0;
+  quizState.answered=false;
+  quizState.selected=-1;
+  quizState.shortAnswers=[];
+  quizState.startTime=Date.now();
+  quizState.active=true;
+
+  let qs=[];
+  if(mode==='random'){
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+  } else {
+    qs=[...QUIZ_DATA];
+  }
+  quizState.questions=qs;
+  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  document.getElementById('quiz-result').style.display='none';
+  renderQuizQuestion();
+  startQuizTimer();
+}
+
+function renderQuizQuestion(){
+  const container=document.getElementById('quiz-container');
+  const qs=quizState.questions;
+  const idx=quizState.index;
+  if(idx>=qs.length){
+    finishQuiz();
+    return;
+  }
+  const q=qs[idx];
+  container.innerHTML='';
+  const card=document.createElement('div');
+  card.className='quiz-card';
+
+  if(q.type==='choice'){
+    card.innerHTML=`
+      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
+      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <div class="options" id="quiz-options">
+        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
+      </div>
+      <div class="feedback" id="quiz-feedback"></div>
+    `;
+  } else {
+    card.innerHTML=`
+      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
+      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
+      <div style="margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
+      </div>
+      <div class="feedback" id="quiz-feedback"></div>
+    `;
+  }
+  container.appendChild(card);
+  quizState.answered=false;
+  quizState.selected=-1;
+}
+
+function selectChoice(i){
+  if(quizState.answered) return;
+  const q=quizState.questions[quizState.index];
+  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
+    el.classList.toggle('selected',idx===i);
+  });
+  quizState.selected=i;
+}
+
+function submitChoice(){
+  if(quizState.selected===-1) return;
+  const q=quizState.questions[quizState.index];
+  const fb=document.getElementById('quiz-feedback');
+  const options=document.querySelectorAll('#quiz-options .option');
+  options.forEach((el,idx)=>{
+    if(idx===q.answer) el.classList.add('correct');
+    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
+  });
+  quizState.total++;
+  if(quizState.selected===q.answer){
+    quizState.correct++;
+    quizState.streak++;
+    fb.className='feedback show correct';
+    fb.innerHTML=`<p>回答正确！${q.explain||''}</p>`;
+  } else {
+    quizState.streak=0;
+    fb.className='feedback show wrong';
+    fb.innerHTML=`<p>回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}</p>`;
+    addWrongBook(q.q,q.options[q.answer],q.explain||'');
+  }
+  quizState.answered=true;
+  setTimeout(()=>{
+    quizState.index++;
+    renderQuizQuestion();
+  },2000);
+}
+
+function submitShortAnswer(){
+  const input=document.getElementById('short-input');
+  const val=input.value.trim();
+  const q=quizState.questions[quizState.index];
+  const fb=document.getElementById('quiz-feedback');
+  quizState.total++;
+  quizState.correct++;
+  fb.className='feedback show correct';
+  fb.innerHTML=`<p>已记录你的回答。</p><p><strong>参考答案：</strong>${q.ans||''}</p>`;
+  quizState.answered=true;
+  setTimeout(()=>{
+    quizState.index++;
+    renderQuizQuestion();
+  },2500);
+}
+
+function finishQuiz(){
+  quizState.active=false;
+  document.getElementById('quiz-container').innerHTML='';
+  const el=document.getElementById('quiz-result');
+  el.style.display='block';
+  const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
+  el.innerHTML=`
+    <h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>
+    <p>正确：${quizState.correct} / ${quizState.total}</p>
+    <p>正确率：${pct}%</p>
+    <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
+    <p>连续答对：${quizState.streak}</p>
+    <button class="btn btn-primary btn-sm" onclick="startQuiz('${quizState.mode}')" style="margin-top:10px;">重新开始</button>
+  `;
+  statsData.quizAnswered+=quizState.total;
+  statsData.accuracy=Math.round(((statsData.accuracy*(statsData.quizAnswered-quizState.total))+(pct*quizState.total))/Math.max(1,statsData.quizAnswered));
+  statsData.streak=Math.max(statsData.streak,quizState.streak);
+  saveState();
+  clearInterval(quizState._timer);
+  document.getElementById('quiz-timer').textContent='';
+}
+
+function startQuizTimer(){
+  clearInterval(quizState._timer);
+  quizState._timer=setInterval(()=>{
+    if(!quizState.active){clearInterval(quizState._timer);return;}
+    const elapsed=Math.floor((Date.now()-quizState.startTime)/1000);
+    const m=Math.floor(elapsed/60);
+    const s=elapsed%60;
+    document.getElementById('quiz-timer').textContent=`⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+
+function resetQuiz(){
+  quizState.active=false;
+  clearInterval(quizState._timer);
+  document.getElementById('quiz-container').innerHTML='';
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-timer').textContent='';
+  document.getElementById('quiz-info').textContent='包含20道选择题和10道简答题。点击"随机抽题"开始练习。';
+}
+
+function addWrongBook(q,correctAns,explain){
+  wrongBook.unshift({q,correctAns,explain,time:new Date().toLocaleString()});
+  if(wrongBook.length>50) wrongBook.pop();
+  saveState();
+}
+
+// ==================== TAB 3: EXAM ====================
+function startExam(){
+  const questions=shuffleArray([...QUIZ_DATA]).slice(0,7).map(q=>({...q,type:'choice'}));
+  const shortQs=shuffleArray([...SHORT_ANSWER_QUESTIONS]).slice(0,3).map((q,i)=>({q:q.q,ans:q.ans,type:'short',index:i}));
+  examState.questions=[...questions,...shortQs];
+  examState.answers=new Array(examState.questions.length).fill(null);
+  examState.active=true;
+  examState.startTime=Date.now();
+  document.getElementById('start-exam-btn').disabled=true;
+  document.getElementById('start-exam-btn').textContent='考试进行中...';
+  renderExam();
+  startExamTimer();
+}
+
+function renderExam(){
+  const container=document.getElementById('exam-container');
+  container.innerHTML='';
+  examState.questions.forEach((q,i)=>{
+    const card=document.createElement('div');
+    card.className='exam-card';
+    if(q.type==='choice'){
+      card.innerHTML=`
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(选择题)</span></h3>
+        <div class="options" id="exam-opt-${i}">
+          ${q.options.map((opt,j)=>`<div class="option" data-exam="${i}" data-idx="${j}" onclick="selectExamChoice(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</div>`).join('')}
+        </div>
+      `;
+    } else {
+      card.innerHTML=`
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(简答题)</span></h3>
+        <textarea class="short-input" data-exam="${i}" placeholder="输入你的回答..." oninput="examState.answers[${i}]=this.value"></textarea>
+      `;
+    }
+    container.appendChild(card);
+  });
+  const btnDiv=document.createElement('div');
+  btnDiv.style.marginTop='16px';
+  btnDiv.innerHTML=`<button class="btn btn-warning" onclick="submitExam()">提交试卷</button>`;
+  container.appendChild(btnDiv);
+}
+
+function selectExamChoice(qIdx,optIdx){
+  document.querySelectorAll(`#exam-opt-${qIdx} .option`).forEach((el,i)=>{
+    el.classList.toggle('selected',i===optIdx);
+  });
+  examState.answers[qIdx]=optIdx;
+}
+
+function startExamTimer(){
+  clearInterval(examState.timer);
+  examState.minutes=15;
+  const update=()=>{
+    const elapsed=Math.floor((Date.now()-examState.startTime)/1000);
+    const remaining=examState.minutes*60-elapsed;
+    if(remaining<=0){
+      clearInterval(examState.timer);
+      submitExam();
+      return;
+    }
+    const m=Math.floor(remaining/60);
+    const s=remaining%60;
+    document.getElementById('exam-timer').textContent=`⏱ 剩余 ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(remaining<60){
+      document.getElementById('exam-timer').style.color='var(--accent)';
+    }
+  };
+  update();
+  examState.timer=setInterval(update,1000);
+}
+
+function submitExam(){
+  if(!examState.active) return;
+  examState.active=false;
+  clearInterval(examState.timer);
+  document.getElementById('start-exam-btn').disabled=false;
+  document.getElementById('start-exam-btn').textContent='开始考试';
+  document.getElementById('exam-timer').textContent='';
+
+  let correct=0,total=0;
+  const results=[];
+  examState.questions.forEach((q,i)=>{
+    const ans=examState.answers[i];
+    if(q.type==='choice'){
+      total++;
+      const isCorrect=ans===q.answer;
+      if(isCorrect) correct++;
+      results.push({index:i,question:q.q,userAns:ans!==null?String.fromCharCode(65+ans):'未作答',correctAns:String.fromCharCode(65+q.answer),isCorrect,type:'choice',explain:q.explain||''});
+    } else {
+      results.push({index:i,question:q.q,userAns:ans||'未作答',correctAns:'（见参考答案）',isCorrect:ans&&ans.trim().length>0,type:'short'});
+    }
+  });
+
+  const el=document.getElementById('exam-result');
+  const pct=total>0?Math.round(correct/total*100):0;
+  el.style.display='block';
+  let html=`
+    <h3 style="color:var(--accent);margin-bottom:8px;">考试结果</h3>
+    <p><strong>选择题：</strong>${correct} / ${total} 正确 (${pct}%)</p>
+    <p><strong>简答题：</strong>已答 ${results.filter(r=>r.type==='short'&&r.userAns!=='未作答').length} / ${results.filter(r=>r.type==='short').length}</p>
+    <p><strong>用时：</strong>${Math.round((Date.now()-examState.startTime)/1000)}秒</p>
+    <hr style="margin:12px 0;border-color:var(--border);">
+    <h4 style="margin-bottom:8px;">详细结果</h4>
+  `;
+  results.forEach(r=>{
+    if(r.type==='choice'){
+      const icon=r.isCorrect?'✓':'✗';
+      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'#e8f5e9':'#ffebee'};border-radius:6px;font-size:13px;">
+        <p><strong>${r.question}</strong></p>
+        <p>${icon} 你的答案：${r.userAns} ${r.isCorrect?'':'| 正确答案：'+r.correctAns}</p>
+        ${!r.isCorrect?`<p style="color:var(--text-light);">${r.explain}</p>`:''}
+      </div>`;
+    }
+  });
+  html+=`<button class="btn btn-primary btn-sm" onclick="document.getElementById('exam-result').style.display='none';" style="margin-top:10px;">关闭结果</button>`;
+  el.innerHTML=html;
+
+  statsData.examCount++;
+  saveState();
+}
+
+// ==================== TAB 4: REVIEW ====================
+function updateReviewStats(){
+  document.getElementById('stat-learned').textContent=statsData.learned||learnedSet.size;
+  document.getElementById('stat-total').textContent=10;
+  document.getElementById('stat-quiz').textContent=statsData.quizAnswered||0;
+  document.getElementById('stat-accuracy').textContent=(statsData.accuracy||0)+'%';
+  document.getElementById('stat-streak').textContent=statsData.streak||0;
+  document.getElementById('stat-exam').textContent=statsData.examCount||0;
+
+  const wb=document.getElementById('wrong-book');
+  if(wrongBook.length===0){
+    wb.innerHTML='<p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
+  } else {
+    wb.innerHTML=wrongBook.slice(0,10).map(item=>
+      `<div style="padding:8px;margin-bottom:6px;background:#ffebee;border-radius:6px;font-size:13px;">
+        <p><strong>${item.q}</strong></p>
+        <p>正确答案：${item.correctAns}</p>
+        ${item.explain?`<p style="color:var(--text-light);">${item.explain}</p>`:''}
+        <p style="font-size:11px;color:var(--text-light);">${item.time}</p>
+      </div>`
+    ).join('');
+  }
+
+  const weak=document.getElementById('weak-concepts');
+  const weakMap={};
+  wrongBook.forEach(item=>{
+    const match=QUIZ_DATA.find(q=>q.q===item.q);
+    if(match){
+      const idx=QUIZ_DATA.indexOf(match);
+      const conceptIdx=Math.floor(idx/2);
+      const c=CONCEPTS[conceptIdx%CONCEPTS.length];
+      if(c){
+        weakMap[c.name]=(weakMap[c.name]||0)+1;
+      }
+    }
+  });
+  const weakList=Object.entries(weakMap).sort((a,b)=>b[1]-a[1]);
+  if(weakList.length===0){
+    weak.innerHTML='<p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
+  } else {
+    weak.innerHTML=weakList.map(([name,count])=>
+      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#f3eef8;border-radius:6px;font-size:13px;">
+        <span>${name}</span>
+        <span style="color:var(--accent);font-weight:700;">错${count}题</span>
+      </div>`
+    ).join('');
+  }
+}
+
+// ==================== TAB 5: MINDMAP ====================
+function renderMindmap(){
+  const el=document.getElementById('mindmap');
+  el.innerHTML=`
+    <ul>
+      <li>
+        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+        <span class="tree-node root">识破伪科学与信息鉴别</span>
+        <div class="children open">
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心01：伪科学识别法</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">三大特征：不可证伪 / 个人见证 / 术语滥用</span></li>
+              <li><span class="tree-node leaf">类比：信息领域的"验钞机"</span></li>
+              <li><span class="tree-node leaf">案例：尼斯湖水怪、星座性格</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心02：民科心理画像</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">缺乏同行评议 / 不会证伪自己 / 迫害妄想</span></li>
+              <li><span class="tree-node leaf">民科≠业余科学家——区别在方法论</span></li>
+              <li><span class="tree-node leaf">案例：推翻相对论的民科网站</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心03：泡沫科学</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">好泡沫（激发研究）vs 坏泡沫（误导公众）</span></li>
+              <li><span class="tree-node leaf">潜意识理论 / 冷聚变争议</span></li>
+              <li><span class="tree-node app">应用：判断新闻中的"突破"真实度</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">MKS核心04：严谨测量</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">从子午线到米原器再到光速定义</span></li>
+              <li><span class="tree-node leaf">标准化本身就是科学进步</span></li>
+              <li><span class="tree-node app">应用：认识"测量的精度"概念</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">科学共识 → 媒体科学素养</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">科学共识：多源独立证据汇聚</span></li>
+              <li><span class="tree-node leaf">媒体素养：三步法查原始论文</span></li>
+              <li><span class="tree-node app">应用：全球变暖、刷屏新闻鉴别</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">神药陷阱 + 相关≠因果 + 双盲实验</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">神药陷阱：酵素/葡萄籽/胶原蛋白共同模式</span></li>
+              <li><span class="tree-node leaf">相关≠因果：第三变量驱动虚假相关</span></li>
+              <li><span class="tree-node leaf">双盲实验：排除安慰剂+观察者偏差</span></li>
+              <li><span class="tree-node app">应用：保健品鉴别、科学阅读</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">谬误辨析</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">科里奥利力在马桶尺度可忽略</span></li>
+              <li><span class="tree-node leaf">QWERTY不是最优布局而是路径依赖</span></li>
+              <li><span class="tree-node leaf">巴纳姆效应：模糊描述适配所有人</span></li>
+            </div>
+          </li>
+        </div>
+      </li>
+    </ul>
+  `;
+}
+
+function toggleTree(el){
+  const parent=el.parentElement;
+  const children=parent.querySelector('.children');
+  if(!children) return;
+  children.classList.toggle('open');
+  el.textContent=children.classList.contains('open')?'[−]':'[+]';
+}
+
+// ==================== TAB 6: SOCRATIC ====================
+function renderSocratic(){
+  const container=document.getElementById('socratic-container');
+  container.innerHTML='';
+  SOCRATIC_DATA.forEach(theme=>{
+    const themeDiv=document.createElement('div');
+    themeDiv.className='card';
+    themeDiv.innerHTML=`<h3>主题：${theme.theme}</h3>`;
+    theme.pairs.forEach((pair,i)=>{
+      const card=document.createElement('div');
+      card.className='socratic-card';
+      card.innerHTML=`
+        <div class="socratic-q" onclick="toggleSocratic(this)">
+          <span>${pair.q}</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="socratic-a">
+          <p>${pair.a}</p>
+        </div>
+      `;
+      themeDiv.appendChild(card);
+    });
+    container.appendChild(themeDiv);
+  });
+}
+
+function toggleSocratic(el){
+  const answer=el.nextElementSibling;
+  const arrow=el.querySelector('.arrow');
+  answer.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ==================== TAB 8: DECISION ====================
+function renderDecision(){
+  const container=document.getElementById('decision-container');
+  container.innerHTML='';
+  DECISION_ROUNDS.forEach((round,ri)=>{
+    const div=document.createElement('div');
+    div.className='decision-round';
+    div.innerHTML=`
+      <h3>场景 ${ri+1}</h3>
+      <div class="scenario">${round.scenario}</div>
+      <div class="choices" id="decision-choices-${ri}">
+        ${round.choices.map((c,ci)=>`<div class="choice" onclick="selectDecision(${ri},${ci})">${String.fromCharCode(65+ci)}. ${c.text}</div>`).join('')}
+      </div>
+      <div class="feedback" id="decision-feedback-${ri}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function selectDecision(ri,ci){
+  const round=DECISION_ROUNDS[ri];
+  const choice=round.choices[ci];
+  const fb=document.getElementById(`decision-feedback-${ri}`);
+  document.querySelectorAll(`#decision-choices-${ri} .choice`).forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(i===ci) el.classList.add('selected');
+  });
+  fb.className=`feedback show ${choice.type}`;
+  const icon=choice.type==='correct'?'✓':choice.type==='wrong'?'✗':'!';
+  fb.innerHTML=`${icon} ${choice.feedback}`;
+}
+
+// ==================== INIT ====================
+loadState();
+renderConcepts();
+renderSVGMap();
+updateProgress();
+renderFlipCard(0);
+renderSocratic();
+renderDecision();
+updateReviewStats();
+
+// Override quiz submit on choice click
+document.addEventListener('click',function(e){
+  const opt=e.target.closest('#quiz-options .option');
+  if(opt && !quizState.answered){
+    submitChoice();
+  }
+});
+
+// Ensure exam timer is cleaned up when tab is hidden
+window.addEventListener('beforeunload',function(){
+  clearInterval(examState.timer);
+  clearInterval(quizState._timer);
+});
+</script>
+</body>
+</html>

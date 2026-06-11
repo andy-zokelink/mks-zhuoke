@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科学思维的工具箱 · 最小知识集</title>
+<style>
+:root {
+  --bg:#fdf6ec;
+  --card:#fffaf2;
+  --accent:#c0392b;
+  --accent-light:#e74c3c;
+  --text:#3d2f2f;
+  --text-light:#6b5a5a;
+  --border:#e8d5c4;
+  --gold:#b8860b;
+  --success:#27ae60;
+  --warning:#e67e22;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height:1.8;
+  padding-bottom:60px;
+}
+.top-bar {
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:linear-gradient(135deg,#3d2f2f,#5a3e3e);
+  color:#fff;
+  padding:14px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.top-bar h1 { font-size:20px; font-weight:700; }
+.top-bar a { color:#e8d5c4; text-decoration:none; font-size:14px; }
+.top-bar a:hover { color:#fff; }
+.tab-bar {
+  position:sticky;
+  top:44px;
+  z-index:99;
+  background:var(--bg);
+  border-bottom:2px solid var(--border);
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:8px 12px;
+}
+.tab-btn {
+  padding:6px 14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+  font-size:13px;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.tab-btn:hover { background:var(--border); }
+.tab-btn.active {
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+.card h3 { font-size:16px; margin-bottom:8px; color:var(--text); }
+.card p { font-size:14px; color:var(--text-light); margin-bottom:6px; }
+.core-goal {
+  background:linear-gradient(135deg,#fff5ee,#fde8d0);
+  border:2px solid var(--gold);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  text-align:center;
+}
+.core-goal h2 { color:var(--accent); font-size:20px; }
+.core-goal p { font-size:15px; color:var(--text-light); max-width:700px; margin:8px auto 0; }
+.concept-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+.concept-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.concept-card:hover { border-color:var(--accent-light); box-shadow:0 2px 8px rgba(192,57,43,0.1); }
+.concept-card .label {
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:10px;
+  margin-bottom:6px;
+}
+.concept-card .label.mks { background:var(--gold); }
+.concept-card h3 { font-size:15px; margin-bottom:4px; }
+.concept-card .def { font-size:13px; color:var(--text-light); }
+.concept-card .extra { display:none; margin-top:8px; font-size:13px; color:var(--text-light); border-top:1px dashed var(--border); padding-top:8px; }
+.concept-card .extra.show { display:block; }
+.concept-card .extra strong { color:var(--text); }
+.mks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:20px; }
+.mks-core { background:var(--card); border:2px solid var(--gold); border-radius:12px; padding:16px; text-align:center; }
+.mks-core .icon { font-size:28px; }
+.mks-core h3 { font-size:15px; color:var(--accent); }
+.mks-core p { font-size:13px; color:var(--text-light); }
+.svg-wrap { margin:20px 0; text-align:center; }
+.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+.boundary-table th,.boundary-table td { border:1px solid var(--border); padding:10px 12px; text-align:left; font-size:13px; }
+.boundary-table th { background:var(--accent); color:#fff; font-weight:600; }
+.boundary-table tr:nth-child(even) { background:var(--card); }
+.learning-path { counter-reset:step; }
+.learning-path .step { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+.learning-path .step::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+.learning-path .step h3 { font-size:14px; margin-bottom:4px; }
+.learning-path .step p { font-size:13px; color:var(--text-light); }
+.progress-bar { height:8px; background:var(--border); border-radius:4px; margin:8px 0; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .5s; }
+
+/* Flip card */
+.flip-container { perspective:1000px; max-width:500px; margin:20px auto; }
+.flip-card { position:relative; width:100%; min-height:320px; transition:transform .6s; transform-style:preserve-3d; }
+.flip-card.flipped { transform:rotateY(180deg); }
+.flip-front,.flip-back { position:absolute; top:0; left:0; width:100%; min-height:320px; backface-visibility:hidden; border-radius:12px; padding:24px; border:1px solid var(--border); background:var(--card); }
+.flip-back { transform:rotateY(180deg); }
+.flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+.flip-card .nav button { padding:6px 16px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-size:13px; }
+.flip-card .nav button:hover { background:var(--border); }
+.flip-card .mark-btn { background:var(--accent); color:#fff; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
+.flip-card .mark-btn:hover { background:var(--accent-light); }
+.flip-card .counter { font-size:13px; color:var(--text-light); }
+
+/* Quiz */
+.quiz-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+.quiz-card h3 { font-size:15px; margin-bottom:10px; }
+.quiz-card .options { display:flex; flex-direction:column; gap:6px; }
+.quiz-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+.quiz-card .option:hover { background:var(--border); }
+.quiz-card .option.selected { border-color:var(--accent); background:#fde8d0; }
+.quiz-card .option.correct { border-color:var(--success); background:#e8f5e9; }
+.quiz-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.quiz-card .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
+.quiz-card .feedback.show { display:block; }
+.quiz-card .feedback.correct { background:#e8f5e9; border:1px solid #a5d6a7; }
+.quiz-card .feedback.wrong { background:#ffebee; border:1px solid #ef9a9a; }
+.quiz-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
+.quiz-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+
+/* Exam */
+.exam-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+.exam-card h3 { font-size:15px; margin-bottom:10px; }
+.exam-card .options { display:flex; flex-direction:column; gap:6px; }
+.exam-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; }
+.exam-card .option.selected { border-color:var(--accent); background:#fde8d0; }
+.exam-card .option.correct { border-color:var(--success); background:#e8f5e9; }
+.exam-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.exam-card .feedback { margin-top:8px; padding:8px; border-radius:6px; font-size:13px; display:none; }
+.exam-card .feedback.show { display:block; }
+.exam-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
+.exam-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+
+/* Review */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; }
+.stat-card .num { font-size:28px; font-weight:700; color:var(--accent); }
+.stat-card .label { font-size:13px; color:var(--text-light); margin-top:4px; }
+
+/* Mindmap */
+.mindmap { padding:10px 0; }
+.mindmap ul { list-style:none; padding-left:24px; }
+.mindmap li { position:relative; margin:4px 0; }
+.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; }
+.mindmap .tree-toggle:hover { color:var(--accent-light); }
+.mindmap .tree-node { padding:6px 10px; border-radius:6px; font-size:13px; display:inline-block; }
+.mindmap .tree-node.root { background:var(--accent); color:#fff; font-weight:700; }
+.mindmap .tree-node.branch { background:#d4a574; color:#fff; }
+.mindmap .tree-node.leaf { background:var(--card); border:1px solid var(--border); }
+.mindmap .tree-node.app { background:var(--success); color:#fff; }
+.mindmap .children { display:none; padding-left:20px; border-left:2px solid var(--border); margin:4px 0 4px 12px; }
+.mindmap .children.open { display:block; }
+
+/* Socratic */
+.socratic-card { background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
+.socratic-q { padding:14px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent); display:flex; justify-content:space-between; align-items:center; user-select:none; }
+.socratic-q:hover { background:#fde8d0; }
+.socratic-q .arrow { transition:transform .3s; font-size:12px; }
+.socratic-q .arrow.open { transform:rotate(180deg); }
+.socratic-a { display:none; padding:0 16px 14px; border-top:1px dashed var(--border); }
+.socratic-a.open { display:block; }
+.socratic-a p { font-size:13px; color:var(--text-light); margin-top:10px; }
+.socratic-a p strong { color:var(--text); }
+
+/* Case Study */
+.case-dim { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:10px; }
+.case-dim h3 { font-size:14px; color:var(--accent); margin-bottom:6px; }
+.case-dim p { font-size:13px; color:var(--text-light); }
+
+/* Decision */
+.decision-round { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+.decision-round h3 { font-size:15px; margin-bottom:10px; }
+.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:#fde8d0; border-radius:8px; }
+.decision-round .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-round .choice { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+.decision-round .choice:hover { background:var(--border); }
+.decision-round .choice.selected { border-color:var(--accent); background:#fde8d0; }
+.decision-round .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
+.decision-round .feedback.show { display:block; border-left:4px solid; }
+.decision-round .feedback.correct { background:#e8f5e9; border-left-color:var(--success); }
+.decision-round .feedback.wrong { background:#ffebee; border-left-color:var(--accent); }
+.decision-round .feedback.warning { background:#fff8e1; border-left-color:var(--warning); }
+.decision-round .choice.disabled { pointer-events:none; opacity:0.6; }
+
+/* Buttons */
+.btn {
+  display:inline-block;
+  padding:8px 20px;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+}
+.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary:hover { background:var(--accent-light); }
+.btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); }
+.btn-secondary:hover { background:var(--border); }
+.btn-success { background:var(--success); color:#fff; }
+.btn-success:hover { opacity:0.9; }
+.btn-warning { background:var(--warning); color:#fff; }
+.btn-warning:hover { opacity:0.9; }
+.btn-sm { padding:5px 12px; font-size:12px; }
+
+/* Responsive */
+@media(max-width:640px) {
+  .top-bar h1 { font-size:16px; }
+  .tab-btn { font-size:12px; padding:4px 10px; }
+  .concept-grid { grid-template-columns:1fr; }
+  .mks-grid { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+}
+/* SVG */
+svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <h1>科学思维的工具箱</h1>
+  <a href="#">← 返回课程首页</a>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="0">知识集总览</button>
+  <button class="tab-btn" data-tab="1">知识卡片</button>
+  <button class="tab-btn" data-tab="2">题库系统</button>
+  <button class="tab-btn" data-tab="3">考试模式</button>
+  <button class="tab-btn" data-tab="4">复习模式</button>
+  <button class="tab-btn" data-tab="5">思维导图</button>
+  <button class="tab-btn" data-tab="6">深度追问</button>
+  <button class="tab-btn" data-tab="7">案例分析</button>
+  <button class="tab-btn" data-tab="8">实战决策</button>
+</div>
+
+<!-- Tab Content -->
+<div class="tab-content">
+
+<!-- ===== TAB 0: 知识集总览 ===== -->
+<div class="tab-panel active" id="tab-0">
+  <div class="core-goal">
+    <h2>掌握科学思维的六大核心工具</h2>
+    <p>极限·模型·证据·计算·变量·数字 — 建立不受本能和直觉欺骗的理性判断力。卓克说："科学方法是人类知识迭代最好的方法，没有之一。"</p>
+  </div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">10个核心概念</h2>
+  <div class="concept-grid" id="concept-grid"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">MKS 核心工具箱（4个）</h2>
+  <div class="mks-grid" id="mks-grid"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">概念关系图</h2>
+  <div class="svg-wrap" id="svg-map"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">边界知识</h2>
+  <table class="boundary-table">
+    <thead><tr><th style="width:40px;">#</th><th>知识点</th><th>用途说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>地球熄灯一小时的起源与争议</td><td>讨论环保符号化时引用</td></tr>
+      <tr><td>2</td><td>NEDC/WLTP/EPA续航测试标准差异</td><td>理解电动车续航标注</td></tr>
+      <tr><td>3</td><td>撒哈拉沙漠太阳能计划(Desertec)</td><td>讨论可再生能源可行性</td></tr>
+      <tr><td>4</td><td>蓝鲸的生物学分类与演化史</td><td>理解体型约束</td></tr>
+      <tr><td>5</td><td>二维码的Reed-Solomon纠错码原理</td><td>通信技术背景</td></tr>
+      <tr><td>6</td><td>CPU的登纳德缩放比例定律</td><td>理解芯片发展史</td></tr>
+      <tr><td>7</td><td>混沌理论(蝴蝶效应)基础概念</td><td>理解复杂系统</td></tr>
+      <tr><td>8</td><td>蒙特卡洛方法与费米估算</td><td>数量级推理工具</td></tr>
+      <tr><td>9</td><td>笛卡尔坐标系的发明史</td><td>数学工具背景</td></tr>
+      <tr><td>10</td><td>纽姆符记谱法到五线谱的演变</td><td>信息编码史案例</td></tr>
+      <tr><td>11</td><td>雷达在二战中的发展与天气预报</td><td>技术交叉史</td></tr>
+      <tr><td>12</td><td>卡尔·波普尔的证伪主义</td><td>科学哲学基础</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习路径</h2>
+  <div class="learning-path">
+    <div class="step"><h3>先学「极限思维」和「务实判断」</h3><p>学会把问题推到极值看本质，用物理约束校准直觉</p></div>
+    <div class="step"><h3>掌握「数量级感知」和「变量分析」</h3><p>建立快速估算和识别关键变量的能力</p></div>
+    <div class="step"><h3>深入「模型建构」和「计算推理」</h3><p>用简化模型和数学逻辑替代直觉判断</p></div>
+    <div class="step"><h3>强化「证据挖掘」和「概率思维」</h3><p>学会追溯证据链，用概率替代非黑即白</p></div>
+    <div class="step"><h3>升华到「科学方法总论」+「复杂系统思维」</h3><p>理解所有工具的统一框架和系统涌现</p></div>
+  </div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习进度</h2>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-light);">已掌握概念 <span id="learned-count">0</span>/10</p>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:4px;" id="progress-text">继续努力，掌握科学思维工具</p>
+  </div>
+</div>
+
+<!-- ===== TAB 1: 知识卡片 ===== -->
+<div class="tab-panel" id="tab-1">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">知识卡片 · 翻转学习</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
+  <div class="flip-container">
+    <div class="flip-card" id="flip-card">
+      <div class="flip-front" id="flip-front"></div>
+      <div class="flip-back" id="flip-back"></div>
+    </div>
+    <div class="nav">
+      <button onclick="prevCard()">← 上一个</button>
+      <span class="counter" id="flip-counter">1/10</span>
+      <button onclick="nextCard()">下一个 →</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <button class="btn btn-primary btn-sm" onclick="markLearned()" id="mark-learned-btn">✓ 标记已学会</button>
+      <button class="btn btn-secondary btn-sm" onclick="flipCard()" style="margin-left:8px;">🔄 翻转卡片</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 2: 题库系统 ===== -->
+<div class="tab-panel" id="tab-2">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">题库系统</h2>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="btn btn-primary" onclick="startQuiz('random')">随机抽题</button>
+    <button class="btn btn-secondary" onclick="startQuiz('all')">全部题目</button>
+    <button class="btn btn-warning btn-sm" onclick="resetQuiz()">重置</button>
+    <span class="quiz-timer" id="quiz-timer"></span>
+  </div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-light);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
+  </div>
+  <div id="quiz-container"></div>
+  <div id="quiz-result" style="display:none;" class="card"></div>
+</div>
+
+<!-- ===== TAB 3: 考试模式 ===== -->
+<div class="tab-panel" id="tab-3">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">考试模式</h2>
+  <div style="margin-bottom:14px;">
+    <button class="btn btn-primary" id="start-exam-btn" onclick="startExam()">开始考试</button>
+    <span class="exam-timer" id="exam-timer"></span>
+  </div>
+  <div id="exam-container"></div>
+  <div id="exam-result" style="display:none;" class="card"></div>
+</div>
+
+<!-- ===== TAB 4: 复习模式 ===== -->
+<div class="tab-panel" id="tab-4">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">复习模式</h2>
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="num" id="stat-learned">0</div><div class="label">已学会概念</div></div>
+    <div class="stat-card"><div class="num" id="stat-total">10</div><div class="label">总概念</div></div>
+    <div class="stat-card"><div class="num" id="stat-quiz">0</div><div class="label">已答题数</div></div>
+    <div class="stat-card"><div class="num" id="stat-accuracy">0%</div><div class="label">正确率</div></div>
+    <div class="stat-card"><div class="num" id="stat-streak">0</div><div class="label">连续答对</div></div>
+    <div class="stat-card"><div class="num" id="stat-exam">0</div><div class="label">考试完成</div></div>
+  </div>
+  <h3 style="font-size:15px;margin-bottom:8px;color:var(--text);">错题本</h3>
+  <div id="wrong-book" class="card">
+    <p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
+  </div>
+  <h3 style="font-size:15px;margin:12px 0 8px;color:var(--text);">薄弱概念分析</h3>
+  <div id="weak-concepts" class="card">
+    <p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
+  </div>
+</div>
+
+<!-- ===== TAB 5: 思维导图 ===== -->
+<div class="tab-panel" id="tab-5">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">思维导图 · 科学思维工具箱</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
+  <div class="mindmap" id="mindmap"></div>
+</div>
+
+<!-- ===== TAB 6: 深度追问 ===== -->
+<div class="tab-panel" id="tab-6">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">深度追问 · 苏格拉底式问答</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
+  <div id="socratic-container"></div>
+</div>
+
+<!-- ===== TAB 7: 案例分析 ===== -->
+<div class="tab-panel" id="tab-7">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">案例分析 · MKS四维度分析</h2>
+  <div class="card">
+    <h3>案例：电动汽车续航"虚标"问题</h3>
+    <p>问题识别：NEDC续航400公里，实际只跑250公里——消费者维权、媒体质疑厂商欺诈。</p>
+    <p style="margin-top:8px;">用MKS四维度拆解：</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度一：变量分析</h3>
+    <p>温度/速度/空调/载重四个变量叠加导致40%衰减。电动汽车的续航并非"虚标"，而是测试标准（NEDC）与实际驾驶场景存在系统性变量差异。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度二：务实判断</h3>
+    <p>NEDC是标准测试不是真实路况，厂商不能违法但标准本身有局限。务实的选择是推广更接近实际的测试标准（WLTP/EPA），同时消费者教育"续航=标称×0.7"的务实估算规则。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度三：模型建构</h3>
+    <p>需要新的续航预测模型纳入更多变量（温度、速度、空调功率、载重等），替代单一的NEDC标称值模型。特斯拉等厂商已经提供基于实时数据的续航预测。</p>
+  </div>
+  <div class="case-dim">
+    <h3>维度四：科学方法总论</h3>
+    <p>观察（实际续航远低于标称）→ 假设（厂商欺诈 / 标准偏差）→ 验证（对比不同标准测试结果）→ 修正（采用WLTP标准 / 建立新模型）。</p>
+  </div>
+  <div class="card" style="background:#fde8d0;border-color:var(--gold);">
+    <h3>MKS启示</h3>
+    <p>任何一个"被骗"的直觉反应背后，可能都有一个合理的科学解释。先分析变量再归因——这是科学思维工具箱最核心的应用原则。</p>
+  </div>
+</div>
+
+<!-- ===== TAB 8: 实战决策 ===== -->
+<div class="tab-panel" id="tab-8">
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">实战决策模拟</h2>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">模拟三个现实场景，测试你的科学思维应用能力。每个场景有三个选择，点击查看反馈。</p>
+  <div id="decision-container"></div>
+</div>
+
+</div><!-- /.tab-content -->
+
+<script>
+// ==================== DATA ====================
+const CONCEPTS = [
+  {id:'c1',name:'极限思维',def:'推到极值看本质——将变量推至最小或最大，观察系统行为，从而剥离表面现象触及核心规律。电价夜间减半不是因为发电成本低而是需求低；太空垃圾不会无限增加因为大气阻力最终将其拖回地球。',mks:true,analogy:'如同商业谈判中的"底牌试探"——推到对方能接受的最低价格，才能知道真正的利润空间在哪里。',example:'拔河比赛胜负取决于地面摩擦系数和总质量而非选手力量——推到极限后，选对鞋+绑大胖子才是最优策略。硬盘装满电影不会变重，因为数据只是电子排列的改变。',counter:'推极限不等于钻牛角尖——有些系统的极限行为与常态完全不同（如超导只在极低温出现），不能把极限结论直接套用到日常。'},
+  {id:'c2',name:'务实判断',def:'回归物理约束和工程现实做决策。手机屏幕越做越大是因为电池技术停滞——大屏幕=大机身=大电池；二维码破损失效也能扫是因为纠错码冗余设计。',mks:true,analogy:'如同装修预算——不是设计方案有多美，而是实际承重墙在哪里、水管怎么走。务实思维就是找出"承重墙"（物理约束）。',example:'CPU核心越来越多而非越来越快，因为单核频率已触碰功耗墙（散热极限）；蓝鲸是最大动物因为海洋浮力克服了重力约束，陆地动物到不了这个体型。',counter:'务实不是保守——卫星电话直接连卫星不依赖地面基站，跳过了"信号塔"的物理约束，是更高维度的务实。'},
+  {id:'c3',name:'数量级感知',def:'在10倍尺度上校准判断力。1亿有多大？全球太阳能发电需要多大面积？药物分子要多少个才能治疗疾病？学会用数量级而非线性直觉做估算。',mks:false,analogy:'如同看地图先看比例尺——1:10000和1:1000000的地图给出完全不同层次的细节。数量级错了，结论就全盘皆错。',example:'感受1亿：1亿秒≈3.17年；全球太阳能发电需撒哈拉沙漠面积1/4铺设面板；治疗疾病的药物分子需要10^15数量级才能覆盖全身。',counter:'数量级估算不能替代精确模型——费米估算可以判断"方向对不对"，但工程设计需要精确计算。先估算、再精确，两者互补。'},
+  {id:'c4',name:'复杂系统思维',def:'理解多变量相互作用导致反直觉结果的系统。空姐让打开遮光板不是为了让你看风景而是让眼睛适应外界光线以备紧急撤离；鸡蛋能预防流感不是因为"营养丰富"而是鸡胚培养法的副产品。',mks:false,analogy:'如同堵车——前面车减速不是有人故意慢，而是前方10公里处发生了事故。复杂系统中因果链很长，直觉往往只看到最近的一环。',example:'安全带的安全增益只能通过大样本统计才能发现；飞机上不让用手机不是因为一定会干扰导航，而是"可能的干扰+一次性大量设备同时使用"的组合风险。',counter:'复杂系统思维不是"阴谋论"——并非所有反直觉结果都源于隐藏的恶意操纵，大多数只是系统自身涌现的特性。'},
+  {id:'c5',name:'变量分析',def:'识别关键变量、区分虚假相关性。电动汽车续航400公里实测250公里——因为NEDC标准不是真实路况；食物热量表的误差可达20-30%。',mks:false,analogy:'如同买菜讨价还价——价格、新鲜度、距离三个变量，"新鲜度"往往比"价格"对最终满意度影响更大。先找到影响最大的变量再下手。',example:'续航测试的NEDC标准与实际驾驶的主要变量差异：温度、速度波动、空调使用、载重——四个变量叠加可导致续航缩水40%。',counter:'变量分析不能穷举——要在"足够好"和"完美"之间平衡。关键变量的筛选比穷尽所有变量更重要。'},
+  {id:'c6',name:'模型建构',def:'用简化模型理解和预测复杂现实。天气预报用数值模型而非经验公式；行星生命的"持续可栖息带"模型帮助筛选目标。',mks:true,analogy:'如同地图就是地形的模型——地铁线路图只保留站点的拓扑关系，舍弃了实际距离和弯道，但这种"简化"恰恰让它成为最高效的导航工具。',example:'天气预报从"看云识天气"到数值天气预报——用物理方程模拟大气运动，准确率从30%提升到80%+；地球质量是火星10倍可以用行星形成模型解释。',counter:'所有模型都是错的，但有些是有用的——牛顿力学在宏观低速下完美，但在接近光速时完全失效。知道模型的边界比记住模型本身更重要。'},
+  {id:'c7',name:'证据挖掘',def:'像侦探一样追溯结论的证据链。牛顿身世有大量一手文献支撑而非传说；地质年代的名字（侏罗纪、白垩纪）来源于特定地层特征而非随意命名。',mks:false,analogy:'如同考古发掘——不是挖到一块骨头就编故事，而是逐层挖掘、记录位置、交叉验证年代。证据链越完整，结论越可靠。',example:'硬币边缘的锯齿源于贵金属货币时期的"削边防盗"——用锯齿检测是否有人偷偷刮掉金银；地质学家通过标准化石确定地层年代。',counter:'证据≠真理——再强的证据也只是"尚未被证伪"的结论。哥白尼的日心说最初证据并不比地心说更强，是后续积累的证据扭转了天平。'},
+  {id:'c8',name:'计算推理',def:'用数学和逻辑推理而非直觉做判断。为什么用XYZ表示未知数？因为笛卡尔用字母表最后三个字母；羊皮卷里的微积分说明古代数学家已有积分思想。',mks:false,analogy:'如同侦探破案——不是靠"感觉这个人像凶手"，而是通过时间线、动机、物证构建逻辑链。计算推理就是用量化数据替代"感觉"。',example:'爱因斯坦每天跟谁下班？通过计算步行速度和路径可推断；质数为什么迷人？因为它们是乘法的"原子"——任何整数都可唯一分解为质数乘积。',counter:'计算不能替代理解——AlphaGo能下赢围棋但"不懂"围棋。计算结果是工具，解释结果的意义仍然需要人类判断。'},
+  {id:'c9',name:'概率思维',def:'用量化概率替代非黑即白的判断。天气预报"降雨概率70%"不是"有70%的时间下雨"而是"在历史上类似条件下70%的情况下了雨"。',mks:false,analogy:'如同投资组合——没有"稳赚不赔"的股票，只有"期望收益为正"的策略。概率思维让你接纳不确定性而非抗拒它。',example:'安全带减少50%死亡风险——不是说你能在50%的事故中幸存，而是群体统计中死亡率从X降到了X/2。',counter:'概率思维不等于"什么都不确定所以不做判断"——科学决策是在概率分布中找到最优策略，而非因为不确定性而放弃决策。'},
+  {id:'c10',name:'科学方法总论',def:'观察→假设→验证→修正的循环——人类知识迭代的最高效方法。卓克说19世纪人类最伟大成就不是蒸汽机而是"发明了发明的方法"。',mks:true,analogy:'如同软件开发中的敏捷迭代——不是一次性写出完美代码，而是持续发布、收集反馈、快速修正。科学方法就是认知升级的敏捷开发流程。',example:'地球一小时熄灯活动的实际节电效果微乎其微——用科学方法检验后发现它更多是象征意义；蒙眼视物能力从未通过严格的科学验证。',counter:'科学方法不是唯一获取知识的方式——艺术、哲学、宗教提供科学无法覆盖的价值。但就"可验证的真知"而言，科学方法确实是最优解。'}
+];
+
+const MKS_IDS = ['c1','c2','c6','c10'];
+
+const QUIZ_DATA = [
+  {q:'拔河比赛胜负最关键的因素是什么？',options:['地面摩擦系数和总质量','选手力量大小','绳子粗细','队长指挥水平'],answer:0,explain:'推到极限看本质：拔河胜负取决于地面摩擦系数和总质量而非选手力量——选对鞋+绑大胖子才是最优策略。',type:'choice'},
+  {q:'电价夜间减半的根本原因是？',options:['夜间电力需求低','夜间发电成本低','鼓励夜生活','电厂夜间空闲'],answer:0,explain:'电价由供需决定。夜间需求低，电价自然下降，这与发电成本无关——这是极限思维中"推到极端看本质"的典型例子。',type:'choice'},
+  {q:'硬盘装满电影会变重吗？',options:['不会，数据只是电子排列改变','会，因为信息有质量','会变轻，因为电子减少','取决于电影大小'],answer:0,explain:'存储数据只是改变电子排列，不改变质量。除非是理论物理中极端的Landauer原理，否则可忽略不计。',type:'choice'},
+  {q:'为什么没有比蓝鲸更大的动物？',options:['陆地重力约束+海洋浮力的上限','食物不够','演化时间不够','天敌太多'],answer:0,explain:'海洋浮力克服了重力约束，但体型受限于食物获取效率和新陈代谢。蓝鲸代表了这个约束下的极限。',type:'choice'},
+  {q:'安全带的核心作用是？',options:['减少死亡风险约50%','完全避免事故伤害','仅保护驾驶员','装饰作用'],answer:0,explain:'安全带减少约50%的死亡风险——这是概率思维的体现：群体统计中死亡率从X降到X/2，而不是保证个人绝对安全。',type:'choice'},
+  {q:'手机屏幕越来越大的底层原因是？',options:['用户喜欢大屏','电池技术停滞，大屏幕=大机身=大电池','成本更低','品牌竞争'],answer:1,explain:'务实判断：手机电池技术长期停滞，大屏幕需要大机身，大机身才能容纳大电池。这是工程约束下的务实选择。',type:'choice'},
+  {q:'二维码破损还能扫描是因为？',options:['扫描器功率大','纠错码的冗余设计','图像识别AI','二维码标准宽松'],answer:1,explain:'务实判断：二维码采用Reed-Solomon纠错码冗余设计，即使部分破损也能恢复数据。这是工程设计中"容错"的务实思想。',type:'choice'},
+  {q:'CPU核心数越来越多的原因是？',options:['单核已经够快','单核频率触碰功耗墙无法继续提升','消费者要求','营销策略'],answer:1,explain:'务实判断：单核频率提升已触碰功耗墙（散热极限），转向多核是物理约束下的务实选择。',type:'choice'},
+  {q:'天气预报从"看云识天气"到数值预报的核心变化是？',options:['更贵的设备','用物理方程模拟大气运动','更多气象站','人工智能'],answer:1,explain:'模型建构：数值天气预报用物理方程（纳维-斯托克斯方程等）模拟大气运动，从经验公式升级为数学模型，准确率从30%提升到80%+。',type:'choice'},
+  {q:'空姐让打开遮光板的真实原因是？',options:['让乘客看风景','让眼睛适应外界光线以备紧急撤离','检查机翼结冰','省电'],answer:1,explain:'复杂系统思维：看似为"看风景"的行为，实际上是让眼睛预先适应外界光线强度，以备紧急撤离时能立即看清环境。',type:'choice'},
+  {q:'电动汽车NEDC续航与实际续航差异的主要原因？',options:['电池质量问题','厂商欺诈','测试标准不包含温度/空调/速度波动','充电桩功率不足'],answer:2,explain:'变量分析：NEDC测试标准与实际驾驶的关键变量差异——温度、速度波动、空调使用、载重，四变量叠加可导致续航缩水40%。',type:'choice'},
+  {q:'质数为什么被称为"乘法的原子"？',options:['因为它们是奇数','因为数量多','任何整数可唯一分解为质数乘积','因为质数都是素数'],answer:2,explain:'计算推理：算术基本定理表明任何大于1的整数都可唯一分解为质数乘积。质数就像乘法世界中的"原子"。',type:'choice'},
+  {q:'地球一小时熄灯活动的实际节能效果？',options:['非常显著','完全没有效果','微乎其微，更多是象征意义','比预想的更好'],answer:2,explain:'科学方法总论：用科学方法检验后发现节电微乎其微，更多是象征意义。验证了"观察→假设→验证→修正"的循环。',type:'choice'},
+  {q:'"持续可栖息带"模型的核心判断标准是？',options:['行星大小','行星表面可长期维持液态水','是否有氧气','离太阳的距离'],answer:2,explain:'模型建构：持续可栖息带模型以"行星表面能否长期维持液态水"为核心判断标准，帮助科学家筛选宜居目标。',type:'choice'},
+  {q:'费米估算的核心价值是？',options:['精确计算','替代实验','快速判断方向是否正确','避免数学'],answer:2,explain:'数量级感知：费米估算的核心不是精确，而是在有限信息下快速判断数量级方向是否正确——"先判断方向，再精确计算"。',type:'choice'},
+  {q:'卓克认为19世纪人类最伟大的成就是什么？',options:['蒸汽机','电磁学','进化论','发明了发明的方法（科学方法）'],answer:3,explain:'科学方法总论：卓克认为蒸汽机等是科学方法的结果而非方法本身。"发明了发明的方法"让知识迭代发生质变。',type:'choice'},
+  {q:'为什么硬币边缘有锯齿？',options:['装饰美观','防滑','工厂加工瑕疵','防盗——防止刮掉贵金属'],answer:3,explain:'证据挖掘：硬币锯齿起源于贵金属货币时期——用来检测是否有人偷偷从边缘刮掉金银。证据链追溯到历史用途。',type:'choice'},
+  {q:'XYZ作为未知数的起源是？',options:['随机选择','英语字母顺序','数学家的名字缩写','笛卡尔用字母表最后三个字母'],answer:3,explain:'计算推理/数学史：笛卡尔用字母表最后三个字母（X,Y,Z）表示未知数，A,B,C表示已知数。这是数学约定的渊源。',type:'choice'},
+  {q:'科学思维课"发刊词"的核心主张是？',options:['多读书','学会科学方法迭代认知','相信专家','记忆知识'],answer:3,explain:'科学方法总论：发刊词的核心主张是掌握科学方法——"观察→假设→验证→修正"的认知迭代循环。',type:'choice'},
+  {q:'NEDC续航测试与实际驾驶的最主要差异变量不包括？',options:['温度','空调','载重','车身颜色'],answer:3,explain:'变量分析：温度、空调、载重都是影响续航的关键变量。车身颜色与续航无关——识别关键变量比穷尽所有变量更重要。',type:'choice'}
+];
+
+const SHORT_ANSWER_QUESTIONS = [
+  {q:'简述"极限思维"在商业决策中的一个应用场景。',ans:'推到极限看本质——如同商业谈判中试探对方底价，推到最低才能知道利润空间。另一种应用：将某个变量推到0或无穷大，观察系统行为，判断该变量是否是真正的决定性因素。'},
+  {q:'什么是"务实判断"？为什么手机屏幕越做越大是务实的选择？',ans:'务实判断是回归物理和工程约束做决策。手机屏幕越来越大因为电池技术停滞——大屏幕需要大机身，大机身可以容纳大电池，这是电池瓶颈下的务实妥协。'},
+  {q:'如何用"数量级感知"来验证一个听起来"很大"的数字是否合理？',ans:'用熟悉的数量级做参照——如1亿秒≈3.17年。如果一个声称"每天有1亿人使用"的产品是新产品，用人口基数做数量级估算可快速判断真伪。'},
+  {q:'复杂系统思维的核心启示是什么？举例说明。',ans:'复杂系统中因果链很长，直觉往往只看到最近一环而误判。如堵车——不是有人故意慢，而是10公里外事故效应传递。理解复杂系统需要克制简单归因的冲动。'},
+  {q:'模型建构的三原则是什么？',ans:'1.简化但不失真——保留核心变量；2.明确定义适用边界——牛顿力学在高速下失效；3.持续迭代——预报模型通过历史误差修正参数。'},
+  {q:'为什么说"所有模型都是错的，但有些是有用的"？',ans:'模型本质是现实的简化，任何模型都无法100%还原现实。好的模型在特定范围内预测力强（如牛顿力学在宏观低速），但超出边界就失效。关键是知道边界在哪里。'},
+  {q:'证据挖掘与"道听途说"的本质区别是什么？',ans:'证据挖掘追溯一手文献和原始数据，交叉验证多个独立来源。道听途说依赖于二手转述和个人记忆（容易被扭曲）。牛顿身世研究通过教堂记录、信件、出版记录重建生平。'},
+  {q:'"发明了发明的方法"这句话如何理解？',ans:'19世纪之前，技术进步靠偶然和经验积累。科学方法（观察→假设→验证→修正）让发现新知识变成可重复的流程，使技术进步的效率发生质变。'},
+  {q:'概率思维如何帮助人们做出更好的决策？',ans:'用概率替代非黑即白的判断——天气预报"降雨概率70%"不等于"肯定下雨"，而是历史上类似条件70%下了雨。接纳不确定性，在概率分布中找到最优策略。'},
+  {q:'科学方法的四个步骤在实际生活中如何应用？',ans:'观察（收集事实数据）→假设（提出可能的解释）→验证（设计实验或用已有数据检验）→修正（根据结果调整认知）。例如判断保健品是否有效：查论文而非广告→找双盲实验→看统计显著性→更新判断。'}
+];
+
+const SOCRATIC_DATA = [
+  {theme:'极限思维',pairs:[{q:'为什么把问题推到极值就能看到本质？',a:'极值剥离了无关变量，让核心机制暴露。拔河推到极限——胜负取决于摩擦系数而非力量，因为力量大会握紧绳子但不会增加摩擦力。极限的价值在于揭示"系统在极端条件下的真实行为"。'},{q:'推到极限的方法在什么情况下会失效？',a:'推到极限也可能失效——超导只在极低温出现，不能套用到室温。有些系统的极限行为与常态完全不同，不能把极限结论直接套用到日常。关键在于知道"极限结论"的适用范围。'}]},
+  {theme:'模型',pairs:[{q:'如果所有模型都是错的，为什么还要用模型？',a:'因为不用模型就只能凭直觉，而直觉在复杂系统中系统性地出错。好模型的价值不在于"正确"而在于"有用"——天气预报模型虽然不完美，但它把准确率从30%提到了80%+。'},{q:'如何判断一个模型是否"足够好"？',a:'好模型的标准：预测力（在适用范围内准确预测）、简洁性（奥卡姆剃刀——在同等预测力下选择最简单的）、可证伪性（能设计实验验证其预测）、边界清晰（知道什么情况下失效）。'}]
+  }
+];
+
+const DECISION_ROUNDS = [
+  {scenario:'你看到一则新闻"XX保健品经科学研究证实有效"，你会？',choices:[{text:'立即购买',feedback:'科学思维不足。需查原始论文、看是否有双盲实验、检验统计显著性和效应大小。',type:'wrong'},{text:'查一下是否有双盲对照实验',feedback:'正确！务实判断+证据挖掘的典范。',type:'correct'},{text:'问问朋友有没有吃过',feedback:'个人经验样本太小，可能有安慰剂效应。',type:'warning'}]},
+  {scenario:'公司要你估算一个新市场的规模，手头只有人口数据。你会？',choices:[{text:'花三个月做详细市场调研',feedback:'可能太慢了。先用费米估算快速判断方向。',type:'warning'},{text:'用数量级估算先做快速判断',feedback:'正确！数量级感知在商业决策中的典型应用。',type:'correct'},{text:'等竞争对手先进入再跟进',feedback:'过于被动，失去了先发优势。',type:'warning'}]},
+  {scenario:'你发现公司产品的某项指标在实验室测试中表现优异，但用户反馈不佳。',choices:[{text:'继续优化实验室指标',feedback:'陷入了"模型崇拜"——实验室指标≠真实用户体验。',type:'wrong'},{text:'深入分析用户实际使用场景的变量',feedback:'变量分析+务实判断：找出实验室与真实场景的关键变量差异。',type:'correct'},{text:'加大营销力度教育用户',feedback:'短视做法。长期看产品必须匹配真实需求。',type:'warning'}]}
+];
+
+// ==================== STATE ====================
+let flipIndex = 0;
+let learnedSet = new Set();
+let wrongBook = [];
+let quizState = {active:false,questions:[],index:0,correct:0,total:0,streak:0,answered:false,selected:-1,shortAnswers:[],mode:'all',startTime:null};
+let examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
+let statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
+
+// ==================== UTILITY ====================
+function $(id){return document.getElementById(id);}
+function save(key,val){try{localStorage.setItem('zk1_mks_'+key,JSON.stringify(val));}catch(e){}}
+function load(key,def){try{let v=localStorage.getItem('zk1_mks_'+key);return v?JSON.parse(v):def;}catch(e){return def;}}
+
+function loadState(){
+  learnedSet=new Set(load('learned',[]));
+  wrongBook=load('wrongBook',[]);
+  statsData=load('stats',{learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0});
+}
+
+function saveState(){
+  save('learned',[...learnedSet]);
+  save('wrongBook',wrongBook);
+  save('stats',statsData);
+}
+
+// ==================== TABS ====================
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+    if(this.dataset.tab=='4') updateReviewStats();
+    if(this.dataset.tab=='5') renderMindmap();
+  });
+});
+
+// ==================== TAB 0: OVERVIEW ====================
+function renderConcepts(){
+  const grid=document.getElementById('concept-grid');
+  grid.innerHTML='';
+  CONCEPTS.forEach((c,i)=>{
+    const card=document.createElement('div');
+    card.className='concept-card';
+    card.innerHTML=`
+      <span class="label ${c.mks?'mks':''}">${c.mks?'MKS核心':'概念'}</span>
+      <h3>${c.name}</h3>
+      <div class="def">${c.def}</div>
+      <div class="extra" id="extra-${c.id}">
+        <p><strong>类比：</strong>${c.analogy}</p>
+        <p><strong>示例：</strong>${c.example}</p>
+        <p><strong>反例/边界：</strong>${c.counter}</p>
+      </div>
+    `;
+    card.addEventListener('click',()=>{
+      const extra=document.getElementById('extra-'+c.id);
+      extra.classList.toggle('show');
+    });
+    grid.appendChild(card);
+  });
+
+  const mg=document.getElementById('mks-grid');
+  mg.innerHTML='';
+  MKS_IDS.forEach(id=>{
+    const c=CONCEPTS.find(x=>x.id===id);
+    if(!c)return;
+    const card=document.createElement('div');
+    card.className='mks-core';
+    card.innerHTML=`<div class="icon">🧰</div><h3>${c.name}</h3><p>${c.def.substring(0,60)}...</p>`;
+    mg.appendChild(card);
+  });
+}
+
+function renderSVGMap(){
+  const svg=`<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#b8860b"/></marker>
+  </defs>
+  <rect width="900" height="620" fill="#fdf6ec" rx="12"/>
+
+  <!-- Edges -->
+  <line x1="450" y1="55" x2="150" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="320" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="570" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="55" x2="740" y2="140" stroke="#d4a574" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="150" y1="170" x2="90" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="150" y1="170" x2="210" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="320" y1="170" x2="280" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="320" y1="170" x2="370" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="570" y1="170" x2="520" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="570" y1="170" x2="620" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="740" y1="170" x2="700" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="740" y1="170" x2="790" y2="280" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <line x1="210" y1="310" x2="280" y2="420" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="310" x2="450" y2="420" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="790" y1="310" x2="620" y2="420" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Bottom integration -->
+  <line x1="300" y1="450" x2="400" y2="550" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <line x1="600" y1="450" x2="500" y2="550" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+
+  <!-- Root -->
+  <ellipse cx="450" cy="30" rx="100" ry="22" fill="#c0392b"/>
+  <text x="450" y="35" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">科学思维工具箱</text>
+
+  <!-- Branches -->
+  <rect x="60" y="145" rx="18" ry="18" width="180" height="40" fill="#d4a574"/>
+  <text x="150" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">极限思维</text>
+  <rect x="240" y="145" rx="18" ry="18" width="160" height="40" fill="#d4a574"/>
+  <text x="320" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">数量级感知</text>
+  <rect x="490" y="145" rx="18" ry="18" width="160" height="40" fill="#d4a574"/>
+  <text x="570" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">模型建构</text>
+  <rect x="660" y="145" rx="18" ry="18" width="160" height="40" fill="#d4a574"/>
+  <text x="740" y="170" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">证据挖掘</text>
+
+  <!-- Leaves -->
+  <rect x="20" y="260" rx="12" ry="12" width="140" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="90" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">务实判断</text>
+  <rect x="170" y="260" rx="12" ry="12" width="100" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="220" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">变量分析</text>
+  <rect x="230" y="260" rx="12" ry="12" width="100" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="280" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">计算推理</text>
+  <rect x="325" y="260" rx="12" ry="12" width="110" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="380" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">概率思维</text>
+  <rect x="475" y="260" rx="12" ry="12" width="100" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="525" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">科学方法总论</text>
+  <rect x="575" y="260" rx="12" ry="12" width="110" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="630" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">MKS核心01</text>
+  <rect x="735" y="260" rx="12" ry="12" width="110" height="36" fill="#fffaf2" stroke="#e8d5c4"/>
+  <text x="790" y="283" text-anchor="middle" fill="#3d2f2f" font-size="12">MKS核心02</text>
+
+  <!-- Application nodes -->
+  <rect x="200" y="400" rx="14" ry="14" width="160" height="36" fill="#27ae60"/>
+  <text x="280" y="423" text-anchor="middle" fill="#fff" font-size="12">商业·物理·日常</text>
+  <rect x="530" y="400" rx="14" ry="14" width="140" height="36" fill="#27ae60"/>
+  <text x="600" y="423" text-anchor="middle" fill="#fff" font-size="12">科学·工程·决策</text>
+
+  <!-- Bottom: Complex Systems -->
+  <ellipse cx="450" cy="558" rx="180" ry="28" fill="#c0392b"/>
+  <text x="450" y="563" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">复杂系统思维（整合层）</text>
+</svg>`;
+  document.getElementById('svg-map').innerHTML=svg;
+}
+
+function updateProgress(){
+  const count=learnedSet.size;
+  document.getElementById('learned-count').textContent=count;
+  const pct=Math.round(count/10*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-text').textContent=count>=10?'🎉 恭喜！你已掌握所有核心概念！':`已掌握 ${count}/10，继续努力！`;
+  statsData.learned=count;
+  saveState();
+}
+
+// ==================== TAB 1: FLIP CARDS ====================
+function renderFlipCard(idx){
+  const c=CONCEPTS[idx];
+  if(!c)return;
+  const front=document.getElementById('flip-front');
+  const back=document.getElementById('flip-back');
+  front.innerHTML=`
+    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name}</h3>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:10px;">${c.mks?'MKS核心概念':'核心概念'}</p>
+    <p style="font-size:14px;">${c.def}</p>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-light);text-align:center;">点击"翻转卡片"查看详情</div>
+  `;
+  back.innerHTML=`
+    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name} · 深层理解</h3>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>类比：</strong>${c.analogy}</p>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>示例：</strong>${c.example}</p>
+    <p style="font-size:13px;"><strong>反例/边界：</strong>${c.counter}</p>
+  `;
+  document.getElementById('flip-counter').textContent=`${idx+1}/${CONCEPTS.length}`;
+  document.getElementById('flip-card').classList.remove('flipped');
+  const btn=document.getElementById('mark-learned-btn');
+  if(learnedSet.has(c.id)){
+    btn.textContent='✓ 已学会';
+    btn.style.background='var(--success)';
+  } else {
+    btn.textContent='✓ 标记已学会';
+    btn.style.background='';
+  }
+}
+
+function flipCard(){
+  document.getElementById('flip-card').classList.toggle('flipped');
+}
+function prevCard(){flipIndex=(flipIndex-1+CONCEPTS.length)%CONCEPTS.length;renderFlipCard(flipIndex);}
+function nextCard(){flipIndex=(flipIndex+1)%CONCEPTS.length;renderFlipCard(flipIndex);}
+function markLearned(){
+  const c=CONCEPTS[flipIndex];
+  if(!c)return;
+  if(learnedSet.has(c.id)){
+    learnedSet.delete(c.id);
+  } else {
+    learnedSet.add(c.id);
+  }
+  saveState();
+  renderFlipCard(flipIndex);
+  updateProgress();
+}
+
+// ==================== TAB 2: QUIZ ====================
+function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startQuiz(mode){
+  quizState.mode=mode;
+  quizState.index=0;
+  quizState.correct=0;
+  quizState.total=0;
+  quizState.streak=0;
+  quizState.answered=false;
+  quizState.selected=-1;
+  quizState.shortAnswers=[];
+  quizState.startTime=Date.now();
+  quizState.active=true;
+
+  let qs=[];
+  if(mode==='random'){
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+  } else {
+    qs=[...QUIZ_DATA];
+  }
+  quizState.questions=qs;
+  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  document.getElementById('quiz-result').style.display='none';
+  renderQuizQuestion();
+  startQuizTimer();
+}
+
+function renderQuizQuestion(){
+  const container=document.getElementById('quiz-container');
+  const qs=quizState.questions;
+  const idx=quizState.index;
+  if(idx>=qs.length){
+    finishQuiz();
+    return;
+  }
+  const q=qs[idx];
+  container.innerHTML='';
+  const card=document.createElement('div');
+  card.className='quiz-card';
+
+  if(q.type==='choice'){
+    card.innerHTML=`
+      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
+      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <div class="options" id="quiz-options">
+        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
+      </div>
+      <div class="feedback" id="quiz-feedback"></div>
+    `;
+  } else {
+    card.innerHTML=`
+      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
+      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
+      <div style="margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
+      </div>
+      <div class="feedback" id="quiz-feedback"></div>
+    `;
+  }
+  container.appendChild(card);
+  quizState.answered=false;
+  quizState.selected=-1;
+}
+
+function selectChoice(i){
+  if(quizState.answered) return;
+  const q=quizState.questions[quizState.index];
+  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
+    el.classList.toggle('selected',idx===i);
+  });
+  quizState.selected=i;
+}
+
+function submitChoice(){
+  if(quizState.selected===-1) return;
+  const q=quizState.questions[quizState.index];
+  const fb=document.getElementById('quiz-feedback');
+  const options=document.querySelectorAll('#quiz-options .option');
+  options.forEach((el,idx)=>{
+    if(idx===q.answer) el.classList.add('correct');
+    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
+  });
+  quizState.total++;
+  if(quizState.selected===q.answer){
+    quizState.correct++;
+    quizState.streak++;
+    fb.className='feedback show correct';
+    fb.innerHTML=`✅ 回答正确！${q.explain||''}`;
+  } else {
+    quizState.streak=0;
+    fb.className='feedback show wrong';
+    fb.innerHTML=`❌ 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}`;
+    addWrongBook(q.q,q.options[q.answer],q.explain||'');
+  }
+  quizState.answered=true;
+  setTimeout(()=>{
+    quizState.index++;
+    renderQuizQuestion();
+  },2000);
+}
+
+function submitShortAnswer(){
+  const input=document.getElementById('short-input');
+  const val=input.value.trim();
+  const q=quizState.questions[quizState.index];
+  const fb=document.getElementById('quiz-feedback');
+  quizState.total++;
+  quizState.correct++;
+  fb.className='feedback show correct';
+  fb.innerHTML=`✅ 已记录你的回答。<br><strong>参考答案：</strong>${q.ans||''}`;
+  quizState.answered=true;
+  setTimeout(()=>{
+    quizState.index++;
+    renderQuizQuestion();
+  },2500);
+}
+
+function finishQuiz(){
+  quizState.active=false;
+  document.getElementById('quiz-container').innerHTML='';
+  const el=document.getElementById('quiz-result');
+  el.style.display='block';
+  const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
+  el.innerHTML=`
+    <h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>
+    <p>正确：${quizState.correct} / ${quizState.total}</p>
+    <p>正确率：${pct}%</p>
+    <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
+    <p>连续答对：${quizState.streak}</p>
+    <button class="btn btn-primary btn-sm" onclick="startQuiz('${quizState.mode}')" style="margin-top:10px;">重新开始</button>
+  `;
+  statsData.quizAnswered+=quizState.total;
+  statsData.accuracy=Math.round(((statsData.accuracy*(statsData.quizAnswered-quizState.total))+(pct*quizState.total))/Math.max(1,statsData.quizAnswered));
+  statsData.streak=Math.max(statsData.streak,quizState.streak);
+  saveState();
+  clearInterval(quizState._timer);
+  document.getElementById('quiz-timer').textContent='';
+}
+
+function startQuizTimer(){
+  clearInterval(quizState._timer);
+  quizState._timer=setInterval(()=>{
+    if(!quizState.active){clearInterval(quizState._timer);return;}
+    const elapsed=Math.floor((Date.now()-quizState.startTime)/1000);
+    const m=Math.floor(elapsed/60);
+    const s=elapsed%60;
+    document.getElementById('quiz-timer').textContent=`⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+
+function resetQuiz(){
+  quizState.active=false;
+  clearInterval(quizState._timer);
+  document.getElementById('quiz-container').innerHTML='';
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-timer').textContent='';
+  document.getElementById('quiz-info').textContent='包含20道选择题和10道简答题。点击"随机抽题"开始练习。';
+}
+
+function addWrongBook(q,correctAns,explain){
+  wrongBook.unshift({q,correctAns,explain,time:new Date().toLocaleString()});
+  if(wrongBook.length>50) wrongBook.pop();
+  saveState();
+}
+
+// ==================== TAB 3: EXAM ====================
+function startExam(){
+  const questions=shuffleArray([...QUIZ_DATA]).slice(0,7).map(q=>({...q,type:'choice'}));
+  const shortQs=shuffleArray([...SHORT_ANSWER_QUESTIONS]).slice(0,3).map((q,i)=>({q:q.q,ans:q.ans,type:'short',index:i}));
+  examState.questions=[...questions,...shortQs];
+  examState.answers=new Array(examState.questions.length).fill(null);
+  examState.active=true;
+  examState.startTime=Date.now();
+  document.getElementById('start-exam-btn').disabled=true;
+  document.getElementById('start-exam-btn').textContent='考试进行中...';
+  renderExam();
+  startExamTimer();
+}
+
+function renderExam(){
+  const container=document.getElementById('exam-container');
+  container.innerHTML='';
+  examState.questions.forEach((q,i)=>{
+    const card=document.createElement('div');
+    card.className='exam-card';
+    if(q.type==='choice'){
+      card.innerHTML=`
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(选择题)</span></h3>
+        <div class="options" id="exam-opt-${i}">
+          ${q.options.map((opt,j)=>`<div class="option" data-exam="${i}" data-idx="${j}" onclick="selectExamChoice(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</div>`).join('')}
+        </div>
+      `;
+    } else {
+      card.innerHTML=`
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(简答题)</span></h3>
+        <textarea class="short-input" data-exam="${i}" placeholder="输入你的回答..." oninput="examState.answers[${i}]=this.value"></textarea>
+      `;
+    }
+    container.appendChild(card);
+  });
+  const btnDiv=document.createElement('div');
+  btnDiv.style.marginTop='16px';
+  btnDiv.innerHTML=`<button class="btn btn-warning" onclick="submitExam()">📝 提交试卷</button>`;
+  container.appendChild(btnDiv);
+}
+
+function selectExamChoice(qIdx,optIdx){
+  document.querySelectorAll(`#exam-opt-${qIdx} .option`).forEach((el,i)=>{
+    el.classList.toggle('selected',i===optIdx);
+  });
+  examState.answers[qIdx]=optIdx;
+}
+
+function startExamTimer(){
+  clearInterval(examState.timer);
+  examState.minutes=15;
+  const update=()=>{
+    const elapsed=Math.floor((Date.now()-examState.startTime)/1000);
+    const remaining=examState.minutes*60-elapsed;
+    if(remaining<=0){
+      clearInterval(examState.timer);
+      submitExam();
+      return;
+    }
+    const m=Math.floor(remaining/60);
+    const s=remaining%60;
+    document.getElementById('exam-timer').textContent=`⏱ 剩余 ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(remaining<60){
+      document.getElementById('exam-timer').style.color='var(--accent)';
+    }
+  };
+  update();
+  examState.timer=setInterval(update,1000);
+}
+
+function submitExam(){
+  if(!examState.active) return;
+  examState.active=false;
+  clearInterval(examState.timer);
+  document.getElementById('start-exam-btn').disabled=false;
+  document.getElementById('start-exam-btn').textContent='开始考试';
+  document.getElementById('exam-timer').textContent='';
+
+  let correct=0,total=0;
+  const results=[];
+  examState.questions.forEach((q,i)=>{
+    const ans=examState.answers[i];
+    if(q.type==='choice'){
+      total++;
+      const isCorrect=ans===q.answer;
+      if(isCorrect) correct++;
+      results.push({index:i,question:q.q,userAns:ans!==null?String.fromCharCode(65+ans):'未作答',correctAns:String.fromCharCode(65+q.answer),isCorrect,type:'choice',explain:q.explain||''});
+    } else {
+      results.push({index:i,question:q.q,userAns:ans||'未作答',correctAns:'（见参考答案）',isCorrect:ans&&ans.trim().length>0,type:'short'});
+    }
+  });
+
+  const el=document.getElementById('exam-result');
+  const pct=total>0?Math.round(correct/total*100):0;
+  el.style.display='block';
+  let html=`
+    <h3 style="color:var(--accent);margin-bottom:8px;">考试结果</h3>
+    <p><strong>选择题：</strong>${correct} / ${total} 正确 (${pct}%)</p>
+    <p><strong>简答题：</strong>已答 ${results.filter(r=>r.type==='short'&&r.userAns!=='未作答').length} / ${results.filter(r=>r.type==='short').length}</p>
+    <p><strong>用时：</strong>${Math.round((Date.now()-examState.startTime)/1000)}秒</p>
+    <hr style="margin:12px 0;border-color:var(--border);">
+    <h4 style="margin-bottom:8px;">详细结果</h4>
+  `;
+  results.forEach(r=>{
+    if(r.type==='choice'){
+      const icon=r.isCorrect?'✅':'❌';
+      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'#e8f5e9':'#ffebee'};border-radius:6px;font-size:13px;">
+        <p><strong>${r.question}</strong></p>
+        <p>${icon} 你的答案：${r.userAns} ${r.isCorrect?'':'| 正确答案：'+r.correctAns}</p>
+        ${!r.isCorrect?`<p style="color:var(--text-light);">${r.explain}</p>`:''}
+      </div>`;
+    }
+  });
+  html+=`<button class="btn btn-primary btn-sm" onclick="document.getElementById('exam-result').style.display='none';" style="margin-top:10px;">关闭结果</button>`;
+  el.innerHTML=html;
+
+  statsData.examCount++;
+  saveState();
+}
+
+// ==================== TAB 4: REVIEW ====================
+function updateReviewStats(){
+  document.getElementById('stat-learned').textContent=statsData.learned||learnedSet.size;
+  document.getElementById('stat-total').textContent=10;
+  document.getElementById('stat-quiz').textContent=statsData.quizAnswered||0;
+  document.getElementById('stat-accuracy').textContent=(statsData.accuracy||0)+'%';
+  document.getElementById('stat-streak').textContent=statsData.streak||0;
+  document.getElementById('stat-exam').textContent=statsData.examCount||0;
+
+  const wb=document.getElementById('wrong-book');
+  if(wrongBook.length===0){
+    wb.innerHTML='<p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
+  } else {
+    wb.innerHTML=wrongBook.slice(0,10).map(item=>
+      `<div style="padding:8px;margin-bottom:6px;background:#ffebee;border-radius:6px;font-size:13px;">
+        <p><strong>${item.q}</strong></p>
+        <p>正确答案：${item.correctAns}</p>
+        ${item.explain?`<p style="color:var(--text-light);">${item.explain}</p>`:''}
+        <p style="font-size:11px;color:var(--text-light);">${item.time}</p>
+      </div>`
+    ).join('');
+  }
+
+  const weak=document.getElementById('weak-concepts');
+  const weakMap={};
+  wrongBook.forEach(item=>{
+    const match=QUIZ_DATA.find(q=>q.q===item.q);
+    if(match){
+      const idx=QUIZ_DATA.indexOf(match);
+      const conceptIdx=Math.floor(idx/2);
+      const c=CONCEPTS[conceptIdx%CONCEPTS.length];
+      if(c){
+        weakMap[c.name]=(weakMap[c.name]||0)+1;
+      }
+    }
+  });
+  const weakList=Object.entries(weakMap).sort((a,b)=>b[1]-a[1]);
+  if(weakList.length===0){
+    weak.innerHTML='<p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
+  } else {
+    weak.innerHTML=weakList.map(([name,count])=>
+      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#fde8d0;border-radius:6px;font-size:13px;">
+        <span>${name}</span>
+        <span style="color:var(--accent);font-weight:700;">错${count}题</span>
+      </div>`
+    ).join('');
+  }
+}
+
+// ==================== TAB 5: MINDMAP ====================
+function renderMindmap(){
+  const el=document.getElementById('mindmap');
+  el.innerHTML=`
+    <ul>
+      <li>
+        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+        <span class="tree-node root">科学思维工具箱</span>
+        <div class="children open">
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">极限思维 → 务实判断</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">极限思维：推到极值看本质</span></li>
+              <li><span class="tree-node leaf">务实判断：回归物理约束</span></li>
+              <li><span class="tree-node app">应用：商业谈判、工程设计</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">数量级感知 → 变量分析</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">数量级感知：10倍尺度校准</span></li>
+              <li><span class="tree-node leaf">变量分析：识别关键变量</span></li>
+              <li><span class="tree-node app">应用：费米估算、NEDC续航分析</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">模型建构 → 计算推理</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">模型建构：简化复杂现实</span></li>
+              <li><span class="tree-node leaf">计算推理：量化替代直觉</span></li>
+              <li><span class="tree-node app">应用：天气预报、质数分解</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">证据挖掘 + 概率思维 → 科学方法总论</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">证据挖掘：追溯证据链</span></li>
+              <li><span class="tree-node leaf">概率思维：接纳不确定性</span></li>
+              <li><span class="tree-node leaf">科学方法总论：观察→假设→验证→修正</span></li>
+              <li><span class="tree-node app">应用：科学研究、日常决策</span></li>
+            </div>
+          </li>
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">复杂系统思维（整合层）</span>
+            <div class="children open">
+              <li><span class="tree-node leaf">理解多变量相互作用</span></li>
+              <li><span class="tree-node leaf">警惕直觉的简单归因</span></li>
+              <li><span class="tree-node app">应用：堵车分析、航空安全</span></li>
+            </div>
+          </li>
+        </div>
+      </li>
+    </ul>
+  `;
+}
+
+function toggleTree(el){
+  const parent=el.parentElement;
+  const children=parent.querySelector('.children');
+  if(!children) return;
+  children.classList.toggle('open');
+  el.textContent=children.classList.contains('open')?'[−]':'[+]';
+}
+
+// ==================== TAB 6: SOCRATIC ====================
+function renderSocratic(){
+  const container=document.getElementById('socratic-container');
+  container.innerHTML='';
+  SOCRATIC_DATA.forEach(theme=>{
+    const themeDiv=document.createElement('div');
+    themeDiv.className='card';
+    themeDiv.innerHTML=`<h3>主题：${theme.theme}</h3>`;
+    theme.pairs.forEach((pair,i)=>{
+      const card=document.createElement('div');
+      card.className='socratic-card';
+      card.innerHTML=`
+        <div class="socratic-q" onclick="toggleSocratic(this)">
+          <span>${pair.q}</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="socratic-a">
+          <p>${pair.a}</p>
+        </div>
+      `;
+      themeDiv.appendChild(card);
+    });
+    container.appendChild(themeDiv);
+  });
+}
+
+function toggleSocratic(el){
+  const answer=el.nextElementSibling;
+  const arrow=el.querySelector('.arrow');
+  answer.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ==================== TAB 8: DECISION ====================
+function renderDecision(){
+  const container=document.getElementById('decision-container');
+  container.innerHTML='';
+  DECISION_ROUNDS.forEach((round,ri)=>{
+    const div=document.createElement('div');
+    div.className='decision-round';
+    div.innerHTML=`
+      <h3>场景 ${ri+1}</h3>
+      <div class="scenario">${round.scenario}</div>
+      <div class="choices" id="decision-choices-${ri}">
+        ${round.choices.map((c,ci)=>`<div class="choice" onclick="selectDecision(${ri},${ci})">${String.fromCharCode(65+ci)}. ${c.text}</div>`).join('')}
+      </div>
+      <div class="feedback" id="decision-feedback-${ri}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function selectDecision(ri,ci){
+  const round=DECISION_ROUNDS[ri];
+  const choice=round.choices[ci];
+  const fb=document.getElementById(`decision-feedback-${ri}`);
+  document.querySelectorAll(`#decision-choices-${ri} .choice`).forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(i===ci) el.classList.add('selected');
+  });
+  fb.className=`feedback show ${choice.type}`;
+  const icon=choice.type==='correct'?'✅':choice.type==='wrong'?'❌':'⚠️';
+  fb.innerHTML=`${icon} ${choice.feedback}`;
+}
+
+// ==================== INIT ====================
+loadState();
+renderConcepts();
+renderSVGMap();
+updateProgress();
+renderFlipCard(0);
+renderSocratic();
+renderDecision();
+updateReviewStats();
+
+// Override quiz submit on choice click
+document.addEventListener('click',function(e){
+  const opt=e.target.closest('#quiz-options .option');
+  if(opt && !quizState.answered){
+    submitChoice();
+  }
+});
+
+// ==================== EXAM TIMER AUTO-START CHECK ====================
+// Ensure exam timer is cleaned up when tab is hidden
+window.addEventListener('beforeunload',function(){
+  clearInterval(examState.timer);
+  clearInterval(quizState._timer);
+});
+</script>
+</body>
+</html>

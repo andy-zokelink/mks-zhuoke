@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演化论：世界的源代码 · 最小知识集</title>
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --bg: #f0f7f0;
+  --card: #ffffff;
+  --accent: #1a6b3c;
+  --accent-light: #2d9b5e;
+  --text: #1e2a1e;
+  --text-light: #4a5a4a;
+  --border: #c8dbc8;
+  --gold: #b8860b;
+  --success: #27ae60;
+  --warning: #d4a017;
+  --danger: #c0392b;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(30,42,30,0.08);
+  --shadow-hover: 0 6px 24px rgba(30,42,30,0.14);
+  --transition: 0.3s ease;
+  --font: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ===== Top Bar ===== */
+.top-bar {
+  background: linear-gradient(135deg, #1a3a1a, #2d5e2d);
+  color: #f0f7f0;
+  padding: 32px 0 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.top-bar::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 25% 50%, rgba(45,155,94,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse at 75% 50%, rgba(184,134,11,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.top-bar h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
+}
+.top-bar .subtitle {
+  font-size: 1rem;
+  color: #b8d4b8;
+  margin-top: 6px;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 1px;
+}
+.top-bar .badge-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.top-bar .badge {
+  background: rgba(255,255,255,0.12);
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #c8e6c8;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Container ===== */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== Tabs ===== */
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px;
+  margin: 28px auto 0;
+  max-width: 1100px;
+  box-shadow: var(--shadow);
+  justify-content: center;
+}
+.tab-btn {
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all var(--transition);
+  font-family: var(--font);
+}
+.tab-btn:hover { background: rgba(26,107,60,0.06); color: var(--text); }
+.tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(26,107,60,0.3);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== Intro Section ===== */
+.intro-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin: 28px auto;
+  max-width: 1100px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.intro-section::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--accent);
+  border-radius: 4px 0 0 4px;
+}
+.intro-section h2 { font-size: 1.35rem; color: var(--accent); margin-bottom: 12px; }
+.intro-section p { color: var(--text-light); font-size: 0.98rem; line-height: 1.9; margin-bottom: 8px; }
+.intro-section p:last-child { margin-bottom: 0; }
+.intro-section .core-goal {
+  background: linear-gradient(135deg, rgba(26,107,60,0.06), rgba(45,155,94,0.04));
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 500;
+}
+.intro-section .core-goal strong { color: var(--accent); }
+
+/* ===== Stats Row ===== */
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.stat-card {
+  flex: 1;
+  min-width: 100px;
+  max-width: 160px;
+  text-align: center;
+  padding: 18px 12px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.stat-card .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); line-height: 1.2; }
+.stat-card .stat-lbl { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
+
+/* ===== Section Title ===== */
+.section-title {
+  text-align: center;
+  margin: 40px 0 24px;
+}
+.section-title h2 {
+  font-size: 1.5rem;
+  color: var(--text);
+  position: relative;
+  display: inline-block;
+}
+.section-title h2::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--accent-light);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* ===== Concept Cards (Flip) ===== */
+.flip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.flip-card {
+  perspective: 800px;
+  height: 240px;
+  cursor: pointer;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.flip-card-front {
+  background: var(--card);
+  z-index: 2;
+}
+.flip-card-front .fc-icon { font-size: 1.6rem; margin-bottom: 10px; }
+.flip-card-front h3 { font-size: 1.08rem; color: var(--accent); margin-bottom: 8px; }
+.flip-card-front .fc-brief { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; flex: 1; }
+.flip-card-front .fc-hint { font-size: 0.78rem; color: var(--gold); margin-top: 8px; }
+.flip-card-front .mks-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.flip-card-back {
+  background: linear-gradient(135deg, #1a3a1a, #2d5e2d);
+  color: #f0f7f0;
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+.flip-card-back h4 { font-size: 1rem; color: #8bc88b; margin-bottom: 10px; }
+.flip-card-back p { font-size: 0.88rem; line-height: 1.7; color: #d0e6d0; flex: 1; }
+.flip-card-back .fc-flip-hint { font-size: 0.75rem; color: #6aa06a; margin-top: 8px; text-align: right; }
+
+/* ===== SVG Container ===== */
+.svg-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.svg-container h3 { font-size: 1.1rem; color: var(--accent); margin-bottom: 16px; text-align: center; }
+.svg-container svg { max-width: 100%; height: auto; }
+.svg-container .svg-caption {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* ===== MCQ ===== */
+.mcq-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+}
+.mcq-section h3 {
+  font-size: 1.25rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+  text-align: center;
+}
+.mcq-section .mcq-subtitle {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+.mcq-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: border-color var(--transition);
+}
+.mcq-item.correct { border-color: var(--success); background: rgba(39,174,96,0.04); }
+.mcq-item.wrong { border-color: var(--danger); background: rgba(192,57,43,0.04); }
+.mcq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+.mcq-opts { display: flex; flex-direction: column; gap: 6px; }
+.mcq-opts label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background var(--transition);
+  border: 1px solid transparent;
+}
+.mcq-opts label:hover { background: rgba(26,107,60,0.05); }
+.mcq-opts input[type="radio"] { accent-color: var(--accent); }
+.mcq-item .mcq-result {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: none;
+}
+.mcq-item.correct .mcq-result { display: block; color: var(--success); }
+.mcq-item.wrong .mcq-result { display: block; color: var(--danger); }
+.mcq-item .mcq-explain {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  display: none;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.mcq-item.correct .mcq-explain,
+.mcq-item.wrong .mcq-explain { display: block; }
+.mcq-score {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(26,107,60,0.06);
+  border-radius: 8px;
+}
+
+/* ===== Boundary Knowledge ===== */
+.boundary-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+}
+.boundary-box h3 { font-size: 1.2rem; color: var(--accent); margin-bottom: 20px; text-align: center; }
+.boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.boundary-item {
+  background: rgba(26,107,60,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.boundary-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.boundary-item .b-icon { font-size: 1.2rem; margin-bottom: 6px; }
+.boundary-item .b-title { font-size: 0.92rem; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+.boundary-item .b-desc { font-size: 0.82rem; color: var(--text-light); line-height: 1.6; }
+.boundary-item .b-source { font-size: 0.75rem; color: var(--gold); margin-top: 6px; }
+
+/* ===== Learning Path ===== */
+.learning-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+}
+.learning-box h3 { font-size: 1.25rem; color: var(--accent); margin-bottom: 24px; text-align: center; }
+.path-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.path-step {
+  background: linear-gradient(135deg, #f0f7f0, #ffffff);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: center;
+  min-width: 150px;
+  flex: 1 1 150px;
+  max-width: 190px;
+  transition: transform var(--transition), box-shadow var(--transition);
+  position: relative;
+}
+.path-step:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.path-step .step-num {
+  display: inline-block;
+  width: 32px; height: 32px;
+  line-height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.path-step .step-name { font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.path-step .step-arrow { color: var(--accent-light); font-size: 0.85rem; margin: 4px 0; }
+.path-step .step-desc { font-size: 0.78rem; color: var(--text-light); line-height: 1.5; }
+
+/* ===== Socratic Q&A ===== */
+.socratic-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+}
+.socratic-box h3 { font-size: 1.25rem; color: var(--accent); margin-bottom: 24px; text-align: center; }
+.socratic-group {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.socratic-q {
+  background: rgba(26,107,60,0.05);
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background var(--transition);
+}
+.socratic-q:hover { background: rgba(26,107,60,0.1); }
+.socratic-q .toggle-icon { font-size: 1.2rem; color: var(--accent); transition: transform var(--transition); }
+.socratic-group.open .socratic-q .toggle-icon { transform: rotate(180deg); }
+.socratic-a {
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+.socratic-group.open .socratic-a {
+  max-height: 600px;
+  padding: 16px 20px;
+}
+.socratic-a p { font-size: 0.88rem; color: var(--text-light); line-height: 1.8; margin-bottom: 6px; }
+.socratic-a p:last-child { margin-bottom: 0; }
+.socratic-a .insight {
+  background: rgba(184,134,11,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+/* ===== Case Study ===== */
+.case-study {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+}
+.case-study h3 { font-size: 1.25rem; color: var(--accent); margin-bottom: 16px; text-align: center; }
+.case-study .case-intro { font-size: 0.92rem; color: var(--text-light); line-height: 1.8; margin-bottom: 16px; }
+.case-study .case-timeline {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 20px;
+}
+.case-study .case-timeline::before {
+  content: "";
+  position: absolute;
+  left: 8px; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.case-study .tl-item {
+  position: relative;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: rgba(26,107,60,0.03);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.case-study .tl-item::before {
+  content: "";
+  position: absolute;
+  left: -24px; top: 18px;
+  width: 12px; height: 12px;
+  background: var(--accent-light);
+  border-radius: 50%;
+  border: 2px solid var(--card);
+}
+.case-study .tl-item .tl-year { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+.case-study .tl-item .tl-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.6; }
+.case-study .case-lesson {
+  background: rgba(26,107,60,0.06);
+  border: 1px solid var(--accent-light);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+.case-study .case-lesson h4 { font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
+.case-study .case-lesson p { font-size: 0.88rem; color: var(--text-light); line-height: 1.7; }
+
+/* ===== Decision Simulation ===== */
+.decision-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+}
+.decision-box h3 { font-size: 1.25rem; color: var(--accent); margin-bottom: 16px; text-align: center; }
+.decision-box .sim-intro { font-size: 0.88rem; color: var(--text-light); text-align: center; margin-bottom: 20px; }
+.sim-round {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: border-color var(--transition);
+}
+.sim-round.resolved { border-color: var(--success); background: rgba(39,174,96,0.03); }
+.sim-round h4 {
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.sim-round .sim-scenario { font-size: 0.88rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.7; }
+.sim-round .sim-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.sim-round .sim-opts button {
+  padding: 8px 18px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font);
+}
+.sim-round .sim-opts button:hover { border-color: var(--accent-light); background: rgba(26,107,60,0.04); }
+.sim-round .sim-opts button:disabled { opacity: 0.5; cursor: not-allowed; }
+.sim-round .sim-opts button.chosen { border-color: var(--accent); background: var(--accent); color: #fff; }
+.sim-round .sim-result {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-light);
+  display: none;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+.sim-round.resolved .sim-result { display: block; }
+.sim-round .sim-result .consequence { font-weight: 600; }
+.sim-round .sim-result .consequence.good { color: var(--success); }
+.sim-round .sim-result .consequence.bad { color: var(--danger); }
+.sim-round .sim-result .consequence.mixed { color: var(--warning); }
+
+/* ===== Footer ===== */
+.site-footer {
+  background: linear-gradient(135deg, #1a3a1a, #2d5e2d);
+  color: #b8d4b8;
+  text-align: center;
+  padding: 32px 24px;
+  margin-top: 48px;
+}
+.site-footer .stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 16px;
+}
+.site-footer .stat-item { text-align: center; }
+.site-footer .stat-num { display: block; font-size: 1.6rem; font-weight: 700; color: #f0f7f0; }
+.site-footer .stat-label { font-size: 0.82rem; color: #8ab88a; }
+.site-footer .copyright { font-size: 0.78rem; color: #6a8a6a; margin-top: 8px; }
+.site-footer a { color: var(--gold); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .top-bar h1 { font-size: 1.4rem; }
+  .top-bar .subtitle { font-size: 0.85rem; }
+  .tab-btn { padding: 8px 12px; font-size: 0.8rem; }
+  .flip-grid { grid-template-columns: 1fr; }
+  .flip-card { height: 220px; }
+  .intro-section, .mcq-section, .boundary-box, .learning-box, .socratic-box, .case-study, .decision-box { padding: 24px 20px; }
+  .boundary-grid { grid-template-columns: 1fr; }
+  .path-steps { flex-direction: column; align-items: center; }
+  .path-step { max-width: 100%; }
+  .site-footer .stats { gap: 20px; }
+  .stats-row { gap: 8px; }
+  .stat-card { min-width: 70px; max-width: 120px; padding: 12px 8px; }
+  .stat-card .stat-num { font-size: 1.3rem; }
+}
+
+@media (max-width: 480px) {
+  .top-bar h1 { font-size: 1.2rem; }
+  .top-bar .subtitle { font-size: 0.8rem; }
+  .mcq-item { padding: 14px 16px; }
+  .sim-round { padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Top Bar ===== -->
+<header class="top-bar">
+  <h1>演化论：世界的源代码</h1>
+  <p class="subtitle">卓克·科学思维课 · 专题二</p>
+  <div class="badge-row">
+    <span class="badge">约 55 篇提炼</span>
+    <span class="badge">10 个核心概念</span>
+    <span class="badge">20 道测验</span>
+  </div>
+</header>
+
+<!-- ===== Tab Navigation ===== -->
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="tab1">概览</button>
+  <button class="tab-btn" data-tab="tab2">自然选择</button>
+  <button class="tab-btn" data-tab="tab3">基因平移</button>
+  <button class="tab-btn" data-tab="tab4">演化世界观</button>
+  <button class="tab-btn" data-tab="tab5">物种大灭绝</button>
+  <button class="tab-btn" data-tab="tab6">生命与性别</button>
+  <button class="tab-btn" data-tab="tab7">人类迁徙</button>
+  <button class="tab-btn" data-tab="tab8">肤色与语言</button>
+  <button class="tab-btn" data-tab="tab9">测验与案例</button>
+</nav>
+
+<!-- ============================================================ -->
+<!-- TAB 1: 概览 -->
+<!-- ============================================================ -->
+<div class="tab-panel active" id="tab1">
+
+  <section class="intro-section">
+    <h2>理解生命38亿年的底层逻辑</h2>
+    <p>
+      演化论不仅是生物学的基础理论，更是一种普适的世界观。本专题从卓克·科学思维课约55篇相关文章中，提炼出10个核心概念，帮助你掌握"变异—选择—遗传"这一驱动一切复杂系统演进的底层循环。
+    </p>
+    <p>
+      你将理解：为什么自然选择不是"最强者生存"而是"最适者生存"；基因如何在物种间"走私"；性别、肤色、语言、人类迁徙——这些看似独立的现象如何被同一套演化逻辑串联起来。
+    </p>
+    <div class="core-goal">
+      <strong>核心目标：</strong>掌握演化论的核心框架——自然选择、基因平移、物种灭绝、生命起源——理解"演化"不仅解释生物多样性，更是一种普适的世界观：一切复杂系统都在变异-选择-遗传的循环中演进。
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">10</div>
+      <div class="stat-lbl">核心概念</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4</div>
+      <div class="stat-lbl">MKS核心</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">20</div>
+      <div class="stat-lbl">道选择题</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">55</div>
+      <div class="stat-lbl">篇提炼</div>
+    </div>
+  </div>
+
+  <!-- Flip Cards for all 10 concepts -->
+  <div class="section-title"><h2>十大核心概念</h2></div>
+  <div class="flip-grid">
+
+    <!-- Card 1: 自然选择 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9EC;</div>
+          <h3>自然选择 <span class="mks-badge">MKS</span></h3>
+          <p class="fc-brief">不是"最强者生存"而是"最适者生存"——环境筛选的不是力量大而是适合当下生态位的个体。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>自然选择（达尔文）</h4>
+          <p>达尔文和华莱士在1858年同时提出自然选择理论。其核心是：生物个体之间存在可遗传的差异（变异），那些更适应环境的个体有更高的生存和繁殖机会（选择），有利特征代代累积（遗传）。自然选择不是目的论——它没有"想要"达到什么目标，它只是一个过滤器。人类常误以为演化是"进步"的阶梯，但事实上，演化只是种群对环境的动态响应。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: 基因平移 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9EA;</div>
+          <h3>基因平移 <span class="mks-badge">MKS</span></h3>
+          <p class="fc-brief">颠覆传统进化树——基因不仅垂直遗传（父母→子女），还可以在物种间水平转移。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>基因水平转移</h4>
+          <p>基因平移（水平基因转移）在细菌中极为普遍——抗生素耐药性通过质粒在不同菌种间快速传播。过去认为多细胞生物中罕见，但近年研究发现人类基因组中约有8%来源于逆转录病毒（内源性逆转录病毒序列）。这些病毒基因在数百万年前整合到人类祖先基因组中，甚至参与胎盘形成等重要生理功能。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: 演化论世界观 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30D;</div>
+          <h3>演化论世界观 <span class="mks-badge">MKS</span></h3>
+          <p class="fc-brief">演化不仅是生物学理论，更是一种看待一切复杂系统的思维方式。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>通用演化框架</h4>
+          <p>技术演化：手机键盘从实物键盘到触屏键盘——不是设计出来的，是市场选择的结果。语言演化：词汇的诞生和消亡、语法简化——满足"变异-选择-遗传"三要素。文化演化：互联网模因的传播、宗教的变迁——同样是信息复制和选择的过程。如果将演化定义为"变异+选择+遗传"的循环，那么任何具有信息复制能力的系统都会演化。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: 物种大灭绝 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30B;</div>
+          <h3>物种大灭绝 <span class="mks-badge">MKS</span></h3>
+          <p class="fc-brief">地球历史上有5次大灭绝，每次灭绝后新物种爆发——毁灭是创新的前奏。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>五次大灭绝</h4>
+          <p>奥陶纪末（4.43亿年前）：约86%物种灭绝；泥盆纪末（3.72亿年前）：约75%物种灭绝；二叠纪末（2.52亿年前）：约96%物种灭绝——这是最大规模的一次，被称为"大死亡"；三叠纪末（2.01亿年前）：约80%物种灭绝，为恐龙崛起铺平道路；白垩纪末（6600万年前）：约76%物种灭绝，包括非鸟类恐龙，为哺乳动物辐射演化开辟空间。每次灭绝腾出了生态位，幸存者在全新环境中迅速分化。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: 生命起源 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30E;</div>
+          <h3>生命起源</h3>
+          <p class="fc-brief">从地下4000米的微生物到深海热泉——生命可能在极端环境中诞生。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>极端环境中的生命</h4>
+          <p>传统认为生命起源于温暖浅海（"原始汤"假说），但近年发现：深海热泉口的化学梯度可能是生命诞生的能量来源——铁硫矿物表面催化有机分子形成。地下4000米处发现的微生物以岩石中氢为能量来源，表明生命可能在地下深处诞生。2017年在加拿大老排水沟中发现了最古老的微生物化石（42.8亿年前），暗示生命在地球形成后仅5亿年就出现了。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6: 性别演化 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x264A;&#xFE0F;</div>
+          <h3>性别演化</h3>
+          <p class="fc-brief">性别不是为了繁殖（无性繁殖更高效），而是为了基因重组——增加多样性对抗寄生虫和疾病。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>性别的演化意义</h4>
+          <p>无性繁殖在效率上碾压有性繁殖——每个个体都能繁殖，后代基因100%复制。那么性为什么没有被淘汰？最有力的解释是"红皇后假说"：有性繁殖通过基因重组产生新的基因组合，让寄生虫和病原体更难适应宿主。这也是为什么"最靓的羽毛"（孔雀）反而可能保留——性选择让健康基因的信号得以传递。有性繁殖等于在不断洗牌，让基因组保持对环境的动态适应。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 7: 人类迁徙 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9D9;</div>
+          <h3>人类迁徙</h3>
+          <p class="fc-brief">从非洲走出、横跨白令海峡、散布太平洋岛屿——基因和语言旁证共同还原人类扩散路径。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>走出非洲</h4>
+          <p>现代人类（智人）约在20-15万年前出现于东非。约7-5万年前，一批智人走出非洲，沿印度洋海岸线到达东南亚和澳大利亚。约4.5万年前到达欧洲，与尼安德特人相遇并混血（现代非非洲人携带约1-4%尼安德特人基因）。白令陆桥约1.5万年前露出海面，人类进入美洲。波利尼西亚人约3000年前开始远洋航行，在太平洋岛屿间迁徙。线粒体DNA和Y染色体单倍群追踪提供了清晰的遗传证据。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 8: 考古旁证 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F3DB;&#xFE0F;</div>
+          <h3>考古旁证</h3>
+          <p class="fc-brief">从衣服、家猫、狗、酵母菌的驯化史看人类文明的演化——旁证比文字更可靠。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>旁证的力量</h4>
+          <p>文字记载只有几千年历史，但人类文明数万年。考古旁证成为更可靠的窗口：虱子基因的分子钟告诉我们人类约7万年前开始穿衣服（虱子从头发中分化出头虱和体虱）；猫的驯化没有人类刻意为之——野猫被粮仓的老鼠吸引，猫与人形成共生关系；狗的驯化至少1.5万年前，比农业革命还早；酵母菌的驯化产生了面包和啤酒。旁证有时比文字记载更准确。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 9: 肤色演化 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F3FF;</div>
+          <h3>肤色演化</h3>
+          <p class="fc-brief">肤色是紫外线强度和维生素D合成的平衡产物——深色皮肤防止叶酸被紫外线破坏。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>肤色的演化权衡</h4>
+          <p>深色皮肤中的黑色素可以阻挡紫外线，保护皮下叶酸不被分解——叶酸对胎儿神经发育至关重要。在低纬度地区，深色皮肤具有明显的选择优势。当人类迁徙到高纬度地区时，紫外线强度下降，深色皮肤反而阻碍维生素D合成——维生素D不足影响钙吸收和免疫。因此，浅色皮肤在高纬度成为选择优势。肤色不是"种族"分类，而是对紫外线强度的一种演化适应。维生素D和叶酸之间的权衡是理解肤色分布的关键框架。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 10: 语言起源 -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F399;&#xFE0F;</div>
+          <h3>语言起源</h3>
+          <p class="fc-brief">最早的语言更像音乐——音高和节奏承载意义，语法是后来演化的产物。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>语言的演化起源</h4>
+          <p>达尔文认为语言和音乐有共同祖先——一种类似"歌唱"的交流方式。现代研究支持这一假说：婴儿对音高和节奏极其敏感，远早于掌握单词；世界各地的音乐和语言共享声学特征；前语言期的婴儿能通过语调辨别情绪。语法可能是语言演化的后期阶段——在词汇量扩展后，组合规则才成为必要。FOXP2基因（"语言基因"）的突变影响了人类言语所需的精细口腔运动控制。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.flip-grid -->
+
+  <!-- SVG: 演化之树 -->
+  <div class="section-title"><h2>生命演化之树</h2></div>
+  <div class="svg-container">
+    <h3>从LUCA到智人——38亿年演化历程</h3>
+    <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+      <defs>
+        <linearGradient id="trunkGrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#1a6b3c"/>
+          <stop offset="100%" stop-color="#2d9b5e"/>
+        </linearGradient>
+        <linearGradient id="leafGrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#3cb371"/>
+          <stop offset="100%" stop-color="#66cdaa"/>
+        </linearGradient>
+        <radialGradient id="glow">
+          <stop offset="0%" stop-color="#2d9b5e" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#2d9b5e" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect width="900" height="480" fill="#f0f7f0" rx="8"/>
+
+      <!-- Title -->
+      <text x="450" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a6b3c">生命演化之树 · 从LUCA到智人</text>
+
+      <!-- Trunk -->
+      <path d="M450,460 Q448,420 445,380 Q442,340 440,300 Q438,260 438,220 Q440,180 445,140 Q450,100 458,60" stroke="url(#trunkGrad)" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+      <!-- LUCA -->
+      <circle cx="450" cy="465" r="18" fill="#1a6b3c"/>
+      <text x="450" y="469" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">LUCA</text>
+      <text x="450" y="495" text-anchor="middle" font-size="9" fill="#4a5a4a" font-style="italic">约38亿年前</text>
+
+      <!-- Branches - Bacteria -->
+      <path d="M440,380 Q400,350 340,330" stroke="#3cb371" stroke-width="3" fill="none"/>
+      <circle cx="340" cy="328" r="12" fill="#3cb371"/>
+      <text x="340" y="332" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">细菌</text>
+
+      <!-- Branches - Archaea -->
+      <path d="M442,360 Q390,320 320,290" stroke="#2d9b5e" stroke-width="3" fill="none"/>
+      <circle cx="320" cy="288" r="12" fill="#2d9b5e"/>
+      <text x="320" y="292" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">古菌</text>
+
+      <!-- Eukaryotes -->
+      <path d="M445,320 Q400,290 370,260" stroke="#1a6b3c" stroke-width="3" fill="none"/>
+      <circle cx="370" cy="258" r="12" fill="#1a6b3c"/>
+      <text x="370" y="262" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">真核生物</text>
+
+      <!-- Plants -->
+      <path d="M445,280 Q420,230 400,190" stroke="#2d9b5e" stroke-width="2.5" fill="none"/>
+      <circle cx="400" cy="188" r="10" fill="#2d9b5e"/>
+      <text x="400" y="192" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">植物</text>
+
+      <!-- Animals -->
+      <path d="M448,260 Q460,210 480,170" stroke="#1a6b3c" stroke-width="2.5" fill="none"/>
+      <circle cx="480" cy="168" r="10" fill="#1a6b3c"/>
+      <text x="480" y="172" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">动物</text>
+
+      <!-- Fungi -->
+      <path d="M443,270 Q430,220 425,180" stroke="#3cb371" stroke-width="2.5" fill="none"/>
+      <circle cx="425" cy="178" r="10" fill="#3cb371"/>
+      <text x="425" y="182" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">真菌</text>
+
+      <!-- Fish -->
+      <path d="M478,210 Q520,170 560,140" stroke="#1a6b3c" stroke-width="2" fill="none"/>
+      <circle cx="560" cy="138" r="9" fill="#2d9b5e"/>
+      <text x="560" y="142" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">鱼类</text>
+
+      <!-- Amphibians -->
+      <path d="M476,200 Q510,150 540,110" stroke="#1a6b3c" stroke-width="2" fill="none"/>
+      <circle cx="540" cy="108" r="9" fill="#2d9b5e"/>
+      <text x="540" y="112" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">两栖类</text>
+
+      <!-- Reptiles -->
+      <path d="M478,190 Q520,130 560,90" stroke="#1a6b3c" stroke-width="2" fill="none"/>
+      <circle cx="560" cy="88" r="9" fill="#2d9b5e"/>
+      <text x="560" y="92" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">爬行类</text>
+
+      <!-- Birds -->
+      <path d="M558,100 Q600,80 650,60" stroke="#3cb371" stroke-width="2" fill="none"/>
+      <circle cx="650" cy="58" r="8" fill="#3cb371"/>
+      <text x="650" y="62" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">鸟类</text>
+
+      <!-- Mammals -->
+      <path d="M558,95 Q600,65 640,40" stroke="#1a6b3c" stroke-width="2" fill="none"/>
+      <circle cx="640" cy="38" r="8" fill="#1a6b3c"/>
+      <text x="640" y="42" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">哺乳类</text>
+
+      <!-- Primates -->
+      <path d="M638,50 Q660,70 690,90" stroke="#1a6b3c" stroke-width="2" fill="none"/>
+      <circle cx="690" cy="90" r="8" fill="#1a6b3c"/>
+      <text x="690" y="94" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">灵长类</text>
+
+      <!-- Homo -->
+      <path d="M688,100 Q710,120 740,140" stroke="#1a6b3c" stroke-width="2" fill="none"/>
+      <circle cx="740" cy="140" r="8" fill="#1a6b3c"/>
+      <text x="740" y="144" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">人属</text>
+
+      <!-- Homo sapiens -->
+      <ellipse cx="740" cy="165" rx="30" ry="14" fill="rgba(45,155,94,0.08)" stroke="#2d9b5e" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="740" y="169" text-anchor="middle" font-size="8" fill="#1a6b3c" font-weight="bold">智人</text>
+
+      <!-- Mass extinctions markers -->
+      <line x1="200" y1="260" x2="370" y2="260" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+      <text x="195" y="257" text-anchor="end" font-size="7" fill="#c0392b">&#x2716; 二叠纪末灭绝</text>
+
+      <line x1="200" y1="190" x2="440" y2="190" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+      <text x="195" y="187" text-anchor="end" font-size="7" fill="#c0392b">&#x2716; 白垩纪末灭绝</text>
+
+      <!-- Time labels -->
+      <text x="780" y="310" font-size="9" fill="#4a5a4a" font-weight="bold">时间轴</text>
+      <line x1="780" y1="320" x2="780" y2="460" stroke="#4a5a4a" stroke-width="1" opacity="0.4"/>
+      <text x="790" y="460" font-size="7" fill="#6a8a6a">38亿年前</text>
+      <text x="790" y="310" font-size="7" fill="#6a8a6a">现在</text>
+      <polygon points="780,305 775,315 785,315" fill="#4a5a4a" opacity="0.4"/>
+
+      <!-- Key events -->
+      <circle cx="450" cy="420" r="3" fill="#b8860b"/>
+      <text x="490" y="423" font-size="7" fill="#b8860b">光合作用出现</text>
+
+      <circle cx="445" cy="340" r="3" fill="#b8860b"/>
+      <text x="490" y="343" font-size="7" fill="#b8860b">真核生物共生起源</text>
+
+      <circle cx="448" cy="240" r="3" fill="#b8860b"/>
+      <text x="490" y="243" font-size="7" fill="#b8860b">寒武纪物种大爆发（5.4亿年前）</text>
+
+      <circle cx="460" cy="160" r="3" fill="#b8860b"/>
+      <text x="495" y="163" font-size="7" fill="#b8860b">陆地动物出现</text>
+
+    </svg>
+    <p class="svg-caption">演化之树示意图：从共同祖先（LUCA，Last Universal Common Ancestor）开始，生命通过不断的分叉和选择，形成了今天丰富多彩的生物世界。红色的灭绝事件标记了物种大灭绝的时刻，每次毁灭都为新一轮演化开辟空间。</p>
+  </div>
+
+  <!-- 边界知识 -->
+  <div class="section-title"><h2>边界知识</h2></div>
+  <div class="boundary-box">
+    <h3>12条值得了解的边界知识</h3>
+    <div class="boundary-grid">
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F9EC;</div>
+        <div class="b-title">达尔文从未说"人是从猴子变的"</div>
+        <div class="b-desc">达尔文说的是"人和现代猴类有一个共同祖先"。这个祖先生活在数千万年前，演化分歧后各自走上了不同的路径。</div>
+        <div class="b-source">来源：达尔文《物种起源》《人类的由来》</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F9EC;</div>
+        <div class="b-title">孟德尔的工作被埋没了34年</div>
+        <div class="b-desc">孟德尔1866年发表遗传定律，但直到1900年才被三位科学家独立重新发现，那时孟德尔已去世16年。</div>
+        <div class="b-source">来源：科学史</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F9EA;</div>
+        <div class="b-title">人的基因组约8%是病毒DNA</div>
+        <div class="b-desc">这些称为"内源性逆转录病毒"的序列，是远古病毒感染人类祖先后整合到生殖细胞基因组的遗迹。其中一种病毒蛋白参与胎盘形成。</div>
+        <div class="b-source">来源：病毒演化学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F30B;</div>
+        <div class="b-title">二叠纪末"大死亡"几乎终结生命</div>
+        <div class="b-desc">2.52亿年前，96%的海洋物种和70%的陆地脊椎动物灭绝。原因可能是西伯利亚火山喷发持续了数百万年，导致全球变暖和海洋酸化。</div>
+        <div class="b-source">来源：古生物学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F30E;</div>
+        <div class="b-title">地下微生物可能比地表生物总量还大</div>
+        <div class="b-desc">地下4000米深处发现了活跃的微生物群落，它们以岩石中的氢为能量来源，代谢速度极慢——细胞分裂一次可能需要数千年。</div>
+        <div class="b-source">来源：深地微生物学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x264A;&#xFE0F;</div>
+        <div class="b-title">有些物种不需要雄性也能繁殖</div>
+        <div class="b-desc">科莫多巨蜥和某些鲨鱼可以通过"孤雌生殖"产下后代。这在演化上是一种"备用方案"，当找不到配偶时仍可延续种群。</div>
+        <div class="b-source">来源：动物学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F9D9;</div>
+        <div class="b-title">所有非非洲人都有尼安德特人基因</div>
+        <div class="b-desc">现代人类（智人）到达欧亚大陆后与尼安德特人发生混血。亚欧人携带约1-4%尼安德特人基因，这些基因影响了免疫、皮肤和头发特征。</div>
+        <div class="b-source">来源：古人类基因组学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F3DB;&#xFE0F;</div>
+        <div class="b-title">面包酵母是人类最早驯化的微生物</div>
+        <div class="b-desc">酵母菌的驯化最早可追溯到约6000年前的古埃及。面包和啤酒的发酵标志着人类从"采集微生物"走向"培育微生物"。</div>
+        <div class="b-source">来源：微生物考古学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F3FF;</div>
+        <div class="b-title">深色皮肤是对叶酸的保护</div>
+        <div class="b-desc">紫外线破坏叶酸，而叶酸匮乏导致胎儿神经管缺陷。深肤色在低纬度地区是强烈的选择优势——这比"防晒伤"重要得多。</div>
+        <div class="b-source">来源：人类演化生物学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F399;&#xFE0F;</div>
+        <div class="b-title">人类能说话因为喉咙发生了演化</div>
+        <div class="b-desc">人的喉头在婴儿期下降，形成了独特的声道结构，可以发出元音。但这也增加了窒息风险——这是语言能力"付出的代价"。</div>
+        <div class="b-source">来源：人类演化解剖学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F9E0;</div>
+        <div class="b-title">演化没有"方向"只有"适应"</div>
+        <div class="b-desc">人类经常误以为演化是"从低等到高等"的进步过程。实际上，演化只是对环境变化做出响应。细菌仍然是地球上最成功的生命形式。</div>
+        <div class="b-source">来源：演化论哲学</div>
+      </div>
+
+      <div class="boundary-item">
+        <div class="b-icon">&#x1F30D;</div>
+        <div class="b-title">技术演化的速度远超生物演化</div>
+        <div class="b-desc">生物演化以代际为单位（人类约25年一代），而技术演化以年甚至月为单位。但这种"快"也让技术更容易犯"致命错误"。</div>
+        <div class="b-source">来源：技术演化理论</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 学习路径 -->
+  <div class="section-title"><h2>五阶段学习路径</h2></div>
+  <div class="learning-box">
+    <h3>从入门到深度理解演化论</h3>
+    <div class="path-steps">
+      <div class="path-step">
+        <div class="step-num">1</div>
+        <div class="step-name">建立直觉</div>
+        <div class="step-arrow">&darr;</div>
+        <div class="step-desc">通过自然选择和人工选择的对比，建立"变异-选择-遗传"的直觉模型</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">2</div>
+        <div class="step-name">理解机制</div>
+        <div class="step-arrow">&darr;</div>
+        <div class="step-desc">深入基因层面：突变、重组、漂变、基因流动——演化的四个驱动力</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">3</div>
+        <div class="step-name">时间尺度</div>
+        <div class="step-arrow">&darr;</div>
+        <div class="step-desc">从化石记录理解地质时间尺度，大灭绝与辐射演化的节奏</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">4</div>
+        <div class="step-name">人类演化</div>
+        <div class="step-arrow">&darr;</div>
+        <div class="step-desc">将演化框架应用于人类自身：迁徙、肤色、语言、驯化</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">5</div>
+        <div class="step-name">跨界迁移</div>
+        <div class="step-desc">将演化思维应用于技术、文化、经济等领域——演化论世界观</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab1 -->
+
+<!-- ============================================================ -->
+<!-- TAB 2: 自然选择 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab2">
+
+  <section class="intro-section">
+    <h2>自然选择：演化的核心引擎</h2>
+    <p>
+      自然选择是演化论中最核心、也最容易被误解的概念。它不是"最强者生存"——如果环境变化，最强壮的动物也可能最先灭绝。它也不是"努力就能适应"——个体在生命周期内获得的特征不会遗传给后代（拉马克的用进废退是错误的）。自然选择只是种群中可遗传的变异在环境过滤下的统计效应。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>自然选择没有意图、没有方向、没有道德——它只是一个自动运行的过滤器。理解这一点，是科学思维和日常思维的重要分水岭。
+    </div>
+  </section>
+
+  <!-- Sub-flip cards for natural selection topics -->
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F50D;</div>
+          <h3>什么是"适合"</h3>
+          <p class="fc-brief">"最适者生存"的"适"不是强壮或聪明，而是繁殖成功率——留下最多后代的就是"最适"。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>繁殖适合度</h4>
+          <p>演化生物学用"繁殖适合度"（fitness）来衡量个体对下一代基因库的贡献。一只体弱但留下3只后代的乌龟，比一只强壮但留下1只后代的豹子"更适合"。适合度永远是相对的，取决于特定环境。比如在抗生素环境中，携带耐药基因的细菌（即使生长缓慢）比生长快速但不耐药的细菌更适合。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9E0;</div>
+          <h3>误解澄清</h3>
+          <p class="fc-brief">"演化"不是"进步"、"适应"不是"完美"、"自然选择"不是"优胜劣汰"——语言陷阱无处不在。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>三种常见误解</h4>
+          <p>误解一：演化=进步。实际上，演化没有方向，细菌和人类各走各的路。误解二：适应=完美。实际上，适应受限于历史制约——熊猫的"拇指"其实是腕骨的延长，不完美但够用。误解三："优胜劣汰"是斯宾塞的社会达尔文主义，不是达尔文的科学概念——达尔文从未说过"优胜劣汰"，这是后人的扭曲。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F33F;</div>
+          <h3>人工选择 vs 自然选择</h3>
+          <p class="fc-brief">达尔文从鸽子的驯化中获得灵感——人类的选择和自然的选择遵循相同逻辑。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>相同的逻辑，不同的筛选者</h4>
+          <p>达尔文在《物种起源》开篇就讨论人工选择。鸽友通过选育培养出上百种鸽子品种，从信鸽到观赏鸽——这展示了变异和选择可以达到的效果。自然选择与人工选择的唯一区别是筛选者：人工选择中，人类有意识地选择想要的性状；自然选择中，"选择"由环境自动完成——生存和繁殖就是"选择"。理解了人工选择，就等于理解了自然选择的逻辑。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab2 -->
+
+<!-- ============================================================ -->
+<!-- TAB 3: 基因平移 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab3">
+
+  <section class="intro-section">
+    <h2>基因平移：改写进化树的力量</h2>
+    <p>
+      经典进化树假设基因只沿"树干"垂直传递。但我们在细菌中发现了另一种主要的信息传递方式：水平基因转移（基因平移）。一个细菌可以从完全不相关的另一个细菌那里获得基因——就像拿着U盘在电脑之间复制文件。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>基因平移颠覆了"一棵树"的进化模型——生命更像一张网，基因在各分支间流动。这在医学上意义重大：抗生素耐药性可以在一夜之间从一种细菌跳到另一种。
+    </div>
+  </section>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9EA;</div>
+          <h3>质粒与耐药性</h3>
+          <p class="fc-brief">细菌之间通过质粒传递耐药基因——这是医院超级细菌产生的主要机制。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>质粒传递</h4>
+          <p>质粒是细菌体内独立于染色体的小型环状DNA分子。它们可以自主复制，并通过"接合"（细菌之间的物理接触）从一个细菌转移到另一个。耐药基因通常位于质粒上，这意味着即使是对抗生素敏感的细菌，一旦从耐药菌那里获得质粒，也会立即变成耐药菌。这就是为什么单一抗生素很难根除细菌感染——耐药性可以通过基因平移迅速扩散。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9EC;</div>
+          <h3>内源性逆转录病毒</h3>
+          <p class="fc-brief">人的基因组中约8%来源于远古病毒——这些"化石病毒"甚至参与了重要的生理功能。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>病毒基因的整合</h4>
+          <p>逆转录病毒（如HIV）的生命周期包括将自身DNA整合到宿主基因组中。如果这种整合发生在生殖细胞（精子或卵子）中，病毒基因就会代代遗传。人类基因组中大约有10万个这样的病毒DNA片段，占基因组的8%。科学家发现，其中一种名为"合胞素"的病毒蛋白，在现代胎盘的形成中扮演了关键角色——它帮助胎儿细胞与母体细胞融合。演化利用了病毒。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30F;</div>
+          <h3>生命网格</h3>
+          <p class="fc-brief">如果基因平移如此普遍，生命的演化图像就不是一棵树，而是一张网。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>从树到网</h4>
+          <p>在微生物世界，水平转移如此频繁以至于"物种"的概念本身都变得模糊。不同细菌之间共享基因的程度远超预期。一些研究者提出"网状演化"模型代替传统的分支进化树。这个模型承认：垂直遗传形成主干，但水平转移在分支之间架起桥梁。在人类身上也是如此——我们和共生的肠道细菌之间有持续的基因交流。生命不是一株树，而是一张相互连接的网。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab3 -->
+
+<!-- ============================================================ -->
+<!-- TAB 4: 演化世界观 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab4">
+
+  <section class="intro-section">
+    <h2>演化论世界观：超越生物学的通用框架</h2>
+    <p>
+      如果把演化论的定义放宽到"变异+选择+遗传"的抽象模型，我们会发现它几乎适用于一切复杂系统。技术、语言、文化、法律、习俗、科学理论本身——都在经历某种形式的演化。演化论不仅是一门生物学说，更是一种强有力的思维方式。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>任何能够自我复制的信息单元（基因、观念、技术）都会在"变异-选择-遗传"的循环中演化。理解这一点，你就拥有了一把理解万物的钥匙。
+    </div>
+  </section>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x2328;&#xFE0F;</div>
+          <h3>技术的演化</h3>
+          <p class="fc-brief">QWERTY键盘不是"最优"设计，但为什么活了下来？因为生态位锁定。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>技术生物学</h4>
+          <p>QWERTY键盘设计于1873年，原本是为了防止打字机按键卡住而刻意放慢打字速度。理论上，更高效的键盘设计（如DVORAK）确实存在。但QWERTY已经锁定了生态位：打字员培训体系、打印机生产标准、用户习惯——所有这些形成了"选择压"，让更优的设计难以取代现有标准。这就是"路径依赖"——技术演化中的一种常见现象。智能手机的触屏键盘是另一个例子：物理键盘消亡不是因为人们不再需要打字，而是触屏提供了更大的灵活性。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F399;&#xFE0F;</div>
+          <h3>语言的演化</h3>
+          <p class="fc-brief">词汇的诞生和消亡、语法的简化——语言在变异-选择-遗传中演化。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>语言演化</h4>
+          <p>语言变化遵循演化规律：新词（变异）、使用频率（选择）、传承（遗传）。"自拍""点赞"这类词的诞生和普及就是变异和选择。不规则的动词形式逐渐被规则形式替代（英语中"helped"取代了"holp"）是语法的系统简化。语言演化的速度可以用"词汇半衰期"来测量：研究表明，常用词的替换率约每2000年更换一半。语法结构比词汇更保守——中文的语序（主谓宾）过去3000年几乎没有变化。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F4AD;</div>
+          <h3>文化模因</h3>
+          <p class="fc-brief">道金斯提出"模因"（meme）作为文化复制单位——互联网时代这一概念爆发。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>模因论</h4>
+          <p>道金斯在1976年《自私的基因》中提出了"模因"概念——一个文化信息单元，通过模仿在人际间传播。模因与基因类似：变异（修图变化）、选择（点击率高的存活）、遗传（被转发分享）。互联网极大地加速了模因演化的速度：一个梗图在数小时内经历无数轮变异和选择。模因理论帮助我们理解：为什么有些错误观念比正确观念更容易传播？因为它们的复制策略更高效——简单、情绪化、易于传播。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab4 -->
+
+<!-- ============================================================ -->
+<!-- TAB 5: 物种大灭绝 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab5">
+
+  <section class="intro-section">
+    <h2>物种大灭绝：毁灭是创新的前奏</h2>
+    <p>
+      地球上至少发生了五次物种大灭绝事件，每次灭绝的物种数量惊人。但令人深思的是，每一次大规模灭绝之后，都跟随着一次物种大爆发。灭绝"清空"了生态位，幸存者迅速分化填补空白。恐龙灭绝（6600万年前）让哺乳动物有了崛起的机会——如果没有那颗小行星，人类可能永远不会出现。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>毁灭和创造是一枚硬币的两面。灭绝不是演化的失败——它是演化的引擎之一。没有灭绝就没有新物种的大量涌现。
+    </div>
+  </section>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30B;</div>
+          <h3>五次大灭绝</h3>
+          <p class="fc-brief">奥陶纪、泥盆纪、二叠纪、三叠纪、白垩纪——五次"末日"的节奏和影响各有不同。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>五次大灭绝详情</h4>
+          <p>第一次（奥陶纪末，4.43亿年前）：全球变冷导致海平面下降，86%物种灭绝。第二次（泥盆纪末，3.72亿年前）：海洋缺氧，75%物种灭绝。第三次（二叠纪末，2.52亿年前）：西伯利亚火山喷发数百万年，96%物种灭绝——"大死亡"。第四次（三叠纪末，2.01亿年前）：火山活动与气候变化，80%物种灭绝，恐龙崛起。第五次（白垩纪末，6600万年前）：小行星撞击地球，76%物种灭绝，包括所有非鸟类恐龙，哺乳动物兴起。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x2604;&#xFE0F;</div>
+          <h3>小行星撞击</h3>
+          <p class="fc-brief">希克苏鲁伯陨石坑——6600万年前一颗直径10公里的小行星终结了恐龙时代。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>恐龙灭绝的真相</h4>
+          <p>1980年，路易斯·阿尔瓦雷斯父子在K-Pg界线地层中发现了高浓度的铱元素——铱在地壳中罕见但在小行星中常见。1990年，墨西哥尤卡坦半岛的希克苏鲁伯陨石坑被确认为撞击点。模拟表明：小行星以每秒20公里的速度撞击地球，释放的能量相当于100万亿吨TNT，引发全球火灾、海啸和"撞击冬天"——尘埃遮天蔽日数年，光合作用停止。恐龙灭绝，而小型哺乳动物靠冬眠和杂食存活了下来。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F331;</div>
+          <h3>灭绝后的爆发</h3>
+          <p class="fc-brief">白垩纪灭绝后的1000万年里，哺乳动物的种类从少数几种爆炸式增长到数百种。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>适应性辐射</h4>
+          <p>大灭绝之后，空出的生态位被幸存者快速占据。白垩纪末灭绝后，哺乳动物经历了"适应性辐射"——从小型夜行食虫动物迅速演化出草食、肉食、树栖、水生、飞翔等生态类型。灵长类出现在这一辐射之后。类似的现象也发生在二叠纪末灭绝后：恐龙的前身（主龙类）在灭绝后的空旷世界中迅速多样化。灭绝清空了棋盘，让新玩家有机会占据棋局。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab5 -->
+
+<!-- ============================================================ -->
+<!-- TAB 6: 生命与性别 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab6">
+
+  <section class="intro-section">
+    <h2>生命起源与性别演化</h2>
+    <p>
+      生命从何而来？性别从何而来？这两个问题触及演化的深层。传统观点认为生命起源于温暖浅海的"原始汤"，但近年的发现指向深海热泉和地下深处。至于性别——从演化角度看它是个巨大的"浪费"——为什么几乎所有复杂生物都要采用有性繁殖？答案是多样性对抗不确定性。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>生命的起源可能不是一个"幸运事故"，而是在特定化学梯度中的必然结果。性别的存在不是为了让繁殖更高效——恰恰相反，它牺牲效率来换取多样性，使种群能够对抗快速演化的寄生虫和疾病。
+    </div>
+  </section>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30E;</div>
+          <h3>深海热泉假说</h3>
+          <p class="fc-brief">生命可能诞生于深海热泉口的化学梯度中——铁硫矿物催化有机分子形成。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>热泉口：生命的熔炉</h4>
+          <p>在深海热泉口，高温（最高400°C）的还原性热液与冰冷的海水相遇，形成巨大的化学梯度。这种梯度为最早的化学反应提供了驱动力。德国化学家Gunter Wachtershauser提出"铁-硫世界"假说：铁硫矿物表面像催化剂一样促进有机分子的合成。实验室模拟证实，在类似热泉口的条件下，氨基酸和核苷酸可以自发形成。此外，热泉口中的"蜂窝状"微孔结构可能充当了最早的"细胞膜"。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F33F;</div>
+          <h3>红皇后假说</h3>
+          <p class="fc-brief">"你必须不停奔跑才能留在原地"——有性繁殖是对抗共同演化军备竞赛的策略。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>红皇后假说与性</h4>
+          <p>红皇后假说源自刘易斯·卡罗尔的小说——爱丽丝必须不停奔跑才能停在原地。在生物学中，这个比喻描述的是捕食者和猎物、寄生虫和宿主之间的共同演化军备竞赛。无性繁殖产生的后代基因与亲本完全相同，一旦寄生虫进化出突破宿主防御的机制，整个种群脆弱不堪。而有性繁殖通过基因重组产生多样性，就像不断更换密码锁。一些实验表明，在有寄生虫压力大的环境中，有性繁殖的比例更高。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F992;</div>
+          <h3>性选择</h3>
+          <p class="fc-brief">孔雀华丽的尾巴浪费能量却吸引异性——性选择可以产生违背自然选择的特征。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>性选择的力量</h4>
+          <p>达尔文意识到，除了生存竞争（自然选择），还有另一种选择力量：性选择——个体之间争取交配机会的竞争。孔雀的尾巴巨大、华丽且耗能——按自然选择它早该被淘汰。但雌孔雀偏爱尾巴更华丽的雄孔雀，因为能负担起这样奢华的尾巴本身就是"健康信号"（"累赘原理"）。性选择解释了为什么许多物种中"雄性比雌性更好看"——雄性之间的竞争和雌性的偏好驱动了这些特征的演化。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab6 -->
+
+<!-- ============================================================ -->
+<!-- TAB 7: 人类迁徙 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab7">
+
+  <section class="intro-section">
+    <h2>人类迁徙：基因与旁证还原的漫长征途</h2>
+    <p>
+      智人从非洲走出，最终散布到地球的每一个角落。这段旅程跨越数万年，留下了复杂的基因痕迹。线粒体DNA和Y染色体的研究表明，所有非非洲人都是同一批"走出非洲"的智人的后裔。但人类的扩散不是单次事件——它与尼安德特人、丹尼索瓦人相遇、混血，路径比我们想象的要复杂得多。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>人类迁徙的关键证据来自三个源头：化石、基因、语言。三者相互印证、相互补充，共同构建了一幅越来越清晰的人类扩散地图。
+    </div>
+  </section>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F30D;</div>
+          <h3>走出非洲路线</h3>
+          <p class="fc-brief">约7-5万年前，一批智人沿印度洋海岸线走出非洲，到达东南亚和澳大利亚。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>沿海迁徙路线</h4>
+          <p>遗传学和考古学证据支持"走出非洲"模型：约7-5万年前，现代人类从东非出发，沿阿拉伯半岛南缘、印度洋海岸线，到达东南亚。这条沿海路线在距今较低海平面时暴露的大陆架上提供了丰富的海洋食物资源。约5万年前到达澳大利亚（当时与东南亚以陆桥相连）。约4.5万年前到达欧洲。约1.5万年前通过白令陆桥进入美洲。波利尼西亚人的远洋航行则是更晚（约3000年前）的故事。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F9E0;</div>
+          <h3>尼安德特人混血</h3>
+          <p class="fc-brief">现代非非洲人的基因组中携带约1-4%的尼安德特人DNA。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>杂交的遗产</h4>
+          <p>2010年，尼安德特人基因组测序完成，揭示了惊人的事实：走出非洲的智人与尼安德特人（欧亚大陆的古人类）发生了混血。所有非非洲人都携带尼安德特人DNA，但亚洲人的比例略高于欧洲人。有些尼安德特人基因在现代人身上发挥了功能：影响角蛋白（皮肤和头发）的基因可能帮助早期人类适应欧亚大陆的气候。但也有负面影响——某些尼安德特人基因与抑郁症、糖尿病风险相关。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F3F4;</div>
+          <h3>波利尼西亚远航</h3>
+          <p class="fc-brief">拉皮塔人约3000年前开始远洋航行——在没有指南针的时代征服了太平洋。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>航海者的基因</h4>
+          <p>波利尼西亚人的迁徙是古代最惊人的远洋航行。约3000年前，拉皮塔文化的人群从东南亚出发，乘坐双体独木舟，依靠星象、洋流和鸟类飞行方向导航。他们先后抵达斐济、汤加、萨摩亚，然后向东扩展到夏威夷（约公元800年）、复活节岛（约公元1200年）和新西兰（约公元1300年）。基因研究表明，波利尼西亚人带有东南亚和美拉尼西亚双重血统。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab7 -->
+
+<!-- ============================================================ -->
+<!-- TAB 8: 肤色与语言 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab8">
+
+  <section class="intro-section">
+    <h2>肤色演化与语言起源</h2>
+    <p>
+      肤色和语言看起来是两个完全不同的研究领域，但它们都可以用演化论的框架来解释。肤色是在"保护叶酸"和"合成维生素D"之间演化的权衡；语言则可能是从类似音乐的交流系统演化而来的。两个故事都展示了演化如何通过"修补"已有的结构来创造新的功能。
+    </p>
+    <div class="core-goal">
+      <strong>关键洞见：</strong>人体是一个演化的"拼凑品"——没有什么特征是"为了最优而设计"的，每一个特征都是在历史约束下"够用就行"的方案。肤色和语言是最好的例证。
+    </div>
+  </section>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F3FF;</div>
+          <h3>肤色的演化权衡</h3>
+          <p class="fc-brief">深色皮肤防紫外线破坏叶酸，浅色皮肤促进维生素D合成——两个需求在竞争中演化。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>叶酸 vs 维生素D</h4>
+          <p>肤色是演化中精确权衡的结果。深色皮肤中的黑色素有效阻挡紫外线，保护血液中的叶酸不被分解。叶酸是胎儿神经管发育的必需物质——缺乏叶酸和胎儿神经管畸形有因果关系。在低纬度（赤道附近），强烈紫外线成为选择深色皮肤的压力。当人类迁往高纬度，紫外线减弱，深色皮肤反而阻碍了紫外线合成维生素D的效率。维生素D对钙吸收和免疫系统至关重要。浅色皮肤是对低紫外线环境的适应。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F399;&#xFE0F;</div>
+          <h3>语言从音乐中诞生</h3>
+          <p class="fc-brief">最早的语言可能更像歌唱——音高和节奏承载意义，语法是后来演化出来的。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>音乐-语言共同祖先</h4>
+          <p>达尔文在《人类的由来》中提出：人类在拥有语言之前就拥有音乐能力，语言和音乐有一个共同的祖先——类似"歌唱"的交流方式。现代研究支持：婴儿在掌握单词前就能辨别语调的情绪含义；世界各地的音乐和口语共享声学特征（节奏、音高轮廓）；前语言期婴儿的"咿呀学语"包含音高变化。语言演化分阶段：首先是"音乐性"的语调交流，然后是词汇的发明，最后是语法的出现。FOXP2基因与言语运动控制有关。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="fc-icon">&#x1F4AC;</div>
+          <h3>语法是晚近的发明</h3>
+          <p class="fc-brief">人类早期语言可能只是词汇的简单排列——语法是随着词汇量扩展而演化的。</p>
+          <p class="fc-hint">&#x1F504; 点击翻转</p>
+        </div>
+        <div class="flip-card-back">
+          <h4>语法演化</h4>
+          <p>语言学家认为早期语言是一种"原始语言"——只有名词和动词的简单拼接，没有时态、格、从句等复杂语法结构。这种模式在儿童语言习得过程中"重演"：两岁时孩子用两个词组合，三岁才开始出现复杂语法。皮钦语（临时混合语）到克里奥尔语（母语化）的演化过程可能反映了语言从简单到复杂的自然演化路径。语法不是"设计"出来的，而是在使用中通过"变异-选择-遗传"自然演化出来的。</p>
+          <p class="fc-flip-hint">&#x1F53B; 点击翻回</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#tab8 -->
+
+<!-- ============================================================ -->
+<!-- TAB 9: 测验与案例 -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="tab9">
+
+  <!-- ===== 20 MCQ ===== -->
+  <div class="section-title"><h2>自测题</h2></div>
+  <div class="mcq-section">
+    <h3>20道选择题 · 检验你的理解</h3>
+    <p class="mcq-subtitle">答题进度将自动保存在浏览器中（本地存储）</p>
+
+    <div id="mcqContainer"></div>
+    <div id="mcqScore" class="mcq-score">已答：0/20 · 正确：0 (0%)</div>
+  </div>
+
+  <!-- ===== 苏格拉底问答 ===== -->
+  <div class="section-title"><h2>苏格拉底问答</h2></div>
+  <div class="socratic-box">
+    <h3>四组深度追问</h3>
+
+    <div class="socratic-group" id="soc1">
+      <div class="socratic-q" onclick="toggleSocratic('soc1')">
+        <span>Q1：如果自然选择只是"过滤器"，它为什么会产生"有目的"的器官（如眼睛）？</span>
+        <span class="toggle-icon">&#x25BC;</span>
+      </div>
+      <div class="socratic-a">
+        <p>这个问题触及了演化论最让初学者困惑的地方。眼睛看起来如此精密，就像被精心设计的工具——它怎么可能由盲目的自然选择产生？</p>
+        <p>答案是：自然选择通过累积选择产生"看起来有目的"的结构。演化不是一步到位的——现在的眼睛和最早的光敏细胞之间，存在无数个有功能的中间阶段。一个简单的光敏斑点（只能感知明暗）就有选择优势——它让原始生物能躲避天敌。随着时间推移，光敏斑点逐渐变成杯状、针孔状、最后形成透镜眼。每一步的改进都在当时提供了生存优势。</p>
+        <p>道金斯在《攀登不可思议之山》中用了一个比喻：你不可能从地面跳到山顶，但你可以走一条缓坡——自然选择就是那条缓坡。每一小步都在当时是可行的，而被自然选择保留下来的。</p>
+        <div class="insight">关键洞见：复杂性不是一步到位的奇迹，而是数百万年累积选择的结果。演化是"爬山"而非"跳崖"。</div>
+      </div>
+    </div>
+
+    <div class="socratic-group" id="soc2">
+      <div class="socratic-q" onclick="toggleSocratic('soc2')">
+        <span>Q2：如果基因平移如此普遍，物种之间为什么还能保持差异？</span>
+        <span class="toggle-icon">&#x25BC;</span>
+      </div>
+      <div class="socratic-a">
+        <p>这看似矛盾：基因在物种间水平转移，物种却仍然保持着自己的特征——为什么基因平移没有把所有物种变成"大杂烩"？</p>
+        <p>原因有几个：第一，基因平移在细菌中极为普遍，但在多细胞生物（动物、植物）中频率要低得多——因为生殖细胞与体细胞的分离（魏斯曼屏障）降低了基因进入可遗传通路的概率。第二，即使基因水平转移了，大多数情况下这些"外来基因"不会在种群中固定下来——它们可能被自然选择淘汰或由于遗传漂变而消失。第三，物种间之所以能保持差异，是因为大多数性状由多基因控制，单一基因的转移不足以改变物种的整体特征。</p>
+        <p>所以，基因平移不是否定进化树的"罪证"，而是给简单的树形模型增加了一个维度——生命更像一棵"树上有蔓"的网络结构。</p>
+        <div class="insight">关键洞见：基因平移和垂直遗传共存——生命是一棵树干上缠绕着藤蔓的建筑，主干仍然清晰可辨。</div>
+      </div>
+    </div>
+
+    <div class="socratic-group" id="soc3">
+      <div class="socratic-q" onclick="toggleSocratic('soc3')">
+        <span>Q3：现代医学和农业打破了"自然选择"，人类还在演化吗？</span>
+        <span class="toggle-icon">&#x25BC;</span>
+      </div>
+      <div class="socratic-a">
+        <p>这是一个极好的问题。确实，现代医学拯救了许多原本会被自然选择淘汰的个体，农业让食物匮乏不再成为选择压力。但这不意味着人类停止了演化——只是"选择压"发生了变化。</p>
+        <p>第一，人类仍在演化，只是速度不同。研究表明，过去1000年中人类仍在经历自然选择：平均身高的增加、乳糖耐受性的扩散（在农牧民中）、牙齿尺寸的减小。第二，医疗技术本身创造了新的选择压力——例如，剖腹产率的增加让"骨盆狭窄"这一特征不再被严格淘汰，研究表明全球骨盆尺寸可能在缓慢变化。第三，文化演化现在远远快于生物演化——智能手机的使用改变了拇指和大脑的使用模式，但不会改变基因。第四，基因技术（CRISPR）可能让人类开始主动控制自身的演化。</p>
+        <p>所以答案是不但"还在演"，而且演化的层面更多了：生物演化、文化演化、技术演化同时进行。</p>
+        <div class="insight">关键洞见：人类没有跳出演化，而是进入了生物演化和文化演化共同作用的新阶段。</div>
+      </div>
+    </div>
+
+    <div class="socratic-group" id="soc4">
+      <div class="socratic-q" onclick="toggleSocratic('soc4')">
+        <span>Q4：演化论能否预测人类的未来？</span>
+        <span class="toggle-icon">&#x25BC;</span>
+      </div>
+      <div class="socratic-a">
+        <p>演化论是历史科学——它擅长解释过去，但对未来的预测力有限。原因在于演化的三个要素中，有两个是不可预测的。</p>
+        <p>我们知道"选择"和"遗传"的规律，但"变异"是随机的。我们不知道未来会发生什么随机突变。更重要的是，我们不知道未来的"选择压"是什么——环境变化（气候变化、战争、宇宙射线等）具有极大的不确定性。所以演化论不能预测未来人类会变成什么样子——就像1859年的达尔文无法预测智能手机的存在。</p>
+        <p>但是，演化论给出了一些趋势性的预测框架：人类不会"越变越好"（没有进步方向）；人类在未来仍会受到自然选择的约束（除非基因编辑完全替代自然生殖）；人类在地球上的适应能力可能会继续增强（只要环境相对稳定）。演化论是"预防针"——它让我们警惕"人类是演化终极产物"的傲慢。</p>
+        <div class="insight">关键洞见：演化论不能预测具体结果，但能训练我们的思维方式——让我们理解变化的方向性限制和可能性空间。</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 案例分析：复活节岛 ===== -->
+  <div class="section-title"><h2>案例分析</h2></div>
+  <div class="case-study">
+    <h3>复活节岛——一部浓缩的人类史</h3>
+    <p class="case-intro">
+      复活节岛（拉帕努伊）的故事是演化论视角下人类文明命运的缩影。一座孤岛、一片棕榈森林、一个与世隔绝的文明——它在几个世纪内从繁荣走向崩溃，浓缩了人类在地球上面临的根本困境：有限资源下的无限增长。
+    </p>
+    <div class="case-timeline">
+      <div class="tl-item">
+        <div class="tl-year">约公元400-800年</div>
+        <div class="tl-desc">波利尼西亚航海者抵达复活节岛。岛上覆盖着茂密的亚热带棕榈林，土壤肥沃，鸟类资源丰富。定居者带来文化、家禽和老鼠。人口缓慢增长，部落社会形成。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">约公元900-1200年</div>
+        <div class="tl-desc">人口增长，资源压力增大。各部落开始建造巨型石像（摩艾像）——既是权力象征也是祖先崇拜。石像越建越大，运输石像需要大量木材和人力资源。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">约公元1200-1500年</div>
+        <div class="tl-desc">森林砍伐加速。棕榈树被砍伐用于运输石像、建造房屋和独木舟。老鼠以棕榈种子为食，阻碍森林更新。土壤侵蚀加剧，农作物产量下降。鸟类灭绝，渔业因缺乏独木舟而萎缩。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">约公元1500-1722年</div>
+        <div class="tl-desc">社会崩溃：森林消失，资源枯竭，饥荒爆发。部落间战争不断——推倒对方的石像成为征服的象征。人口从峰值约1.5万下降到不足3000。甚至出现了人吃人的现象。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1722年至今</div>
+        <div class="tl-desc">荷兰探险家登岛，随后奴隶贩子、传教士、商船接踵而至。外来疾病、奴隶贸易、殖民统治进一步摧毁了残存的社会结构。今天，复活节岛作为世界遗产向人类发出警示。</div>
+      </div>
+    </div>
+    <div class="case-lesson">
+      <h4>演化论的启示</h4>
+      <p>
+        复活节岛的故事不是"一个文明为何愚蠢地毁掉自己"的简单寓言。从演化论视角看：岛上居民面临的"选择压"是短期的（下一顿饭、下一次战争、下一个石像），而资源的消耗是长期的、缓慢的。当毁林的负面后果积累到临界点时，社会已无法回退——这就是"演化陷阱"：在局部最优的短期策略下，系统走向全局崩溃。这个故事的深刻之处在于：它不是一个"悲剧的古代社会"的故事——它可能是每一个文明（包括我们）的寓言。今天的全球化社会不过是更大的"复活节岛"：我们也在消耗不可再生的资源，也在面临短期利益和长期可持续之间的权衡。演化论教会我们的不是悲观，而是清醒。
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 决策模拟 ===== -->
+  <div class="section-title"><h2>决策模拟</h2></div>
+  <div class="decision-box">
+    <h3>演化思维的决策练习</h3>
+    <p class="sim-intro">在以下三个场景中，请运用演化论的思维方式做出选择，并查看结果分析。</p>
+
+    <div class="sim-round" id="sim1">
+      <h4>第一轮 · 抗生素策略</h4>
+      <p class="sim-scenario">
+        你是一名医生。一位患者要求你开抗生素治疗病毒性感冒。抗生素对病毒无效，但患者坚持要"预防细菌感染"。你会怎么做？
+      </p>
+      <div class="sim-opts" data-round="1">
+        <button onclick="simChoose(1,0)">A. 告知患者抗生素对病毒无效并拒绝开药</button>
+        <button onclick="simChoose(1,1)">B. 开抗生素满足患者要求</button>
+        <button onclick="simChoose(1,2)">C. 开抗生素但告诉患者"吃完整个疗程"</button>
+      </div>
+      <div class="sim-result" id="simResult1">
+        <p><span class="consequence" id="simConc1"></span></p>
+        <p id="simExp1"></p>
+      </div>
+    </div>
+
+    <div class="sim-round" id="sim2">
+      <h4>第二轮 · 农业策略</h4>
+      <p class="sim-scenario">
+        你的村庄有丰富的土地，但水资源有限。你必须在以下两种策略中选择：种植单一高利润作物，收益高但风险集中；或者种植多种传统作物，收益较低但抗风险能力强。
+      </p>
+      <div class="sim-opts" data-round="2">
+        <button onclick="simChoose(2,0)">A. 种植高利润单一作物</button>
+        <button onclick="simChoose(2,1)">B. 种植多种传统作物</button>
+        <button onclick="simChoose(2,2)">C. 大部分种高利润作物，小部分种传统作物</button>
+      </div>
+      <div class="sim-result" id="simResult2">
+        <p><span class="consequence" id="simConc2"></span></p>
+        <p id="simExp2"></p>
+      </div>
+    </div>
+
+    <div class="sim-round" id="sim3">
+      <h4>第三轮 · 信息策略</h4>
+      <p class="sim-scenario">
+        你在社交媒体上看到一个"惊人"的科学发现被广泛转发。内容听起来很有道理但来源不明。在进一步核实之前，你的第一反应是？
+      </p>
+      <div class="sim-opts" data-round="3">
+        <button onclick="simChoose(3,0)">A. 立即转发——信息有价值就该让更多人看到</button>
+        <button onclick="simChoose(3,1)">B. 不转发，先去查找原始研究论文验证</button>
+        <button onclick="simChoose(3,2)">C. 转发但加上"未经证实"的标注</button>
+      </div>
+      <div class="sim-result" id="simResult3">
+        <p><span class="consequence" id="simConc3"></span></p>
+        <p id="simExp3"></p>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /#tab9 -->
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer">
+  <div class="stats">
+    <div class="stat-item">
+      <span class="stat-num">10</span>
+      <span class="stat-label">核心概念</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4</span>
+      <span class="stat-label">MKS核心</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">20</span>
+      <span class="stat-label">道选择题</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">55</span>
+      <span class="stat-label">篇提炼</span>
+    </div>
+  </div>
+  <p class="copyright">
+    卓克·科学思维课 · 演化论：世界的源代码 &copy; MKS 最小知识集 · 内容源自得到 App 专栏 · 仅供个人学习参考
+  </p>
+</footer>
+
+<script>
+/* ================================================================
+   Tab Switching
+   ================================================================ */
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+    if (btn.getAttribute('data-tab') === 'tab9') renderMCQ();
+  });
+});
+
+/* ================================================================
+   Socratic Q&A Toggle
+   ================================================================ */
+function toggleSocratic(id) {
+  var g = document.getElementById(id);
+  g.classList.toggle('open');
+}
+
+/* ================================================================
+   Decision Simulation
+   ================================================================ */
+var simResults = JSON.parse(localStorage.getItem('zk2_mks_sim') || '{}');
+
+function simChoose(round, choice) {
+  var container = document.getElementById('sim' + round);
+  var resultDiv = document.getElementById('simResult' + round);
+  var concSpan = document.getElementById('simConc' + round);
+  var expSpan = document.getElementById('simExp' + round);
+  var buttons = container.querySelectorAll('.sim-opts button');
+
+  buttons.forEach(function(b) { b.disabled = true; b.classList.remove('chosen'); });
+  buttons[choice].classList.add('chosen');
+
+  var outcomes = {
+    1: [
+      { con: '结果：良好', exp: '你的拒绝教育了患者关于抗生素耐药性的知识。抗生素耐药性是典型的演化案例——细菌在抗生素压力下，耐药基因通过自然选择扩散。每一次不必要的抗生素使用都在加速超级细菌的演化。你的坚持是正确的。', cls: 'good' },
+      { con: '结果：不佳', exp: '你满足了患者的要求，但加剧了抗生素耐药性的演化。每多用一次抗生素，就是在加速筛选耐药菌。从演化视角看，这是一个典型的"公地悲剧"——个体短期获益（患者满意）vs 群体长期代价（耐药性扩散）。', cls: 'bad' },
+      { con: '结果：中等', exp: '你开了抗生素但叮嘱服用——这比不叮嘱好一些，但依然加剧了耐药性演化。部分服用是更糟糕的情况——它没有完全杀死敏感菌，却给耐药菌留下繁殖空间。演化论告诉我们：要么用足量杀死所有目标菌，要么不用。', cls: 'mixed' }
+    ],
+    2: [
+      { con: '结果：有风险', exp: '单一作物种植（单一种植）在短期内收益最大化，但从演化视角看，这是把所有的"基因蛋"放在一个篮子里。一旦出现新的病虫害或气候异常，整个村庄的收成可能被全部毁灭。爱尔兰土豆饥荒（1845-1852）就是血的教训——单一品种的马铃薯被晚疫病菌灭绝。', cls: 'bad' },
+      { con: '结果：稳健', exp: '多样性策略是演化论的核心启示。在自然界，多样性是面对不确定性的最佳策略——它不追求短期最优，而是追求长期韧性。村庄的多种作物像投资组合——即使一种歉收，其他作物仍可提供生存保障。这是"对冲策略"的演化版本。', cls: 'good' },
+      { con: '结果：居中', exp: '混合策略在效率和抗风险之间取得了平衡。从演化视角看，这是"多生态位"策略——它既捕获了主要生态位（高利润作物）的收益，又保留了备用生态位（传统作物）的安全网。自然界中的"机会主义者+保守派"混合生存策略与此类似。', cls: 'mixed' }
+    ],
+    3: [
+      { con: '结果：有风险', exp: '未经核实的信息就像"有害突变"——它们可能在传播中被"选择"（转发）而扩散。演化论提醒我们：传播最广的信息不一定是正确的，而是那些最容易复制(简单、情绪化)的信息。互联网信息的"自然选择"不一定筛选出真理。', cls: 'bad' },
+      { con: '结果：理性', exp: '核查原始来源是科学思维的核心——相当于在"变异"（生成的信息）中选择那些经过实验检验的。科学引文索引、论文同行评议机制就是信息"自然选择"的人工改良版本。你的做法符合"相信但要验证"的科学态度。', cls: 'good' },
+      { con: '结果：中等', exp: '标注"未经证实"是折中方案，但它可能被忽略。传播学研究表明，"未经证实"这类标注的效果有限——读者更关注信息本身而非附注。在"信息的自然选择"中，标注无法阻止错误信息的传播。', cls: 'mixed' }
+    ]
+  };
+
+  var o = outcomes[round][choice];
+  concSpan.textContent = o.con;
+  concSpan.className = 'consequence ' + o.cls;
+  expSpan.textContent = o.exp;
+  resultDiv.style.display = 'block';
+  container.classList.add('resolved');
+
+  simResults[round] = choice;
+  localStorage.setItem('zk2_mks_sim', JSON.stringify(simResults));
+}
+
+/* Restore previous sim choices */
+(function restoreSim() {
+  for (var r = 1; r <= 3; r++) {
+    if (simResults[r] !== undefined) simChoose(r, simResults[r]);
+  }
+})();
+
+/* ================================================================
+   MCQ: 20 questions, ans distribution 0:5, 1:5, 2:5, 3:5
+   ================================================================ */
+var mcqData = [
+  // ans=0 (5 questions: Natural Selection & Fundamentals)
+  { q: '达尔文进化论的核心机制是什么？', opts: ['自然选择', '用进废退', '获得性遗传', '神创论'], ans: 0 },
+  { q: '孔雀华丽尾巴的演化主要是哪种选择的结果？', opts: ['性选择', '自然选择', '人工选择', '稳定选择'], ans: 0 },
+  { q: '以下哪项不是自然选择的必要条件？', opts: ['环境发生改变', '个体间存在变异', '变异可以遗传', '繁殖过剩导致竞争'], ans: 0 },
+  { q: '在演化生物学中，"适应"最重要的特征是？', opts: ['有助于在该环境中生存和繁殖', '使生物体更复杂', '使生物体更强壮', '延长个体寿命'], ans: 0 },
+  { q: '达尔文和华莱士何时同时提出自然选择理论？', opts: ['1858年', '1859年', '1866年', '1900年'], ans: 0 },
+  // ans=1 (5 questions: Gene Transfer & Sex & Language)
+  { q: '基因平移（水平基因转移）指的是？', opts: ['基因从父母到子女', '基因在物种间水平转移', '基因突变', '基因丢失'], ans: 1 },
+  { q: '人类基因组中约8%的序列来源于什么？', opts: ['细菌基因', '内源性逆转录病毒', '线粒体DNA', '非编码RNA'], ans: 1 },
+  { q: '性别的演化意义主要用以下哪个假说解释？', opts: ['中性理论', '红皇后假说', '间断平衡假说', '米勒实验'], ans: 1 },
+  { q: '尼安德特人基因在现代非非洲人中的比例大约是多少？', opts: ['0%', '1-4%', '10-15%', '20%以上'], ans: 1 },
+  { q: '最早的语言在结构上可能更像什么？', opts: ['动物叫声', '音乐（音高和节奏）', '手势语言', '书写符号'], ans: 1 },
+  // ans=2 (5 questions: Mass Extinction & Migration & Life Origin)
+  { q: '地球上物种大灭绝共发生了几次？', opts: ['1次', '3次', '5次', '7次'], ans: 2 },
+  { q: '物种大灭绝中规模最大的是哪一次？', opts: ['奥陶纪末', '泥盆纪末', '二叠纪末', '白垩纪末'], ans: 2 },
+  { q: '现代人类（智人）走出非洲的关键时间点约在？', opts: ['100万年前', '50万年前', '7-5万年前', '1万年前'], ans: 2 },
+  { q: '生命最有可能在以下哪种环境中诞生？', opts: ['温暖浅海', '原始大气雷电', '深海热泉口', '外太空陨石'], ans: 2 },
+  { q: '狗的驯化大约发生在什么时候？', opts: ['5000年前', '8000年前', '1万年前', '至少1.5万年前'], ans: 2 },
+  // ans=3 (5 questions: Gender, Migration, Evolution Worldview)
+  { q: '性别演化的主要原因是什么？', opts: ['繁殖需要', '让物种更好看', '社会结构要求', '基因重组增加多样性对抗疾病'], ans: 3 },
+  { q: '波利尼西亚人的远洋航行大约开始于什么时候？', opts: ['5万年前', '1万年前', '5000年前', '3000年前'], ans: 3 },
+  { q: '白垩纪末大灭绝后，什么类群的动物经历了最快的适应性辐射？', opts: ['恐龙', '鸟类', '爬行类', '哺乳类'], ans: 3 },
+  { q: '肤色演化是以下哪两种因素之间的权衡？', opts: ['防晒和保暖', '吸引配偶和躲避天敌', '叶酸保护和维生素D合成', '血型和免疫系统'], ans: 3 },
+  { q: '以下哪项最符合演化论世界观的核心洞见？', opts: ['人类是演化的终极产物', '演化等同于进步', '细菌比人类低等', '一切复杂系统都在变异-选择-遗传中演进'], ans: 3 }
+];
+
+var userAnswers = JSON.parse(localStorage.getItem('zk2_mks_mcq') || '{}');
+var mcqRendered = false;
+
+function renderMCQ() {
+  if (mcqRendered) return;
+  mcqRendered = true;
+  var container = document.getElementById('mcqContainer');
+  var html = '';
+  mcqData.forEach(function(item, idx) {
+    var saved = userAnswers[idx];
+    var letters = ['A', 'B', 'C', 'D'];
+    html += '<div class="mcq-item" id="mcqItem' + idx + '">';
+    html += '<div class="mcq-q">' + (idx + 1) + '. ' + item.q + '</div>';
+    html += '<div class="mcq-opts">';
+    item.opts.forEach(function(opt, oi) {
+      var checked = (saved !== undefined && saved == oi) ? ' checked' : '';
+      html += '<label><input type="radio" name="mcq' + idx + '" value="' + oi + '" onchange="checkMCQ(' + idx + ',' + oi + ')"' + checked + '> ' + letters[oi] + '. ' + opt + '</label>';
+    });
+    html += '</div>';
+    html += '<div class="mcq-result" id="mcqResult' + idx + '"></div>';
+    html += '<div class="mcq-explain" id="mcqExplain' + idx + '"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+
+  /* Apply saved states */
+  for (var idx in userAnswers) {
+    if (userAnswers.hasOwnProperty(idx)) {
+      applyMCQState(parseInt(idx), userAnswers[idx]);
+    }
+  }
+  updateMCQScore();
+}
+
+var mcqExplanations = [
+  // ans=0 (5)
+  '达尔文提出的核心机制是自然选择。用进废退是拉马克的观点，获得性遗传也被拉马克支持但被现代遗传学否定。神创论是前科学时代的解释。',
+  '达尔文提出性选择来解释华丽特征——孔雀的尾巴对生存无益甚至有害，但吸引雌性，是性选择的典型案例。',
+  '自然选择不要求环境改变。即使环境稳定，自然选择也在持续进行——淘汰不利变异、保留有利变异。环境改变只是改变了选择的方向。',
+  '演化生物学中的"适应"特指——有助于生物在当前环境中生存和繁殖的特征。它不追求复杂、强壮或长寿，只追求繁殖成功。',
+  '1858年达尔文和华莱士在林奈学会上同时发表自然选择论文。1859年达尔文出版《物种起源》。1866年孟德尔发表遗传定律。',
+  // ans=1 (5)
+  '基因平移（水平基因转移）指基因在不同物种之间水平传递。从父母到子女是垂直传递，不属于基因平移。',
+  '人类基因组约8%来源于内源性逆转录病毒（远古病毒整合到生殖细胞基因组中）。它们中的一些甚至参与重要生理功能（如胎盘形成）。',
+  '红皇后假说（"必须不停奔跑才能留在原地"）解释了有性繁殖的优势——基因重组产生的多样性让宿主能对抗快速演化的寄生虫和疾病。',
+  '现代非非洲人基因组中携带约1-4%的尼安德特人DNA，这是智人走出非洲后与尼安德特人混血留下的遗产。非洲人几乎没有尼安德特人基因。',
+  '达尔文提出语言和音乐有共同祖先。现代研究支持最早的语言更像音乐——音高和节奏承载意义，语法是后来演化的产物。',
+  // ans=2 (5)
+  '地球历史上发生5次物种大灭绝：奥陶纪末、泥盆纪末、二叠纪末、三叠纪末、白垩纪末。目前人类可能正在引发第六次。',
+  '二叠纪末灭绝（约2.52亿年前）导致96%的物种灭绝，是规模最大的一次，被称为"大死亡"或"大灭绝之母"。',
+  '现代人类（智人）约7-5万年前从非洲走出，沿印度洋海岸线到达东南亚和澳大利亚。约4.5万年前到达欧洲，约1.5万年前进入美洲。',
+  '深海热泉口的化学梯度被认为是生命最可能的诞生地——铁硫矿物表面的催化作用可能促进了最早有机分子的形成。米勒实验支持原始汤假说，但热泉假说目前更受关注。',
+  '狗的驯化至少发生在1.5万年前，比农业革命（约1万年前）还要早。最早的考古证据来自德国波恩附近的1.4万年前的狗葬。',
+  // ans=3 (5)
+  '性别的主要演化意义是通过基因重组增加多样性，使种群能对抗快速演化的寄生虫和病原体（红皇后假说）。无性繁殖更高效但缺乏多样性。',
+  '波利尼西亚人的远洋航行约始于3000年前（拉皮塔文化），他们依靠星象、洋流和鸟类导航征服了太平洋——在无文字时代完成了最伟大的航海探索。',
+  '白垩纪末灭绝后，哺乳类经历了最快的适应性辐射——从少数小型夜行食虫动物迅速演化出肉食、草食、树栖、水生、飞翔等生态类型。',
+  '肤色演化是紫外线对叶酸的破坏（需要深色皮肤阻挡紫外线）与维生素D的合成（需要浅色皮肤吸收紫外线）之间的演化权衡。',
+  '演化论世界观的核心洞见是一切复杂系统都在变异-选择-遗传的循环中演进——技术、语言、文化、经济等皆如此。它不仅是生物学理论，更是一种思维方式。'
+];
+
+function checkMCQ(idx, choice) {
+  userAnswers[idx] = choice;
+  localStorage.setItem('zk2_mks_mcq', JSON.stringify(userAnswers));
+  applyMCQState(idx, choice);
+  updateMCQScore();
+}
+
+function applyMCQState(idx, choice) {
+  var item = document.getElementById('mcqItem' + idx);
+  var resultDiv = document.getElementById('mcqResult' + idx);
+  var explainDiv = document.getElementById('mcqExplain' + idx);
+  var correct = mcqData[idx].ans;
+  var allLabels = item.querySelectorAll('.mcq-opts label');
+
+  /* Clear previous states */
+  item.classList.remove('correct', 'wrong');
+  allLabels.forEach(function(l) { l.style.color = ''; });
+
+  if (choice == correct) {
+    item.classList.add('correct');
+    resultDiv.textContent = '✅ 正确！';
+    explainDiv.textContent = mcqExplanations[idx];
+  } else {
+    item.classList.add('wrong');
+    resultDiv.textContent = '❌ 错误。正确答案是 ' + ['A','B','C','D'][correct] + '. ' + mcqData[idx].opts[correct];
+    explainDiv.textContent = mcqExplanations[idx];
+  }
+
+  /* Highlight correct answer in green */
+  allLabels[correct].style.color = '#27ae60';
+  if (choice != correct) {
+    allLabels[choice].style.color = '#c0392b';
+  }
+}
+
+function updateMCQScore() {
+  var total = mcqData.length;
+  var answered = Object.keys(userAnswers).length;
+  var correct = 0;
+  for (var idx in userAnswers) {
+    if (userAnswers.hasOwnProperty(idx) && userAnswers[idx] == mcqData[parseInt(idx)].ans) correct++;
+  }
+  var pct = answered > 0 ? Math.round(correct / answered * 100) : 0;
+  document.getElementById('mcqScore').textContent = '已答：' + answered + '/' + total + ' · 正确：' + correct + ' (' + pct + '%)';
+}
+
+/* ================================================================
+   Init: restore MCQ if tab9 is active
+   ================================================================ */
+if (document.querySelector('.tab-btn[data-tab="tab9"]').classList.contains('active')) {
+  renderMCQ();
+}
+
+</script>
+
+</body>
+</html>
