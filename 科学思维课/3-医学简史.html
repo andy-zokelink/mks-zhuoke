@@ -6,16 +6,16 @@
 <title>医学简史：疾病、药物与身体 · 最小知识集</title>
 <style>
 :root {
-  --bg:#fdf6ec;
-  --card:#fffaf2;
-  --accent:#c0392b;
-  --accent-light:#e74c3c;
-  --text:#3d2f2f;
-  --text-light:#6b5a5a;
-  --border:#e8d5c4;
+  --bg:#f5ece0;
+  --card:#faf5ed;
+  --accent:#8b4513;
+  --accent-light:#2d5016;
+  --text:#3d2b1f;
+  --text-light:#6b5b4f;
+  --border:#d4c5b0;
   --gold:#b8860b;
-  --success:#27ae60;
-  --warning:#e67e22;
+  --success:#2d5016;
+  --warning:#b87333;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -24,21 +24,44 @@ body {
   color: var(--text);
   line-height:1.8;
   padding-bottom:60px;
+  position:relative;
+}
+/* Parchment grain texture */
+body::before {
+  content:'';
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:256px 256px;
+}
+/* Vignette effect — darkened edges for aged paper */
+body::after {
+  content:'';
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  pointer-events:none;
+  z-index:0;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(139,69,19,0.08) 100%);
 }
 .top-bar {
   position:sticky;
   top:0;
   z-index:100;
-  background:linear-gradient(135deg,#3d2f2f,#5a3e3e);
-  color:#fff;
+  background:linear-gradient(135deg,#6b3410,#8b4513);
+  color:#faf5ed;
   padding:14px 24px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  border-bottom:2px solid #5a2d0c;
 }
-.top-bar h1 { font-size:20px; font-weight:700; }
-.top-bar a { color:#e8d5c4; text-decoration:none; font-size:14px; }
-.top-bar a:hover { color:#fff; }
+.top-bar h1 { font-size:20px; font-weight:700; letter-spacing:2px; }
+.top-bar a { color:#d4c5b0; text-decoration:none; font-size:14px; }
+.top-bar a:hover { color:#f5ece0; }
 .tab-bar {
   position:sticky;
   top:44px;
@@ -50,6 +73,7 @@ body {
   gap:6px;
   padding:8px 12px;
 }
+.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; position:relative; z-index:1; }
 .tab-btn {
   padding:6px 14px;
   border:1px solid var(--border);
@@ -64,10 +88,9 @@ body {
 .tab-btn:hover { background:var(--border); }
 .tab-btn.active {
   background:var(--accent);
-  color:#fff;
+  color:#faf5ed;
   border-color:var(--accent);
 }
-.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; }
 .tab-panel { display:none; }
 .tab-panel.active { display:block; }
 .card {
@@ -77,19 +100,108 @@ body {
   padding:20px;
   margin-bottom:16px;
 }
-.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); border-bottom:2px solid var(--border); padding-bottom:6px; }
 .card h3 { font-size:16px; margin-bottom:8px; color:var(--text); }
 .card p { font-size:14px; color:var(--text-light); margin-bottom:6px; }
 .core-goal {
-  background:linear-gradient(135deg,#fff5ee,#fde8d0);
-  border:2px solid var(--gold);
-  border-radius:12px;
+  background:linear-gradient(135deg,#faf5ed,#f0e4d0);
+  border:2px solid var(--border);
+  border-radius:6px;
   padding:20px;
   margin-bottom:20px;
   text-align:center;
+  position:relative;
+}
+.core-goal::before {
+  content:'';
+  position:absolute;
+  top:6px;left:6px;right:6px;bottom:6px;
+  border:1px solid rgba(139,69,19,0.2);
+  border-radius:3px;
+  pointer-events:none;
 }
 .core-goal h2 { color:var(--accent); font-size:20px; }
 .core-goal p { font-size:15px; color:var(--text-light); max-width:700px; margin:8px auto 0; }
+
+/* Hero Banner — Retro Apothecary Engraving Style */
+.hero-banner { margin-bottom:24px; }
+.hero-border {
+  border:3px double var(--accent);
+  padding:8px;
+  position:relative;
+}
+.hero-inner {
+  border:2px solid var(--border);
+  background:linear-gradient(180deg, #faf5ed 0%, #f5ece0 50%, #f0e4d0 100%);
+  padding:28px 24px 20px;
+  text-align:center;
+  position:relative;
+}
+.hero-ornament-top, .hero-ornament-bottom {
+  font-size:18px;
+  color:var(--accent);
+  letter-spacing:12px;
+  opacity:0.6;
+}
+.hero-ornament-bottom { margin-top:10px; }
+.hero-title {
+  font-family:"Georgia","Times New Roman","KaiTi",serif;
+  font-size:28px;
+  color:var(--accent);
+  font-weight:700;
+  letter-spacing:4px;
+  margin:8px 0 12px;
+}
+.hero-subtitle {
+  font-size:14px;
+  color:var(--text-light);
+  max-width:700px;
+  margin:0 auto;
+  line-height:1.8;
+  font-style:italic;
+}
+.hero-divider {
+  margin:16px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-divider::before, .hero-divider::after {
+  content:'';
+  flex:1;
+  max-width:80px;
+  height:1px;
+  background:var(--border);
+}
+.hero-divider-icon {
+  font-size:20px;
+  color:var(--accent);
+  margin:0 16px;
+}
+.hero-stats {
+  display:flex;
+  justify-content:center;
+  gap:32px;
+  flex-wrap:wrap;
+}
+.hero-stat {
+  text-align:center;
+  min-width:120px;
+}
+.hero-stat-num {
+  display:block;
+  font-family:"Georgia","Times New Roman",serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--accent);
+}
+.hero-stat-label {
+  display:block;
+  font-size:11px;
+  color:var(--text-light);
+  margin-top:4px;
+  line-height:1.5;
+}
 .concept-grid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
@@ -99,42 +211,80 @@ body {
 .concept-card {
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:10px;
+  border-left:4px solid var(--accent);
+  border-radius:6px 10px 10px 6px;
   padding:14px;
   cursor:pointer;
   transition:all .2s;
   position:relative;
 }
-.concept-card:hover { border-color:var(--accent-light); box-shadow:0 2px 8px rgba(192,57,43,0.1); }
+.concept-card:hover { border-color:var(--accent); box-shadow:0 2px 12px rgba(139,69,19,0.15); transform:translateY(-1px); }
 .concept-card .label {
   display:inline-block;
   background:var(--accent);
-  color:#fff;
+  color:#faf5ed;
   font-size:11px;
   padding:2px 8px;
-  border-radius:10px;
+  border-radius:3px;
   margin-bottom:6px;
+  letter-spacing:1px;
 }
-.concept-card .label.mks { background:var(--gold); }
+.concept-card .label.mks { background:var(--accent-light); }
 .concept-card h3 { font-size:15px; margin-bottom:4px; }
 .concept-card .def { font-size:13px; color:var(--text-light); }
 .concept-card .extra { display:none; margin-top:8px; font-size:13px; color:var(--text-light); border-top:1px dashed var(--border); padding-top:8px; }
 .concept-card .extra.show { display:block; }
 .concept-card .extra strong { color:var(--text); }
 .mks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:20px; }
-.mks-core { background:var(--card); border:2px solid var(--gold); border-radius:12px; padding:16px; text-align:center; }
+.mks-core { background:var(--card); border:2px solid var(--accent-light); border-radius:6px; padding:16px; text-align:center; position:relative; }
 .mks-core .icon { font-size:28px; }
 .mks-core h3 { font-size:15px; color:var(--accent); }
 .mks-core p { font-size:13px; color:var(--text-light); }
 .svg-wrap { margin:20px 0; text-align:center; }
-.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; border:2px solid var(--border); }
 .boundary-table th,.boundary-table td { border:1px solid var(--border); padding:10px 12px; text-align:left; font-size:13px; }
-.boundary-table th { background:var(--accent); color:#fff; font-weight:600; }
-.boundary-table tr:nth-child(even) { background:var(--card); }
-.learning-path { counter-reset:step; }
-.learning-path .step { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
-.learning-path .step::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
-.learning-path .step h3 { font-size:14px; margin-bottom:4px; }
+.boundary-table th { background:var(--accent); color:#faf5ed; font-weight:600; letter-spacing:1px; font-family:"Georgia","Times New Roman",serif; }
+.boundary-table tr:nth-child(even) { background:rgba(212,197,176,0.2); }
+.boundary-table tr:nth-child(odd) { background:var(--card); }
+.learning-path { counter-reset:step; position:relative; }
+.learning-path::before {
+  content:'';
+  position:absolute;
+  top:0;bottom:0;
+  left:27px;
+  width:2px;
+  background: repeating-linear-gradient(to bottom, var(--accent) 0, var(--accent) 4px, transparent 4px, transparent 8px);
+}
+.learning-path .step {
+  position:relative;
+  padding:14px 14px 14px 56px;
+  margin-bottom:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-left:4px solid var(--accent);
+  border-radius:4px 8px 8px 4px;
+}
+.learning-path .step::before {
+  counter-increment:step;
+  content:counter(step);
+  position:absolute;
+  left:10px;
+  top:14px;
+  width:32px;
+  height:32px;
+  background:var(--accent);
+  color:#faf5ed;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  font-weight:700;
+  font-family:"Georgia","Times New Roman",serif;
+  border:2px solid var(--card);
+  box-shadow:0 1px 3px rgba(139,69,19,0.3);
+}
+.learning-path .step h3 { font-size:14px; margin-bottom:4px; color:var(--accent); }
 .learning-path .step p { font-size:13px; color:var(--text-light); }
 .progress-bar { height:8px; background:var(--border); border-radius:4px; margin:8px 0; overflow:hidden; }
 .progress-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .5s; }
@@ -148,7 +298,7 @@ body {
 .flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
 .flip-card .nav button { padding:6px 16px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-size:13px; }
 .flip-card .nav button:hover { background:var(--border); }
-.flip-card .mark-btn { background:var(--accent); color:#fff; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
+.flip-card .mark-btn { background:var(--accent); color:#faf5ed; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
 .flip-card .mark-btn:hover { background:var(--accent-light); }
 .flip-card .counter { font-size:13px; color:var(--text-light); }
 
@@ -158,13 +308,13 @@ body {
 .quiz-card .options { display:flex; flex-direction:column; gap:6px; }
 .quiz-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
 .quiz-card .option:hover { background:var(--border); }
-.quiz-card .option.selected { border-color:var(--accent); background:#fde8d0; }
-.quiz-card .option.correct { border-color:var(--success); background:#e8f5e9; }
-.quiz-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.quiz-card .option.selected { border-color:var(--accent); background:#f0e4d0; }
+.quiz-card .option.correct { border-color:var(--success); background:rgba(45,80,22,0.08); }
+.quiz-card .option.wrong { border-color:var(--accent); background:rgba(139,69,19,0.06); }
 .quiz-card .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
 .quiz-card .feedback.show { display:block; }
-.quiz-card .feedback.correct { background:#e8f5e9; border:1px solid #a5d6a7; }
-.quiz-card .feedback.wrong { background:#ffebee; border:1px solid #ef9a9a; }
+.quiz-card .feedback.correct { background:rgba(45,80,22,0.08); border:1px solid rgba(45,80,22,0.3); }
+.quiz-card .feedback.wrong { background:rgba(139,69,19,0.06); border:1px solid rgba(139,69,19,0.2); }
 .quiz-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
 .quiz-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
 
@@ -173,9 +323,9 @@ body {
 .exam-card h3 { font-size:15px; margin-bottom:10px; }
 .exam-card .options { display:flex; flex-direction:column; gap:6px; }
 .exam-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; }
-.exam-card .option.selected { border-color:var(--accent); background:#fde8d0; }
-.exam-card .option.correct { border-color:var(--success); background:#e8f5e9; }
-.exam-card .option.wrong { border-color:var(--accent); background:#ffebee; }
+.exam-card .option.selected { border-color:var(--accent); background:#f0e4d0; }
+.exam-card .option.correct { border-color:var(--success); background:rgba(45,80,22,0.08); }
+.exam-card .option.wrong { border-color:var(--accent); background:rgba(139,69,19,0.06); }
 .exam-card .feedback { margin-top:8px; padding:8px; border-radius:6px; font-size:13px; display:none; }
 .exam-card .feedback.show { display:block; }
 .exam-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
@@ -191,20 +341,20 @@ body {
 .mindmap { padding:10px 0; }
 .mindmap ul { list-style:none; padding-left:24px; }
 .mindmap li { position:relative; margin:4px 0; }
-.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; }
+.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; font-weight:bold; }
 .mindmap .tree-toggle:hover { color:var(--accent-light); }
-.mindmap .tree-node { padding:6px 10px; border-radius:6px; font-size:13px; display:inline-block; }
-.mindmap .tree-node.root { background:var(--accent); color:#fff; font-weight:700; }
-.mindmap .tree-node.branch { background:#d4a574; color:#fff; }
+.mindmap .tree-node { padding:6px 10px; border-radius:4px; font-size:13px; display:inline-block; }
+.mindmap .tree-node.root { background:var(--accent); color:#faf5ed; font-weight:700; }
+.mindmap .tree-node.branch { background:#b8860b; color:#faf5ed; }
 .mindmap .tree-node.leaf { background:var(--card); border:1px solid var(--border); }
-.mindmap .tree-node.app { background:var(--success); color:#fff; }
+.mindmap .tree-node.app { background:var(--accent-light); color:#faf5ed; }
 .mindmap .children { display:none; padding-left:20px; border-left:2px solid var(--border); margin:4px 0 4px 12px; }
 .mindmap .children.open { display:block; }
 
 /* Socratic */
 .socratic-card { background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
 .socratic-q { padding:14px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent); display:flex; justify-content:space-between; align-items:center; user-select:none; }
-.socratic-q:hover { background:#fde8d0; }
+.socratic-q:hover { background:#f0e4d0; }
 .socratic-q .arrow { transition:transform .3s; font-size:12px; }
 .socratic-q .arrow.open { transform:rotate(180deg); }
 .socratic-a { display:none; padding:0 16px 14px; border-top:1px dashed var(--border); }
@@ -220,16 +370,16 @@ body {
 /* Decision */
 .decision-round { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
 .decision-round h3 { font-size:15px; margin-bottom:10px; }
-.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:#fde8d0; border-radius:8px; }
+.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:#f0e4d0; border-radius:8px; }
 .decision-round .choices { display:flex; flex-direction:column; gap:8px; }
 .decision-round .choice { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
 .decision-round .choice:hover { background:var(--border); }
-.decision-round .choice.selected { border-color:var(--accent); background:#fde8d0; }
+.decision-round .choice.selected { border-color:var(--accent); background:#f0e4d0; }
 .decision-round .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
 .decision-round .feedback.show { display:block; border-left:4px solid; }
-.decision-round .feedback.correct { background:#e8f5e9; border-left-color:var(--success); }
-.decision-round .feedback.wrong { background:#ffebee; border-left-color:var(--accent); }
-.decision-round .feedback.warning { background:#fff8e1; border-left-color:var(--warning); }
+.decision-round .feedback.correct { background:rgba(45,80,22,0.08); border-left-color:var(--success); }
+.decision-round .feedback.wrong { background:rgba(139,69,19,0.06); border-left-color:var(--accent); }
+.decision-round .feedback.warning { background:rgba(184,134,11,0.08); border-left-color:var(--gold); }
 .decision-round .choice.disabled { pointer-events:none; opacity:0.6; }
 
 /* Buttons */
@@ -243,7 +393,7 @@ body {
   transition:all .2s;
   font-family:inherit;
 }
-.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary { background:var(--accent); color:#faf5ed; }
 .btn-primary:hover { background:var(--accent-light); }
 .btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); }
 .btn-secondary:hover { background:var(--border); }
@@ -260,6 +410,10 @@ body {
   .concept-grid { grid-template-columns:1fr; }
   .mks-grid { grid-template-columns:1fr; }
   .stats-grid { grid-template-columns:1fr 1fr; }
+  .hero-title { font-size:22px; letter-spacing:2px; }
+  .hero-stats { gap:16px; }
+  .hero-stat-num { font-size:18px; }
+  .hero-inner { padding:18px 12px 14px; }
 }
 /* SVG */
 svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
@@ -291,9 +445,33 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
 <!-- ===== TAB 0: 知识集总览 ===== -->
 <div class="tab-panel active" id="tab-0">
-  <div class="core-goal">
-    <h2>疾病视角下的人类文明</h2>
-    <p>理解天花如何塑造人类史、流感为什么反复爆发、疫苗和药物的真实原理——从疾病与医学的演化史中看到科学思维的胜利。天花杀死的人数超过所有战争之和；1918年西班牙流感杀死了5000万-1亿人；疫苗利用适应性免疫的记忆功能根除了天花——医学的每一滴进步都是科学方法的胜利。</p>
+  <!-- Hero: Retro Medical Apothecary Banner -->
+  <div class="hero-banner">
+    <div class="hero-border">
+      <div class="hero-inner">
+        <div class="hero-ornament-top">&#10087;</div>
+        <h1 class="hero-title">疾病视角下的人类文明</h1>
+        <p class="hero-subtitle">理解天花如何塑造人类史、流感为什么反复爆发、疫苗和药物的真实原理——从疾病与医学的演化史中看到科学思维的胜利。</p>
+        <div class="hero-divider">
+          <span class="hero-divider-icon">&#9881;</span>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-num">5亿+</span>
+            <span class="hero-stat-label">天花致死人数<br>(超过所有战争之和)</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">5000万-1亿</span>
+            <span class="hero-stat-label">1918年西班牙流感<br>全球死亡人数</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">1种</span>
+            <span class="hero-stat-label">被人类彻底根除的<br>传染病：天花</span>
+          </div>
+        </div>
+        <div class="hero-ornament-bottom">&#10087;</div>
+      </div>
+    </div>
   </div>
 
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">10个核心概念</h2>
@@ -448,7 +626,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     <h3>维度四：科学方法总论——从大流行中学到的教训</h3>
     <p>1918年西班牙流感催生了全球公共卫生体系。观察：一种异常致命的流感在年轻人中爆发。假设：某种特殊的免疫机制导致了年轻人死亡。验证：通过对1918年病毒的重建和动物实验，证实了细胞因子风暴假说。修正：现代大流行准备计划将"青壮年高死亡率"纳入应急预案。流感监测系统（WHO全球流感监测网络）正是从这次教训中建立起来的。</p>
   </div>
-  <div class="card" style="background:#fde8d0;border-color:var(--gold);">
+  <div class="card" style="background:#f0e4d0;border-color:var(--accent-light);">
     <h3>MKS启示</h3>
     <p>1918年流感揭示了医学中最深刻的矛盾：有时最强大的防御系统反而造成最大的伤害。细胞因子风暴至今仍是治疗COVID-19等病毒感染的重大挑战。理解疾病需要同时考虑病原体、宿主和环境的相互作用——这是复杂系统思维的典型医学应用。西班牙流感的三个教训：不要以为年轻人就安全、非药物干预（口罩/社交距离/封城）有效、全球监测系统不可或缺。</p>
   </div>
@@ -624,103 +802,93 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#b8860b"/></marker>
-    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#27ae60"/></marker>
-    <linearGradient id="grad3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8b2500"/><stop offset="100%" stop-color="#c0392b"/></linearGradient>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8b4513"/>
+    </marker>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#faf5ed"/>
+      <stop offset="100%" stop-color="#f2e8d5"/>
+    </linearGradient>
+    <filter id="rough">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
   </defs>
-  <rect width="900" height="580" fill="#fdf6ec" rx="12"/>
 
-  <!-- ===== Tier 1: Root ===== -->
-  <ellipse cx="450" cy="28" rx="120" ry="24" fill="#c0392b"/>
-  <text x="450" y="33" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">医学简史 MKS</text>
+  <!-- Background -->
+  <rect width="960" height="420" fill="url(#bgGrad)" rx="8"/>
+  <rect x="4" y="4" width="952" height="412" fill="none" stroke="#8b4513" stroke-width="1.5" rx="5" opacity="0.3"/>
 
-  <!-- Root → 4 Category Groups -->
-  <line x1="450" y1="52" x2="140" y2="100" stroke="#c0392b" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="450" y1="52" x2="320" y2="100" stroke="#c0392b" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="450" y1="52" x2="580" y2="100" stroke="#c0392b" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="450" y1="52" x2="760" y2="100" stroke="#c0392b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Title banner -->
+  <rect x="280" y="16" width="400" height="38" rx="4" fill="#8b4513" opacity="0.9"/>
+  <text x="480" y="42" text-anchor="middle" fill="#faf5ed" font-size="17" font-weight="bold" font-family="Georgia,serif">医学进步的五个里程碑</text>
 
-  <!-- ===== Tier 2: 4 Category Groups ===== -->
-  <rect x="38" y="105" rx="14" ry="14" width="204" height="34" fill="#8b2500" opacity="0.85"/>
-  <text x="140" y="127" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">🦠 传染病与免疫</text>
+  <!-- Timeline horizontal line -->
+  <line x1="60" y1="200" x2="900" y2="200" stroke="#8b4513" stroke-width="2.5" stroke-dasharray="8,3"/>
 
-  <rect x="240" y="105" rx="14" ry="14" width="160" height="34" fill="#8b2500" opacity="0.85"/>
-  <text x="320" y="127" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">🧬 癌症与成瘾</text>
+  <!-- ===== Node 1: 放血疗法 (Bloodletting) ===== -->
+  <circle cx="100" cy="200" r="22" fill="#faf5ed" stroke="#8b4513" stroke-width="2.5"/>
+  <text x="100" y="205" text-anchor="middle" fill="#8b4513" font-size="14" font-weight="bold">I</text>
+  <line x1="100" y1="222" x2="100" y2="260" stroke="#8b4513" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="15" y="262" width="170" height="56" rx="6" fill="#faf5ed" stroke="#8b4513" stroke-width="1.5"/>
+  <text x="100" y="282" text-anchor="middle" fill="#8b4513" font-size="13" font-weight="bold" font-family="Georgia,serif">放血疗法</text>
+  <text x="100" y="300" text-anchor="middle" fill="#6b5b4f" font-size="10">体液说 · 四液平衡</text>
+  <text x="100" y="314" text-anchor="middle" fill="#b8860b" font-size="9">约公元前400年</text>
 
-  <rect x="500" y="105" rx="14" ry="14" width="160" height="34" fill="#8b2500" opacity="0.85"/>
-  <text x="580" y="127" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">💊 药物与疫苗</text>
+  <!-- Arrow 1→2 -->
+  <line x1="125" y1="200" x2="215" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
 
-  <rect x="680" y="105" rx="14" ry="14" width="160" height="34" fill="#8b2500" opacity="0.85"/>
-  <text x="760" y="127" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">🏥 公共卫生</text>
+  <!-- ===== Node 2: 细菌论 (Germ Theory) ===== -->
+  <circle cx="280" cy="200" r="22" fill="#faf5ed" stroke="#8b4513" stroke-width="2.5"/>
+  <text x="280" y="205" text-anchor="middle" fill="#8b4513" font-size="14" font-weight="bold">II</text>
+  <line x1="280" y1="222" x2="280" y2="260" stroke="#8b4513" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="188" y="262" width="184" height="56" rx="6" fill="#faf5ed" stroke="#8b4513" stroke-width="1.5"/>
+  <text x="280" y="282" text-anchor="middle" fill="#8b4513" font-size="13" font-weight="bold" font-family="Georgia,serif">细菌致病论</text>
+  <text x="280" y="300" text-anchor="middle" fill="#6b5b4f" font-size="10">巴斯德 · 科赫法则</text>
+  <text x="280" y="314" text-anchor="middle" fill="#b8860b" font-size="9">1860s–1880s</text>
 
-  <!-- Group → Concept edges -->
-  <line x1="110" y1="139" x2="85" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="140" y1="139" x2="140" y2="265" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="170" y1="139" x2="195" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="290" y1="139" x2="270" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="320" y1="139" x2="320" y2="265" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="350" y1="139" x2="370" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="550" y1="139" x2="530" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="580" y1="139" x2="580" y2="265" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="610" y1="139" x2="630" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="725" y1="139" x2="725" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="760" y1="139" x2="795" y2="188" stroke="#d4a574" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- Arrow 2→3 -->
+  <line x1="308" y1="200" x2="398" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
 
-  <!-- ===== Tier 3: 10 Core Concepts ===== -->
-  <!-- 传染病与免疫 -->
-  <rect x="20" y="190" rx="10" ry="10" width="120" height="38" fill="#fde8d0" stroke="#c0392b" stroke-width="2"/>
-  <text x="80" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11" font-weight="bold">天花与人类史 ⭐</text>
-  <rect x="90" y="268" rx="10" ry="10" width="100" height="38" fill="#fde8d0" stroke="#c0392b" stroke-width="2"/>
-  <text x="140" y="292" text-anchor="middle" fill="#3d2f2f" font-size="11" font-weight="bold">免疫系统 ⭐</text>
-  <rect x="145" y="190" rx="10" ry="10" width="105" height="38" fill="#fde8d0" stroke="#c0392b" stroke-width="2"/>
-  <text x="197" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11" font-weight="bold">流感大流行 ⭐</text>
+  <!-- ===== Node 3: 疫苗 (Vaccines) - 强调 ===== -->
+  <circle cx="463" cy="200" r="25" fill="#2d5016" stroke="#2d5016" stroke-width="2"/>
+  <text x="463" y="206" text-anchor="middle" fill="#faf5ed" font-size="15" font-weight="bold">III</text>
+  <line x1="463" y1="225" x2="463" y2="268" stroke="#2d5016" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="363" y="270" width="200" height="62" rx="6" fill="#f0f5ec" stroke="#2d5016" stroke-width="2"/>
+  <text x="463" y="290" text-anchor="middle" fill="#2d5016" font-size="14" font-weight="bold" font-family="Georgia,serif">疫苗革命</text>
+  <text x="463" y="308" text-anchor="middle" fill="#3d2b1f" font-size="10">牛痘→灭活→mRNA</text>
+  <text x="463" y="324" text-anchor="middle" fill="#b8860b" font-size="9">1796 → 1980 根除天花</text>
 
-  <!-- 癌症与成瘾 -->
-  <rect x="220" y="190" rx="10" ry="10" width="110" height="38" fill="#fde8d0" stroke="#c0392b" stroke-width="2"/>
-  <text x="275" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11" font-weight="bold">癌症的真相 ⭐</text>
-  <rect x="250" y="268" rx="10" ry="10" width="100" height="38" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="300" y="292" text-anchor="middle" fill="#3d2f2f" font-size="11">成瘾的脑科学</text>
+  <!-- Arrow 3→4 -->
+  <line x1="490" y1="200" x2="580" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
 
-  <!-- 药物与疫苗 -->
-  <rect x="470" y="190" rx="10" ry="10" width="100" height="38" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="520" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11">疫苗原理</text>
-  <rect x="530" y="268" rx="10" ry="10" width="100" height="38" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="580" y="292" text-anchor="middle" fill="#3d2f2f" font-size="11">药物研发</text>
-  <rect x="575" y="190" rx="10" ry="10" width="100" height="38" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="625" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11">HIV/AIDS</text>
+  <!-- ===== Node 4: 抗生素 (Antibiotics) ===== -->
+  <circle cx="645" cy="200" r="25" fill="#2d5016" stroke="#2d5016" stroke-width="2"/>
+  <text x="645" y="206" text-anchor="middle" fill="#faf5ed" font-size="15" font-weight="bold">IV</text>
+  <line x1="645" y1="225" x2="645" y2="268" stroke="#2d5016" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="548" y="270" width="194" height="62" rx="6" fill="#f0f5ec" stroke="#2d5016" stroke-width="2"/>
+  <text x="645" y="290" text-anchor="middle" fill="#2d5016" font-size="14" font-weight="bold" font-family="Georgia,serif">抗生素时代</text>
+  <text x="645" y="308" text-anchor="middle" fill="#3d2b1f" font-size="10">青霉素 · 弗莱明1928</text>
+  <text x="645" y="324" text-anchor="middle" fill="#b8860b" font-size="9">二战期间大规模量产</text>
 
-  <!-- 公共卫生 -->
-  <rect x="655" y="190" rx="10" ry="10" width="105" height="38" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="707" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11">梅毒与文明</text>
-  <rect x="765" y="190" rx="10" ry="10" width="80" height="38" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="805" y="214" text-anchor="middle" fill="#3d2f2f" font-size="11">公共卫生</text>
+  <!-- Arrow 4→5 -->
+  <line x1="673" y1="200" x2="763" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
 
-  <!-- ===== Concepts → Integration ===== -->
-  <line x1="140" y1="306" x2="140" y2="355" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-  <line x1="320" y1="306" x2="320" y2="355" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-  <line x1="580" y1="306" x2="580" y2="355" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-  <line x1="760" y1="228" x2="760" y2="355" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
+  <!-- ===== Node 5: 基因 (Genetics) ===== -->
+  <circle cx="830" cy="200" r="22" fill="#faf5ed" stroke="#8b4513" stroke-width="2.5"/>
+  <text x="830" y="205" text-anchor="middle" fill="#8b4513" font-size="14" font-weight="bold">V</text>
+  <line x1="830" y1="222" x2="830" y2="262" stroke="#8b4513" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="745" y="264" width="170" height="56" rx="6" fill="#faf5ed" stroke="#8b4513" stroke-width="1.5"/>
+  <text x="830" y="284" text-anchor="middle" fill="#8b4513" font-size="13" font-weight="bold" font-family="Georgia,serif">基因医学</text>
+  <text x="830" y="302" text-anchor="middle" fill="#6b5b4f" font-size="10">基因组 · CRISPR</text>
+  <text x="830" y="316" text-anchor="middle" fill="#b8860b" font-size="9">2003 人类基因组计划</text>
 
-  <!-- Bridge -->
-  <rect x="150" y="360" rx="14" ry="14" width="340" height="36" fill="#27ae60" opacity="0.9"/>
-  <text x="320" y="383" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">疾病认知 → 机制理解 → 干预手段 → 社会应用</text>
-
-  <line x1="320" y1="396" x2="450" y2="455" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)" stroke-dasharray="6,3"/>
-
-  <!-- ===== Tier 4: Integration ===== -->
-  <ellipse cx="450" cy="475" rx="200" ry="30" fill="url(#grad3)"/>
-  <text x="450" y="470" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">科学思维与医学（整合层）</text>
-  <text x="450" y="487" text-anchor="middle" fill="#fde8d0" font-size="11">从传染病到癌症，从疫苗到公共卫生——医学即科学方法论的实践场</text>
-
-  <!-- Legend -->
-  <rect x="30" y="515" rx="6" ry="6" width="14" height="14" fill="#fde8d0" stroke="#c0392b" stroke-width="2"/>
-  <text x="50" y="528" fill="#3d2f2f" font-size="11">⭐ = MKS核心概念</text>
-  <rect x="200" y="515" rx="6" ry="6" width="14" height="14" fill="#fffaf2" stroke="#e8d5c4"/>
-  <text x="220" y="528" fill="#3d2f2f" font-size="11">□ = 支撑概念</text>
-  <rect x="350" y="515" rx="6" ry="6" width="14" height="14" fill="#27ae60" opacity="0.9"/>
-  <text x="370" y="528" fill="#27ae60" font-size="11">⟶ = 应用整合路径</text>
+  <!-- Bottom annotation -->
+  <rect x="30" y="358" width="900" height="46" rx="4" fill="#f5ece0" stroke="#d4c5b0" stroke-width="1"/>
+  <text x="480" y="376" text-anchor="middle" fill="#6b5b4f" font-size="11" font-style="italic" font-family="Georgia,serif">医学史是人类与疾病博弈的五幕剧——每一幕都代表着科学方法的一次胜利</text>
+  <text x="480" y="394" text-anchor="middle" fill="#b8860b" font-size="10" font-family="Georgia,serif">体液说 → 微生物 → 免疫记忆 → 化学武器 → 生命密码</text>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
@@ -1056,7 +1224,7 @@ function submitExam(){
   results.forEach(r=>{
     if(r.type==='choice'){
       const icon=r.isCorrect?'&#10004;':'&#10008;';
-      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'#e8f5e9':'#ffebee'};border-radius:6px;font-size:13px;">
+      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'rgba(45,80,22,0.08)':'rgba(139,69,19,0.06)'};border-radius:6px;font-size:13px;">
         <p><strong>${r.question}</strong></p>
         <p>${icon} 你的答案：${r.userAns} ${r.isCorrect?'':'| 正确答案：'+r.correctAns}</p>
         ${!r.isCorrect?`<p style="color:var(--text-light);">${r.explain}</p>`:''}
@@ -1084,7 +1252,7 @@ function updateReviewStats(){
     wb.innerHTML='<p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
   } else {
     wb.innerHTML=wrongBook.slice(0,10).map(item=>
-      `<div style="padding:8px;margin-bottom:6px;background:#ffebee;border-radius:6px;font-size:13px;">
+      `<div style="padding:8px;margin-bottom:6px;background:rgba(139,69,19,0.06);border-radius:6px;font-size:13px;">
         <p><strong>${item.q}</strong></p>
         <p>正确答案：${item.correctAns}</p>
         ${item.explain?`<p style="color:var(--text-light);">${item.explain}</p>`:''}
@@ -1111,7 +1279,7 @@ function updateReviewStats(){
     weak.innerHTML='<p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
   } else {
     weak.innerHTML=weakList.map(([name,count])=>
-      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#fde8d0;border-radius:6px;font-size:13px;">
+      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#f0e4d0;border-radius:6px;font-size:13px;">
         <span>${name}</span>
         <span style="color:var(--accent);font-weight:700;">错${count}题</span>
       </div>`
