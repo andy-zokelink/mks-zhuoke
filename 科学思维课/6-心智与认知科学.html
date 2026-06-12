@@ -546,6 +546,7 @@ body::after {
 /* ── Flip Cards ── */
 .flip-container {
   perspective: 1200px;
+  -webkit-perspective: 1200px;
   max-width: 560px;
   margin: 24px auto;
 }
@@ -553,20 +554,22 @@ body::after {
 .flip-card {
   position: relative;
   width: 100%;
-  min-height: 340px;
+  display: grid;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
-.flip-card.flipped { transform: rotateY(180deg); }
+.flip-card.flipped {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
 
 .flip-front, .flip-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  grid-area: 1 / 1;
   min-height: 340px;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: var(--radius);
   padding: 28px;
   border: 1px solid var(--border);
@@ -576,16 +579,20 @@ body::after {
   box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 }
 
-.flip-back { transform: rotateY(180deg); background: rgba(18,34,58,0.8); }
+.flip-back {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  background: rgba(18,34,58,0.8);
+}
 
-.flip-card .nav {
+.flip-container .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 18px;
 }
 
-.flip-card .nav button {
+.flip-container .nav button {
   padding: 8px 20px;
   border: 1px solid var(--border);
   border-radius: 24px;
@@ -597,13 +604,13 @@ body::after {
   transition: var(--transition);
 }
 
-.flip-card .nav button:hover {
+.flip-container .nav button:hover {
   background: rgba(56,189,248,0.08);
   border-color: rgba(56,189,248,0.25);
   color: #38bdf8;
 }
 
-.flip-card .mark-btn {
+.flip-container .mark-btn {
   background: linear-gradient(135deg, #38bdf8, #0284c7);
   color: #fff;
   border: none;
@@ -617,12 +624,12 @@ body::after {
   box-shadow: 0 0 12px rgba(56,189,248,0.2);
 }
 
-.flip-card .mark-btn:hover {
+.flip-container .mark-btn:hover {
   box-shadow: 0 0 20px rgba(56,189,248,0.35);
   transform: translateY(-1px);
 }
 
-.flip-card .counter {
+.flip-container .counter {
   font-size: 13px;
   color: var(--muted);
   font-weight: 500;
@@ -869,13 +876,19 @@ body::after {
 /* ── Mindmap ── */
 .mindmap { padding: 12px 0; }
 
-.mindmap ul {
-  list-style: none;
-  padding-left: 24px;
+.mindmap-tree {
+  padding-left: 0;
 }
 
-.mindmap li {
-  position: relative;
+.tree-root-wrap {
+  margin-bottom: 6px;
+}
+
+.tree-branch {
+  margin: 6px 0;
+}
+
+.tree-leaf-wrap {
   margin: 3px 0;
 }
 
@@ -886,6 +899,8 @@ body::after {
   user-select: none;
   font-weight: 700;
   margin-right: 4px;
+  display: inline-block;
+  min-width: 18px;
 }
 
 .mindmap .tree-toggle:hover { color: var(--accent-light); }
@@ -896,6 +911,7 @@ body::after {
   font-size: 13px;
   display: inline-block;
   transition: var(--transition);
+  margin: 2px 0;
 }
 
 .mindmap .tree-node.root {
@@ -927,9 +943,9 @@ body::after {
 
 .mindmap .children {
   display: none;
-  padding-left: 20px;
+  padding-left: 28px;
   border-left: 2px solid rgba(56,189,248,0.2);
-  margin: 4px 0 4px 14px;
+  margin: 4px 0 6px 18px;
 }
 
 .mindmap .children.open { display: block; animation: fadeSlideIn 0.3s ease; }
@@ -1650,97 +1666,209 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 900 740" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
-    <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#38bdf8"/></marker>
-    <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="glowAmber"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrowA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
+    <marker id="arrowC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#38bdf8"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#34d399"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#f87171"/></marker>
+    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glowA"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glowG"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="gradRoot" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#818cf8"/></linearGradient>
   </defs>
-  <rect width="900" height="620" fill="#060f1f" rx="12"/>
+  <rect width="900" height="740" fill="#060f1f" rx="12"/>
 
-  <!-- Background neural connections (faint) -->
-  <g opacity="0.05" stroke="#38bdf8" stroke-width="1">
-    <line x1="100" y1="50" x2="300" y2="200"/><line x1="300" y1="50" x2="500" y2="250"/>
-    <line x1="600" y1="50" x2="400" y2="300"/><line x1="800" y1="80" x2="600" y2="250"/>
-    <line x1="150" y1="350" x2="350" y2="500"/><line x1="450" y1="300" x2="650" y2="450"/>
-    <line x1="750" y1="350" x2="550" y2="500"/><line x1="200" y1="500" x2="400" y2="580"/>
-    <line x1="500" y1="450" x2="700" y2="580"/><line x1="100" y1="200" x2="250" y2="400"/>
-    <line x1="650" y1="200" x2="800" y2="400"/>
+  <!-- Background neural web (very faint) -->
+  <g opacity="0.04" stroke="#38bdf8" stroke-width="0.8">
+    <line x1="80" y1="100" x2="200" y2="220"/><line x1="200" y1="60" x2="350" y2="200"/>
+    <line x1="400" y1="50" x2="550" y2="220"/><line x1="600" y1="80" x2="750" y2="210"/>
+    <line x1="820" y1="100" x2="700" y2="250"/><line x1="50" y1="300" x2="180" y2="450"/>
+    <line x1="250" y1="300" x2="380" y2="480"/><line x1="450" y1="280" x2="600" y2="470"/>
+    <line x1="650" y1="300" x2="800" y2="450"/><line x1="100" y1="500" x2="300" y2="600"/>
+    <line x1="400" y1="480" x2="600" y2="620"/><line x1="700" y1="500" x2="500" y2="630"/>
+    <line x1="150" y1="150" x2="300" y2="350"/><line x1="550" y1="150" x2="680" y2="350"/>
+    <line x1="350" y1="350" x2="500" y2="520"/><line x1="250" y1="520" x2="450" y2="680"/>
+    <line x1="550" y1="520" x2="650" y2="680"/>
   </g>
 
-  <!-- Edges to MKS nodes (amber) -->
-  <line x1="450" y1="50" x2="150" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
-  <line x1="450" y1="50" x2="320" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
-  <line x1="450" y1="50" x2="570" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
-  <line x1="450" y1="50" x2="740" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
+  <!-- ===== CROSS-CONNECTIONS (drawn first so they sit behind nodes) ===== -->
 
-  <!-- Edges to leaf nodes (purple/cyan) -->
-  <line x1="150" y1="160" x2="90" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="150" y1="160" x2="210" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="320" y1="160" x2="280" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="320" y1="160" x2="370" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="570" y1="160" x2="520" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="570" y1="160" x2="620" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="740" y1="160" x2="700" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="740" y1="160" x2="790" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <!-- Cross: 心理学科学化 → 双盲实验 (method bridge, amber solid) -->
+  <line x1="200" y1="110" x2="300" y2="110" stroke="#fb923c" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#arrowA)" opacity="0.7"/>
+  <text x="250" y="103" text-anchor="middle" fill="#fb923c" font-size="9" opacity="0.7">方法论基石</text>
 
-  <!-- Bottom integration -->
-  <line x1="210" y1="295" x2="280" y2="405" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
-  <line x1="700" y1="295" x2="450" y2="405" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
-  <line x1="790" y1="295" x2="620" y2="405" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
+  <!-- Cross: 线粒体 → 自由基 (free radicals from mito, amber dotted) -->
+  <line x1="640" y1="110" x2="710" y2="110" stroke="#fb923c" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrowA)" opacity="0.7"/>
+  <text x="675" y="103" text-anchor="middle" fill="#fb923c" font-size="9" opacity="0.7">产生场所</text>
 
-  <!-- Integration to bottom -->
-  <line x1="300" y1="430" x2="400" y2="535" stroke="#34d399" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
-  <line x1="600" y1="430" x2="500" y2="535" stroke="#34d399" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <!-- Cross: 双盲实验 → 安慰剂效应 (controls for placebo, cyan) -->
+  <line x1="310" y1="160" x2="120" y2="225" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowC)" opacity="0.6"/>
+  <text x="180" y="200" text-anchor="middle" fill="#38bdf8" font-size="9" opacity="0.6">排除安慰剂效应</text>
 
-  <!-- Root node (central glow) -->
-  <ellipse cx="450" cy="25" rx="140" ry="24" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.5"/>
-  <ellipse cx="450" cy="25" rx="130" ry="22" fill="#0a1628" stroke="#38bdf8" stroke-width="2" filter="url(#glow)"/>
-  <text x="450" y="30" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">心智、衰老与认知科学</text>
+  <!-- Cross: 自由基假说 → 批判性思维 (debunking needs critical thinking, amber) -->
+  <line x1="710" y1="160" x2="450" y2="225" stroke="#fb923c" stroke-width="1.8" stroke-dasharray="8,4" marker-end="url(#arrowA)" opacity="0.6"/>
+  <text x="580" y="195" text-anchor="middle" fill="#fb923c" font-size="9" opacity="0.6">推翻理论需批判思维</text>
 
-  <!-- MKS Branch nodes (amber glow) -->
-  <rect x="60" y="135" rx="20" ry="20" width="180" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="150" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">心理学科学化</text>
-  <rect x="240" y="135" rx="20" ry="20" width="160" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="320" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">双盲实验</text>
-  <rect x="490" y="135" rx="20" ry="20" width="160" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="570" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">衰老的线粒体理论</text>
-  <rect x="660" y="135" rx="20" ry="20" width="160" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="740" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">自由基假说的兴衰</text>
+  <!-- Cross: 安慰剂效应 ←→ 脑死亡 (mind-body boundary, red) -->
+  <line x1="120" y1="270" x2="260" y2="270" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,5" marker-end="url(#arrowR)" opacity="0.5"/>
+  <text x="190" y="263" text-anchor="middle" fill="#f87171" font-size="9" opacity="0.5">身心边界</text>
 
-  <!-- Leaf nodes (cyan) -->
-  <rect x="20" y="245" rx="12" ry="12" width="140" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="90" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">安慰剂效应</text>
-  <rect x="170" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="220" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">脑死亡与生命意义</text>
-  <rect x="230" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="280" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">端粒的谎言</text>
-  <rect x="325" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="375" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">批判性思维</text>
-  <rect x="475" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="525" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">认知偏见</text>
-  <rect x="575" y="245" rx="12" ry="12" width="110" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="630" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">死亡基因</text>
-  <rect x="735" y="245" rx="12" ry="12" width="110" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
-  <text x="790" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">意识与大脑</text>
+  <!-- Cross: 端粒 ←→ 死亡基因 (cellular aging/death, red) -->
+  <line x1="380" y1="270" x2="690" y2="270" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,5" marker-end="url(#arrowR)" opacity="0.5"/>
+  <text x="535" y="263" text-anchor="middle" fill="#f87171" font-size="9" opacity="0.5">细胞衰老/死亡机制</text>
 
-  <!-- Application nodes (green) -->
-  <rect x="200" y="385" rx="14" ry="14" width="160" height="36" fill="#34d399"/>
-  <text x="280" y="408" text-anchor="middle" fill="#020617" font-size="12" font-weight="bold">理解自我·认识衰老</text>
-  <rect x="530" y="385" rx="14" ry="14" width="140" height="36" fill="#34d399"/>
-  <text x="600" y="408" text-anchor="middle" fill="#020617" font-size="12" font-weight="bold">科学验证·逻辑辨析</text>
+  <!-- Cross: 认知偏见 → 批判性思维 (bias is what CT overcomes, cyan) -->
+  <line x1="735" y1="260" x2="450" y2="260" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowC)" opacity="0.6"/>
+  <text x="592" y="253" text-anchor="middle" fill="#38bdf8" font-size="9" opacity="0.6">偏见→需要批判思维矫正</text>
 
-  <!-- Bottom: Integration -->
-  <ellipse cx="450" cy="545" rx="200" ry="28" fill="#0a1628" stroke="#38bdf8" stroke-width="2" filter="url(#glow)"/>
-  <text x="450" y="550" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">科学地理解"我是谁"（整合层）</text>
+  <!-- ===== LEVEL 1: ROOT (y=35) ===== -->
+  <ellipse cx="450" cy="35" rx="155" ry="26" fill="#0a1628" stroke="url(#gradRoot)" stroke-width="2.5" filter="url(#glow)"/>
+  <text x="450" y="40" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">心智、衰老与认知科学</text>
 
-  <!-- Synapse dots at connections -->
-  <g fill="#38bdf8" opacity="0.6">
-    <circle cx="150" cy="260" r="3"/><circle cx="320" cy="260" r="3"/>
-    <circle cx="570" cy="260" r="3"/><circle cx="740" cy="260" r="3"/>
-    <circle cx="280" cy="400" r="3"/><circle cx="600" cy="400" r="3"/>
-    <circle cx="450" cy="400" r="3"/>
+  <!-- Lines from root to 4 MKS nodes -->
+  <line x1="450" y1="60" x2="140" y2="100" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrowA)" filter="url(#glowA)"/>
+  <line x1="450" y1="60" x2="310" y2="100" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrowA)" filter="url(#glowA)"/>
+  <line x1="450" y1="60" x2="590" y2="100" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrowA)" filter="url(#glowA)"/>
+  <line x1="450" y1="60" x2="760" y2="100" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrowA)" filter="url(#glowA)"/>
+
+  <!-- ===== LEVEL 2: 4 MKS CORE NODES (y~110) ===== -->
+  <!-- MKS 1: 心理学科学化 -->
+  <rect x="30" y="97" rx="20" ry="20" width="175" height="38" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowA)"/>
+  <text x="117" y="121" text-anchor="middle" fill="#fb923c" font-size="12.5" font-weight="bold">① 心理学科学化</text>
+
+  <!-- MKS 2: 双盲实验 -->
+  <rect x="230" y="97" rx="20" ry="20" width="160" height="38" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowA)"/>
+  <text x="310" y="121" text-anchor="middle" fill="#fb923c" font-size="12.5" font-weight="bold">② 双盲实验</text>
+
+  <!-- MKS 3: 线粒体理论 -->
+  <rect x="440" y="97" rx="20" ry="20" width="185" height="38" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowA)"/>
+  <text x="532" y="121" text-anchor="middle" fill="#fb923c" font-size="12.5" font-weight="bold">③ 衰老的线粒体理论</text>
+
+  <!-- MKS 4: 自由基假说 -->
+  <rect x="660" y="97" rx="20" ry="20" width="175" height="38" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowA)"/>
+  <text x="747" y="121" text-anchor="middle" fill="#fb923c" font-size="12.5" font-weight="bold">④ 自由基假说的兴衰</text>
+
+  <!-- Lines from MKS nodes to leaf concepts -->
+  <line x1="117" y1="135" x2="70" y2="210" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowC)"/>
+  <line x1="117" y1="135" x2="220" y2="210" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowC)"/>
+  <line x1="290" y1="135" x2="380" y2="210" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowC)"/>
+  <line x1="380" y1="135" x2="450" y2="210" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowC)"/>
+  <line x1="532" y1="135" x2="380" y2="210" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)" opacity="0.5"/>
+  <line x1="532" y1="135" x2="690" y2="210" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowC)"/>
+  <line x1="700" y1="135" x2="690" y2="210" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)" opacity="0.5"/>
+  <line x1="830" y1="135" x2="810" y2="210" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowC)"/>
+
+  <!-- ===== LEVEL 3: EXTENDED CONCEPTS (y~225) ===== -->
+  <!-- 安慰剂效应 -->
+  <rect x="18" y="215" rx="14" ry="14" width="126" height="34" fill="#0f1d35" stroke="#7dd3fc" stroke-width="1.8"/>
+  <text x="81" y="237" text-anchor="middle" fill="#7dd3fc" font-size="12">安慰剂效应</text>
+
+  <!-- 脑死亡与生命意义 -->
+  <rect x="160" y="215" rx="14" ry="14" width="138" height="34" fill="#0f1d35" stroke="#7dd3fc" stroke-width="1.8"/>
+  <text x="229" y="237" text-anchor="middle" fill="#7dd3fc" font-size="12">脑死亡与生命意义</text>
+
+  <!-- 端粒的谎言 -->
+  <rect x="315" y="215" rx="14" ry="14" width="110" height="34" fill="#0f1d35" stroke="#7dd3fc" stroke-width="1.8"/>
+  <text x="370" y="237" text-anchor="middle" fill="#7dd3fc" font-size="12">端粒的谎言</text>
+
+  <!-- 批判性思维 -->
+  <rect x="445" y="215" rx="14" ry="14" width="110" height="34" fill="#0f1d35" stroke="#facc15" stroke-width="2.2"/>
+  <text x="500" y="237" text-anchor="middle" fill="#facc15" font-size="12" font-weight="bold">批判性思维</text>
+
+  <!-- 认知偏见 -->
+  <rect x="600" y="215" rx="14" ry="14" width="110" height="34" fill="#0f1d35" stroke="#7dd3fc" stroke-width="1.8"/>
+  <text x="655" y="237" text-anchor="middle" fill="#7dd3fc" font-size="12">认知偏见</text>
+
+  <!-- 死亡基因 -->
+  <rect x="745" y="215" rx="14" ry="14" width="110" height="34" fill="#0f1d35" stroke="#7dd3fc" stroke-width="1.8"/>
+  <text x="800" y="237" text-anchor="middle" fill="#7dd3fc" font-size="12">死亡基因</text>
+
+  <!-- Lines from concepts to key insights -->
+  <line x1="80" y1="249" x2="80" y2="315" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)"/>
+  <line x1="230" y1="249" x2="230" y2="315" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)"/>
+  <line x1="370" y1="249" x2="250" y2="315" stroke="#38bdf8" stroke-width="1.3" marker-end="url(#arrowC)" opacity="0.6"/>
+  <line x1="370" y1="249" x2="500" y2="315" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)"/>
+  <line x1="500" y1="249" x2="370" y2="315" stroke="#facc15" stroke-width="1.3" marker-end="url(#arrowC)" opacity="0.5"/>
+  <line x1="500" y1="249" x2="630" y2="315" stroke="#facc15" stroke-width="1.5" marker-end="url(#arrowC)" opacity="0.5"/>
+  <line x1="655" y1="249" x2="630" y2="315" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)"/>
+  <line x1="800" y1="249" x2="770" y2="315" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowC)"/>
+
+  <!-- ===== LEVEL 4: KEY INSIGHTS (y~330) ===== -->
+  <!-- 从躺椅推测到实验科学 -->
+  <rect x="10" y="320" rx="10" ry="10" width="160" height="32" fill="#0a1628" stroke="#38bdf8" stroke-width="1.2" opacity="0.85"/>
+  <text x="90" y="340" text-anchor="middle" fill="#94a3b8" font-size="11">操作化定义 + 行为测量</text>
+
+  <!-- 排除安慰剂+研究者偏见 -->
+  <rect x="185" y="320" rx="10" ry="10" width="160" height="32" fill="#0a1628" stroke="#38bdf8" stroke-width="1.2" opacity="0.85"/>
+  <text x="265" y="340" text-anchor="middle" fill="#94a3b8" font-size="11">排除安慰剂+研究者偏见</text>
+
+  <!-- 内共生假说+mtDNA -->
+  <rect x="365" y="320" rx="10" ry="10" width="155" height="32" fill="#0a1628" stroke="#38bdf8" stroke-width="1.2" opacity="0.85"/>
+  <text x="442" y="340" text-anchor="middle" fill="#94a3b8" font-size="11">内共生假说 + mtDNA高突变</text>
+
+  <!-- 临床试验推翻理论 -->
+  <rect x="540" y="320" rx="10" ry="10" width="160" height="32" fill="#0a1628" stroke="#38bdf8" stroke-width="1.2" opacity="0.85"/>
+  <text x="620" y="340" text-anchor="middle" fill="#94a3b8" font-size="11">SELECT/HOPE 推翻假说</text>
+
+  <!-- 进化心理学+宗教 -->
+  <rect x="720" y="320" rx="10" ry="10" width="155" height="32" fill="#0a1628" stroke="#38bdf8" stroke-width="1.2" opacity="0.85"/>
+  <text x="797" y="340" text-anchor="middle" fill="#94a3b8" font-size="11">模式识别→迷信→宗教</text>
+
+  <!-- Lines to applications -->
+  <line x1="90" y1="352" x2="240" y2="415" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrowG)"/>
+  <line x1="265" y1="352" x2="240" y2="415" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrowG)"/>
+  <line x1="260" y1="352" x2="500" y2="440" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="440" y1="352" x2="600" y2="415" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrowG)"/>
+  <line x1="620" y1="352" x2="600" y2="415" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrowG)"/>
+  <line x1="700" y1="352" x2="500" y2="440" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="800" y1="352" x2="600" y2="415" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- ===== LEVEL 5: APPLICATIONS (y~425) ===== -->
+  <!-- 应用一：科学验证 -->
+  <rect x="170" y="418" rx="16" ry="16" width="170" height="36" fill="#0f3822" stroke="#34d399" stroke-width="2" filter="url(#glowG)"/>
+  <text x="255" y="441" text-anchor="middle" fill="#6ee7b7" font-size="13" font-weight="bold">🔬 科学验证 · 区分真伪</text>
+
+  <!-- 应用二：理解自我 -->
+  <rect x="530" y="418" rx="16" ry="16" width="170" height="36" fill="#0f3822" stroke="#34d399" stroke-width="2" filter="url(#glowG)"/>
+  <text x="615" y="441" text-anchor="middle" fill="#6ee7b7" font-size="13" font-weight="bold">🧬 理解自我 · 认识衰老</text>
+
+  <!-- Lines to integration -->
+  <line x1="255" y1="454" x2="400" y2="555" stroke="#38bdf8" stroke-width="2.2" marker-end="url(#arrowC)"/>
+  <line x1="615" y1="454" x2="500" y2="555" stroke="#38bdf8" stroke-width="2.2" marker-end="url(#arrowC)"/>
+
+  <!-- ===== LEVEL 6: INTEGRATION (y~570) ===== -->
+  <ellipse cx="450" cy="570" rx="220" ry="30" fill="#0a1628" stroke="#818cf8" stroke-width="2.5" filter="url(#glow)"/>
+  <text x="450" y="575" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">🌊 科学地理解"我是谁" （整合层）</text>
+
+  <!-- ===== EXTRA: Meta-level glows and synapse dots ===== -->
+  <g fill="#38bdf8" opacity="0.5">
+    <circle cx="117" cy="135" r="3.5"/>
+    <circle cx="310" cy="135" r="3.5"/>
+    <circle cx="532" cy="135" r="3.5"/>
+    <circle cx="747" cy="135" r="3.5"/>
+    <circle cx="80" cy="249" r="2.5"/>
+    <circle cx="230" cy="249" r="2.5"/>
+    <circle cx="370" cy="249" r="2.5"/>
+    <circle cx="500" cy="249" r="2.5"/>
+    <circle cx="655" cy="249" r="2.5"/>
+    <circle cx="800" cy="249" r="2.5"/>
+    <circle cx="255" cy="454" r="3"/>
+    <circle cx="615" cy="454" r="3"/>
+    <circle cx="450" cy="500" r="2"/>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(18, 680)">
+    <rect x="0" y="0" width="864" height="50" rx="8" fill="#0a1628" stroke="rgba(56,189,248,0.12)" stroke-width="1"/>
+    <text x="15" y="20" fill="#94a3b8" font-size="10">图例：</text>
+    <line x1="55" y1="16" x2="85" y2="16" stroke="#fb923c" stroke-width="2.5"/><text x="90" y="20" fill="#fb923c" font-size="10">MKS核心概念</text>
+    <line x1="185" y1="16" x2="215" y2="16" stroke="#38bdf8" stroke-width="2"/><text x="220" y="20" fill="#7dd3fc" font-size="10">扩展概念</text>
+    <line x1="305" y1="16" x2="335" y2="16" stroke="#34d399" stroke-width="2"/><text x="340" y="20" fill="#6ee7b7" font-size="10">应用层</text>
+    <line x1="415" y1="16" x2="455" y2="16" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,4"/><text x="460" y="20" fill="#f87171" font-size="10">交叉关联</text>
+    <text x="550" y="20" fill="#facc15" font-size="10" font-weight="bold">批判性思维</text>
+    <line x1="635" y1="16" x2="675" y2="16" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="6,3"/><text x="680" y="20" fill="#94a3b8" font-size="10">虚线=间接关联</text>
+    <text x="15" y="40" fill="#64748b" font-size="9">10个核心概念相互关联：心理学科学化依赖双盲实验的方法论，线粒体是自由基的产生场所，安慰剂效应由双盲实验排除，批判性思维贯通全局——联合回应"我是谁"</text>
   </g>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
@@ -1821,7 +1949,7 @@ function startQuiz(mode){
 
   let qs=[];
   if(mode==='random'){
-    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,10);
   } else {
     qs=[...QUIZ_DATA];
   }
@@ -2144,79 +2272,136 @@ function updateReviewStats(){
 function renderMindmap(){
   const el=document.getElementById('mindmap');
   el.innerHTML=`
-    <ul>
-      <li>
+    <div class="mindmap-tree">
+      <!-- ROOT -->
+      <div class="tree-root-wrap">
         <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
         <span class="tree-node root">心智、衰老与认知科学</span>
-        <div class="children open">
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">MKS核心01：心理学科学化</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">从"躺椅推测"到实验科学</span></li>
-              <li><span class="tree-node leaf">将"心灵"转化为可测量的"行为"</span></li>
-              <li><span class="tree-node leaf">行为主义革命 + 认知革命</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">MKS核心02：双盲实验</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">排除安慰剂效应 + 研究者偏见</span></li>
-              <li><span class="tree-node leaf">"有效"声称必须通过双盲检验</span></li>
-              <li><span class="tree-node leaf">1954年脊髓灰质炎疫苗试验</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">MKS核心03：衰老的线粒体理论</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">内共生假说：细菌→线粒体</span></li>
-              <li><span class="tree-node leaf">mtDNA突变率高→能量生产衰退</span></li>
-              <li><span class="tree-node app">应用：理解衰老的细胞机制</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">MKS核心04：自由基假说的兴衰</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">漂亮理论：氧化损伤→衰老→抗氧化</span></li>
-              <li><span class="tree-node leaf">SELECT/HOPE试验推翻理论</span></li>
-              <li><span class="tree-node app">应用：理解"证据>理论"的科学精神</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">安慰剂效应 → 脑死亡</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">安慰剂：内啡肽+多巴胺的生理基础</span></li>
-              <li><span class="tree-node leaf">边界：不能缩小肿瘤、不能杀菌</span></li>
-              <li><span class="tree-node leaf">脑死亡：全脑 vs 脑干标准的伦理争议</span></li>
-              <li><span class="tree-node app">应用：理解"活着"的科学定义</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">端粒的谎言 + 批判性思维 + 认知偏见</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">端粒≠衰老时钟；延长端粒酶增加癌症风险</span></li>
-              <li><span class="tree-node leaf">六种逻辑谬误：人身攻击、诉诸权威、假二分…</span></li>
-              <li><span class="tree-node leaf">认知偏见：过度模式识别→迷信→宗教</span></li>
-              <li><span class="tree-node app">应用：识别谬误，理解信念的起源</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">死亡基因</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">坏死（意外死亡）vs 凋亡（程序性自杀）</span></li>
-              <li><span class="tree-node leaf">凋亡：演化出的抗癌"刹车"</span></li>
-              <li><span class="tree-node leaf">p53：关键的凋亡开关</span></li>
-            </div>
-          </li>
+        <div class="children open" style="margin-left:0;border-left:none;padding-left:0;">
+
+        <!-- BRANCH 1: 心理学科学化 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">MKS核心01：心理学科学化</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">从"躺椅推测"到实验科学</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">将"心灵"转化为可测量的"行为"</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">行为主义革命 + 认知革命</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：循证心理治疗评估</span></div>
+          </div>
         </div>
-      </li>
-    </ul>
+
+        <!-- BRANCH 2: 双盲实验 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">MKS核心02：双盲实验</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">排除安慰剂效应 + 研究者偏见</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">"有效"声称必须通过双盲检验</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">1954年脊髓灰质炎疫苗试验（40万人）</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：科学验证的"金标准"</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 3: 衰老的线粒体理论 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">MKS核心03：衰老的线粒体理论</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">内共生假说：需氧细菌→线粒体</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">mtDNA靠近"火线"，突变率是核DNA的10-20倍</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">能量生产衰退→肌少症、神经退行性疾病</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：理解衰老的细胞机制</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 4: 自由基假说的兴衰 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">MKS核心04：自由基假说的兴衰</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">漂亮理论：氧化损伤→抗氧剂→延缓衰老</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">SELECT试验（3.5万人）：维生素E反增17%风险</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">Cochrane综述（30万人）：抗氧化剂增死亡率</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：理解"证据 > 理论"的科学精神</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 5: 安慰剂效应 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">安慰剂效应</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">生理基础：内啡肽+多巴胺系统激活</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">边界一：不能缩小肿瘤、不能杀菌</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">边界二：主要影响主观体验和中枢调节功能</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：区分"病"与"病感"</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 6: 脑死亡 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">脑死亡与生命意义</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">全脑死亡（美国）vs 脑干死亡（英国）</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">脑死亡 ≠ 植物人（后者保留脑干功能）</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">伦理争议：器官移植与"活着"的定义</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：理解"生命"的科学-哲学边界</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 7: 端粒 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">端粒的谎言</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">端粒缩短与衰老相关 ≠ 因果关系</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">小鼠端粒更长但寿命更短——跨物种不支持</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">激活端粒酶增加癌症风险——"抗衰老"的代价</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：破除"端粒=衰老时钟"迷思</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 8: 批判性思维 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">批判性思维</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">谬误①人身攻击 ②诉诸权威 ③假二分</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">谬误④滑坡论证 ⑤循环论证 ⑥红鲱鱼</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">批判性思维 ≠ 抬杠——是对己对人同样严格</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：识别谬误，用证据替代情绪论证</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 9: 认知偏见 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">认知偏见</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">模式识别过度敏感→演化生存优势</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">"宁可虚惊不可漏报"→超自然信仰起源</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">迷信→制度化宗教→社会整合与死亡焦虑</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：理解"为什么人容易信神"</span></div>
+          </div>
+        </div>
+
+        <!-- BRANCH 10: 死亡基因 -->
+        <div class="tree-branch">
+          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+          <span class="tree-node branch">死亡基因</span>
+          <div class="children open">
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">坏死（意外）：细胞肿胀破裂→引发炎症</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">凋亡（程序）：细胞主动"自杀"→干净清除</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node leaf">p53突变→凋亡刹车失灵→>50%癌症中出现</span></div>
+            <div class="tree-leaf-wrap"><span class="tree-node app">应用：理解癌症发生的细胞机制</span></div>
+          </div>
+        </div>
+
+      </div>
+      </div>
+    </div>
   `;
 }
 
