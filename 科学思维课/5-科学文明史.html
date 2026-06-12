@@ -362,29 +362,40 @@ body {
 .progress-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--gold)); border-radius:3px; transition:width .5s ease; }
 
 /* ===== Flip card ===== */
-.flip-container { perspective:1200px; max-width:520px; margin:20px auto; }
-.flip-card { position:relative; width:100%; min-height:360px; transition:transform .6s cubic-bezier(0.4,0,0.2,1); transform-style:preserve-3d; }
-.flip-card.flipped { transform:rotateY(180deg); }
+.flip-container { -webkit-perspective:1200px; perspective:1200px; max-width:520px; margin:20px auto; }
+.flip-card {
+  position:relative;
+  width:100%;
+  min-height:360px;
+  transition:transform .6s cubic-bezier(0.4,0,0.2,1);
+  -webkit-transform-style:preserve-3d;
+  transform-style:preserve-3d;
+  cursor:pointer;
+}
+.flip-card.flipped { -webkit-transform:rotateY(180deg); transform:rotateY(180deg); }
 .flip-front,.flip-back {
   position:absolute;
   top:0;left:0;
   width:100%;
+  height:100%;
   min-height:360px;
   backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
   border-radius:14px;
   padding:28px 24px;
   border:1px solid rgba(255,255,255,0.08);
   background:linear-gradient(160deg, rgba(21,26,64,0.9), rgba(17,22,60,0.8));
   backdrop-filter:blur(8px);
   box-shadow:0 8px 32px rgba(0,0,0,0.3);
+  overflow-y:auto;
 }
 .flip-back { transform:rotateY(180deg); }
-.flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
-.flip-card .nav button { padding:7px 18px; border:1px solid rgba(255,255,255,0.12); border-radius:20px; background:rgba(21,26,64,0.6); color:var(--text-dim); cursor:pointer; font-size:13px; font-family:inherit; transition:all .2s; }
-.flip-card .nav button:hover { border-color:var(--gold); color:var(--text); background:rgba(226,176,74,0.08); }
-.flip-card .mark-btn { background:linear-gradient(135deg, rgba(91,141,238,0.3), rgba(91,141,238,0.15)); color:var(--text); border:1px solid rgba(91,141,238,0.3); padding:7px 18px; border-radius:20px; cursor:pointer; font-size:13px; font-family:inherit; transition:all .2s; }
-.flip-card .mark-btn:hover { background:linear-gradient(135deg, rgba(226,176,74,0.3), rgba(226,176,74,0.15)); border-color:var(--gold); }
-.flip-card .counter { font-size:13px; color:var(--text-dim); }
+.flip-container .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+.flip-container .nav button { padding:7px 18px; border:1px solid rgba(255,255,255,0.12); border-radius:20px; background:rgba(21,26,64,0.6); color:var(--text-dim); cursor:pointer; font-size:13px; font-family:inherit; transition:all .2s; }
+.flip-container .nav button:hover { border-color:var(--gold); color:var(--text); background:rgba(226,176,74,0.08); }
+.mark-btn { background:linear-gradient(135deg, rgba(91,141,238,0.3), rgba(91,141,238,0.15)); color:var(--text); border:1px solid rgba(91,141,238,0.3); padding:7px 18px; border-radius:20px; cursor:pointer; font-size:13px; font-family:inherit; transition:all .2s; }
+.mark-btn:hover { background:linear-gradient(135deg, rgba(226,176,74,0.3), rgba(226,176,74,0.15)); border-color:var(--gold); }
+.flip-container .counter { font-size:13px; color:var(--text-dim); }
 
 /* ===== Quiz / Exam ===== */
 .quiz-card {
@@ -1024,130 +1035,246 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 920 400" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 920 540" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#5b8dee"/></marker>
     <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#e2b04a"/></marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#e0556a"/></marker>
     <linearGradient id="eraGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111a3a"/><stop offset="100%" stop-color="#0f1735"/></linearGradient>
     <linearGradient id="eraGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#151e42"/><stop offset="100%" stop-color="#121a3e"/></linearGradient>
     <linearGradient id="eraGrad3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2450"/><stop offset="100%" stop-color="#162048"/></linearGradient>
     <linearGradient id="eraGrad4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1f2a5a"/><stop offset="100%" stop-color="#1b2652"/></linearGradient>
     <linearGradient id="eraGrad5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#243068"/><stop offset="100%" stop-color="#202c5e"/></linearGradient>
+    <filter id="glowGold"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
 
-  <rect width="920" height="400" fill="var(--bg)" rx="10"/>
+  <rect width="920" height="540" fill="var(--bg)" rx="10"/>
 
-  <!-- Stars -->
-  <circle cx="30" cy="15" r="1" fill="#fff" opacity="0.4"/>
+  <!-- Background stars -->
+  <circle cx="30" cy="18" r="1.2" fill="#fff" opacity="0.4"/>
   <circle cx="180" cy="10" r="0.7" fill="#fff" opacity="0.3"/>
-  <circle cx="320" cy="20" r="1.2" fill="#e2b04a" opacity="0.35"/>
+  <circle cx="320" cy="22" r="1" fill="#e2b04a" opacity="0.35"/>
   <circle cx="500" cy="8" r="0.8" fill="#fff" opacity="0.3"/>
-  <circle cx="660" cy="16" r="1" fill="#5b8dee" opacity="0.4"/>
-  <circle cx="800" cy="10" r="0.7" fill="#fff" opacity="0.25"/>
-  <circle cx="880" cy="22" r="0.9" fill="#fff" opacity="0.3"/>
+  <circle cx="660" cy="16" r="1.2" fill="#5b8dee" opacity="0.4"/>
+  <circle cx="800" cy="12" r="0.7" fill="#fff" opacity="0.25"/>
+  <circle cx="880" cy="24" r="0.9" fill="#fff" opacity="0.3"/>
+  <circle cx="70" cy="520" r="0.8" fill="#fff" opacity="0.2"/>
+  <circle cx="840" cy="522" r="1" fill="#fff" opacity="0.2"/>
 
-  <text x="460" y="26" text-anchor="middle" fill="#e2b04a" font-size="16" font-weight="bold" letter-spacing="2">✦ 文明演进图：从古代智慧到现代科学的五千年历程</text>
+  <!-- Title -->
+  <text x="460" y="26" text-anchor="middle" fill="#e2b04a" font-size="15" font-weight="bold" letter-spacing="2">✦ 文明演进图：科学思想的五千年级联 —— 从古代智慧到全球科学共同体</text>
 
-  <!-- Main Timeline -->
-  <line x1="60" y1="200" x2="860" y2="200" stroke="#5b8dee" stroke-width="2.5" opacity="0.7"/>
-  <polygon points="860,200 848,194 848,206" fill="#5b8dee" opacity="0.7"/>
-  <polygon points="60,200 72,194 72,206" fill="#5b8dee" opacity="0.7"/>
-  <text x="460" y="220" text-anchor="middle" fill="#5b8dee" font-size="11" opacity="0.8">时间之矢 →</text>
+  <!-- ===== MAIN TIMELINE ===== -->
+  <line x1="50" y1="170" x2="870" y2="170" stroke="#5b8dee" stroke-width="2.5" opacity="0.6"/>
+  <polygon points="870,170 858,164 858,176" fill="#5b8dee" opacity="0.6"/>
+  <polygon points="50,170 62,164 62,176" fill="#5b8dee" opacity="0.6"/>
+  <text x="460" y="190" text-anchor="middle" fill="#5b8dee" font-size="10" opacity="0.7">时间之矢 →</text>
 
-  <!-- Era 1 -->
-  <rect x="65" y="85" width="150" height="110" fill="url(#eraGrad1)" rx="5" stroke="rgba(91,141,238,0.3)" stroke-width="1"/>
-  <path d="M65,85 L80,75 L215,75 L230,85" fill="#151e42" stroke="rgba(91,141,238,0.3)" stroke-width="1"/>
-  <text x="140" y="100" text-anchor="middle" fill="#e2b04a" font-size="14" font-weight="bold">🏛️ 古代科学</text>
-  <line x1="80" y1="110" x2="200" y2="110" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
-  <text x="140" y="126" text-anchor="middle" fill="#9098b8" font-size="10">巴比伦天文学</text>
-  <text x="140" y="142" text-anchor="middle" fill="#9098b8" font-size="10">希腊自然哲学</text>
-  <text x="140" y="158" text-anchor="middle" fill="#9098b8" font-size="10">中国四大发明</text>
-  <text x="140" y="174" text-anchor="middle" fill="#9098b8" font-size="10">阿拉伯黄金时代</text>
-  <text x="140" y="192" text-anchor="middle" fill="#5b8dee" font-size="9">~3000BC - 5世纪</text>
-  <line x1="140" y1="195" x2="140" y2="200" stroke="#5b8dee" stroke-width="2" opacity="0.6"/>
+  <!-- Year markers on timeline -->
+  <line x1="140" y1="167" x2="140" y2="173" stroke="#e2b04a" stroke-width="1.5" opacity="0.5"/>
+  <text x="140" y="195" text-anchor="middle" fill="#9098b8" font-size="8">~3000BC</text>
+  <line x1="315" y1="167" x2="315" y2="173" stroke="#e2b04a" stroke-width="1.5" opacity="0.5"/>
+  <text x="315" y="195" text-anchor="middle" fill="#9098b8" font-size="8">1088</text>
+  <line x1="495" y1="167" x2="495" y2="173" stroke="#e2b04a" stroke-width="1.5" opacity="0.5"/>
+  <text x="495" y="195" text-anchor="middle" fill="#9098b8" font-size="8">1543-1687</text>
+  <line x1="675" y1="167" x2="675" y2="173" stroke="#e2b04a" stroke-width="1.5" opacity="0.5"/>
+  <text x="675" y="195" text-anchor="middle" fill="#9098b8" font-size="8">18世纪</text>
+  <line x1="840" y1="167" x2="840" y2="173" stroke="#e2b04a" stroke-width="1.5" opacity="0.5"/>
+  <text x="840" y="195" text-anchor="middle" fill="#9098b8" font-size="8">19世纪–</text>
 
-  <!-- Era 2 -->
-  <rect x="240" y="85" width="150" height="110" fill="url(#eraGrad2)" rx="5" stroke="rgba(91,141,238,0.4)" stroke-width="1"/>
-  <path d="M240,85 L255,75 L390,75 L405,85" fill="#1a2450" stroke="rgba(91,141,238,0.4)" stroke-width="1"/>
-  <text x="315" y="100" text-anchor="middle" fill="#e2b04a" font-size="14" font-weight="bold">📜 中世纪</text>
-  <line x1="255" y1="110" x2="375" y2="110" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
-  <text x="315" y="126" text-anchor="middle" fill="#9098b8" font-size="10">博洛尼亚大学(1088)</text>
-  <text x="315" y="142" text-anchor="middle" fill="#9098b8" font-size="10">修道院学术传统</text>
-  <text x="315" y="158" text-anchor="middle" fill="#9098b8" font-size="10">经院哲学</text>
-  <text x="315" y="174" text-anchor="middle" fill="#9098b8" font-size="10">阿拉伯→欧洲翻译运动</text>
-  <text x="315" y="192" text-anchor="middle" fill="#5b8dee" font-size="9">5 - 15世纪</text>
-  <line x1="315" y1="195" x2="315" y2="200" stroke="#5b8dee" stroke-width="2" opacity="0.6"/>
+  <!-- ===== TOP: 5 ERA BOXES (larger, richer) ===== -->
 
-  <path d="M230,160 C235,160 235,160 240,160" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
+  <!-- Era 1: 古代科学 -->
+  <rect x="52" y="42" width="162" height="125" fill="url(#eraGrad1)" rx="5" stroke="rgba(91,141,238,0.3)" stroke-width="1"/>
+  <path d="M52,42 L68,32 L214,32 L230,42" fill="#151e42" stroke="rgba(91,141,238,0.3)" stroke-width="1"/>
+  <text x="133" y="56" text-anchor="middle" fill="#e2b04a" font-size="13" font-weight="bold">🏛️ 古代科学文明</text>
+  <line x1="65" y1="64" x2="201" y2="64" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+  <text x="133" y="80" text-anchor="middle" fill="#9098b8" font-size="10">✦ 巴比伦天文学 · 星表</text>
+  <text x="133" y="95" text-anchor="middle" fill="#9098b8" font-size="10">✦ 希腊自然哲学(亚里士多德)</text>
+  <text x="133" y="110" text-anchor="middle" fill="#9098b8" font-size="10">✦ 欧几里得《几何原本》</text>
+  <text x="133" y="125" text-anchor="middle" fill="#9098b8" font-size="10">✦ 中国四大发明 · 都江堰</text>
+  <text x="133" y="140" text-anchor="middle" fill="#9098b8" font-size="10">✦ 阿拉伯百年翻译运动</text>
+  <text x="133" y="158" text-anchor="middle" fill="#5b8dee" font-size="9">≈ 公元前3000 – 公元5世纪</text>
+  <line x1="133" y1="167" x2="133" y2="170" stroke="#5b8dee" stroke-width="2" opacity="0.5"/>
 
-  <!-- Era 3 -->
-  <rect x="415" y="85" width="160" height="110" fill="url(#eraGrad3)" rx="5" stroke="rgba(226,176,74,0.35)" stroke-width="1"/>
-  <path d="M415,85 L432,73 L575,73 L592,85" fill="#1f2a5a" stroke="rgba(226,176,74,0.35)" stroke-width="1"/>
-  <text x="495" y="100" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">🔭 科学革命</text>
-  <line x1="430" y1="110" x2="560" y2="110" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-  <text x="495" y="126" text-anchor="middle" fill="#e4e6f2" font-size="10">哥白尼日心说(1543)</text>
-  <text x="495" y="142" text-anchor="middle" fill="#e4e6f2" font-size="10">伽利略与望远镜</text>
-  <text x="495" y="158" text-anchor="middle" fill="#e4e6f2" font-size="10">英国皇家学会(1660)</text>
-  <text x="495" y="174" text-anchor="middle" fill="#e4e6f2" font-size="10">牛顿《原理》(1687)</text>
-  <text x="495" y="192" text-anchor="middle" fill="#e2b04a" font-size="9">15 - 17世纪</text>
-  <line x1="495" y1="195" x2="495" y2="200" stroke="#5b8dee" stroke-width="2" opacity="0.6"/>
+  <!-- Era 2: 中世纪科学暗流 -->
+  <rect x="235" y="42" width="162" height="125" fill="url(#eraGrad2)" rx="5" stroke="rgba(91,141,238,0.35)" stroke-width="1"/>
+  <path d="M235,42 L251,32 L397,32 L413,42" fill="#1a2450" stroke="rgba(91,141,238,0.35)" stroke-width="1"/>
+  <text x="316" y="56" text-anchor="middle" fill="#e2b04a" font-size="13" font-weight="bold">📜 中世纪科学暗流</text>
+  <line x1="248" y1="64" x2="384" y2="64" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+  <text x="316" y="80" text-anchor="middle" fill="#9098b8" font-size="10">✦ 博洛尼亚大学(1088)</text>
+  <text x="316" y="95" text-anchor="middle" fill="#9098b8" font-size="10">✦ 牛津/巴黎大学相继成立</text>
+  <text x="316" y="110" text-anchor="middle" fill="#9098b8" font-size="10">✦ 修道院保存古典学术</text>
+  <text x="316" y="125" text-anchor="middle" fill="#9098b8" font-size="10">✦ 经院哲学·托马斯阿奎那</text>
+  <text x="316" y="140" text-anchor="middle" fill="#9098b8" font-size="10">✦ 阿拉伯→欧洲翻译运动</text>
+  <text x="316" y="158" text-anchor="middle" fill="#5b8dee" font-size="9">≈ 5世纪 – 15世纪</text>
+  <line x1="316" y1="167" x2="316" y2="170" stroke="#5b8dee" stroke-width="2" opacity="0.5"/>
 
-  <path d="M405,160 C410,160 410,160 415,160" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
+  <!-- Arrow Era1→Era2 -->
+  <path d="M214,110 C224,110 224,110 235,110" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
 
-  <!-- Era 4 -->
-  <rect x="600" y="85" width="150" height="110" fill="url(#eraGrad4)" rx="5" stroke="rgba(226,176,74,0.4)" stroke-width="1"/>
-  <path d="M600,85 L617,73 L750,73 L767,85" fill="#243068" stroke="rgba(226,176,74,0.4)" stroke-width="1"/>
-  <text x="675" y="100" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">💡 启蒙时代</text>
-  <line x1="615" y1="110" x2="735" y2="110" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-  <text x="675" y="126" text-anchor="middle" fill="#e4e6f2" font-size="10">法国科学院(1666)</text>
-  <text x="675" y="142" text-anchor="middle" fill="#e4e6f2" font-size="10">百科全书派</text>
-  <text x="675" y="158" text-anchor="middle" fill="#e4e6f2" font-size="10">拉瓦锡化学革命</text>
-  <text x="675" y="174" text-anchor="middle" fill="#e4e6f2" font-size="10">工业革命展开</text>
-  <text x="675" y="192" text-anchor="middle" fill="#e2b04a" font-size="9">18世纪</text>
-  <line x1="675" y1="195" x2="675" y2="200" stroke="#5b8dee" stroke-width="2" opacity="0.6"/>
+  <!-- Era 3: 科学革命 -->
+  <rect x="418" y="42" width="170" height="125" fill="url(#eraGrad3)" rx="5" stroke="rgba(226,176,74,0.35)" stroke-width="1"/>
+  <path d="M418,42 L436,30 L588,30 L606,42" fill="#1f2a5a" stroke="rgba(226,176,74,0.35)" stroke-width="1"/>
+  <text x="503" y="56" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">🔭 文艺复兴与科学革命</text>
+  <line x1="431" y1="64" x2="575" y2="64" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <text x="503" y="80" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 哥白尼日心说(1543)</text>
+  <text x="503" y="95" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 伽利略望远镜观测(1610)</text>
+  <text x="503" y="110" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 英国皇家学会成立(1660)</text>
+  <text x="503" y="125" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 法国科学院成立(1666)</text>
+  <text x="503" y="140" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 牛顿《原理》出版(1687)</text>
+  <text x="503" y="158" text-anchor="middle" fill="#e2b04a" font-size="9">≈ 15世纪 – 17世纪</text>
+  <line x1="503" y1="167" x2="503" y2="170" stroke="#5b8dee" stroke-width="2" opacity="0.5"/>
 
-  <path d="M592,160 C597,160 597,160 600,160" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
+  <!-- Arrow Era2→Era3 -->
+  <path d="M397,110 C407,110 407,110 418,110" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
 
-  <!-- Era 5 -->
-  <rect x="775" y="85" width="130" height="110" fill="url(#eraGrad5)" rx="5" stroke="rgba(226,176,74,0.5)" stroke-width="1"/>
-  <path d="M775,85 L790,73 L905,73 L920,85" fill="#2a3870" stroke="rgba(226,176,74,0.5)" stroke-width="1"/>
-  <text x="840" y="100" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">⚛️ 现代科学</text>
-  <line x1="790" y1="110" x2="890" y2="110" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-  <text x="840" y="126" text-anchor="middle" fill="#e4e6f2" font-size="10">达尔文进化论</text>
-  <text x="840" y="142" text-anchor="middle" fill="#e4e6f2" font-size="10">相对论/量子力学</text>
-  <text x="840" y="158" text-anchor="middle" fill="#e4e6f2" font-size="10">DNA双螺旋</text>
-  <text x="840" y="174" text-anchor="middle" fill="#e4e6f2" font-size="10">中国科学现代化</text>
-  <text x="840" y="192" text-anchor="middle" fill="#e2b04a" font-size="9">19世纪 - 至今</text>
-  <line x1="840" y1="195" x2="840" y2="200" stroke="#5b8dee" stroke-width="2" opacity="0.6"/>
+  <!-- Era 4: 启蒙时代 -->
+  <rect x="610" y="42" width="155" height="125" fill="url(#eraGrad4)" rx="5" stroke="rgba(226,176,74,0.4)" stroke-width="1"/>
+  <path d="M610,42 L627,30 L765,30 L782,42" fill="#243068" stroke="rgba(226,176,74,0.4)" stroke-width="1"/>
+  <text x="687" y="56" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">💡 启蒙与工业革命</text>
+  <line x1="623" y1="64" x2="751" y2="64" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <text x="687" y="80" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 狄德罗百科全书派</text>
+  <text x="687" y="95" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 拉瓦锡化学革命</text>
+  <text x="687" y="110" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 瓦特改良蒸汽机</text>
+  <text x="687" y="125" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 林奈生物分类法</text>
+  <text x="687" y="140" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 科学学会遍及欧洲</text>
+  <text x="687" y="158" text-anchor="middle" fill="#e2b04a" font-size="9">≈ 18世纪</text>
+  <line x1="687" y1="167" x2="687" y2="170" stroke="#5b8dee" stroke-width="2" opacity="0.5"/>
 
-  <path d="M767,160 C772,160 772,160 775,160" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
+  <!-- Arrow Era3→Era4 -->
+  <path d="M588,110 C598,110 598,110 610,110" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
 
-  <!-- Integration -->
-  <rect x="100" y="250" width="720" height="50" rx="10" fill="rgba(91,141,238,0.08)" stroke="rgba(91,141,238,0.2)" stroke-width="1"/>
-  <text x="460" y="272" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">科学思想的制度土壤：大学→科学院→知识产权→自由探索</text>
-  <text x="460" y="291" text-anchor="middle" fill="#e2b04a" font-size="11">科学不是天才的偶然产物，而是特定社会土壤中层层沉积的制度性成果</text>
+  <!-- Era 5: 现代科学 -->
+  <rect x="785" y="42" width="122" height="125" fill="url(#eraGrad5)" rx="5" stroke="rgba(226,176,74,0.5)" stroke-width="1"/>
+  <path d="M785,42 L800,30 L907,30 L920,42" fill="#2a3870" stroke="rgba(226,176,74,0.5)" stroke-width="1"/>
+  <text x="846" y="56" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">⚛️ 现代科学</text>
+  <line x1="798" y1="64" x2="894" y2="64" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <text x="846" y="80" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 达尔文进化论</text>
+  <text x="846" y="95" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 相对论/量子力学</text>
+  <text x="846" y="110" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ DNA双螺旋(1953)</text>
+  <text x="846" y="125" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 计算机/互联网</text>
+  <text x="846" y="140" text-anchor="middle" fill="#e4e6f2" font-size="10">✦ 中国科学现代化</text>
+  <text x="846" y="158" text-anchor="middle" fill="#e2b04a" font-size="9">≈ 19世纪 – 至今</text>
+  <line x1="846" y1="167" x2="846" y2="170" stroke="#5b8dee" stroke-width="2" opacity="0.5"/>
 
-  <path d="M140,200 C140,225 140,225 200,250" stroke="#e2b04a" stroke-width="1" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
-  <path d="M315,200 C315,225 315,225 350,250" stroke="#e2b04a" stroke-width="1" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
-  <path d="M495,200 C495,225 460,225 460,250" stroke="#e2b04a" stroke-width="1" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
-  <path d="M675,200 C675,225 570,225 570,250" stroke="#e2b04a" stroke-width="1" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
-  <path d="M840,200 C840,225 720,225 720,250" stroke="#e2b04a" stroke-width="1" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
+  <!-- Arrow Era4→Era5 -->
+  <path d="M782,110 C792,110 792,110 785,110" stroke="#5b8dee" stroke-width="1.2" fill="none" marker-end="url(#arrow)" opacity="0.5"/>
 
-  <!-- China track -->
-  <rect x="100" y="320" width="720" height="36" rx="8" fill="rgba(226,176,74,0.06)" stroke="rgba(226,176,74,0.2)" stroke-width="1"/>
-  <text x="460" y="343" text-anchor="middle" fill="#e2b04a" font-size="12" font-weight="bold">🇨🇳 中国科学现代化之路：留美幼童(1872) → 庚子赔款→清华(1911) → 赛先生(1919) → 科学思想扎根</text>
+  <!-- ===== MIDDLE: KEY TURNING POINTS (sub-nodes below timeline) ===== -->
 
-  <!-- Legend -->
-  <rect x="100" y="372" rx="3" ry="3" width="10" height="10" fill="url(#eraGrad1)" stroke="rgba(91,141,238,0.3)"/>
-  <text x="115" y="382" fill="#9098b8" font-size="10">古代</text>
-  <rect x="175" y="372" rx="3" ry="3" width="10" height="10" fill="url(#eraGrad3)" stroke="rgba(226,176,74,0.35)"/>
-  <text x="190" y="382" fill="#9098b8" font-size="10">科学革命</text>
-  <rect x="270" y="372" rx="3" ry="3" width="10" height="10" fill="url(#eraGrad5)" stroke="rgba(226,176,74,0.5)"/>
-  <text x="285" y="382" fill="#9098b8" font-size="10">现代</text>
-  <line x1="360" y1="377" x2="390" y2="377" stroke="#5b8dee" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="395" y="382" fill="#9098b8" font-size="10">文明演进方向</text>
-  <line x1="490" y1="377" x2="520" y2="377" stroke="#e2b04a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGold)"/>
-  <text x="525" y="382" fill="#9098b8" font-size="10">制度沉淀</text>
+  <!-- Sub-node row -->
+  <rect x="52" y="200" width="162" height="75" rx="4" fill="rgba(91,141,238,0.04)" stroke="rgba(91,141,238,0.12)" stroke-width="0.8"/>
+  <text x="133" y="216" text-anchor="middle" fill="#5b8dee" font-size="10" font-weight="bold">技术型知识积累</text>
+  <text x="133" y="233" text-anchor="middle" fill="#9098b8" font-size="9">天文观测·数学计算</text>
+  <text x="133" y="249" text-anchor="middle" fill="#9098b8" font-size="9">工程建造·医学经验</text>
+  <text x="133" y="265" text-anchor="middle" fill="#5e6688" font-size="8">有技术无系统科学</text>
+
+  <rect x="235" y="200" width="162" height="75" rx="4" fill="rgba(91,141,238,0.04)" stroke="rgba(91,141,238,0.15)" stroke-width="0.8"/>
+  <text x="316" y="216" text-anchor="middle" fill="#5b8dee" font-size="10" font-weight="bold">学术制度萌芽</text>
+  <text x="316" y="233" text-anchor="middle" fill="#9098b8" font-size="9">大学学位·学术自治</text>
+  <text x="316" y="249" text-anchor="middle" fill="#9098b8" font-size="9">七艺课程·经院方法</text>
+  <text x="316" y="265" text-anchor="middle" fill="#5e6688" font-size="8">制度框架初步建立</text>
+
+  <rect x="418" y="200" width="170" height="75" rx="4" fill="rgba(226,176,74,0.04)" stroke="rgba(226,176,74,0.15)" stroke-width="0.8"/>
+  <text x="503" y="216" text-anchor="middle" fill="#e2b04a" font-size="10" font-weight="bold">科学方法诞生</text>
+  <text x="503" y="233" text-anchor="middle" fill="#e4e6f2" font-size="9">数学化+实验验证</text>
+  <text x="503" y="249" text-anchor="middle" fill="#e4e6f2" font-size="9">学会→同行评议机制</text>
+  <text x="503" y="265" text-anchor="middle" fill="#8b7340" font-size="8">科学共同体成型</text>
+
+  <rect x="610" y="200" width="155" height="75" rx="4" fill="rgba(226,176,74,0.04)" stroke="rgba(226,176,74,0.18)" stroke-width="0.8"/>
+  <text x="687" y="216" text-anchor="middle" fill="#e2b04a" font-size="10" font-weight="bold">科学制度化</text>
+  <text x="687" y="233" text-anchor="middle" fill="#e4e6f2" font-size="9">国家科学院普及</text>
+  <text x="687" y="249" text-anchor="middle" fill="#e4e6f2" font-size="9">科学期刊·专业学会</text>
+  <text x="687" y="265" text-anchor="middle" fill="#8b7340" font-size="8">科学职业化开始</text>
+
+  <rect x="785" y="200" width="122" height="75" rx="4" fill="rgba(226,176,74,0.05)" stroke="rgba(226,176,74,0.22)" stroke-width="0.8"/>
+  <text x="846" y="216" text-anchor="middle" fill="#e2b04a" font-size="10" font-weight="bold">科学全球化</text>
+  <text x="846" y="233" text-anchor="middle" fill="#e4e6f2" font-size="9">全球大学体系</text>
+  <text x="846" y="249" text-anchor="middle" fill="#e4e6f2" font-size="9">国际科学合作</text>
+  <text x="846" y="265" text-anchor="middle" fill="#8b7340" font-size="8">科学思想扎根各国</text>
+
+  <!-- Vertical connectors: era box → sub-node -->
+  <line x1="133" y1="167" x2="133" y2="200" stroke="rgba(91,141,238,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="316" y1="167" x2="316" y2="200" stroke="rgba(91,141,238,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="503" y1="167" x2="503" y2="200" stroke="rgba(226,176,74,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="687" y1="167" x2="687" y2="200" stroke="rgba(226,176,74,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="846" y1="167" x2="846" y2="200" stroke="rgba(226,176,74,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <!-- ===== CHINA PARALLEL TRACK ===== -->
+  <rect x="52" y="290" width="855" height="80" rx="8" fill="rgba(226,176,74,0.04)" stroke="rgba(226,176,74,0.18)" stroke-width="1"/>
+  <text x="70" y="310" fill="#e2b04a" font-size="12" font-weight="bold">🇨🇳 中国科学近代化的关键节点（平行对照）</text>
+
+  <!-- China timeline markers -->
+  <rect x="70" y="320" width="130" height="42" rx="4" fill="rgba(224,85,106,0.08)" stroke="rgba(224,85,106,0.2)" stroke-width="0.8"/>
+  <text x="135" y="336" text-anchor="middle" fill="#e4e6f2" font-size="9">1607 徐光启译</text>
+  <text x="135" y="352" text-anchor="middle" fill="#9098b8" font-size="8">《几何原本》前六卷</text>
+
+  <rect x="215" y="320" width="120" height="42" rx="4" fill="rgba(224,85,106,0.08)" stroke="rgba(224,85,106,0.2)" stroke-width="0.8"/>
+  <text x="275" y="336" text-anchor="middle" fill="#e4e6f2" font-size="9">1692 康熙禁令</text>
+  <text x="275" y="352" text-anchor="middle" fill="#9098b8" font-size="8">禁止民间私习天文</text>
+
+  <rect x="350" y="320" width="110" height="42" rx="4" fill="rgba(76,175,136,0.08)" stroke="rgba(76,175,136,0.2)" stroke-width="0.8"/>
+  <text x="405" y="336" text-anchor="middle" fill="#e4e6f2" font-size="9">1872 留美幼童</text>
+  <text x="405" y="352" text-anchor="middle" fill="#9098b8" font-size="8">120名少年赴美</text>
+
+  <rect x="475" y="320" width="120" height="42" rx="4" fill="rgba(76,175,136,0.08)" stroke="rgba(76,175,136,0.2)" stroke-width="0.8"/>
+  <text x="535" y="336" text-anchor="middle" fill="#e4e6f2" font-size="9">1895 甲午战败</text>
+  <text x="535" y="352" text-anchor="middle" fill="#9098b8" font-size="8">洋务运动破产</text>
+
+  <rect x="610" y="320" width="120" height="42" rx="4" fill="rgba(76,175,136,0.08)" stroke="rgba(76,175,136,0.2)" stroke-width="0.8"/>
+  <text x="670" y="336" text-anchor="middle" fill="#e4e6f2" font-size="9">1911 清华学堂</text>
+  <text x="670" y="352" text-anchor="middle" fill="#9098b8" font-size="8">庚子赔款退款</text>
+
+  <rect x="745" y="320" width="100" height="42" rx="4" fill="rgba(91,141,238,0.08)" stroke="rgba(91,141,238,0.2)" stroke-width="0.8"/>
+  <text x="795" y="336" text-anchor="middle" fill="#e4e6f2" font-size="9">1919 赛先生</text>
+  <text x="795" y="352" text-anchor="middle" fill="#9098b8" font-size="8">五四运动旗帜</text>
+
+  <rect x="855" y="320" width="40" height="42" rx="4" fill="rgba(91,141,238,0.06)" stroke="rgba(91,141,238,0.15)" stroke-width="0.8"/>
+  <text x="875" y="345" text-anchor="middle" fill="#5b8dee" font-size="8">→ 至今</text>
+
+  <!-- Arrows between China markers -->
+  <path d="M200,340 L215,340" stroke="#e0556a" stroke-width="1" fill="none" marker-end="url(#arrowRed)" opacity="0.4"/>
+  <path d="M335,340 L350,340" stroke="#e0556a" stroke-width="1" fill="none" marker-end="url(#arrowRed)" opacity="0.4"/>
+  <path d="M460,340 L475,340" stroke="#4caf88" stroke-width="1" fill="none" marker-end="url(#arrow)" opacity="0.4"/>
+  <path d="M595,340 L610,340" stroke="#4caf88" stroke-width="1" fill="none" marker-end="url(#arrow)" opacity="0.4"/>
+  <path d="M730,340 L745,340" stroke="#5b8dee" stroke-width="1" fill="none" marker-end="url(#arrow)" opacity="0.4"/>
+  <path d="M845,340 L855,340" stroke="#5b8dee" stroke-width="1" fill="none" marker-end="url(#arrow)" opacity="0.4"/>
+
+  <!-- ===== SYNTHESIS SECTION ===== -->
+  <rect x="52" y="385" width="855" height="58" rx="10" fill="rgba(91,141,238,0.06)" stroke="rgba(91,141,238,0.18)" stroke-width="1"/>
+  <text x="480" y="406" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">〓 科学思想的制度土壤：大学（学术自治）→ 科学院（同行评议）→ 知识产权（激励机制）→ 自由探索（创新源头）〓</text>
+  <text x="480" y="430" text-anchor="middle" fill="#e2b04a" font-size="10">科学不是天才的偶然产物，而是特定社会制度层层沉积的成果 —— 每一个科学时代都是前一层文明的星辉沉积</text>
+
+  <!-- Dashed lines: sub-nodes → synthesis -->
+  <path d="M133,275 C133,330 133,330 200,385" stroke="#e2b04a" stroke-width="0.8" fill="none" stroke-dasharray="3,3" marker-end="url(#arrowGold)" opacity="0.35"/>
+  <path d="M316,275 C316,330 316,330 350,385" stroke="#e2b04a" stroke-width="0.8" fill="none" stroke-dasharray="3,3" marker-end="url(#arrowGold)" opacity="0.35"/>
+  <path d="M503,275 C503,330 503,330 480,385" stroke="#e2b04a" stroke-width="0.8" fill="none" stroke-dasharray="3,3" marker-end="url(#arrowGold)" opacity="0.35"/>
+  <path d="M687,275 C687,330 687,330 610,385" stroke="#e2b04a" stroke-width="0.8" fill="none" stroke-dasharray="3,3" marker-end="url(#arrowGold)" opacity="0.35"/>
+  <path d="M846,275 C846,330 846,330 760,385" stroke="#e2b04a" stroke-width="0.8" fill="none" stroke-dasharray="3,3" marker-end="url(#arrowGold)" opacity="0.35"/>
+
+  <!-- ===== LEGACY SECTION ===== -->
+  <rect x="52" y="455" width="855" height="32" rx="8" fill="rgba(76,175,136,0.04)" stroke="rgba(76,175,136,0.15)" stroke-width="1"/>
+  <text x="480" y="476" text-anchor="middle" fill="#4caf88" font-size="11">🌱 今天：科学方法成为人类共同认知工具 · 中国科研论文全球第一 · 从"赛先生"到全民科学素养 · 科学思想根依然在生长</text>
+
+  <!-- Vertical line from synthesis → legacy -->
+  <line x1="480" y1="443" x2="480" y2="455" stroke="rgba(76,175,136,0.3)" stroke-width="0.8" stroke-dasharray="2,2"/>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="52" y="498" rx="3" ry="3" width="10" height="10" fill="url(#eraGrad1)" stroke="rgba(91,141,238,0.3)"/>
+  <text x="67" y="508" fill="#9098b8" font-size="9">古代</text>
+  <rect x="110" y="498" rx="3" ry="3" width="10" height="10" fill="url(#eraGrad3)" stroke="rgba(226,176,74,0.35)"/>
+  <text x="125" y="508" fill="#9098b8" font-size="9">科学革命</text>
+  <rect x="190" y="498" rx="3" ry="3" width="10" height="10" fill="url(#eraGrad5)" stroke="rgba(226,176,74,0.5)"/>
+  <text x="205" y="508" fill="#9098b8" font-size="9">现代</text>
+  <line x1="270" y1="503" x2="300" y2="503" stroke="#5b8dee" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="305" y="508" fill="#9098b8" font-size="9">文明演进方向</text>
+  <line x1="390" y1="503" x2="420" y2="503" stroke="#e2b04a" stroke-width="0.8" stroke-dasharray="3,3" marker-end="url(#arrowGold)"/>
+  <text x="425" y="508" fill="#9098b8" font-size="9">制度沉淀</text>
+  <line x1="505" y1="503" x2="535" y2="503" stroke="#e0556a" stroke-width="0.8" marker-end="url(#arrowRed)"/>
+  <text x="540" y="508" fill="#9098b8" font-size="9">中国节点</text>
+  <rect x="630" y="498" rx="3" ry="3" width="10" height="10" fill="rgba(76,175,136,0.2)" stroke="rgba(76,175,136,0.3)"/>
+  <text x="645" y="508" fill="#9098b8" font-size="9">进步节点</text>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
@@ -1227,7 +1354,7 @@ function startQuiz(mode){
 
   let qs=[];
   if(mode==='random'){
-    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,10);
   } else {
     qs=[...QUIZ_DATA];
   }
@@ -1550,66 +1677,128 @@ function updateReviewStats(){
 function renderMindmap(){
   const el=document.getElementById('mindmap');
   el.innerHTML=`
-    <ul>
-      <li>
-        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-        <span class="tree-node root">科学文明史：中西对话</span>
-        <div class="children open">
+    <!-- Root -->
+    <div style="background:linear-gradient(135deg,rgba(91,141,238,0.12),rgba(226,176,74,0.08));border:1px solid rgba(226,176,74,0.25);border-radius:12px;padding:14px 18px;margin-bottom:18px;text-align:center;">
+      <span style="font-size:17px;font-weight:700;color:var(--gold);letter-spacing:2px;">🌐 科学文明史 · 中西对话五千年</span>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:4px;">大学起源 → 中西分流 → 科学革命 → 中国近代化 → 科学思想扎根</p>
+    </div>
+
+    <!-- Branch 1: 大学制度起源 -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;">
+      <div class="card" style="padding:14px 16px;margin-bottom:0;">
+        <ul style="list-style:none;padding-left:0;">
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">大学制度起源</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">1088年博洛尼亚大学（学生大学）</span></li>
-              <li><span class="tree-node leaf">契约保护的师生团体</span></li>
-              <li><span class="tree-node leaf">自治：教会vs国王vs市民</span></li>
-              <li><span class="tree-node app">MKS核心：大学起源</span></li>
-            </div>
+            <span class="tree-node branch">🏛️ 大学制度起源（1088–）</span>
+            <ul class="children open" style="list-style:none;">
+              <li style="margin-top:6px;">├ <span class="tree-node leaf">📜 博洛尼亚大学(1088)：世界第一所大学，核心是"受契约保护的师生团体"</span></li>
+              <li>├ <span class="tree-node leaf">⚖️ 「学生大学」模式：学生组建同乡会，雇佣教授并制定教学规则</span></li>
+              <li>├ <span class="tree-node leaf">🏫 巴黎大学「教师大学」模式：教授控制教学内容和学位授予</span></li>
+              <li>├ <span class="tree-node leaf">🛡️ 三重权力博弈：教会(许可证) vs 国王(控制) vs 市民(经济)</span></li>
+              <li style="margin-top:4px;">└ <span class="tree-node app">⭐ MKS核心：大学起源 —— 理解制度土壤如何决定知识生产</span></li>
+            </ul>
           </li>
+        </ul>
+      </div>
+
+      <!-- Branch 2: 中西科学分流 -->
+      <div class="card" style="padding:14px 16px;margin-bottom:0;">
+        <ul style="list-style:none;padding-left:0;">
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">中西科学分流</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">李约瑟难题</span></li>
-              <li><span class="tree-node leaf">科举抑制科学思维</span></li>
-              <li><span class="tree-node leaf">重伦理vs重实证</span></li>
-              <li><span class="tree-node app">MKS核心：中西科学分流</span></li>
-            </div>
+            <span class="tree-node branch">🍂 中西科学分流</span>
+            <ul class="children open" style="list-style:none;">
+              <li style="margin-top:6px;">├ <span class="tree-node leaf">❓ 李约瑟难题：中国古代技术领先，但近代科学为什么没有在中国产生？</span></li>
+              <li>├ <span class="tree-node leaf">📖 科举制度：精英智力全部导向四书五经和八股文，无独立科学研究职业</span></li>
+              <li>├ <span class="tree-node leaf">🧠 文化取向：重伦理/诗词/经学，轻视纯粹自然知识的探索</span></li>
+              <li>├ <span class="tree-node leaf">🏗️ 社会结构：商人地位低，没有形成资助科学的市民社会</span></li>
+              <li style="margin-top:4px;">└ <span class="tree-node app">⭐ MKS核心：中西科学分流 —— 三变量模型解构历史错位</span></li>
+            </ul>
           </li>
+        </ul>
+      </div>
+
+      <!-- Branch 3: 科学院演进与科学革命 -->
+      <div class="card" style="padding:14px 16px;margin-bottom:0;">
+        <ul style="list-style:none;padding-left:0;">
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">科学院与科学革命</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">英国皇家学会：自下而上+实验</span></li>
-              <li><span class="tree-node leaf">法国科学院：自上而下+理论</span></li>
-              <li><span class="tree-node leaf">牛顿与胡克之争</span></li>
-              <li><span class="tree-node leaf">宗教与科学的复杂关系</span></li>
-              <li><span class="tree-node app">MKS核心：科学院演进</span></li>
-            </div>
+            <span class="tree-node branch">🔬 科学院演进与科学革命（1543–1687）</span>
+            <ul class="children open" style="list-style:none;">
+              <li style="margin-top:6px;">├ <span class="tree-node leaf">🇬🇧 英国皇家学会(1660)：自下而上+贵族赞助，座右铭"Nullius in verba"</span></li>
+              <li>├ <span class="tree-node leaf">🇫🇷 法国科学院(1666)：自上而下+国王拨款，科学家是国家雇员</span></li>
+              <li>├ <span class="tree-node leaf">☀️ 哥白尼(1543)日心说 → 伽利略(1610)望远镜 → 开普勒行星定律</span></li>
+              <li>├ <span class="tree-node leaf">🍎 牛顿《原理》(1687)：万有引力+运动三定律，经典力学体系完成</span></li>
+              <li>├ <span class="tree-node leaf">⚔️ 牛顿与胡克之争：万有引力平方反比律的优先权恩怨</span></li>
+              <li>├ <span class="tree-node leaf">✝️ 宗教与科学：从修道院庇护到伽利略审判(1633)，非简单对立</span></li>
+              <li style="margin-top:4px;">└ <span class="tree-node app">⭐ MKS核心：科学院演进 —— 英法两种模式奠定现代科学体制</span></li>
+            </ul>
           </li>
+        </ul>
+      </div>
+
+      <!-- Branch 4: 康熙与科学 -->
+      <div class="card" style="padding:14px 16px;margin-bottom:0;">
+        <ul style="list-style:none;padding-left:0;">
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">康熙与科学</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">个人酷爱科学</span></li>
-              <li><span class="tree-node leaf">未建立国家制度</span></li>
-              <li><span class="tree-node leaf">禁止民间私习天文</span></li>
-              <li><span class="tree-node app">MKS核心：康熙与科学</span></li>
-            </div>
+            <span class="tree-node branch">👑 康熙与科学（1654–1722）</span>
+            <ul class="children open" style="list-style:none;">
+              <li style="margin-top:6px;">├ <span class="tree-node leaf">📐 康熙向传教士学习欧几里得几何、天文学，亲自解数学题</span></li>
+              <li>├ <span class="tree-node leaf">🔭 收藏望远镜、钟表等西洋科学仪器，个人兴趣浓厚</span></li>
+              <li>├ <span class="tree-node leaf">🚫 1692年下令"禁止民间私习天文"，将天文视为皇家秘术</span></li>
+              <li>├ <span class="tree-node leaf">⚡ 个人爱好 ≠ 国家制度：未建立科学院，未推广科学教育</span></li>
+              <li>├ <span class="tree-node leaf">👁️ 根本原因："皇权天授"逻辑下天象解释权是统治合法性的来源</span></li>
+              <li style="margin-top:4px;">└ <span class="tree-node app">⭐ MKS核心：康熙与科学 —— "个人爱好vs国家制度"的经典案例</span></li>
+            </ul>
           </li>
+        </ul>
+      </div>
+
+      <!-- Branch 5: 中国科学近代化 -->
+      <div class="card" style="padding:14px 16px;margin-bottom:0;">
+        <ul style="list-style:none;padding-left:0;">
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">中国科学近代化</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">四大发明反思：技术≠科学</span></li>
-              <li><span class="tree-node leaf">留美幼童（1872）</span></li>
-              <li><span class="tree-node leaf">庚子赔款→清华学堂（1911）</span></li>
-              <li><span class="tree-node leaf">天津教案→洋务运动→赛先生</span></li>
-              <li><span class="tree-node leaf">科学思想扎根：方法成为共识</span></li>
-            </div>
+            <span class="tree-node branch">🐉 中国科学近代化之路（1870–1949）</span>
+            <ul class="children open" style="list-style:none;">
+              <li style="margin-top:6px;">├ <span class="tree-node leaf">🔥 天津教案(1870) → 洋务运动(1861-1895)引进西方科技</span></li>
+              <li>├ <span class="tree-node leaf">🎒 留美幼童(1872)：120名12岁少年赴美，詹天佑修京张铁路</span></li>
+              <li>├ <span class="tree-node leaf">🏫 庚子赔款退款(约$1100万) → 清华学堂(1911) → 清华大学</span></li>
+              <li>├ <span class="tree-node leaf">🗣️ 赛先生(1919)：五四运动高举"科学"旗帜，科学成为文化价值</span></li>
+              <li>├ <span class="tree-node leaf">💡 四大发明反思：技术发明(做出来) ≠ 科学思想(为什么这么做)</span></li>
+              <li>├ <span class="tree-node leaf">📚 徐光启×利玛窦 合译《几何原本》(1607)：中西交流的真正开端</span></li>
+              <li>├ <span class="tree-node leaf">💔 1881年留美计划被清廷中断：保守派担心幼童"西化过度"</span></li>
+              <li style="margin-top:4px;">└ <span class="tree-node leaf">🌱 胡适、竺可桢等庚款留学生成为中国现代科学的奠基人</span></li>
+            </ul>
           </li>
-        </div>
-      </li>
-    </ul>
+        </ul>
+      </div>
+
+      <!-- Branch 6: 科学思想扎根 -->
+      <div class="card" style="padding:14px 16px;margin-bottom:0;">
+        <ul style="list-style:none;padding-left:0;">
+          <li>
+            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+            <span class="tree-node branch">🌍 科学思想扎根：从方法到共识</span>
+            <ul class="children open" style="list-style:none;">
+              <li style="margin-top:6px;">├ <span class="tree-node leaf">🧪 科学方法作为认知工具：证据 > 权威，可重复 > 单一报告</span></li>
+              <li>├ <span class="tree-node leaf">📊 从"引进技术"(洋务运动)到"内化思维方式"(五四后)的转变</span></li>
+              <li>├ <span class="tree-node leaf">🔄 核心素养：可证伪性 · 统计显著性 · 相关≠因果 · 对照实验</span></li>
+              <li>├ <span class="tree-node leaf">🏆 今天中国科研论文数全球第一，但"重发表轻质量"评价待改进</span></li>
+              <li>├ <span class="tree-node leaf">⚠️ 伪科学仍存：气功治病·酸碱体质 —— 科学素养任重道远</span></li>
+              <li>├ <span class="tree-node leaf">🔗 制度土壤：大学(独立学术空间) → 科学院(同行评议) → 知识产权</span></li>
+              <li style="margin-top:4px;">└ <span class="tree-node leaf">🎯 核心标志：公共讨论中用证据而非权威判断，接受"可能被证明错误"</span></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom summary -->
+    <div style="margin-top:14px;padding:12px 16px;background:rgba(226,176,74,0.04);border:1px dashed rgba(226,176,74,0.2);border-radius:10px;text-align:center;font-size:12px;color:var(--text-dim);">
+      📌 每个分支点击 <b style="color:var(--gold);">[−]/[+]</b> 可折叠 · 带 ⭐ 标记为 <b style="color:var(--gold);">MKS核心概念</b>
+    </div>
   `;
 }
 
