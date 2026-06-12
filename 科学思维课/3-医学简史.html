@@ -397,15 +397,24 @@ body {
 }
 
 /* ===== FLIP CARD ===== */
-.flip-container { max-width: 540px; margin: 24px auto; perspective: 1200px; -webkit-perspective: 1200px; }
+.flip-container { max-width: 540px; margin: 24px auto; }
 .flip-card {
-  position: relative; width: 100%;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
   height: 440px;
+  margin-bottom: 14px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
+  cursor: pointer;
 }
-.flip-card.flipped { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
+.flip-inner.flipped { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
 .flip-front, .flip-back {
   position: absolute; top: 0; left: 0;
   width: 100%; height: 100%;
@@ -417,6 +426,7 @@ body {
   background: var(--card);
   box-shadow: var(--shadow-md);
   overflow-y: auto;
+  overflow-wrap: break-word;
 }
 .flip-back { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
 .flip-container .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
@@ -886,9 +896,11 @@ svg text { font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-seri
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">知识卡片 · 翻转学习</h2>
   <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
   <div class="flip-container">
-    <div class="flip-card" id="flip-card">
-      <div class="flip-front" id="flip-front"></div>
-      <div class="flip-back" id="flip-back"></div>
+    <div class="flip-card">
+      <div class="flip-inner" id="flip-inner">
+        <div class="flip-front" id="flip-front"></div>
+        <div class="flip-back" id="flip-back"></div>
+      </div>
     </div>
     <div class="nav">
       <button onclick="prevCard()">&larr; 上一个</button>
@@ -1164,89 +1176,142 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M0,0 L10,5 L0,10 Z" fill="#0d9488"/>
     </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#d97706"/>
+    </marker>
+    <marker id="arrow-rose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#e11d48"/>
+    </marker>
+    <filter id="shadow1"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="100%" stop-color="#f0fdfa"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="960" height="420" fill="url(#bgGrad)" rx="8"/>
-  <rect x="4" y="4" width="952" height="412" fill="none" stroke="#0d9488" stroke-width="1.5" rx="5" opacity="0.25"/>
+  <rect width="960" height="520" fill="url(#bgGrad)" rx="10"/>
+  <rect x="3" y="3" width="954" height="514" fill="none" stroke="#0d9488" stroke-width="1.5" rx="8" opacity="0.2"/>
 
-  <!-- Title banner -->
-  <rect x="280" y="16" width="400" height="38" rx="4" fill="#1a2744" opacity="0.9"/>
-  <text x="480" y="42" text-anchor="middle" fill="#f8fafc" font-size="17" font-weight="bold" font-family="Georgia,serif">医学进步的五个里程碑</text>
+  <!-- Title -->
+  <rect x="310" y="14" width="340" height="36" rx="6" fill="#1a2744" opacity="0.92"/>
+  <text x="480" y="38" text-anchor="middle" fill="#f8fafc" font-size="16" font-weight="bold" font-family="Georgia,serif">医学简史 · 概念关系图</text>
 
-  <!-- Timeline horizontal line -->
-  <line x1="60" y1="200" x2="900" y2="200" stroke="#0d9488" stroke-width="2.5" stroke-dasharray="8,4" opacity="0.5"/>
+  <!-- ===== CENTER NODE ===== -->
+  <circle cx="480" cy="260" r="42" fill="#0d9488" stroke="#0d9488" stroke-width="1.5" filter="url(#shadow1)"/>
+  <text x="480" y="255" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">疾病</text>
+  <text x="480" y="273" text-anchor="middle" fill="#ccfbf1" font-size="11">与医学</text>
 
-  <!-- ===== Node 1: 放血疗法 ===== -->
-  <circle cx="100" cy="200" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>
-  <text x="100" y="205" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">I</text>
-  <line x1="100" y1="224" x2="100" y2="262" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="15" y="264" width="170" height="56" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="100" y="284" text-anchor="middle" fill="#1a2744" font-size="13" font-weight="bold" font-family="Georgia,serif">放血疗法</text>
-  <text x="100" y="302" text-anchor="middle" fill="#64748b" font-size="10">体液说 · 四液平衡</text>
-  <text x="100" y="316" text-anchor="middle" fill="#d97706" font-size="9">约公元前400年</text>
+  <!-- ===== BRANCH 1: 病原体 (Top-Left) ===== -->
+  <circle cx="200" cy="110" r="32" fill="#e11d48" stroke="#e11d48" stroke-width="1" filter="url(#shadow1)"/>
+  <text x="200" y="106" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">病原体</text>
+  <text x="200" y="122" text-anchor="middle" fill="#fecdd3" font-size="9">与疾病</text>
 
-  <!-- Arrow 1→2 -->
-  <line x1="127" y1="200" x2="213" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+  <!-- Center → 病原体 -->
+  <line x1="443" y1="240" x2="228" y2="130" stroke="#e11d48" stroke-width="2" marker-end="url(#arrow-rose)" opacity="0.5"/>
 
-  <!-- ===== Node 2: 细菌论 ===== -->
-  <circle cx="280" cy="200" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>
-  <text x="280" y="205" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">II</text>
-  <line x1="280" y1="224" x2="280" y2="262" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="188" y="264" width="184" height="56" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="280" y="284" text-anchor="middle" fill="#1a2744" font-size="13" font-weight="bold" font-family="Georgia,serif">细菌致病论</text>
-  <text x="280" y="302" text-anchor="middle" fill="#64748b" font-size="10">巴斯德 · 科赫法则</text>
-  <text x="280" y="316" text-anchor="middle" fill="#d97706" font-size="9">1860s–1880s</text>
+  <!-- Sub-nodes -->
+  <rect x="28" y="160" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="103" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">天花病毒</text>
+  <text x="103" y="196" text-anchor="middle" fill="#64748b" font-size="9">唯一根除的传染病</text>
 
-  <!-- Arrow 2→3 -->
-  <line x1="307" y1="200" x2="395" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+  <rect x="198" y="160" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="273" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">流感病毒</text>
+  <text x="273" y="196" text-anchor="middle" fill="#64748b" font-size="9">抗原漂移·大流行</text>
 
-  <!-- ===== Node 3: 疫苗 - 强调 ===== -->
-  <circle cx="463" cy="200" r="27" fill="#0d9488" stroke="#0d9488" stroke-width="2"/>
-  <text x="463" y="206" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">III</text>
-  <line x1="463" y1="227" x2="463" y2="268" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="363" y="270" width="200" height="62" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
-  <text x="463" y="290" text-anchor="middle" fill="#0d9488" font-size="14" font-weight="bold" font-family="Georgia,serif">疫苗革命</text>
-  <text x="463" y="308" text-anchor="middle" fill="#1a2744" font-size="10">牛痘→灭活→mRNA</text>
-  <text x="463" y="324" text-anchor="middle" fill="#d97706" font-size="9">1796 → 1980 根除天花</text>
+  <rect x="28" y="218" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="103" y="236" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">HIV</text>
+  <text x="103" y="254" text-anchor="middle" fill="#64748b" font-size="9">攻击CD4+T细胞</text>
 
-  <!-- Arrow 3→4 -->
-  <line x1="493" y1="200" x2="578" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+  <rect x="198" y="218" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="273" y="236" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">梅毒螺旋体</text>
+  <text x="273" y="254" text-anchor="middle" fill="#64748b" font-size="9">"伟大的模仿者"</text>
 
-  <!-- ===== Node 4: 抗生素 ===== -->
-  <circle cx="645" cy="200" r="27" fill="#0d9488" stroke="#0d9488" stroke-width="2"/>
-  <text x="645" y="206" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">IV</text>
-  <line x1="645" y1="227" x2="645" y2="268" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="548" y="270" width="194" height="62" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
-  <text x="645" y="290" text-anchor="middle" fill="#0d9488" font-size="14" font-weight="bold" font-family="Georgia,serif">抗生素时代</text>
-  <text x="645" y="308" text-anchor="middle" fill="#1a2744" font-size="10">青霉素 · 弗莱明1928</text>
-  <text x="645" y="324" text-anchor="middle" fill="#d97706" font-size="9">二战期间大规模量产</text>
+  <!-- Branch→sub connectors -->
+  <line x1="175" y1="130" x2="103" y2="158" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <line x1="210" y1="138" x2="273" y2="158" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
 
-  <!-- Arrow 4→5 -->
-  <line x1="675" y1="200" x2="763" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+  <!-- ===== BRANCH 2: 免疫防御 (Top-Right) ===== -->
+  <circle cx="760" cy="110" r="32" fill="#d97706" stroke="#d97706" stroke-width="1" filter="url(#shadow1)"/>
+  <text x="760" y="106" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">免疫</text>
+  <text x="760" y="122" text-anchor="middle" fill="#fef3c7" font-size="9">与防御</text>
 
-  <!-- ===== Node 5: 基因 ===== -->
-  <circle cx="830" cy="200" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>
-  <text x="830" y="205" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">V</text>
-  <line x1="830" y1="224" x2="830" y2="264" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="745" y="266" width="170" height="56" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="830" y="286" text-anchor="middle" fill="#1a2744" font-size="13" font-weight="bold" font-family="Georgia,serif">基因医学</text>
-  <text x="830" y="304" text-anchor="middle" fill="#64748b" font-size="10">基因组 · CRISPR</text>
-  <text x="830" y="318" text-anchor="middle" fill="#d97706" font-size="9">2003 人类基因组计划</text>
+  <!-- Center → 免疫 -->
+  <line x1="517" y1="240" x2="732" y2="130" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-amber)" opacity="0.5"/>
 
-  <!-- Bottom annotation -->
-  <rect x="30" y="358" width="900" height="46" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="480" y="376" text-anchor="middle" fill="#475569" font-size="11" font-style="italic" font-family="Georgia,serif">医学史是人类与疾病博弈的五幕剧——每一幕都代表着科学方法的一次胜利</text>
-  <text x="480" y="394" text-anchor="middle" fill="#d97706" font-size="10" font-family="Georgia,serif">体液说 → 微生物 → 免疫记忆 → 化学武器 → 生命密码</text>
+  <rect x="588" y="160" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="668" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">固有免疫</text>
+  <text x="668" y="196" text-anchor="middle" fill="#64748b" font-size="9">快速非特异·第一道防线</text>
+
+  <rect x="768" y="160" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="848" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">适应性免疫</text>
+  <text x="848" y="196" text-anchor="middle" fill="#64748b" font-size="9">B/T细胞·免疫记忆</text>
+
+  <rect x="680" y="218" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="760" y="236" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">CCR5-Δ32突变</text>
+  <text x="760" y="254" text-anchor="middle" fill="#64748b" font-size="9">天然HIV免疫·精准医疗</text>
+
+  <!-- ===== BRANCH 3: 医学干预 (Bottom-Left) ===== -->
+  <circle cx="200" cy="410" r="32" fill="#0d9488" stroke="#0d9488" stroke-width="1" filter="url(#shadow1)"/>
+  <text x="200" y="406" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">药物</text>
+  <text x="200" y="422" text-anchor="middle" fill="#ccfbf1" font-size="9">与研发</text>
+
+  <!-- Center → 药物 -->
+  <line x1="443" y1="280" x2="228" y2="390" stroke="#0d9488" stroke-width="2" marker-end="url(#arrow-teal)" opacity="0.5"/>
+
+  <rect x="28" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="105" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">疫苗</text>
+  <text x="105" y="376" text-anchor="middle" fill="#64748b" font-size="9">灭活·减毒·mRNA</text>
+
+  <rect x="200" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="278" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">抗生素/抗病毒</text>
+  <text x="278" y="376" text-anchor="middle" fill="#64748b" font-size="9">青霉素→耐药性挑战</text>
+
+  <rect x="100" y="400" width="155" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="178" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">双盲临床实验</text>
+  <text x="178" y="436" text-anchor="middle" fill="#64748b" font-size="9">成功率~10%</text>
+
+  <!-- ===== BRANCH 4: 社会/演化 (Bottom-Right) ===== -->
+  <circle cx="760" cy="410" r="32" fill="#059669" stroke="#059669" stroke-width="1" filter="url(#shadow1)"/>
+  <text x="760" y="406" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">社会</text>
+  <text x="760" y="422" text-anchor="middle" fill="#d1fae5" font-size="9">与演化</text>
+
+  <!-- Center → 社会 -->
+  <line x1="517" y1="280" x2="732" y2="390" stroke="#059669" stroke-width="2" marker-end="url(#arrow-teal)" opacity="0.5"/>
+
+  <rect x="580" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="658" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">癌症的真相</text>
+  <text x="658" y="376" text-anchor="middle" fill="#64748b" font-size="9">累积突变·演化疾病</text>
+
+  <rect x="755" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="832" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">公共卫生</text>
+  <text x="832" y="376" text-anchor="middle" fill="#64748b" font-size="9">近视·文明病·预防</text>
+
+  <rect x="668" y="400" width="155" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#shadow1)"/>
+  <text x="746" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">成瘾脑科学</text>
+  <text x="746" y="436" text-anchor="middle" fill="#64748b" font-size="9">多巴胺奖赏通路劫持</text>
+
+  <!-- Cross-links: 天花 → 疫苗 (dashed) -->
+  <line x1="103" y1="208" x2="105" y2="338" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
+  <text x="94" y="278" fill="#d97706" font-size="8" opacity="0.5">驱动</text>
+
+  <!-- Cross-links: HIV → CCR5 -->
+  <line x1="150" y1="240" x2="682" y2="240" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
+  <text x="400" y="238" fill="#d97706" font-size="8" opacity="0.5">攻克</text>
+
+  <!-- Legend -->
+  <rect x="30" y="464" width="900" height="38" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="60" y="480" fill="#e11d48" font-size="10" font-weight="bold">■ 病原体</text>
+  <text x="160" y="480" fill="#d97706" font-size="10" font-weight="bold">■ 免疫防御</text>
+  <text x="280" y="480" fill="#0d9488" font-size="10" font-weight="bold">■ 药物研发</text>
+  <text x="410" y="480" fill="#059669" font-size="10" font-weight="bold">■ 社会演化</text>
+  <text x="540" y="480" fill="#475569" font-size="10">—— 为主线</text>
+  <text x="670" y="480" fill="#475569" font-size="10">- - 为交叉影响</text>
+  <text x="810" y="480" fill="#64748b" font-size="9" font-style="italic">医学=病原体×免疫×药物×社会</text>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
@@ -1280,7 +1345,7 @@ function renderFlipCard(idx){
     <p style="font-size:13px;"><strong>反例/边界：</strong>${c.counter}</p>
   `;
   document.getElementById('flip-counter').textContent=`${idx+1}/${CONCEPTS.length}`;
-  document.getElementById('flip-card').classList.remove('flipped');
+  document.getElementById('flip-inner').classList.remove('flipped');
   const btn=document.getElementById('mark-learned-btn');
   if(learnedSet.has(c.id)){
     btn.textContent='✓ 已学会';
@@ -1292,7 +1357,7 @@ function renderFlipCard(idx){
 }
 
 function flipCard(){
-  document.getElementById('flip-card').classList.toggle('flipped');
+  document.getElementById('flip-inner').classList.toggle('flipped');
 }
 function prevCard(){flipIndex=(flipIndex-1+CONCEPTS.length)%CONCEPTS.length;renderFlipCard(flipIndex);}
 function nextCard(){flipIndex=(flipIndex+1)%CONCEPTS.length;renderFlipCard(flipIndex);}
@@ -1326,12 +1391,17 @@ function startQuiz(mode){
 
   let qs=[];
   if(mode==='random'){
-    qs=shuffleArray([...QUIZ_DATA]).slice(0,10);
+    const shuffledChoice = shuffleArray([...QUIZ_DATA]).slice(0, 7);
+    const shuffledShort = shuffleArray([...SHORT_ANSWER_QUESTIONS]).slice(0, 3).map((q, i) => ({q: q.q, ans: q.ans, type: 'short', index: i}));
+    qs = shuffleArray([...shuffledChoice, ...shuffledShort]);
   } else {
-    qs=[...QUIZ_DATA];
+    const shortQs = SHORT_ANSWER_QUESTIONS.map((q, i) => ({q: q.q, ans: q.ans, type: 'short', index: i}));
+    qs = shuffleArray([...QUIZ_DATA, ...shortQs]);
   }
   quizState.questions=qs;
-  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  const choiceCount = qs.filter(q => q.type === 'choice').length;
+  const shortCount = qs.filter(q => q.type === 'short').length;
+  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题（${choiceCount}道选择 + ${shortCount}道简答），开始答题！`;
   document.getElementById('quiz-result').style.display='none';
   renderQuizQuestion();
   startQuizTimer();
@@ -1649,10 +1719,8 @@ function updateReviewStats(){
 function renderMindmap(){
   const el=document.getElementById('mindmap');
 
-  // Recursive tree builder: returns clean <li> HTML
   function buildNode(label, cls, kids) {
     let html = '<li>';
-    // Toggle button for branches that have children
     if (kids && kids.length > 0) {
       html += `<span class="tree-toggle" onclick="toggleTree(this)">[−]</span>`;
     }
@@ -1670,40 +1738,124 @@ function renderMindmap(){
 
   el.innerHTML = '<ul class="mindmap-root">'
     + buildNode('⚕ 医学简史：疾病、药物与身体', 'root', [
-        { label: 'MKS核心：天花与免疫', cls: 'branch', children: [
-            { label: '天花：唯一被根除的人类传染病', cls: 'leaf' },
-            { label: '免疫系统：固有免疫 + 适应性免疫互补', cls: 'leaf' },
-            { label: '疫苗原理：利用适应性免疫的记忆功能', cls: 'leaf' },
-            { label: '应用：全球根除战略、牛痘接种', cls: 'app' }
+        // ===== 一、病原体与传染病 =====
+        { label: '一、病原体与传染病', cls: 'branch', children: [
+            { label: '天花病毒', cls: 'branch', children: [
+                { label: '唯一被人类根除的传染病', cls: 'leaf' },
+                { label: '只感染人类，无动物储存库', cls: 'leaf' },
+                { label: '牛痘→疫苗→1980全球根除', cls: 'app' }
+              ]
+            },
+            { label: '流感病毒', cls: 'branch', children: [
+                { label: '抗原漂移：RNA点突变积累→年度疫苗更新', cls: 'leaf' },
+                { label: '抗原转换：基因片段重组→大流行', cls: 'leaf' },
+                { label: '1918西班牙流感：W形死亡曲线', cls: 'leaf' },
+                { label: '细胞因子风暴：年轻人免疫过度反应致死', cls: 'leaf' }
+              ]
+            },
+            { label: 'HIV/AIDS', cls: 'branch', children: [
+                { label: '攻击CD4+T细胞→免疫系统崩溃', cls: 'leaf' },
+                { label: 'CCR5-Δ32突变→天然HIV免疫', cls: 'leaf' },
+                { label: '柏林病人：骨髓移植治愈HIV', cls: 'app' }
+              ]
+            },
+            { label: '梅毒螺旋体', cls: 'branch', children: [
+                { label: '"伟大的模仿者"：症状模拟几十种疾病', cls: 'leaf' },
+                { label: '影响梵高/尼采/莫泊桑→改变艺术史', cls: 'leaf' },
+                { label: '推动婚前筛查+接触追踪制度', cls: 'app' }
+              ]
+            }
           ]
         },
-        { label: 'MKS核心：流感与病毒变异', cls: 'branch', children: [
-            { label: '抗原漂移：RNA复制点突变积累', cls: 'leaf' },
-            { label: '抗原转换：不同毒株基因片段重组', cls: 'leaf' },
-            { label: '1918大流行：W形死亡曲线之谜', cls: 'leaf' },
-            { label: '应用：年度疫苗更新、大流行预警系统', cls: 'app' }
+        // ===== 二、免疫系统与疫苗 =====
+        { label: '二、免疫系统与疫苗', cls: 'branch', children: [
+            { label: '固有免疫', cls: 'branch', children: [
+                { label: '第一道防线：巨噬细胞/NK细胞', cls: 'leaf' },
+                { label: '快速(分钟级)但非特异性', cls: 'leaf' }
+              ]
+            },
+            { label: '适应性免疫', cls: 'branch', children: [
+                { label: 'B细胞产生抗体·T细胞杀伤感染细胞', cls: 'leaf' },
+                { label: '慢(天级)但精确·形成免疫记忆', cls: 'leaf' }
+              ]
+            },
+            { label: '疫苗原理', cls: 'branch', children: [
+                { label: '灭活疫苗：安全·需多次接种+佐剂', cls: 'leaf' },
+                { label: '减毒活疫苗：免疫原性强·有毒力恢复风险', cls: 'leaf' },
+                { label: 'mRNA疫苗：开发快·mRNA不进入细胞核', cls: 'leaf' },
+                { label: '核心：利用适应性免疫的记忆功能', cls: 'app' }
+              ]
+            }
           ]
         },
-        { label: 'MKS核心：癌症与演化', cls: 'branch', children: [
-            { label: '癌症本质：累积突变的演化疾病', cls: 'leaf' },
-            { label: '机制：凋亡逃脱 + 无限增殖失控', cls: 'leaf' },
-            { label: '肺癌：死亡率最高的癌症类型', cls: 'leaf' },
-            { label: '应用：精准靶向药物、早期筛查', cls: 'app' }
+        // ===== 三、药物研发与治疗 =====
+        { label: '三、药物研发与治疗', cls: 'branch', children: [
+            { label: '历史演进', cls: 'branch', children: [
+                { label: '从放血疗法(体液说)→细菌致病论', cls: 'leaf' },
+                { label: '青霉素：弗莱明1928意外发现→二战量产', cls: 'leaf' }
+              ]
+            },
+            { label: '现代药物研发', cls: 'branch', children: [
+                { label: '双盲临床实验：排除安慰剂效应+观察者偏差', cls: 'leaf' },
+                { label: '5000-10000候选化合物→1个上市(~10%)', cls: 'leaf' },
+                { label: '10-15年·>10亿美元·低垂果实已摘完', cls: 'leaf' }
+              ]
+            },
+            { label: '抗生素耐药性', cls: 'branch', children: [
+                { label: '演化逻辑：滥用抗生素→筛选耐药菌株', cls: 'leaf' },
+                { label: '合理使用抗生素的公共卫生意义', cls: 'app' }
+              ]
+            }
           ]
         },
-        { label: '拓展概念', cls: 'branch', children: [
-            { label: '成瘾的脑科学：多巴胺奖赏通路被劫持', cls: 'leaf' },
-            { label: '药物研发：双盲实验与10%成功率', cls: 'leaf' },
-            { label: '梅毒与文明：疾病改变艺术史进程', cls: 'leaf' },
-            { label: 'HIV/AIDS：CCR5突变与柏林病人', cls: 'leaf' },
-            { label: '公共卫生：户外活动时间不足致近视飙升', cls: 'leaf' }
+        // ===== 四、疾病的社会与演化维度 =====
+        { label: '四、疾病的社会与演化维度', cls: 'branch', children: [
+            { label: '癌症的真相', cls: 'branch', children: [
+                { label: '本质：细胞累积突变的演化疾病', cls: 'leaf' },
+                { label: '机制：凋亡逃脱+无限增殖失控', cls: 'leaf' },
+                { label: '肺癌：中国年新发~80万·死亡~65万', cls: 'leaf' },
+                { label: '不是单一疾病→没有"万能抗癌药"', cls: 'app' }
+              ]
+            },
+            { label: '成瘾的脑科学', cls: 'branch', children: [
+                { label: '多巴胺：自然奖赏30-40→成瘾物质2-10倍', cls: 'leaf' },
+                { label: '青少年前额叶未成熟(25岁)→冲动控制弱', cls: 'leaf' },
+                { label: '成瘾≠意志力差→需要医学干预', cls: 'app' }
+              ]
+            },
+            { label: '公共卫生视角', cls: 'branch', children: [
+                { label: '近视飙升：户外<1h/天→眼轴过度增长', cls: 'leaf' },
+                { label: '日光→视网膜多巴胺→抑制眼轴增长', cls: 'leaf' },
+                { label: '新加坡政策：2h户外→近视率80%→40%', cls: 'app' },
+                { label: '清洁饮用水→增加寿命~30年(>任何药物)', cls: 'app' }
+              ]
+            }
           ]
         },
-        { label: '科学思维整合', cls: 'branch', children: [
-            { label: '变量分析：识别关键致病因素', cls: 'leaf' },
-            { label: '模型建构：SEIR传播动力学模型', cls: 'leaf' },
-            { label: '证据挖掘：病毒溯源与基因组重建', cls: 'leaf' },
-            { label: '务实判断：大流行应对宁过度勿不足', cls: 'leaf' }
+        // ===== 五、MKS科学思维整合 =====
+        { label: '五、MKS科学思维整合', cls: 'branch', children: [
+            { label: '变量分析', cls: 'branch', children: [
+                { label: '识别关键致病因素vs表面变量', cls: 'leaf' },
+                { label: '近视：关键变量是光照时间而非屏幕时间', cls: 'leaf' },
+                { label: '流感致死：关键变量是宿主免疫反应强度', cls: 'leaf' }
+              ]
+            },
+            { label: '模型建构', cls: 'branch', children: [
+                { label: 'SEIR模型：易感→暴露→感染→恢复', cls: 'leaf' },
+                { label: '费城vs圣路易斯：提前2周干预→死亡减少50%+', cls: 'leaf' }
+              ]
+            },
+            { label: '证据挖掘', cls: 'branch', children: [
+                { label: '1918病毒：2005年从阿拉斯加冻土重建基因组', cls: 'leaf' },
+                { label: '溯源：禽流感起源→美国堪萨斯最早爆发', cls: 'leaf' }
+              ]
+            },
+            { label: '务实判断', cls: 'branch', children: [
+                { label: '大流行应对：宁可过度反应也比反应不足好', cls: 'leaf' },
+                { label: '伪科学识别：双盲实验是唯一可靠标准', cls: 'leaf' },
+                { label: '天花根除的启示：可复制≠可重复', cls: 'app' }
+              ]
+            }
           ]
         }
       ])
@@ -1800,6 +1952,11 @@ renderFlipCard(0);
 renderSocratic();
 renderDecision();
 updateReviewStats();
+
+// Click-to-flip on card itself
+document.getElementById('flip-inner').addEventListener('click', function(){
+  this.classList.toggle('flipped');
+});
 
 // Override quiz submit on choice click
 document.addEventListener('click',function(e){

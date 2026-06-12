@@ -574,7 +574,9 @@ body::before {
 .flip-card {
   position: relative;
   width: 100%;
+  min-height: 340px;
   display: grid;
+  grid-template: 1fr / 1fr;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
@@ -598,6 +600,8 @@ body::before {
 .flip-back {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
+  overflow-y: auto;
+  overflow-wrap: break-word;
 }
 .flip-front h3, .flip-back h3 { font-size: 18px; color: var(--primary); margin-bottom: 12px; font-weight: 700; }
 .flip-front p, .flip-back p { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.8; }
@@ -1361,7 +1365,7 @@ svg text { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-se
     <span class="quiz-timer" id="quiz-timer"></span>
   </div>
   <div class="card">
-    <p style="font-size:14px;color:var(--text-secondary);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
+    <p style="font-size:14px;color:var(--text-secondary);" id="quiz-info">包含20道选择题。点击"随机抽题"开始练习（每次随机10题）。</p>
   </div>
   <div id="quiz-container"></div>
   <div id="quiz-result" style="display:none;" class="card"></div>
@@ -1520,7 +1524,7 @@ const DECISION_ROUNDS = [
 let flipIndex = 0;
 let learnedSet = new Set();
 let wrongBook = [];
-let quizState = {active:false,questions:[],index:0,correct:0,total:0,streak:0,answered:false,selected:-1,shortAnswers:[],mode:'all',startTime:null};
+let quizState = {active:false,questions:[],correct:0,total:0,streak:0,mode:'all',startTime:null,userAnswers:{},_timer:null};
 let examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
 let statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
 
@@ -2078,15 +2082,12 @@ function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.r
 
 function startQuiz(mode){
   quizState.mode=mode;
-  quizState.index=0;
   quizState.correct=0;
   quizState.total=0;
   quizState.streak=0;
-  quizState.answered=false;
-  quizState.selected=-1;
-  quizState.shortAnswers=[];
   quizState.startTime=Date.now();
   quizState.active=true;
+  quizState.userAnswers={};
 
   let qs=[];
   if(mode==='random'){
@@ -2095,123 +2096,127 @@ function startQuiz(mode){
     qs=[...QUIZ_DATA];
   }
   quizState.questions=qs;
-  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，点击选项作答。完成后点击"提交答案"查看结果。`;
   document.getElementById('quiz-result').style.display='none';
-  renderQuizQuestion();
+  renderAllQuizQuestions();
   startQuizTimer();
 }
 
-function renderQuizQuestion(){
+function renderAllQuizQuestions(){
   const container=document.getElementById('quiz-container');
   const qs=quizState.questions;
-  const idx=quizState.index;
-  if(idx>=qs.length){
-    finishQuiz();
-    return;
-  }
-  const q=qs[idx];
-  container.innerHTML='';
-  const card=document.createElement('div');
-  card.className='quiz-card';
-
-  if(q.type==='choice'){
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
-      <p style="font-size:14px;margin-bottom:12px;line-height:1.8;">${q.q}</p>
-      <div class="options" id="quiz-options">
-        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  } else {
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
-      <p style="font-size:14px;margin-bottom:12px;line-height:1.8;">${q.q}</p>
-      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
-      <div style="margin-top:8px;">
-        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  }
-  container.appendChild(card);
-  quizState.answered=false;
-  quizState.selected=-1;
+  let html='';
+  qs.forEach((q,i)=>{
+    if(q.type==='choice'){
+      html+=`<div class="quiz-card" id="qcard${i}">
+        <h3>第 ${i+1}/${qs.length} 题 (选择题)</h3>
+        <p style="font-size:14px;margin-bottom:12px;line-height:1.8;">${q.q}</p>
+        <div class="options">`;
+      q.options.forEach((opt,j)=>{
+        html+=`<div class="option" id="opt${i}_${j}" onclick="selectQuizChoice(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</div>`;
+      });
+      html+=`</div><div class="feedback" id="fb${i}"></div></div>`;
+    } else {
+      html+=`<div class="quiz-card" id="qcard${i}">
+        <h3>第 ${i+1}/${qs.length} 题 (简答题)</h3>
+        <p style="font-size:14px;margin-bottom:12px;line-height:1.8;">${q.q}</p>
+        <textarea class="short-input" id="essay${i}" placeholder="输入你的回答..."></textarea>
+        <div class="feedback" id="fb${i}"></div>
+      </div>`;
+    }
+  });
+  html+=`<div style="text-align:center;margin-top:14px;">
+    <button class="btn btn-warning" onclick="submitAllQuiz()">📩 提交答案</button>
+  </div>`;
+  container.innerHTML=html;
 }
 
-function selectChoice(i){
-  if(quizState.answered) return;
-  const q=quizState.questions[quizState.index];
-  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
-    el.classList.toggle('selected',idx===i);
-  });
-  quizState.selected=i;
-}
-
-function submitChoice(){
-  if(quizState.selected===-1) return;
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
-  const options=document.querySelectorAll('#quiz-options .option');
-  options.forEach((el,idx)=>{
-    if(idx===q.answer) el.classList.add('correct');
-    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
-  });
-  quizState.total++;
-  if(quizState.selected===q.answer){
-    quizState.correct++;
-    quizState.streak++;
-    fb.className='feedback show correct';
+function selectQuizChoice(qIdx,optIdx){
+  if(quizState.userAnswers[qIdx]!==undefined) return;
+  quizState.userAnswers[qIdx]=optIdx;
+  const q=quizState.questions[qIdx];
+  const correctIdx=q.answer;
+  const isCorrect=optIdx===correctIdx;
+  // Highlight all options for this question
+  for(let j=0;j<q.options.length;j++){
+    const el=document.getElementById('opt'+qIdx+'_'+j);
+    if(!el) continue;
+    if(j===optIdx) el.classList.add('selected');
+    if(j===correctIdx) el.classList.add('correct');
+    else if(j===optIdx && !isCorrect) el.classList.add('wrong');
+    el.style.pointerEvents='none';
+  }
+  const fb=document.getElementById('fb'+qIdx);
+  fb.className='feedback show '+(isCorrect?'correct':'wrong');
+  if(isCorrect){
     fb.innerHTML=`<p>✅ 回答正确！${q.explain||''}</p>`;
   } else {
-    quizState.streak=0;
-    fb.className='feedback show wrong';
-    fb.innerHTML=`<p>❌ 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}</p>`;
-    addWrongBook(q.q,q.options[q.answer],q.explain||'');
+    fb.innerHTML=`<p>❌ 回答错误。正确答案是 ${String.fromCharCode(65+correctIdx)}. ${q.options[correctIdx]}<br>${q.explain||''}</p>`;
+    addWrongBook(q.q,q.options[correctIdx],q.explain||'');
   }
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2000);
+  // Update score
+  let correct=0,total=0;
+  quizState.questions.forEach((qi,idx)=>{
+    if(qi.type==='choice'){
+      total++;
+      const ua=quizState.userAnswers[idx];
+      if(ua!==undefined && ua===qi.answer) correct++;
+    }
+  });
+  document.getElementById('quiz-info').textContent=`已答 ${Object.keys(quizState.userAnswers).length} / ${quizState.questions.length} 题 | 正确 ${correct}`;
 }
 
-function submitShortAnswer(){
-  const input=document.getElementById('short-input');
-  const val=input.value.trim();
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
-  quizState.total++;
-  quizState.correct++;
-  fb.className='feedback show correct';
-  fb.innerHTML=`<p>已记录你的回答。</p><p><strong>参考答案：</strong>${q.ans||''}</p>`;
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2500);
-}
-
-function finishQuiz(){
+function submitAllQuiz(){
+  const qs=quizState.questions;
+  let correct=0,total=0;
+  qs.forEach((q,i)=>{
+    if(q.type==='choice'){
+      total++;
+      const ua=quizState.userAnswers[i];
+      if(ua!==undefined && ua===q.answer) correct++;
+      // Lock unanswered questions too
+      if(ua===undefined){
+        for(let j=0;j<q.options.length;j++){
+          const el=document.getElementById('opt'+i+'_'+j);
+          if(!el) continue;
+          if(j===q.answer) el.classList.add('correct');
+          el.style.pointerEvents='none';
+        }
+        const fb=document.getElementById('fb'+i);
+        fb.className='feedback show wrong';
+        fb.innerHTML=`<p>⚠ 未作答。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}</p>`;
+        addWrongBook(q.q,q.options[q.answer],q.explain||'');
+      }
+    } else {
+      // Short answer — record from textarea
+      const ta=document.getElementById('essay'+i);
+      if(ta && ta.value.trim()){
+        total++;
+        correct++;
+        const fb=document.getElementById('fb'+i);
+        fb.className='feedback show correct';
+        fb.innerHTML=`<p>已记录你的回答。</p><p><strong>参考答案：</strong>${q.ans||''}</p>`;
+      }
+    }
+  });
+  quizState.correct=correct;
+  quizState.total=total;
   quizState.active=false;
-  document.getElementById('quiz-container').innerHTML='';
-  const el=document.getElementById('quiz-result');
-  el.style.display='block';
-  const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
-  el.innerHTML=`
-    <h3 style="color:var(--primary);margin-bottom:10px;">答题完成！</h3>
-    <p>正确：${quizState.correct} / ${quizState.total}</p>
-    <p>正确率：${pct}%</p>
-    <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
-    <p>连续答对：${quizState.streak}</p>
-    <button class="btn btn-primary btn-sm" onclick="startQuiz('${quizState.mode}')" style="margin-top:10px;">重新开始</button>
-  `;
-  statsData.quizAnswered+=quizState.total;
-  statsData.accuracy=Math.round(((statsData.accuracy*(statsData.quizAnswered-quizState.total))+(pct*quizState.total))/Math.max(1,statsData.quizAnswered));
-  statsData.streak=Math.max(statsData.streak,quizState.streak);
-  saveState();
   clearInterval(quizState._timer);
   document.getElementById('quiz-timer').textContent='';
+  const el=document.getElementById('quiz-result');
+  el.style.display='block';
+  const pct=total>0?Math.round(correct/total*100):0;
+  el.innerHTML=`
+    <h3 style="color:var(--primary);margin-bottom:10px;">答题完成！</h3>
+    <p>正确：${correct} / ${total}</p>
+    <p>正确率：${pct}%</p>
+    <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
+    <button class="btn btn-primary btn-sm" onclick="startQuiz('${quizState.mode}')" style="margin-top:10px;">重新开始</button>
+  `;
+  statsData.quizAnswered+=total;
+  statsData.accuracy=Math.round(((statsData.accuracy*(statsData.quizAnswered-total))+(pct*total))/Math.max(1,statsData.quizAnswered));
+  saveState();
 }
 
 function startQuizTimer(){
@@ -2227,11 +2232,12 @@ function startQuizTimer(){
 
 function resetQuiz(){
   quizState.active=false;
+  quizState.userAnswers={};
   clearInterval(quizState._timer);
   document.getElementById('quiz-container').innerHTML='';
   document.getElementById('quiz-result').style.display='none';
   document.getElementById('quiz-timer').textContent='';
-  document.getElementById('quiz-info').textContent='包含20道选择题和10道简答题。点击"随机抽题"开始练习。';
+  document.getElementById('quiz-info').textContent='包含20道选择题。点击"随机抽题"开始练习（每次随机10题）。';
 }
 
 function addWrongBook(q,correctAns,explain){
@@ -2410,100 +2416,69 @@ function updateReviewStats(){
 }
 
 // ==================== TAB 5: MINDMAP ====================
+const MINDMAP_TREE = [
+  {label:'识破伪科学与信息鉴别',cls:'root',open:true,children:[
+    {label:'MKS核心01：伪科学识别法',cls:'branch',open:true,children:[
+      {label:'三大特征：不可证伪 / 个人见证 / 术语滥用',cls:'leaf'},
+      {label:'类比：信息领域的"验钞机"——不必懂假钞配方',cls:'leaf'},
+      {label:'案例：尼斯湖水怪照片、星座巴纳姆效应',cls:'leaf'}
+    ]},
+    {label:'MKS核心02：民科心理画像',cls:'branch',open:true,children:[
+      {label:'缺乏同行评议 / 不会证伪自己 / 迫害叙事',cls:'leaf'},
+      {label:'民科 ≠ 业余科学家 —— 本质区别在方法论而非智力',cls:'leaf'},
+      {label:'案例：个人网站推翻相对论的民科',cls:'leaf'}
+    ]},
+    {label:'MKS核心03：泡沫科学',cls:'branch',open:true,children:[
+      {label:'好泡沫(激发研究) vs 坏泡沫(误导公众)',cls:'leaf'},
+      {label:'潜意识理论被过度神化 / 冷聚变争议',cls:'leaf'},
+      {label:'应用：判断新闻中"重大突破"的真实度',cls:'app'}
+    ]},
+    {label:'MKS核心04：严谨测量',cls:'branch',open:true,children:[
+      {label:'从子午线→米原器→光速定义：标准化的进化',cls:'leaf'},
+      {label:'标准化本身就是科学进步的核心驱动力',cls:'leaf'},
+      {label:'应用：认识测量精度与实用精度的平衡',cls:'app'}
+    ]},
+    {label:'六维分析工具箱：科学共识 → 媒体素养',cls:'branch',open:true,children:[
+      {label:'科学共识：冰芯+树轮+卫星+海平面四源汇聚',cls:'leaf'},
+      {label:'三步法：查原始论文 → 看效应大小 → 找利益冲突',cls:'leaf'},
+      {label:'应用：全球变暖争议、刷屏科普文章鉴别',cls:'app'}
+    ]},
+    {label:'六维分析工具箱：神药陷阱 + 相关≠因果 + 双盲',cls:'branch',open:true,children:[
+      {label:'神药陷阱：酵素/葡萄籽/胶原蛋白的共同营销模式',cls:'leaf'},
+      {label:'相关≠因果：冰淇淋销量与溺水、公鸡与日出',cls:'leaf'},
+      {label:'双盲实验：排除安慰剂效应 + 观察者偏差',cls:'leaf'},
+      {label:'应用：保健品鉴别、医学新闻科学阅读',cls:'app'}
+    ]},
+    {label:'六维分析工具箱：谬误辨析',cls:'branch',open:true,children:[
+      {label:'科里奥利力：飓风尺度才显著，马桶可忽略',cls:'leaf'},
+      {label:'QWERTY布局：防止卡键的历史偶然 ≠ 最优设计',cls:'leaf'},
+      {label:'巴纳姆效应：模糊人格描述适配所有人的心理机制',cls:'leaf'}
+    ]}
+  ]}
+];
+
+function buildMindTree(nodes,level){
+  return nodes.map(n=>{
+    if(!n.children){
+      return `<div class="tree-leaf-wrap"><span class="tree-node ${n.cls||'leaf'}">${n.label}</span></div>`;
+    }
+    const open=n.open!==false?' open':'';
+    const cls=n.cls||'branch';
+    const indent=n.cls==='root'?' style="margin-left:0;border-left:none;padding-left:0;"':'';
+    return `<div class="tree-branch">
+      <span class="tree-toggle" onclick="toggleMindNode(this)">${n.open!==false?'[−]':'[+]'}</span>
+      <span class="tree-node ${cls}">${n.label}</span>
+      <div class="children${open}"${indent}>${buildMindTree(n.children,level+1)}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderMindmap(){
   const el=document.getElementById('mindmap');
-  el.innerHTML=`
-    <div class="mindmap-tree">
-      <!-- ROOT -->
-      <div class="tree-root-wrap">
-        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-        <span class="tree-node root">识破伪科学与信息鉴别</span>
-        <div class="children open" style="margin-left:0;border-left:none;padding-left:0;">
-
-        <!-- BRANCH 1: 伪科学识别法 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">MKS核心01：伪科学识别法</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">三大特征：不可证伪 / 个人见证 / 术语滥用</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">类比：信息领域的"验钞机"</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">案例：尼斯湖水怪、星座性格</span></div>
-          </div>
-        </div>
-
-        <!-- BRANCH 2: 民科心理画像 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">MKS核心02：民科心理画像</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">缺乏同行评议 / 不会证伪自己 / 迫害妄想</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">民科≠业余科学家——区别在方法论</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">案例：推翻相对论的民科网站</span></div>
-          </div>
-        </div>
-
-        <!-- BRANCH 3: 泡沫科学 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">MKS核心03：泡沫科学</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">好泡沫（激发研究）vs 坏泡沫（误导公众）</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">潜意识理论 / 冷聚变争议</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node app">应用：判断新闻中的"突破"真实度</span></div>
-          </div>
-        </div>
-
-        <!-- BRANCH 4: 严谨测量 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">MKS核心04：严谨测量</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">从子午线到米原器再到光速定义</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">标准化本身就是科学进步</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node app">应用：认识"测量的精度"概念</span></div>
-          </div>
-        </div>
-
-        <!-- BRANCH 5: 科学共识 + 媒体科学素养 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">科学共识 → 媒体科学素养</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">科学共识：多源独立证据汇聚</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">媒体素养：三步法查原始论文</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node app">应用：全球变暖、刷屏新闻鉴别</span></div>
-          </div>
-        </div>
-
-        <!-- BRANCH 6: 神药陷阱 + 相关≠因果 + 双盲实验 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">神药陷阱 + 相关≠因果 + 双盲实验</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">神药陷阱：酵素/葡萄籽/胶原蛋白共同模式</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">相关≠因果：第三变量驱动虚假相关</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">双盲实验：排除安慰剂+观察者偏差</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node app">应用：保健品鉴别、科学阅读</span></div>
-          </div>
-        </div>
-
-        <!-- BRANCH 7: 谬误辨析 -->
-        <div class="tree-branch">
-          <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-          <span class="tree-node branch">谬误辨析</span>
-          <div class="children open">
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">科里奥利力在马桶尺度可忽略</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">QWERTY不是最优布局而是路径依赖</span></div>
-            <div class="tree-leaf-wrap"><span class="tree-node leaf">巴纳姆效应：模糊描述适配所有人</span></div>
-          </div>
-        </div>
-
-      </div>
-      </div>
-    </div>
-  `;
+  el.innerHTML=`<div class="mindmap-tree">${buildMindTree(MINDMAP_TREE,0)}</div>`;
 }
-function toggleTree(el){
+
+function toggleMindNode(el){
   const parent=el.parentElement;
   const children=parent.querySelector('.children');
   if(!children) return;
@@ -2585,20 +2560,6 @@ renderFlipCard(0);
 renderSocratic();
 renderDecision();
 updateReviewStats();
-
-// Override quiz submit on choice click
-document.addEventListener('click',function(e){
-  const opt=e.target.closest('#quiz-options .option');
-  if(opt && !quizState.answered){
-    submitChoice();
-  }
-});
-
-// Ensure exam timer is cleaned up when tab is hidden
-window.addEventListener('beforeunload',function(){
-  clearInterval(examState.timer);
-  clearInterval(quizState._timer);
-});
 </script>
 </body>
 </html>
