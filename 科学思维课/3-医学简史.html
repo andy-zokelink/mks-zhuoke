@@ -855,6 +855,12 @@ svg text { font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-seri
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">概念关系图</h2>
   <div class="svg-wrap" id="svg-map"></div>
 
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">⚕ 医学演化时间线</h2>
+  <div class="svg-wrap" id="svg-timeline"></div>
+
+  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">&#9651; 疾病·防御·干预 三角动力模型</h2>
+  <div class="svg-wrap" id="svg-triangle"></div>
+
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">边界知识</h2>
   <table class="boundary-table">
     <thead><tr><th style="width:40px;">#</th><th>知识点</th><th>用途说明</th></tr></thead>
@@ -1176,7 +1182,7 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 960 570" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M0,0 L10,5 L0,10 Z" fill="#0d9488"/>
@@ -1187,131 +1193,174 @@ function renderSVGMap(){
     <marker id="arrow-rose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M0,0 L10,5 L0,10 Z" fill="#e11d48"/>
     </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#059669"/>
+    </marker>
     <filter id="shadow1"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
+    <filter id="shadow2"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.18"/></filter>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="100%" stop-color="#f0fdfa"/>
     </linearGradient>
   </defs>
 
-  <rect width="960" height="520" fill="url(#bgGrad)" rx="10"/>
-  <rect x="3" y="3" width="954" height="514" fill="none" stroke="#0d9488" stroke-width="1.5" rx="8" opacity="0.2"/>
+  <rect width="960" height="570" fill="url(#bgGrad)" rx="12"/>
+  <rect x="3" y="3" width="954" height="564" fill="none" stroke="#0d9488" stroke-width="1.5" rx="10" opacity="0.15"/>
+
+  <!-- Background quadrant dividers -->
+  <line x1="480" y1="60" x2="480" y2="500" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="6,4" opacity="0.25"/>
+  <line x1="40" y1="290" x2="920" y2="290" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="6,4" opacity="0.25"/>
 
   <!-- Title -->
-  <rect x="310" y="14" width="340" height="36" rx="6" fill="#1a2744" opacity="0.92"/>
-  <text x="480" y="38" text-anchor="middle" fill="#f8fafc" font-size="16" font-weight="bold" font-family="Georgia,serif">医学简史 · 概念关系图</text>
+  <rect x="270" y="12" width="420" height="38" rx="7" fill="#1a2744" opacity="0.93" filter="url(#shadow1)"/>
+  <text x="480" y="37" text-anchor="middle" fill="#f8fafc" font-size="16" font-weight="bold" font-family="Georgia,serif">医学简史 · 概念关系图</text>
 
   <!-- ===== CENTER NODE ===== -->
-  <circle cx="480" cy="260" r="42" fill="#0d9488" stroke="#0d9488" stroke-width="1.5" filter="url(#shadow1)"/>
-  <text x="480" y="255" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">疾病</text>
-  <text x="480" y="273" text-anchor="middle" fill="#ccfbf1" font-size="11">与医学</text>
+  <circle cx="480" cy="290" r="46" fill="url(#bgGrad)" stroke="#0d9488" stroke-width="2.5" filter="url(#shadow2)"/>
+  <circle cx="480" cy="290" r="40" fill="#0d9488" opacity="0.92"/>
+  <text x="480" y="283" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">疾病</text>
+  <text x="480" y="303" text-anchor="middle" fill="#ccfbf1" font-size="11">与医学</text>
 
   <!-- ===== BRANCH 1: 病原体 (Top-Left) ===== -->
-  <circle cx="200" cy="110" r="32" fill="#e11d48" stroke="#e11d48" stroke-width="1" filter="url(#shadow1)"/>
-  <text x="200" y="106" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">病原体</text>
-  <text x="200" y="122" text-anchor="middle" fill="#fecdd3" font-size="9">与疾病</text>
+  <circle cx="210" cy="110" r="34" fill="#e11d48" stroke="#e11d48" stroke-width="1.5" filter="url(#shadow1)"/>
+  <text x="210" y="106" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">病原体</text>
+  <text x="210" y="123" text-anchor="middle" fill="#fecdd3" font-size="9">与疾病</text>
 
   <!-- Center → 病原体 -->
-  <line x1="443" y1="240" x2="228" y2="130" stroke="#e11d48" stroke-width="2" marker-end="url(#arrow-rose)" opacity="0.5"/>
+  <line x1="438" y1="270" x2="240" y2="130" stroke="#e11d48" stroke-width="2.2" marker-end="url(#arrow-rose)" opacity="0.55"/>
 
-  <!-- Sub-nodes -->
-  <rect x="28" y="160" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="103" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">天花病毒</text>
-  <text x="103" y="196" text-anchor="middle" fill="#64748b" font-size="9">唯一根除的传染病</text>
+  <!-- Sub-nodes Row 1 -->
+  <rect x="22" y="165" width="156" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="100" y="183" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">天花病毒</text>
+  <text x="100" y="201" text-anchor="middle" fill="#64748b" font-size="9">唯一根除的传染病</text>
 
-  <rect x="198" y="160" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="273" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">流感病毒</text>
-  <text x="273" y="196" text-anchor="middle" fill="#64748b" font-size="9">抗原漂移·大流行</text>
+  <rect x="198" y="165" width="156" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="276" y="183" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">流感病毒</text>
+  <text x="276" y="201" text-anchor="middle" fill="#64748b" font-size="9">抗原漂移·大流行</text>
 
-  <rect x="28" y="218" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="103" y="236" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">HIV</text>
-  <text x="103" y="254" text-anchor="middle" fill="#64748b" font-size="9">攻击CD4+T细胞</text>
+  <!-- Sub-nodes Row 2 -->
+  <rect x="22" y="228" width="156" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="100" y="246" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">HIV</text>
+  <text x="100" y="264" text-anchor="middle" fill="#64748b" font-size="9">攻击CD4+T细胞</text>
 
-  <rect x="198" y="218" width="150" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="273" y="236" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">梅毒螺旋体</text>
-  <text x="273" y="254" text-anchor="middle" fill="#64748b" font-size="9">"伟大的模仿者"</text>
+  <rect x="198" y="228" width="156" height="48" rx="8" fill="#fff" stroke="#e11d48" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="276" y="246" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">梅毒螺旋体</text>
+  <text x="276" y="264" text-anchor="middle" fill="#64748b" font-size="9">"伟大的模仿者"</text>
 
   <!-- Branch→sub connectors -->
-  <line x1="175" y1="130" x2="103" y2="158" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
-  <line x1="210" y1="138" x2="273" y2="158" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+  <line x1="185" y1="135" x2="100" y2="163" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="225" y1="140" x2="276" y2="163" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="100" y1="213" x2="100" y2="226" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="276" y1="213" x2="276" y2="226" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
 
   <!-- ===== BRANCH 2: 免疫防御 (Top-Right) ===== -->
-  <circle cx="760" cy="110" r="32" fill="#d97706" stroke="#d97706" stroke-width="1" filter="url(#shadow1)"/>
-  <text x="760" y="106" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">免疫</text>
-  <text x="760" y="122" text-anchor="middle" fill="#fef3c7" font-size="9">与防御</text>
+  <circle cx="750" cy="110" r="34" fill="#d97706" stroke="#d97706" stroke-width="1.5" filter="url(#shadow1)"/>
+  <text x="750" y="106" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">免疫</text>
+  <text x="750" y="123" text-anchor="middle" fill="#fef3c7" font-size="9">与防御</text>
 
   <!-- Center → 免疫 -->
-  <line x1="517" y1="240" x2="732" y2="130" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-amber)" opacity="0.5"/>
+  <line x1="522" y1="270" x2="720" y2="130" stroke="#d97706" stroke-width="2.2" marker-end="url(#arrow-amber)" opacity="0.55"/>
 
-  <rect x="588" y="160" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="668" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">固有免疫</text>
-  <text x="668" y="196" text-anchor="middle" fill="#64748b" font-size="9">快速非特异·第一道防线</text>
+  <rect x="590" y="165" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="670" y="183" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">固有免疫</text>
+  <text x="670" y="201" text-anchor="middle" fill="#64748b" font-size="9">快速非特异·第一道防线</text>
 
-  <rect x="768" y="160" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="848" y="178" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">适应性免疫</text>
-  <text x="848" y="196" text-anchor="middle" fill="#64748b" font-size="9">B/T细胞·免疫记忆</text>
+  <rect x="770" y="165" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="850" y="183" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">适应性免疫</text>
+  <text x="850" y="201" text-anchor="middle" fill="#64748b" font-size="9">B/T细胞·免疫记忆</text>
 
-  <rect x="680" y="218" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="760" y="236" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">CCR5-Δ32突变</text>
-  <text x="760" y="254" text-anchor="middle" fill="#64748b" font-size="9">天然HIV免疫·精准医疗</text>
+  <rect x="680" y="228" width="160" height="48" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="760" y="246" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">CCR5-Δ32突变</text>
+  <text x="760" y="264" text-anchor="middle" fill="#64748b" font-size="9">天然HIV免疫·精准医疗</text>
 
-  <!-- ===== BRANCH 3: 医学干预 (Bottom-Left) ===== -->
-  <circle cx="200" cy="410" r="32" fill="#0d9488" stroke="#0d9488" stroke-width="1" filter="url(#shadow1)"/>
-  <text x="200" y="406" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">药物</text>
-  <text x="200" y="422" text-anchor="middle" fill="#ccfbf1" font-size="9">与研发</text>
+  <!-- Branch→sub connectors -->
+  <line x1="725" y1="135" x2="670" y2="163" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="760" y1="142" x2="850" y2="163" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="670" y1="213" x2="760" y2="226" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="850" y1="213" x2="760" y2="226" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+
+  <!-- ===== BRANCH 3: 药物 (Bottom-Left) ===== -->
+  <circle cx="210" cy="460" r="34" fill="#0d9488" stroke="#0d9488" stroke-width="1.5" filter="url(#shadow1)"/>
+  <text x="210" y="456" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">药物</text>
+  <text x="210" y="473" text-anchor="middle" fill="#ccfbf1" font-size="9">与研发</text>
 
   <!-- Center → 药物 -->
-  <line x1="443" y1="280" x2="228" y2="390" stroke="#0d9488" stroke-width="2" marker-end="url(#arrow-teal)" opacity="0.5"/>
+  <line x1="438" y1="310" x2="240" y2="440" stroke="#0d9488" stroke-width="2.2" marker-end="url(#arrow-teal)" opacity="0.55"/>
 
-  <rect x="28" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="105" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">疫苗</text>
-  <text x="105" y="376" text-anchor="middle" fill="#64748b" font-size="9">灭活·减毒·mRNA</text>
+  <rect x="22" y="400" width="156" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="100" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">疫苗</text>
+  <text x="100" y="436" text-anchor="middle" fill="#64748b" font-size="9">灭活·减毒·mRNA</text>
 
-  <rect x="200" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="278" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">抗生素/抗病毒</text>
-  <text x="278" y="376" text-anchor="middle" fill="#64748b" font-size="9">青霉素→耐药性挑战</text>
+  <rect x="198" y="400" width="156" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="276" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">抗生素/抗病毒</text>
+  <text x="276" y="436" text-anchor="middle" fill="#64748b" font-size="9">青霉素→耐药性挑战</text>
 
-  <rect x="100" y="400" width="155" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="178" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">双盲临床实验</text>
-  <text x="178" y="436" text-anchor="middle" fill="#64748b" font-size="9">成功率~10%</text>
+  <rect x="100" y="462" width="156" height="48" rx="8" fill="#fff" stroke="#0d9488" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="178" y="480" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">双盲临床实验</text>
+  <text x="178" y="498" text-anchor="middle" fill="#64748b" font-size="9">成功率~10%</text>
+
+  <!-- Branch→sub connectors -->
+  <line x1="185" y1="435" x2="100" y2="398" stroke="#0d9488" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="225" y1="440" x2="276" y2="398" stroke="#0d9488" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="100" y1="448" x2="178" y2="460" stroke="#0d9488" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="276" y1="448" x2="178" y2="460" stroke="#0d9488" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
 
   <!-- ===== BRANCH 4: 社会/演化 (Bottom-Right) ===== -->
-  <circle cx="760" cy="410" r="32" fill="#059669" stroke="#059669" stroke-width="1" filter="url(#shadow1)"/>
-  <text x="760" y="406" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">社会</text>
-  <text x="760" y="422" text-anchor="middle" fill="#d1fae5" font-size="9">与演化</text>
+  <circle cx="750" cy="460" r="34" fill="#059669" stroke="#059669" stroke-width="1.5" filter="url(#shadow1)"/>
+  <text x="750" y="456" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">社会</text>
+  <text x="750" y="473" text-anchor="middle" fill="#d1fae5" font-size="9">与演化</text>
 
   <!-- Center → 社会 -->
-  <line x1="517" y1="280" x2="732" y2="390" stroke="#059669" stroke-width="2" marker-end="url(#arrow-teal)" opacity="0.5"/>
+  <line x1="522" y1="310" x2="720" y2="440" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-green)" opacity="0.55"/>
 
-  <rect x="580" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="658" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">癌症的真相</text>
-  <text x="658" y="376" text-anchor="middle" fill="#64748b" font-size="9">累积突变·演化疾病</text>
+  <rect x="590" y="400" width="160" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="670" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">癌症的真相</text>
+  <text x="670" y="436" text-anchor="middle" fill="#64748b" font-size="9">累积突变·演化疾病</text>
 
-  <rect x="755" y="340" width="155" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="832" y="358" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">公共卫生</text>
-  <text x="832" y="376" text-anchor="middle" fill="#64748b" font-size="9">近视·文明病·预防</text>
+  <rect x="770" y="400" width="160" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="850" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">公共卫生</text>
+  <text x="850" y="436" text-anchor="middle" fill="#64748b" font-size="9">近视·文明病·预防</text>
 
-  <rect x="668" y="400" width="155" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#shadow1)"/>
-  <text x="746" y="418" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">成瘾脑科学</text>
-  <text x="746" y="436" text-anchor="middle" fill="#64748b" font-size="9">多巴胺奖赏通路劫持</text>
+  <rect x="680" y="462" width="160" height="48" rx="8" fill="#fff" stroke="#059669" stroke-width="1.3" filter="url(#shadow1)"/>
+  <text x="760" y="480" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">成瘾脑科学</text>
+  <text x="760" y="498" text-anchor="middle" fill="#64748b" font-size="9">多巴胺奖赏通路劫持</text>
 
-  <!-- Cross-links: 天花 → 疫苗 (dashed) -->
-  <line x1="103" y1="208" x2="105" y2="338" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
-  <text x="94" y="278" fill="#d97706" font-size="8" opacity="0.5">驱动</text>
+  <!-- Branch→sub connectors -->
+  <line x1="725" y1="435" x2="670" y2="398" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="760" y1="442" x2="850" y2="398" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="670" y1="448" x2="760" y2="460" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
+  <line x1="850" y1="448" x2="760" y2="460" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>
 
-  <!-- Cross-links: HIV → CCR5 -->
-  <line x1="150" y1="240" x2="682" y2="240" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
-  <text x="400" y="238" fill="#d97706" font-size="8" opacity="0.5">攻克</text>
+  <!-- ===== CROSS-LINKS ===== -->
+  <!-- 天花 → 疫苗: drives vaccine development -->
+  <path d="M 100 276 Q 100 340 100 398" stroke="#d97706" stroke-width="1.3" stroke-dasharray="5,3" fill="none" opacity="0.4" marker-end="url(#arrow-amber)"/>
+  <rect x="92" y="332" width="32" height="16" rx="3" fill="#fef3c7" stroke="#fcd34d" stroke-width="0.5"/>
+  <text x="108" y="344" text-anchor="middle" fill="#b45309" font-size="8" font-weight="bold">驱动</text>
 
-  <!-- Legend -->
-  <rect x="30" y="464" width="900" height="38" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="60" y="480" fill="#e11d48" font-size="10" font-weight="bold">■ 病原体</text>
-  <text x="160" y="480" fill="#d97706" font-size="10" font-weight="bold">■ 免疫防御</text>
-  <text x="280" y="480" fill="#0d9488" font-size="10" font-weight="bold">■ 药物研发</text>
-  <text x="410" y="480" fill="#059669" font-size="10" font-weight="bold">■ 社会演化</text>
-  <text x="540" y="480" fill="#475569" font-size="10">—— 为主线</text>
-  <text x="670" y="480" fill="#475569" font-size="10">- - 为交叉影响</text>
-  <text x="810" y="480" fill="#64748b" font-size="9" font-style="italic">医学=病原体×免疫×药物×社会</text>
+  <!-- HIV → CCR5-Δ32: cross-quadrant breakthrough routed BELOW center -->
+  <path d="M 178 252 Q 330 355 680 252" stroke="#d97706" stroke-width="1.3" stroke-dasharray="5,3" fill="none" opacity="0.4" marker-end="url(#arrow-amber)"/>
+  <rect x="380" y="338" width="32" height="16" rx="3" fill="#fef3c7" stroke="#fcd34d" stroke-width="0.5"/>
+  <text x="396" y="350" text-anchor="middle" fill="#b45309" font-size="8" font-weight="bold">攻克</text>
+
+  <!-- 梅毒 → 公共卫生 -->
+  <path d="M 354 252 Q 480 340 590 424" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.3" marker-end="url(#arrow-amber)"/>
+  <text x="520" y="376" fill="#b45309" font-size="7.5" opacity="0.45" font-style="italic">塑造</text>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="15" y="522" width="930" height="38" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="46" cy="541" r="5" fill="#e11d48"/>
+  <text x="58" y="545" fill="#475569" font-size="10" font-weight="bold">病原体</text>
+  <circle cx="142" cy="541" r="5" fill="#d97706"/>
+  <text x="154" y="545" fill="#475569" font-size="10" font-weight="bold">免疫防御</text>
+  <circle cx="240" cy="541" r="5" fill="#0d9488"/>
+  <text x="252" y="545" fill="#475569" font-size="10" font-weight="bold">药物研发</text>
+  <circle cx="344" cy="541" r="5" fill="#059669"/>
+  <text x="356" y="545" fill="#475569" font-size="10" font-weight="bold">社会演化</text>
+  <line x1="470" y1="541" x2="510" y2="541" stroke="#475569" stroke-width="1.5" opacity="0.5"/>
+  <text x="518" y="545" fill="#64748b" font-size="9">为主线</text>
+  <line x1="590" y1="541" x2="640" y2="541" stroke="#475569" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <text x="648" y="545" fill="#64748b" font-size="9">交叉影响</text>
+  <text x="750" y="545" fill="#94a3b8" font-size="9" font-style="italic">医学 = 病原体 × 免疫 × 药物 × 社会</text>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
@@ -1324,6 +1373,232 @@ function updateProgress(){
   document.getElementById('progress-text').textContent=count>=10?'恭喜！你已掌握所有核心概念！':`已掌握 ${count}/10，继续努力！`;
   statsData.learned=count;
   saveState();
+}
+
+// ==================== CREATIVE DIAGRAM 1: 医学演化时间线 ====================
+function renderTimelineSVG(){
+  const svg=`<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tlBg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fef2f2"/>
+      <stop offset="25%" stop-color="#fffbeb"/>
+      <stop offset="50%" stop-color="#f0fdfa"/>
+      <stop offset="75%" stop-color="#ecfdf5"/>
+      <stop offset="100%" stop-color="#eff6ff"/>
+    </linearGradient>
+    <filter id="tlShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+    <linearGradient id="tlLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e11d48"/>
+      <stop offset="30%" stop-color="#d97706"/>
+      <stop offset="55%" stop-color="#0d9488"/>
+      <stop offset="80%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="420" fill="url(#tlBg)" rx="12"/>
+  <rect x="3" y="3" width="954" height="414" fill="none" stroke="#cbd5e1" stroke-width="1" rx="10" opacity="0.3"/>
+
+  <!-- Title -->
+  <rect x="300" y="14" width="360" height="36" rx="7" fill="#1a2744" opacity="0.93" filter="url(#tlShadow)"/>
+  <text x="480" y="38" text-anchor="middle" fill="#f8fafc" font-size="16" font-weight="bold" font-family="Georgia,serif">⚕ 从蒙昧到精准：医学演化时间线</text>
+
+  <!-- Central Timeline Arc -->
+  <path d="M 40 230 Q 480 80 920 230" stroke="url(#tlLine)" stroke-width="3.5" fill="none" opacity="0.7" filter="url(#tlShadow)"/>
+  <path d="M 40 230 Q 480 80 920 230" stroke="url(#tlLine)" stroke-width="1" fill="none" opacity="0.25" stroke-dasharray="4,8"/>
+
+  <!-- === ERA 1: 古代医学 (~400BC-1600) === -->
+  <!-- Node -->
+  <circle cx="130" cy="195" r="28" fill="#e11d48" stroke="#fff" stroke-width="3" filter="url(#tlShadow)"/>
+  <text x="130" y="191" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">古代</text>
+  <text x="130" y="205" text-anchor="middle" fill="#fecdd3" font-size="8">医学</text>
+
+  <!-- Card below -->
+  <rect x="42" y="245" width="176" height="100" rx="9" fill="#fff" stroke="#e11d48" stroke-width="1.2" filter="url(#tlShadow)"/>
+  <text x="130" y="268" text-anchor="middle" fill="#1a2744" font-size="12" font-weight="bold">体液学说时代</text>
+  <text x="130" y="288" text-anchor="middle" fill="#64748b" font-size="9">希波克拉底·四体液平衡</text>
+  <text x="130" y="305" text-anchor="middle" fill="#64748b" font-size="9">放血疗法·柳树皮止痛</text>
+  <text x="130" y="326" text-anchor="middle" fill="#94a3b8" font-size="8" font-style="italic">~公元前400年–1600年</text>
+
+  <!-- Connector -->
+  <line x1="130" y1="223" x2="130" y2="243" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
+
+  <!-- === ERA 2: 启蒙时代 (1700-1850) === -->
+  <circle cx="340" cy="158" r="28" fill="#d97706" stroke="#fff" stroke-width="3" filter="url(#tlShadow)"/>
+  <text x="340" y="154" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">启蒙</text>
+  <text x="340" y="168" text-anchor="middle" fill="#fef3c7" font-size="8">时代</text>
+
+  <rect x="250" y="210" width="180" height="100" rx="9" fill="#fff" stroke="#d97706" stroke-width="1.2" filter="url(#tlShadow)"/>
+  <text x="340" y="233" text-anchor="middle" fill="#1a2744" font-size="12" font-weight="bold">疫苗接种诞生</text>
+  <text x="340" y="253" text-anchor="middle" fill="#64748b" font-size="9">1796年 琴纳·牛痘预防天花</text>
+  <text x="340" y="270" text-anchor="middle" fill="#64748b" font-size="9">天花→人类第一个疫苗</text>
+  <text x="340" y="291" text-anchor="middle" fill="#94a3b8" font-size="8" font-style="italic">~1700年–1850年</text>
+
+  <line x1="340" y1="186" x2="340" y2="208" stroke="#d97706" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
+
+  <!-- === ERA 3: 微生物革命 (1850-1928) === -->
+  <circle cx="550" cy="138" r="28" fill="#0d9488" stroke="#fff" stroke-width="3" filter="url(#tlShadow)"/>
+  <text x="550" y="134" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">微生物</text>
+  <text x="550" y="148" text-anchor="middle" fill="#ccfbf1" font-size="8">革命</text>
+
+  <rect x="458" y="190" width="184" height="100" rx="9" fill="#fff" stroke="#0d9488" stroke-width="1.2" filter="url(#tlShadow)"/>
+  <text x="550" y="213" text-anchor="middle" fill="#1a2744" font-size="12" font-weight="bold">病原体被发现</text>
+  <text x="550" y="233" text-anchor="middle" fill="#64748b" font-size="9">巴斯德·微生物致病理论</text>
+  <text x="550" y="250" text-anchor="middle" fill="#64748b" font-size="9">科赫法则·确定病原体</text>
+  <text x="550" y="271" text-anchor="middle" fill="#94a3b8" font-size="8" font-style="italic">~1850年–1928年</text>
+
+  <line x1="550" y1="166" x2="550" y2="188" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
+
+  <!-- === ERA 4: 抗生素时代 (1928-1980) === -->
+  <circle cx="740" cy="158" r="28" fill="#059669" stroke="#fff" stroke-width="3" filter="url(#tlShadow)"/>
+  <text x="740" y="154" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">抗生素</text>
+  <text x="740" y="168" text-anchor="middle" fill="#d1fae5" font-size="8">时代</text>
+
+  <rect x="648" y="210" width="184" height="100" rx="9" fill="#fff" stroke="#059669" stroke-width="1.2" filter="url(#tlShadow)"/>
+  <text x="740" y="233" text-anchor="middle" fill="#1a2744" font-size="12" font-weight="bold">化学治疗崛起</text>
+  <text x="740" y="253" text-anchor="middle" fill="#64748b" font-size="9">1928年 弗莱明·青霉素发现</text>
+  <text x="740" y="270" text-anchor="middle" fill="#64748b" font-size="9">双盲实验标准化·疫苗普及</text>
+  <text x="740" y="291" text-anchor="middle" fill="#94a3b8" font-size="8" font-style="italic">~1928年–1980年</text>
+
+  <line x1="740" y1="186" x2="740" y2="208" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
+
+  <!-- === ERA 5: 精准医疗 (1980-present) === -->
+  <circle cx="890" cy="195" r="28" fill="#3b82f6" stroke="#fff" stroke-width="3" filter="url(#tlShadow)"/>
+  <text x="890" y="191" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">精准</text>
+  <text x="890" y="205" text-anchor="middle" fill="#dbeafe" font-size="8">医疗</text>
+
+  <rect x="798" y="245" width="145" height="100" rx="9" fill="#fff" stroke="#3b82f6" stroke-width="1.2" filter="url(#tlShadow)"/>
+  <text x="870" y="268" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="bold">基因·mRNA时代</text>
+  <text x="870" y="288" text-anchor="middle" fill="#64748b" font-size="9">基因编辑CRISPR</text>
+  <text x="870" y="305" text-anchor="middle" fill="#64748b" font-size="9">mRNA疫苗·精准医疗</text>
+  <text x="870" y="326" text-anchor="middle" fill="#94a3b8" font-size="8" font-style="italic">~1980年–至今</text>
+
+  <line x1="890" y1="223" x2="870" y2="243" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
+
+  <!-- Era connectors along arc -->
+  <path d="M 158 195 Q 240 100 340 158" stroke="#e11d48" stroke-width="1" fill="none" opacity="0.25" stroke-dasharray="3,3"/>
+  <path d="M 340 158 Q 440 80 550 138" stroke="#d97706" stroke-width="1" fill="none" opacity="0.25" stroke-dasharray="3,3"/>
+  <path d="M 550 138 Q 640 80 740 158" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.25" stroke-dasharray="3,3"/>
+  <path d="M 740 158 Q 820 120 890 195" stroke="#059669" stroke-width="1" fill="none" opacity="0.25" stroke-dasharray="3,3"/>
+
+  <!-- Bottom insight label -->
+  <rect x="200" y="368" width="560" height="34" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="480" y="390" text-anchor="middle" fill="#475569" font-size="11" font-style="italic">
+    从盲目试错→理性实证→精准靶向：医学的每一次跃迁，都是科学思维的胜利
+  </text>
+</svg>`;
+  document.getElementById('svg-timeline').innerHTML=svg;
+}
+
+// ==================== CREATIVE DIAGRAM 2: 疾病·防御·干预 三角动力模型 ====================
+function renderTriangleSVG(){
+  const svg=`<svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="triShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+    <filter id="triShadowLg"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-opacity="0.18"/></filter>
+    <radialGradient id="triCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a2744"/>
+      <stop offset="100%" stop-color="#0f1b33"/>
+    </radialGradient>
+    <marker id="tri-arrow-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#e11d48"/>
+    </marker>
+    <marker id="tri-arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#d97706"/>
+    </marker>
+    <marker id="tri-arrow-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="500" fill="#ffffff" rx="12"/>
+  <rect x="3" y="3" width="954" height="494" fill="none" stroke="#cbd5e1" stroke-width="1" rx="10" opacity="0.3"/>
+
+  <!-- Title -->
+  <rect x="270" y="14" width="420" height="36" rx="7" fill="#1a2744" opacity="0.93" filter="url(#triShadow)"/>
+  <text x="480" y="38" text-anchor="middle" fill="#f8fafc" font-size="16" font-weight="bold" font-family="Georgia,serif">△ 疾病·防御·干预：三角动力模型</text>
+
+  <!-- === Background Triangle outline === -->
+  <polygon points="480,68 120,380 840,380" fill="none" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="8,5" opacity="0.5"/>
+
+  <!-- === TOP VERTEX: 病原体/疾病 (Attack) === -->
+  <circle cx="480" cy="78" r="36" fill="#e11d48" stroke="#fff" stroke-width="3" filter="url(#triShadowLg)"/>
+  <text x="480" y="72" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">病原体</text>
+  <text x="480" y="90" text-anchor="middle" fill="#fecdd3" font-size="9">&amp; 疾病</text>
+
+  <!-- Attack sub-nodes -->
+  <rect x="380" y="130" width="80" height="32" rx="6" fill="#fff1f2" stroke="#fda4af" stroke-width="1"/>
+  <text x="420" y="150" text-anchor="middle" fill="#be123c" font-size="9" font-weight="bold">病毒</text>
+
+  <rect x="480" y="130" width="80" height="32" rx="6" fill="#fff1f2" stroke="#fda4af" stroke-width="1"/>
+  <text x="520" y="150" text-anchor="middle" fill="#be123c" font-size="9" font-weight="bold">细菌</text>
+
+  <rect x="430" y="172" width="100" height="32" rx="6" fill="#fff1f2" stroke="#fda4af" stroke-width="1"/>
+  <text x="480" y="192" text-anchor="middle" fill="#be123c" font-size="9" font-weight="bold">癌症·突变</text>
+
+  <!-- === LEFT VERTEX: 免疫系统 (Defense) === -->
+  <circle cx="120" cy="380" r="36" fill="#d97706" stroke="#fff" stroke-width="3" filter="url(#triShadowLg)"/>
+  <text x="120" y="374" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">免疫</text>
+  <text x="120" y="392" text-anchor="middle" fill="#fef3c7" font-size="9">防御系统</text>
+
+  <!-- Defense sub-nodes -->
+  <rect x="30" y="310" width="90" height="32" rx="6" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+  <text x="75" y="330" text-anchor="middle" fill="#b45309" font-size="9" font-weight="bold">固有免疫</text>
+
+  <rect x="135" y="310" width="90" height="32" rx="6" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+  <text x="180" y="330" text-anchor="middle" fill="#b45309" font-size="9" font-weight="bold">适应性免疫</text>
+
+  <rect x="82" y="425" width="120" height="32" rx="6" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+  <text x="142" y="445" text-anchor="middle" fill="#b45309" font-size="9" font-weight="bold">CCR5-Δ32天然免疫</text>
+
+  <!-- === RIGHT VERTEX: 医学干预 (Intervention) === -->
+  <circle cx="840" cy="380" r="36" fill="#0d9488" stroke="#fff" stroke-width="3" filter="url(#triShadowLg)"/>
+  <text x="840" y="374" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">医学</text>
+  <text x="840" y="392" text-anchor="middle" fill="#ccfbf1" font-size="9">干预手段</text>
+
+  <!-- Intervention sub-nodes -->
+  <rect x="745" y="310" width="95" height="32" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
+  <text x="792" y="330" text-anchor="middle" fill="#0f766e" font-size="9" font-weight="bold">疫苗·药物</text>
+
+  <rect x="855" y="310" width="95" height="32" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
+  <text x="902" y="330" text-anchor="middle" fill="#0f766e" font-size="9" font-weight="bold">双盲实验</text>
+
+  <rect x="800" y="425" width="110" height="32" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
+  <text x="855" y="445" text-anchor="middle" fill="#0f766e" font-size="9" font-weight="bold">公共卫生</text>
+
+  <!-- === DYNAMIC ARROWS (triangle edges) === -->
+  <!-- Attack → Defense: pathogen challenges immune system -->
+  <path d="M 456 110 Q 260 180 150 346" stroke="#e11d48" stroke-width="2.5" fill="none" opacity="0.55" marker-end="url(#tri-arrow-r)"/>
+  <rect x="280" y="205" width="60" height="20" rx="4" fill="#fff1f2" stroke="#fda4af" stroke-width="0.8"/>
+  <text x="310" y="219" text-anchor="middle" fill="#be123c" font-size="8" font-weight="bold">入侵攻击</text>
+
+  <!-- Defense → Intervention: immunity knowledge feeds drug/vaccine development -->
+  <path d="M 150 358 Q 350 400 804 356" stroke="#d97706" stroke-width="2.5" fill="none" opacity="0.55" marker-end="url(#tri-arrow-b)"/>
+  <rect x="420" y="388" width="72" height="20" rx="4" fill="#fffbeb" stroke="#fcd34d" stroke-width="0.8"/>
+  <text x="456" y="402" text-anchor="middle" fill="#b45309" font-size="8" font-weight="bold">免疫原理→药物</text>
+
+  <!-- Intervention → Attack: medical intervention fights pathogens -->
+  <path d="M 816 348 Q 660 180 504 110" stroke="#0d9488" stroke-width="2.5" fill="none" opacity="0.55" marker-end="url(#tri-arrow-g)"/>
+  <rect x="640" y="200" width="72" height="20" rx="4" fill="#f0fdfa" stroke="#5eead4" stroke-width="0.8"/>
+  <text x="676" y="214" text-anchor="middle" fill="#0f766e" font-size="8" font-weight="bold">药物对抗病原</text>
+
+  <!-- === CENTER: Core Insight === -->
+  <circle cx="480" cy="280" r="38" fill="url(#triCenter)" stroke="#fff" stroke-width="3" filter="url(#triShadow)"/>
+  <text x="480" y="272" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">演化</text>
+  <text x="480" y="290" text-anchor="middle" fill="#94a3b8" font-size="9">三角动力</text>
+  <text x="480" y="305" text-anchor="middle" fill="#64748b" font-size="7">共进化</text>
+
+  <!-- === Outer ring: Society/Evolution context === -->
+  <ellipse cx="480" cy="290" rx="370" ry="175" fill="none" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="4,6" opacity="0.35"/>
+  <text x="480" y="120" text-anchor="middle" fill="#94a3b8" font-size="8" font-style="italic">社会·环境·演化 — 外部约束与驱动力</text>
+
+  <!-- Bottom insight -->
+  <rect x="160" y="458" width="640" height="32" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="480" y="480" text-anchor="middle" fill="#475569" font-size="11" font-style="italic">
+    疾病的本质是三方博弈：病原体进攻 × 免疫系统防御 × 医学干预反制 — 在演化中不断升级
+  </text>
+</svg>`;
+  document.getElementById('svg-triangle').innerHTML=svg;
 }
 
 // ==================== TAB 1: FLIP CARDS ====================
@@ -1947,6 +2222,8 @@ function selectDecision(ri,ci){
 loadState();
 renderConcepts();
 renderSVGMap();
+renderTimelineSVG();
+renderTriangleSVG();
 updateProgress();
 renderFlipCard(0);
 renderSocratic();
