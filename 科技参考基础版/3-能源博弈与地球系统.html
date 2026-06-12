@@ -3,1423 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>能源博弈与地球系统 · 最小知识集</title>
+<title>能源博弈与地球系统 · 卓克基础科技参考一</title>
 <style>
-/* ============================================================
-   能源博弈与地球系统 · Energy Games and Earth Systems
-   设计理念：大地炎黄 — 熔岩般的红金调性，地球的温暖与紧迫
-   每一个概念都是一场能源博弈的认知武器
-   ============================================================ */
-:root {
-  --bg:#fdf6ec;
-  --card:#fffaf2;
-  --accent:#c0392b;
-  --accent-dark:#9b2c1f;
-  --accent-light:#fce4e4;
-  --accent2:#d4a574;
-  --accent2-dark:#b8860b;
-  --accent2-light:#fef5e7;
-  --text:#3d2f2f;
-  --text2:#6b5555;
-  --text-muted:#9a8585;
-  --border:#e8d5c0;
-  --border-solid:#d4bfa0;
-  --gold:#b8860b;
-  --slate:#2d1f1f;
-  --steel:#4a3535;
-  --cream:#fdf6ec;
-  --parchment:#f8efe0;
-  --shadow-sm:0 1px 3px rgba(61,47,47,0.06);
-  --shadow-md:0 4px 16px rgba(61,47,47,0.08);
-  --shadow-lg:0 8px 32px rgba(61,47,47,0.10);
-  --shadow-accent:0 4px 20px rgba(192,57,43,0.15);
-  --radius-sm:6px;
-  --radius:10px;
-  --radius-lg:16px;
-  --radius-xl:20px;
-  --font-display:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Serif SC",serif;
-  --font-body:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
-}
-
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  background-image:
-    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L30 60 M0 30 L60 30' stroke='%23e8d5c0' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E");
-  background-size: 60px 60px;
-  color: var(--text);
-  line-height: 1.75;
-  padding-bottom: 80px;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ===== TOP BAR ===== */
-.top-bar {
-  position: sticky; top: 0; z-index: 200;
-  background: linear-gradient(160deg, #2d1510 0%, #3d1f18 40%, #4a2518 100%);
-  color: #f8e8d8; padding: 16px 28px;
-  display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid rgba(212,165,116,0.25);
-  box-shadow: 0 2px 20px rgba(30,12,8,0.3);
-}
-.top-bar::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent2) 20%, var(--gold) 50%, var(--accent2) 80%, transparent);
-  opacity: 0.6;
-}
-.top-bar h1 {
-  font-size: 21px; font-weight: 700; letter-spacing: 0.04em; color: #f8e8d8;
-}
-.top-bar h1::before { content: '\26A1 '; font-size: 20px; }
-.top-bar a {
-  color: #c9a884; text-decoration: none; font-size: 13px; letter-spacing: 0.02em;
-  transition: color .25s;
-}
-.top-bar a:hover { color: var(--gold); }
-
-/* ===== TAB BAR ===== */
-.tab-bar {
-  position: sticky; top: 56px; z-index: 199;
-  background: linear-gradient(180deg, #3d1f18 0%, #2d1510 100%);
-  border-bottom: 1px solid rgba(212,165,116,0.2);
-  display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 16px;
-  box-shadow: 0 2px 12px rgba(30,12,8,0.25);
-}
-.tab-btn {
-  padding: 7px 16px; border: 1px solid rgba(200,170,130,0.2); border-radius: 22px;
-  background: rgba(255,255,255,0.03); color: rgba(248,232,216,0.7);
-  cursor: pointer; font-size: 13px; font-family: var(--font-body);
-  letter-spacing: 0.01em; transition: all .25s cubic-bezier(0.4,0,0.2,1);
-  white-space: nowrap; position: relative;
-}
-.tab-btn:hover {
-  background: rgba(192,57,43,0.12); color: #f8e8d8;
-  border-color: rgba(192,57,43,0.35);
-}
-.tab-btn.active {
-  background: var(--accent); color: #fff; border-color: var(--accent);
-  font-weight: 600; box-shadow: 0 2px 12px rgba(192,57,43,0.35);
-  transform: translateY(-1px);
-}
-.tab-content { max-width: 1120px; margin: 0 auto; padding: 28px 18px; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; animation: fadeSlideIn .4s ease; }
-
-@keyframes fadeSlideIn {
-  from { opacity:0; transform:translateY(8px); }
-  to { opacity:1; transform:translateY(0); }
-}
-
-/* ===== CARDS ===== */
-.card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 22px; margin-bottom: 16px;
-  box-shadow: var(--shadow-sm); transition: box-shadow .3s;
-}
-.card:hover { box-shadow: var(--shadow-md); }
-.card h2 { font-size: 18px; margin-bottom: 12px; color: var(--slate); font-weight: 700; }
-.card h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); font-weight: 600; }
-.card p { font-size: 14px; color: var(--text2); margin-bottom: 6px; line-height: 1.7; }
-
-/* ===== CORE GOAL HERO ===== */
-.core-goal {
-  background: linear-gradient(155deg, var(--card) 0%, #faf5eb 40%, #f5ebd8 100%);
-  border: 1px solid var(--border-solid); border-left: 6px solid var(--accent);
-  border-radius: var(--radius-lg); padding: 36px 28px; margin-bottom: 28px;
-  text-align: center; position: relative; box-shadow: var(--shadow-md); overflow: hidden;
-}
-.core-goal::before {
-  content: ''; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(192,57,43,0.06) 0%, transparent 70%);
-}
-.core-goal h2 {
-  color: var(--slate); font-size: 24px; font-weight: 700; letter-spacing: 0.03em;
-  position: relative; z-index: 1;
-}
-.core-goal h2::before { content: '\26A1 '; font-size: 28px; }
-.core-goal p {
-  font-size: 15px; color: var(--text2); max-width: 700px; margin: 10px auto 0;
-  position: relative; z-index: 1; line-height: 1.8;
-}
-
-/* ===== CONCEPT GRID ===== */
-.concept-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 14px; margin-bottom: 28px;
-}
-.concept-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-left: 4px solid var(--accent2); border-radius: var(--radius);
-  padding: 16px 18px; cursor: pointer;
-  transition: all .25s cubic-bezier(0.4,0,0.2,1);
-  position: relative; box-shadow: var(--shadow-sm);
-}
-.concept-card:hover {
-  border-color: var(--accent); box-shadow: var(--shadow-accent);
-  transform: translateY(-2px);
-}
-.concept-card .label {
-  display: inline-block; background: var(--steel); color: #fff;
-  font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 10px;
-  margin-bottom: 8px; letter-spacing: 0.04em; text-transform: uppercase;
-}
-.concept-card .label.mks {
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  box-shadow: 0 1px 4px rgba(192,57,43,0.3);
-}
-.concept-card h3 { font-size: 15px; margin-bottom: 5px; color: var(--text); font-weight: 700; }
-.concept-card .def { font-size: 13px; color: var(--text2); line-height: 1.65; }
-.concept-card .extra {
-  display: none; margin-top: 10px; font-size: 13px; color: var(--text2);
-  border-top: 1px dashed var(--border-solid); padding-top: 10px;
-  animation: expandIn .3s ease;
-}
-@keyframes expandIn {
-  from { opacity:0; max-height:0; }
-  to { opacity:1; max-height:600px; }
-}
-.concept-card .extra.show { display: block; }
-.concept-card .extra strong { color: var(--slate); font-weight: 700; }
-
-/* ===== MKS GRID ===== */
-.mks-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 14px; margin-bottom: 28px;
-}
-.mks-core {
-  background: linear-gradient(160deg, var(--card) 0%, #faf5eb 100%);
-  border: 2px solid var(--accent); border-radius: var(--radius);
-  padding: 20px 16px; text-align: center; box-shadow: var(--shadow-sm);
-  transition: all .3s; position: relative;
-}
-.mks-core:hover {
-  box-shadow: var(--shadow-accent); transform: translateY(-3px);
-  border-color: var(--accent-dark);
-}
-.mks-core .icon { font-size: 32px; margin-bottom: 6px; display: block; }
-.mks-core h3 { font-size: 15px; color: var(--slate); font-weight: 700; margin-bottom: 4px; }
-.mks-core p { font-size: 13px; color: var(--text2); line-height: 1.5; }
-
-/* ===== SVG WRAP ===== */
-.svg-wrap {
-  margin: 24px 0; text-align: center; background: var(--card);
-  border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 12px; box-shadow: var(--shadow-sm);
-}
-.svg-wrap svg { max-width: 100%; height: auto; border-radius: var(--radius-sm); }
-
-/* ===== BOUNDARY TABLE ===== */
-.boundary-table {
-  width: 100%; border-collapse: separate; border-spacing: 0;
-  margin-bottom: 28px; border-radius: var(--radius); overflow: hidden;
-  box-shadow: var(--shadow-sm); border: 1px solid var(--border);
-}
-.boundary-table th, .boundary-table td {
-  border-bottom: 1px solid var(--border); padding: 12px 14px;
-  text-align: left; font-size: 13px;
-}
-.boundary-table th {
-  background: var(--slate); color: #f8e8d8; font-weight: 600; font-size: 12px;
-  letter-spacing: 0.03em; text-transform: uppercase;
-}
-.boundary-table tr:last-child td { border-bottom: none; }
-.boundary-table tbody tr { transition: background .2s; }
-.boundary-table tbody tr:nth-child(even) { background: #fdf9f3; }
-.boundary-table tbody tr:hover { background: #fef5e7; }
-
-/* ===== LEARNING PATH ===== */
-.learning-path {
-  display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 28px;
-}
-.learning-path .step {
-  flex: 1 1 180px; min-width: 160px; position: relative;
-  background: var(--card); border: 1px solid var(--border);
-  border-top: 4px solid var(--steel); padding: 24px 14px 16px;
-  text-align: center; transition: all .3s; box-shadow: var(--shadow-sm);
-}
-.learning-path .step:hover {
-  border-top-color: var(--accent); box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-.learning-path .step::before {
-  content: attr(data-step); position: absolute; top: -15px; left: 50%;
-  transform: translateX(-50%); width: 30px; height: 30px;
-  background: var(--steel); color: #fff; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700;
-  box-shadow: 0 2px 8px rgba(61,47,47,0.2); transition: background .3s;
-}
-.learning-path .step:hover::before { background: var(--accent); }
-.learning-path .step::after {
-  content: '\2192'; position: absolute; right: -14px; top: 50%;
-  transform: translateY(-50%); font-size: 20px; color: var(--accent);
-  font-weight: bold; z-index: 1;
-}
-.learning-path .step:last-child::after { display: none; }
-.learning-path .step h3 { font-size: 14px; margin-bottom: 4px; color: var(--slate); font-weight: 700; }
-.learning-path .step p { font-size: 12px; color: var(--text2); line-height: 1.5; }
-
-/* ===== PROGRESS ===== */
-.progress-bar {
-  height: 8px; background: var(--border); border-radius: 4px;
-  margin: 8px 0; overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 4px; transition: width .6s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 0 8px rgba(192,57,43,0.3);
-}
-
-/* ===== FLIP CARD ===== */
-.flip-container { -webkit-perspective: 1200px; perspective: 1200px; max-width: 520px; margin: 24px auto; }
-.flip-card {
-  position: relative; width: 100%; min-height: 360px;
-  transition: transform .7s cubic-bezier(0.4,0,0.2,1);
-  -webkit-transform-style: preserve-3d; transform-style: preserve-3d;
-  cursor: pointer;
-}
-.flip-card.flipped { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
-.flip-front, .flip-back {
-  position: absolute; top: 0; left: 0; width: 100%; min-height: 360px;
-  -webkit-backface-visibility: hidden; backface-visibility: hidden;
-  border-radius: var(--radius-lg); padding: 28px 24px;
-  border: 1px solid var(--border); background: var(--card);
-  box-shadow: var(--shadow-md);
-}
-.flip-front {
-  background: linear-gradient(160deg, var(--card) 0%, #faf5eb 100%);
-  border-top: 4px solid var(--accent);
-}
-.flip-back {
-  -webkit-transform: rotateY(180deg); transform: rotateY(180deg);
-  background: linear-gradient(160deg, #faf5eb 0%, #f5ebd8 100%);
-  border-top: 4px solid var(--accent2);
-}
-.flip-container .nav {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 18px;
-}
-.flip-container .nav button {
-  padding: 8px 18px; border: 1px solid var(--border-solid); border-radius: var(--radius-sm);
-  background: var(--card); cursor: pointer; font-size: 13px;
-  font-family: var(--font-body); color: var(--slate); transition: all .2s;
-}
-.flip-container .nav button:hover { background: var(--parchment); border-color: var(--accent); }
-.flip-card .mark-btn {
-  background: var(--steel); color: #fff; border: none; padding: 8px 18px;
-  border-radius: var(--radius-sm); cursor: pointer; font-size: 13px;
-  font-family: var(--font-body); font-weight: 600; transition: all .25s;
-}
-.flip-card .mark-btn:hover { background: var(--accent); box-shadow: var(--shadow-accent); }
-.flip-container .counter { font-size: 13px; color: var(--text2); font-weight: 600; }
-
-/* ===== QUIZ ===== */
-.quiz-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 22px; margin-bottom: 14px;
-  box-shadow: var(--shadow-sm);
-}
-.quiz-card h3 { font-size: 15px; margin-bottom: 12px; color: var(--slate); }
-.quiz-card .options { display: flex; flex-direction: column; gap: 7px; }
-.quiz-card .option {
-  padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  cursor: pointer; font-size: 13px; transition: all .2s; background: #fdf9f3;
-}
-.quiz-card .option:hover { background: var(--parchment); border-color: var(--border-solid); }
-.quiz-card .option.selected { border-color: var(--accent); background: #fef5e7; box-shadow: 0 0 0 1px var(--accent2); }
-.quiz-card .option.correct { border-color: #4a8c5c; background: #eaf5ed; }
-.quiz-card .option.wrong { border-color: var(--accent); background: var(--accent-light); }
-.quiz-card .feedback { margin-top: 12px; padding: 12px; border-radius: var(--radius-sm); font-size: 13px; display: none; }
-.quiz-card .feedback.show { display: block; animation: expandIn .3s ease; }
-.quiz-card .feedback.correct { background: #eaf5ed; border: 1px solid #6aaa7a; color: #2d5a3a; }
-.quiz-card .feedback.wrong { background: var(--accent-light); border: 1px solid #e8b4b4; color: #7a2020; }
-.quiz-card .short-input {
-  width: 100%; min-height: 70px; padding: 12px; border: 1px solid var(--border-solid);
-  border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-body);
-  resize: vertical; background: #fdf9f3; transition: border-color .2s;
-}
-.quiz-card .short-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(192,57,43,0.1); }
-.quiz-timer { font-size: 14px; color: var(--accent); font-weight: 700; margin-bottom: 12px; font-variant-numeric: tabular-nums; }
-
-/* ===== EXAM ===== */
-.exam-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
-}
-.exam-card h3 { font-size: 15px; margin-bottom: 12px; color: var(--slate); }
-.exam-card .options { display: flex; flex-direction: column; gap: 7px; }
-.exam-card .option {
-  padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  cursor: pointer; font-size: 13px; transition: all .2s; background: #fdf9f3;
-}
-.exam-card .option:hover { background: var(--parchment); border-color: var(--border-solid); }
-.exam-card .option.selected { border-color: var(--accent); background: #fef5e7; }
-.exam-card .option.correct { border-color: #4a8c5c; background: #eaf5ed; }
-.exam-card .option.wrong { border-color: var(--accent); background: var(--accent-light); }
-.exam-card .feedback { margin-top: 10px; padding: 10px; border-radius: var(--radius-sm); font-size: 13px; display: none; }
-.exam-card .feedback.show { display: block; }
-.exam-card .short-input {
-  width: 100%; min-height: 70px; padding: 12px; border: 1px solid var(--border-solid);
-  border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-body);
-  resize: vertical; background: #fdf9f3;
-}
-.exam-card .short-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(192,57,43,0.1); }
-.exam-timer { font-size: 14px; color: var(--accent); font-weight: 700; margin-bottom: 12px; font-variant-numeric: tabular-nums; }
-
-/* ===== STATS ===== */
-.stats-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px; margin-bottom: 28px;
-}
-.stat-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px 16px; text-align: center; box-shadow: var(--shadow-sm);
-  transition: all .3s;
-}
-.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.stat-card .num {
-  font-size: 32px; font-weight: 700; color: var(--slate);
-  font-variant-numeric: tabular-nums;
-}
-.stat-card:nth-child(1) .num { color: var(--accent); }
-.stat-card:nth-child(3) .num { color: #4a8c5c; }
-.stat-card:nth-child(4) .num { color: var(--accent2-dark); }
-.stat-card .label { font-size: 13px; color: var(--text2); margin-top: 6px; font-weight: 500; }
-
-/* ===== MINDMAP ===== */
-.mindmap { padding: 10px 0; }
-.mindmap ul { list-style: none; padding-left: 20px; }
-.mindmap li { position: relative; margin: 2px 0; }
-.mindmap .tree-toggle {
-  cursor: pointer; color: var(--accent); font-size: 14px; user-select: none;
-  font-weight: 700; margin-right: 4px; transition: color .2s;
-  display: inline-block; width: 16px;
-}
-.mindmap .tree-toggle:hover { color: var(--accent-dark); }
-.mindmap .tree-node {
-  padding: 6px 12px; border-radius: var(--radius-sm); font-size: 13px;
-  display: inline-block; transition: all .2s; vertical-align: middle; line-height: 1.5;
-}
-.mindmap .tree-node.root {
-  background: var(--slate); color: #f8e8d8; font-weight: 700;
-  font-size: 15px; box-shadow: var(--shadow-sm); padding: 10px 16px;
-}
-.mindmap .tree-node.branch {
-  background: var(--steel); color: #e8d8c8; font-weight: 600;
-  font-size: 14px; padding: 8px 14px;
-}
-.mindmap .tree-node.branch.app {
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #fff;
-}
-.mindmap .tree-node.leaf {
-  background: var(--card); border: 1px solid var(--border);
-  color: var(--text2); font-size: 12px; padding: 6px 10px; max-width: 620px;
-}
-.mindmap .tree-node.leaf.mks {
-  border-color: var(--accent2); border-left: 3px solid var(--accent);
-  background: linear-gradient(90deg, #fef5e7 0%, var(--card) 100%);
-  color: var(--slate); font-weight: 500;
-}
-.mindmap .tree-node.leaf:hover { box-shadow: var(--shadow-sm); }
-.mindmap .children { display: none; padding-left: 18px; border-left: 2px solid var(--border); margin: 4px 0 4px 8px; }
-.mindmap .children.open { display: block; animation: expandIn .3s ease; }
-
-/* ===== SOCRATIC ===== */
-.socratic-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow-sm);
-}
-.socratic-q {
-  padding: 16px 18px; cursor: pointer; display: flex; align-items: flex-start;
-  gap: 10px; transition: background .2s; font-size: 14px; font-weight: 600;
-  color: var(--slate); border-left: 4px solid var(--accent);
-}
-.socratic-q:hover { background: #fef5e7; }
-.socratic-q::before { content: '\2753'; font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.socratic-a {
-  padding: 0 18px 0 42px; max-height: 0; overflow: hidden;
-  transition: all .4s ease; background: #fdf9f3; font-size: 13px; color: var(--text2);
-  line-height: 1.8; border-left: 4px solid var(--accent2);
-}
-.socratic-a.open { max-height: 800px; padding: 16px 18px 16px 42px; }
-.socratic-sub { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
-.socratic-sub .sub-q { font-weight: 600; color: var(--accent); font-size: 13px; cursor: pointer; margin-bottom: 4px; }
-.socratic-sub .sub-a { display: none; font-size: 13px; color: var(--text2); padding-left: 12px; }
-.socratic-sub .sub-a.open { display: block; animation: expandIn .3s ease; }
-
-/* ===== CASE STUDY ===== */
-.case-meta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; }
-.case-meta .m {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px; flex: 1 1 220px; box-shadow: var(--shadow-sm);
-}
-.case-meta .m h4 {
-  font-size: 13px; color: var(--accent); font-weight: 700; margin-bottom: 6px;
-  padding-bottom: 4px; border-bottom: 2px solid var(--accent-light);
-}
-.case-meta .m p { font-size: 13px; color: var(--text2); line-height: 1.7; }
-
-/* ===== DECISION ===== */
-.decision-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-sm);
-}
-.decision-card h3 { font-size: 16px; color: var(--slate); margin-bottom: 12px; }
-.decision-card .scenario { font-size: 14px; color: var(--text); margin-bottom: 14px; font-weight: 500; }
-.decision-card .choices { display: flex; flex-direction: column; gap: 8px; }
-.decision-card .choice-btn {
-  padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  cursor: pointer; font-size: 13px; transition: all .2s; background: #fdf9f3;
-  text-align: left;
-}
-.decision-card .choice-btn:hover { background: var(--parchment); border-color: var(--accent); }
-.decision-card .choice-btn.chosen { border-color: var(--accent); background: #fef5e7; }
-.decision-card .choice-result { display: none; margin-top: 12px; padding: 14px; border-radius: var(--radius-sm); font-size: 13px; }
-.decision-card .choice-result.show { display: block; animation: expandIn .3s ease; }
-.decision-card .choice-result.correct { background: #eaf5ed; border: 1px solid #6aaa7a; color: #2d5a3a; }
-.decision-card .choice-result.wrong { background: var(--accent-light); border: 1px solid #e8b4b4; color: #7a2020; }
-.decision-card .choice-result.warning { background: #fef5e7; border: 1px solid var(--accent2); color: #6b4c1d; }
-
-/* ===== BTN GENERIC ===== */
-.btn {
-  display: inline-block; padding: 10px 20px; border-radius: var(--radius-sm);
-  font-size: 13px; font-family: var(--font-body); cursor: pointer;
-  border: none; font-weight: 600; transition: all .2s; text-align: center;
-}
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-dark); box-shadow: var(--shadow-accent); }
-.btn-warning { background: var(--accent2-dark); color: #fff; }
-.btn-warning:hover { background: var(--gold); }
-.btn-sm { padding: 6px 14px; font-size: 12px; }
-.btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-.btn-outline:hover { background: var(--accent); color: #fff; }
-
-/* ===== FOOTER ===== */
-.page-footer {
-  text-align: center; padding: 28px; border-top: 1px solid var(--border);
-  margin-top: 20px;
-}
-.page-footer a {
-  color: var(--accent-dark); text-decoration: none; font-size: 14px; font-weight: 600;
-  padding: 8px 18px; border: 2px solid var(--accent); border-radius: 24px;
-  transition: all .2s; display: inline-block; margin: 4px 8px;
-}
-.page-footer a:hover { background: var(--accent); color: #fff; }
-
-/* MOBILE */
-@media(max-width:640px){
-  .concept-grid{grid-template-columns:1fr}
-  .top-bar{flex-direction:column;align-items:flex-start}
-  .tab-btn{font-size:11px;padding:5px 10px}
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0e14;--bg2:#10151c;--card:#141a20;--card-hover:#1a2028;--text:#c8d0dc;--text-bright:#e8edf4;--text-dim:#6b7385;--border:#1e2430;--border-light:#2d3038;--accent:#ff9800;--accent-glow:rgba(255,152,0,0.2);--accent2:#ffb74d;--mks:#ff9800;--mks-glow:rgba(255,152,0,0.15);--success:#4caf50;--danger:#ef5350;--warn:#ff9800;--shadow:0 2px 12px rgba(0,0,0,0.35);--shadow-md:0 4px 20px rgba(0,0,0,0.4);--radius:10px;--radius-sm:6px;--radius-lg:16px;--ease:0.3s cubic-bezier(0.4,0,0.2,1);--font-serif:"Georgia","Times New Roman",serif}
+html{font-size:clamp(14px,1.2vw,16px);scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,152,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,152,0,0.03) 1px,transparent 1px);background-size:48px 48px}
+.top-bar{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,#1a1208 0%,#241a0d 100%);border-bottom:1px solid rgba(255,152,0,0.2);color:#e8edf4;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.top-bar h1{font-size:clamp(0.9rem,2vw,1.1rem);font-weight:700;letter-spacing:2px}
+.top-bar .home-link{color:var(--accent);font-size:.78rem;border:1px solid var(--accent);padding:4px 14px;border-radius:20px;text-decoration:none;transition:all var(--ease);white-space:nowrap}
+.top-bar .home-link:hover{background:var(--accent);color:#0a0e14}
+.tab-bar{position:sticky;top:46px;z-index:199;display:flex;flex-wrap:wrap;gap:3px;padding:6px clamp(4px,1vw,10px);background:rgba(10,14,20,0.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);justify-content:center}
+.tab-btn{padding:5px 11px;border-radius:18px;border:1px solid transparent;background:transparent;color:var(--text-dim);cursor:pointer;font-size:.73rem;font-weight:500;letter-spacing:.5px;transition:all var(--ease);font-family:inherit;white-space:nowrap}
+.tab-btn:hover{color:var(--accent);border-color:rgba(255,152,0,0.3)}.tab-btn.active{background:var(--accent);color:#0a0e14;border-color:var(--accent);font-weight:700;box-shadow:0 0 16px var(--accent-glow)}
+.tab-panel{display:none;position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:24px 20px 60px}.tab-panel.active{display:block;animation:fadeSlideIn .35s ease}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.hero{max-width:1100px;margin:0 auto;padding:50px 24px 30px;position:relative;z-index:1}
+.hero-inner{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:48px 40px;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(255,152,0,0.06)}
+.hero-inner::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,152,0,0.08) 0%,transparent 70%)}
+.hero-inner::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,79,0.06) 0%,transparent 70%)}
+.hero-badge{display:inline-block;background:rgba(255,152,0,0.12);color:var(--accent);font-size:.75rem;letter-spacing:3px;padding:4px 14px;border-radius:20px;margin-bottom:16px;font-weight:600;position:relative;z-index:1}
+.hero h2{font-size:2rem;font-weight:900;color:var(--text-bright);margin-bottom:12px;position:relative;z-index:1;letter-spacing:2px}
+.hero .hero-sub{font-size:1rem;color:var(--accent2);margin-bottom:20px;position:relative;z-index:1}
+.hero .hero-desc{font-size:.92rem;color:var(--text-dim);line-height:1.8;max-width:700px;position:relative;z-index:1}
+.hero-stats{display:flex;gap:32px;margin-top:24px;position:relative;z-index:1;flex-wrap:wrap}
+.hero-stat{text-align:center}.hero-stat .num{font-size:2rem;font-weight:900;color:var(--accent);font-family:var(--font-serif)}.hero-stat .lbl{font-size:.72rem;color:var(--text-dim);margin-top:2px}
+.sec-title{font-size:1.2rem;font-weight:700;color:var(--text-bright);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-bottom:32px}
+.concept-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 20px;border-left:4px solid transparent;transition:all var(--ease);cursor:pointer;box-shadow:var(--shadow);position:relative}
+.concept-card:hover{border-left-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.concept-card .c-name{font-size:1rem;font-weight:700;color:var(--text-bright);margin-bottom:6px}
+.concept-card .c-def{font-size:.82rem;color:var(--text-dim);line-height:1.6;margin-bottom:8px}
+.concept-card .c-extra{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:.8rem;color:var(--text-dim);line-height:1.7}.concept-card .c-extra.show{display:block;animation:expandIn .3s ease}
+@keyframes expandIn{from{opacity:0;max-height:0}to{opacity:1;max-height:400px}}
+.concept-card .c-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.tag{font-size:.65rem;padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:.5px}.tag.mks{background:rgba(255,152,0,0.15);color:var(--mks)}.tag.core{background:rgba(255,152,0,0.12);color:var(--accent)}.concept-card .c-hint{font-size:.68rem;color:var(--text-dim);margin-top:8px;font-style:italic}
+.mks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:32px}
+.mks-card{background:var(--card);border:2px solid var(--mks);border-radius:var(--radius);padding:24px 20px;position:relative;box-shadow:0 0 20px var(--mks-glow);transition:all var(--ease)}
+.mks-card:hover{transform:translateY(-3px);box-shadow:0 0 30px rgba(255,152,0,0.25)}
+.mks-card .mks-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--mks);color:#0a0e14;font-size:.68rem;padding:3px 14px;border-radius:12px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.mks-card .mk-name{font-size:1rem;font-weight:700;color:var(--text-bright);margin:8px 0 6px}.mks-card .mk-desc{font-size:.8rem;color:var(--text-dim);line-height:1.7}
+.svg-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:32px;text-align:center;overflow-x:auto;box-shadow:var(--shadow)}.svg-wrap svg{max-width:100%;height:auto}
+.boundary-table{width:100%;border-collapse:collapse;margin-bottom:32px;font-size:.82rem}
+.boundary-table th{background:linear-gradient(135deg,#1d1608,#282012);color:var(--accent);padding:12px 14px;text-align:left;font-weight:700;letter-spacing:1px;font-size:.75rem;border-bottom:2px solid var(--accent)}
+.boundary-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text)}.boundary-table tr:hover td{background:rgba(255,152,0,0.04)}.boundary-table .bd-label{color:var(--accent2);font-weight:600;white-space:nowrap}
+.path-steps{display:flex;gap:0;margin-bottom:32px;position:relative;flex-wrap:wrap;justify-content:center}
+.path-steps::before{content:'';position:absolute;top:28px;left:5%;right:5%;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--mks));opacity:.3;z-index:0}
+.path-step{flex:1;min-width:140px;max-width:220px;position:relative;z-index:1;text-align:center;padding:0 12px}
+.path-step .step-dot{width:56px;height:56px;border-radius:50%;background:var(--card);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.3rem;transition:all var(--ease)}
+.path-step .step-dot:hover{transform:scale(1.1);box-shadow:0 0 24px var(--accent-glow)}.path-step h4{font-size:.85rem;color:var(--text-bright);margin-bottom:4px}.path-step p{font-size:.72rem;color:var(--text-dim);line-height:1.5}
+.progress-wrap{margin-bottom:24px}.progress-header-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.progress-header-row .lbl{font-size:.78rem;color:var(--text-dim);letter-spacing:1px}.progress-header-row .val{font-size:1.4rem;font-weight:900;color:var(--accent);font-family:var(--font-serif)}
+.progress-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .8s var(--ease)}
+.flip-container{display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:32px}
+.flip-card{width:100%;max-width:500px;height:320px;perspective:1200px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius-lg);padding:32px 28px;display:flex;flex-direction:column;justify-content:center}
+.flip-front{background:linear-gradient(135deg,#1a1208 0%,#241a0d 100%);border:1px solid var(--border-light);text-align:center;border-top:4px solid var(--accent)}
+.flip-front .ff-name{font-size:1.6rem;font-weight:900;color:var(--text-bright);margin-bottom:8px}.flip-front .ff-hint{font-size:.75rem;color:var(--text-dim);letter-spacing:1px}
+.flip-back{background:var(--card);border:1px solid var(--border-light);transform:rotateY(180deg);overflow-y:auto;text-align:left;border-top:4px solid var(--mks)}
+.flip-back .fb-row{margin-bottom:10px}.flip-back .fb-label{font-size:.68rem;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase}.flip-back .fb-text{font-size:.85rem;color:var(--text);line-height:1.6}
+.flip-nav{display:flex;align-items:center;gap:16px}.flip-nav button{padding:8px 18px;border-radius:20px;border:1px solid var(--border-light);background:var(--card);color:var(--text);cursor:pointer;font-size:.8rem;transition:all var(--ease);font-family:inherit}.flip-nav button:hover{border-color:var(--accent);color:var(--accent)}.flip-nav .idx{font-size:.82rem;color:var(--text-dim);min-width:60px;text-align:center}
+.quiz-q{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}.quiz-q .q-title{font-weight:700;color:var(--text-bright);margin-bottom:10px}.quiz-q .q-opts{display:flex;flex-direction:column;gap:6px}
+.q-opt{padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);cursor:pointer;transition:all var(--ease);font-size:.82rem;color:var(--text);font-family:inherit;text-align:left}
+.q-opt:hover{border-color:var(--accent);background:rgba(255,152,0,0.06)}.q-opt.chosen{border-color:var(--accent);background:rgba(255,152,0,0.12);font-weight:600}
+.q-opt.correct{border-color:var(--success);background:rgba(76,175,80,0.15)}.q-opt.wrong{border-color:var(--danger);background:rgba(239,83,80,0.12)}
+.q-feedback{display:none;margin-top:8px;padding:10px;border-radius:var(--radius-sm);font-size:.8rem;line-height:1.6}.q-feedback.show{display:block}
+.q-feedback.correct{background:rgba(76,175,80,0.1);color:var(--success);border:1px solid rgba(76,175,80,0.3)}.q-feedback.wrong{background:rgba(239,83,80,0.1);color:var(--danger);border:1px solid rgba(239,83,80,0.3)}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.btn{padding:10px 22px;border-radius:20px;border:none;cursor:pointer;font-size:.82rem;font-weight:600;font-family:inherit;transition:all var(--ease);letter-spacing:.5px}
+.btn-pri{background:var(--accent);color:#0a0e14}.btn-pri:hover{box-shadow:0 0 20px var(--accent-glow)}.btn-sec{background:var(--card);color:var(--text);border:1px solid var(--border)}.btn-sec:hover{border-color:var(--accent);color:var(--accent)}.btn-warn{background:var(--mks);color:#0a0e14}
+.saq-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}.saq-item .saq-q{font-weight:600;color:var(--text-bright);margin-bottom:10px}
+.saq-item textarea{width:100%;height:80px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:10px;font-family:inherit;font-size:.82rem;resize:vertical}.saq-item textarea:focus{outline:none;border-color:var(--accent)}
+.saq-ans{display:none;margin-top:8px;padding:10px;background:rgba(255,152,0,0.06);border-radius:var(--radius-sm);font-size:.8rem;color:var(--text);line-height:1.7}.saq-ans.show{display:block}
+.mindmap{padding:10px 0}.mm-node{margin:4px 0}.mm-toggle{cursor:pointer;color:var(--accent);font-weight:700;margin-right:4px;user-select:none}.mm-label{font-size:.88rem}
+.mm-children{margin-left:20px;border-left:1px solid var(--border);padding-left:12px;display:none}.mm-children.open{display:block}
+.mm-root>.mm-label{font-size:1rem;font-weight:700;color:var(--accent2)}.mm-branch>.mm-label{font-weight:600;color:var(--text-bright)}
+.mm-leaf{color:var(--text-dim);font-size:.8rem;padding:2px 0}.mm-leaf.mks-leaf{color:var(--mks);font-weight:600}
+.soc-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.soc-q{font-weight:600;color:var(--text-bright);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.soc-q::after{content:'▸';color:var(--accent);transition:transform var(--ease);font-size:.7rem}.soc-q.open::after{transform:rotate(90deg)}
+.soc-a{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:.82rem;color:var(--text-dim);line-height:1.7}.soc-a.show{display:block}
+.case-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+.case-card h3{color:var(--accent2);font-size:1.1rem;margin-bottom:10px}.case-card .case-meta{font-size:.72rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:12px}.case-card .case-body{font-size:.85rem;color:var(--text);line-height:1.8}
+.case-card .case-insight{margin-top:14px;padding:12px;background:rgba(255,152,0,0.08);border-radius:var(--radius-sm);border-left:3px solid var(--mks);font-size:.8rem;color:var(--text)}
+.decision-scene{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px}
+.decision-scene h3{font-size:.95rem;color:var(--text-bright);margin-bottom:8px}.decision-scene .scene-desc{font-size:.82rem;color:var(--text-dim);margin-bottom:12px;line-height:1.7}
+.decision-scene .scene-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.decision-scene .scene-opt{padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);cursor:pointer;font-size:.82rem;color:var(--text);transition:all var(--ease);font-family:inherit;text-align:left}
+.decision-scene .scene-opt:hover{border-color:var(--accent)}.decision-scene .scene-opt.selected{border-color:var(--accent);background:rgba(255,152,0,0.12)}
+.decision-scene .scene-result{display:none;padding:12px;background:rgba(255,152,0,0.06);border-radius:var(--radius-sm);font-size:.8rem;color:var(--text);line-height:1.7}.decision-scene .scene-result.show{display:block}
+@media(max-width:768px){.hero-inner{padding:28px 20px}.hero h2{font-size:1.5rem}.concept-grid{grid-template-columns:1fr}.mks-grid{grid-template-columns:1fr}.path-steps{flex-direction:column;align-items:center;gap:16px}.path-steps::before{display:none}.flip-card{height:360px}.tab-btn{font-size:.68rem;padding:4px 8px}}
 </style>
 </head>
 <body>
-<div class="top-bar">
-  <h1>能源博弈与地球系统 · 最小知识集</h1>
-  <a href="index.html">\2190 返回知识主板</a>
+<nav class="top-bar"><h1>⚡ 能源博弈与地球系统</h1><a href="index.html" class="home-link">← 返回雷达站</a></nav>
+<div class="tab-bar" id="tabBar">
+<button class="tab-btn active" data-tab="0">知识集总览</button><button class="tab-btn" data-tab="1">知识卡片</button><button class="tab-btn" data-tab="2">题库系统</button><button class="tab-btn" data-tab="3">考试模式</button><button class="tab-btn" data-tab="4">复习模式</button><button class="tab-btn" data-tab="5">思维导图</button><button class="tab-btn" data-tab="6">深度追问</button><button class="tab-btn" data-tab="7">案例分析</button><button class="tab-btn" data-tab="8">实战决策</button>
 </div>
+<section class="hero"><div class="hero-inner"><div class="hero-badge">BAND 03 · 能量橙 · MKS CORE</div><h2>追踪地球能量脉搏的每一次跳动</h2><p class="hero-sub">从碳中和的全球棋局到核聚变的终极梦想</p><p class="hero-desc">当碳中和重塑全球贸易规则、当特高压把西部的光送到东部的工厂、当固态电池和核聚变在实验室里逼近临界点——能源转型不是环保口号，而是正在进行的全球经济秩序重构。</p><div class="hero-stats"><div class="hero-stat"><div class="num">50+</div><div class="lbl">核心日课篇</div></div><div class="hero-stat"><div class="num">10</div><div class="lbl">MKS核心概念</div></div><div class="hero-stat"><div class="num">20</div><div class="lbl">实战检测题</div></div></div></div></section>
+<div style="max-width:1100px;margin:0 auto;padding:0 24px 20px;position:relative;z-index:1;"><div class="progress-wrap"><div class="progress-header-row"><span class="lbl">学习进度</span><span class="val" id="progressPct">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div></div></div>
 
-<div class="tab-bar">
-  <button class="tab-btn active" data-tab="0">知识集总览</button>
-  <button class="tab-btn" data-tab="1">知识卡片</button>
-  <button class="tab-btn" data-tab="2">题库系统</button>
-  <button class="tab-btn" data-tab="3">考试模式</button>
-  <button class="tab-btn" data-tab="4">复习模式</button>
-  <button class="tab-btn" data-tab="5">思维导图</button>
-  <button class="tab-btn" data-tab="6">深度追问</button>
-  <button class="tab-btn" data-tab="7">案例分析</button>
-  <button class="tab-btn" data-tab="8">实战决策</button>
-</div>
-
-<div class="tab-content">
-  <!-- ===== TAB 0: 知识集总览 ===== -->
-  <div class="tab-panel active" id="tab-0">
-    <div class="core-goal">
-      <h2>核心目标：理解能源博弈与地球系统的底层逻辑</h2>
-      <p>能源不仅是技术问题，更是地缘政治、地球科学、生态伦理与人类文明路径选择的交汇点。本MKS汇集核电、碳中和、特高压、电池、储能、气候变化与微塑料等领域，帮助你建立从物理规律到政策博弈的完整认知框架。</p>
-    </div>
-
-    <h3 class="section-title" style="margin-top:0;">10 个核心概念</h3>
-    <div class="concept-grid" id="concept-grid"></div>
-
-    <h3 class="section-title">MKS 核心（4个）</h3>
-    <div class="mks-grid" id="mks-grid"></div>
-
-    <h3 class="section-title">学习进度</h3>
-    <div class="card" style="text-align:center;padding:20px;">
-      <p style="font-size:15px;" id="progress-text">已掌握 <span id="learned-count">0</span>/10 个概念</p>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%;"></div></div>
-    </div>
-
-    <h3 class="section-title">概念关系图</h3>
-    <div class="svg-wrap" id="svg-map"></div>
-
-    <h3 class="section-title">边界知识（10项）</h3>
-    <table class="boundary-table">
-      <thead><tr><th>序号</th><th>知识/信念</th><th>边界/误区</th><th>MKS概念关联</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>碳中和 = 零排放</td><td>碳中和是净排放为零，不是完全不排放。碳汇可以抵消部分排放</td><td>碳循环的账本逻辑</td></tr>
-        <tr><td>2</td><td>核能 = 人类最危险的能源</td><td>煤电每年空气污染致死数十万人，核电历史总死亡人数远低于煤电</td><td>核恐惧的概率错判</td></tr>
-        <tr><td>3</td><td>电池技术很快能突破能量密度天花板</td><td>电化学储能受物理定律约束，能量密度永远无法接近化石燃料</td><td>电池的物理天花板</td></tr>
-        <tr><td>4</td><td>全球变暖就是每年温度均匀升高</td><td>气候变化是非线性的，存在临界点和阶跃，局部冷不代表全球未变暖</td><td>气候系统的非线性</td></tr>
-        <tr><td>5</td><td>新能源转型是纯技术问题</td><td>能源选择是地缘战略选择，涉及石油美元体系和海上通道安全</td><td>能源地缘政治</td></tr>
-        <tr><td>6</td><td>地球工程可以轻松解决气候问题</td><td>主动干预地球系统的风险不可控，可能扰乱季风导致数十亿人缺粮</td><td>地球工程的诱惑与风险</td></tr>
-        <tr><td>7</td><td>氢能是终极清洁能源</td><td>氢的生产/储存/运输全链条效率不到30%，更可能是储能中介而非一次能源</td><td>储能的根本悖论</td></tr>
-        <tr><td>8</td><td>新能源 = 零污染</td><td>光伏板含铅和镉，锂电池电解液有毒，风电叶片不可回收填埋</td><td>新能源的垃圾问题</td></tr>
-        <tr><td>9</td><td>缺电就建更多电厂</td><td>电力供需必须实时平衡，关键是电网调节能力而非总装机容量</td><td>电网的不可任性</td></tr>
-        <tr><td>10</td><td>今年冷所以全球变暖是假的</td><td>局部的冷不能否定整体的热，拉尼娜年也会有极寒天气</td><td>拉尼娜与全球变暖的辩证</td></tr>
-      </tbody>
-    </table>
-
-    <h3 class="section-title">五阶段学习路径</h3>
-    <div class="learning-path">
-      <div class="step" data-step="1"><h3>物理认知</h3><p>理解能量密度天花板、电网实时平衡、碳循环机制</p></div>
-      <div class="step" data-step="2"><h3>技术评估</h3><p>评估核电/光伏/电池/氢能/特高压的真实技术能力</p></div>
-      <div class="step" data-step="3"><h3>系统思维</h3><p>连接气候系统非线性、地球工程风险、能源地缘博弈</p></div>
-      <div class="step" data-step="4"><h3>决策判断</h3><p>用概率思维评估风险，用账本逻辑分析碳中和政策</p></div>
-      <div class="step" data-step="5"><h3>行动实践</h3><p>在投资/消费/政策选择中应用MKS分析框架</p></div>
-    </div>
-  </div>
-
-  <!-- ===== TAB 1: 知识卡片 ===== -->
-  <div class="tab-panel" id="tab-1">
-    <div class="flip-container">
-      <div class="flip-card" id="flip-card" onclick="flipCard()">
-        <div class="flip-front" id="flip-front"></div>
-        <div class="flip-back" id="flip-back"></div>
-      </div>
-      <div class="nav">
-        <button onclick="prevCard()">\25C0 上一张</button>
-        <span class="counter" id="flip-counter"></span>
-        <button onclick="nextCard()">下一张 \25B6</button>
-      </div>
-      <div style="text-align:center;margin-top:12px;">
-        <button class="mark-btn" id="mark-learned-btn" onclick="markLearned()">\2713 标记已学会</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== TAB 2: 题库系统 ===== -->
-  <div class="tab-panel" id="tab-2">
-    <h3 class="section-title" style="margin-top:0;">选择题（20题）+ 简答题（10题）</h3>
-    <div class="card" style="text-align:center;">
-      <p id="quiz-info">共 30 题，选择答题模式开始</p>
-      <p class="quiz-timer" id="quiz-timer" style="display:none;"></p>
-      <button class="btn btn-primary" onclick="startQuiz('all')">全部答题（30题）</button>
-      <button class="btn btn-outline" style="margin-left:10px;" onclick="startQuiz('random')">随机10题</button>
-    </div>
-    <div id="quiz-container"></div>
-    <div id="quiz-result" style="display:none;text-align:center;margin-top:16px;"></div>
-  </div>
-
-  <!-- ===== TAB 3: 考试模式 ===== -->
-  <div class="tab-panel" id="tab-3">
-    <h3 class="section-title" style="margin-top:0;">考试模式（7选择 + 3简答，15分钟限时）</h3>
-    <div class="card" style="text-align:center;">
-      <p style="font-size:14px;">随机抽取7道选择题和3道简答题，15分钟倒计时</p>
-      <p class="exam-timer" id="exam-timer-display"></p>
-      <button class="btn btn-primary" id="exam-start-btn" onclick="startExam()">开始考试</button>
-      <button class="btn btn-warning" id="exam-submit-btn" onclick="submitExam()" style="display:none;">\2714 交卷</button>
-    </div>
-    <div id="exam-container"></div>
-    <div id="exam-result" style="display:none;text-align:center;margin-top:16px;"></div>
-  </div>
-
-  <!-- ===== TAB 4: 复习模式 ===== -->
-  <div class="tab-panel" id="tab-4">
-    <h3 class="section-title" style="margin-top:0;">学习统计</h3>
-    <div class="stats-grid" id="review-stats"></div>
-    <h3 class="section-title">错题本</h3>
-    <div id="wrong-book-container" class="card">
-      <p style="color:var(--text-muted);">暂无错题记录</p>
-    </div>
-    <h3 class="section-title">薄弱概念分析</h3>
-    <div id="weak-concept-container" class="card">
-      <p style="color:var(--text-muted);">尚未完成足够题目进行分析</p>
-    </div>
-  </div>
-
-  <!-- ===== TAB 5: 思维导图 ===== -->
-  <div class="tab-panel" id="tab-5">
-    <div class="mindmap" id="mindmap"></div>
-  </div>
-
-  <!-- ===== TAB 6: 深度追问 ===== -->
-  <div class="tab-panel" id="tab-6">
-    <div id="socratic-container"></div>
-  </div>
-
-  <!-- ===== TAB 7: 案例分析 ===== -->
-  <div class="tab-panel" id="tab-7">
-    <h3 class="section-title" style="margin-top:0;">案例分析：碳中和的国际博弈——中国的30·60承诺</h3>
-    <div class="card">
-      <p style="font-size:14px;color:var(--text);margin-bottom:12px;">2020年9月，中国在联合国大会宣布"2030年前碳达峰、2060年前碳中和"（30·60目标）。这是全球第二大经济体做出的最激进的减排承诺之一。本案例分析其中的地缘博弈、技术路径选择与制度设计。</p>
-      <div class="case-meta">
-        <div class="m"><h4>利益分析</h4><p>中国是全球最大碳排放国（年排放约100亿吨占全球28%），但也是最大可再生能源投资国。碳中和对内倒逼产业升级（淘汰高耗能产能），对外争夺气候治理话语权。欧盟碳边境税（CBAM）将对中国出口造成每年约50亿欧元成本——主动碳中 和可缓解贸易壁垒。</p></div>
-        <div class="m"><h4>制度设计</h4><p>全国碳排放权交易市场2021年启动（覆盖电力行业年排放约45亿吨），碳价从48元/吨起步。但覆盖行业有限（仅发电），碳配额分配偏宽松（初期免费分配为主），需观察后续金融化进展（碳期货/碳期权）。</p></div>
-        <div class="m"><h4>人性假设</h4><p>碳中和承诺的驱动力不是"道德觉悟"而是"利益计算"——中国西部光伏/风电资源丰富，东部缺能，特高压技术使清洁能源远距离输送成为可能。碳中和与技术自主（光伏全产业链全球领先）形成正反馈。</p></div>
-        <div class="m"><h4>文化土壤</h4><p>中国"集中力量办大事"的体制优势在大规模基建中显著（特高压投资超万亿），但也面临地方执行偏差（运动式减碳导致2021年拉闸限电）。碳中 和需要从"中央意志"转化为"全民行为"——碳普惠、个人碳账户等探索刚刚起步。</p></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== TAB 8: 实战决策 ===== -->
-  <div class="tab-panel" id="tab-8">
-    <div id="decision-container"></div>
-  </div>
-</div>
-
-<div class="page-footer">
-  <a href="index.html">\2190 返回知识主板</a>
-  <a href="#">\2191 回到顶部</a>
-</div>
+<div class="tab-panel active" id="panel0"><h3 class="sec-title">📡 10个核心概念</h3><div class="concept-grid" id="conceptGrid0"></div><h3 class="sec-title">🔧 MKS核心工具箱</h3><div class="mks-grid" id="mksGrid"></div><h3 class="sec-title">🕸 概念关系图</h3><div class="svg-wrap" id="svgMap"></div><h3 class="sec-title">🎨 创意图：能源转型地图</h3><div class="svg-wrap" id="creativeSVG"></div><h3 class="sec-title">🗺 边界知识表</h3><div style="overflow-x:auto;"><table class="boundary-table" id="boundaryTable"></table></div><h3 class="sec-title">🛤 学习路径</h3><div class="path-steps" id="pathSteps"></div></div>
+<div class="tab-panel" id="panel1"><h3 class="sec-title">🃏 3D翻转知识卡片</h3><div class="flip-container"><div class="flip-card" id="flipCard" onclick="flipCard()"><div class="flip-inner" id="flipInner"><div class="flip-front"><div class="ff-name" id="ffName"></div><div class="ff-hint">点击翻转查看详情</div></div><div class="flip-back" id="flipBack"></div></div></div><div class="flip-nav"><button onclick="prevCard()">◀ 上一张</button><span class="idx" id="cardIdx">1 / 10</span><button onclick="nextCard()">下一张 ▶</button></div><button class="btn btn-warn" onclick="markLearned()" id="markLearnedBtn">⭐ 标记已学习</button></div></div>
+<div class="tab-panel" id="panel2"><h3 class="sec-title">📝 选择题（20题）</h3><div id="mcqContainer"></div><div class="quiz-actions"><button class="btn btn-pri" onclick="renderMCQ()">🔄 重新出题</button><button class="btn btn-sec" onclick="resetAllMCQ()">↺ 全部重置</button></div><h3 class="sec-title" style="margin-top:32px;">✍ 简答题（10题）</h3><div id="saqContainer"></div><div class="quiz-actions"><button class="btn btn-sec" onclick="revealAllSAQ()">📖 显示全部参考答案</button></div></div>
+<div class="tab-panel" id="panel3"><h3 class="sec-title">⏱ 考试模式</h3><p style="color:var(--text-dim);margin-bottom:16px;">随机抽取10道选择题+3道简答题，限时15分钟。</p><div class="quiz-actions"><button class="btn btn-pri" onclick="startExam()">▶ 开始考试</button><button class="btn btn-sec" onclick="resetExam()">↺ 重置考试</button></div><div id="examTimer" style="text-align:center;font-size:1.5rem;font-weight:900;color:var(--accent);margin:16px 0;font-family:var(--font-serif);"></div><div id="examContainer"></div><div id="examResult" style="display:none;"></div></div>
+<div class="tab-panel" id="panel4"><h3 class="sec-title">🔄 复习模式</h3><div id="reviewStats"></div><div id="reviewList"></div></div>
+<div class="tab-panel" id="panel5"><h3 class="sec-title">🧠 思维导图</h3><div class="mindmap" id="mindmapContainer"></div></div>
+<div class="tab-panel" id="panel6"><h3 class="sec-title">🔍 深度追问</h3><div id="socraticContainer"></div></div>
+<div class="tab-panel" id="panel7"><h3 class="sec-title">📋 案例分析</h3><div class="case-card"><h3>碳中和的国际博弈——气候正义还是经济战争？</h3><div class="case-meta">2020-2026 · 碳边境调节、碳交易、发展中国家权益</div><div class="case-body"><p>欧盟CBAM从2026年起对进口钢铁、水泥、铝等征收碳关税——欧盟声称防止碳泄漏，发展中国家视其为贸易保护主义。中国30·60目标既是环境承诺也是战略回应。</p></div><div class="case-insight"><strong>🔑 MKS洞察：</strong>碳中和对不同国家意味完全不同——欧盟保持绿色技术领先，中国是能源安全+产业升级驱动力，印度/非洲是发展权vs减排义务的零和博弈。理解这点需要系统思维。</div></div></div>
+<div class="tab-panel" id="panel8"><h3 class="sec-title">🎯 实战决策</h3><div id="decisionContainer"></div></div>
 
 <script>
-// ==================== DATA ====================
-var CONCEPTS = [
-  {id:'c1',name:'碳循环的账本逻辑',def:'碳中和不是不排放而是收支平衡——就像家庭预算，可以花钱但要确保收入覆盖。全球碳循环中海洋吸收+陆地吸收约等于人为排放的一半，另一半在大气中积累。种几棵树就"碳中和"是错觉，因为碳汇有上限且需要时间。',mks:true,analogy:'如同家庭预算——可以花钱但要确保收入覆盖。碳中 和就是让碳排放的"支出"不超过碳汇的"收入"。',example:'全球人为年排放约360亿吨CO2，海洋吸收约90亿吨，陆地吸收约120亿吨，大气净增约150亿吨。碳中 和目标就是让净增归零。',counter:'碳抵消（如植树）不能替代减排。树木成长需要数十年，且森林火灾可瞬间释放储存的碳。碳账本的核心是先大幅减少排放，再用碳汇做"最后一公里"的平衡。'},
-  {id:'c2',name:'核恐惧的概率错判',def:'公众对核能的恐惧与实际风险严重倒挂。怕核电但不怕煤电——实际上煤电每年因空气污染致死数十万。切尔诺贝利直接死亡31人，福岛无人因辐射直接死亡但疏散恐慌导致上千人间接死亡。',mks:true,analogy:'如同怕坐飞机但不怕开车——实际上开车死亡概率远高于飞机。核电风险是"低概率高可见"，煤电风险是"高概率低可见"。',example:'切尔诺贝利事故直接死亡31人（辐射急性致死），长期癌症超额死亡估计约4000人（争议很大）。而全球煤电每年因PM2.5导致约80万人过早死亡。',counter:'核恐惧也有理性成分——核电事故的"最大可能损失"确实很大（切尔诺贝利永久疏散区），且核废料处置是跨代际的难题。但需要量化比较而非情绪化恐惧。'},
-  {id:'c3',name:'电池的物理天花板',def:'电化学储能的能量密度永远无法接近化石燃料。锂电池能量密度约0.3kWh/kg，汽油约12kWh/kg，差40倍。石墨烯电池续航1000公里是违背物理定律的忽悠。',mks:false,analogy:'爬楼梯vs坐电梯——电池储存能量靠化学键（爬楼梯），汽油直接燃烧释放化学能（坐电梯）。化学键能密度有上限。',example:'特斯拉Model 3电池约480kg储存约60kWh能量；同样重量汽油含约5760kWh能量。电池能量密度每十年仅提升约5-8%，不可能出现跳跃式突破。',counter:'电池能量密度低但转换效率高——电机效率90%+，内燃机仅25-30%。综合来看，电动车总效率（well-to-wheel）仍有优势。'},
-  {id:'c4',name:'气候系统的非线性',def:'气候变化不是渐变而是有临界点的阶跃。北极冻土融化释放甲烷加速变暖再融化更多冻土（正反馈环）。温度升2度的后果远不止1度的两倍——是指数级影响。',mks:true,analogy:'如同推椅子——不是慢慢倒而是推到某个角度突然翻。气候系统有多个"倾覆点"（tipping point），一旦越过就不可逆转。',example:'北极永久冻土含约1.5万亿吨碳（是大气中碳的两倍），融化释放的甲烷温室效应是CO2的25倍。格林兰冰盖完全融化可使全球海平面上升7米。',counter:'气候模型的非线性预测存在不确定性——我们不知道精确的临界点在哪里，但"不确定性"本身就是风险——就像不知道悬崖边缘的确切位置，但知道继续走肯定危险。'},
-  {id:'c5',name:'能源地缘政治',def:'能源技术选择是地缘战略选择。中国建特高压把西部清洁能源送到东部——降低对海上石油通道（马六甲海峡）的依赖。新能源转型的背后是石油美元体系和海上霸权的深层博弈。',mks:false,analogy:'选操作系统不只是技术偏好而是选阵营——Windows vs Linux背后是生态和话语权。能源同样如此——选择石油就是选择依赖中东+美元结算+海上运输安全。',example:'中国石油对外依存度超70%，其中80%经过马六甲海峡。特高压技术（全球独步）将西部风电/光伏送至东部，本质是降低"马六甲困境"风险。',counter:'新能源转型也不是完全摆脱地缘依赖——锂/钴/稀土等关键矿产的供应链可能形成新的依赖（刚果钴、智利锂、中国稀土加工）。地缘博弈永不停歇，只是换了战场。'},
-  {id:'c6',name:'地球工程的诱惑与风险',def:'主动干预地球系统是给整个地球做手术——没有备份没有临床试验。平流层气溶胶注入可以降温但可能扰乱季风导致数十亿人缺粮。空调排热不能让全球降温——局部制冷掩盖不了全球净增热。',mks:false,analogy:'如同给整个地球做一台手术——没有第二个地球当备份，也没有办法做临床试验。成功了是英雄，失败了是全人类的灾难。',example:'平流层气溶胶注入（模仿火山喷发效果）成本估算仅几十亿美元/年，可以抵消全球变暖。但模拟显示会扰乱印度季风——影响20亿人的粮食生产。',counter:'地球工程可以作为"最后手段"保留——如果减排失败且气候灾难临界点逼近，可能需要冒风险使用。但绝不能因为有了地球工程就放松减排努力——这是"道德风险"。'},
-  {id:'c7',name:'储能的根本悖论',def:'能量密度越高越危险，越低越没用。抽水蓄能可靠但需要特定地理条件，锂电池灵活但大规模储能成本过高。氢能的生产/储存/运输全链条效率不到30%。',mks:true,analogy:'如同把钱换成黄金储存vs换成棉花——黄金值钱但太重搬运成本高，棉花轻但占地方又不值钱。储能就是在"密度"和"安全"之间走钢丝。',example:'抽水蓄能效率约75%，但依赖山区地形；锂电池储能效率约90%，但百MW级电站成本超2亿元；压缩空气储能需要地下盐穴；氢能全链条效率仅25-30%。',counter:'没有"完美储能"，但可以有"正确组合"——短时调节用锂电池，日调节用抽水蓄能，季节性调节可能需要氢能。不同时间尺度的储能解决不同问题。'},
-  {id:'c8',name:'拉尼娜与全球变暖的辩证',def:'局部的冷不能否定整体的热。2021年中国北方极寒但全球平均气温仍是历史前五。如同冬天也有暖和的日子但不代表不是冬天。今年特别冷所以全球变暖是骗局——这是典型的局部-整体混淆。',mks:false,analogy:'冬天也有暖和的日子但不代表不是冬天。全球变暖是长期趋势，拉尼娜是短期波动——趋势和波动是两个不同时间尺度的问题。',example:'2021年2月中国北方遭遇极端寒潮（北京最低-19.6度），但2021年全球平均气温仍为历史第六暖。拉尼娜现象使赤道太平洋降温，局部地区出现极寒完全正常。',counter:'气候科学确实存在不确定性，但核心结论（人类活动导致全球变暖）有超过97%的气候科学家认同。质疑需要证据而非"今天冷所以没变暖"的个体经验。'},
-  {id:'c9',name:'新能源的垃圾问题',def:'清洁能源设备退役后的污染被严重低估。光伏板含铅和镉，锂电池电解液有毒，风电叶片不可回收只能填埋。新能源=零污染——其实只是转移了污染形态和时空位置。',mks:false,analogy:'如同吃药治好了一种病但肝坏了——光伏解决了碳排放问题，但创造了新的有毒废弃物问题。不能只看治疗作用不看副作用。',example:'到2050年全球光伏退役组件预计达7800万吨（约等于当前全球塑料年产量），其中铅/镉/碲等有毒物质处理不当会污染土壤和地下水。风电叶片（玻璃纤维/碳纤维复合材料）几乎无法回收。',counter:'新能源废弃物问题相比化石燃料污染规模仍然小得多——煤电每年产生数亿吨煤灰（含重金属），石油泄漏的环境破坏更大。新能源垃圾问题是"可管理"的。'},
-  {id:'c10',name:'电网的不可任性',def:'电力供需必须实时平衡，不能有一秒钟偏差。如同不能存水的自来水系统——拧开水龙头那一刻水厂必须同步生产等量的水。拉闸限电不是因为缺煤而是因为电价不市场化导致电厂不愿发。建更多电厂不能解决——关键在于电网调节能力。',mks:false,analogy:'如同不能存水的自来水系统——拧开水龙头那一刻水厂必须同步生产等量的水。电网最大的特点就是电无法大规模储存，必须发多少用多少。',example:'2021年中国多省拉闸限电——不是因为煤不够，而是煤价涨了但电价没涨（电价受管制），电厂"发电即亏"所以不愿多发。解方是推进电力市场化改革而非简单的建更多电厂。',counter:'极端情况下（如德州2021寒潮）确实是装机容量不足导致的。但大多数"缺电"本质上是"缺灵活调节能力"——用需求侧响应、储能、跨区调度等软方案比建新电厂更有效。'}
+var concepts = [
+  {name:"碳中和",define:"通过减排和碳汇抵消使净碳排放为零。中国承诺2030碳达峰、2060碳中和。这不是环境口号而是全球经济秩序重构。",analogy:"碳中和像家庭收支平衡——不是不花钱(不排放)，而是花的每笔钱(每吨碳排放)都要有对应收入(碳汇或减排)来抵消。",example:"欧盟CBAM从2026年起对进口高碳产品征收碳关税——要求进口商品也为碳排放买单。",counter:"碳中和≠零化石能源——CCUS允许继续使用化石能源的同时实现净零排放，但CCUS的规模和成本远不足以匹配全球排放量。"},
+  {name:"核聚变",define:"模拟太阳内部能量产生方式——轻原子核(氘氚)在极高温度下融合释放巨大能量。几乎不产生长寿命放射性废料。",analogy:"核裂变是把大石头砸碎获取能量有碎片(核废料)问题。核聚变是把小石头挤在一起获取能量产物是清洁的氦，但需要付出巨大的挤压力(1亿℃)。",example:"中国EAST实现1.2亿℃等离子体运行101秒世界纪录。国际ITER项目正在法国建造最大托卡马克。",counter:"永远还差30年——尽管原理清楚，工程实现(特别是Q>1持续运行)仍是巨大挑战；商业聚变堆乐观估计在2050年代。"},
+  {name:"固态电池",define:"用固体电解质替代传统锂电池中液态电解质——有望同时解决能量密度天花板和安全性(液态易燃)两大痛点。",analogy:"传统锂电液态电解质像在电池里装了一瓶汽油(易燃)——固态电解质相当于把汽油换成了玻璃(不可燃)，既安全又能堆得更密。",example:"丰田计划2027-2028年量产固态电池，宣称续航1200公里。QuantumScape陶瓷隔膜已通过大众测试。",counter:"固-固界面阻抗远大于液-固界面，循环寿命和倍率性能仍不如液态电池；制造微米级无缺陷陶瓷电解质膜是巨大工程挑战。"},
+  {name:"碳捕获与封存(CCUS)",define:"从工业排放源或大气中捕获CO₂压缩运输后注入地下永久封存——最具争议的碳中和路径之一。",analogy:"CCUS像给烟囱装巨型空气净化器——但不减少燃烧只是把CO₂截下来埋到地下。类似把垃圾扫到地毯下面——需要确保永远不会再跑出来。",example:"冰岛Climeworks Orca是世界最大DAC设施，每年从大气捕获4000吨CO₂并矿化封存。",counter:"CCUS成本高昂(每吨CO₂约100-600美元)，能耗大，存在CO₂泄漏风险；批评者认为这是化石燃料行业的免费通行证。"},
+  {name:"光伏与可再生能源",define:"太阳能光伏将光能直接转化为电能，全球增长最快能源形式。中国在光伏全产业链占全球65%+产能。",analogy:"光伏像用光子在硅片上打保龄球——光子撞击硅原子把电子撞出轨道形成电流。不需要燃料不需要运动的静态发电革命。",example:"2023年全球新增光伏装机超400GW中国贡献一半以上；光伏LCOE已低于煤电。",counter:"光伏间歇性(夜晚为零阴雨天大幅降低)需大规模储能配合；退役组件回收和无害化处理是即将爆发的环境挑战。"},
+  {name:"特高压输电(UHV)",define:"±800kV及以上直流和1000kV及以上交流输电技术——中国是全球唯一实现特高压大规模商业运营的国家。",analogy:"普通电网是乡间小路损耗大距离受限。特高压是电力高速公路——可把西部水电/风电以极低损耗送到3000公里外东部沿海。",example:"昌吉-古泉±1100kV特高压直流工程输电距离3324公里，电压等级和输送容量均为世界之最。",counter:"特高压单条线路投资数百亿元；跨区域集中输电使受端电网面临集中风险——一条线路故障可能导致大面积停电。"},
+  {name:"氢能经济",define:"以氢气为能源载体通过燃料电池将化学能转化为电能(产物仅为水)。被寄予难以电气化部门脱碳厚望。",analogy:"氢能不是一次能源而是能源搬运工——需先用其他能源生产氢再用氢。绿氢(可再生电解)=零碳；灰氢(天然气制)=排放转移。",example:"2022北京冬奥会超1000辆氢燃料电池汽车配套30多个加氢站。钢铁行业探索用绿氢替代焦炭作为还原剂(氢冶金)。",counter:"氢能全链条能量损失约60-70%——100度电最终变30-40度可用功。BEV全链效率约70-80%——这是氢在乘用车领域难以竞争的根本物理原因。"},
+  {name:"气候变化临界点",define:"地球系统中一旦被跨越就会引发自我强化、不可逆变化的关键阈值——格陵兰冰盖、亚马逊雨林、AMOC等。",analogy:"临界点像推球过山脊——推过前松手球滚回来；一旦推过球自己滚下去再也回不来。正反馈使一旦启动无法在人类时间尺度逆转。",example:"IPCC第六次评估报告(2021)首次高置信度确认多个临界点存在风险——格陵兰冰盖可能在1.5-2℃被跨越。",counter:"临界点确切位置存在巨大不确定性不同模型给出的阈值差异显著；部分临界点之间可能存在多米诺效应。"},
+  {name:"动力电池回收",define:"EV锂电池退役后的梯次利用(储能等低要求场景)和最终材料回收(拆解提取锂/钴/镍)——兼顾资源循环和环保。",analogy:"电池生命周期像瀑布——第一级驱动汽车(高功率)；第二级电网储能(低功率即可)；第三级材料回收(提取贵金属重做电池)。",example:"宁德时代回收技术可将废旧电池中90%以上锂/镍/钴回收。欧盟新电池法规要求2031年起必须有最低回收材料比例。",counter:"回收成本在当前金属价格下有时高于开矿——经济性高度依赖金属价格；回收技术路线(火法vs湿法)环保性也需权衡。"},
+  {name:"电网级储能",define:"大规模储能系统(抽水蓄能/锂电/压缩空气/液流电池等)——解决可再生能源间歇性的关键支撑技术。",analogy:"没有储能的电网像零库存超市——必须即产即销。光伏只在中午发电但用电高峰在傍晚。储能是给电网建巨型仓库。",example:"河北丰宁抽水蓄能电站(3.6GW)是世界最大——用电低谷抽水上山高峰放水发电，来回效率75-80%。",counter:"抽水蓄能受地理条件限制；锂电储能1-4小时场景最优但长时储能(10+小时)经济性挑战大。"}
 ];
 
-var MKS_IDS = ['c1','c2','c4','c7'];
-
-var QUIZ_DATA = [
-  // Answer distribution: {0:5, 1:5, 2:5, 3:5} — each option index is correct exactly 5 times
-  {q:'碳中和的真正含义是？',options:['净排放为零，碳排放量与碳汇吸收量平衡','完全不排放任何温室气体','只在发电领域实现零排放','碳排放量逐年递减到零'],answer:0,explain:'碳中和是收支平衡——碳排放量与碳汇吸收量相抵，净排放为零，而非完全不排放。参考碳循环的账本逻辑。',type:'choice'},
-  {q:'切尔诺贝利事故直接导致辐射急性死亡的人数是？',options:['超过1000人','约31人','约5000人','超过20万人'],answer:1,explain:'切尔诺贝利事故直接死于急性辐射综合征的确认人数为31人。公众对核电风险的恐惧远超实际统计数字。',type:'choice'},
-  {q:'锂电池的能量密度大约是多少？',options:['约0.3kWh/kg','约12kWh/kg','约3kWh/kg','约1.2kWh/kg'],answer:0,explain:'锂电池能量密度约0.3kWh/kg，汽油约12kWh/kg，相差约40倍。电化学储能受物理定律约束。',type:'choice'},
-  {q:'气候系统的非线性最形象的比喻是？',options:['水烧开的过程','汽车加速','弹簧拉伸','推椅子到某个角度突然翻倒'],answer:3,explain:'推椅子不是慢慢倒而是到某个角度突然翻——气候系统存在临界点，越过就会发生不可逆的阶跃式变化。',type:'choice'},
-  {q:'中国建设特高压电网的核心地缘战略目的是？',options:['降低对马六甲海峡石油运输通道的依赖','单纯为了环保','响应国际减排压力','为了向国外输出技术标准'],answer:0,explain:'中国石油对外依存度超70%，且80%经过马六甲海峡。特高压将西部清洁能源送到东部，本质是能源通道自主化。',type:'choice'},
-  {q:'平流层气溶胶注入这种地球工程方案最大的风险是？',options:['成本太高不可承受','可能扰乱季风导致数十亿人粮食减产','技术完全不可行','对臭氧层无影响'],answer:1,explain:'模拟显示平流层气溶胶注入会扰乱印度和非洲季风——影响全球约20亿人的粮食生产。地球工程没有备份和临床试验。',type:'choice'},
-  {q:'氢能全链条（生产-储存-运输-使用）的综合效率大约是？',options:['超过80%','60-70%','不到30%','40-50%'],answer:2,explain:'电解水制氢效率~70%，压缩/液化储存~85%，运输~90%，燃料电池发电~50%，全链条效率不足30%。氢能更多是储能中介。',type:'choice'},
-  {q:'2021年中国北方极寒天气与全球变暖的关系是？',options:['证明全球变暖是骗局','全球变暖已经停止','两者没有任何关系','局部短期冷不能否定全球长期变暖趋势'],answer:3,explain:'局部的冷不能否定整体的热。拉尼娜等短期波动叠加到全球变暖趋势上，极端天气频次和强度都在增加。',type:'choice'},
-  {q:'风电叶片难以回收的主要原因是什么？',options:['玻璃纤维/碳纤维复合材料难以分解再利用','体积太大运输困难','回收成本高于制造新叶片的成本','政策限制回收'],answer:0,explain:'风电叶片由玻璃纤维和碳纤维复合材料制成，这些材料热固性后无法重新熔融加工，只能切割后填埋。',type:'choice'},
-  {q:'2021年中国多省拉闸限电的根本原因是？',options:['煤炭供应绝对量不足','煤价上涨但电价受管制，电厂不愿亏损发电','发电装机总量不足','全社会用电量暴增远超预期'],answer:1,explain:'煤价飙升但电价未市场联动——电厂"发电即亏"，宁愿少发。本质是电价机制问题而非产能问题。',type:'choice'},
-  {q:'全球人为碳排放中，大约有多少被海洋和陆地生态系统吸收？',options:['约10%','约25%','约50%','超过80%'],answer:2,explain:'全球人为年排放约360亿吨CO2，海洋吸收约90亿吨，陆地吸收约120亿吨，合计约210亿吨——约占总排放的58%，其余积累在大气中。',type:'choice'},
-  {q:'石墨烯电池号称续航1000公里的说法从MKS角度如何评价？',options:['技术上完全可行','已经量产但成本太高','正在实验阶段很快商用','违背电池能量密度的物理天花板，属于伪科学宣传'],answer:3,explain:'电化学储能的能量密度受物理规律约束，石墨烯只是电极材料改进，不可能突破化学键能密度上限。这种宣传是典型的"科研吸引投资"话术。',type:'choice'},
-  {q:'北极永久冻土融化释放甲烷对全球变暖的影响属于？',options:['正反馈环','负反馈环','中性影响','无法判断'],answer:0,explain:'冻土融化释放甲烷（强温室气体）加速变暖加速更多融化——这是典型的正反馈环，是气候系统非线性最危险的机制之一。',type:'choice'},
-  {q:'以下哪项最能体现"新能源的垃圾问题"？',options:['核电的辐射废料','光伏退役组件中的铅和镉对土壤的污染','天然气开采的甲烷泄漏','煤电的煤灰'],answer:1,explain:'新能源（光伏/风电/锂电池）虽然运行中零碳排放，但退役后的有毒物质处理是严重被低估的问题。光伏板含铅镉等重金属。',type:'choice'},
-  {q:'"电网的不可任性"最核心的约束是什么？',options:['电可以大规模储存但成本高','电网容量不够大','电力供需必须每秒钟实时平衡','电压不稳定'],answer:2,explain:'电力无法大规模储存——这是电网与其他能源系统最大的区别。供需必须精确平衡到秒级，偏差可能导致电网崩溃。',type:'choice'},
-  {q:'以下哪种储能方式对地理条件的要求最苛刻？',options:['锂电池储能','飞轮储能','压缩空气储能','抽水蓄能'],answer:3,explain:'抽水蓄能需要上下两个水库+足够的水头落差，依赖特定的山区地形。虽然效率高（~75%）且可靠，但选址受到严格地理限制。',type:'choice'},
-  {q:'欧盟碳边境调节机制（CBAM）对中国出口的影响大约是？',options:['无影响','每年约500亿欧元成本','每年约50亿欧元成本','反而对中国有利'],answer:2,explain:'CBAM对进口商品按碳排放量征收关税，中国作为最大碳排放国和高碳产品出口国，受影响最大的行业包括钢铁、铝、水泥等。',type:'choice'},
-  {q:'光伏组件中哪类有害物质最值得关注？',options:['硅（半导体材料）','铅和镉（重金属）','铝边框','玻璃面板'],answer:1,explain:'光伏组件中含铅（焊料）和碲化镉（薄膜电池），退役后若不当填埋会渗入土壤和地下水。日本和欧盟已要求光伏组件生产商承担回收责任。',type:'choice'},
-  {q:'以下哪种说法最准确描述"储能悖论"？',options:['所有储能技术都已成熟','只需要一种储能技术就够了','能量密度越高的储能方式通常越危险，越安全的通常密度越低','储能完全不重要'],answer:2,explain:'高密度储能（锂电池/氢能）危险性高，低密度储能（抽水蓄能）安全性好但灵活性差。没有完美解——只能根据时间尺度和场景搭配使用。',type:'choice'},
-  {q:'中国碳中和承诺（30·60目标）中"碳达峰"的预计年份是？',options:['2025年','2035年','2060年','2030年'],answer:3,explain:'中国承诺2030年前实现碳达峰（碳排放达到峰值不再增长），2060年前实现碳中和（净零排放）。这是"30·60"目标的含义。',type:'choice'}
+var mksToolkit = [
+  {name:"系统思维",desc:"能源问题从来不是孤立的——关闭煤电厂涉及电力安全、就业、区域经济等多子系统。碳中和是对整个能源-经济-社会系统的重新设计。<br><br><strong>应用：</strong>分析能源政策时画一张包含至少5个利益相关方的系统图。"},
+  {name:"能量密度直觉",desc:"不同能源能量密度差异极大——化石燃料(MJ/kg级)到锂电池(0.5-1)到氢(120但体积密度低)。理解这个梯度让你不会被「XX新能源将取代石油」迷惑。<br><br><strong>应用：</strong>比较能源方案时先算能量密度和全链条效率。"},
+  {name:"技术成熟度曲线",desc:"新技术经历：创新触发→期望膨胀顶峰→幻灭低谷→稳步爬升→生产力高原。固态电池、核聚变、氢能经济分别位于不同位置。<br><br><strong>应用：</strong>看到技术突破新闻先判断在曲线上哪个位置。"},
+  {name:"碳思维",desc:"将碳排放作为隐形成本纳入所有决策。一公斤牛肉碳排放(约60kg CO₂e)是一公斤豆腐(约2kg)的30倍。<br><br><strong>应用：</strong>做重大决策时追加一个碳成本维度。"}
 ];
 
-var SHORT_ANSWER_QUESTIONS = [
-  {q:'简述"碳循环的账本逻辑"并用一个生活中的例子说明。',ans:'碳循环账本逻辑指碳中 和是碳排放与碳汇吸收之间的收支平衡，而非完全不排放。如同家庭预算——可以花钱但要确保收入覆盖。全球人为排放约360亿吨CO2/年，海洋+陆地吸收约210亿吨/年，大气净增约150亿吨。'},
-  {q:'为什么说公众对核电的恐惧是"概率错判"？请用MKS框架分析。',ans:'公众对核电的恐惧与煤电实际危害形成倒挂——切尔诺贝利直接死亡31人，而煤电每年因空气污染导致约80万人过早死亡。核电是"低概率高可见"（事故轰动效应强），煤电是"高概率低可见"（慢性死亡分散在日常）。核恐惧的概率错判是一种"可得性启发"偏差。'},
-  {q:'锂电池能量密度的物理天花板在哪里？为什么不可能有跳跃式突破？',ans:'电化学储能受化学键能上限约束——锂电池约0.3kWh/kg而汽油约12kWh/kg。化学键的能差由元素周期表中的电极电势差决定，这是物理常数。每年能量密度提升仅5-8%，是以材料优化而非物理突破为驱动的。石墨烯只是改变了电极结构，不影响键能上限。'},
-  {q:'什么是气候系统的"临界点"？举一个具体例子说明。',ans:'临界点（tipping point）是气候系统中一旦越过就不可逆转的阈值。例如：北极永久冻土融化释放甲烷加速变暖再融化更多冻土（正反馈），一旦开始就无法停止。又如格林兰冰盖——一旦融化到某个深度，冰面海拔降到一定高度后气温更高加速融化。'},
-  {q:'中国建设特高压电网与地缘政治有何关系？',ans:'特高压是实现"西电东送"的关键技术——将西部风电/光伏输送到东部沿海。这降低了中国对海上石油进口（经马六甲海峡）的依赖，减少了石油美元体系对中国能源安全的掣肘。能源选择即地缘战略选择——减少石油依赖=减少海上航道风险。'},
-  {q:'"储能的根本悖论"是什么？请解释。',ans:'储能悖论：能量密度越高通常越危险（锂电池易起火/氢能易爆炸），能量密度越低越安全但效用受限（抽水蓄能安全但需特定地理条件）。没有完美储能技术——只能根据时间尺度搭配使用：短时调频用电池、日调节用抽水蓄能、季节性调节需要氢能等长时储能。'},
-  {q:'"新能源=零污染"这个说法错在哪里？',ans:'污染形态和时空位置被转移了——光伏运行中零碳排放，但退役后含铅/镉等有毒物质污染土壤；锂电池电解液有毒、风电叶片不可回收。新能源只是把"当时当地的大气污染"变成了"未来某地的固体废弃物污染"。需全生命周期评估才能反映真实环境影响。'},
-  {q:'2021年中国拉闸限电的本质问题是什么？',ans:'本质是电价机制问题而非产能不足——煤价飙升但电价受管制，电厂"发电即亏"所以不愿多发。这体现了"电网的不可任性"——电力无法储存，供需必须实时平衡。建更多电厂解决不了——关键在于电力市场化改革和电网灵活调节能力建设。'},
-  {q:'什么是"拉尼娜与全球变暖的辩证"？如何向普通人解释？',ans:'拉尼娜是赤道太平洋海温异常降低的短期气候现象（每2-7年一次），全球变暖是长期趋势（数十年尺度）。局部冷和全球热可以同时出现——如同冬天也有暖和的日子但不代表不是冬天。2021年中国北方极寒但全球平均气温仍是历史前五——波动无法否定趋势。'},
-  {q:'如何理解"地球工程的诱惑与风险"中的"道德风险"概念？',ans:'道德风险（moral hazard）：如果人类认为"有地球工程兜底"就可以放松减排努力，结果可能既做了破坏环境的事又没用上地球工程（因为风险太大不敢真的实施）。这是"以未来的不确定性为当下的不作为背书"的危险逻辑。正确的做法是先全力减排，地球工程只作为最后手段保留。'}
+var boundaryData = [
+  {label:"页岩气革命",relation:"水平钻井+水力压裂使美国从能源进口国变出口国——重塑全球地缘格局",level:"产业变革"},
+  {label:"OPEC+机制",relation:"石油输出国组织+俄罗斯等产油国产量协调联盟",level:"地缘政治"},
+  {label:"EROI能源回报率",relation:"能源产出与获取投入之比——页岩油约5:1远低于传统石油(20:1+)",level:"核心指标"},
+  {label:"杰文斯悖论",relation:"效率提高反而增加总消耗——LED更省电导致更广泛使用",level:"经济学悖论"},
+  {label:"碳交易vs碳税",relation:"前者设总量让市场定价(EU-ETS)；后者设价格让市场决定排放量",level:"政策工具"},
+  {label:"虚拟电厂",relation:"软件聚合分布式能源(屋顶光伏/储能/EV)作为一个整体参与电力市场",level:"新兴模式"},
+  {label:"V2G车到电网",relation:"EV停驶时将电池电量反向输送给电网——车成为移动储能单元",level:"前沿应用"},
+  {label:"第四代核反应堆",relation:"以安全性/可持续性/防扩散为目标——钠冷快堆/熔盐堆/高温气冷堆等",level:"技术前沿"},
+  {label:"地热能",relation:"利用地球内部热量发电——冰岛30%电力来自地热但受地质条件制约",level:"可再生资源"},
+  {label:"海洋能",relation:"潮汐/波浪/温差发电——资源量巨大但工程挑战极高",level:"新兴领域"},
+  {label:"SMR小型模块化堆",relation:"预制模块化核反应堆(<300MWe)——降低建设成本和周期",level:"技术前沿"},
+  {label:"IEA国际能源署",relation:"OECD国家能源政策协调机构——近年从石油安全扩展到清洁能源转型",level:"国际治理"}
 ];
 
-var SOCRATIC_DATA = [
-  {theme:'碳中和的可行性',pairs:[
-    {q:'中国承诺2060年碳中和，这个目标真的能做到吗？',a:'从技术角度看可行但挑战巨大。中国目前的碳排放约100亿吨/年，相当于全球28%。要在40年内净排放归零，需要：能源结构从煤炭占比58%降到接近零、交通全面电动化、工业流程革命性改造。但中国的优势是光伏/风电/特高压/电动车全产业链世界领先——这是"供给创造需求"的正循环。'},
-    {q:'如果中国碳中 和了但其他发展中国家还在增排，有意义吗？',a:'非常有意义——首先碳中 和技术路径一旦跑通（光伏+风电+储能+特高压+电动车），就形成可复制的"中国方案"，降低全球碳中 和的边际成本；其次中国是全球最大制造业国家，中国碳中 和意味着全球供应链碳中 和；第三气候治理是"囚徒困境"——需要有国家先迈出一步打破僵局。'}
-  ]},
-  {theme:'核电的理性评估',pairs:[
-    {q:'既然煤电每年致死80万人，为什么公众更怕核电？',a:'这是"概率错觉"和"可得性启发"的叠加——核电事故画面震撼（切尔诺贝利的废墟、福岛的爆炸），媒体高强度报道，使人高估其发生频率。煤电的死亡分散在日常的空气污染中，没有"画面感"。人类大脑演化于小群体环境，对"一次性大量死亡"的恐惧远大于"分散的慢性死亡"。'},
-    {q:'但核废料要管上万年——这难道不是"留给后代的炸弹"吗？',a:'核废料确实是核电最大的技术和伦理难题。但需要量化对比：核电运行50年产生的高放废料全球总量约2.9万吨（相当于一个足球场堆高2米），而煤电一年排放的CO2超过150亿吨且在大气中存留数百年。两者的"代际影响"不在一个数量级——CO2的气候效应影响所有后代，高放废料可以通过深地质处置隔离。'}
-  ]},
-  {theme:'电池的物理极限',pairs:[
-    {q:'如果电池能量密度不能突破物理天花板，电动车如何替代燃油车？',a:'虽然电池能量密度只有汽油的1/40，但电机效率（90%+）远高于内燃机（25-30%），所以实际续航差距没40倍那么大。更关键的方向不是拼命提高能量密度，而是：超快充（800V平台10分钟充400公里）、换电模式、智能化（自动驾驶改变出行方式减少总用车里程）。'},
-    {q:'钠电池真的能从实验室走向大规模商用吗？',a:'钠电池的最大优势是钠资源丰富（海水中取之不竭）且成本约为锂电池的70%。能量密度虽低于锂电池（约0.15kWh/kg），但足够用于储能电站和低速电动车。锂资源集中分布（智利/澳大利亚/中国），钠电池可以降低供应链风险——这是"够用就好"的务实判断。'}
-  ]},
-  {theme:'气候变化与个人行动',pairs:[
-    {q:'个人少开一天车、少吃一顿肉对气候变化有意义吗？',a:'从碳循环账本看，单次个人的减排确实微乎其微——但这混淆了"个体减排的直接效果"和"个体行为的社会信号效应"。当足够多的个体改变行为，就会推动产业变革（如植物肉市场从0增长到数百亿美元）。更重要的是——个人行动的真正价值是"投票权"：用消费选择、选票、社交媒体话语权推动政策变革。'},
-    {q:'如果气候变化真的那么紧迫，为什么各国还在争论不休？',a:'这就是典型的"公地悲剧"——减排收益全球共享但减排成本本国承担，每个国家都有"免费搭车"的动机。巴黎协定用"自主贡献"（NDC）替代了有约束力的配额，降低了博弈门槛但也弱化了执行力。突破方向是：技术使碳中 和成本降到比化石能源更低时，气候博弈就从"成本分摊"变成"技术竞赛"。'}
-  ]}
-];
-
-var DECISION_ROUNDS = [
-  {scenario:'你有一笔100万的投资预算，希望在能源领域做长期投资（5-10年视角）。以下哪个选择最符合MKS分析框架？',choices:[
-    {text:'全部投入氢能赛道——这是终极清洁能源',feedback:'氢能全链条效率不到30%，短期难以突破物理天花板。单一押注忽视储能悖论和电网约束。',type:'wrong'},
-    {text:'分散投资——光伏（30%）、储能（30%）、特高压设备（20%）、碳捕集技术（20%）',feedback:'MKS分析：光伏（中国全产业链优势）+储能（电网灵活性关键瓶颈）+特高压（跨区输送唯一解）+碳捕集（碳中和兜底技术）。分散配置覆盖碳中 和全链条。',type:'correct'},
-    {text:'全仓买核电股票——核电是唯一可靠的基荷清洁能源',feedback:'核电虽是基荷清洁能源，但建设周期长（5-10年）、公众接受度不确定性大、核废料问题未解决。单一押注风险过高。',type:'warning'}
-  ]},
-  {scenario:'你所在的城市政府正在征求意见——是否在郊区建设一座大型光伏电站。支持者说环保，反对者说占用耕地。你的MKS分析建议？',choices:[
-    {text:'强烈支持——光伏是清洁能源，建在哪里都可以',feedback:'忽视了"新能源的垃圾问题"和"务实判断"——光伏退役后含铅和镉的组件如何处理？占用耕地是否影响粮食安全？需要全周期评估而非只看运行阶段。',type:'wrong'},
-    {text:'建议做全生命周期评估——考虑土地用途、退役回收、电网接入容量、对当地生态的影响',feedback:'正确！用MKS多维分析框架——碳循环账本（减排效益）、务实判断（土地机会成本）、电网不可任性（是否有消纳能力）、新能源垃圾问题（退役处理方案）。',type:'correct'},
-    {text:'强烈反对——光伏不靠谱，应该建核电站',feedback:'非此即彼的思维——不同能源适用不同场景。光伏和核电不是"替代"而是"互补"。关键是因地制宜而非教条化选边。',type:'warning'}
-  ]},
-  {scenario:'你的公司考虑在ESG报告中宣称"已实现碳中和"。目前的做法是大量购买碳抵消（植树项目）来覆盖排放。MKS分析怎么看？',choices:[
-    {text:'支持——购买碳抵消就是碳中 和了',feedback:'混淆了"碳抵消"和"碳中 和"——碳循环账本逻辑：种的树需要几十年才能吸收等量CO2，且森林火灾可瞬间释放。碳抵消只是"花钱买心安"。',type:'wrong'},
-    {text:'建议先大幅减少自身排放（能效提升、清洁能源替代），再用碳抵消弥补难以消除的残余排放',feedback:'正确！先"节流"再"开源"——第一步改进自身运营降低排放，第二步对难以消除的残余排放（如航空/水泥工艺排放）购买高质量碳信用。碳抵消是"最后一公里"。',type:'correct'},
-    {text:'直接拒绝——碳抵消完全没用',feedback:'过度否定——高质量碳抵消（如直接空气捕集DAC而非植树）是有真实气候效益的。关键是"精打细算"——先减排、再抵消、且确保碳信用的额外性和永久性。',type:'warning'}
-  ]}
-];
-
-// ==================== STATE ====================
-var flipIndex = 0;
-var learnedSet = new Set();
-var wrongBook = [];
-var quizState = {active:false,questions:[],correct:0,total:0,streak:0,mode:'all',startTime:null,essayAnswers:{}};
-var examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
-var statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
-
-// ==================== UTILITY ====================
-function $(id){return document.getElementById(id);}
-function save(key,val){try{localStorage.setItem('mks_tech3_'+key,JSON.stringify(val));}catch(e){}}
-function load(key,def){try{var v=localStorage.getItem('mks_tech3_'+key);return v?JSON.parse(v):def;}catch(e){return def;}}
-
-function loadState(){
-  learnedSet=new Set(load('learned',[]));
-  wrongBook=load('wrongBook',[]);
-  statsData=load('stats',{learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0});
-}
-
-function saveState(){
-  save('learned',[...learnedSet]);
-  save('wrongBook',wrongBook);
-  save('stats',statsData);
-}
-
-// ==================== TABS ====================
-document.querySelectorAll('.tab-btn').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
-    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
-    this.classList.add('active');
-    $('tab-'+this.dataset.tab).classList.add('active');
-    if(this.dataset.tab=='4') updateReviewStats();
-    if(this.dataset.tab=='5') renderMindmap();
-  });
-});
-
-// ==================== TAB 0: OVERVIEW ====================
-function renderConcepts(){
-  var grid=$('concept-grid');
-  grid.innerHTML='';
-  CONCEPTS.forEach(function(c,i){
-    var card=document.createElement('div');
-    card.className='concept-card';
-    card.innerHTML='<span class="label '+(c.mks?'mks':'')+'">'+(c.mks?'MKS核心':'概念')+'</span><h3>'+c.name+'</h3><div class="def">'+c.def+'</div><div class="extra" id="extra-'+c.id+'"><p><strong>类比：</strong>'+c.analogy+'</p><p><strong>示例：</strong>'+c.example+'</p><p><strong>反例/边界：</strong>'+c.counter+'</p></div>';
-    card.addEventListener('click',function(){
-      var extra=$('extra-'+c.id);
-      extra.classList.toggle('show');
-    });
-    grid.appendChild(card);
-  });
-
-  var mg=$('mks-grid');
-  mg.innerHTML='';
-  MKS_IDS.forEach(function(id){
-    var c=CONCEPTS.find(function(x){return x.id===id;});
-    if(!c)return;
-    var card=document.createElement('div');
-    card.className='mks-core';
-    card.innerHTML='<div class="icon">★</div><h3>'+c.name+'</h3><p>'+c.def.substring(0,60)+'...</p>';
-    mg.appendChild(card);
-  });
-}
-
-function renderSVGMap(){
-  var svg='<svg viewBox="0 0 1060 780" xmlns="http://www.w3.org/2000/svg">'+
-  '<defs>'+
-    '<linearGradient id="hGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2d1510"/><stop offset="100%" stop-color="#4a2518"/></linearGradient>'+
-    '<linearGradient id="mksGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c0392b"/><stop offset="100%" stop-color="#9b2c1f"/></linearGradient>'+
-    '<linearGradient id="cat1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3d1f18"/><stop offset="100%" stop-color="#5a3028"/></linearGradient>'+
-    '<linearGradient id="cat2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3d1f18"/><stop offset="100%" stop-color="#2d4a3a"/></linearGradient>'+
-    '<linearGradient id="cat3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3d1f18"/><stop offset="100%" stop-color="#5a3028"/></linearGradient>'+
-    '<linearGradient id="cat4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3d1f18"/><stop offset="100%" stop-color="#4a2a1a"/></linearGradient>'+
-    '<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter>'+
-    '<filter id="shAccent" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#c0392b" flood-opacity="0.3"/></filter>'+
-    '<filter id="shGreen" x="-25%" y="-25%" width="150%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#4a8c5c" flood-opacity="0.25"/></filter>'+
-    '<marker id="arrDark" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#6b5555"/></marker>'+
-    '<marker id="arrAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#c0392b"/></marker>'+
-    '<marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#4a8c5c"/></marker>'+
-    '<marker id="arrGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#b8860b"/></marker>'+
-  '</defs>'+
-  '<rect width="1060" height="780" fill="#fdf6ec" rx="14"/>'+
-  '<rect x="1" y="1" width="1058" height="778" fill="none" stroke="#e8d5c0" stroke-width="1.5" rx="13"/>'+
-
-  '<!-- TIER 0: ROOT -->'+
-  '<rect x="330" y="16" width="400" height="44" rx="10" fill="url(#hGrad)" filter="url(#sh)"/>'+
-  '<text x="530" y="44" text-anchor="middle" fill="#f8e8d8" font-size="18" font-weight="bold" font-family="sans-serif">⚡ 能源博弈与地球系统</text>'+
-
-  '<!-- Connectors to 4 hubs -->'+
-  '<path d="M400,60 Q280,88 170,112" stroke="#6b5555" stroke-width="2" fill="none" marker-end="url(#arrDark)"/>'+
-  '<path d="M460,60 Q420,92 420,112" stroke="#6b5555" stroke-width="2" fill="none" marker-end="url(#arrDark)"/>'+
-  '<path d="M600,60 Q640,92 640,112" stroke="#6b5555" stroke-width="2" fill="none" marker-end="url(#arrDark)"/>'+
-  '<path d="M660,60 Q800,88 930,112" stroke="#6b5555" stroke-width="2" fill="none" marker-end="url(#arrDark)"/>'+
-
-  '<!-- TIER 1: 4 CATEGORY HUBS -->'+
-  '<circle cx="170" cy="136" r="36" fill="url(#cat1)" filter="url(#sh)"/>'+
-  '<text x="170" y="132" text-anchor="middle" fill="#f8e8d8" font-size="12" font-weight="bold" font-family="sans-serif">物理约束</text>'+
-  '<text x="170" y="147" text-anchor="middle" fill="#d4bfa0" font-size="10" font-family="sans-serif">能源物理层</text>'+
-
-  '<circle cx="420" cy="136" r="36" fill="url(#cat2)" filter="url(#sh)"/>'+
-  '<text x="420" y="132" text-anchor="middle" fill="#f8e8d8" font-size="12" font-weight="bold" font-family="sans-serif">气候认知</text>'+
-  '<text x="420" y="147" text-anchor="middle" fill="#d4bfa0" font-size="10" font-family="sans-serif">地球系统层</text>'+
-
-  '<circle cx="640" cy="136" r="36" fill="url(#cat3)" filter="url(#sh)"/>'+
-  '<text x="640" y="132" text-anchor="middle" fill="#f8e8d8" font-size="12" font-weight="bold" font-family="sans-serif">地缘博弈</text>'+
-  '<text x="640" y="147" text-anchor="middle" fill="#d4bfa0" font-size="10" font-family="sans-serif">政策战略层</text>'+
-
-  '<circle cx="930" cy="136" r="36" fill="url(#cat4)" filter="url(#sh)"/>'+
-  '<text x="930" y="132" text-anchor="middle" fill="#f8e8d8" font-size="12" font-weight="bold" font-family="sans-serif">环境代价</text>'+
-  '<text x="930" y="147" text-anchor="middle" fill="#d4bfa0" font-size="10" font-family="sans-serif">生态伦理层</text>'+
-
-  '<!-- TIER 2: CONCEPT CARDS (10 total, organized under 4 hubs) -->'+
-
-  '<!-- Col 1: 物理约束 → 3 concepts -->'+
-  '<line x1="170" y1="172" x2="78" y2="232" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrAccent)"/>'+
-  '<line x1="170" y1="172" x2="170" y2="232" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>'+
-  '<line x1="170" y1="172" x2="262" y2="232" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>'+
-
-  '<rect x="28" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#c0392b" stroke-width="2.5" filter="url(#shAccent)"/>'+
-  '<text x="78" y="258" text-anchor="middle" fill="#9b2c1f" font-size="10.5" font-weight="bold" font-family="sans-serif">★ 电池物理天花板</text>'+
-  '<text x="78" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">化学键能上限</text>'+
-
-  '<rect x="120" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#d4a574" stroke-width="1.5" filter="url(#sh)"/>'+
-  '<text x="170" y="258" text-anchor="middle" fill="#3d2f2f" font-size="10.5" font-weight="bold" font-family="sans-serif">电网不可任性</text>'+
-  '<text x="170" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">实时平衡约束</text>'+
-
-  '<rect x="212" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#d4a574" stroke-width="1.5" filter="url(#sh)"/>'+
-  '<text x="262" y="258" text-anchor="middle" fill="#3d2f2f" font-size="10.5" font-weight="bold" font-family="sans-serif">储能根本悖论</text>'+
-  '<text x="262" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">密度vs安全</text>'+
-
-  '<!-- Col 2: 气候认知 → 3 concepts -->'+
-  '<line x1="420" y1="172" x2="328" y2="232" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>'+
-  '<line x1="420" y1="172" x2="420" y2="232" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrAccent)"/>'+
-  '<line x1="420" y1="172" x2="512" y2="232" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>'+
-
-  '<rect x="278" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#d4a574" stroke-width="1.5" filter="url(#sh)"/>'+
-  '<text x="328" y="258" text-anchor="middle" fill="#3d2f2f" font-size="10.5" font-weight="bold" font-family="sans-serif">拉尼娜辩证</text>'+
-  '<text x="328" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">局部冷vs全局热</text>'+
-
-  '<rect x="370" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#c0392b" stroke-width="2.5" filter="url(#shAccent)"/>'+
-  '<text x="420" y="258" text-anchor="middle" fill="#9b2c1f" font-size="10.5" font-weight="bold" font-family="sans-serif">★ 气候非线性</text>'+
-  '<text x="420" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">临界点阶跃</text>'+
-
-  '<rect x="462" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#d4a574" stroke-width="1.5" filter="url(#sh)"/>'+
-  '<text x="512" y="258" text-anchor="middle" fill="#3d2f2f" font-size="10.5" font-weight="bold" font-family="sans-serif">地球工程诱惑</text>'+
-  '<text x="512" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">干预无备份</text>'+
-
-  '<!-- Col 3: 地缘博弈 → 2 concepts -->'+
-  '<line x1="640" y1="172" x2="540" y2="232" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>'+
-  '<line x1="640" y1="172" x2="680" y2="232" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrAccent)"/>'+
-
-  '<rect x="490" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#d4a574" stroke-width="1.5" filter="url(#sh)"/>'+
-  '<text x="540" y="258" text-anchor="middle" fill="#3d2f2f" font-size="10.5" font-weight="bold" font-family="sans-serif">能源地缘政治</text>'+
-  '<text x="540" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">技术即战略</text>'+
-
-  '<rect x="630" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#c0392b" stroke-width="2.5" filter="url(#shAccent)"/>'+
-  '<text x="680" y="258" text-anchor="middle" fill="#9b2c1f" font-size="10.5" font-weight="bold" font-family="sans-serif">★ 碳循环账本</text>'+
-  '<text x="680" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">收支平衡逻辑</text>'+
-
-  '<!-- Col 4: 环境代价 → 2 concepts -->'+
-  '<line x1="930" y1="172" x2="830" y2="232" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrAccent)"/>'+
-  '<line x1="930" y1="172" x2="970" y2="232" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>'+
-
-  '<rect x="780" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#c0392b" stroke-width="2.5" filter="url(#shAccent)"/>'+
-  '<text x="830" y="258" text-anchor="middle" fill="#9b2c1f" font-size="10.5" font-weight="bold" font-family="sans-serif">★ 核恐惧概率错判</text>'+
-  '<text x="830" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">风险倒挂认知</text>'+
-
-  '<rect x="872" y="237" width="100" height="52" rx="8" fill="#fffaf2" stroke="#d4a574" stroke-width="1.5" filter="url(#sh)"/>'+
-  '<text x="922" y="258" text-anchor="middle" fill="#3d2f2f" font-size="10.5" font-weight="bold" font-family="sans-serif">新能源垃圾</text>'+
-  '<text x="922" y="277" text-anchor="middle" fill="#6b5555" font-size="9" font-family="sans-serif">污染转移形态</text>'+
-
-  '<!-- INTEGRATION ARROWS from concepts down -->'+
-  '<line x1="78" y1="289" x2="78" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="170" y1="289" x2="170" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="262" y1="289" x2="262" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="328" y1="289" x2="328" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="420" y1="289" x2="420" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="512" y1="289" x2="512" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="540" y1="289" x2="540" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="680" y1="289" x2="680" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="830" y1="289" x2="830" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-  '<line x1="922" y1="289" x2="922" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7"/>'+
-
-  '<!-- TIER 3: INTEGRATION BRIDGE -->'+
-  '<rect x="40" y="405" width="980" height="36" rx="11" fill="#4a8c5c" opacity="0.85" filter="url(#shGreen)"/>'+
-  '<text x="530" y="428" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">物理约束 → 气候认知 → 地缘博弈 → 环境代价：四层递进，形成完整能源认知体系</text>'+
-
-  '<line x1="530" y1="441" x2="530" y2="490" stroke="#4a8c5c" stroke-width="2.5" marker-end="url(#arrGreen)"/>'+
-
-  '<!-- TIER 4: APPLICATION LAYER -->'+
-  '<rect x="230" y="496" width="600" height="60" rx="14" fill="url(#hGrad)" filter="url(#sh)"/>'+
-  '<text x="530" y="522" text-anchor="middle" fill="#f8e8d8" font-size="16" font-weight="bold" font-family="sans-serif">\u{1F30D} 能源博弈与地球系统 — 整合应用</text>'+
-  '<text x="530" y="544" text-anchor="middle" fill="#d4bfa0" font-size="11" font-family="sans-serif">所有概念协同作用，应对现实世界的能源与气候挑战</text>'+
-
-  '<!-- Cross-connections between categories -->'+
-  '<path d="M530,496 L350,496" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.35"/>'+
-  '<path d="M530,496 L710,496" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.35"/>'+
-
-  '<!-- LEGEND -->'+
-  '<rect x="40" y="598" width="14" height="14" rx="3" fill="#fffaf2" stroke="#c0392b" stroke-width="2.2"/>'+
-  '<text x="60" y="610" fill="#6b5555" font-size="10.5" font-family="sans-serif">★ = MKS核心概念</text>'+
-  '<rect x="220" y="598" width="14" height="14" rx="3" fill="#fffaf2" stroke="#d4a574" stroke-width="1.2"/>'+
-  '<text x="240" y="610" fill="#6b5555" font-size="10.5" font-family="sans-serif">□ = 支撑概念</text>'+
-  '<rect x="380" y="598" width="14" height="14" rx="3" fill="#4a8c5c" opacity="0.7"/>'+
-  '<text x="400" y="610" fill="#6b5555" font-size="10.5" font-family="sans-serif">━━ = 递进整合路径</text>'+
-  '<line x1="530" y1="605" x2="558" y2="605" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4,3"/>'+
-  '<text x="564" y="610" fill="#6b5555" font-size="10.5" font-family="sans-serif">━━ = 分类关联</text>'+
-  '<text x="730" y="610" fill="#9a8585" font-size="10.5" font-family="sans-serif">Energy Games and Earth Systems — 卓克·科技参考基础版</text>'+
-
-  '<line x1="120" y1="630" x2="940" y2="630" stroke="#e8d5c0" stroke-width="0.8"/>'+
-  '</svg>';
-  $('svg-map').innerHTML=svg;
-}
-
-function updateProgress(){
-  var count=learnedSet.size;
-  $('learned-count').textContent=count;
-  var pct=Math.round(count/10*100);
-  $('progress-fill').style.width=pct+'%';
-  $('progress-text').textContent=count>=10?'🎉 恭喜！你已掌握所有核心概念！':'已掌握 '+count+'/10，继续努力！';
-  statsData.learned=count;
-  saveState();
-}
-
-// ==================== TAB 1: FLIP CARDS ====================
-function renderFlipCard(idx){
-  var c=CONCEPTS[idx];
-  if(!c)return;
-  var front=$('flip-front');
-  var back=$('flip-back');
-  front.innerHTML='<h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">'+c.name+'</h3><p style="font-size:13px;color:var(--text2);margin-bottom:10px;">'+(c.mks?'MKS核心概念':'核心概念')+'</p><p style="font-size:14px;">'+c.def+'</p><div style="margin-top:12px;font-size:13px;color:var(--text2);text-align:center;">点击“翻转卡片”查看详情</div>';
-  back.innerHTML='<h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">'+c.name+' · 深层理解</h3><p style="font-size:13px;margin-bottom:8px;"><strong>类比：</strong>'+c.analogy+'</p><p style="font-size:13px;margin-bottom:8px;"><strong>示例：</strong>'+c.example+'</p><p style="font-size:13px;"><strong>反例/边界：</strong>'+c.counter+'</p>';
-  $('flip-counter').textContent=(idx+1)+'/'+CONCEPTS.length;
-  $('flip-card').classList.remove('flipped');
-  var btn=$('mark-learned-btn');
-  if(learnedSet.has(c.id)){
-    btn.textContent='✓ 已学会';
-    btn.style.background='#4a8c5c';
-  } else {
-    btn.textContent='✓ 标记已学会';
-    btn.style.background='';
-  }
-}
-
-function flipCard(){
-  $('flip-card').classList.toggle('flipped');
-}
-function prevCard(){flipIndex=(flipIndex-1+CONCEPTS.length)%CONCEPTS.length;renderFlipCard(flipIndex);}
-function nextCard(){flipIndex=(flipIndex+1)%CONCEPTS.length;renderFlipCard(flipIndex);}
-function markLearned(){
-  var c=CONCEPTS[flipIndex];
-  if(!c)return;
-  if(learnedSet.has(c.id)){
-    learnedSet.delete(c.id);
-  } else {
-    learnedSet.add(c.id);
-  }
-  saveState();
-  renderFlipCard(flipIndex);
-  updateProgress();
-}
-
-// ==================== TAB 2: QUIZ ====================
-function shuffleArray(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
-
-function startQuiz(mode){
-  quizState.mode=mode;
-  quizState.correct=0;
-  quizState.total=0;
-  quizState.streak=0;
-  quizState.startTime=Date.now();
-  quizState.active=true;
-  quizState.essayAnswers={};
-
-  var qs=[];
-  if(mode==='random'){
-    // random 10: 7 choice + 3 short-answer
-    var choiceQs=QUIZ_DATA.filter(function(q){return q.type==='choice';});
-    var essayQs=SHORT_ANSWER_QUESTIONS.map(function(q,i){return {q:q.q,answer:i,explain:q.ans,type:'essay',ans:q.ans};});
-    qs=shuffleArray([...choiceQs]).slice(0,7);
-    qs=qs.concat(shuffleArray([...essayQs]).slice(0,3));
-    qs=shuffleArray(qs);
-  } else {
-    qs=[...QUIZ_DATA];
-    var essayQs=SHORT_ANSWER_QUESTIONS.map(function(q,i){return {q:q.q,answer:i,explain:q.ans,type:'essay',ans:q.ans};});
-    qs=qs.concat(essayQs);
-  }
-  quizState.questions=qs;
-  $('quiz-info').textContent='共 '+qs.length+' 题，开始答题！';
-  $('quiz-result').style.display='none';
-  renderAllQuiz();
-  startQuizTimer();
-}
-
-function renderAllQuiz(){
-  var container=$('quiz-container');
-  var qs=quizState.questions;
-  var html='';
-  qs.forEach(function(q,i){
-    if(q.type==='choice'){
-      html+='<div class="quiz-card" id="quiz-card-'+i+'"><h3>第 '+(i+1)+'/'+qs.length+' 题 (选择题)</h3><p style="font-size:14px;margin-bottom:10px;">'+q.q+'</p><div class="options" id="quiz-opts-'+i+'">'+q.options.map(function(opt,j){return '<div class="option" onclick="answerQuizQ('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+opt+'</div>';}).join('')+'</div><div class="feedback" id="quiz-fb-'+i+'"></div></div>';
-    } else {
-      html+='<div class="quiz-card" id="quiz-card-'+i+'"><h3>第 '+(i+1)+'/'+qs.length+' 题 (简答题)</h3><p style="font-size:14px;margin-bottom:10px;">'+q.q+'</p><textarea class="short-input" id="quiz-essay-'+i+'" placeholder="输入你的回答..."></textarea><div style="margin-top:8px;"><button class="btn btn-primary btn-sm" onclick="answerQuizEssay('+i+')">提交</button></div><div class="feedback" id="quiz-fb-'+i+'"></div></div>';
-    }
-  });
-  html+='<div style="margin-top:16px;text-align:center;"><button class="btn btn-warning" onclick="finishQuiz()">\u{1F4E9} 提交全部答案</button></div>';
-  container.innerHTML=html;
-}
-
-function answerQuizQ(qIdx,optIdx){
-  var optsEl=$('quiz-opts-'+qIdx);
-  if(!optsEl || optsEl.dataset.answered==='1') return;
-  optsEl.dataset.answered='1';
-  var q=quizState.questions[qIdx];
-  var isCorrect=optIdx===q.answer;
-  optsEl.querySelectorAll('.option').forEach(function(el,j){
-    el.style.pointerEvents='none';
-    if(j===q.answer) el.classList.add('correct');
-    if(j===optIdx&&!isCorrect) el.classList.add('wrong');
-    if(j===optIdx) el.classList.add('selected');
-  });
-  var fb=$('quiz-fb-'+qIdx);
-  quizState.total++;
-  if(isCorrect){
-    quizState.correct++;
-    quizState.streak++;
-    fb.className='feedback correct show';
-    fb.innerHTML='✅ 正确！'+q.explain;
-  } else {
-    quizState.streak=0;
-    fb.className='feedback wrong show';
-    fb.innerHTML='❌ 错误。正确答案是 '+String.fromCharCode(65+q.answer)+'。'+q.explain;
-    wrongBook.push({q:q.q,options:q.options,userChoice:optIdx,correctAnswer:q.answer,explain:q.explain,time:new Date().toISOString()});
-  }
-  saveState();
-}
-
-function answerQuizEssay(qIdx){
-  var essayEl=$('quiz-essay-'+qIdx);
-  var fb=$('quiz-fb-'+qIdx);
-  if(!essayEl || fb.classList.contains('show')) return;
-  var userAnswer=essayEl.value.trim();
-  if(!userAnswer){alert('请输入你的回答');return;}
-  quizState.essayAnswers[qIdx]=userAnswer;
-  fb.className='feedback correct show';
-  fb.innerHTML='<strong>✅ 你的回答：</strong>'+userAnswer+'<br><br><strong>\u{1F4DA} 参考答案：</strong>'+quizState.questions[qIdx].ans;
-  quizState.total++;
-  quizState.correct++;
-  statsData.quizAnswered++;
-  saveState();
-}
-
-function startQuizTimer(){
-  var timerEl=$('quiz-timer');
-  timerEl.style.display='block';
-  var seconds=0;
-  if(quizState._timerInterval) clearInterval(quizState._timerInterval);
-  quizState._timerInterval=setInterval(function(){
-    seconds++;
-    var min=Math.floor(seconds/60);
-    var sec=seconds%60;
-    timerEl.textContent='⏱ 用时: '+(min<10?'0':'')+min+':'+(sec<10?'0':'')+sec;
-  },1000);
-}
-
-function finishQuiz(){
-  if(quizState._timerInterval) clearInterval(quizState._timerInterval);
-  quizState.active=false;
-  var resultEl=$('quiz-result');
-  resultEl.style.display='block';
-  var total=quizState.total;
-  var correct=quizState.correct;
-  var pct=Math.round(correct/total*100);
-  var msg=pct>=90?'🌟 太厉害了！你对能源博弈与地球系统有深刻的理解。':pct>=70?'👍 不错！你对核心概念的理解已经比较扎实。':pct>=50?'📖 基础过关，建议重点复习错误的概念。':'🛠 还需要加强学习，建议重新阅读知识卡片和概念图。';
-  resultEl.innerHTML='<div class="card"><h3>答题结果</h3><p style="font-size:18px;font-weight:700;color:var(--accent);">正确 '+correct+'/'+total+' ('+pct+'%)</p><p>'+msg+'</p></div>';
-  statsData.quizAnswered+=total;
-  var oldAcc=statsData.accuracy*(statsData.quizAnswered/(statsData.quizAnswered+total)||0);
-  statsData.accuracy=pct/100;
-  saveState();
-}
-
-// ==================== TAB 3: EXAM ====================
-function startExam(){
-  $('exam-start-btn').style.display='none';
-  $('exam-submit-btn').style.display='inline-block';
-  examState.active=true;
-  examState.answers=[];
-  examState.startTime=Date.now();
-
-  var choiceQs=shuffleArray(QUIZ_DATA.filter(function(q){return q.type==='choice';})).slice(0,7);
-  var essayQs=SHORT_ANSWER_QUESTIONS.map(function(q,i){return {q:q.q,answer:i,explain:q.ans,type:'essay',ans:q.ans,idx:i};});
-  var selectedEssays=shuffleArray([...essayQs]).slice(0,3);
-  examState.questions=shuffleArray([...choiceQs].concat(selectedEssays));
-
-  var container=$('exam-container');
-  var html='';
-  examState.questions.forEach(function(q,i){
-    if(q.type==='choice'){
-      html+='<div class="exam-card"><h3>第 '+(i+1)+'/10 题 (选择题)</h3><p style="font-size:14px;margin-bottom:10px;">'+q.q+'</p><div class="options" id="exam-opts-'+i+'">'+q.options.map(function(opt,j){return '<div class="option" onclick="selectExamChoice('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+opt+'</div>';}).join('')+'</div></div>';
-    } else {
-      html+='<div class="exam-card"><h3>第 '+(i+1)+'/10 题 (简答题)</h3><p style="font-size:14px;margin-bottom:10px;">'+q.q+'</p><textarea class="short-input" id="exam-essay-'+i+'" placeholder="输入你的回答..."></textarea></div>';
-    }
-  });
-  container.innerHTML=html;
-
-  // Timer
-  var totalSec=examState.minutes*60;
-  var timerEl=$('exam-timer-display');
-  examState.timer=setInterval(function(){
-    totalSec--;
-    var min=Math.floor(totalSec/60);
-    var sec=totalSec%60;
-    timerEl.textContent='⏰ 剩余时间: '+(min<10?'0':'')+min+':'+(sec<10?'0':'')+sec;
-    if(totalSec<=300) timerEl.style.color='var(--accent)';
-    if(totalSec<=0){
-      clearInterval(examState.timer);
-      submitExam();
-    }
-  },1000);
-  timerEl.textContent='⏰ 剩余时间: 15:00';
-}
-
-function selectExamChoice(qIdx,optIdx){
-  var optsEl=$('exam-opts-'+qIdx);
-  if(!optsEl) return;
-  examState.answers[qIdx]=optIdx;
-  optsEl.querySelectorAll('.option').forEach(function(el,j){
-    el.classList.toggle('selected',j===optIdx);
-  });
-}
-
-function submitExam(){
-  if(!examState.active) return;
-  examState.active=false;
-  if(examState.timer) clearInterval(examState.timer);
-  $('exam-submit-btn').style.display='none';
-  $('exam-start-btn').style.display='inline-block';
-
-  var correct=0,total=examState.questions.length;
-  var resultHtml='<h3 class="section-title">考试结果</h3>';
-
-  examState.questions.forEach(function(q,i){
-    if(q.type==='choice'){
-      var userAns=examState.answers[i];
-      var isCorrect=userAns===q.answer;
-      if(isCorrect) correct++;
-      resultHtml+='<div class="exam-card"><h3>第 '+(i+1)+' 题 '+(isCorrect?'✅':'❌')+'</h3><p>'+q.q+'</p><p style="margin-top:8px;">你的答案: '+(userAns!==undefined?String.fromCharCode(65+userAns):'未作答')+' | 正确答案: '+String.fromCharCode(65+q.answer)+'</p><p style="color:var(--text2);font-size:13px;">'+q.explain+'</p></div>';
-    } else {
-      var essayAnswer=$('exam-essay-'+i);
-      var textAnswer=essayAnswer?essayAnswer.value.trim():'未作答';
-      correct++; // essay always counted as participation
-      resultHtml+='<div class="exam-card"><h3>第 '+(i+1)+' 题 (简答题)</h3><p>'+q.q+'</p><p style="margin-top:8px;"><strong>你的回答：</strong>'+(textAnswer||'未作答')+'</p><p style="color:var(--text2);font-size:13px;"><strong>参考答案：</strong>'+q.ans+'</p></div>';
-    }
-  });
-
-  var pct=Math.round(correct/total*100);
-  var grade=pct>=80?'A (优秀)':pct>=60?'B (良好)':pct>=40?'C (及格)':'D (需要加强)';
-  resultHtml='<div class="card" style="text-align:center;"><h3>\u{1F4DD} 考试成绩</h3><p style="font-size:24px;font-weight:700;color:var(--accent);">'+correct+'/'+total+' ('+pct+'%)</p><p style="font-size:16px;">等级: '+grade+'</p></div>'+resultHtml;
-
-  $('exam-result').innerHTML=resultHtml;
-  $('exam-result').style.display='block';
-  statsData.examCount++;
-  saveState();
-}
-
-// ==================== TAB 4: REVIEW ====================
-function updateReviewStats(){
-  var container=$('review-stats');
-  container.innerHTML='<div class="stat-card"><div class="num">'+learnedSet.size+'</div><div class="label">已学概念</div></div>'+
-    '<div class="stat-card"><div class="num">'+statsData.quizAnswered+'</div><div class="label">答题总数</div></div>'+
-    '<div class="stat-card"><div class="num">'+Math.round(statsData.accuracy*100)+'%</div><div class="label">正确率</div></div>'+
-    '<div class="stat-card"><div class="num">'+statsData.examCount+'</div><div class="label">考试次数</div></div>';
-
-  var wb=$('wrong-book-container');
-  if(wrongBook.length===0){
-    wb.innerHTML='<p style="color:var(--text-muted);">暂无错题记录</p>';
-  } else {
-    var html='<table class="boundary-table"><thead><tr><th>题目</th><th>你的答案</th><th>正确答案</th><th>解析</th></tr></thead><tbody>';
-    wrongBook.slice().reverse().slice(0,20).forEach(function(w){
-      html+='<tr><td>'+w.q+'</td><td>'+String.fromCharCode(65+w.userChoice)+'</td><td>'+String.fromCharCode(65+w.correctAnswer)+'</td><td style="font-size:12px;">'+w.explain+'</td></tr>';
-    });
-    html+='</tbody></table>';
-    wb.innerHTML=html;
-  }
-
-  var wc=$('weak-concept-container');
-  var conceptErrors={};
-  CONCEPTS.forEach(function(c){conceptErrors[c.id]=0;});
-  wrongBook.forEach(function(w){
-    // Map wrong answers to concepts by keyword
-    CONCEPTS.forEach(function(c){
-      if(c.def.indexOf(w.explain.substring(0,10))>-1 || w.explain.indexOf(c.name.substring(0,4))>-1){
-        conceptErrors[c.id]++;
-      }
-    });
-  });
-  if(wrongBook.length===0){
-    wc.innerHTML='<p style="color:var(--text-muted);">尚未完成足够题目进行分析</p>';
-  } else {
-    var sorted=CONCEPTS.slice().sort(function(a,b){return conceptErrors[b.id]-conceptErrors[a.id];});
-    var weakHtml='<p style="margin-bottom:10px;font-size:14px;">以下概念可能需要加强：</p>';
-    sorted.forEach(function(c){
-      if(conceptErrors[c.id]>0){
-        weakHtml+='<div style="margin-bottom:8px;padding:10px;background:#fdf9f3;border-radius:var(--radius-sm);border-left:3px solid var(--accent);"><strong>'+c.name+'</strong> ('+conceptErrors[c.id]+'次错误) - '+c.def.substring(0,80)+'...</div>';
-      }
-    });
-    wc.innerHTML=weakHtml;
-  }
-}
-
-// ==================== TAB 5: MINDMAP ====================
-function renderMindmap(){
-  var tree = {
-    name:'⚡ 能源博弈与地球系统',root:true,children:[
-      {name:'物理约束层',branch:true,children:[
-        {name:'★ 电池的物理天花板',leaf:true,mks:true},
-        {name:'电网的不可任性',leaf:true},
-        {name:'储能的根本悖论',leaf:true},
-        {name:'碳循环的账本逻辑',leaf:true,mks:true}
-      ]},
-      {name:'气候认知层',branch:true,children:[
-        {name:'★ 气候系统的非线性',leaf:true,mks:true},
-        {name:'拉尼娜与全球变暖的辩证',leaf:true},
-        {name:'地球工程的诱惑与风险',leaf:true}
-      ]},
-      {name:'地缘博弈层',branch:true,children:[
-        {name:'能源地缘政治',leaf:true},
-        {name:'碳中和\xB7中国30·60承诺',leaf:true,app:true,children:[
-          {name:'碳交易市场',leaf:true},
-          {name:'特高压西电东送',leaf:true},
-          {name:'光伏全产业链优势',leaf:true}
-        ]}
-      ]},
-      {name:'环境代价层',branch:true,children:[
-        {name:'★ 核恐惧的概率错判',leaf:true,mks:true},
-        {name:'新能源的垃圾问题',leaf:true}
-      ]},
-      {name:'整合应用',branch:true,app:true,children:[
-        {name:'碳中和国际博弈分析',leaf:true},
-        {name:'能源投资决策框架',leaf:true},
-        {name:'气候变化个人行动指南',leaf:true}
-      ]}
-    ]
-  };
-
-  function buildTree(node,depth){
-    var cls='tree-node ';
-    if(node.root) cls+='root';
-    else if(node.branch) cls+=node.app?'branch app':'branch';
-    else if(node.leaf) cls+=node.mks?'leaf mks':'leaf';
-    else cls+='leaf';
-
-    var html='<li>';
-    if(node.children && node.children.length>0){
-      html+='<span class="tree-toggle" onclick="toggleTree(this)">▶</span>';
-    }
-    html+='<span class="'+cls+'">'+node.name+'</span>';
-    if(node.children && node.children.length>0){
-      html+='<ul class="children">'+node.children.map(function(c){return buildTree(c,depth+1);}).join('')+'</ul>';
-    }
-    html+='</li>';
-    return html;
-  }
-
-  var mindmap=$('mindmap');
-  mindmap.innerHTML='<ul>'+buildTree(tree,0)+'</ul>';
-  // Open first level
-  mindmap.querySelectorAll('.children').forEach(function(el){
-    var parentLi=el.parentElement;
-    if(parentLi){
-      var parentUl=parentLi.parentElement;
-      if(!parentUl || parentUl===mindmap || parentUl.parentElement===mindmap){
-        el.classList.add('open');
-        var toggle=parentLi.querySelector('.tree-toggle');
-        if(toggle) toggle.textContent='▼';
-      }
-    }
-  });
-}
-
-function toggleTree(el){
-  var children=el.parentElement.querySelector('.children');
-  if(children){
-    children.classList.toggle('open');
-    el.textContent=children.classList.contains('open')?'▼':'▶';
-  }
-}
-
-// ==================== TAB 6: SOCRATIC ====================
-function renderSocratic(){
-  var container=$('socratic-container');
-  var html='';
-  SOCRATIC_DATA.forEach(function(chain,ci){
-    html+='<div class="socratic-card"><div class="socratic-q" onclick="toggleSocratic('+ci+')">'+chain.theme+'</div><div class="socratic-a" id="socratic-a-'+ci+'">';
-    chain.pairs.forEach(function(pair,pi){
-      html+='<p style="font-weight:600;color:var(--slate);margin-bottom:4px;">❓ '+pair.q+'</p><p style="color:var(--text2);margin-bottom:10px;">'+pair.a+'</p>';
-    });
-    html+='</div></div>';
-  });
-  container.innerHTML=html;
-}
-
-function toggleSocratic(idx){
-  var el=$('socratic-a-'+idx);
-  el.classList.toggle('open');
-}
-
-// ==================== TAB 7: CASE STUDY (inline in HTML) ====================
-
-// ==================== TAB 8: DECISION ====================
-function renderDecision(){
-  var container=$('decision-container');
-  var html='';
-  DECISION_ROUNDS.forEach(function(round,ri){
-    html+='<div class="decision-card"><h3>\u{1F3AF} 场景 '+(ri+1)+'</h3><p class="scenario">'+round.scenario+'</p><div class="choices">';
-    round.choices.forEach(function(choice,ci){
-      html+='<div class="choice-btn" id="dec-btn-'+ri+'-'+ci+'" onclick="chooseDecision('+ri+','+ci+')">'+String.fromCharCode(65+ci)+'. '+choice.text+'</div>';
-    });
-    html+='</div><div class="choice-result" id="dec-result-'+ri+'"></div></div>';
-  });
-  container.innerHTML=html;
-}
-
-function chooseDecision(ri,ci){
-  var round=DECISION_ROUNDS[ri];
-  var choice=round.choices[ci];
-  // Disable all buttons
-  for(var i=0;i<round.choices.length;i++){
-    var btn=$('dec-btn-'+ri+'-'+i);
-    btn.style.pointerEvents='none';
-    btn.classList.toggle('chosen',i===ci);
-  }
-  var result=$('dec-result-'+ri);
-  result.className='choice-result show '+choice.type;
-  var label=choice.type==='correct'?'✅ MKS正确分析':choice.type==='wrong'?'❌ MKS分析建议':'⚠ MKS分析建议';
-  result.innerHTML='<strong>'+label+'：</strong>'+choice.feedback;
-}
-
-// ==================== INIT ====================
-function init(){
-  loadState();
-  renderConcepts();
-  renderSVGMap();
-  updateProgress();
-  renderFlipCard(0);
-  renderSocratic();
-  renderDecision();
-  // pre-open mindmap and review when tabs loaded
-}
-
+var LS='mks_tech3_';
+var currentTab=0,currentCardIdx=0,learnedCards=[];
+try{var raw=localStorage.getItem(LS+'learned');if(raw)learnedCards=JSON.parse(raw);}catch(e){learnedCards=[];}
+
+document.getElementById('tabBar').addEventListener('click',function(e){if(e.target.classList.contains('tab-btn'))switchTab(parseInt(e.target.getAttribute('data-tab')));});
+function switchTab(t){currentTab=t;document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',i===t);});document.querySelectorAll('.tab-panel').forEach(function(p,i){p.classList.toggle('active',i===t);});if(t===0)renderOverviewTab();if(t===4)renderReview();updateProgress();}
+function renderOverviewTab(){var html='';concepts.forEach(function(c,i){var tg=i<4?'<span class="tag mks">MKS核心</span>':'';html+='<div class="concept-card" onclick="toggleConcept(this)"><div class="c-name">'+(i+1)+'. '+c.name+'</div><div class="c-def">'+c.define+'</div><div class="c-tags">'+tg+'<span class="tag core">核心概念</span></div><div class="c-extra"><strong>类比：</strong>'+c.analogy+'<br><br><strong>示例：</strong>'+c.example+'<br><br><strong>反例/边界：</strong>'+c.counter+'</div><div class="c-hint">点击展开类比、示例与边界</div></div>';});document.getElementById('conceptGrid0').innerHTML=html;var mh='';mksToolkit.forEach(function(tk){mh+='<div class="mks-card"><div class="mks-badge">★ MKS 核心工具箱</div><div class="mk-name">'+tk.name+'</div><div class="mk-desc">'+tk.desc+'</div></div>';});document.getElementById('mksGrid').innerHTML=mh;document.getElementById('svgMap').innerHTML=buildSVGMap();document.getElementById('creativeSVG').innerHTML=buildCreativeSVG();document.getElementById('boundaryTable').innerHTML='<thead><tr><th>概念</th><th>与核心体系的关系</th><th>层级</th></tr></thead><tbody>'+boundaryData.map(function(b){return '<tr><td class="bd-label">'+b.label+'</td><td>'+b.relation+'</td><td>'+b.level+'</td></tr>';}).join('')+'</tbody>';document.getElementById('pathSteps').innerHTML=[{i:'🔬',t:'能源物理基础',d:'能量密度、热力学约束'},{i:'🔋',t:'关键技术',d:'光伏/核能/储能/氢能'},{i:'🌐',t:'系统博弈',d:'碳中和政策、碳市场'},{i:'📈',t:'转型评估',d:'技术成熟度、成本曲线'}].map(function(s,i){return '<div class="path-step"><div class="step-dot">'+s.i+'</div><h4>阶段'+(i+1)+'：'+s.t+'</h4><p>'+s.d+'</p></div>';}).join('');}
+function toggleConcept(el){var ex=el.querySelector('.c-extra');if(ex){ex.classList.toggle('show');el.querySelector('.c-hint').style.display=ex.classList.contains('show')?'none':'';}}
+function buildSVGMap(){var w=1000,h=710,s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="100%"><defs><filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter></defs><rect width="'+w+'" height="'+h+'" fill="#141a20" rx="8"/>';s+='<rect x="340" y="15" width="320" height="50" rx="12" fill="#1a1208" stroke="#ff9800" stroke-width="2.5" filter="url(#s)"/><text x="500" y="47" text-anchor="middle" fill="#ffb74d" font-size="15" font-weight="700">能源博弈与地球系统</text>';var l2=[{x:80,y:120,w:190,l:"能源供应",sub:"核聚变 · 光伏"},{x:300,y:120,w:190,l:"能源载体",sub:"固态电池 · 氢能 · 特高压"},{x:520,y:120,w:190,l:"环境影响",sub:"碳中和 · 临界点"},{x:740,y:120,w:190,l:"系统调控",sub:"电池回收 · 电网储能"}];l2.forEach(function(n){s+='<rect x="'+n.x+'" y="'+n.y+'" width="'+n.w+'" height="54" rx="10" fill="#1d1608" stroke="#ffb74d" stroke-width="1.5" filter="url(#s)"/>';s+='<text x="'+(n.x+n.w/2)+'" y="'+(n.y+22)+'" text-anchor="middle" fill="#e8edf4" font-size="13" font-weight="600">'+n.l+'</text>';s+='<text x="'+(n.x+n.w/2)+'" y="'+(n.y+42)+'" text-anchor="middle" fill="#6b7385" font-size="10">'+n.sub+'</text>';s+='<line x1="500" y1="65" x2="'+(n.x+n.w/2)+'" y2="'+n.y+'" stroke="#ff9800" stroke-width="1" opacity="0.3"/>';});var l3=[{x:40,y:270,w:145,l:"核聚变",p:0},{x:200,y:270,w:145,l:"光伏/风电",p:0},{x:40,y:350,w:145,l:"CCUS",p:0},{x:200,y:350,w:145,l:"化石能源",p:0},{x:330,y:270,w:145,l:"固态电池",p:1},{x:490,y:270,w:145,l:"氢能经济",p:1},{x:330,y:350,w:145,l:"特高压",p:1},{x:490,y:350,w:145,l:"锂电池",p:1},{x:620,y:270,w:145,l:"碳中和目标",p:2},{x:780,y:270,w:145,l:"气候临界点",p:2},{x:620,y:350,w:145,l:"碳交易/CBAM",p:2},{x:780,y:350,w:145,l:"IPCC评估",p:2},{x:280,y:450,w:145,l:"电池回收",p:3},{x:440,y:450,w:145,l:"电网储能",p:3},{x:600,y:450,w:145,l:"虚拟电厂",p:3},{x:760,y:450,w:145,l:"V2G",p:3}];l3.forEach(function(n){s+='<rect x="'+n.x+'" y="'+n.y+'" width="'+n.w+'" height="42" rx="8" fill="#1a2016" stroke="#6b7385" stroke-width="1"/>';s+='<text x="'+(n.x+n.w/2)+'" y="'+(n.y+26)+'" text-anchor="middle" fill="#c8d0dc" font-size="10.5">'+n.l+'</text>';var p=l2[n.p];s+='<line x1="'+(p.x+p.w/2)+'" y1="'+(p.y+54)+'" x2="'+(n.x+n.w/2)+'" y2="'+n.y+'" stroke="#6b7385" stroke-width="0.8" opacity="0.35"/>';});var l4=[{x:40,y:560,w:140,l:"ITER/商业聚变"},{x:200,y:560,w:140,l:"钙钛矿光伏"},{x:360,y:560,w:140,l:"光储充一体站"},{x:520,y:560,w:140,l:"绿氢炼钢"},{x:680,y:560,w:140,l:"碳边境博弈"},{x:840,y:560,w:140,l:"长时储能突破"}];l4.forEach(function(n){s+='<rect x="'+n.x+'" y="'+n.y+'" width="'+n.w+'" height="34" rx="6" fill="#0d1a14" stroke="#1a2016" stroke-width="0.8"/>';s+='<text x="'+(n.x+n.w/2)+'" y="'+(n.y+21)+'" text-anchor="middle" fill="#6b7385" font-size="9">'+n.l+'</text>';});s+='<rect x="40" y="640" width="14" height="14" rx="3" fill="#1a1208" stroke="#ff9800" stroke-width="2"/><text x="60" y="651" fill="#c8d0dc" font-size="10">根概念</text><rect x="160" y="640" width="14" height="14" rx="3" fill="#1d1608" stroke="#ffb74d" stroke-width="1"/><text x="180" y="651" fill="#c8d0dc" font-size="10">MKS核心层</text><rect x="300" y="640" width="14" height="14" rx="3" fill="#1a2016" stroke="#6b7385" stroke-width="1"/><text x="320" y="651" fill="#c8d0dc" font-size="10">概念层</text><rect x="420" y="640" width="14" height="14" rx="3" fill="#0d1a14" stroke="#1a2016" stroke-width="1"/><text x="440" y="651" fill="#c8d0dc" font-size="10">应用层</text><text x="580" y="651" fill="#6b7385" font-size="9">▶ 四层递进从物理原理到产业应用</text>';return s+'</svg>';}
+function buildCreativeSVG(){var w=1000,h=430,s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="100%"><rect width="'+w+'" height="'+h+'" fill="#141a20" rx="8"/><text x="500" y="35" text-anchor="middle" fill="#e8edf4" font-size="16" font-weight="700">能源转型地图：从化石王国到零碳新大陆</text>';s+='<rect x="30" y="70" width="260" height="250" rx="16" fill="#1d1608" stroke="#ff9800" stroke-width="1.5"/><text x="160" y="105" text-anchor="middle" fill="#ff9800" font-size="14" font-weight="700">🏭 化石能源王国</text>';['煤炭(最丰富/最脏)','石油(交通命脉/地缘焦点)','天然气(过渡桥梁)'].forEach(function(it,i){s+='<text x="160" y="'+(145+i*24)+'" text-anchor="middle" fill="#c8d0dc" font-size="10">'+it+'</text>';});s+='<rect x="370" y="70" width="260" height="250" rx="16" fill="#1a2016" stroke="#ffb74d" stroke-width="1.5"/><text x="500" y="105" text-anchor="middle" fill="#ffb74d" font-size="14" font-weight="700">🌉 过渡地带</text>';['天然气桥','CCUS(捕获+封存)','碳交易市场','大规模储能'].forEach(function(it,i){s+='<text x="500" y="'+(145+i*24)+'" text-anchor="middle" fill="#c8d0dc" font-size="10">'+it+'</text>';});s+='<rect x="710" y="70" width="260" height="250" rx="16" fill="#0d1a14" stroke="#4caf50" stroke-width="1.5"/><text x="840" y="105" text-anchor="middle" fill="#4caf50" font-size="14" font-weight="700">🌱 零碳新大陆</text>';['光伏沙漠(光→电)','风电海洋(风→电)','氢能河流(绿氢)','核聚变山脉(终极)'].forEach(function(it,i){s+='<text x="840" y="'+(145+i*24)+'" text-anchor="middle" fill="#c8d0dc" font-size="10">'+it+'</text>';});s+='<text x="310" y="195" fill="#ff9800" font-size="24">→</text><text x="650" y="195" fill="#4caf50" font-size="24">→</text>';s+='<text x="500" y="380" text-anchor="middle" fill="#ff9800" font-size="11" font-weight="600">MKS洞察：能源转型是在技术成熟度、经济性和政治可行性三者间的动态平衡</text>';s+='<text x="500" y="405" text-anchor="middle" fill="#6b7385" font-size="9">障碍：储能鸿沟 | 电网瓶颈 | 成本悬崖 | 政治阻力 | 技术不确定性</text>';return s+'</svg>';}
+
+function initFlipCards(){setCard(0);}
+function setCard(idx){currentCardIdx=idx;var c=concepts[idx];document.getElementById('ffName').textContent=c.name;document.getElementById('cardIdx').textContent=(idx+1)+' / '+concepts.length;document.getElementById('flipInner').classList.remove('flipped');document.getElementById('flipBack').innerHTML='<div class="fb-row"><div class="fb-label">▎定义</div><div class="fb-text">'+c.define+'</div></div><div class="fb-row"><div class="fb-label">▎类比</div><div class="fb-text">'+c.analogy+'</div></div><div class="fb-row"><div class="fb-label">▎示例</div><div class="fb-text">'+c.example+'</div></div><div class="fb-row"><div class="fb-label">▎反例/边界</div><div class="fb-text">'+c.counter+'</div></div>';updateMarkBtn();}
+function flipCard(){document.getElementById('flipInner').classList.toggle('flipped');}
+function prevCard(){setCard((currentCardIdx-1+concepts.length)%concepts.length);}
+function nextCard(){setCard((currentCardIdx+1)%concepts.length);}
+function markLearned(){learnedCards[currentCardIdx]=!learnedCards[currentCardIdx];localStorage.setItem(LS+'learned',JSON.stringify(learnedCards));updateMarkBtn();updateProgress();}
+function updateMarkBtn(){var b=document.getElementById('markLearnedBtn'),l=!!learnedCards[currentCardIdx];b.textContent=l?'✅ 已学习':'⭐ 标记已学习';b.style.background=l?'var(--success)':'var(--mks)';}
+
+var mcqData=[{q:"中国碳中和目标的完整表述是？",opts:["2030年前碳达峰，2060年前碳中和","2025年碳中和","2030年碳中和","不设定目标"],ans:0,exp:"中国2020年在联合国提出30·60目标：2030年前碳达峰(排放不再增长)，2060年前碳中和(净零排放)。"},{q:"欧盟CBAM的核心目的是？",opts:["防止碳泄漏——企业搬到碳价低国家逃避碳成本","增加关税收入","禁止进口","推广标准"],ans:0,exp:"CBAM逻辑：如果欧盟企业为碳排放付费而进口商品不需要，高碳产业会外迁。通过对进口征碳关税来公平竞争。"},{q:"CCUS最大的争议是？",opts:["可能被用作化石燃料行业继续照常营业的借口","技术完全不成熟","成本太低导致滥用","只能捕获不能封存"],ans:0,exp:"CCUS技术上可行但批评者认为它给了化石燃料行业一张免费通行证——可以继续烧煤/石油/天然气因为将来会用CCUS。问题在于规模部署远未达到可中和全球排放的水平。"},{q:"碳中和不等同于？",opts:["零化石能源——CCUS可能允许继续使用","减少碳排放","增加碳汇","使用清洁能源"],ans:0,exp:"碳中和是净排放为零——可通过减排+碳汇抵消实现。理论上可继续使用化石能源但用CCUS捕获排放。实践中CCUS规模远不足以匹配。"},{q:"哪个不是碳定价的主要方式？",opts:["直接禁止使用化石燃料","碳交易(设定总量让市场定价)","碳税(设定价格让市场决定排放)","碳边境调节(CBAM)"],ans:0,exp:"碳定价有碳交易(如EU-ETS设总量上限)和碳税(直接对每吨碳排放征税)。直接禁止是命令与控制手段，不是定价机制。"},{q:"核聚变与核裂变的主要区别？",opts:["聚变是轻核融合释放能量，裂变是重核分裂","聚变更危险","裂变不需要燃料","两者一样"],ans:1,exp:"核裂变分裂重原子核(铀-235)产生长寿命放射性废料。核聚变融合轻原子核(氘+氚→氦)产物氦无害，燃料海水中无穷无尽。但实现受控聚变极其困难。"},{q:"中国EAST实现的里程碑是？",opts:["1.2亿℃等离子体运行101秒","实现商业发电","造出氢弹","发现新燃料"],ans:1,exp:"EAST(中科院合肥)全超导托卡马克2023年实现1.2亿℃等离子体运行101秒——稳态高约束模式运行时间世界纪录。"},{q:"固态电池相比液态锂电池的主要优势？",opts:["更高能量密度和本质安全性(不可燃)","更低制造成本","更简单工艺","更轻重量"],ans:1,exp:"固态电池用固体电解质替代液态有机电解质：(1)不可燃解决安全隐患；(2)允许锂金属负极理论能量密度500+Wh/kg(当前约250-300)。但固-固界面阻抗和制造工艺仍是挑战。"},{q:"固态电池目前最大量产瓶颈？",opts:["固-固界面高阻抗和超薄电解质膜制造工艺","缺乏锂资源","政府不允许","市场不需要"],ans:1,exp:"液态电解质可自然浸润填充电极微小凹凸接触面积大阻抗低。固体与固体微观尺度是点接触阻抗高。制造微米级无缺陷陶瓷电解质膜是巨大工程挑战。"},{q:"关于氢能经济最准确理解？",opts:["氢是能源载体而非一次能源——清洁程度取决于生产方式","氢是地球上最丰富能源","氢燃料电池效率超100%","氢可直接从空气提取"],ans:1,exp:"氢不是一次能源(不像太阳能或煤炭)必须先消耗其他能源生产。绿氢=零碳灰氢=排放转移。氢能全链效率约30-40%远低于BEV的70-80%。"},{q:"氢能全链条效率约为？",opts:["30-40%","80-90%","100%","5%"],ans:1,exp:"电解水制氢约70%→压缩/运输约80-90%→燃料电池约50-60%——全链相乘约30-40%。BEV全链约70-80%。这是氢在乘用车领域难与BEV竞争的根本物理原因。"},{q:"特高压输电电压等级通常指？",opts:["±800kV及以上直流或1000kV及以上交流","220V","10kV","380kV"],ans:2,exp:"特高压(UHV)指±800kV及以上直流和1000kV及以上交流。中国全球唯一实现特高压大规模商业运营——昌吉-古泉±1100kV工程3324公里世界之最。"},{q:"为什么特高压对中国能源转型特别重要？",opts:["能源资源集中在西部负荷中心在东部沿海","唯一引进技术","成本最低","最安全"],ans:2,exp:"中国能源与电力消费严重错位——约80%风光在西北约70%电力消费在东部。特高压唯一能以较低损耗将电力从3000+公里外输送的技术。"},{q:"气候变化临界点最核心特征？",opts:["一旦跨越后自我强化且不可逆","所有气候变化都触发临界点","临界点对人类有益","临界点很容易逆转"],ans:2,exp:"临界点最危险特征：(1)自我强化——冰融化露出深色海水吸收更多热量→更多冰融化；(2)不可逆(人类时间尺度)；(3)阈值不确定。格陵兰冰盖和AMOC可能在1.5-2℃区间被跨越。"},{q:"杰文斯悖论核心含义是？",opts:["效率提高反而可能增加总消耗","技术进步必然减少能耗","越节能越贵","效率与总量无关"],ans:2,exp:"19世纪杰文斯发现蒸汽机效率提高后煤炭总消耗不降反升——效率提高降低使用成本刺激更广泛应用。LED省电80%+但照明场景急剧增加。对靠效率提升实现碳中和是重要警示。"},{q:"电网储能面临的4小时瓶颈指什么？",opts:["锂电在4小时以上持续放电时经济性急剧下降","储能系统最多工作4小时","电网只需4小时储能","法规限制4小时"],ans:3,exp:"锂电在1-4小时放电场景经济性最优。但可再生能源间歇性可能持续数天需长时储能(10-100小时)。锂电在长时场景度电成本急剧上升。抽水蓄能/压缩空气/液流电池更适合长时。"},{q:"V2G最核心的概念是？",opts:["EV停驶时将电池电能反向输送给电网","用汽油车给电网供电","电网给汽车充电","汽车可以飞"],ans:3,exp:"V2G将EV视为移动储能单元——大部分私家车95%时间停着。电价低时充电(中午光伏)电价高时卖电(傍晚高峰)帮助电网平衡。挑战：频繁充放加速老化、需双向充电桩。"},{q:"动力电池回收中梯次利用指？",opts:["退役电池先用于低要求场景再拆解回收材料","直接拆解","把电池放进楼梯","当新电池出售"],ans:3,exp:"EV电池容量衰减至80%以下不再适合汽车但对储能等低功率场景仍可用多年。梯次利用=汽车退休→储能继续工作→最终拆解回收的瀑布式使用。"},{q:"关于光伏能源最准确理解？",opts:["光伏LCOE已低于煤电但间歇性需储能配合","光伏是最贵能源","光伏只在太空使用","光伏不需要太阳"],ans:3,exp:"光伏LCOE已低于新建煤电甚至现有煤电运营成本——但间歇性(夜晚为零阴雨天大幅降低)容量因子仅15-25%。没有储能配合的光伏只能在有阳光时供电。"},{q:"全球能源转型中国在哪个领域占绝对主导？",opts:["光伏全产业链各环节>65%全球产能","石油开采","核聚变","地热能"],ans:3,exp:"中国在光伏产业链各个环节(多晶硅约75%/硅片约97%/电池片约85%/组件约75%)占据全球绝对主导份额。经过20年产业政策和规模效应积累是中国碳中和时代的重要战略资产。"}];
+
+var saqData=[{q:"解释中国30·60目标含义及对能源行业影响。",hint:"2030碳达峰=排放不再增长；2060碳中和=净零排放。影响：煤电加速退役、可再生能源爆发、碳市场扩围。"},{q:"比较碳交易和碳税两种碳定价机制。",hint:"碳交易=设总量→市场定价确定排放数量但价格波动大。碳税=设价格→由市场决定排放量价格稳定但减排数量不确定。"},{q:"为什么核聚变永远还差30年？",hint:"(1)等离子体约束——1亿℃不接触材料壁；(2)Q>1未实现稳态；(3)氚自持——氚在地球几乎不存在需在堆内通过中子轰击锂产生。"},{q:"固态电池固-固界面问题为什么难解决？",hint:"液态电解质自然浸润填充电极微小凹凸接触面积大阻抗低。固体与固体微观尺度点接触真实接触面积仅1-10%。充放电电极体积变化进一步恶化。"},{q:"氢能在什么场景比电池电动更有优势？",hint:"(1)长距离重型运输(卡车/船舶/飞机)——电池太重；(2)高温工业(炼钢/化工)——需还原剂非电力；(3)季节性储能——氢气可大规模存储数月。"},{q:"为什么说特高压是中国能源转型必要条件？",hint:"80%风光在西北70%电力消费在东南沿海。没有特高压意味着西部新能源无法输送到东部——有电送不出=资源浪费。"},{q:"用杰文斯悖论解释为什么效率提升不足实现碳中和。",hint:"效率提升→成本下降→需求增加→总消耗可能不降反升。LED省电→照明场景爆炸增长。效率必要但须有总量约束配合。"},{q:"比较CCUS和DAC技术差异。",hint:"CCUS=从烟囱点源捕获高浓度CO₂(5-15%)相对经济($50-150/吨)。DAC=从大气(0.04%)捕获处理巨量空气成本极高($250-600+/吨)且极其耗能。"},{q:"光伏退役后环境挑战？",hint:"(1)25-30年寿命后大量退役集中到来；(2)含铅焊料/含氟背板有害物质需无害化；(3)回收经济性差成本高于新料。需政策和低成本分离技术。"},{q:"什么是能源不可能三角？",hint:"安全(供应稳定)/公平(可负担性)/可持续(环境友好)三者难以同时兼顾。发达国家优先可持续+安全；发展中国家优先公平+安全——站位不同导致碳中和博弈立场分裂。"}];
+
+var currentMCQ=[],currentSAQ=[];
+function renderMCQ(){currentMCQ=mcqData.slice().sort(function(){return Math.random()-0.5;}).slice(0,10);var h='';currentMCQ.forEach(function(q,qi){h+='<div class="quiz-q" id="mq'+qi+'"><div class="q-title">'+(qi+1)+'. '+q.q+'</div><div class="q-opts">';q.opts.forEach(function(o,oi){h+='<button class="q-opt" onclick="selectMCQ('+qi+','+oi+',this)" id="mo'+qi+'_'+oi+'">'+'ABCD'[oi]+'. '+o+'</button>';});h+='</div><div class="q-feedback" id="mf'+qi+'"></div></div>';});document.getElementById('mcqContainer').innerHTML=h;}
+function selectMCQ(qi,oi,btn){var q=currentMCQ[qi],c=q.ans===oi;document.querySelectorAll('#mq'+qi+' .q-opt').forEach(function(o,i){o.disabled=true;if(i===q.ans)o.classList.add('correct');if(i===oi&&!c)o.classList.add('wrong');if(i===oi)o.classList.add('chosen');});var fb=document.getElementById('mf'+qi);fb.className='q-feedback show '+(c?'correct':'wrong');fb.innerHTML=(c?'✅ 正确！':'❌ 错误。')+' '+q.exp;saveQuizResult('mcq_'+qi,c);updateProgress();}
+function resetAllMCQ(){currentMCQ=[];document.getElementById('mcqContainer').innerHTML='';}
+function renderSAQ(){currentSAQ=saqData.slice().sort(function(){return Math.random()-0.5;}).slice(0,5);var h='';currentSAQ.forEach(function(item,i){h+='<div class="saq-item"><div class="saq-q">'+(i+1)+'. '+item.q+'</div><textarea placeholder="输入你的答案..." id="sa'+i+'"></textarea><div style="margin-top:8px;"><button class="btn btn-sec" onclick="revealSAQ('+i+')" style="font-size:0.75rem;">📖 查看参考要点</button></div><div class="saq-ans" id="saa'+i+'">'+item.hint+'</div></div>';});document.getElementById('saqContainer').innerHTML=h;}
+function revealSAQ(i){document.getElementById('saa'+i).classList.add('show');}
+function revealAllSAQ(){currentSAQ.forEach(function(_,i){revealSAQ(i);});}
+
+var examTimer=null,examTimeLeft=900,examAnswers={};
+function startExam(){var em=mcqData.slice().sort(function(){return Math.random()-0.5;}).slice(0,10);var es=saqData.slice().sort(function(){return Math.random()-0.5;}).slice(0,3);document.getElementById('examResult').style.display='none';var h='<h4 style="color:var(--accent2);margin-bottom:16px;">选择题（每题5分，共50分）</h4>';em.forEach(function(q,qi){h+='<div class="quiz-q"><div class="q-title">'+(qi+1)+'. '+q.q+'</div><div class="q-opts">';q.opts.forEach(function(o,oi){h+='<button class="q-opt" onclick="selectExamMCQ('+qi+','+oi+',this,'+q.ans+')">'+'ABCD'[oi]+'. '+o+'</button>';});h+='</div></div>';});h+='<h4 style="color:var(--accent2);margin:24px 0 16px;">简答题（共50分）</h4>';es.forEach(function(item,i){h+='<div class="saq-item"><div class="saq-q">'+(i+1)+'. '+item.q+'</div><textarea placeholder="输入你的答案..." id="exsa'+i+'"></textarea></div>';});h+='<div class="quiz-actions"><button class="btn btn-pri" onclick="submitExam()">📋 提交答卷</button></div>';document.getElementById('examContainer').innerHTML=h;examTimeLeft=900;updateExamTimer();if(examTimer)clearInterval(examTimer);examTimer=setInterval(function(){examTimeLeft--;updateExamTimer();if(examTimeLeft<=0){clearInterval(examTimer);submitExam();}},1000);}
+function updateExamTimer(){var m=Math.floor(examTimeLeft/60),s=examTimeLeft%60;document.getElementById('examTimer').textContent='⏱ '+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+function selectExamMCQ(qi,oi,btn,ca){if(examAnswers['mcq_'+qi]!==undefined)return;examAnswers['mcq_'+qi]=(oi===ca);btn.parentElement.querySelectorAll('.q-opt').forEach(function(o,i){o.disabled=true;if(i===ca)o.classList.add('correct');if(i===oi&&i!==ca)o.classList.add('wrong');});}
+function submitExam(){if(examTimer)clearInterval(examTimer);var mc=Object.values(examAnswers).filter(function(v){return v===true;}).length;var ms=mc*5;document.getElementById('examResult').style.display='block';document.getElementById('examResult').innerHTML='<div style="background:var(--card);border:1px solid var(--accent);border-radius:var(--radius-lg);padding:32px;text-align:center;"><div style="font-size:3rem;">'+(ms>=30?'🎉':'📚')+'</div><h3 style="color:var(--text-bright);">考试完成！</h3><p style="font-size:1.2rem;color:var(--accent);">选择题：'+mc+'/10 ('+ms+'/50分)</p><p style="color:var(--text-dim);">简答题自行对照参考要点评分</p><p style="color:var(--mks);font-weight:600;">'+(ms>=40?'🌟 优秀！':ms>=25?'👍 良好！':'💪 建议复习后再来。')+'</p></div>';document.getElementById('examTimer').textContent='';examAnswers={};var ec=parseInt(localStorage.getItem(LS+'examCount')||'0')+1;localStorage.setItem(LS+'examCount',ec);localStorage.setItem(LS+'lastExamScore',ms);updateProgress();}
+function resetExam(){if(examTimer)clearInterval(examTimer);examAnswers={};document.getElementById('examContainer').innerHTML='';document.getElementById('examTimer').textContent='';document.getElementById('examResult').style.display='none';}
+function renderReview(){var lc=learnedCards.filter(function(x){return!!x;}).length,ec=parseInt(localStorage.getItem(LS+'examCount')||'0'),ls=localStorage.getItem(LS+'lastExamScore')||'—';document.getElementById('reviewStats').innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px;"><div class="case-card" style="text-align:center;"><div style="font-size:2rem;font-weight:900;color:var(--accent);">'+lc+'/10</div><div style="font-size:0.75rem;color:var(--text-dim);">卡片已学习</div></div><div class="case-card" style="text-align:center;"><div style="font-size:2rem;font-weight:900;color:var(--accent2);">'+ec+'</div><div style="font-size:0.75rem;color:var(--text-dim);">考试次数</div></div><div class="case-card" style="text-align:center;"><div style="font-size:2rem;font-weight:900;color:var(--mks);">'+ls+'</div><div style="font-size:0.75rem;color:var(--text-dim);">最近考试分</div></div></div>';var lh='<h4 style="color:var(--text-bright);margin-bottom:12px;">未掌握概念</h4>',hu=false;concepts.forEach(function(c,i){if(!learnedCards[i]){hu=true;lh+='<div class="soc-item"><div style="font-weight:600;color:var(--text-bright);">'+(i+1)+'. '+c.name+'</div><div style="font-size:0.78rem;color:var(--text-dim);margin-top:4px;">'+c.define+'</div></div>';}});if(!hu)lh+='<p style="color:var(--success);">🎉 全部10个核心概念已掌握！</p>';document.getElementById('reviewList').innerHTML=lh;}
+
+function buildMindmap(){var bs=[{t:'能源供应',l:['★ 核聚变 (MKS)','★ 光伏/风电 (MKS)','核裂变','CCUS']},{t:'能源载体',l:['★ 固态电池 (MKS)','★ 氢能经济 (MKS)','特高压输电','锂电池']},{t:'环境影响',l:['★ 碳中和 (MKS)','气候临界点','碳交易/CBAM','IPCC评估']},{t:'系统调控',l:['★ 电网储能 (MKS)','电池回收','虚拟电厂','V2G']}];var h='<div class="mm-node mm-root"><span class="mm-label">⚡ 能源博弈与地球系统</span><div class="mm-children open">';bs.forEach(function(b){h+='<div class="mm-node mm-branch"><span class="mm-toggle" onclick="toggleMM(this)">▾</span><span class="mm-label">'+b.t+'</span><div class="mm-children open">';b.l.forEach(function(l){h+='<div class="'+(l.indexOf('(MKS)')>-1?'mm-leaf mks-leaf':'mm-leaf')+'">'+l+'</div>';});h+='</div></div>';});h+='</div></div>';document.getElementById('mindmapContainer').innerHTML=h;}
+function toggleMM(el){var c=el.parentElement.querySelector('.mm-children');if(c){c.classList.toggle('open');el.textContent=c.classList.contains('open')?'▾':'▸';}}
+
+function buildSocratic(){var qs=[{q:"核聚变实现了是不是所有能源问题都解决了？",a:"不完全是。即使商业聚变堆在2050年代成功它解决的是<strong>发电</strong>问题——但全球约一半一次能源不用于发电而是交通(液体燃料)、工业高温、化工原料。聚变可替代煤电/气电但不能直接把航空燃料变没了。"},{q:"碳中和是不是发达国家限制发展中国家的阴谋？",a:"合理的质疑但过于简化。发达国家确实排放了两百年才达到今天富裕水平——现在要求发展中国家不走同样的高碳路径确实存在公平问题。但气候变化对发展中国家伤害往往更严重因为适应能力更弱。这不是阴谋而是<strong>利益不对称</strong>的博弈。"},{q:"固态电池量产是不是就可以淘汰燃油车了？",a:"固态电池解决安全性+能量密度两大痛点——但EV普及还有充电基础设施、电池成本、电网容量三个约束。固态电池是加速器而非一键开关。而且若电还是煤发的EV只是把排气管从车尾移到发电厂烟囱。"},{q:"光伏这么便宜为什么还不能完全取代煤电？",a:"光伏致命弱点不是成本而是<strong>间歇性</strong>——晚上无光阴雨天出力大幅降低容量因子仅15-25%。解决需大规模储能+常规发电备份+跨区输电+需求侧响应。四个都不便宜。"},{q:"为什么不能每个国家自己搞碳中和各自负责？",a:"因为<strong>大气是全球公共品</strong>——CO₂在大气中混合只需几周。中国减排可被美国增排抵消马尔代夫却承受海平面上升后果。这就是公地悲剧——每个国家有搭便车动机。所以需要国际协议和CBAM强制搭便车者付费。"}];var h='';qs.forEach(function(item,i){h+='<div class="soc-item"><div class="soc-q" onclick="toggleSoc(this)">'+(i+1)+'. '+item.q+'</div><div class="soc-a">'+item.a+'</div></div>';});document.getElementById('socraticContainer').innerHTML=h;}
+function toggleSoc(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('show');}
+
+var decisionScenes=[{t:"场景1：煤城的转型困境",d:"你是一座煤电依赖型城市的市长，中央要求2030年前碳达峰。城市经济高度依赖煤炭产业链(就业30%)。",o:["A. 加速关停煤电——强行转型光伏/储能产业","B. 渐进转型——天然气过渡逐步培育新产业","C. 争取特殊政策延长转型期"]},{t:"场景2：家庭能源投资决策",d:"你有20万预算改善家庭能源系统。选项：",o:["A. 安装屋顶光伏+家用储能电池","B. 投资社区太阳能电站股份","C. 更换高效家电+改善房屋保温"]}];
+var decisionAnalysis=[["强行转型可能造成短期就业崩塌但若争取到转型基金和产业政策可在新赛道建立先发优势。","天然气桥降低短期冲击但需承担继续排放的风险——未来碳配额收紧时可能面临更高碳成本。推荐配合人才再培训。","短期保护就业但长期风险最大——延期意味未来在更短时间完成更剧烈转型且可能面临碳关税惩罚。"],["屋顶光伏+储能投资回报期约8-12年提供能源自主性和停电备用。初期投入大组件和电池有衰减成本。","社区太阳能股份门槛低不需屋顶空间管理专业化。回报率通常低于自建控制权较弱。","能效升级投资回报期最短(2-5年)确定性最高无技术风险。推荐优先能效再考虑自发电。"]];
+function buildDecision(){var h='';decisionScenes.forEach(function(sc,si){h+='<div class="decision-scene" id="ds'+si+'"><h3>'+sc.t+'</h3><div class="scene-desc">'+sc.d+'</div><div class="scene-opts">';sc.o.forEach(function(o,oi){h+='<button class="scene-opt" onclick="chooseDecision('+si+','+oi+')">'+o+'</button>';});h+='</div><div class="scene-result" id="dsr'+si+'"></div></div>';});document.getElementById('decisionContainer').innerHTML=h;}
+function chooseDecision(si,oi){var r=document.getElementById('dsr'+si);r.innerHTML='<strong>MKS分析：</strong>'+decisionAnalysis[si][oi];r.classList.add('show');document.querySelectorAll('#ds'+si+' .scene-opt').forEach(function(b,i){b.disabled=true;if(i===oi)b.classList.add('selected');});}
+
+function updateProgress(){var lc=learnedCards.filter(function(x){return!!x;}).length,pct=Math.round((lc/concepts.length)*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';}
+function saveQuizResult(key,correct){var r={};try{r=JSON.parse(localStorage.getItem(LS+'quizResults')||'{}');}catch(e){}r[key]=correct;localStorage.setItem(LS+'quizResults',JSON.stringify(r));}
+function init(){renderOverviewTab();initFlipCards();renderMCQ();renderSAQ();buildMindmap();buildSocratic();buildDecision();updateProgress();}
 init();
 </script>
 </body>

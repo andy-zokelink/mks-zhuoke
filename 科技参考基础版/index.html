@@ -3,783 +3,634 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克·科技参考基础版 · 科技观测站</title>
+<title>卓克·基础科技参考一 — 科技雷达站</title>
 <style>
-/* ============================================================
-   科技观测站 (Tech Observatory) — 卓克·科技参考基础版 导航主页
-   视觉隐喻：暖色系的科技雷达站/观测台，纯 CSS 打造
-   设计语言：黄铜器械 + 暖金光芒 + 学术纸张质感
-   ============================================================ */
+/* ===== Foundations ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:            #fdf6ec;
-  --bg-deep:       #f8eedb;
-  --card:          #fffaf2;
-  --card-hover:    #fff8eb;
-  --text:          #3d2f2f;
-  --text-light:    #6b5b5b;
-  --text-muted:    #9b8585;
-  --gold:          #b8860b;
-  --gold-bright:   #d4a853;
-  --gold-pale:     #e8d5a3;
-  --brass:         #c4a840;
-  --brass-dark:    #8a7020;
-  --deep-red:      #8b1a1a;
-  --accent:        #c0392b;
-  --accent-soft:   #d4745c;
-  --border:        #e8d5c4;
-  --border-strong: #d4c0a8;
-  --shadow-sm:     0 2px 8px rgba(60,30,20,.07);
-  --shadow-md:     0 6px 20px rgba(60,30,20,.10);
-  --shadow-lg:     0 12px 32px rgba(60,30,20,.14);
-  --radius:        12px;
-  --radius-sm:     8px;
-  --transition:    0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
+  --bg: #0a0e14;
+  --bg-elevated: #11161d;
+  --bg-card: #161c26;
+  --bg-card-hover: #1a2130;
+  --text: #c8d0dc;
+  --text-bright: #e8edf4;
+  --text-dim: #6b7385;
+  --border: #1e2736;
+  --border-light: #2a3548;
+  --radar-green: #00e676;
+  --radar-green-glow: rgba(0,230,118,0.25);
 
-* { margin:0; padding:0; box-sizing:border-box; }
+  --s1: #00bcd4; --s1-glow: rgba(0,188,212,0.2);
+  --s2: #4caf50; --s2-glow: rgba(76,175,80,0.2);
+  --s3: #ff9800; --s3-glow: rgba(255,152,0,0.2);
+  --s4: #7c4dff; --s4-glow: rgba(124,77,255,0.2);
+  --s5: #ff6b6b; --s5-glow: rgba(255,107,107,0.2);
+  --s6: #ffd54f; --s6-glow: rgba(255,213,79,0.2);
 
-html {
-  font-size: clamp(14px, 1.2vw, 16px);
-  scroll-behavior: smooth;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 body {
-  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  background:
-    /* 暖米色基底 */
-    linear-gradient(175deg,
-      #fef9f2 0%,
-      #fdf6ec 8%,
-      #faf0e0 28%,
-      #f5ead5 52%,
-      #faf0e0 76%,
-      #fdf6ec 100%
-    ),
-    /* 纸张纤维纹理 */
-    repeating-linear-gradient(0deg,
-      transparent, transparent 1px,
-      rgba(139,105,20,0.012) 1px, rgba(139,105,20,0.012) 3px
-    ),
-    repeating-linear-gradient(90deg,
-      transparent, transparent 14px,
-      rgba(139,105,20,0.018) 14px, rgba(139,105,20,0.018) 15px
-    );
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
   color: var(--text);
-  line-height: 1.7;
+  line-height: 1.75;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  padding-bottom: 80px;
 }
 
-/* 环境光晕 — 暖金光芒从中央扩散 */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 32%,
-    rgba(212,168,83,0.10) 0%,
-    rgba(212,168,83,0.04) 25%,
-    transparent 50%,
-    rgba(40,25,10,0.06) 78%,
-    rgba(40,25,10,0.12) 100%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ============================================================
-   MAIN CONTAINER
-   ============================================================ */
-.main {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 clamp(16px, 3vw, 32px) 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-/* ============================================================
-   HEADER — 黄铜铭牌 + 标题
-   ============================================================ */
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: clamp(20px, 3.5vw, 36px);
-  margin-bottom: clamp(8px, 1.5vw, 16px);
-  text-align: center;
-}
-
-/* 顶部导航链接 — 返回知识主板 */
-.nav-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.brass-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: linear-gradient(180deg, #dcc870 0%, #c4a840 25%, #b09030 55%, #c4a840 80%, #d4b860 100%);
-  border: 1.5px solid var(--brass-dark);
-  border-radius: 3px;
-  padding: 5px 14px;
-  text-decoration: none;
-  color: #3d2818;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.18),
-    inset 0 1px 0 rgba(255,255,220,0.4),
-    inset 0 -1px 2px rgba(0,0,0,0.12);
-  position: relative;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.brass-tag:hover {
-  background: linear-gradient(180deg, #eed880 0%, #d4b850 25%, #c0a040 55%, #d4b850 80%, #e4c870 100%);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,220,0.5);
-}
-.brass-tag::before,
-.brass-tag::after {
-  content: '';
-  position: absolute;
-  width: 4px; height: 4px;
-  background: radial-gradient(circle at 40% 40%, #a08030 0%, #604810 100%);
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.brass-tag::before { left: 5px; }
-.brass-tag::after  { right: 5px; }
-
-/* 主标题 */
-.title-main {
-  font-size: clamp(1.3rem, 3vw, 2rem);
-  font-weight: 900;
-  color: var(--deep-red);
-  letter-spacing: 0.08em;
-  line-height: 1.35;
-}
-
-.title-sub {
-  font-size: clamp(0.78rem, 1.3vw, 0.9rem);
-  color: var(--text-light);
-  letter-spacing: 0.1em;
-  font-weight: 400;
-}
-
-/* 分隔装饰线 */
-.divider-ornament {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  max-width: 420px;
-  margin: 8px 0;
-  opacity: 0.7;
-}
-.divider-ornament::before,
-.divider-ornament::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-pale), var(--brass), var(--gold-pale), transparent);
-}
-.divider-ornament .diamond {
-  width: 7px; height: 7px;
-  background: var(--brass);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-  box-shadow: 0 0 4px rgba(180,134,11,0.4);
-}
-
-
-/* ============================================================
-   INTRO — 课程简介
-   ============================================================ */
-.intro {
-  max-width: 680px;
-  text-align: center;
-  margin: 0 auto clamp(20px, 2.5vw, 28px);
-  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
-  color: var(--text-light);
-  line-height: 1.85;
-  letter-spacing: 0.03em;
-}
-.intro strong {
-  color: var(--deep-red);
-  font-weight: 700;
-}
-
-
-/* ============================================================
-   RADAR OBSERVATORY — 中央雷达站 (纯 CSS)
-   ============================================================ */
-.observatory {
-  position: relative;
-  width: clamp(260px, 38vw, 340px);
-  height: clamp(260px, 38vw, 340px);
-  margin: 0 auto clamp(28px, 3.5vw, 40px);
-  flex-shrink: 0;
-}
-
-/* 外圈光晕 */
-.radar-glow {
-  position: absolute;
-  inset: -18px;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    rgba(212,168,83,0.09) 55%,
-    rgba(212,168,83,0.03) 75%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
-
-/* 雷达底盘 */
-.radar-base {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
+.ambient {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0;
   background:
-    radial-gradient(circle at 48% 45%,
-      #fefbf5 0%,
-      #fdf6ec 30%,
-      #f8eedb 60%,
-      #f0e2cc 100%
-    );
-  box-shadow:
-    0 0 0 3px var(--border-strong),
-    0 0 0 6px rgba(212,168,83,0.18),
-    0 0 0 9px var(--border),
-    inset 0 0 60px rgba(180,134,11,0.06),
-    var(--shadow-lg);
+    radial-gradient(ellipse 60% 50% at 50% 30%, rgba(0,230,118,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 40% at 20% 60%, rgba(0,188,212,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 40% at 80% 60%, rgba(124,77,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 20% at 50% 90%, rgba(255,152,0,0.03) 0%, transparent 50%);
+}
+.ambient::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.6;
 }
 
-/* 同心圆环 */
+.particles {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.particle {
+  position: absolute; border-radius: 50%;
+  background: var(--radar-green);
+  animation: particle-float linear infinite; opacity: 0;
+}
+@keyframes particle-float {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.8; }
+  50%  { opacity: 0.3; }
+  90%  { opacity: 0.05; }
+  100% { transform: translateY(-100vh) translateX(var(--drift)); opacity: 0; }
+}
+
+/* ===== Radar Station Visual ===== */
+.radar-section {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto;
+  padding: 60px 24px 20px; text-align: center;
+}
+.radar-display {
+  position: relative;
+  width: 260px; height: 260px;
+  margin: 0 auto 40px;
+}
 .radar-ring {
-  position: absolute;
+  position: absolute; top: 50%; left: 50%;
   border-radius: 50%;
-  border: 1px dashed var(--gold-pale);
-  pointer-events: none;
+  border: 1px solid rgba(0,230,118,0.15);
+  transform: translate(-50%, -50%);
 }
-.radar-ring.r1 { inset: 12%; border-color: rgba(180,134,11,0.25); border-width:1px; }
-.radar-ring.r2 { inset: 28%; border-color: rgba(180,134,11,0.30); border-width:1px; }
-.radar-ring.r3 { inset: 44%; }
-.radar-ring.r4 { inset: 60%; border-style:dotted; border-color:rgba(180,134,11,0.20); }
-
-/* 十字准线 */
+.radar-ring.r1 { width: 260px; height: 260px; }
+.radar-ring.r2 { width: 180px; height: 180px; border-color: rgba(0,230,118,0.2); }
+.radar-ring.r3 { width: 100px; height: 100px; border-color: rgba(0,230,118,0.3); }
 .radar-cross {
-  position: absolute;
-  pointer-events: none;
-}
-.radar-cross.h {
-  top: 50%; left: 4%; right: 4%;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(180,134,11,0.18) 8%,
-    rgba(180,134,11,0.35) 50%,
-    rgba(180,134,11,0.18) 92%,
-    transparent 100%
-  );
-  transform: translateY(-50%);
-}
-.radar-cross.v {
-  left: 50%; top: 4%; bottom: 4%;
-  width: 1px;
-  background: linear-gradient(180deg,
-    transparent 0%,
-    rgba(180,134,11,0.18) 8%,
-    rgba(180,134,11,0.35) 50%,
-    rgba(180,134,11,0.18) 92%,
-    transparent 100%
-  );
+  position: absolute; top: 0; left: 50%;
+  width: 1px; height: 100%;
+  background: rgba(0,230,118,0.1);
   transform: translateX(-50%);
 }
+.radar-cross.h { width: 100%; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
 
-/* 对角扫描线 */
-.radar-diag {
-  position: absolute;
-  top: 50%; left: 50%;
-  pointer-events: none;
+.radar-scan {
+  position: absolute; top: 50%; left: 50%;
+  width: 130px; height: 130px;
+  transform-origin: 0 0;
+  animation: radar-sweep 4s linear infinite;
+  background: conic-gradient(from 0deg, rgba(0,230,118,0.3) 0deg, rgba(0,230,118,0.05) 30deg, transparent 60deg);
+  border-radius: 50%;
 }
-.radar-diag::before,
-.radar-diag::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 1px;
-  height: 42%;
-  background: linear-gradient(180deg,
-    rgba(180,134,11,0.22) 0%,
-    rgba(180,134,11,0.08) 60%,
-    transparent 100%
-  );
-  transform-origin: top center;
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
-.radar-diag::before { transform: translate(-50%, -100%) rotate(38deg); }
-.radar-diag::after  { transform: translate(-50%, -100%) rotate(-38deg); }
 
-/* 中心罗盘 */
-.radar-compass {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: clamp(40px, 6vw, 54px);
-  height: clamp(40px, 6vw, 54px);
+.radar-hub {
+  position: absolute; top: 50%; left: 50%;
+  width: 12px; height: 12px;
+  background: var(--radar-green); border-radius: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 45% 40%,
-    #d4a853 0%,
-    #b8860b 35%,
-    #8a6518 70%,
-    #6b4a10 100%
-  );
-  box-shadow:
-    0 0 0 3px rgba(180,134,11,0.35),
-    0 0 0 6px rgba(180,134,11,0.12),
-    0 2px 12px rgba(60,30,10,0.3),
-    inset 0 1px 1px rgba(255,255,220,0.25);
+  box-shadow: 0 0 20px var(--radar-green-glow), 0 0 60px var(--radar-green-glow);
+  animation: hub-pulse 2s ease-in-out infinite;
 }
-.radar-compass::before {
-  content: '';
-  position: absolute;
-  inset: 20%;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255,255,200,0.3);
-}
-.radar-compass::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 6px; height: 6px;
-  background: #fffef5;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 8px 2px rgba(255,250,220,0.7);
-  animation: compass-pulse 2.4s ease-in-out infinite;
+@keyframes hub-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--radar-green-glow), 0 0 60px var(--radar-green-glow); }
+  50%      { box-shadow: 0 0 35px rgba(0,230,118,0.5), 0 0 90px rgba(0,230,118,0.3); }
 }
 
-@keyframes compass-pulse {
-  0%, 100% { box-shadow: 0 0 8px 2px rgba(255,250,220,0.7); }
-  50%      { box-shadow: 0 0 14px 5px rgba(255,250,220,0.95); }
+.radar-blip {
+  position: absolute; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--radar-green);
+  animation: blip-fade 3s ease-in-out infinite;
+}
+@keyframes blip-fade {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.5); }
 }
 
-/* 方向标记 */
-.radar-label {
-  position: absolute;
-  font-size: clamp(0.6rem, 0.9vw, 0.7rem);
-  font-weight: 700;
-  color: var(--brass-dark);
-  letter-spacing: 0.05em;
-  pointer-events: none;
+.radar-title { position: relative; z-index: 1; }
+.radar-title h1 {
+  font-size: 2.6rem; font-weight: 900; letter-spacing: 3px;
+  color: var(--text-bright); margin-bottom: 6px;
+  background: linear-gradient(135deg, #e8edf4 0%, #a0b4cc 50%, #e8edf4 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.radar-label.n { top: 4%;    left: 50%; transform: translate(-50%, -50%); }
-.radar-label.s { bottom: 2%; left: 50%; transform: translate(-50%, 50%); }
-.radar-label.e { top: 50%;   right: 3%; transform: translate(50%, -50%); }
-.radar-label.w { top: 50%;   left: 3%;  transform: translate(-50%, -50%); }
-
-/* 扫描光点 */
-.radar-dot {
-  position: absolute;
-  width: clamp(4px, 0.7vw, 6px);
-  height: clamp(4px, 0.7vw, 6px);
-  border-radius: 50%;
-  background: var(--gold-bright);
-  box-shadow: 0 0 6px 2px rgba(212,168,83,0.6);
-  pointer-events: none;
+.radar-title .subtitle {
+  font-size: 1.05rem; color: var(--radar-green);
+  letter-spacing: 6px; font-weight: 400; text-transform: uppercase; margin-bottom: 8px;
 }
-.radar-dot.d1 { top: 18%; left: 32%; animation: dot-blink 3s ease-in-out infinite; }
-.radar-dot.d2 { top: 24%; right:22%; animation: dot-blink 3s ease-in-out 0.5s infinite; }
-.radar-dot.d3 { bottom:22%; left:25%; animation: dot-blink 3s ease-in-out 1s infinite; }
-.radar-dot.d4 { bottom:20%; right:20%;animation: dot-blink 3s ease-in-out 1.5s infinite; }
-.radar-dot.d5 { top: 40%; left:10%;  animation: dot-blink 3s ease-in-out 0.8s infinite; }
-.radar-dot.d6 { top: 38%; right:12%; animation: dot-blink 3s ease-in-out 2s infinite; }
-
-@keyframes dot-blink {
-  0%, 100% { opacity:0.35; transform:scale(1); }
-  50%      { opacity:1;    transform:scale(1.5); }
+.radar-title .tagline {
+  font-size: 0.9rem; color: var(--text-dim); letter-spacing: 2px;
+  max-width: 500px; margin: 0 auto;
 }
 
-
-/* ============================================================
-   TOPIC CARDS GRID
-   ============================================================ */
-.cards-section {
-  width: 100%;
-  max-width: 1100px;
+/* ===== Six Frequency Bands ===== */
+.bands-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 40px 24px 60px;
 }
-
-.cards-section-label {
-  text-align: center;
-  font-size: clamp(0.75rem, 1.1vw, 0.82rem);
-  color: var(--text-muted);
-  letter-spacing: 0.12em;
-  margin-bottom: clamp(14px, 2vw, 20px);
-  text-transform: uppercase;
+.bands-section h2 {
+  text-align: center; font-size: 1.2rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 36px; font-weight: 500;
 }
-
-.cards-grid {
+.bands-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(14px, 2vw, 22px);
+  gap: 28px;
 }
 
-/* ============================================================
-   INDIVIDUAL CARD
-   ============================================================ */
-.topic-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: inherit;
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: clamp(16px, 2.2vw, 24px) clamp(14px, 2vw, 22px);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-  overflow: hidden;
-  min-height: 180px;
+.band-card {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--bg-card); border-radius: var(--radius-lg);
+  border: 1px solid var(--border); padding: 28px 24px 24px;
+  position: relative; overflow: hidden;
+  transition: all var(--ease); box-shadow: var(--shadow); cursor: pointer;
+}
+.band-card:hover {
+  transform: translateY(-5px); box-shadow: var(--shadow-lg);
+  background: var(--bg-card-hover);
+}
+.band-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 4px; transition: height var(--ease);
+}
+.band-card:hover::before { height: 6px; }
+.band-card.s1::before { background: var(--s1); }
+.band-card.s2::before { background: var(--s2); }
+.band-card.s3::before { background: var(--s3); }
+.band-card.s4::before { background: var(--s4); }
+.band-card.s5::before { background: var(--s5); }
+.band-card.s6::before { background: var(--s6); }
+
+.band-card::after {
+  content: ''; position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  opacity: 0; transition: opacity var(--ease); pointer-events: none;
+}
+.band-card.s1::after { background: var(--s1-glow); }
+.band-card.s2::after { background: var(--s2-glow); }
+.band-card.s3::after { background: var(--s3-glow); }
+.band-card.s4::after { background: var(--s4-glow); }
+.band-card.s5::after { background: var(--s5-glow); }
+.band-card.s6::after { background: var(--s6-glow); }
+.band-card:hover::after { opacity: 1; }
+
+.band-card .band-num {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 4rem; font-weight: 900;
+  position: absolute; top: 4px; right: 16px;
+  opacity: 0.04; pointer-events: none; line-height: 1;
+  transition: opacity var(--ease);
+}
+.band-card:hover .band-num { opacity: 0.08; }
+.band-card.s1 .band-num { color: var(--s1); }
+.band-card.s2 .band-num { color: var(--s2); }
+.band-card.s3 .band-num { color: var(--s3); }
+.band-card.s4 .band-num { color: var(--s4); }
+.band-card.s5 .band-num { color: var(--s5); }
+.band-card.s6 .band-num { color: var(--s6); }
+
+.band-card .band-icon { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+.band-card h3 {
+  font-size: 1.15rem; font-weight: 700; color: var(--text-bright);
+  margin-bottom: 6px; letter-spacing: 1px;
+}
+.band-card .band-freq {
+  font-size: 0.75rem; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 12px; display: block;
+}
+.band-card.s1 .band-freq { color: var(--s1); }
+.band-card.s2 .band-freq { color: var(--s2); }
+.band-card.s3 .band-freq { color: var(--s3); }
+.band-card.s4 .band-freq { color: var(--s4); }
+.band-card.s5 .band-freq { color: var(--s5); }
+.band-card.s6 .band-freq { color: var(--s6); }
+
+.band-card .band-desc {
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 16px;
+}
+.band-progress {
+  height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.band-progress .fill {
+  height: 100%; border-radius: 2px; transition: width 0.8s var(--ease);
+}
+.band-card.s1 .fill { background: var(--s1); }
+.band-card.s2 .fill { background: var(--s2); }
+.band-card.s3 .fill { background: var(--s3); }
+.band-card.s4 .fill { background: var(--s4); }
+.band-card.s5 .fill { background: var(--s5); }
+.band-card.s6 .fill { background: var(--s6); }
+
+.band-progress-label {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px; font-size: 0.72rem; color: var(--text-dim);
+}
+.band-arrow {
+  display: inline-block; margin-left: 4px;
+  transition: transform var(--ease); opacity: 0.5;
+}
+.band-card:hover .band-arrow { transform: translateX(4px); opacity: 1; }
+
+/* ===== Overall Progress ===== */
+.progress-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 0 24px 50px;
+}
+.progress-section h2 {
+  text-align: center; font-size: 1.2rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 28px; font-weight: 500;
+}
+.progress-overview {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow);
+}
+.progress-header {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;
+}
+.progress-header .label { font-size: 0.85rem; letter-spacing: 2px; color: var(--text-dim); }
+.progress-header .pct {
+  font-size: 2rem; font-weight: 900; color: var(--radar-green);
+  font-family: "Georgia", "Times New Roman", serif;
+}
+.progress-total-bar {
+  height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 24px;
+}
+.progress-total-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--s1), var(--s2), var(--s3), var(--s4), var(--s5), var(--s6));
+  transition: width 1s var(--ease);
 }
 
-.topic-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--gold-pale);
-  background: var(--card-hover);
+.module-rows { display: flex; flex-direction: column; gap: 14px; }
+.module-row { display: flex; align-items: center; gap: 14px; }
+.module-row .m-icon { font-size: 1.2rem; width: 32px; text-align: center; flex-shrink: 0; }
+.module-row .m-name {
+  width: 120px; font-size: 0.82rem; font-weight: 600; color: var(--text); flex-shrink: 0;
+}
+.module-row .m-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.module-row .m-fill { height: 100%; border-radius: 3px; transition: width 0.8s var(--ease); }
+.module-row .m-pct {
+  width: 40px; text-align: right; font-size: 0.78rem; font-weight: 600; color: var(--text-dim); flex-shrink: 0;
 }
 
-/* 卡片顶部装饰条 */
-.topic-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 12px; right: 12px;
-  height: 3px;
-  border-radius: 0 0 2px 2px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--gold-pale) 20%,
-    var(--gold-bright) 50%,
-    var(--gold-pale) 80%,
-    transparent 100%
-  );
-  opacity: 0.55;
-  transition: opacity var(--transition);
+/* ===== Learning Path ===== */
+.path-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 0 24px 50px;
 }
-.topic-card:hover::before {
-  opacity: 0.9;
+.path-section h2 {
+  text-align: center; font-size: 1.2rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 28px; font-weight: 500;
 }
+.path-track {
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 0; position: relative; flex-wrap: wrap;
+}
+.path-track::before {
+  content: ''; position: absolute;
+  top: 24px; left: 8%; right: 8%; height: 2px;
+  background: linear-gradient(90deg, var(--s1), var(--s2), var(--s3), var(--s4), var(--s5), var(--s6));
+  opacity: 0.3; z-index: 0;
+}
+.path-node {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  position: relative; z-index: 1; flex: 1; min-width: 100px; max-width: 150px;
+}
+.path-dot {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; background: var(--bg-card);
+  border: 2px solid var(--border); transition: all var(--ease);
+  cursor: pointer; position: relative;
+}
+.path-dot:hover { transform: scale(1.15); border-color: var(--text-dim); }
+.path-node.n1 .path-dot { border-color: var(--s1); }
+.path-node.n2 .path-dot { border-color: var(--s2); }
+.path-node.n3 .path-dot { border-color: var(--s3); }
+.path-node.n4 .path-dot { border-color: var(--s4); }
+.path-node.n5 .path-dot { border-color: var(--s5); }
+.path-node.n6 .path-dot { border-color: var(--s6); }
+.path-label { font-size: 0.72rem; color: var(--text-dim); text-align: center; line-height: 1.4; }
 
-/* 卡片编号圆圈 */
-.card-num {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-pale), var(--brass));
-  color: #3d2818;
-  font-size: 0.85rem;
-  font-weight: 800;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 4px rgba(139,105,20,0.25);
-  flex-shrink: 0;
-  letter-spacing: 0;
+/* ===== Podcast Player ===== */
+.podcast-section {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto; padding: 50px 24px 20px;
 }
-
-/* 卡片标题 */
-.card-title {
-  font-size: clamp(0.92rem, 1.3vw, 1.05rem);
-  font-weight: 700;
-  color: var(--deep-red);
-  margin-bottom: 6px;
-  line-height: 1.4;
-  letter-spacing: 0.03em;
+.podcast-section h2 {
+  text-align: center; font-size: 1.2rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 28px; font-weight: 500;
 }
-
-/* 卡片副标题 */
-.card-desc {
-  font-size: clamp(0.76rem, 1vw, 0.82rem);
-  color: var(--text-light);
-  line-height: 1.6;
-  flex: 1;
-  margin-bottom: 10px;
+.podcast-player {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px;
+  display: flex; align-items: center; gap: 24px; box-shadow: var(--shadow);
 }
-
-/* 文章数量指示器 */
-.card-count {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: auto;
+.podcast-play-btn {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 2px solid var(--radar-green);
+  background: rgba(0,230,118,0.08); color: var(--radar-green);
+  font-size: 1.5rem; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--ease);
 }
-
-.count-bar-wrap {
-  flex: 1;
-  height: 5px;
-  background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
+.podcast-play-btn:hover {
+  background: rgba(0,230,118,0.2); box-shadow: 0 0 30px var(--radar-green-glow);
 }
-
-.count-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--accent-soft), var(--accent));
-  transition: width 0.6s ease;
+.podcast-info { flex: 1; }
+.podcast-info .podcast-title { font-size: 1rem; font-weight: 700; color: var(--text-bright); margin-bottom: 4px; }
+.podcast-info .podcast-ep { font-size: 0.8rem; color: var(--radar-green); letter-spacing: 2px; }
+.podcast-wave { display: flex; align-items: flex-end; gap: 3px; height: 32px; margin-top: 10px; }
+.podcast-wave .bar {
+  width: 3px; background: var(--radar-green); border-radius: 2px;
+  animation: wave 0.8s ease-in-out infinite; opacity: 0.4;
 }
-
-.count-label {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  letter-spacing: 0.04em;
+.podcast-wave .bar:nth-child(1) { height: 12px; animation-delay: 0s; }
+.podcast-wave .bar:nth-child(2) { height: 22px; animation-delay: 0.1s; }
+.podcast-wave .bar:nth-child(3) { height: 15px; animation-delay: 0.2s; }
+.podcast-wave .bar:nth-child(4) { height: 28px; animation-delay: 0.3s; }
+.podcast-wave .bar:nth-child(5) { height: 18px; animation-delay: 0.4s; }
+.podcast-wave .bar:nth-child(6) { height: 24px; animation-delay: 0.5s; }
+.podcast-wave .bar:nth-child(7) { height: 10px; animation-delay: 0.6s; }
+.podcast-wave .bar:nth-child(8) { height: 20px; animation-delay: 0.7s; }
+@keyframes wave {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.4); }
 }
+.podcast-placeholder { font-size: 0.78rem; color: var(--text-dim); margin-top: 6px; font-style: italic; }
 
-/* 卡片右下角的小箭头 */
-.card-arrow {
-  position: absolute;
-  bottom: 14px;
-  right: 16px;
-  width: 18px;
-  height: 18px;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: all var(--transition);
-  color: var(--gold);
-  font-size: 0.8rem;
-  line-height: 18px;
-  text-align: center;
-}
-.topic-card:hover .card-arrow {
-  opacity: 0.7;
-  transform: translateX(0);
-}
-
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
+/* ===== Footer ===== */
 .footer {
-  margin-top: clamp(28px, 3.5vw, 40px);
-  text-align: center;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  letter-spacing: 0.06em;
-  line-height: 2;
+  position: relative; z-index: 1;
+  text-align: center; padding: 40px 24px;
+  font-size: 0.75rem; color: var(--text-dim); letter-spacing: 2px;
 }
 
-.footer .brass-line {
-  display: block;
-  width: 60px;
-  height: 1px;
-  margin: 0 auto 12px;
-  background: linear-gradient(90deg, transparent, var(--gold-pale), var(--brass), var(--gold-pale), transparent);
-}
-
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* ===== Responsive ===== */
 @media (max-width: 900px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
+  .bands-grid { grid-template-columns: repeat(2, 1fr); }
+  .radar-title h1 { font-size: 2rem; }
 }
-
-@media (max-width: 580px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .topic-card {
-    min-height: auto;
-    padding: 16px 14px;
-  }
-  .observatory {
-    width: 220px;
-    height: 220px;
-    margin-bottom: 24px;
-  }
-  .card-arrow {
-    opacity: 0.35;
-    transform: translateX(0);
-  }
+@media (max-width: 640px) {
+  .bands-grid { grid-template-columns: 1fr; }
+  .radar-title h1 { font-size: 1.6rem; letter-spacing: 2px; }
+  .radar-title .subtitle { font-size: 0.85rem; letter-spacing: 3px; }
+  .radar-display { width: 180px; height: 180px; }
+  .radar-ring.r1 { width: 180px; height: 180px; }
+  .radar-ring.r2 { width: 120px; height: 120px; }
+  .radar-ring.r3 { width: 70px; height: 70px; }
+  .path-track { flex-direction: column; align-items: center; gap: 16px; }
+  .path-track::before { display: none; }
+  .path-node { flex-direction: row; max-width: none; width: 100%; }
+  .podcast-player { flex-direction: column; text-align: center; }
+  .module-row .m-name { width: 80px; font-size: 0.72rem; }
 }
-
-/* 小屏隐藏副标题过长文本截断 */
-@media (max-width: 360px) {
-  .title-sub {
-    font-size: 0.7rem;
-  }
-  .intro {
-    font-size: 0.78rem;
-  }
-}
-
 </style>
 </head>
 <body>
 
-<div class="main">
+<div class="ambient"></div>
+<div class="particles" id="particles"></div>
 
-  <!-- ======== HEADER ======== -->
-  <header class="header">
-
-    <!-- 顶部导航 -->
-    <nav class="nav-top">
-      <a href="../index.html" class="brass-tag" title="返回知识主板">&#x2190; 知识主板</a>
-    </nav>
-
-    <!-- 主标题 -->
-    <h1 class="title-main">卓克&#xb7;科技参考基础版</h1>
-    <p class="title-sub">&#x5353;&#x514b;&#xb7;科技参考基础版 &#xb7; 317篇深度解读 &#xb7; 最小知识体系</p>
-
-    <!-- 装饰分隔线 -->
-    <div class="divider-ornament">
-      <span class="diamond"></span>
-    </div>
-  </header>
-
-  <!-- ======== INTRO ======== -->
-  <p class="intro">
-    这是一套由<strong>卓克</strong>主理的科技新闻深度解读课程，覆盖
-    <strong>室温超导、基因编辑、核安全、气候变化、三星堆考古、量子计算、人工智能、脑机接口、新冠疫苗、碳中和、太空探索、自动驾驶、食品科学</strong>
-    等全球科技热点。317篇文章构建了一套<strong>可迁移的科技思维操作系统</strong>，
-    帮助你在信息洪流中建立属于自己的认知锚点。
-  </p>
-
-  <!-- ======== CENTRAL RADAR ======== -->
-  <div class="observatory" aria-hidden="true">
-    <div class="radar-glow"></div>
-    <div class="radar-base"></div>
+<!-- Radar Station -->
+<section class="radar-section">
+  <div class="radar-display">
     <div class="radar-ring r1"></div>
     <div class="radar-ring r2"></div>
     <div class="radar-ring r3"></div>
-    <div class="radar-ring r4"></div>
-    <div class="radar-cross h"></div>
     <div class="radar-cross v"></div>
-    <div class="radar-diag"></div>
-    <div class="radar-compass"></div>
-    <span class="radar-label n">N</span>
-    <span class="radar-label s">S</span>
-    <span class="radar-label e">E</span>
-    <span class="radar-label w">W</span>
-    <div class="radar-dot d1"></div>
-    <div class="radar-dot d2"></div>
-    <div class="radar-dot d3"></div>
-    <div class="radar-dot d4"></div>
-    <div class="radar-dot d5"></div>
-    <div class="radar-dot d6"></div>
+    <div class="radar-cross h"></div>
+    <div class="radar-scan"></div>
+    <div class="radar-hub"></div>
+    <div class="radar-blip" style="top:22%;left:68%;animation-delay:0s;"></div>
+    <div class="radar-blip" style="top:60%;left:25%;animation-delay:1.2s;"></div>
+    <div class="radar-blip" style="top:35%;left:80%;animation-delay:2.5s;"></div>
+    <div class="radar-blip" style="top:72%;left:55%;animation-delay:0.8s;"></div>
+    <div class="radar-blip" style="top:15%;left:40%;animation-delay:2s;"></div>
   </div>
+  <div class="radar-title">
+    <div class="subtitle">TECH RADAR STATION</div>
+    <h1>卓克·基础科技参考一</h1>
+    <p class="tagline">从317篇日课中提取的六频段科技认知系统<br>像雷达一样扫描前沿，像解码器一样穿透噪声</p>
+  </div>
+</section>
 
-  <!-- ======== TOPIC CARDS ======== -->
-  <section class="cards-section">
-    <p class="cards-section-label">&#x2014; 六大观测领域 &#x2014;</p>
+<!-- Six Frequency Bands -->
+<section class="bands-section">
+  <h2>◆ 六 频 扫 描 ◆</h2>
+  <div class="bands-grid">
 
-    <div class="cards-grid">
+    <a href="1-智能时代的底层代码.html" class="band-card s1">
+      <span class="band-num">01</span>
+      <span class="band-icon">\u{1F4BB}</span>
+      <h3>智能时代的底层代码</h3>
+      <span class="band-freq">BAND 1 · 数据青</span>
+      <p class="band-desc">芯片战争的物理极限、AI觉醒的算法逻辑、量子计算的范式跃迁——理解数字世界运转的底层指令。</p>
+      <div class="band-progress"><div class="fill" id="fill1" style="width:0%"></div></div>
+      <div class="band-progress-label"><span id="pct1">0%</span><span>进入扫描 <span class="band-arrow">→</span></span></div>
+    </a>
 
-      <!-- Card 1 -->
-      <a href="1-智能时代的底层代码.html" class="topic-card">
-        <span class="card-num">01</span>
-        <h2 class="card-title">智能时代的底层代码</h2>
-        <p class="card-desc">人工智能、芯片制程、算力革命与数字文明的基础设施</p>
-        <div class="card-count">
-          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:78%"></span></span>
-          <span class="count-label">~55篇</span>
-        </div>
-        <span class="card-arrow">&#x2192;</span>
-      </a>
+    <a href="2-生命科学与医学前沿.html" class="band-card s2">
+      <span class="band-num">02</span>
+      <span class="band-icon">\u{1F9EC}</span>
+      <h3>生命科学与医学前沿</h3>
+      <span class="band-freq">BAND 2 · 生机绿</span>
+      <p class="band-desc">mRNA技术的革命潜力、CAR-T癌症疗法的天价逻辑、基因编辑的伦理边界——重新理解生命的编码与修复。</p>
+      <div class="band-progress"><div class="fill" id="fill2" style="width:0%"></div></div>
+      <div class="band-progress-label"><span id="pct2">0%</span><span>进入扫描 <span class="band-arrow">→</span></span></div>
+    </a>
 
-      <!-- Card 2 -->
-      <a href="2-生命科学与医学前沿.html" class="topic-card">
-        <span class="card-num">02</span>
-        <h2 class="card-title">生命科学与医学前沿</h2>
-        <p class="card-desc">基因编辑、脑机接口、神经科学、流行病与大健康革命</p>
-        <div class="card-count">
-          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:72%"></span></span>
-          <span class="count-label">~58篇</span>
-        </div>
-        <span class="card-arrow">&#x2192;</span>
-      </a>
+    <a href="3-能源博弈与地球系统.html" class="band-card s3">
+      <span class="band-num">03</span>
+      <span class="band-icon">⚡</span>
+      <h3>能源博弈与地球系统</h3>
+      <span class="band-freq">BAND 3 · 能量橙</span>
+      <p class="band-desc">碳中和的全球棋局、核聚变的终极梦想、电池技术的突围之路——追踪地球能量脉搏的每一次跳动。</p>
+      <div class="band-progress"><div class="fill" id="fill3" style="width:0%"></div></div>
+      <div class="band-progress-label"><span id="pct3">0%</span><span>进入扫描 <span class="band-arrow">→</span></span></div>
+    </a>
 
-      <!-- Card 3 -->
-      <a href="3-能源博弈与地球系统.html" class="topic-card">
-        <span class="card-num">03</span>
-        <h2 class="card-title">能源博弈与地球系统</h2>
-        <p class="card-desc">碳中和路径、核能安全、气候变化科学与全球能源转型</p>
-        <div class="card-count">
-          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:65%"></span></span>
-          <span class="count-label">~52篇</span>
-        </div>
-        <span class="card-arrow">&#x2192;</span>
-      </a>
+    <a href="4-星辰大海-航天与工程探索.html" class="band-card s4">
+      <span class="band-num">04</span>
+      <span class="band-icon">\u{1F680}</span>
+      <h3>星辰大海·航天与工程探索</h3>
+      <span class="band-freq">BAND 4 · 深空紫</span>
+      <p class="band-desc">SpaceX的快速迭代哲学、火星移民的科学账本、空间站的轨道政治——仰望星空的工程师视角。</p>
+      <div class="band-progress"><div class="fill" id="fill4" style="width:0%"></div></div>
+      <div class="band-progress-label"><span id="pct4">0%</span><span>进入扫描 <span class="band-arrow">→</span></span></div>
+    </a>
 
-      <!-- Card 4 -->
-      <a href="4-星辰大海：航天与工程探索.html" class="topic-card">
-        <span class="card-num">04</span>
-        <h2 class="card-title">星辰大海：航天与工程探索</h2>
-        <p class="card-desc">火箭复用、深空探测、空间站、超级工程与极限制造</p>
-        <div class="card-count">
-          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:55%"></span></span>
-          <span class="count-label">~48篇</span>
-        </div>
-        <span class="card-arrow">&#x2192;</span>
-      </a>
+    <a href="5-饮食健康与生活科学.html" class="band-card s5">
+      <span class="band-num">05</span>
+      <span class="band-icon">\u{1FAC0}</span>
+      <h3>饮食健康与生活科学</h3>
+      <span class="band-freq">BAND 5 · 生命红</span>
+      <p class="band-desc">人造肉的分子真相、间歇断食的生理逻辑、微塑料的生物旅程——把身体当作最精密的实验室来理解。</p>
+      <div class="band-progress"><div class="fill" id="fill5" style="width:0%"></div></div>
+      <div class="band-progress-label"><span id="pct5">0%</span><span>进入扫描 <span class="band-arrow">→</span></span></div>
+    </a>
 
-      <!-- Card 5 -->
-      <a href="5-饮食、健康与生活科学.html" class="topic-card">
-        <span class="card-num">05</span>
-        <h2 class="card-title">饮食、健康与生活科学</h2>
-        <p class="card-desc">食品科学、营养学、日常科技原理与生活方式的科学证据</p>
-        <div class="card-count">
-          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:58%"></span></span>
-          <span class="count-label">~50篇</span>
-        </div>
-        <span class="card-arrow">&#x2192;</span>
-      </a>
+    <a href="6-科学思维的操作系统.html" class="band-card s6">
+      <span class="band-num">06</span>
+      <span class="band-icon">\u{1F9E0}</span>
+      <h3>科学思维的操作系统</h3>
+      <span class="band-freq">BAND 6 · 智慧金</span>
+      <p class="band-desc">进化论作为通用算法、概率思维的决策框架、反馈系统的世界模型——给大脑安装一套科学操作系统。</p>
+      <div class="band-progress"><div class="fill" id="fill6" style="width:0%"></div></div>
+      <div class="band-progress-label"><span id="pct6">0%</span><span>进入扫描 <span class="band-arrow">→</span></span></div>
+    </a>
 
-      <!-- Card 6 -->
-      <a href="6-科学思维的操作系统.html" class="topic-card">
-        <span class="card-num">06</span>
-        <h2 class="card-title">科学思维的操作系统</h2>
-        <p class="card-desc">方法论、认知工具、批判性思维与科学决策的底层框架</p>
-        <div class="card-count">
-          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:60%"></span></span>
-          <span class="count-label">~54篇</span>
-        </div>
-        <span class="card-arrow">&#x2192;</span>
-      </a>
+  </div>
+</section>
 
+<!-- Overall Progress -->
+<section class="progress-section">
+  <h2>◆ 学 习 进 度 ◆</h2>
+  <div class="progress-overview">
+    <div class="progress-header">
+      <span class="label">总完成度</span>
+      <span class="pct" id="totalPct">0%</span>
     </div>
-  </section>
+    <div class="progress-total-bar">
+      <div class="progress-total-fill" id="totalFill" style="width:0%"></div>
+    </div>
+    <div class="module-rows" id="moduleRows"></div>
+  </div>
+</section>
 
-  <!-- ======== FOOTER ======== -->
-  <footer class="footer">
-    <span class="brass-line"></span>
-    卓克&#xb7;科技参考基础版 &#xb7; 317篇深度解读<br>
-    构建属于你自己的最小知识体系
-  </footer>
+<!-- Learning Path -->
+<section class="path-section">
+  <h2>◆ 学 习 路 径 ◆</h2>
+  <div class="path-track">
+    <div class="path-node n1"><div class="path-dot">\u{1F4BB}</div><div class="path-label">底层代码<br>扫描数字世界</div></div>
+    <div class="path-node n2"><div class="path-dot">\u{1F9EC}</div><div class="path-label">生命科学<br>解码生物逻辑</div></div>
+    <div class="path-node n3"><div class="path-dot">⚡</div><div class="path-label">能源博弈<br>追踪地球脉搏</div></div>
+    <div class="path-node n4"><div class="path-dot">\u{1F680}</div><div class="path-label">星辰大海<br>丈量宇宙边疆</div></div>
+    <div class="path-node n5"><div class="path-dot">\u{1FAC0}</div><div class="path-label">饮食健康<br>实验室里的身体</div></div>
+    <div class="path-node n6"><div class="path-dot">\u{1F9E0}</div><div class="path-label">科学思维<br>安装认知系统</div></div>
+  </div>
+</section>
 
-</div><!-- /.main -->
+<!-- Podcast Player Placeholder -->
+<section class="podcast-section">
+  <h2>◆ 播 客 收 听 ◆</h2>
+  <div class="podcast-player" id="podcastPlayer">
+    <button class="podcast-play-btn" id="podcastPlayBtn" onclick="togglePodcast()" title="播放/暂停">▶</button>
+    <div class="podcast-info">
+      <div class="podcast-title">科技参考·音频解读</div>
+      <div class="podcast-ep">每周更新 · 深度解读六大专题</div>
+      <div class="podcast-wave">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <div class="podcast-placeholder">\u{1F3A7} 播客音频即将上线，敬请期待</div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  卓克 · 科技参考基础版 · MKS全体系 · 317篇日课精华<br>
+  <span style="opacity:0.5">Tech Radar Station — scanning the frontiers of science &amp; technology</span>
+</div>
+
+<script>
+(function() {
+  var container = document.getElementById('particles');
+  for (var i = 0; i < 20; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = (Math.random() * 94 + 3) + '%';
+    p.style.bottom = -(Math.random() * 20 + 5) + 'px';
+    p.style.width = p.style.height = (Math.random() * 3 + 1.5) + 'px';
+    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    if (Math.random() > 0.7) p.style.background = 'var(--s1)';
+    else if (Math.random() > 0.8) p.style.background = 'var(--s3)';
+    container.appendChild(p);
+  }
+})();
+
+(function() {
+  var prefixes = ['mks_tech1_', 'mks_tech2_', 'mks_tech3_', 'mks_tech4_', 'mks_tech5_', 'mks_tech6_'];
+  var moduleNames = [
+    { icon: '\u{1F4BB}', name: '智能底层代码', color: 'var(--s1)' },
+    { icon: '\u{1F9EC}', name: '生命科学前沿', color: 'var(--s2)' },
+    { icon: '⚡', name: '能源地球系统', color: 'var(--s3)' },
+    { icon: '\u{1F680}', name: '航天工程探索', color: 'var(--s4)' },
+    { icon: '\u{1FAC0}', name: '饮食健康生活', color: 'var(--s5)' },
+    { icon: '\u{1F9E0}', name: '科学思维系统', color: 'var(--s6)' }
+  ];
+  var totalPct = 0;
+  var rowsHtml = '';
+  prefixes.forEach(function(prefix, i) {
+    var learned = 0;
+    try {
+      var raw = localStorage.getItem(prefix + 'learned');
+      if (raw) { var arr = JSON.parse(raw); if (Array.isArray(arr)) learned = arr.filter(function(x){return !!x;}).length; }
+    } catch(e) {}
+    var pct = Math.round((learned / 10) * 100);
+    totalPct += pct;
+    document.getElementById('fill' + (i + 1)).style.width = pct + '%';
+    document.getElementById('pct' + (i + 1)).textContent = pct + '%';
+    rowsHtml += '<div class="module-row">' +
+      '<span class="m-icon">' + moduleNames[i].icon + '</span>' +
+      '<span class="m-name">' + moduleNames[i].name + '</span>' +
+      '<span class="m-track"><span class="m-fill" style="width:' + pct + '%;background:' + moduleNames[i].color + '"></span></span>' +
+      '<span class="m-pct">' + pct + '%</span></div>';
+  });
+  var overall = Math.round(totalPct / 6);
+  document.getElementById('totalPct').textContent = overall + '%';
+  document.getElementById('totalFill').style.width = overall + '%';
+  document.getElementById('moduleRows').innerHTML = rowsHtml;
+})();
+
+var podcastPlaying = false;
+function togglePodcast() {
+  podcastPlaying = !podcastPlaying;
+  document.getElementById('podcastPlayBtn').textContent = podcastPlaying ? '⏸' : '▶';
+}
+</script>
 
 </body>
 </html>
