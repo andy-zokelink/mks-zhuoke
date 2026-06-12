@@ -3,147 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克·科学思维课 — 认知的光谱</title>
+<title>卓克·科学思维课 — 理性的锻造厂</title>
 <style>
 /* ===== Foundations ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --paper: #f9f7f3;
-  --paper-warm: #f3efe8;
-  --ink: #2d2a26;
-  --ink-light: #5c5750;
-  --ink-dim: #8c8780;
-  --white: #ffffff;
-  --border: #e8e3db;
-  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06);
-  --shadow-lg: 0 2px 6px rgba(0,0,0,0.05), 0 12px 36px rgba(0,0,0,0.09);
-  --radius: 12px;
-  --radius-lg: 18px;
+  /* Forge palette — dark, warm, metallic */
+  --bg: #141210;
+  --bg-card: #1c1a17;
+  --bg-card-hover: #231f1b;
+  --text: #ddd6c8;
+  --text-bright: #f0e8d8;
+  --text-dim: #8a8278;
+  --border: #2a2722;
+  --border-light: #38342e;
+  --gold: #e8a840;
+  --gold-light: #f4d78e;
+  --gold-dark: #b87a28;
+  --copper: #c4703a;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 10px;
+  --radius-lg: 16px;
   --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  /* Module spectrum — six wavelengths of understanding */
-  --m1: #c8851a; /* 工具箱 · 琥珀金 — 工匠的温度 */
-  --m2: #0d7b6b; /* 演化论 · 深潭绿 — 生命的纵深 */
-  --m3: #c0392b; /* 医学 · 茜红 — 血肉的实证 */
-  --m4: #d9472e; /* 伪科学 · 警觉橙 — 辨别真伪的锐度 */
-  --m5: #8b6914; /* 文明史 · 古铜 — 时间的沉淀 */
-  --m6: #6b3eb8; /* 心智 · 思辨紫 — 意识的深度 */
+  /* Six forging flames */
+  --m1: #e8942a; /* 工具箱 · 锤炼之火 — 琥珀金 */
+  --m1-glow: rgba(232,148,42,0.25);
+  --m2: #2ea88a; /* 演化论 · 熔铸之火 — 深潭绿 */
+  --m2-glow: rgba(46,168,138,0.25);
+  --m3: #d4504b; /* 医学 · 淬炼之火 — 茜红 */
+  --m3-glow: rgba(212,80,75,0.25);
+  --m4: #e0683d; /* 伪科学 · 锻打之火 — 警觉橙 */
+  --m4-glow: rgba(224,104,61,0.25);
+  --m5: #c49840; /* 文明史 · 铭纹之火 — 古铜 */
+  --m5-glow: rgba(196,152,64,0.25);
+  --m6: #8b6dc0; /* 心智 · 开刃之火 — 思辨紫 */
+  --m6-glow: rgba(139,109,192,0.25);
 }
 
 body {
   font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--bg);
+  color: var(--text);
   line-height: 1.8;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* ===== Top Light Wash ===== */
-.top-light {
+/* ===== Forge Ambient Glow ===== */
+.forge-ambient {
   position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 420px;
+  top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(200, 180, 140, 0.15), transparent 70%),
-    radial-gradient(ellipse 40% 40% at 25% 5%, rgba(180, 200, 220, 0.08), transparent 60%),
-    radial-gradient(ellipse 40% 40% at 75% 5%, rgba(200, 170, 180, 0.08), transparent 60%);
+    radial-gradient(ellipse 50% 40% at 50% 25%, rgba(232,148,42,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 50% at 15% 50%, rgba(196,152,64,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 50% at 85% 50%, rgba(224,104,61,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 50% 95%, rgba(200,130,40,0.04) 0%, transparent 50%);
 }
+
+/* ===== Floating Embers ===== */
+.embers {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.ember {
+  position: absolute;
+  border-radius: 50%;
+  animation: ember-rise linear infinite;
+  opacity: 0;
+}
+@keyframes ember-rise {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  8%   { opacity: 0.9; }
+  60%  { opacity: 0.4; }
+  95%  { opacity: 0.05; }
+  100% { transform: translateY(-100vh) translateX(var(--drift)) scale(0.2); opacity: 0; }
+}
+.ember.e1  { left: 8%;  bottom: -10px; width: 3px; height: 3px; background: var(--gold-light); --drift: 30px; animation-duration: 9s; animation-delay: 0s; }
+.ember.e2  { left: 18%; bottom: -10px; width: 2px; height: 2px; background: var(--m4); --drift: -20px; animation-duration: 7s; animation-delay: 1.5s; }
+.ember.e3  { left: 28%; bottom: -10px; width: 4px; height: 4px; background: var(--gold); --drift: 15px; animation-duration: 11s; animation-delay: 0.8s; }
+.ember.e4  { left: 38%; bottom: -10px; width: 2px; height: 2px; background: var(--m1); --drift: -35px; animation-duration: 8s; animation-delay: 3s; }
+.ember.e5  { left: 48%; bottom: -10px; width: 3px; height: 3px; background: var(--m3); --drift: 25px; animation-duration: 10s; animation-delay: 2s; }
+.ember.e6  { left: 58%; bottom: -10px; width: 2px; height: 2px; background: var(--gold-light); --drift: -15px; animation-duration: 7.5s; animation-delay: 4s; }
+.ember.e7  { left: 68%; bottom: -10px; width: 3px; height: 3px; background: var(--m5); --drift: 20px; animation-duration: 9.5s; animation-delay: 1s; }
+.ember.e8  { left: 78%; bottom: -10px; width: 4px; height: 4px; background: var(--copper); --drift: -25px; animation-duration: 8.5s; animation-delay: 2.5s; }
+.ember.e9  { left: 88%; bottom: -10px; width: 2px; height: 2px; background: var(--m6); --drift: 10px; animation-duration: 10.5s; animation-delay: 3.5s; }
+.ember.e10 { left: 12%; bottom: -10px; width: 2px; height: 2px; background: var(--m2); --drift: -30px; animation-duration: 7.8s; animation-delay: 5s; }
+.ember.e11 { left: 52%; bottom: -10px; width: 3px; height: 3px; background: var(--gold); --drift: 35px; animation-duration: 12s; animation-delay: 0.3s; }
+.ember.e12 { left: 72%; bottom: -10px; width: 2px; height: 2px; background: var(--m1); --drift: -10px; animation-duration: 8.2s; animation-delay: 4.5s; }
+.ember.e13 { left: 33%; bottom: -10px; width: 3px; height: 3px; background: var(--m4); --drift: 18px; animation-duration: 9.8s; animation-delay: 6s; }
+.ember.e14 { left: 63%; bottom: -10px; width: 2px; height: 2px; background: var(--gold-light); --drift: -22px; animation-duration: 7.2s; animation-delay: 1.8s; }
+.ember.e15 { left: 92%; bottom: -10px; width: 3px; height: 3px; background: var(--m3); --drift: 28px; animation-duration: 11.5s; animation-delay: 3.8s; }
 
 /* ===== Page Shell ===== */
 .page {
   position: relative;
   z-index: 1;
-  max-width: 1060px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 60px 28px 0;
+  padding: 64px 28px 0;
 }
 
 /* ===== Hero ===== */
 .hero {
   text-align: center;
-  padding: 20px 0 14px;
+  padding: 10px 0 0;
+  position: relative;
+}
+.hero .forge-crown {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 120px;
+  background: radial-gradient(ellipse 60% 70% at 50% 100%, rgba(232,148,42,0.1), transparent 70%);
+  pointer-events: none;
 }
 .hero .eyebrow {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
-  letter-spacing: 6px;
-  color: var(--ink-dim);
-  margin-bottom: 16px;
+  letter-spacing: 5px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  position: relative;
+  display: inline-block;
 }
+.hero .eyebrow::before,
+.hero .eyebrow::after {
+  content: "◇";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.4rem;
+  color: var(--gold-dark);
+  opacity: 0.5;
+}
+.hero .eyebrow::before { left: -24px; }
+.hero .eyebrow::after  { right: -24px; }
 .hero h1 {
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 900;
-  letter-spacing: 4px;
-  color: var(--ink);
-  line-height: 1.25;
-  margin-bottom: 10px;
+  letter-spacing: 5px;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  background: linear-gradient(180deg, #f8e0a0 0%, #e0a030 45%, #b87018 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 12px rgba(232,148,42,0.35));
 }
 .hero h1 .dot {
-  color: var(--m4);
+  -webkit-text-fill-color: #e8942a;
   display: inline-block;
-  animation: dot-pulse 2.8s ease-in-out infinite;
+  animation: spark-pulse 2.4s ease-in-out infinite;
 }
-@keyframes dot-pulse {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(-4px); opacity: 0.5; }
+@keyframes spark-pulse {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+  40% { transform: translateY(-5px) scale(1.15); opacity: 0.6; }
+  70% { transform: translateY(-2px) scale(1.05); opacity: 0.85; }
 }
 .hero .tagline {
-  font-size: 1.05rem;
-  color: var(--ink-light);
+  font-size: 1.1rem;
+  color: var(--text-dim);
   letter-spacing: 2px;
   margin-bottom: 6px;
   font-weight: 500;
 }
 .hero .sub-tagline {
   font-size: 0.82rem;
-  color: var(--ink-dim);
+  color: var(--text-dim);
   letter-spacing: 0.5px;
+  opacity: 0.7;
 }
 
-/* ===== Spectrum Divider ===== */
-.spectrum-line {
+/* ===== Forge Illustration SVG ===== */
+.forge-svg-wrap {
   display: flex;
-  height: 3px;
-  border-radius: 2px;
-  margin: 36px auto 0;
-  max-width: 480px;
-  overflow: hidden;
+  justify-content: center;
+  margin: 28px auto 0;
+  max-width: 700px;
+  position: relative;
 }
-.spectrum-line span {
-  flex: 1;
-  height: 100%;
-  transition: flex 0.6s ease;
+.forge-svg-wrap::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 60px;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(232,148,42,0.08), transparent 70%);
+  pointer-events: none;
 }
-.spectrum-line span:nth-child(1) { background: var(--m1); }
-.spectrum-line span:nth-child(2) { background: var(--m2); }
-.spectrum-line span:nth-child(3) { background: var(--m3); }
-.spectrum-line span:nth-child(4) { background: var(--m4); }
-.spectrum-line span:nth-child(5) { background: var(--m5); }
-.spectrum-line span:nth-child(6) { background: var(--m6); }
+.forge-svg {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+}
+/* Flame flicker animations */
+.flame-1 { animation: flicker1 2.8s ease-in-out infinite; transform-origin: 170px 175px; }
+.flame-2 { animation: flicker2 3.1s ease-in-out infinite; transform-origin: 260px 175px; }
+.flame-3 { animation: flicker3 2.5s ease-in-out infinite; transform-origin: 350px 175px; }
+.flame-4 { animation: flicker4 3.3s ease-in-out infinite; transform-origin: 440px 175px; }
+.flame-5 { animation: flicker5 2.7s ease-in-out infinite; transform-origin: 530px 175px; }
+.flame-6 { animation: flicker6 2.9s ease-in-out infinite; transform-origin: 620px 175px; }
+@keyframes flicker1 { 0%,100%{transform:scaleY(1) scaleX(1)} 30%{transform:scaleY(1.04) scaleX(0.97)} 60%{transform:scaleY(0.97) scaleX(1.03)} 85%{transform:scaleY(1.02) scaleX(0.99)} }
+@keyframes flicker2 { 0%,100%{transform:scaleY(1) scaleX(1)} 25%{transform:scaleY(0.97) scaleX(1.03)} 55%{transform:scaleY(1.05) scaleX(0.96)} 80%{transform:scaleY(1.01) scaleX(1.01)} }
+@keyframes flicker3 { 0%,100%{transform:scaleY(1) scaleX(1)} 35%{transform:scaleY(1.03) scaleX(0.98)} 65%{transform:scaleY(0.96) scaleX(1.04)} 90%{transform:scaleY(1.02) scaleX(0.99)} }
+@keyframes flicker4 { 0%,100%{transform:scaleY(1) scaleX(1)} 20%{transform:scaleY(1.05) scaleX(0.96)} 50%{transform:scaleY(0.98) scaleX(1.02)} 75%{transform:scaleY(1.03) scaleX(0.98)} }
+@keyframes flicker5 { 0%,100%{transform:scaleY(1) scaleX(1)} 40%{transform:scaleY(0.97) scaleX(1.03)} 70%{transform:scaleY(1.04) scaleX(0.97)} 95%{transform:scaleY(1.01) scaleX(1.0)} }
+@keyframes flicker6 { 0%,100%{transform:scaleY(1) scaleX(1)} 28%{transform:scaleY(1.04) scaleX(0.97)} 58%{transform:scaleY(0.97) scaleX(1.03)} 82%{transform:scaleY(1.02) scaleX(0.99)} }
 
-.spectrum-line:hover span { flex: 1; }
-.spectrum-line:hover span:hover { flex: 2.5; }
+/* Inner flame animations */
+.flame-inner-1 { animation: flickerI1 2.2s ease-in-out infinite; transform-origin: 175px 175px; }
+.flame-inner-2 { animation: flickerI2 2.5s ease-in-out infinite; transform-origin: 265px 175px; }
+.flame-inner-3 { animation: flickerI3 2.0s ease-in-out infinite; transform-origin: 355px 175px; }
+.flame-inner-4 { animation: flickerI4 2.6s ease-in-out infinite; transform-origin: 445px 175px; }
+.flame-inner-5 { animation: flickerI5 2.2s ease-in-out infinite; transform-origin: 535px 175px; }
+.flame-inner-6 { animation: flickerI6 2.3s ease-in-out infinite; transform-origin: 625px 175px; }
+@keyframes flickerI1 { 0%,100%{transform:scaleY(1) scaleX(1);opacity:1} 30%{transform:scaleY(1.06) scaleX(0.94);opacity:0.7} 60%{transform:scaleY(0.94) scaleX(1.06);opacity:0.9} 85%{transform:scaleY(1.03) scaleX(0.98);opacity:0.8} }
+@keyframes flickerI2 { 0%,100%{transform:scaleY(1) scaleX(1);opacity:1} 25%{transform:scaleY(0.94) scaleX(1.06);opacity:0.9} 55%{transform:scaleY(1.07) scaleX(0.93);opacity:0.7} 80%{transform:scaleY(1.02) scaleX(1.01);opacity:0.85} }
+@keyframes flickerI3 { 0%,100%{transform:scaleY(1) scaleX(1);opacity:1} 35%{transform:scaleY(1.05) scaleX(0.95);opacity:0.75} 65%{transform:scaleY(0.93) scaleX(1.07);opacity:0.9} 90%{transform:scaleY(1.03) scaleX(0.98);opacity:0.8} }
+@keyframes flickerI4 { 0%,100%{transform:scaleY(1) scaleX(1);opacity:1} 20%{transform:scaleY(1.07) scaleX(0.93);opacity:0.65} 50%{transform:scaleY(0.95) scaleX(1.05);opacity:0.85} 75%{transform:scaleY(1.04) scaleX(0.97);opacity:0.75} }
+@keyframes flickerI5 { 0%,100%{transform:scaleY(1) scaleX(1);opacity:1} 40%{transform:scaleY(0.93) scaleX(1.07);opacity:0.9} 70%{transform:scaleY(1.06) scaleX(0.94);opacity:0.7} 95%{transform:scaleY(1.02) scaleX(1.0);opacity:0.85} }
+@keyframes flickerI6 { 0%,100%{transform:scaleY(1) scaleX(1);opacity:1} 28%{transform:scaleY(1.06) scaleX(0.94);opacity:0.7} 58%{transform:scaleY(0.94) scaleX(1.06);opacity:0.9} 82%{transform:scaleY(1.03) scaleX(0.98);opacity:0.8} }
 
 /* ===== Intro ===== */
 .intro {
   max-width: 720px;
-  margin: 40px auto 0;
-  padding: 0;
+  margin: 44px auto 0;
   text-align: center;
 }
 .intro p {
   font-size: 0.95rem;
-  color: var(--ink-light);
+  color: var(--text-dim);
   line-height: 2;
   margin-bottom: 10px;
 }
 .intro p:last-child { margin-bottom: 0; }
 .intro strong {
-  color: var(--ink);
+  color: var(--text-bright);
   font-weight: 700;
   position: relative;
 }
@@ -152,7 +260,7 @@ body {
   position: absolute;
   left: 0; right: 0; bottom: 2px;
   height: 4px;
-  background: rgba(200, 170, 120, 0.25);
+  background: rgba(232,148,42,0.18);
   border-radius: 2px;
   z-index: -1;
 }
@@ -171,27 +279,35 @@ body {
   padding: 14px 20px;
   min-width: 80px;
   border-radius: 8px;
-  background: var(--white);
+  background: var(--bg-card);
   box-shadow: var(--shadow);
   transition: all var(--ease);
   border: 1px solid var(--border);
+  position: relative;
 }
-.stat:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+.stat::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,148,42,0.15), transparent);
+  opacity: 0;
+  transition: opacity var(--ease);
 }
+.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--border-light); }
+.stat:hover::after { opacity: 1; }
 .stat .num {
   display: block;
   font-size: 1.7rem;
   font-weight: 900;
-  color: var(--ink);
+  color: var(--gold);
   line-height: 1.2;
   letter-spacing: 1px;
 }
 .stat .lbl {
   display: block;
   font-size: 0.72rem;
-  color: var(--ink-dim);
+  color: var(--text-dim);
   margin-top: 3px;
   letter-spacing: 0.5px;
 }
@@ -199,37 +315,40 @@ body {
 /* ===== Section Header ===== */
 .section-head {
   text-align: center;
-  margin: 64px 0 36px;
+  margin: 70px 0 36px;
 }
 .section-head h2 {
   font-size: 1.4rem;
   font-weight: 800;
-  color: var(--ink);
-  letter-spacing: 2px;
+  color: var(--text-bright);
+  letter-spacing: 3px;
   display: inline-block;
   position: relative;
 }
+.section-head h2::before,
 .section-head h2::after {
   content: "";
-  display: block;
-  width: 36px;
-  height: 3px;
-  border-radius: 2px;
-  margin: 10px auto 0;
-  background: linear-gradient(90deg, var(--m1), var(--m2), var(--m3), var(--m4), var(--m5), var(--m6));
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark));
 }
+.section-head h2::before { right: calc(100% + 16px); background: linear-gradient(90deg, var(--gold-dark), transparent); }
+.section-head h2::after  { left: calc(100% + 16px); background: linear-gradient(90deg, transparent, var(--gold-dark)); }
 .section-head .sub {
   font-size: 0.85rem;
-  color: var(--ink-dim);
-  margin-top: 8px;
+  color: var(--text-dim);
+  margin-top: 10px;
   letter-spacing: 0.5px;
+  opacity: 0.75;
 }
 
 /* ===== Module Grid ===== */
 .module-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 24px;
 }
 
 .module {
@@ -237,7 +356,7 @@ body {
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  background: var(--white);
+  background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
   overflow: hidden;
@@ -246,46 +365,74 @@ body {
   box-shadow: var(--shadow);
 }
 .module:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
-  border-color: transparent;
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
 }
 
-/* Color accent bar */
+/* Forge vent — top color accent */
 .module::before {
   content: "";
   display: block;
-  height: 3px;
-  border-radius: 3px 3px 0 0;
-  transition: height var(--ease);
+  height: 4px;
+  transition: all var(--ease);
+  position: relative;
+  z-index: 2;
 }
-.module:hover::before { height: 5px; }
+.module:hover::before { height: 6px; box-shadow: 0 2px 16px var(--m1-glow, rgba(232,148,42,0.3)); }
 .module.m1::before { background: var(--m1); }
 .module.m2::before { background: var(--m2); }
 .module.m3::before { background: var(--m3); }
 .module.m4::before { background: var(--m4); }
 .module.m5::before { background: var(--m5); }
 .module.m6::before { background: var(--m6); }
+.module:hover.m1::before { box-shadow: 0 2px 20px var(--m1-glow); }
+.module:hover.m2::before { box-shadow: 0 2px 20px var(--m2-glow); }
+.module:hover.m3::before { box-shadow: 0 2px 20px var(--m3-glow); }
+.module:hover.m4::before { box-shadow: 0 2px 20px var(--m4-glow); }
+.module:hover.m5::before { box-shadow: 0 2px 20px var(--m5-glow); }
+.module:hover.m6::before { box-shadow: 0 2px 20px var(--m6-glow); }
 
-/* Colored glow on hover */
+/* Forge glow behind card */
 .module .glow {
   position: absolute;
-  top: -40px; left: 50%;
+  top: -30px; left: 50%;
   transform: translateX(-50%);
-  width: 180px; height: 80px;
+  width: 200px; height: 90px;
   border-radius: 50%;
   opacity: 0;
   transition: opacity var(--ease);
   pointer-events: none;
   z-index: 0;
 }
-.module.m1 .glow { background: radial-gradient(ellipse, rgba(200,133,26,0.12), transparent 70%); }
-.module.m2 .glow { background: radial-gradient(ellipse, rgba(13,123,107,0.12), transparent 70%); }
-.module.m3 .glow { background: radial-gradient(ellipse, rgba(192,57,43,0.12), transparent 70%); }
-.module.m4 .glow { background: radial-gradient(ellipse, rgba(217,71,46,0.12), transparent 70%); }
-.module.m5 .glow { background: radial-gradient(ellipse, rgba(139,105,20,0.12), transparent 70%); }
-.module.m6 .glow { background: radial-gradient(ellipse, rgba(107,62,184,0.12), transparent 70%); }
+.module.m1 .glow { background: radial-gradient(ellipse, rgba(232,148,42,0.14), transparent 70%); }
+.module.m2 .glow { background: radial-gradient(ellipse, rgba(46,168,138,0.14), transparent 70%); }
+.module.m3 .glow { background: radial-gradient(ellipse, rgba(212,80,75,0.14), transparent 70%); }
+.module.m4 .glow { background: radial-gradient(ellipse, rgba(224,104,61,0.14), transparent 70%); }
+.module.m5 .glow { background: radial-gradient(ellipse, rgba(196,152,64,0.14), transparent 70%); }
+.module.m6 .glow { background: radial-gradient(ellipse, rgba(139,109,192,0.14), transparent 70%); }
 .module:hover .glow { opacity: 1; }
+
+/* Module number — forge stamp */
+.module-num {
+  position: absolute;
+  top: 14px; right: 18px;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.04;
+  pointer-events: none;
+  transition: opacity var(--ease);
+  font-family: "Georgia", "Times New Roman", serif;
+}
+.module:hover .module-num { opacity: 0.08; }
+.module.m1 .module-num, .module.m1:hover .module-num { color: var(--m1); }
+.module.m2 .module-num, .module.m2:hover .module-num { color: var(--m2); }
+.module.m3 .module-num, .module.m3:hover .module-num { color: var(--m3); }
+.module.m4 .module-num, .module.m4:hover .module-num { color: var(--m4); }
+.module.m5 .module-num, .module.m5:hover .module-num { color: var(--m5); }
+.module.m6 .module-num, .module.m6:hover .module-num { color: var(--m6); }
 
 /* Card body */
 .module-body {
@@ -297,62 +444,38 @@ body {
   z-index: 1;
 }
 
-/* Module number */
-.module-num {
-  position: absolute;
-  top: 16px; right: 20px;
-  font-size: 2.8rem;
-  font-weight: 900;
-  line-height: 1;
-  opacity: 0.05;
-  pointer-events: none;
-  transition: opacity var(--ease);
-}
-.module:hover .module-num { opacity: 0.09; }
-.module.m1 .module-num { color: var(--m1); }
-.module.m2 .module-num { color: var(--m2); }
-.module.m3 .module-num { color: var(--m3); }
-.module.m4 .module-num { color: var(--m4); }
-.module.m5 .module-num { color: var(--m5); }
-.module.m6 .module-num { color: var(--m6); }
-
+/* Icon — forge mark */
 .module-icon {
-  width: 44px; height: 44px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
   margin-bottom: 14px;
-  background: var(--paper-warm);
+  background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
   transition: all var(--ease);
+  position: relative;
 }
-.module.m1 .module-icon { box-shadow: 0 0 0 0 rgba(200,133,26,0); }
-.module.m2 .module-icon { box-shadow: 0 0 0 0 rgba(13,123,107,0); }
-.module.m3 .module-icon { box-shadow: 0 0 0 0 rgba(192,57,43,0); }
-.module.m4 .module-icon { box-shadow: 0 0 0 0 rgba(217,71,46,0); }
-.module.m5 .module-icon { box-shadow: 0 0 0 0 rgba(139,105,20,0); }
-.module.m6 .module-icon { box-shadow: 0 0 0 0 rgba(107,62,184,0); }
-
-.module:hover.m1 .module-icon { box-shadow: 0 0 0 3px rgba(200,133,26,0.12); border-color: rgba(200,133,26,0.3); }
-.module:hover.m2 .module-icon { box-shadow: 0 0 0 3px rgba(13,123,107,0.12); border-color: rgba(13,123,107,0.3); }
-.module:hover.m3 .module-icon { box-shadow: 0 0 0 3px rgba(192,57,43,0.12); border-color: rgba(192,57,43,0.3); }
-.module:hover.m4 .module-icon { box-shadow: 0 0 0 3px rgba(217,71,46,0.12); border-color: rgba(217,71,46,0.3); }
-.module:hover.m5 .module-icon { box-shadow: 0 0 0 3px rgba(139,105,20,0.12); border-color: rgba(139,105,20,0.3); }
-.module:hover.m6 .module-icon { box-shadow: 0 0 0 3px rgba(107,62,184,0.12); border-color: rgba(107,62,184,0.3); }
+.module:hover.m1 .module-icon { border-color: rgba(232,148,42,0.3); box-shadow: 0 0 0 3px rgba(232,148,42,0.08); }
+.module:hover.m2 .module-icon { border-color: rgba(46,168,138,0.3); box-shadow: 0 0 0 3px rgba(46,168,138,0.08); }
+.module:hover.m3 .module-icon { border-color: rgba(212,80,75,0.3); box-shadow: 0 0 0 3px rgba(212,80,75,0.08); }
+.module:hover.m4 .module-icon { border-color: rgba(224,104,61,0.3); box-shadow: 0 0 0 3px rgba(224,104,61,0.08); }
+.module:hover.m5 .module-icon { border-color: rgba(196,152,64,0.3); box-shadow: 0 0 0 3px rgba(196,152,64,0.08); }
+.module:hover.m6 .module-icon { border-color: rgba(139,109,192,0.3); box-shadow: 0 0 0 3px rgba(139,109,192,0.08); }
 
 .module h3 {
   font-size: 1.05rem;
   font-weight: 750;
-  color: var(--ink);
+  color: var(--text-bright);
   margin-bottom: 8px;
   letter-spacing: 0.3px;
   line-height: 1.4;
 }
 .module .desc {
   font-size: 0.84rem;
-  color: var(--ink-light);
+  color: var(--text-dim);
   line-height: 1.7;
   margin-bottom: 16px;
   flex: 1;
@@ -362,7 +485,7 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: var(--ink-dim);
+  color: var(--text-dim);
   border-top: 1px solid var(--border);
   padding-top: 12px;
 }
@@ -372,21 +495,21 @@ body {
   border-radius: 10px;
   font-weight: 600;
   letter-spacing: 0.3px;
+  color: var(--text-dim);
 }
-.module.m1 .badge { background: rgba(200,133,26,0.08); color: var(--m1); }
-.module.m2 .badge { background: rgba(13,123,107,0.08); color: var(--m2); }
-.module.m3 .badge { background: rgba(192,57,43,0.08); color: var(--m3); }
-.module.m4 .badge { background: rgba(217,71,46,0.08); color: var(--m4); }
-.module.m5 .badge { background: rgba(139,105,20,0.08); color: var(--m5); }
-.module.m6 .badge { background: rgba(107,62,184,0.08); color: var(--m6); }
-
+.module.m1 .badge { background: rgba(232,148,42,0.08); color: var(--m1); }
+.module.m2 .badge { background: rgba(46,168,138,0.08); color: var(--m2); }
+.module.m3 .badge { background: rgba(212,80,75,0.08); color: var(--m3); }
+.module.m4 .badge { background: rgba(224,104,61,0.08); color: var(--m4); }
+.module.m5 .badge { background: rgba(196,152,64,0.08); color: var(--m5); }
+.module.m6 .badge { background: rgba(139,109,192,0.08); color: var(--m6); }
 .module-meta .arrow {
   font-size: 0.78rem;
   opacity: 0;
   transform: translateX(-8px);
   transition: all var(--ease);
   font-weight: 600;
-  color: var(--ink-dim);
+  color: var(--text-dim);
 }
 .module:hover .arrow {
   opacity: 1;
@@ -399,9 +522,9 @@ body {
   margin: 0 auto;
 }
 .path-card {
-  background: var(--white);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 42px 36px;
+  padding: 44px 36px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
   position: relative;
@@ -410,7 +533,7 @@ body {
 .path-card h3 {
   text-align: center;
   font-size: 1.15rem;
-  color: var(--ink);
+  color: var(--text-bright);
   margin-bottom: 4px;
   letter-spacing: 1px;
   font-weight: 750;
@@ -418,8 +541,9 @@ body {
 .path-card .path-sub {
   text-align: center;
   font-size: 0.82rem;
-  color: var(--ink-dim);
-  margin-bottom: 34px;
+  color: var(--text-dim);
+  margin-bottom: 36px;
+  opacity: 0.7;
 }
 
 .path-track {
@@ -431,7 +555,7 @@ body {
 .path-track::before {
   content: "";
   position: absolute;
-  top: 21px;
+  top: 22px;
   left: 40px;
   right: 40px;
   height: 2px;
@@ -444,7 +568,7 @@ body {
     var(--m5) 66%, var(--m5) 83%,
     var(--m6) 83%, var(--m6) 100%);
   z-index: 0;
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
 .path-node {
@@ -458,7 +582,7 @@ body {
   min-width: 0;
 }
 .path-dot {
-  width: 44px; height: 44px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -467,9 +591,10 @@ body {
   font-size: 0.95rem;
   color: #fff;
   margin-bottom: 10px;
-  border: 3px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 3px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   transition: all var(--ease);
+  position: relative;
 }
 .path-node:nth-child(1) .path-dot { background: var(--m1); }
 .path-node:nth-child(2) .path-dot { background: var(--m2); }
@@ -477,34 +602,32 @@ body {
 .path-node:nth-child(4) .path-dot { background: var(--m4); }
 .path-node:nth-child(5) .path-dot { background: var(--m5); }
 .path-node:nth-child(6) .path-dot { background: var(--m6); }
-
 .path-node:hover .path-dot {
   transform: scale(1.15);
 }
-.path-node:nth-child(1):hover .path-dot { box-shadow: 0 0 20px rgba(200,133,26,0.3); }
-.path-node:nth-child(2):hover .path-dot { box-shadow: 0 0 20px rgba(13,123,107,0.3); }
-.path-node:nth-child(3):hover .path-dot { box-shadow: 0 0 20px rgba(192,57,43,0.3); }
-.path-node:nth-child(4):hover .path-dot { box-shadow: 0 0 20px rgba(217,71,46,0.3); }
-.path-node:nth-child(5):hover .path-dot { box-shadow: 0 0 20px rgba(139,105,20,0.3); }
-.path-node:nth-child(6):hover .path-dot { box-shadow: 0 0 20px rgba(107,62,184,0.3); }
-
+.path-node:nth-child(1):hover .path-dot { box-shadow: 0 0 24px var(--m1-glow); }
+.path-node:nth-child(2):hover .path-dot { box-shadow: 0 0 24px var(--m2-glow); }
+.path-node:nth-child(3):hover .path-dot { box-shadow: 0 0 24px var(--m3-glow); }
+.path-node:nth-child(4):hover .path-dot { box-shadow: 0 0 24px var(--m4-glow); }
+.path-node:nth-child(5):hover .path-dot { box-shadow: 0 0 24px var(--m5-glow); }
+.path-node:nth-child(6):hover .path-dot { box-shadow: 0 0 24px var(--m6-glow); }
 .path-name {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--text-bright);
   margin-bottom: 3px;
   white-space: nowrap;
 }
 .path-desc {
   font-size: 0.7rem;
-  color: var(--ink-dim);
+  color: var(--text-dim);
   line-height: 1.4;
   max-width: 120px;
 }
 
 /* ===== Progress Section ===== */
 .progress-card {
-  background: var(--white);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 36px 36px;
   box-shadow: var(--shadow);
@@ -513,7 +636,7 @@ body {
 .progress-card h3 {
   text-align: center;
   font-size: 1.15rem;
-  color: var(--ink);
+  color: var(--text-bright);
   margin-bottom: 26px;
   letter-spacing: 1px;
   font-weight: 750;
@@ -532,15 +655,16 @@ body {
   width: 210px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text-bright);
   flex-shrink: 0;
 }
 .progress-row .track {
   flex: 1;
   height: 8px;
-  background: #f0ede8;
+  background: rgba(255,255,255,0.04);
   border-radius: 4px;
   overflow: hidden;
+  border: 1px solid var(--border);
 }
 .progress-row .fill {
   height: 100%;
@@ -548,27 +672,28 @@ body {
   transition: width 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
   width: 0%;
 }
-.progress-row:nth-child(1) .fill { background: var(--m1); }
-.progress-row:nth-child(2) .fill { background: var(--m2); }
-.progress-row:nth-child(3) .fill { background: var(--m3); }
-.progress-row:nth-child(4) .fill { background: var(--m4); }
-.progress-row:nth-child(5) .fill { background: var(--m5); }
-.progress-row:nth-child(6) .fill { background: var(--m6); }
+.progress-row:nth-child(1) .fill { background: var(--m1); box-shadow: 0 0 6px var(--m1-glow); }
+.progress-row:nth-child(2) .fill { background: var(--m2); box-shadow: 0 0 6px var(--m2-glow); }
+.progress-row:nth-child(3) .fill { background: var(--m3); box-shadow: 0 0 6px var(--m3-glow); }
+.progress-row:nth-child(4) .fill { background: var(--m4); box-shadow: 0 0 6px var(--m4-glow); }
+.progress-row:nth-child(5) .fill { background: var(--m5); box-shadow: 0 0 6px var(--m5-glow); }
+.progress-row:nth-child(6) .fill { background: var(--m6); box-shadow: 0 0 6px var(--m6-glow); }
 .progress-row .pct {
   width: 42px;
   text-align: right;
   font-size: 0.76rem;
   font-weight: 600;
-  color: var(--ink-dim);
+  color: var(--text-dim);
   flex-shrink: 0;
 }
 
 /* ===== Footer ===== */
 .footer {
   text-align: center;
-  padding: 48px 28px 36px;
-  margin-top: 50px;
+  padding: 48px 28px 40px;
+  margin-top: 56px;
   border-top: 1px solid var(--border);
+  position: relative;
 }
 .footer-stats {
   display: flex;
@@ -582,75 +707,191 @@ body {
   display: block;
   font-size: 1.4rem;
   font-weight: 900;
-  color: var(--ink);
+  color: var(--gold);
   letter-spacing: 1px;
 }
 .footer-stat .lbl {
   font-size: 0.74rem;
-  color: var(--ink-dim);
+  color: var(--text-dim);
   letter-spacing: 0.5px;
 }
 .footer .copy {
   font-size: 0.74rem;
-  color: var(--ink-dim);
-  opacity: 0.6;
+  color: var(--text-dim);
+  opacity: 0.5;
 }
 .footer a {
-  color: var(--ink-light);
+  color: var(--text-dim);
   text-decoration: none;
   transition: color var(--ease);
 }
-.footer a:hover { color: var(--m4); }
+.footer a:hover { color: var(--gold); }
 
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
   .module-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .hero h1 { font-size: 2rem; letter-spacing: 2px; }
-  .page { padding: 40px 18px 0; }
+  .hero h1 { font-size: 2.2rem; letter-spacing: 3px; }
+  .page { padding: 48px 18px 0; }
   .path-track { flex-wrap: wrap; justify-content: center; gap: 14px; }
   .path-track::before { display: none; }
   .path-node { flex: 0 0 auto; min-width: 90px; }
   .progress-row .label { width: 140px; font-size: 0.78rem; }
+  .section-head h2::before,
+  .section-head h2::after { width: 16px; }
+  .forge-svg-wrap { max-width: 95vw; }
 }
 
 @media (max-width: 640px) {
   .module-grid { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 1.5rem; letter-spacing: 1px; }
-  .hero .tagline { font-size: 0.88rem; }
+  .hero h1 { font-size: 1.6rem; letter-spacing: 2px; }
+  .hero .tagline { font-size: 0.9rem; }
   .hero .sub-tagline { font-size: 0.74rem; }
-  .section-head h2 { font-size: 1.1rem; }
-  .spectrum-line { max-width: 300px; }
-  .intro { margin-top: 28px; }
+  .section-head h2 { font-size: 1.15rem; letter-spacing: 2px; }
+  .section-head h2::before,
+  .section-head h2::after { width: 12px; }
+  .intro { margin-top: 30px; }
   .intro p { font-size: 0.86rem; }
   .stat { padding: 10px 12px; min-width: 56px; }
   .stat .num { font-size: 1.2rem; }
   .stat .lbl { font-size: 0.66rem; }
   .path-card, .progress-card { padding: 24px 16px; }
-  .path-dot { width: 36px; height: 36px; font-size: 0.8rem; }
+  .path-dot { width: 38px; height: 38px; font-size: 0.8rem; }
   .path-name { font-size: 0.7rem; }
   .progress-row .label { width: 100px; font-size: 0.7rem; }
   .module-body { padding: 18px 16px 16px; }
   .footer-stats { gap: 20px; }
+  .forge-svg-wrap { max-width: 100vw; margin-top: 20px; }
 }
 </style>
 </head>
 <body>
 
-<div class="top-light"></div>
+<!-- ===== Ambient Forge Glow ===== -->
+<div class="forge-ambient"></div>
+
+<!-- ===== Floating Embers ===== -->
+<div class="embers">
+  <div class="ember e1"></div><div class="ember e2"></div><div class="ember e3"></div>
+  <div class="ember e4"></div><div class="ember e5"></div><div class="ember e6"></div>
+  <div class="ember e7"></div><div class="ember e8"></div><div class="ember e9"></div>
+  <div class="ember e10"></div><div class="ember e11"></div><div class="ember e12"></div>
+  <div class="ember e13"></div><div class="ember e14"></div><div class="ember e15"></div>
+</div>
 
 <div class="page">
 
 <!-- ===== Hero ===== -->
 <header class="hero">
-  <p class="eyebrow">MKS 知识体系</p>
+  <div class="forge-crown"></div>
+  <p class="eyebrow">MKS 知识体系 · 理性的锻造厂</p>
   <h1>卓克<span class="dot">·</span>科学思维课</h1>
-  <p class="tagline">六重认知透镜，照亮世界的本来面目</p>
-  <p class="sub-tagline">思维的棱镜 · 334 篇专栏文章 · 60 个核心概念</p>
+  <p class="tagline">六道工序，将混沌锻造成秩序</p>
+  <p class="sub-tagline">334 篇专栏文章 · 60 个核心概念 — 每一锤都在重塑认知的锋刃</p>
 </header>
 
-<!-- ===== Spectrum Line ===== -->
-<div class="spectrum-line">
-  <span></span><span></span><span></span><span></span><span></span><span></span>
+<!-- ===== Forge SVG Illustration ===== -->
+<div class="forge-svg-wrap">
+  <svg class="forge-svg" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="fg1" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#e8942a" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#f0b840" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#f4d080" stop-opacity="0.05"/>
+      </linearGradient>
+      <linearGradient id="fg2" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#2ea88a" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#40c8a0" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#60d8b8" stop-opacity="0.05"/>
+      </linearGradient>
+      <linearGradient id="fg3" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#d4504b" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#e87060" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#f09080" stop-opacity="0.05"/>
+      </linearGradient>
+      <linearGradient id="fg4" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#e0683d" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#f08050" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#f8a070" stop-opacity="0.05"/>
+      </linearGradient>
+      <linearGradient id="fg5" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#c49840" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#d8b460" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#e8c878" stop-opacity="0.05"/>
+      </linearGradient>
+      <linearGradient id="fg6" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#8b6dc0" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#a080d8" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#b898e8" stop-opacity="0.05"/>
+      </linearGradient>
+      <radialGradient id="hearth-glow" cx="50%" cy="85%" r="50%">
+        <stop offset="0%" stop-color="#e8942a" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#141210" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Hearth base glow -->
+    <ellipse cx="400" cy="180" rx="320" ry="50" fill="url(#hearth-glow)"/>
+
+    <!-- Hearth structure -->
+    <path d="M90,175 L75,235 Q400,220 725,235 L710,175 Z" fill="#1a1614" stroke="#302820" stroke-width="1.5"/>
+    <path d="M100,178 L400,165 L700,178" fill="none" stroke="#3a3028" stroke-width="2"/>
+    <rect x="110" y="178" width="580" height="5" rx="2" fill="#2a2218"/>
+
+    <!-- Decorative forge patterns on hearth -->
+    <path d="M200,210 Q250,205 300,210 Q350,215 400,210 Q450,205 500,210 Q550,215 600,210" fill="none" stroke="#2a2420" stroke-width="0.8" opacity="0.6"/>
+    <path d="M220,218 Q400,212 580,218" fill="none" stroke="#2a2420" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- Rivets -->
+    <circle cx="150" cy="190" r="3" fill="#3a3028"/><circle cx="650" cy="190" r="3" fill="#3a3028"/>
+    <circle cx="250" cy="185" r="2.5" fill="#352e26"/><circle cx="550" cy="185" r="2.5" fill="#352e26"/>
+
+    <!-- Flame 1 — 工具箱 锤炼之火 -->
+    <g class="flame-1">
+      <path d="M155,178 C150,130 145,80 170,30 C195,80 200,130 185,178 Z" fill="url(#fg1)" opacity="0.85"/>
+      <path d="M162,178 C160,140 158,100 170,55 C182,100 183,140 178,178 Z" fill="#f8d080" opacity="0.25" class="flame-inner-1"/>
+    </g>
+
+    <!-- Flame 2 — 演化论 熔铸之火 -->
+    <g class="flame-2">
+      <path d="M245,178 C240,125 235,75 260,28 C285,75 295,125 275,178 Z" fill="url(#fg2)" opacity="0.85"/>
+      <path d="M252,178 C250,135 248,95 260,55 C272,95 275,135 268,178 Z" fill="#80e8c8" opacity="0.25" class="flame-inner-2"/>
+    </g>
+
+    <!-- Flame 3 — 医学 淬炼之火 -->
+    <g class="flame-3">
+      <path d="M335,178 C330,125 325,70 350,22 C375,70 380,125 365,178 Z" fill="url(#fg3)" opacity="0.88"/>
+      <path d="M342,178 C340,135 338,90 350,50 C362,90 365,135 358,178 Z" fill="#f8b0a0" opacity="0.22" class="flame-inner-3"/>
+    </g>
+
+    <!-- Flame 4 — 伪科学 锻打之火 -->
+    <g class="flame-4">
+      <path d="M428,178 C423,130 418,75 440,28 C462,75 467,130 455,178 Z" fill="url(#fg4)" opacity="0.88"/>
+      <path d="M435,178 C433,138 431,95 440,58 C449,95 452,138 448,178 Z" fill="#f8c0a0" opacity="0.22" class="flame-inner-4"/>
+    </g>
+
+    <!-- Flame 5 — 文明史 铭纹之火 -->
+    <g class="flame-5">
+      <path d="M520,178 C515,130 510,80 530,30 C550,80 558,130 545,178 Z" fill="url(#fg5)" opacity="0.85"/>
+      <path d="M526,178 C524,138 522,98 530,60 C538,98 542,138 538,178 Z" fill="#f0d898" opacity="0.22" class="flame-inner-5"/>
+    </g>
+
+    <!-- Flame 6 — 心智 开刃之火 -->
+    <g class="flame-6">
+      <path d="M608,178 C603,130 598,80 620,30 C642,80 648,130 635,178 Z" fill="url(#fg6)" opacity="0.85"/>
+      <path d="M614,178 C612,138 610,98 620,60 C630,98 633,138 628,178 Z" fill="#d0b8f0" opacity="0.22" class="flame-inner-6"/>
+    </g>
+
+    <!-- Subtle heat shimmer lines above flames -->
+    <path d="M170,25 Q175,18 180,25" fill="none" stroke="rgba(232,148,42,0.12)" stroke-width="0.8" opacity="0.4">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M350,20 Q355,12 360,20" fill="none" stroke="rgba(212,80,75,0.12)" stroke-width="0.8" opacity="0.4">
+      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M530,28 Q535,20 540,28" fill="none" stroke="rgba(196,152,64,0.12)" stroke-width="0.8" opacity="0.4">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3.5s" repeatCount="indefinite"/>
+    </path>
+  </svg>
 </div>
 
 <!-- ===== Intro ===== -->
@@ -659,14 +900,14 @@ body {
     科学不仅是知识，更是一套<strong>观察世界、分析问题、做出判断</strong>的方法。本体系从卓克 334 篇专栏中提炼出 60 个核心概念，分六个模块层层递进——从认知工具到演化思维，从医学认知到伪科学鉴别，从科学史纵深到大脑与心智。
   </p>
   <p>
-    六重透镜各有焦点，合在一起则是一套完整的<strong>科学认知系统</strong>。建议按推荐路径逐模块学习，每模块 2-4 周精读。
+    六道锻造工序各有其火候，合在一起则是一套完整的<strong>科学认知系统</strong>。建议按推荐路径逐模块学习，每模块 2-4 周精读。
   </p>
 </section>
 
 <!-- ===== Stats ===== -->
 <div class="stats">
   <div class="stat"><span class="num">334</span><span class="lbl">篇专栏文章</span></div>
-  <div class="stat"><span class="num">6</span><span class="lbl">认知透镜</span></div>
+  <div class="stat"><span class="num">6</span><span class="lbl">锻造工序</span></div>
   <div class="stat"><span class="num">60</span><span class="lbl">核心概念</span></div>
   <div class="stat"><span class="num">120</span><span class="lbl">道选择题</span></div>
   <div class="stat"><span class="num">60</span><span class="lbl">道简答题</span></div>
@@ -674,13 +915,13 @@ body {
 
 <!-- ===== Six Modules ===== -->
 <div class="section-head">
-  <h2>六重认知透镜</h2>
-  <p class="sub">白光穿过棱镜，折射出六种观察世界的色彩</p>
+  <h2>六大锻造工序</h2>
+  <p class="sub">选材·熔铸·淬炼·锻打·铭纹·开刃 — 六步锻造认知的锋刃</p>
 </div>
 
 <div class="module-grid">
 
-  <!-- Module 1 -->
+  <!-- Module 1: 工具箱 · 选材 -->
   <a class="module m1" href="1-科学思维的工具箱.html">
     <div class="glow"></div>
     <span class="module-num">01</span>
@@ -695,7 +936,7 @@ body {
     </div>
   </a>
 
-  <!-- Module 2 -->
+  <!-- Module 2: 演化论 · 熔铸 -->
   <a class="module m2" href="2-演化论世界的源代码.html">
     <div class="glow"></div>
     <span class="module-num">02</span>
@@ -710,7 +951,7 @@ body {
     </div>
   </a>
 
-  <!-- Module 3 -->
+  <!-- Module 3: 医学简史 · 淬炼 -->
   <a class="module m3" href="3-医学简史.html">
     <div class="glow"></div>
     <span class="module-num">03</span>
@@ -725,7 +966,7 @@ body {
     </div>
   </a>
 
-  <!-- Module 4 -->
+  <!-- Module 4: 识破伪科学 · 锻打 -->
   <a class="module m4" href="4-识破伪科学.html">
     <div class="glow"></div>
     <span class="module-num">04</span>
@@ -740,7 +981,7 @@ body {
     </div>
   </a>
 
-  <!-- Module 5 -->
+  <!-- Module 5: 科学文明史 · 铭纹 -->
   <a class="module m5" href="5-科学文明史.html">
     <div class="glow"></div>
     <span class="module-num">05</span>
@@ -755,7 +996,7 @@ body {
     </div>
   </a>
 
-  <!-- Module 6 -->
+  <!-- Module 6: 心智认知 · 开刃 -->
   <a class="module m6" href="6-心智与认知科学.html">
     <div class="glow"></div>
     <span class="module-num">06</span>
@@ -772,45 +1013,45 @@ body {
 
 </div>
 
-<!-- ===== Learning Path ===== -->
+<!-- ===== Forging Sequence ===== -->
 <div class="section-head">
-  <h2>推荐学习路径</h2>
-  <p class="sub">六步递进：从掌握工具到认知升华</p>
+  <h2>锻造序列</h2>
+  <p class="sub">从选材到开刃 — 六步完成科学思维的质变</p>
 </div>
 
 <section class="path-section">
   <div class="path-card">
-    <h3>科学认知的逐层聚焦</h3>
-    <p class="path-sub">从方法到世界观，从鉴别到自我认知——六步完成科学思维的跃迁</p>
+    <h3>认知锋刃的六步锻造</h3>
+    <p class="path-sub">每一锤都在为下一锤铺垫 — 锻造不可跳步，认知亦不可速成</p>
     <div class="path-track">
       <div class="path-node">
         <div class="path-dot">1</div>
-        <div class="path-name">工具思维</div>
+        <div class="path-name">选材·工具思维</div>
         <div class="path-desc">掌握科学方法论工具箱</div>
       </div>
       <div class="path-node">
         <div class="path-dot">2</div>
-        <div class="path-name">演化世界观</div>
+        <div class="path-name">熔铸·演化世界观</div>
         <div class="path-desc">用演化视角建立底层框架</div>
       </div>
       <div class="path-node">
         <div class="path-dot">3</div>
-        <div class="path-name">医学认知</div>
+        <div class="path-name">淬炼·医学认知</div>
         <div class="path-desc">理解科学方法如何落地实践</div>
       </div>
       <div class="path-node">
         <div class="path-dot">4</div>
-        <div class="path-name">伪科学防护</div>
+        <div class="path-name">锻打·伪科学防护</div>
         <div class="path-desc">用工具思维识破信息谬误</div>
       </div>
       <div class="path-node">
         <div class="path-dot">5</div>
-        <div class="path-name">科学史纵深</div>
+        <div class="path-name">铭纹·科学史纵深</div>
         <div class="path-desc">从中西比较理解科学生长土壤</div>
       </div>
       <div class="path-node">
         <div class="path-dot">6</div>
-        <div class="path-name">认知科学升华</div>
+        <div class="path-name">开刃·认知科学升华</div>
         <div class="path-desc">用科学理解心智、大脑与衰老</div>
       </div>
     </div>
@@ -819,12 +1060,12 @@ body {
 
 <!-- ===== Progress ===== -->
 <div class="section-head">
-  <h2>学习进度概览</h2>
+  <h2>锻造成果</h2>
 </div>
 
 <section class="path-section">
   <div class="progress-card">
-    <h3>六大模块阅读进度</h3>
+    <h3>六大工序阅读进度</h3>
     <div class="progress-list">
       <div class="progress-row">
         <span class="label">1. 科学思维的工具箱</span>
@@ -864,7 +1105,7 @@ body {
 <footer class="footer">
   <div class="footer-stats">
     <div class="footer-stat"><span class="num">334</span><span class="lbl">篇专栏文章</span></div>
-    <div class="footer-stat"><span class="num">6</span><span class="lbl">认知透镜</span></div>
+    <div class="footer-stat"><span class="num">6</span><span class="lbl">锻造工序</span></div>
     <div class="footer-stat"><span class="num">60</span><span class="lbl">核心概念</span></div>
   </div>
   <p class="copy">
