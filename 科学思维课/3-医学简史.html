@@ -398,19 +398,27 @@ body {
 
 /* ===== FLIP CARD ===== */
 .flip-container { perspective: 1200px; max-width: 540px; margin: 24px auto; }
-.flip-card { position: relative; width: 100%; min-height: 360px; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
-.flip-card.flipped { transform: rotateY(180deg); }
+.flip-card {
+  position: relative; width: 100%;
+  height: 440px;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+.flip-card.flipped { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
 .flip-front, .flip-back {
   position: absolute; top: 0; left: 0;
-  width: 100%; min-height: 360px;
+  width: 100%; height: 100%;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: var(--radius);
   padding: 28px 24px;
   border: 1px solid var(--border);
   background: var(--card);
   box-shadow: var(--shadow-md);
+  overflow-y: auto;
 }
-.flip-back { transform: rotateY(180deg); }
+.flip-back { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
 .flip-card .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
 .flip-card .nav button {
   padding: 8px 20px;
@@ -548,33 +556,67 @@ body {
 .stat-card .label { font-size: 13px; color: var(--text-secondary); margin-top: 6px; }
 
 /* ===== MINDMAP ===== */
-.mindmap { padding: 12px 0; }
-.mindmap ul { list-style: none; padding-left: 24px; }
-.mindmap li { position: relative; margin: 4px 0; }
+.mindmap { padding: 12px 0; font-size: 14px; }
+.mindmap ul { list-style: none; padding-left: 28px; margin: 0; }
+.mindmap li { position: relative; margin: 3px 0; padding: 2px 0; }
+/* Vertical tree line */
+.mindmap li::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -22px;
+  width: 2px;
+  background: var(--border-strong);
+}
+.mindmap li:last-child::before {
+  height: 22px;
+}
+/* Horizontal connector */
+.mindmap li::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: -22px;
+  width: 14px;
+  height: 2px;
+  background: var(--border-strong);
+}
+/* No lines on root level */
+.mindmap > ul > li::before,
+.mindmap > ul > li::after { display: none; }
+
 .mindmap .tree-toggle {
   cursor: pointer; color: var(--teal); font-size: 13px;
   user-select: none; font-weight: bold;
-  display: inline-block; margin-right: 4px;
+  display: inline-block; width: 20px; text-align: center;
+  margin-right: 2px; line-height: 1;
 }
 .mindmap .tree-toggle:hover { color: var(--amber); }
 .mindmap .tree-node {
-  padding: 6px 12px; border-radius: 6px;
+  padding: 5px 12px; border-radius: 6px;
   font-size: 13px; display: inline-block;
+  vertical-align: middle;
 }
 .mindmap .tree-node.root {
   background: linear-gradient(135deg, var(--pri), var(--pri-light));
-  color: #fff; font-weight: 700; font-size: 14px; padding: 8px 16px;
+  color: #fff; font-weight: 700; font-size: 15px; padding: 8px 18px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(26,39,68,0.2);
 }
 .mindmap .tree-node.branch {
   background: var(--teal); color: #fff; font-weight: 600;
+  font-size: 14px; padding: 6px 14px; border-radius: 7px;
 }
 .mindmap .tree-node.leaf {
   background: var(--card); border: 1px solid var(--border-strong);
+  color: var(--text); padding: 4px 12px; border-radius: 5px;
 }
 .mindmap .tree-node.app {
   background: var(--amber); color: #fff; font-weight: 500;
+  padding: 4px 12px; border-radius: 5px;
 }
-.mindmap .children { display: none; padding-left: 24px; border-left: 2px solid var(--border-strong); margin: 4px 0 4px 14px; }
+/* Children container — initially hidden; toggled via .open */
+.mindmap .children { display: none; }
 .mindmap .children.open { display: block; }
 
 /* ===== SOCRATIC ===== */
@@ -1284,7 +1326,7 @@ function startQuiz(mode){
 
   let qs=[];
   if(mode==='random'){
-    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,10);
   } else {
     qs=[...QUIZ_DATA];
   }
@@ -1609,61 +1651,60 @@ function renderMindmap(){
   el.innerHTML=`
     <ul>
       <li>
-        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-        <span class="tree-node root">医学简史：疾病、药物与身体</span>
-        <div class="children open">
+        <span class="tree-node root">⚕ 医学简史：疾病、药物与身体</span>
+        <ul>
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
             <span class="tree-node branch">MKS核心：天花与免疫</span>
-            <div class="children open">
+            <ul class="children open">
               <li><span class="tree-node leaf">天花：唯一被根除的人类传染病</span></li>
-              <li><span class="tree-node leaf">免疫系统：固有+适应性免疫</span></li>
+              <li><span class="tree-node leaf">免疫系统：固有 + 适应性免疫</span></li>
               <li><span class="tree-node leaf">疫苗原理：记忆B细胞与T细胞</span></li>
               <li><span class="tree-node app">应用：全球根除战略、牛痘疫苗</span></li>
-            </div>
+            </ul>
           </li>
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
             <span class="tree-node branch">MKS核心：流感与病毒变异</span>
-            <div class="children open">
+            <ul class="children open">
               <li><span class="tree-node leaf">抗原漂移：点突变积累</span></li>
               <li><span class="tree-node leaf">抗原转换：基因片段重组</span></li>
               <li><span class="tree-node leaf">1918大流行：W形死亡曲线</span></li>
               <li><span class="tree-node app">应用：年度疫苗更新、大流行预警</span></li>
-            </div>
+            </ul>
           </li>
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
             <span class="tree-node branch">MKS核心：癌症与演化</span>
-            <div class="children open">
+            <ul class="children open">
               <li><span class="tree-node leaf">癌症：细胞内部的自然选择</span></li>
               <li><span class="tree-node leaf">累积突变 + 凋亡逃脱</span></li>
               <li><span class="tree-node leaf">肺癌死亡率远高于其他</span></li>
               <li><span class="tree-node app">应用：精准医疗、早期筛查</span></li>
-            </div>
+            </ul>
           </li>
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
             <span class="tree-node branch">拓展概念</span>
-            <div class="children open">
+            <ul class="children open">
               <li><span class="tree-node leaf">成瘾的脑科学：多巴胺奖赏劫持</span></li>
               <li><span class="tree-node leaf">药物研发：双盲实验与10%成功率</span></li>
               <li><span class="tree-node leaf">梅毒与文明：疾病改变了艺术史</span></li>
               <li><span class="tree-node leaf">HIV/AIDS：CCR5突变与柏林病人</span></li>
               <li><span class="tree-node leaf">公共卫生：户外活动与近视</span></li>
-            </div>
+            </ul>
           </li>
           <li>
             <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
             <span class="tree-node branch">科学思维整合</span>
-            <div class="children open">
+            <ul class="children open">
               <li><span class="tree-node leaf">变量分析：识别关键致病因素</span></li>
               <li><span class="tree-node leaf">模型建构：SEIR传播模型</span></li>
               <li><span class="tree-node leaf">证据挖掘：病毒溯源与基因组重建</span></li>
               <li><span class="tree-node leaf">务实判断：宁过度勿不足的大流行应对</span></li>
-            </div>
+            </ul>
           </li>
-        </div>
+        </ul>
       </li>
     </ul>
   `;
@@ -1671,7 +1712,7 @@ function renderMindmap(){
 
 function toggleTree(el){
   const parent=el.parentElement;
-  const children=parent.querySelector('.children');
+  const children=parent.querySelector(':scope > ul.children, :scope > .children');
   if(!children) return;
   children.classList.toggle('open');
   el.textContent=children.classList.contains('open')?'[−]':'[+]';
