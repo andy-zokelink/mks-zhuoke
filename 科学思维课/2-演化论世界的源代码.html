@@ -87,6 +87,26 @@ body {
   color: #c8e6c8;
   letter-spacing: 0.5px;
 }
+.top-bar .home-btn {
+  position: absolute;
+  top: 14px; right: 20px;
+  color: #c8e6c8;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-family: var(--font);
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all var(--transition);
+  z-index: 5;
+  letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.06);
+}
+.top-bar .home-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+  color: #fff;
+}
 
 /* ===== Container ===== */
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
@@ -209,6 +229,12 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
   margin-bottom: 40px;
+}
+.flip-grid.wide {
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+}
+.flip-grid.wide .flip-card {
+  height: 310px;
 }
 .flip-card {
   perspective: 800px;
@@ -716,9 +742,12 @@ body {
 @media (max-width: 768px) {
   .top-bar h1 { font-size: 1.4rem; }
   .top-bar .subtitle { font-size: 0.85rem; }
+  .top-bar .home-btn { top: 10px; right: 12px; font-size: 0.78rem; padding: 5px 12px; }
   .tab-btn { padding: 8px 12px; font-size: 0.8rem; }
   .flip-grid { grid-template-columns: 1fr; }
   .flip-card { height: 220px; }
+  .flip-grid.wide { grid-template-columns: 1fr; }
+  .flip-grid.wide .flip-card { height: 260px; }
   .intro-section, .mcq-section, .boundary-box, .learning-box, .socratic-box, .case-study, .decision-box, .mindmap-box { padding: 24px 20px; }
   .boundary-grid { grid-template-columns: 1fr; }
   .path-steps { flex-direction: column; align-items: center; }
@@ -739,6 +768,7 @@ body {
 @media (max-width: 480px) {
   .top-bar h1 { font-size: 1.2rem; }
   .top-bar .subtitle { font-size: 0.8rem; }
+  .top-bar .home-btn { top: 8px; right: 8px; font-size: 0.72rem; padding: 4px 10px; }
   .mcq-item { padding: 14px 16px; }
   .sim-round { padding: 14px 16px; }
   .svg-container { padding: 12px 8px; }
@@ -751,6 +781,7 @@ body {
   .section-title { margin: 24px 0 16px; }
   .section-title h2 { font-size: 1.25rem; }
   .flip-card { height: 200px; }
+  .flip-grid.wide .flip-card { height: 230px; }
 }
 </style>
 </head>
@@ -758,6 +789,7 @@ body {
 
 <!-- ===== Top Bar ===== -->
 <header class="top-bar">
+  <a href="index.html" class="home-btn">← 返回课程首页</a>
   <h1>演化论：世界的源代码</h1>
   <p class="subtitle">卓克·科学思维课 · 专题二</p>
   <div class="badge-row">
@@ -1082,11 +1114,173 @@ body {
     </div>
   </div>
 
-  <!-- 思维导图 -->
-  <div class="section-title"><h2>演化论思维导图</h2></div>
-  <div class="boundary-box mindmap-box">
-    <h3>十大核心概念 · 概念层次关系</h3>
-    <div class="mindmap" id="mindmap"></div>
+  <!-- 概念层次图 -->
+  <div class="section-title"><h2>演化论概念层次图</h2></div>
+  <div class="svg-container">
+    <h3>十大核心概念 · 从底层逻辑到应用延伸</h3>
+    <svg viewBox="0 0 1020 680" width="100%" height="auto" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="max-width:1020px;height:auto;min-width:400px;">
+      <defs>
+        <linearGradient id="rootGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1a3a1a"/>
+          <stop offset="100%" stop-color="#2d5e2d"/>
+        </linearGradient>
+        <linearGradient id="mksGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1a6b3c"/>
+          <stop offset="100%" stop-color="#2d9b5e"/>
+        </linearGradient>
+        <linearGradient id="extGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#3a7a4a"/>
+          <stop offset="100%" stop-color="#4a9a6a"/>
+        </linearGradient>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#b8860b"/>
+          <stop offset="100%" stop-color="#d4a017"/>
+        </linearGradient>
+        <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(30,42,30,0.18)"/>
+        </filter>
+        <filter id="shadowRoot" x="-5%" y="-5%" width="115%" height="115%">
+          <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="rgba(26,58,26,0.3)"/>
+        </filter>
+        <filter id="glowGold" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="rgba(184,134,11,0.35)"/>
+        </filter>
+        <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="#2d9b5e"/>
+        </marker>
+        <marker id="arrowGold" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="#b8860b"/>
+        </marker>
+      </defs>
+
+      <!-- Background -->
+      <rect width="1020" height="680" fill="#f0f7f0" rx="10"/>
+
+      <!-- === LAYER 0: Title === -->
+      <text x="510" y="44" text-anchor="middle" font-size="18" font-weight="700" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">演化论核心概念层次结构图</text>
+      <line x1="380" y1="54" x2="640" y2="54" stroke="#2d9b5e" stroke-width="1" opacity="0.3"/>
+
+      <!-- === LAYER 1: ROOT === -->
+      <!-- Glow behind root -->
+      <ellipse cx="510" cy="110" rx="170" ry="42" fill="rgba(26,107,60,0.08)"/>
+
+      <rect x="320" y="82" width="380" height="56" rx="12" fill="url(#rootGrad)" filter="url(#shadowRoot)"/>
+      <text x="510" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f7f0" font-family="PingFang SC,Microsoft YaHei,sans-serif">🌳 演化论：世界的源代码</text>
+      <text x="510" y="126" text-anchor="middle" font-size="11" fill="#b8d4b8" font-family="PingFang SC,Microsoft YaHei,sans-serif">底层循环：变异 → 选择 → 遗传</text>
+
+      <!-- Connecting lines from root to MKS -->
+      <line x1="420" y1="138" x2="215" y2="202" stroke="#2d9b5e" stroke-width="1.5" marker-end="url(#arrowGreen)" opacity="0.5"/>
+      <line x1="490" y1="138" x2="420" y2="202" stroke="#2d9b5e" stroke-width="1.5" marker-end="url(#arrowGreen)" opacity="0.5"/>
+      <line x1="530" y1="138" x2="600" y2="202" stroke="#2d9b5e" stroke-width="1.5" marker-end="url(#arrowGreen)" opacity="0.5"/>
+      <line x1="600" y1="138" x2="805" y2="202" stroke="#2d9b5e" stroke-width="1.5" marker-end="url(#arrowGreen)" opacity="0.5"/>
+
+      <!-- Vertical connecting line from root to MKS band -->
+      <rect x="420" y="138" width="180" height="8" rx="4" fill="#b8860b" fill-opacity="0.15"/>
+      <text x="510" y="158" text-anchor="middle" font-size="9" fill="#b8860b" font-weight="600" font-family="PingFang SC,Microsoft YaHei,sans-serif">MKS 核心概念（4个）</text>
+
+      <!-- === LAYER 2: MKS Core Concepts === -->
+      <!-- MKS-01 自然选择 -->
+      <rect x="48" y="205" width="210" height="78" rx="10" fill="#fff" stroke="#2d9b5e" stroke-width="1.8" filter="url(#shadow)"/>
+      <rect x="48" y="205" width="210" height="26" rx="10" fill="#1a6b3c"/>
+      <rect x="48" y="221" width="210" height="10" fill="#1a6b3c"/>
+      <text x="153" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#f0f7f0" font-family="PingFang SC,Microsoft YaHei,sans-serif">🧬 MKS-01 · 自然选择</text>
+      <text x="153" y="252" text-anchor="middle" font-size="9.5" fill="#1e2a1e" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-weight="600">核心：繁殖适合度</text>
+      <text x="153" y="272" text-anchor="middle" font-size="8.5" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">可遗传变异 + 环境过滤 + 代代累积</text>
+
+      <!-- MKS-02 基因平移 -->
+      <rect x="273" y="205" width="210" height="78" rx="10" fill="#fff" stroke="#2d9b5e" stroke-width="1.8" filter="url(#shadow)"/>
+      <rect x="273" y="205" width="210" height="26" rx="10" fill="#1a6b3c"/>
+      <rect x="273" y="221" width="210" height="10" fill="#1a6b3c"/>
+      <text x="378" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#f0f7f0" font-family="PingFang SC,Microsoft YaHei,sans-serif">🦠 MKS-02 · 基因平移</text>
+      <text x="378" y="252" text-anchor="middle" font-size="9.5" fill="#1e2a1e" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-weight="600">基因跨物种水平转移</text>
+      <text x="378" y="272" text-anchor="middle" font-size="8.5" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">质粒传递 · 病毒整合 · 生命网格</text>
+
+      <!-- MKS-03 演化世界观 -->
+      <rect x="498" y="205" width="210" height="78" rx="10" fill="#fff" stroke="#b8860b" stroke-width="1.8" filter="url(#shadow)"/>
+      <rect x="498" y="205" width="210" height="26" rx="10" fill="#b8860b"/>
+      <rect x="498" y="221" width="210" height="10" fill="#b8860b"/>
+      <text x="603" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="PingFang SC,Microsoft YaHei,sans-serif">🌍 MKS-03 · 演化世界观</text>
+      <text x="603" y="252" text-anchor="middle" font-size="9.5" fill="#1e2a1e" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-weight="600">通用演化框架</text>
+      <text x="603" y="272" text-anchor="middle" font-size="8.5" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">技术·语言·文化皆在演化</text>
+
+      <!-- MKS-04 物种大灭绝 -->
+      <rect x="723" y="205" width="210" height="78" rx="10" fill="#fff" stroke="#2d9b5e" stroke-width="1.8" filter="url(#shadow)"/>
+      <rect x="723" y="205" width="210" height="26" rx="10" fill="#1a6b3c"/>
+      <rect x="723" y="221" width="210" height="10" fill="#1a6b3c"/>
+      <text x="828" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#f0f7f0" font-family="PingFang SC,Microsoft YaHei,sans-serif">☄️ MKS-04 · 物种大灭绝</text>
+      <text x="828" y="252" text-anchor="middle" font-size="9.5" fill="#1e2a1e" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-weight="600">毁灭是创新的前奏</text>
+      <text x="828" y="272" text-anchor="middle" font-size="8.5" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">5次大灭绝 → 适应性辐射</text>
+
+      <!-- Connecting lines from MKS to extended concepts -->
+      <!-- Line from MKS group to extended group -->
+      <rect x="48" y="283" width="885" height="8" rx="4" fill="#3a7a4a" fill-opacity="0.08"/>
+      <text x="510" y="305" text-anchor="middle" font-size="9" fill="#3a7a4a" font-weight="600" font-family="PingFang SC,Microsoft YaHei,sans-serif">延伸概念（6个）—— 演化思维的多维展开</text>
+
+      <!-- Lines from MKS band down to extended cards -->
+      <line x1="153" y1="283" x2="153" y2="330" stroke="#3a7a4a" stroke-width="1" opacity="0.3"/>
+      <line x1="378" y1="283" x2="378" y2="330" stroke="#3a7a4a" stroke-width="1" opacity="0.3"/>
+      <line x1="603" y1="283" x2="420" y2="450" stroke="#3a7a4a" stroke-width="1" opacity="0.3"/>
+      <line x1="828" y1="283" x2="600" y2="450" stroke="#3a7a4a" stroke-width="1" opacity="0.3"/>
+
+      <!-- === LAYER 3: Extended Concepts Row 1 === -->
+      <!-- 生命起源 -->
+      <rect x="48" y="326" width="180" height="62" rx="9" fill="#fff" stroke="#3a7a4a" stroke-width="1.4" filter="url(#shadow)"/>
+      <text x="138" y="348" text-anchor="middle" font-size="18" font-family="PingFang SC,Microsoft YaHei,sans-serif">🌋</text>
+      <text x="138" y="366" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">生命起源</text>
+      <text x="138" y="381" text-anchor="middle" font-size="8" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">深海热泉 · 化学梯度</text>
+
+      <!-- 性别演化 -->
+      <rect x="243" y="326" width="180" height="62" rx="9" fill="#fff" stroke="#3a7a4a" stroke-width="1.4" filter="url(#shadow)"/>
+      <text x="333" y="348" text-anchor="middle" font-size="18" font-family="PingFang SC,Microsoft YaHei,sans-serif">⚤</text>
+      <text x="333" y="366" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">性别演化</text>
+      <text x="333" y="381" text-anchor="middle" font-size="8" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">红皇后假说 · 多样性</text>
+
+      <!-- 人类迁徙 -->
+      <rect x="438" y="326" width="180" height="62" rx="9" fill="#fff" stroke="#3a7a4a" stroke-width="1.4" filter="url(#shadow)"/>
+      <text x="528" y="348" text-anchor="middle" font-size="18" font-family="PingFang SC,Microsoft YaHei,sans-serif">🧑‍🌾</text>
+      <text x="528" y="366" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">人类迁徙</text>
+      <text x="528" y="381" text-anchor="middle" font-size="8" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">走出非洲 · 基因+化石</text>
+
+      <!-- 考古旁证 -->
+      <rect x="633" y="326" width="180" height="62" rx="9" fill="#fff" stroke="#3a7a4a" stroke-width="1.4" filter="url(#shadow)"/>
+      <text x="723" y="348" text-anchor="middle" font-size="18" font-family="PingFang SC,Microsoft YaHei,sans-serif">🏛️</text>
+      <text x="723" y="366" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">考古旁证</text>
+      <text x="723" y="381" text-anchor="middle" font-size="8" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">虱子分子钟 · 酵母驯化</text>
+
+      <!-- 肤色演化 -->
+      <rect x="180" y="403" width="180" height="62" rx="9" fill="#fff" stroke="#3a7a4a" stroke-width="1.4" filter="url(#shadow)"/>
+      <text x="270" y="425" text-anchor="middle" font-size="18" font-family="PingFang SC,Microsoft YaHei,sans-serif">🎨</text>
+      <text x="270" y="443" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">肤色演化</text>
+      <text x="270" y="458" text-anchor="middle" font-size="8" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">叶酸保护 vs 维生素D</text>
+
+      <!-- 语言起源 -->
+      <rect x="375" y="403" width="180" height="62" rx="9" fill="#fff" stroke="#3a7a4a" stroke-width="1.4" filter="url(#shadow)"/>
+      <text x="465" y="425" text-anchor="middle" font-size="18" font-family="PingFang SC,Microsoft YaHei,sans-serif">🎵</text>
+      <text x="465" y="443" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a6b3c" font-family="PingFang SC,Microsoft YaHei,sans-serif">语言起源</text>
+      <text x="465" y="458" text-anchor="middle" font-size="8" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">音乐共祖 · 语法涌现</text>
+
+      <!-- === LAYER 4: Insight Bar === -->
+      <rect x="70" y="495" width="880" height="52" rx="10" fill="url(#rootGrad)" filter="url(#shadow)" opacity="0.95"/>
+      <text x="510" y="517" text-anchor="middle" font-size="12" font-weight="600" fill="#c8e6c8" font-family="PingFang SC,Microsoft YaHei,sans-serif">💡 核心洞见</text>
+      <text x="510" y="538" text-anchor="middle" font-size="11" fill="#d0e6d0" font-family="PingFang SC,Microsoft YaHei,sans-serif">一切复杂系统——从基因到语言、从技术到文化——都在「变异 → 选择 → 遗传」的底层循环中演进</text>
+
+      <!-- === LEGEND === -->
+      <rect x="70" y="565" width="880" height="42" rx="8" fill="#fff" stroke="#c8dbc8" stroke-width="1"/>
+      <rect x="90" y="578" width="12" height="12" rx="3" fill="#1a6b3c"/>
+      <text x="108" y="589" font-size="9" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">MKS核心概念</text>
+      <rect x="220" y="578" width="12" height="12" rx="3" fill="#b8860b"/>
+      <text x="238" y="589" font-size="9" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">通用框架（跨界迁移）</text>
+      <rect x="380" y="578" width="12" height="12" rx="3" fill="#3a7a4a"/>
+      <text x="398" y="589" font-size="9" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">延伸概念（演化思维展开）</text>
+      <rect x="590" y="578" width="12" height="12" rx="3" fill="#1a3a1a"/>
+      <text x="608" y="589" font-size="9" fill="#4a5a4a" font-family="PingFang SC,Microsoft YaHei,sans-serif">底层逻辑 / 核心洞见</text>
+
+      <!-- Decorative dots connecting rows -->
+      <circle cx="510" cy="175" r="2.5" fill="#b8860b" opacity="0.4"/>
+      <circle cx="510" cy="190" r="2" fill="#b8860b" opacity="0.3"/>
+      <circle cx="510" cy="312" r="2.5" fill="#3a7a4a" opacity="0.4"/>
+    </svg>
+    <p class="svg-caption">概念层次图：演化论的核心框架由 4 个 MKS 概念（自然选择、基因平移、演化世界观、物种大灭绝）构成主轴，6 个延伸概念（生命起源、性别演化、人类迁徙、考古旁证、肤色演化、语言起源）将演化思维多维展开。所有分支最终汇聚于「变异→选择→遗传」的底层循环——一套适用于一切复杂系统的普适逻辑。</p>
   </div>
 
 </div><!-- /#tab1 -->
@@ -1128,7 +1322,7 @@ body {
 
   <!-- Sub-flip cards for natural selection topics -->
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -1216,7 +1410,7 @@ body {
   </div>
 
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -1304,7 +1498,7 @@ body {
   </div>
 
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -1392,7 +1586,7 @@ body {
   </div>
 
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -1496,7 +1690,7 @@ body {
   </div>
 
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -1600,7 +1794,7 @@ body {
   </div>
 
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -1704,7 +1898,7 @@ body {
   </div>
 
   <div class="section-title"><h2>深入理解</h2></div>
-  <div class="flip-grid">
+  <div class="flip-grid wide">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
       <div class="flip-card-inner">
         <div class="flip-card-front">
