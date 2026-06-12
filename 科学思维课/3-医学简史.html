@@ -5,418 +5,738 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>医学简史：疾病、药物与身体 · 最小知识集</title>
 <style>
+/* ============================================================
+   MEDICAL HISTORY — Clean Modern Academic Design
+   Palette: Deep Indigo + Teal + Warm Amber
+   ============================================================ */
 :root {
-  --bg:#f5ece0;
-  --card:#faf5ed;
-  --accent:#8b4513;
-  --accent-light:#2d5016;
-  --text:#3d2b1f;
-  --text-light:#6b5b4f;
-  --border:#d4c5b0;
-  --gold:#b8860b;
-  --success:#2d5016;
-  --warning:#b87333;
+  --pri: #1a2744;
+  --pri-light: #2c3e6b;
+  --teal: #0d9488;
+  --teal-light: #14b8a6;
+  --teal-bg: #f0fdfa;
+  --amber: #d97706;
+  --amber-bg: #fffbeb;
+  --rose: #e11d48;
+  --rose-bg: #fff1f2;
+  --green: #059669;
+  --green-bg: #ecfdf5;
+  --slate: #475569;
+  --slate-light: #94a3b8;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
+  --font: "PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",-apple-system,sans-serif;
+  --font-serif: "Georgia","Times New Roman","Noto Serif SC","KaiTi",serif;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
 body {
-  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  line-height:1.8;
-  padding-bottom:60px;
-  position:relative;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-/* Parchment grain texture */
-body::before {
-  content:'';
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;
-  pointer-events:none;
-  z-index:0;
-  opacity:0.35;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
-  background-repeat:repeat;
-  background-size:256px 256px;
-}
-/* Vignette effect — darkened edges for aged paper */
-body::after {
-  content:'';
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;
-  pointer-events:none;
-  z-index:0;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(139,69,19,0.08) 100%);
-}
-.top-bar {
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:linear-gradient(135deg,#6b3410,#8b4513);
-  color:#faf5ed;
-  padding:14px 24px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:2px solid #5a2d0c;
-}
-.top-bar h1 { font-size:20px; font-weight:700; letter-spacing:2px; }
-.top-bar a { color:#d4c5b0; text-decoration:none; font-size:14px; }
-.top-bar a:hover { color:#f5ece0; }
-.tab-bar {
-  position:sticky;
-  top:44px;
-  z-index:99;
-  background:var(--bg);
-  border-bottom:2px solid var(--border);
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  padding:8px 12px;
-}
-.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; position:relative; z-index:1; }
-.tab-btn {
-  padding:6px 14px;
-  border:1px solid var(--border);
-  border-radius:20px;
-  background:var(--card);
-  color:var(--text);
-  cursor:pointer;
-  font-size:13px;
-  transition:all .2s;
-  white-space:nowrap;
-}
-.tab-btn:hover { background:var(--border); }
-.tab-btn.active {
-  background:var(--accent);
-  color:#faf5ed;
-  border-color:var(--accent);
-}
-.tab-panel { display:none; }
-.tab-panel.active { display:block; }
-.card {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:16px;
-}
-.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); border-bottom:2px solid var(--border); padding-bottom:6px; }
-.card h3 { font-size:16px; margin-bottom:8px; color:var(--text); }
-.card p { font-size:14px; color:var(--text-light); margin-bottom:6px; }
-.core-goal {
-  background:linear-gradient(135deg,#faf5ed,#f0e4d0);
-  border:2px solid var(--border);
-  border-radius:6px;
-  padding:20px;
-  margin-bottom:20px;
-  text-align:center;
-  position:relative;
-}
-.core-goal::before {
-  content:'';
-  position:absolute;
-  top:6px;left:6px;right:6px;bottom:6px;
-  border:1px solid rgba(139,69,19,0.2);
-  border-radius:3px;
-  pointer-events:none;
-}
-.core-goal h2 { color:var(--accent); font-size:20px; }
-.core-goal p { font-size:15px; color:var(--text-light); max-width:700px; margin:8px auto 0; }
 
-/* Hero Banner — Retro Apothecary Engraving Style */
-.hero-banner { margin-bottom:24px; }
+/* ===== TOP BAR ===== */
+.top-bar {
+  position: sticky; top:0; z-index:100;
+  background: linear-gradient(135deg, #0f1b33 0%, #1a2d50 50%, #15203d 100%);
+  color: #f8fafc;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.top-bar h1 {
+  font-size: 19px; font-weight: 700; letter-spacing: 0.5px;
+  display: flex; align-items: center; gap: 10px;
+}
+.top-bar h1::before {
+  content: '⚕';
+  font-size: 24px;
+}
+.top-bar a {
+  color: #94a3b8; text-decoration: none; font-size: 13px;
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid rgba(148,163,184,0.25);
+  transition: all 0.2s;
+}
+.top-bar a:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+  position: sticky; top: 55px; z-index: 99;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 10px 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.tab-btn {
+  padding: 7px 16px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 24px;
+  background: #fff;
+  color: var(--slate);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+.tab-btn:hover {
+  background: var(--teal-bg);
+  border-color: var(--teal-light);
+  color: var(--teal);
+}
+.tab-btn.active {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(13,148,136,0.3);
+}
+
+/* ===== TAB CONTENT ===== */
+.tab-content { max-width: 1140px; margin: 0 auto; padding: 28px 20px 60px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== CARD ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.card h2 { font-size: 18px; margin-bottom: 14px; color: var(--pri); border-bottom: 2px solid var(--border); padding-bottom: 8px; font-weight: 700; }
+.card h3 { font-size: 16px; margin-bottom: 10px; color: var(--text); font-weight: 600; }
+.card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.8; }
+
+/* ===== HERO BANNER ===== */
+.hero-banner { margin-bottom: 32px; }
 .hero-border {
-  border:3px double var(--accent);
-  padding:8px;
-  position:relative;
+  border: 2px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 6px;
+  background: linear-gradient(135deg, var(--teal-bg), #fff);
 }
 .hero-inner {
-  border:2px solid var(--border);
-  background:linear-gradient(180deg, #faf5ed 0%, #f5ece0 50%, #f0e4d0 100%);
-  padding:28px 24px 20px;
-  text-align:center;
-  position:relative;
+  border: 1px solid rgba(13,148,136,0.15);
+  border-radius: 10px;
+  background: #fff;
+  padding: 40px 32px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
-.hero-ornament-top, .hero-ornament-bottom {
-  font-size:18px;
-  color:var(--accent);
-  letter-spacing:12px;
-  opacity:0.6;
+.hero-inner::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 70%);
+  border-radius: 50%;
 }
-.hero-ornament-bottom { margin-top:10px; }
+.hero-inner::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(217,119,6,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-ornament-top {
+  font-size: 14px;
+  color: var(--teal);
+  letter-spacing: 8px;
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
+.hero-ornament-bottom { font-size: 14px; color: var(--teal); letter-spacing: 8px; opacity: 0.5; margin-top: 8px; }
 .hero-title {
-  font-family:"Georgia","Times New Roman","KaiTi",serif;
-  font-size:28px;
-  color:var(--accent);
-  font-weight:700;
-  letter-spacing:4px;
-  margin:8px 0 12px;
+  font-family: var(--font-serif);
+  font-size: 30px;
+  color: var(--pri);
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 12px 0 16px;
+  position: relative; z-index: 1;
 }
 .hero-subtitle {
-  font-size:14px;
-  color:var(--text-light);
-  max-width:700px;
-  margin:0 auto;
-  line-height:1.8;
-  font-style:italic;
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.9;
+  position: relative; z-index: 1;
 }
 .hero-divider {
-  margin:16px 0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; z-index: 1;
 }
 .hero-divider::before, .hero-divider::after {
-  content:'';
-  flex:1;
-  max-width:80px;
-  height:1px;
-  background:var(--border);
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
 }
 .hero-divider-icon {
-  font-size:20px;
-  color:var(--accent);
-  margin:0 16px;
+  font-size: 22px;
+  color: var(--teal);
+  margin: 0 16px;
 }
 .hero-stats {
-  display:flex;
-  justify-content:center;
-  gap:32px;
-  flex-wrap:wrap;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  position: relative; z-index: 1;
 }
 .hero-stat {
-  text-align:center;
-  min-width:120px;
+  text-align: center;
+  min-width: 130px;
+  padding: 12px 16px;
+  background: var(--teal-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(13,148,136,0.12);
 }
 .hero-stat-num {
-  display:block;
-  font-family:"Georgia","Times New Roman",serif;
-  font-size:22px;
-  font-weight:700;
-  color:var(--accent);
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--teal);
 }
 .hero-stat-label {
-  display:block;
-  font-size:11px;
-  color:var(--text-light);
-  margin-top:4px;
-  line-height:1.5;
+  display: block;
+  font-size: 11px;
+  color: var(--slate);
+  margin-top: 4px;
+  line-height: 1.5;
 }
+
+/* ===== CONCEPT GRID ===== */
 .concept-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:12px;
-  margin-bottom:20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
 }
 .concept-card {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-left:4px solid var(--accent);
-  border-radius:6px 10px 10px 6px;
-  padding:14px;
-  cursor:pointer;
-  transition:all .2s;
-  position:relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  box-shadow: var(--shadow);
 }
-.concept-card:hover { border-color:var(--accent); box-shadow:0 2px 12px rgba(139,69,19,0.15); transform:translateY(-1px); }
+.concept-card:hover {
+  border-color: var(--teal);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
 .concept-card .label {
-  display:inline-block;
-  background:var(--accent);
-  color:#faf5ed;
-  font-size:11px;
-  padding:2px 8px;
-  border-radius:3px;
-  margin-bottom:6px;
-  letter-spacing:1px;
+  display: inline-block;
+  background: var(--slate);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
 }
-.concept-card .label.mks { background:var(--accent-light); }
-.concept-card h3 { font-size:15px; margin-bottom:4px; }
-.concept-card .def { font-size:13px; color:var(--text-light); }
-.concept-card .extra { display:none; margin-top:8px; font-size:13px; color:var(--text-light); border-top:1px dashed var(--border); padding-top:8px; }
-.concept-card .extra.show { display:block; }
-.concept-card .extra strong { color:var(--text); }
-.mks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:20px; }
-.mks-core { background:var(--card); border:2px solid var(--accent-light); border-radius:6px; padding:16px; text-align:center; position:relative; }
-.mks-core .icon { font-size:28px; }
-.mks-core h3 { font-size:15px; color:var(--accent); }
-.mks-core p { font-size:13px; color:var(--text-light); }
-.svg-wrap { margin:20px 0; text-align:center; }
-.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; border:2px solid var(--border); }
-.boundary-table th,.boundary-table td { border:1px solid var(--border); padding:10px 12px; text-align:left; font-size:13px; }
-.boundary-table th { background:var(--accent); color:#faf5ed; font-weight:600; letter-spacing:1px; font-family:"Georgia","Times New Roman",serif; }
-.boundary-table tr:nth-child(even) { background:rgba(212,197,176,0.2); }
-.boundary-table tr:nth-child(odd) { background:var(--card); }
-.learning-path { counter-reset:step; position:relative; }
+.concept-card .label.mks {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  color: #fff;
+}
+.concept-card h3 { font-size: 16px; margin-bottom: 6px; font-weight: 600; color: var(--pri); }
+.concept-card .def { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
+.concept-card .extra { display: none; margin-top: 12px; font-size: 13px; color: var(--text-secondary); border-top: 1px dashed var(--border); padding-top: 12px; }
+.concept-card .extra.show { display: block; animation: fadeSlide 0.3s ease; }
+.concept-card .extra strong { color: var(--text); }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== MKS GRID ===== */
+.mks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.mks-core {
+  background: var(--amber-bg);
+  border: 2px solid rgba(217,119,6,0.2);
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  text-align: center;
+  position: relative;
+  transition: all 0.2s;
+}
+.mks-core:hover {
+  border-color: var(--amber);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.mks-core .icon { font-size: 32px; margin-bottom: 8px; }
+.mks-core h3 { font-size: 16px; color: var(--pri); font-weight: 700; margin-bottom: 4px; }
+.mks-core p { font-size: 12px; color: var(--slate); line-height: 1.6; }
+
+/* ===== SVG WRAP ===== */
+.svg-wrap { margin: 24px 0; text-align: center; }
+.svg-wrap svg { max-width: 100%; height: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+/* ===== BOUNDARY TABLE ===== */
+.boundary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.boundary-table th, .boundary-table td {
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+}
+.boundary-table th {
+  background: var(--pri);
+  color: #f8fafc;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: var(--font);
+}
+.boundary-table tr:nth-child(even) { background: #f8fafc; }
+.boundary-table tr:nth-child(odd) { background: #fff; }
+.boundary-table tr:hover { background: var(--teal-bg); }
+
+/* ===== LEARNING PATH ===== */
+.learning-path { counter-reset: step; position: relative; }
 .learning-path::before {
-  content:'';
-  position:absolute;
-  top:0;bottom:0;
-  left:27px;
-  width:2px;
-  background: repeating-linear-gradient(to bottom, var(--accent) 0, var(--accent) 4px, transparent 4px, transparent 8px);
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 27px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--teal), var(--teal-light), var(--teal));
 }
 .learning-path .step {
-  position:relative;
-  padding:14px 14px 14px 56px;
-  margin-bottom:16px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-left:4px solid var(--accent);
-  border-radius:4px 8px 8px 4px;
+  position: relative;
+  padding: 18px 18px 18px 60px;
+  margin-bottom: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
 }
+.learning-path .step:hover { box-shadow: var(--shadow-md); border-color: var(--teal-light); }
 .learning-path .step::before {
-  counter-increment:step;
-  content:counter(step);
-  position:absolute;
-  left:10px;
-  top:14px;
-  width:32px;
-  height:32px;
-  background:var(--accent);
-  color:#faf5ed;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
-  font-weight:700;
-  font-family:"Georgia","Times New Roman",serif;
-  border:2px solid var(--card);
-  box-shadow:0 1px 3px rgba(139,69,19,0.3);
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.3);
 }
-.learning-path .step h3 { font-size:14px; margin-bottom:4px; color:var(--accent); }
-.learning-path .step p { font-size:13px; color:var(--text-light); }
-.progress-bar { height:8px; background:var(--border); border-radius:4px; margin:8px 0; overflow:hidden; }
-.progress-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .5s; }
+.learning-path .step h3 { font-size: 15px; margin-bottom: 4px; color: var(--pri); font-weight: 600; }
+.learning-path .step p { font-size: 13px; color: var(--text-secondary); }
 
-/* Flip card */
-.flip-container { perspective:1000px; max-width:500px; margin:20px auto; }
-.flip-card { position:relative; width:100%; min-height:320px; transition:transform .6s; transform-style:preserve-3d; }
-.flip-card.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; top:0; left:0; width:100%; min-height:320px; backface-visibility:hidden; border-radius:12px; padding:24px; border:1px solid var(--border); background:var(--card); }
-.flip-back { transform:rotateY(180deg); }
-.flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
-.flip-card .nav button { padding:6px 16px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-size:13px; }
-.flip-card .nav button:hover { background:var(--border); }
-.flip-card .mark-btn { background:var(--accent); color:#faf5ed; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
-.flip-card .mark-btn:hover { background:var(--accent-light); }
-.flip-card .counter { font-size:13px; color:var(--text-light); }
+/* ===== PROGRESS BAR ===== */
+.progress-bar {
+  height: 10px;
+  background: var(--border-strong);
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--teal-light));
+  border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* Quiz */
-.quiz-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
-.quiz-card h3 { font-size:15px; margin-bottom:10px; }
-.quiz-card .options { display:flex; flex-direction:column; gap:6px; }
-.quiz-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
-.quiz-card .option:hover { background:var(--border); }
-.quiz-card .option.selected { border-color:var(--accent); background:#f0e4d0; }
-.quiz-card .option.correct { border-color:var(--success); background:rgba(45,80,22,0.08); }
-.quiz-card .option.wrong { border-color:var(--accent); background:rgba(139,69,19,0.06); }
-.quiz-card .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
-.quiz-card .feedback.show { display:block; }
-.quiz-card .feedback.correct { background:rgba(45,80,22,0.08); border:1px solid rgba(45,80,22,0.3); }
-.quiz-card .feedback.wrong { background:rgba(139,69,19,0.06); border:1px solid rgba(139,69,19,0.2); }
-.quiz-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
-.quiz-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+/* ===== FLIP CARD ===== */
+.flip-container { perspective: 1200px; max-width: 540px; margin: 24px auto; }
+.flip-card { position: relative; width: 100%; min-height: 360px; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+.flip-card.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; top: 0; left: 0;
+  width: 100%; min-height: 360px;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow-md);
+}
+.flip-back { transform: rotateY(180deg); }
+.flip-card .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+.flip-card .nav button {
+  padding: 8px 20px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 24px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font);
+  transition: all 0.2s;
+  color: var(--slate);
+}
+.flip-card .nav button:hover { background: var(--teal-bg); border-color: var(--teal); color: var(--teal); }
+.flip-card .mark-btn {
+  background: var(--teal); color: #fff; border: none;
+  padding: 8px 22px; border-radius: 24px;
+  cursor: pointer; font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.flip-card .mark-btn:hover { background: var(--teal-light); box-shadow: 0 2px 8px rgba(13,148,136,0.3); }
+.flip-card .counter { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 
-/* Exam */
-.exam-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
-.exam-card h3 { font-size:15px; margin-bottom:10px; }
-.exam-card .options { display:flex; flex-direction:column; gap:6px; }
-.exam-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; }
-.exam-card .option.selected { border-color:var(--accent); background:#f0e4d0; }
-.exam-card .option.correct { border-color:var(--success); background:rgba(45,80,22,0.08); }
-.exam-card .option.wrong { border-color:var(--accent); background:rgba(139,69,19,0.06); }
-.exam-card .feedback { margin-top:8px; padding:8px; border-radius:6px; font-size:13px; display:none; }
-.exam-card .feedback.show { display:block; }
-.exam-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; }
-.exam-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+/* ===== CORE GOAL ===== */
+.core-goal {
+  background: linear-gradient(135deg, var(--teal-bg), #fff);
+  border: 2px solid rgba(13,148,136,0.2);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+  position: relative;
+}
+.core-goal::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  border: 1px solid rgba(13,148,136,0.12);
+  border-radius: 10px;
+  pointer-events: none;
+}
+.core-goal h2 { color: var(--teal); font-size: 20px; border: none; margin-bottom: 8px; }
+.core-goal p { font-size: 15px; color: var(--slate); max-width: 700px; margin: 10px auto 0; }
 
-/* Review */
-.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
-.stat-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; }
-.stat-card .num { font-size:28px; font-weight:700; color:var(--accent); }
-.stat-card .label { font-size:13px; color:var(--text-light); margin-top:4px; }
+/* ===== QUIZ & EXAM CARDS ===== */
+.quiz-card, .exam-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.quiz-card h3, .exam-card h3 { font-size: 15px; margin-bottom: 12px; font-weight: 600; }
+.quiz-card .options, .exam-card .options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-card .option, .exam-card .option {
+  padding: 12px 16px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  background: #fff;
+}
+.quiz-card .option:hover, .exam-card .option:hover {
+  background: var(--teal-bg);
+  border-color: var(--teal-light);
+}
+.quiz-card .option.selected, .exam-card .option.selected {
+  border-color: var(--teal);
+  background: var(--teal-bg);
+  box-shadow: 0 0 0 1px var(--teal);
+}
+.quiz-card .option.correct, .exam-card .option.correct {
+  border-color: var(--green);
+  background: var(--green-bg);
+}
+.quiz-card .option.wrong, .exam-card .option.wrong {
+  border-color: var(--rose);
+  background: var(--rose-bg);
+}
+.quiz-card .feedback, .exam-card .feedback {
+  margin-top: 12px; padding: 12px; border-radius: var(--radius-sm);
+  font-size: 13px; display: none; line-height: 1.7;
+}
+.quiz-card .feedback.show, .exam-card .feedback.show { display: block; }
+.quiz-card .feedback.correct, .exam-card .feedback.correct {
+  background: var(--green-bg);
+  border: 1px solid rgba(5,150,105,0.3);
+  color: #065f46;
+}
+.quiz-card .feedback.wrong, .exam-card .feedback.wrong {
+  background: var(--rose-bg);
+  border: 1px solid rgba(225,29,72,0.2);
+  color: #9f1239;
+}
+.quiz-card .short-input, .exam-card .short-input {
+  width: 100%; min-height: 70px; padding: 12px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 13px; font-family: var(--font); resize: vertical;
+  transition: border-color 0.2s;
+}
+.quiz-card .short-input:focus, .exam-card .short-input:focus {
+  outline: none; border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+}
+.quiz-timer, .exam-timer {
+  font-size: 15px; color: var(--teal); font-weight: 700;
+  margin-bottom: 12px; font-variant-numeric: tabular-nums;
+}
 
-/* Mindmap */
-.mindmap { padding:10px 0; }
-.mindmap ul { list-style:none; padding-left:24px; }
-.mindmap li { position:relative; margin:4px 0; }
-.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; font-weight:bold; }
-.mindmap .tree-toggle:hover { color:var(--accent-light); }
-.mindmap .tree-node { padding:6px 10px; border-radius:4px; font-size:13px; display:inline-block; }
-.mindmap .tree-node.root { background:var(--accent); color:#faf5ed; font-weight:700; }
-.mindmap .tree-node.branch { background:#b8860b; color:#faf5ed; }
-.mindmap .tree-node.leaf { background:var(--card); border:1px solid var(--border); }
-.mindmap .tree-node.app { background:var(--accent-light); color:#faf5ed; }
-.mindmap .children { display:none; padding-left:20px; border-left:2px solid var(--border); margin:4px 0 4px 12px; }
-.mindmap .children.open { display:block; }
+/* ===== EXAM ===== */
+.exam-timer { font-size: 15px; color: var(--teal); font-weight: 700; margin-bottom: 12px; }
 
-/* Socratic */
-.socratic-card { background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
-.socratic-q { padding:14px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent); display:flex; justify-content:space-between; align-items:center; user-select:none; }
-.socratic-q:hover { background:#f0e4d0; }
-.socratic-q .arrow { transition:transform .3s; font-size:12px; }
-.socratic-q .arrow.open { transform:rotate(180deg); }
-.socratic-a { display:none; padding:0 16px 14px; border-top:1px dashed var(--border); }
-.socratic-a.open { display:block; }
-.socratic-a p { font-size:13px; color:var(--text-light); margin-top:10px; }
-.socratic-a p strong { color:var(--text); }
+/* ===== REVIEW STATS ===== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.stat-card:hover { box-shadow: var(--shadow-md); }
+.stat-card .num {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--teal);
+  font-family: var(--font-serif);
+}
+.stat-card .label { font-size: 13px; color: var(--text-secondary); margin-top: 6px; }
 
-/* Case Study */
-.case-dim { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:10px; }
-.case-dim h3 { font-size:14px; color:var(--accent); margin-bottom:6px; }
-.case-dim p { font-size:13px; color:var(--text-light); }
+/* ===== MINDMAP ===== */
+.mindmap { padding: 12px 0; }
+.mindmap ul { list-style: none; padding-left: 24px; }
+.mindmap li { position: relative; margin: 4px 0; }
+.mindmap .tree-toggle {
+  cursor: pointer; color: var(--teal); font-size: 13px;
+  user-select: none; font-weight: bold;
+  display: inline-block; margin-right: 4px;
+}
+.mindmap .tree-toggle:hover { color: var(--amber); }
+.mindmap .tree-node {
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 13px; display: inline-block;
+}
+.mindmap .tree-node.root {
+  background: linear-gradient(135deg, var(--pri), var(--pri-light));
+  color: #fff; font-weight: 700; font-size: 14px; padding: 8px 16px;
+}
+.mindmap .tree-node.branch {
+  background: var(--teal); color: #fff; font-weight: 600;
+}
+.mindmap .tree-node.leaf {
+  background: var(--card); border: 1px solid var(--border-strong);
+}
+.mindmap .tree-node.app {
+  background: var(--amber); color: #fff; font-weight: 500;
+}
+.mindmap .children { display: none; padding-left: 24px; border-left: 2px solid var(--border-strong); margin: 4px 0 4px 14px; }
+.mindmap .children.open { display: block; }
 
-/* Decision */
-.decision-round { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
-.decision-round h3 { font-size:15px; margin-bottom:10px; }
-.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:#f0e4d0; border-radius:8px; }
-.decision-round .choices { display:flex; flex-direction:column; gap:8px; }
-.decision-round .choice { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
-.decision-round .choice:hover { background:var(--border); }
-.decision-round .choice.selected { border-color:var(--accent); background:#f0e4d0; }
-.decision-round .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
-.decision-round .feedback.show { display:block; border-left:4px solid; }
-.decision-round .feedback.correct { background:rgba(45,80,22,0.08); border-left-color:var(--success); }
-.decision-round .feedback.wrong { background:rgba(139,69,19,0.06); border-left-color:var(--accent); }
-.decision-round .feedback.warning { background:rgba(184,134,11,0.08); border-left-color:var(--gold); }
-.decision-round .choice.disabled { pointer-events:none; opacity:0.6; }
+/* ===== SOCRATIC ===== */
+.socratic-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.socratic-q {
+  padding: 14px 18px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pri);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: background 0.2s;
+}
+.socratic-q:hover { background: var(--teal-bg); }
+.socratic-q .arrow { transition: transform 0.3s; font-size: 12px; color: var(--teal); }
+.socratic-q .arrow.open { transform: rotate(180deg); }
+.socratic-a { display: none; padding: 0 18px 16px; border-top: 1px dashed var(--border); }
+.socratic-a.open { display: block; }
+.socratic-a p { font-size: 13px; color: var(--text-secondary); margin-top: 12px; line-height: 1.8; }
+.socratic-a p strong { color: var(--text); }
 
-/* Buttons */
+/* ===== CASE STUDY ===== */
+.case-dim {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.case-dim h3 { font-size: 15px; color: var(--pri); margin-bottom: 8px; font-weight: 600; }
+.case-dim p { font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
+
+/* ===== DECISION ===== */
+.decision-round {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+.decision-round h3 { font-size: 16px; margin-bottom: 12px; font-weight: 600; color: var(--pri); }
+.decision-round .scenario {
+  font-size: 14px; color: var(--text-secondary);
+  margin-bottom: 16px; padding: 14px;
+  background: var(--teal-bg);
+  border-radius: var(--radius-sm);
+  line-height: 1.8;
+}
+.decision-round .choices { display: flex; flex-direction: column; gap: 8px; }
+.decision-round .choice {
+  padding: 12px 16px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  background: #fff;
+}
+.decision-round .choice:hover { background: var(--teal-bg); border-color: var(--teal-light); }
+.decision-round .choice.selected {
+  border-color: var(--teal);
+  background: var(--teal-bg);
+  box-shadow: 0 0 0 1px var(--teal);
+}
+.decision-round .choice.disabled { pointer-events: none; opacity: 0.55; }
+.decision-round .feedback {
+  margin-top: 12px; padding: 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px; display: none;
+  line-height: 1.7;
+}
+.decision-round .feedback.show { display: block; border-left: 4px solid; }
+.decision-round .feedback.correct {
+  background: var(--green-bg);
+  border-left-color: var(--green);
+  color: #065f46;
+}
+.decision-round .feedback.wrong {
+  background: var(--rose-bg);
+  border-left-color: var(--rose);
+  color: #9f1239;
+}
+.decision-round .feedback.warning {
+  background: var(--amber-bg);
+  border-left-color: var(--amber);
+  color: #92400e;
+}
+
+/* ===== BUTTONS ===== */
 .btn {
-  display:inline-block;
-  padding:8px 20px;
-  border:none;
-  border-radius:8px;
-  font-size:14px;
-  cursor:pointer;
-  transition:all .2s;
-  font-family:inherit;
+  display: inline-block;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: var(--font);
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
-.btn-primary { background:var(--accent); color:#faf5ed; }
-.btn-primary:hover { background:var(--accent-light); }
-.btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); }
-.btn-secondary:hover { background:var(--border); }
-.btn-success { background:var(--success); color:#fff; }
-.btn-success:hover { opacity:0.9; }
-.btn-warning { background:var(--warning); color:#fff; }
-.btn-warning:hover { opacity:0.9; }
-.btn-sm { padding:5px 12px; font-size:12px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.25);
+}
+.btn-primary:hover { box-shadow: 0 4px 16px rgba(13,148,136,0.4); transform: translateY(-1px); }
+.btn-secondary {
+  background: #fff;
+  color: var(--slate);
+  border: 1.5px solid var(--border-strong);
+}
+.btn-secondary:hover { background: var(--teal-bg); border-color: var(--teal); color: var(--teal); }
+.btn-success { background: var(--green); color: #fff; box-shadow: 0 2px 8px rgba(5,150,105,0.25); }
+.btn-success:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-warning { background: var(--amber); color: #fff; box-shadow: 0 2px 8px rgba(217,119,6,0.25); }
+.btn-warning:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-sm { padding: 6px 16px; font-size: 12px; }
 
-/* Responsive */
-@media(max-width:640px) {
-  .top-bar h1 { font-size:16px; }
-  .tab-btn { font-size:12px; padding:4px 10px; }
-  .concept-grid { grid-template-columns:1fr; }
-  .mks-grid { grid-template-columns:1fr; }
-  .stats-grid { grid-template-columns:1fr 1fr; }
-  .hero-title { font-size:22px; letter-spacing:2px; }
-  .hero-stats { gap:16px; }
-  .hero-stat-num { font-size:18px; }
-  .hero-inner { padding:18px 12px 14px; }
+/* ===== RESPONSIVE ===== */
+@media(max-width: 768px) {
+  .top-bar { padding: 12px 16px; }
+  .top-bar h1 { font-size: 15px; }
+  .tab-bar { padding: 8px 12px; gap: 4px; top: 47px; }
+  .tab-btn { font-size: 11px; padding: 5px 10px; }
+  .tab-content { padding: 16px 10px 40px; }
+  .concept-grid { grid-template-columns: 1fr; }
+  .mks-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .hero-title { font-size: 22px; letter-spacing: 1px; }
+  .hero-stats { gap: 10px; }
+  .hero-stat-num { font-size: 18px; }
+  .hero-inner { padding: 24px 14px 18px; }
+  .hero-stat { min-width: 100px; padding: 10px 12px; }
 }
-/* SVG */
-svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
+@media(max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .top-bar { flex-direction: column; gap: 8px; text-align: center; }
+  .top-bar a { font-size: 12px; }
+}
+
+/* ===== SVG TEXT ===== */
+svg text { font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif; }
+
+/* ===== MISC ===== */
+.nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+.mark-btn { background: var(--teal); color: #fff; border: none; padding: 8px 22px; border-radius: 24px; cursor: pointer; font-size: 13px; font-weight: 500; }
+.mark-btn:hover { background: var(--teal-light); }
+.counter { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 </style>
 </head>
 <body>
@@ -445,15 +765,15 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
 <!-- ===== TAB 0: 知识集总览 ===== -->
 <div class="tab-panel active" id="tab-0">
-  <!-- Hero: Retro Medical Apothecary Banner -->
+  <!-- Hero Banner -->
   <div class="hero-banner">
     <div class="hero-border">
       <div class="hero-inner">
-        <div class="hero-ornament-top">&#10087;</div>
+        <div class="hero-ornament-top">◆ ◆ ◆</div>
         <h1 class="hero-title">疾病视角下的人类文明</h1>
         <p class="hero-subtitle">理解天花如何塑造人类史、流感为什么反复爆发、疫苗和药物的真实原理——从疾病与医学的演化史中看到科学思维的胜利。</p>
         <div class="hero-divider">
-          <span class="hero-divider-icon">&#9881;</span>
+          <span class="hero-divider-icon">⚕</span>
         </div>
         <div class="hero-stats">
           <div class="hero-stat">
@@ -469,7 +789,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
             <span class="hero-stat-label">被人类彻底根除的<br>传染病：天花</span>
           </div>
         </div>
-        <div class="hero-ornament-bottom">&#10087;</div>
+        <div class="hero-ornament-bottom">◆ ◆ ◆</div>
       </div>
     </div>
   </div>
@@ -513,16 +833,16 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习进度</h2>
   <div class="card">
-    <p style="font-size:13px;color:var(--text-light);">已掌握概念 <span id="learned-count">0</span>/10</p>
+    <p style="font-size:13px;color:var(--text-secondary);">已掌握概念 <span id="learned-count">0</span>/10</p>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <p style="font-size:12px;color:var(--text-light);margin-top:4px;" id="progress-text">继续努力，掌握医学简史核心概念</p>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:4px;" id="progress-text">继续努力，掌握医学简史核心概念</p>
   </div>
 </div>
 
 <!-- ===== TAB 1: 知识卡片 ===== -->
 <div class="tab-panel" id="tab-1">
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">知识卡片 · 翻转学习</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
+  <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
   <div class="flip-container">
     <div class="flip-card" id="flip-card">
       <div class="flip-front" id="flip-front"></div>
@@ -533,7 +853,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
       <span class="counter" id="flip-counter">1/10</span>
       <button onclick="nextCard()">下一个 &rarr;</button>
     </div>
-    <div style="text-align:center;margin-top:10px;">
+    <div style="text-align:center;margin-top:16px;">
       <button class="btn btn-primary btn-sm" onclick="markLearned()" id="mark-learned-btn">&#10003; 标记已学会</button>
       <button class="btn btn-secondary btn-sm" onclick="flipCard()" style="margin-left:8px;">&#x1F504; 翻转卡片</button>
     </div>
@@ -543,14 +863,14 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 <!-- ===== TAB 2: 题库系统 ===== -->
 <div class="tab-panel" id="tab-2">
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">题库系统</h2>
-  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
     <button class="btn btn-primary" onclick="startQuiz('random')">随机抽题</button>
     <button class="btn btn-secondary" onclick="startQuiz('all')">全部题目</button>
     <button class="btn btn-warning btn-sm" onclick="resetQuiz()">重置</button>
     <span class="quiz-timer" id="quiz-timer"></span>
   </div>
   <div class="card">
-    <p style="font-size:13px;color:var(--text-light);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
+    <p style="font-size:13px;color:var(--text-secondary);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
   </div>
   <div id="quiz-container"></div>
   <div id="quiz-result" style="display:none;" class="card"></div>
@@ -559,7 +879,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 <!-- ===== TAB 3: 考试模式 ===== -->
 <div class="tab-panel" id="tab-3">
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">考试模式</h2>
-  <div style="margin-bottom:14px;">
+  <div style="margin-bottom:16px;display:flex;gap:12px;align-items:center;">
     <button class="btn btn-primary" id="start-exam-btn" onclick="startExam()">开始考试</button>
     <span class="exam-timer" id="exam-timer"></span>
   </div>
@@ -580,25 +900,25 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
   </div>
   <h3 style="font-size:15px;margin-bottom:8px;color:var(--text);">错题本</h3>
   <div id="wrong-book" class="card">
-    <p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
+    <p style="font-size:13px;color:var(--text-secondary);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
   </div>
   <h3 style="font-size:15px;margin:12px 0 8px;color:var(--text);">薄弱概念分析</h3>
   <div id="weak-concepts" class="card">
-    <p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
+    <p style="font-size:13px;color:var(--text-secondary);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
   </div>
 </div>
 
 <!-- ===== TAB 5: 思维导图 ===== -->
 <div class="tab-panel" id="tab-5">
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">思维导图 · 医学简史</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
+  <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
   <div class="mindmap" id="mindmap"></div>
 </div>
 
 <!-- ===== TAB 6: 深度追问 ===== -->
 <div class="tab-panel" id="tab-6">
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">深度追问 · 苏格拉底式问答</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
+  <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
   <div id="socratic-container"></div>
 </div>
 
@@ -612,7 +932,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
   </div>
   <div class="case-dim">
     <h3>维度一：变量分析——为什么年轻人死亡率反常升高？</h3>
-    <p>1918年H1N1病毒引发了"细胞因子风暴"——年轻人的免疫系统最活跃，过度反应导致自身免疫攻击肺部组织。老年人由于此前曾接触过类似H1类型的流感病毒，具备一定交叉免疫，反而受到保护。这是"强免疫系统反而有害"的反直觉案例。关键变量不是病毒毒性而是宿主的免疫反应强度。</p>
+    <p>1918年H1N1病毒引发了"细胞因子风暴"——年轻人的免疫系统最活跃，过度反应导致自身免疫攻击肺部组织。老年人由于此前曾接触过类似H类型的流感病毒，具备一定交叉免疫，反而受到保护。这是"强免疫系统反而有害"的反直觉案例。关键变量不是病毒毒性而是宿主的免疫反应强度。</p>
   </div>
   <div class="case-dim">
     <h3>维度二：模型建构——大流行的传播动力学模型</h3>
@@ -626,7 +946,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     <h3>维度四：科学方法总论——从大流行中学到的教训</h3>
     <p>1918年西班牙流感催生了全球公共卫生体系。观察：一种异常致命的流感在年轻人中爆发。假设：某种特殊的免疫机制导致了年轻人死亡。验证：通过对1918年病毒的重建和动物实验，证实了细胞因子风暴假说。修正：现代大流行准备计划将"青壮年高死亡率"纳入应急预案。流感监测系统（WHO全球流感监测网络）正是从这次教训中建立起来的。</p>
   </div>
-  <div class="card" style="background:#f0e4d0;border-color:var(--accent-light);">
+  <div class="card" style="background:var(--amber-bg);border-color:rgba(217,119,6,0.2);">
     <h3>MKS启示</h3>
     <p>1918年流感揭示了医学中最深刻的矛盾：有时最强大的防御系统反而造成最大的伤害。细胞因子风暴至今仍是治疗COVID-19等病毒感染的重大挑战。理解疾病需要同时考虑病原体、宿主和环境的相互作用——这是复杂系统思维的典型医学应用。西班牙流感的三个教训：不要以为年轻人就安全、非药物干预（口罩/社交距离/封城）有效、全球监测系统不可或缺。</p>
   </div>
@@ -648,7 +968,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 <!-- ===== TAB 8: 实战决策 ===== -->
 <div class="tab-panel" id="tab-8">
   <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">实战决策模拟 · 医学场景</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">模拟三个真实医学场景，测试你的科学思维应用能力。每个场景有三个选择，点击查看反馈。</p>
+  <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">模拟三个真实医学场景，测试你的科学思维应用能力。每个场景有三个选择，点击查看反馈。</p>
   <div id="decision-container"></div>
 </div>
 
@@ -675,7 +995,7 @@ const QUIZ_DATA = [
   // ===== Tab 0: 5 MCQs (天花与人类史, 免疫系统) =====
   {q:'天花被人类彻底根除的最核心原因是什么？',options:['天花疫苗效果极好','天花病毒只感染人类，没有动物储存库','全球化让疫苗接种覆盖更广','天花病毒变异慢'],answer:1,explain:'天花是唯一被人类根除的传染病。核心原因是天花病毒只有人类一个宿主、没有动物储存库——只要所有人类接种疫苗或彻底消灭最后一例，病毒就无处可藏。狂犬病之所以无法根除就是因为有动物储存库。',type:'choice'},
   {q:'阿兹特克帝国崩溃的最主要直接原因是什么？',options:['西班牙军队的武器优势','内部叛乱','天花病毒导致人口骤降','粮食短缺'],answer:2,explain:'1520年一个感染天花的非洲黑奴随西班牙探险队进入墨西哥，天花迅速传播。墨西哥人口从3000万骤降到300万，阿兹特克帝国的社会组织完全崩溃。西班牙人的军事征服只是最后的收尾工作。',type:'choice'},
-  {q:'适应性免疫和固有免疫的关系，以下说法正确的是？',options:['固有免疫比适应性免疫更重要','适应性免疫识别特异病原体并形成记忆','固有免疫需要T细胞激活','两者完全独立运作'],answer:1,explain:'固有免疫是快速非特异性的第一道防线，适应性免疫是精确但需要时间的第二道防线，其核心特征是"记忆"——B细胞产生抗体、T细胞杀伤感染细胞。疫苗正是利用这一记忆功能。',type:'choice'},
+  {q:'适应性免疫和固有免疫的关系，以下说法正确的是？',options:['固有免疫比适应性免疫更重要','适应性免疫识别特异病原体并形成记忆','适应性免疫需要T细胞激活','两者完全独立运作'],answer:1,explain:'固有免疫是快速非特异性的第一道防线，适应性免疫是精确但需要时间的第二道防线，其核心特征是"记忆"——B细胞产生抗体、T细胞杀伤感染细胞。疫苗正是利用这一记忆功能。',type:'choice'},
   {q:'HIV攻击哪种免疫细胞导致获得性免疫缺陷？',options:['B细胞','巨噬细胞','CD4+T细胞','NK细胞'],answer:2,explain:'HIV的核心攻击目标是CD4+T细胞——它是适应性免疫的"总指挥官"，负责协调B细胞、CD8+T细胞等其他免疫细胞的反应。当CD4+T细胞数量下降到临界值以下，免疫系统全面崩溃，患者进入AIDS阶段。',type:'choice'},
   {q:'为什么天花疫苗的牛痘病毒能在人体产生免疫保护却不引起严重疾病？',options:['牛痘病毒与天花病毒结构相似但致病性弱','牛痘病毒被科学家改造过','人体的固有免疫可以直接清除牛痘','牛痘只感染皮肤不感染内脏'],answer:0,explain:'牛痘病毒与天花病毒的抗原结构高度相似，足以激活适应性免疫产生针对天花的记忆细胞。但牛痘在人体中只引起轻微局部症状——这就是爱德华·琴纳1796年发现接种牛痘可以预防天花的基本原理。',type:'choice'},
 
@@ -696,7 +1016,7 @@ const QUIZ_DATA = [
   // ===== Tab 3: 5 MCQs (梅毒与文明, HIV/AIDS, 公共卫生) =====
   {q:'梅毒为什么被称为"伟大的模仿者"？',options:['梅毒病菌可以伪装成其他细菌','梅毒的症状可模拟几十种其他疾病','梅毒只模仿皮肤病的症状','梅毒可以模仿艾滋病'],answer:1,explain:'梅毒螺旋体感染后症状变化多端：一期是硬下疳（容易被忽略），二期是全身皮疹和发热（误诊为麻疹等），三期是神经和心血管系统损害（误诊为老年痴呆等）。它几乎可以模拟任何疾病的症状，直到1905年才被分离鉴定。',type:'choice'},
   {q:'CCR5-Δ32基因突变如何阻止HIV感染？',options:['突变使免疫细胞产生抗HIV抗体','突变改变了CCR5受体的形状，HIV无法进入细胞','突变使HIV无法在细胞中复制','突变直接杀死HIV病毒'],answer:1,explain:'CCR5是HIV进入CD4+T细胞的主要"门锁"。CCR5-Δ32突变导致这个受体的形状改变，HIV的"钥匙"（包膜蛋白）插不进去——病毒在门外徘徊，无法感染细胞。约1%的高加索人群携带此突变的两份拷贝，他们对HIV具有天然免疫力。',type:'choice'},
-  {q:'柏林病人Timothy Brown的HIV治愈案例说明？',products:['骨髓移植应是HIV的常规治疗方法','HIV可以被治愈，但当前疗法风险极高不适用于所有人','CCR5-Δ32突变可以通过注射获得','HIV感染可以通过药物完全清除'],answer:1,explain:'柏林病人接受了来自CCR5-Δ32突变捐献者的骨髓移植，不仅治愈了白血病，也清除了HIV。但骨髓移植有极高的风险（移植物抗宿主病、高死亡率），不是通用方案。它证明了HIV治愈在技术上是可能的。',type:'choice'},
+  {q:'柏林病人Timothy Brown的HIV治愈案例说明？',options:['骨髓移植应是HIV的常规治疗方法','HIV可以被治愈，但当前疗法风险极高不适用于所有人','CCR5-Δ32突变可以通过注射获得','HIV感染可以通过药物完全清除'],answer:1,explain:'柏林病人接受了来自CCR5-Δ32突变捐献者的骨髓移植，不仅治愈了白血病，也清除了HIV。但骨髓移植有极高的风险（移植物抗宿主病、高死亡率），不是通用方案。它证明了HIV治愈在技术上是可能的。',type:'choice'},
   {q:'中国青少年近视率超过80%而新加坡仅约40%的关键区别是？',options:['中国学生使用电子产品更多','新加坡人基因不易近视','新加坡学校强制每天户外活动2小时','新加坡的照明条件更好'],answer:2,explain:'新加坡通过国家政策强制学校每天安排2小时户外活动，近视率从80%降至40%以下。日光中的强光刺激视网膜释放多巴胺，多巴胺抑制眼轴过度增长。这与基因无关——中国人的遗传背景在新加坡效果显著。',type:'choice'},
   {q:'公共卫生干预中，对人类寿命贡献最大的措施是？',options:['疫苗接种','抗生素研发','清洁饮用水','手术技术'],answer:2,explain:'清洁饮用水的普及使人类平均寿命增加了约30年，远超任何单个药物或手术技术的贡献。减少水源性传染病（霍乱、伤寒等）是公共卫生史上最大的成就。但公共卫生措施往往面临最大的政治和社会阻力。',type:'choice'}
 ];
@@ -805,90 +1125,86 @@ function renderSVGMap(){
   const svg=`<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0,0 L10,5 L0,10 Z" fill="#8b4513"/>
+      <path d="M0,0 L10,5 L0,10 Z" fill="#0d9488"/>
     </marker>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#faf5ed"/>
-      <stop offset="100%" stop-color="#f2e8d5"/>
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f0fdfa"/>
     </linearGradient>
-    <filter id="rough">
-      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise"/>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
   </defs>
 
   <!-- Background -->
   <rect width="960" height="420" fill="url(#bgGrad)" rx="8"/>
-  <rect x="4" y="4" width="952" height="412" fill="none" stroke="#8b4513" stroke-width="1.5" rx="5" opacity="0.3"/>
+  <rect x="4" y="4" width="952" height="412" fill="none" stroke="#0d9488" stroke-width="1.5" rx="5" opacity="0.25"/>
 
   <!-- Title banner -->
-  <rect x="280" y="16" width="400" height="38" rx="4" fill="#8b4513" opacity="0.9"/>
-  <text x="480" y="42" text-anchor="middle" fill="#faf5ed" font-size="17" font-weight="bold" font-family="Georgia,serif">医学进步的五个里程碑</text>
+  <rect x="280" y="16" width="400" height="38" rx="4" fill="#1a2744" opacity="0.9"/>
+  <text x="480" y="42" text-anchor="middle" fill="#f8fafc" font-size="17" font-weight="bold" font-family="Georgia,serif">医学进步的五个里程碑</text>
 
   <!-- Timeline horizontal line -->
-  <line x1="60" y1="200" x2="900" y2="200" stroke="#8b4513" stroke-width="2.5" stroke-dasharray="8,3"/>
+  <line x1="60" y1="200" x2="900" y2="200" stroke="#0d9488" stroke-width="2.5" stroke-dasharray="8,4" opacity="0.5"/>
 
-  <!-- ===== Node 1: 放血疗法 (Bloodletting) ===== -->
-  <circle cx="100" cy="200" r="22" fill="#faf5ed" stroke="#8b4513" stroke-width="2.5"/>
-  <text x="100" y="205" text-anchor="middle" fill="#8b4513" font-size="14" font-weight="bold">I</text>
-  <line x1="100" y1="222" x2="100" y2="260" stroke="#8b4513" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="15" y="262" width="170" height="56" rx="6" fill="#faf5ed" stroke="#8b4513" stroke-width="1.5"/>
-  <text x="100" y="282" text-anchor="middle" fill="#8b4513" font-size="13" font-weight="bold" font-family="Georgia,serif">放血疗法</text>
-  <text x="100" y="300" text-anchor="middle" fill="#6b5b4f" font-size="10">体液说 · 四液平衡</text>
-  <text x="100" y="314" text-anchor="middle" fill="#b8860b" font-size="9">约公元前400年</text>
+  <!-- ===== Node 1: 放血疗法 ===== -->
+  <circle cx="100" cy="200" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="100" y="205" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">I</text>
+  <line x1="100" y1="224" x2="100" y2="262" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="15" y="264" width="170" height="56" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="100" y="284" text-anchor="middle" fill="#1a2744" font-size="13" font-weight="bold" font-family="Georgia,serif">放血疗法</text>
+  <text x="100" y="302" text-anchor="middle" fill="#64748b" font-size="10">体液说 · 四液平衡</text>
+  <text x="100" y="316" text-anchor="middle" fill="#d97706" font-size="9">约公元前400年</text>
 
   <!-- Arrow 1→2 -->
-  <line x1="125" y1="200" x2="215" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="127" y1="200" x2="213" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
 
-  <!-- ===== Node 2: 细菌论 (Germ Theory) ===== -->
-  <circle cx="280" cy="200" r="22" fill="#faf5ed" stroke="#8b4513" stroke-width="2.5"/>
-  <text x="280" y="205" text-anchor="middle" fill="#8b4513" font-size="14" font-weight="bold">II</text>
-  <line x1="280" y1="222" x2="280" y2="260" stroke="#8b4513" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="188" y="262" width="184" height="56" rx="6" fill="#faf5ed" stroke="#8b4513" stroke-width="1.5"/>
-  <text x="280" y="282" text-anchor="middle" fill="#8b4513" font-size="13" font-weight="bold" font-family="Georgia,serif">细菌致病论</text>
-  <text x="280" y="300" text-anchor="middle" fill="#6b5b4f" font-size="10">巴斯德 · 科赫法则</text>
-  <text x="280" y="314" text-anchor="middle" fill="#b8860b" font-size="9">1860s–1880s</text>
+  <!-- ===== Node 2: 细菌论 ===== -->
+  <circle cx="280" cy="200" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="280" y="205" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">II</text>
+  <line x1="280" y1="224" x2="280" y2="262" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="188" y="264" width="184" height="56" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="280" y="284" text-anchor="middle" fill="#1a2744" font-size="13" font-weight="bold" font-family="Georgia,serif">细菌致病论</text>
+  <text x="280" y="302" text-anchor="middle" fill="#64748b" font-size="10">巴斯德 · 科赫法则</text>
+  <text x="280" y="316" text-anchor="middle" fill="#d97706" font-size="9">1860s–1880s</text>
 
   <!-- Arrow 2→3 -->
-  <line x1="308" y1="200" x2="398" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="307" y1="200" x2="395" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
 
-  <!-- ===== Node 3: 疫苗 (Vaccines) - 强调 ===== -->
-  <circle cx="463" cy="200" r="25" fill="#2d5016" stroke="#2d5016" stroke-width="2"/>
-  <text x="463" y="206" text-anchor="middle" fill="#faf5ed" font-size="15" font-weight="bold">III</text>
-  <line x1="463" y1="225" x2="463" y2="268" stroke="#2d5016" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="363" y="270" width="200" height="62" rx="6" fill="#f0f5ec" stroke="#2d5016" stroke-width="2"/>
-  <text x="463" y="290" text-anchor="middle" fill="#2d5016" font-size="14" font-weight="bold" font-family="Georgia,serif">疫苗革命</text>
-  <text x="463" y="308" text-anchor="middle" fill="#3d2b1f" font-size="10">牛痘→灭活→mRNA</text>
-  <text x="463" y="324" text-anchor="middle" fill="#b8860b" font-size="9">1796 → 1980 根除天花</text>
+  <!-- ===== Node 3: 疫苗 - 强调 ===== -->
+  <circle cx="463" cy="200" r="27" fill="#0d9488" stroke="#0d9488" stroke-width="2"/>
+  <text x="463" y="206" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">III</text>
+  <line x1="463" y1="227" x2="463" y2="268" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="363" y="270" width="200" height="62" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  <text x="463" y="290" text-anchor="middle" fill="#0d9488" font-size="14" font-weight="bold" font-family="Georgia,serif">疫苗革命</text>
+  <text x="463" y="308" text-anchor="middle" fill="#1a2744" font-size="10">牛痘→灭活→mRNA</text>
+  <text x="463" y="324" text-anchor="middle" fill="#d97706" font-size="9">1796 → 1980 根除天花</text>
 
   <!-- Arrow 3→4 -->
-  <line x1="490" y1="200" x2="580" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="493" y1="200" x2="578" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
 
-  <!-- ===== Node 4: 抗生素 (Antibiotics) ===== -->
-  <circle cx="645" cy="200" r="25" fill="#2d5016" stroke="#2d5016" stroke-width="2"/>
-  <text x="645" y="206" text-anchor="middle" fill="#faf5ed" font-size="15" font-weight="bold">IV</text>
-  <line x1="645" y1="225" x2="645" y2="268" stroke="#2d5016" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="548" y="270" width="194" height="62" rx="6" fill="#f0f5ec" stroke="#2d5016" stroke-width="2"/>
-  <text x="645" y="290" text-anchor="middle" fill="#2d5016" font-size="14" font-weight="bold" font-family="Georgia,serif">抗生素时代</text>
-  <text x="645" y="308" text-anchor="middle" fill="#3d2b1f" font-size="10">青霉素 · 弗莱明1928</text>
-  <text x="645" y="324" text-anchor="middle" fill="#b8860b" font-size="9">二战期间大规模量产</text>
+  <!-- ===== Node 4: 抗生素 ===== -->
+  <circle cx="645" cy="200" r="27" fill="#0d9488" stroke="#0d9488" stroke-width="2"/>
+  <text x="645" y="206" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">IV</text>
+  <line x1="645" y1="227" x2="645" y2="268" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="548" y="270" width="194" height="62" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  <text x="645" y="290" text-anchor="middle" fill="#0d9488" font-size="14" font-weight="bold" font-family="Georgia,serif">抗生素时代</text>
+  <text x="645" y="308" text-anchor="middle" fill="#1a2744" font-size="10">青霉素 · 弗莱明1928</text>
+  <text x="645" y="324" text-anchor="middle" fill="#d97706" font-size="9">二战期间大规模量产</text>
 
   <!-- Arrow 4→5 -->
-  <line x1="673" y1="200" x2="763" y2="200" stroke="#8b4513" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="675" y1="200" x2="763" y2="200" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
 
-  <!-- ===== Node 5: 基因 (Genetics) ===== -->
-  <circle cx="830" cy="200" r="22" fill="#faf5ed" stroke="#8b4513" stroke-width="2.5"/>
-  <text x="830" y="205" text-anchor="middle" fill="#8b4513" font-size="14" font-weight="bold">V</text>
-  <line x1="830" y1="222" x2="830" y2="262" stroke="#8b4513" stroke-width="1.2" stroke-dasharray="3,2"/>
-  <rect x="745" y="264" width="170" height="56" rx="6" fill="#faf5ed" stroke="#8b4513" stroke-width="1.5"/>
-  <text x="830" y="284" text-anchor="middle" fill="#8b4513" font-size="13" font-weight="bold" font-family="Georgia,serif">基因医学</text>
-  <text x="830" y="302" text-anchor="middle" fill="#6b5b4f" font-size="10">基因组 · CRISPR</text>
-  <text x="830" y="316" text-anchor="middle" fill="#b8860b" font-size="9">2003 人类基因组计划</text>
+  <!-- ===== Node 5: 基因 ===== -->
+  <circle cx="830" cy="200" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="830" y="205" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">V</text>
+  <line x1="830" y1="224" x2="830" y2="264" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <rect x="745" y="266" width="170" height="56" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="830" y="286" text-anchor="middle" fill="#1a2744" font-size="13" font-weight="bold" font-family="Georgia,serif">基因医学</text>
+  <text x="830" y="304" text-anchor="middle" fill="#64748b" font-size="10">基因组 · CRISPR</text>
+  <text x="830" y="318" text-anchor="middle" fill="#d97706" font-size="9">2003 人类基因组计划</text>
 
   <!-- Bottom annotation -->
-  <rect x="30" y="358" width="900" height="46" rx="4" fill="#f5ece0" stroke="#d4c5b0" stroke-width="1"/>
-  <text x="480" y="376" text-anchor="middle" fill="#6b5b4f" font-size="11" font-style="italic" font-family="Georgia,serif">医学史是人类与疾病博弈的五幕剧——每一幕都代表着科学方法的一次胜利</text>
-  <text x="480" y="394" text-anchor="middle" fill="#b8860b" font-size="10" font-family="Georgia,serif">体液说 → 微生物 → 免疫记忆 → 化学武器 → 生命密码</text>
+  <rect x="30" y="358" width="900" height="46" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="480" y="376" text-anchor="middle" fill="#475569" font-size="11" font-style="italic" font-family="Georgia,serif">医学史是人类与疾病博弈的五幕剧——每一幕都代表着科学方法的一次胜利</text>
+  <text x="480" y="394" text-anchor="middle" fill="#d97706" font-size="10" font-family="Georgia,serif">体液说 → 微生物 → 免疫记忆 → 化学武器 → 生命密码</text>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
@@ -910,13 +1226,13 @@ function renderFlipCard(idx){
   const front=document.getElementById('flip-front');
   const back=document.getElementById('flip-back');
   front.innerHTML=`
-    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name}</h3>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:10px;">${c.mks?'MKS核心概念':'核心概念'}</p>
+    <h3 style="font-size:18px;color:var(--pri);margin-bottom:8px;">${c.name}</h3>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">${c.mks?'MKS核心概念':'核心概念'}</p>
     <p style="font-size:14px;">${c.def}</p>
-    <div style="margin-top:12px;font-size:13px;color:var(--text-light);text-align:center;">点击"翻转卡片"查看详情</div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-secondary);text-align:center;">点击"翻转卡片"查看详情</div>
   `;
   back.innerHTML=`
-    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name} · 深层理解</h3>
+    <h3 style="font-size:18px;color:var(--pri);margin-bottom:8px;">${c.name} · 深层理解</h3>
     <p style="font-size:13px;margin-bottom:8px;"><strong>类比：</strong>${c.analogy}</p>
     <p style="font-size:13px;margin-bottom:8px;"><strong>示例：</strong>${c.example}</p>
     <p style="font-size:13px;"><strong>反例/边界：</strong>${c.counter}</p>
@@ -926,7 +1242,7 @@ function renderFlipCard(idx){
   const btn=document.getElementById('mark-learned-btn');
   if(learnedSet.has(c.id)){
     btn.textContent='✓ 已学会';
-    btn.style.background='var(--success)';
+    btn.style.background='var(--green)';
   } else {
     btn.textContent='✓ 标记已学会';
     btn.style.background='';
@@ -1077,7 +1393,7 @@ function finishQuiz(){
   el.style.display='block';
   const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
   el.innerHTML=`
-    <h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>
+    <h3 style="color:var(--teal);margin-bottom:8px;">答题完成！</h3>
     <p>正确：${quizState.correct} / ${quizState.total}</p>
     <p>正确率：${pct}%</p>
     <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
@@ -1140,14 +1456,14 @@ function renderExam(){
     card.className='exam-card';
     if(q.type==='choice'){
       card.innerHTML=`
-        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(选择题)</span></h3>
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-secondary);">(选择题)</span></h3>
         <div class="options" id="exam-opt-${i}">
           ${q.options.map((opt,j)=>`<div class="option" data-exam="${i}" data-idx="${j}" onclick="selectExamChoice(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</div>`).join('')}
         </div>
       `;
     } else {
       card.innerHTML=`
-        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(简答题)</span></h3>
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-secondary);">(简答题)</span></h3>
         <textarea class="short-input" data-exam="${i}" placeholder="输入你的回答..." oninput="examState.answers[${i}]=this.value"></textarea>
       `;
     }
@@ -1181,7 +1497,7 @@ function startExamTimer(){
     const s=remaining%60;
     document.getElementById('exam-timer').textContent=`⏱ 剩余 ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     if(remaining<60){
-      document.getElementById('exam-timer').style.color='var(--accent)';
+      document.getElementById('exam-timer').style.color='var(--rose)';
     }
   };
   update();
@@ -1214,7 +1530,7 @@ function submitExam(){
   const pct=total>0?Math.round(correct/total*100):0;
   el.style.display='block';
   let html=`
-    <h3 style="color:var(--accent);margin-bottom:8px;">考试结果</h3>
+    <h3 style="color:var(--teal);margin-bottom:8px;">考试结果</h3>
     <p><strong>选择题：</strong>${correct} / ${total} 正确 (${pct}%)</p>
     <p><strong>简答题：</strong>已答 ${results.filter(r=>r.type==='short'&&r.userAns!=='未作答').length} / ${results.filter(r=>r.type==='short').length}</p>
     <p><strong>用时：</strong>${Math.round((Date.now()-examState.startTime)/1000)}秒</p>
@@ -1224,10 +1540,10 @@ function submitExam(){
   results.forEach(r=>{
     if(r.type==='choice'){
       const icon=r.isCorrect?'&#10004;':'&#10008;';
-      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'rgba(45,80,22,0.08)':'rgba(139,69,19,0.06)'};border-radius:6px;font-size:13px;">
+      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'var(--green-bg)':'var(--rose-bg)'};border-radius:6px;font-size:13px;">
         <p><strong>${r.question}</strong></p>
         <p>${icon} 你的答案：${r.userAns} ${r.isCorrect?'':'| 正确答案：'+r.correctAns}</p>
-        ${!r.isCorrect?`<p style="color:var(--text-light);">${r.explain}</p>`:''}
+        ${!r.isCorrect?`<p style="color:var(--text-secondary);">${r.explain}</p>`:''}
       </div>`;
     }
   });
@@ -1249,14 +1565,14 @@ function updateReviewStats(){
 
   const wb=document.getElementById('wrong-book');
   if(wrongBook.length===0){
-    wb.innerHTML='<p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
+    wb.innerHTML='<p style="font-size:13px;color:var(--text-secondary);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
   } else {
     wb.innerHTML=wrongBook.slice(0,10).map(item=>
-      `<div style="padding:8px;margin-bottom:6px;background:rgba(139,69,19,0.06);border-radius:6px;font-size:13px;">
+      `<div style="padding:8px;margin-bottom:6px;background:var(--rose-bg);border-radius:6px;font-size:13px;">
         <p><strong>${item.q}</strong></p>
         <p>正确答案：${item.correctAns}</p>
-        ${item.explain?`<p style="color:var(--text-light);">${item.explain}</p>`:''}
-        <p style="font-size:11px;color:var(--text-light);">${item.time}</p>
+        ${item.explain?`<p style="color:var(--text-secondary);">${item.explain}</p>`:''}
+        <p style="font-size:11px;color:var(--text-secondary);">${item.time}</p>
       </div>`
     ).join('');
   }
@@ -1276,12 +1592,12 @@ function updateReviewStats(){
   });
   const weakList=Object.entries(weakMap).sort((a,b)=>b[1]-a[1]);
   if(weakList.length===0){
-    weak.innerHTML='<p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
+    weak.innerHTML='<p style="font-size:13px;color:var(--text-secondary);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
   } else {
     weak.innerHTML=weakList.map(([name,count])=>
-      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#f0e4d0;border-radius:6px;font-size:13px;">
+      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:var(--amber-bg);border-radius:6px;font-size:13px;">
         <span>${name}</span>
-        <span style="color:var(--accent);font-weight:700;">错${count}题</span>
+        <span style="color:var(--rose);font-weight:700;">错${count}题</span>
       </div>`
     ).join('');
   }
