@@ -51,6 +51,7 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  padding-bottom: 64px;
 }
 
 /* ===== Forge Ambient Glow ===== */
@@ -102,6 +103,248 @@ body {
 .ember.e13 { left: 33%; bottom: -10px; width: 3px; height: 3px; background: var(--m4); --drift: 18px; animation-duration: 9.8s; animation-delay: 6s; }
 .ember.e14 { left: 63%; bottom: -10px; width: 2px; height: 2px; background: var(--gold-light); --drift: -22px; animation-duration: 7.2s; animation-delay: 1.8s; }
 .ember.e15 { left: 92%; bottom: -10px; width: 3px; height: 3px; background: var(--m3); --drift: 28px; animation-duration: 11.5s; animation-delay: 3.8s; }
+
+/* ===== Navigation ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(20,18,16,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  height: 50px;
+}
+.nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: color var(--ease);
+  position: relative;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.nav a:hover { color: var(--gold); }
+.nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 0; height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: width var(--ease);
+}
+.nav a:hover::after { width: 100%; }
+
+/* ===== Podcast Section ===== */
+.podcast-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.podcast-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 24px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--ease);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.podcast-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
+}
+.podcast-card.ep1 { border-top: 3px solid var(--m1); }
+.podcast-card.ep2 { border-top: 3px solid var(--m2); }
+.podcast-card.ep3 { border-top: 3px solid var(--m3); }
+.podcast-card.ep4 { border-top: 3px solid var(--m4); }
+.podcast-card.ep5 { border-top: 3px solid var(--m5); }
+.podcast-card.ep6 { border-top: 3px solid var(--m6); }
+
+.podcast-card .ep-num {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 3rem;
+  font-weight: 900;
+  opacity: 0.05;
+  position: absolute;
+  top: 8px; right: 16px;
+  pointer-events: none;
+  line-height: 1;
+  transition: opacity var(--ease);
+}
+.podcast-card:hover .ep-num { opacity: 0.09; }
+.podcast-card.ep1 .ep-num { color: var(--m1); }
+.podcast-card.ep2 .ep-num { color: var(--m2); }
+.podcast-card.ep3 .ep-num { color: var(--m3); }
+.podcast-card.ep4 .ep-num { color: var(--m4); }
+.podcast-card.ep5 .ep-num { color: var(--m5); }
+.podcast-card.ep6 .ep-num { color: var(--m6); }
+
+.podcast-card h4 {
+  font-size: 1rem;
+  font-weight: 750;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+.podcast-card .ep-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.podcast-card .ep-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  position: relative;
+  z-index: 1;
+}
+.podcast-card .ep-duration {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+.podcast-card .play-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  background: rgba(232,148,42,0.08);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  transition: all var(--ease);
+  flex-shrink: 0;
+}
+.podcast-card .play-btn:hover {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+  box-shadow: 0 0 18px var(--m1-glow);
+}
+.podcast-card .play-btn.playing {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+  box-shadow: 0 0 14px var(--m1-glow);
+}
+
+/* ===== Bottom Player Bar ===== */
+.player-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 200;
+  background: rgba(20,18,16,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 10px 28px;
+  display: none;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+}
+.player-bar.active { display: flex; }
+.player-bar .player-title {
+  font-size: 0.86rem;
+  color: var(--text-bright);
+  font-weight: 600;
+  flex: 1;
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+.player-bar .player-wave {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.player-bar .player-wave span {
+  width: 3px;
+  background: var(--gold);
+  border-radius: 1px;
+  animation: wave 0.8s ease-in-out infinite;
+}
+.player-bar .player-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+.player-bar .player-wave span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+.player-bar .player-wave span:nth-child(3) { height: 10px; animation-delay: 0.3s; }
+.player-bar .player-wave span:nth-child(4) { height: 16px; animation-delay: 0.45s; }
+.player-bar .player-wave span:nth-child(5) { height: 7px; animation-delay: 0.6s; }
+@keyframes wave {
+  0%, 100% { transform: scaleY(1); opacity: 0.5; }
+  50% { transform: scaleY(0.4); opacity: 1; }
+}
+.player-bar .player-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all var(--ease);
+  flex-shrink: 0;
+}
+.player-bar .player-btn:hover {
+  background: var(--bg-card);
+  color: var(--gold);
+  border-color: var(--gold-dark);
+}
+.player-bar .player-btn.close-btn:hover {
+  color: var(--m3);
+  border-color: var(--m3);
+}
+
+/* ===== Podcast Responsive ===== */
+@media (max-width: 900px) {
+  .podcast-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .nav-inner { gap: 18px; }
+  .nav a { font-size: 0.74rem; letter-spacing: 0.5px; }
+  .player-bar { padding: 8px 16px; gap: 10px; }
+  .player-bar .player-title { font-size: 0.78rem; max-width: 240px; }
+}
+@media (max-width: 640px) {
+  .podcast-grid { grid-template-columns: 1fr; }
+  .nav-inner { gap: 12px; height: 44px; }
+  .nav a { font-size: 0.68rem; letter-spacing: 0; }
+  .podcast-card { padding: 18px 16px 16px; }
+  .player-bar .player-wave { display: none; }
+  .player-bar .player-title { font-size: 0.74rem; max-width: 160px; }
+}
 
 /* ===== Page Shell ===== */
 .page {
@@ -778,6 +1021,17 @@ body {
   <div class="ember e13"></div><div class="ember e14"></div><div class="ember e15"></div>
 </div>
 
+<!-- ===== Navigation ===== -->
+<nav class="nav" id="top-nav">
+  <div class="nav-inner">
+    <a href="#top-nav">⚒️ 首页</a>
+    <a href="#modules">工序</a>
+    <a href="#forging-sequence">锻造序列</a>
+    <a href="#progress">进度</a>
+    <a href="#podcast">🎙️ 播客</a>
+  </div>
+</nav>
+
 <div class="page">
 
 <!-- ===== Hero ===== -->
@@ -914,7 +1168,7 @@ body {
 </div>
 
 <!-- ===== Six Modules ===== -->
-<div class="section-head">
+<div class="section-head" id="modules">
   <h2>六大锻造工序</h2>
   <p class="sub">选材·熔铸·淬炼·锻打·铭纹·开刃 — 六步锻造认知的锋刃</p>
 </div>
@@ -1014,7 +1268,7 @@ body {
 </div>
 
 <!-- ===== Forging Sequence ===== -->
-<div class="section-head">
+<div class="section-head" id="forging-sequence">
   <h2>锻造序列</h2>
   <p class="sub">从选材到开刃 — 六步完成科学思维的质变</p>
 </div>
@@ -1059,7 +1313,7 @@ body {
 </section>
 
 <!-- ===== Progress ===== -->
-<div class="section-head">
+<div class="section-head" id="progress">
   <h2>锻造成果</h2>
 </div>
 
@@ -1101,6 +1355,84 @@ body {
   </div>
 </section>
 
+<!-- ===== Podcast Section ===== -->
+<div class="section-head" id="podcast">
+  <h2>🎙️ 锻造之音</h2>
+  <p class="sub">六期深度播客 — 用声音淬炼科学思维</p>
+</div>
+
+<section class="path-section">
+  <div class="podcast-grid">
+
+    <!-- EP1: 工具箱 -->
+    <div class="podcast-card ep1">
+      <span class="ep-num">01</span>
+      <h4>EP1 · 科学思维的工具箱</h4>
+      <p class="ep-desc">掌握科学家的方法论武器 — 极限思维、数量级感知、变量分析与模型建构。</p>
+      <div class="ep-meta">
+        <span class="ep-duration">⏱ 11m47s</span>
+        <button class="play-btn" onclick="playEpisode(this, 1)" title="播放 / 暂停">▶</button>
+      </div>
+    </div>
+
+    <!-- EP2: 演化论 -->
+    <div class="podcast-card ep2">
+      <span class="ep-num">02</span>
+      <h4>EP2 · 演化论：世界的源代码</h4>
+      <p class="ep-desc">变异-选择-遗传的底层世界观 — 从自然选择到人类迁徙，重新理解万物的来处。</p>
+      <div class="ep-meta">
+        <span class="ep-duration">⏱ 14m52s</span>
+        <button class="play-btn" onclick="playEpisode(this, 2)" title="播放 / 暂停">▶</button>
+      </div>
+    </div>
+
+    <!-- EP3: 医学简史 -->
+    <div class="podcast-card ep3">
+      <span class="ep-num">03</span>
+      <h4>EP3 · 医学简史</h4>
+      <p class="ep-desc">从疾病视角看科学方法的胜利 — 天花、流感、免疫与癌症认知的演变。</p>
+      <div class="ep-meta">
+        <span class="ep-duration">⏱ 11m21s</span>
+        <button class="play-btn" onclick="playEpisode(this, 3)" title="播放 / 暂停">▶</button>
+      </div>
+    </div>
+
+    <!-- EP4: 识破伪科学 -->
+    <div class="podcast-card ep4">
+      <span class="ep-num">04</span>
+      <h4>EP4 · 识破伪科学与信息鉴别</h4>
+      <p class="ep-desc">在信息洪流中守住理性底线 — 识别伪科学、破除泡沫、辨析常见谬误。</p>
+      <div class="ep-meta">
+        <span class="ep-duration">⏱ 9m36s</span>
+        <button class="play-btn" onclick="playEpisode(this, 4)" title="播放 / 暂停">▶</button>
+      </div>
+    </div>
+
+    <!-- EP5: 科学文明史 -->
+    <div class="podcast-card ep5">
+      <span class="ep-num">05</span>
+      <h4>EP5 · 科学文明史：中西对话</h4>
+      <p class="ep-desc">科学作为社会制度的生长 — 大学、科学院、中西科学分流的历史逻辑。</p>
+      <div class="ep-meta">
+        <span class="ep-duration">⏱ 13m57s</span>
+        <button class="play-btn" onclick="playEpisode(this, 5)" title="播放 / 暂停">▶</button>
+      </div>
+    </div>
+
+    <!-- EP6: 心智认知 -->
+    <div class="podcast-card ep6">
+      <span class="ep-num">06</span>
+      <h4>EP6 · 心智、衰老与认知科学</h4>
+      <p class="ep-desc">用科学理解"我是谁" — 心理学科学化、双盲实验、线粒体与自由基假说。</p>
+      <div class="ep-meta">
+        <span class="ep-duration">⏱ 17m19s</span>
+        <button class="play-btn" onclick="playEpisode(this, 6)" title="播放 / 暂停">▶</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ===== Footer ===== -->
 <footer class="footer">
   <div class="footer-stats">
@@ -1114,6 +1446,115 @@ body {
 </footer>
 
 </div><!-- /.page -->
+
+<!-- ===== Bottom Player Bar ===== -->
+<div class="player-bar" id="player-bar">
+  <div class="player-wave" id="player-wave">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <span class="player-title" id="player-title">选择一期播客开始收听</span>
+  <button class="player-btn" id="player-play-btn" onclick="togglePlayerPlay()" title="暂停 / 播放">▶</button>
+  <button class="player-btn close-btn" onclick="closePlayer()" title="关闭">✕</button>
+</div>
+
+<script>
+(function() {
+  let currentAudio = null;
+  let currentBtn = null;
+  const playerBar = document.getElementById('player-bar');
+  const playerTitle = document.getElementById('player-title');
+  const playerPlayBtn = document.getElementById('player-play-btn');
+
+  window.playEpisode = function(btn, epNum) {
+    var card = btn.closest('.podcast-card');
+    var src = 'podcast/audio/ep' + epNum + '.mp3';
+    var title = card.querySelector('h4').textContent;
+
+    // Same episode — toggle play/pause
+    if (currentAudio && currentAudio.src.indexOf('ep' + epNum + '.mp3') !== -1) {
+      if (currentAudio.paused) {
+        currentAudio.play();
+        btn.textContent = '\u23F8';
+        playerPlayBtn.textContent = '\u23F8';
+      } else {
+        currentAudio.pause();
+        btn.textContent = '\u25B6';
+        playerPlayBtn.textContent = '\u25B6';
+      }
+      return;
+    }
+
+    // Stop previous audio
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    if (currentBtn) {
+      currentBtn.textContent = '\u25B6';
+      currentBtn.classList.remove('playing');
+    }
+
+    // Start new episode
+    var audio = new Audio(src);
+    audio.preload = 'auto';
+    currentAudio = audio;
+    currentBtn = btn;
+    btn.textContent = '\u23F8';
+    btn.classList.add('playing');
+
+    playerBar.classList.add('active');
+    playerTitle.textContent = title;
+    playerPlayBtn.textContent = '\u23F8';
+
+    audio.play().catch(function(e) {
+      console.warn('Audio play failed:', e);
+    });
+
+    audio.addEventListener('ended', function() {
+      btn.textContent = '\u25B6';
+      btn.classList.remove('playing');
+      playerPlayBtn.textContent = '\u25B6';
+      currentAudio = null;
+      currentBtn = null;
+    });
+
+    audio.addEventListener('error', function() {
+      console.warn('Audio failed to load:', src);
+      btn.textContent = '\u25B6';
+      btn.classList.remove('playing');
+      playerBar.classList.remove('active');
+      currentAudio = null;
+      currentBtn = null;
+    });
+  };
+
+  window.togglePlayerPlay = function() {
+    if (!currentAudio) return;
+    if (currentAudio.paused) {
+      currentAudio.play();
+      playerPlayBtn.textContent = '\u23F8';
+      if (currentBtn) currentBtn.textContent = '\u23F8';
+    } else {
+      currentAudio.pause();
+      playerPlayBtn.textContent = '\u25B6';
+      if (currentBtn) currentBtn.textContent = '\u25B6';
+    }
+  };
+
+  window.closePlayer = function() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    if (currentBtn) {
+      currentBtn.textContent = '\u25B6';
+      currentBtn.classList.remove('playing');
+      currentBtn = null;
+    }
+    playerBar.classList.remove('active');
+  };
+})();
+</script>
 
 </body>
 </html>
