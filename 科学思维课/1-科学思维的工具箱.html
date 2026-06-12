@@ -619,44 +619,69 @@ body {
 
 /* ===== MINDMAP ===== */
 .mindmap { padding: 10px 0; }
-.mindmap ul { list-style: none; padding-left: 24px; }
-.mindmap li { position: relative; margin: 3px 0; }
+.mindmap ul { list-style: none; padding-left: 20px; }
+.mindmap li { position: relative; margin: 2px 0; }
 .mindmap .tree-toggle {
   cursor: pointer;
   color: var(--brass);
-  font-size: 12px;
+  font-size: 14px;
   user-select: none;
   font-weight: 700;
   margin-right: 4px;
   transition: color .2s;
+  display: inline-block;
+  width: 16px;
 }
 .mindmap .tree-toggle:hover { color: var(--copper); }
 .mindmap .tree-node {
-  padding: 7px 12px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
   font-size: 13px;
   display: inline-block;
   transition: all .2s;
+  vertical-align: middle;
+  line-height: 1.5;
 }
 .mindmap .tree-node.root {
   background: var(--slate);
   color: #f0e6d8;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   box-shadow: var(--shadow-sm);
+  padding: 10px 16px;
 }
-.mindmap .tree-node.branch { background: var(--steel); color: #e8dfd3; font-weight: 600; }
+.mindmap .tree-node.branch {
+  background: var(--steel);
+  color: #e8dfd3;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+}
+.mindmap .tree-node.branch.app {
+  background: linear-gradient(135deg, var(--brass), var(--copper));
+  color: #fff;
+}
 .mindmap .tree-node.leaf {
   background: #fffefb;
   border: 1px solid var(--border-subtle);
   color: var(--fog);
+  font-size: 12px;
+  padding: 6px 10px;
+  max-width: 620px;
 }
-.mindmap .tree-node.app { background: var(--brass); color: #fff; font-weight: 600; }
+.mindmap .tree-node.leaf.mks {
+  border-color: var(--brass-light);
+  border-left: 3px solid var(--brass);
+  background: linear-gradient(90deg, #fdf3e0 0%, #fffefb 100%);
+  color: var(--slate);
+  font-weight: 500;
+}
+.mindmap .tree-node.leaf:hover { box-shadow: var(--shadow-sm); }
 .mindmap .children {
   display: none;
-  padding-left: 20px;
+  padding-left: 18px;
   border-left: 2px solid var(--border-subtle);
-  margin: 4px 0 4px 14px;
+  margin: 4px 0 4px 8px;
 }
 .mindmap .children.open { display: block; animation: expandIn .3s ease; }
 
@@ -1077,7 +1102,7 @@ const DECISION_ROUNDS = [
 let flipIndex = 0;
 let learnedSet = new Set();
 let wrongBook = [];
-let quizState = {active:false,questions:[],index:0,correct:0,total:0,streak:0,answered:false,selected:-1,shortAnswers:[],mode:'all',startTime:null};
+let quizState = {active:false,questions:[],correct:0,total:0,streak:0,mode:'all',startTime:null};
 let examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
 let statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
 
@@ -1147,123 +1172,155 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 960 680" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#2c3e50"/></marker>
-    <marker id="arrowCopper" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#e67e22"/></marker>
-    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#27ae60"/></marker>
-    <linearGradient id="topGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1a2636"/><stop offset="100%" stop-color="#2c3e50"/></linearGradient>
-    <linearGradient id="bottomGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2c3e50"/><stop offset="100%" stop-color="#e67e22"/></linearGradient>
+    <linearGradient id="headerGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0a1628"/><stop offset="100%" stop-color="#1a2a3e"/></linearGradient>
+    <linearGradient id="mksGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c4793b"/><stop offset="100%" stop-color="#b3592c"/></linearGradient>
+    <linearGradient id="catGrad1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#334155"/></linearGradient>
+    <linearGradient id="catGrad2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#334155"/></linearGradient>
+    <linearGradient id="catGrad3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#334155"/></linearGradient>
+    <linearGradient id="catGrad4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#334155"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter>
+    <filter id="shadowBrass" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#c4793b" flood-opacity="0.3"/></filter>
+    <marker id="arrDark" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#475569"/></marker>
+    <marker id="arrBrass" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#c4793b"/></marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#4a8c5c"/></marker>
   </defs>
+
   <!-- Background -->
-  <rect width="900" height="580" fill="#e8ecf1" rx="12"/>
-  <rect x="2" y="2" width="896" height="576" fill="none" stroke="#c8ccd0" stroke-width="1" rx="10"/>
+  <rect width="960" height="680" fill="#faf8f5" rx="14"/>
+  <rect x="1" y="1" width="958" height="678" fill="none" stroke="#e0dbd2" stroke-width="1.5" rx="13"/>
 
-  <!-- ===== Tier 1: Root (Toolbox Header) ===== -->
-  <rect x="300" y="12" rx="8" ry="8" width="300" height="36" fill="url(#topGrad)"/>
-  <text x="450" y="35" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">🔧 科学思维工具箱</text>
+  <!-- ===== TIER 0: HEADER ===== -->
+  <rect x="280" y="16" width="400" height="44" rx="10" fill="url(#headerGrad)" filter="url(#shadow)"/>
+  <text x="480" y="44" text-anchor="middle" fill="#f0e6d8" font-size="18" font-weight="bold" font-family="sans-serif">\u{1F527} 科学思维工具箱</text>
 
-  <!-- Root → 4 Category Groups -->
-  <line x1="340" y1="48" x2="100" y2="90" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowAccent)"/>
-  <line x1="400" y1="48" x2="320" y2="90" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowAccent)"/>
-  <line x1="500" y1="48" x2="580" y2="90" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowAccent)"/>
-  <line x1="560" y1="48" x2="800" y2="90" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowAccent)"/>
+  <!-- Lines from header to 4 category hubs -->
+  <line x1="330" y1="60" x2="130" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#arrDark)"/>
+  <line x1="410" y1="60" x2="340" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#arrDark)"/>
+  <line x1="550" y1="60" x2="620" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#arrDark)"/>
+  <line x1="630" y1="60" x2="830" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#arrDark)"/>
 
-  <!-- ===== Tier 2: 4 Category Modules ===== -->
-  <rect x="20" y="95" rx="6" ry="6" width="160" height="38" fill="#2c3e50"/>
-  <text x="100" y="119" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">📐 认知框架</text>
+  <!-- ===== TIER 1: 4 CATEGORY HUBS (circle nodes) ===== -->
+  <circle cx="130" cy="140" r="38" fill="url(#catGrad1)" filter="url(#shadow)"/>
+  <text x="130" y="136" text-anchor="middle" fill="#f0e8d8" font-size="12" font-weight="bold" font-family="sans-serif">\u{1F4D0}</text>
+  <text x="130" y="154" text-anchor="middle" fill="#e8dfd3" font-size="11" font-family="sans-serif">认知框架</text>
 
-  <rect x="240" y="95" rx="6" ry="6" width="160" height="38" fill="#2c3e50"/>
-  <text x="320" y="119" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">🔄 系统思维</text>
+  <circle cx="340" cy="140" r="38" fill="url(#catGrad2)" filter="url(#shadow)"/>
+  <text x="340" y="136" text-anchor="middle" fill="#f0e8d8" font-size="12" font-weight="bold" font-family="sans-serif">\u{1F504}</text>
+  <text x="340" y="154" text-anchor="middle" fill="#e8dfd3" font-size="11" font-family="sans-serif">系统思维</text>
 
-  <rect x="500" y="95" rx="6" ry="6" width="160" height="38" fill="#2c3e50"/>
-  <text x="580" y="119" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">📊 推理工具</text>
+  <circle cx="620" cy="140" r="38" fill="url(#catGrad3)" filter="url(#shadow)"/>
+  <text x="620" y="136" text-anchor="middle" fill="#f0e8d8" font-size="12" font-weight="bold" font-family="sans-serif">\u{1F4CA}</text>
+  <text x="620" y="154" text-anchor="middle" fill="#e8dfd3" font-size="11" font-family="sans-serif">推理工具</text>
 
-  <rect x="720" y="95" rx="6" ry="6" width="160" height="38" fill="#2c3e50"/>
-  <text x="800" y="119" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">🎯 元方法论</text>
+  <circle cx="830" cy="140" r="38" fill="url(#catGrad4)" filter="url(#shadow)"/>
+  <text x="830" y="136" text-anchor="middle" fill="#f0e8d8" font-size="12" font-weight="bold" font-family="sans-serif">\u{1F3AF}</text>
+  <text x="830" y="154" text-anchor="middle" fill="#e8dfd3" font-size="11" font-family="sans-serif">元方法论</text>
 
-  <!-- Category → Concept edges -->
-  <line x1="75" y1="133" x2="60" y2="178" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrowCopper)"/>
-  <line x1="100" y1="133" x2="100" y2="250" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrowCopper)"/>
-  <line x1="280" y1="133" x2="260" y2="178" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <line x1="320" y1="133" x2="320" y2="250" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrowCopper)"/>
-  <line x1="540" y1="133" x2="520" y2="178" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <line x1="580" y1="133" x2="580" y2="250" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <line x1="760" y1="133" x2="740" y2="178" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <line x1="800" y1="133" x2="800" y2="178" stroke="#5d6d7e" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrowCopper)"/>
+  <!-- ===== TIER 2: CONCEPT CARDS ===== -->
+  <!-- 认知框架 column: 3 concepts -->
+  <!-- Line from hub to each concept -->
+  <line x1="130" y1="178" x2="50" y2="230" stroke="#c4793b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrBrass)"/>
+  <line x1="130" y1="178" x2="130" y2="230" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="130" y1="178" x2="210" y2="230" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
 
-  <!-- ===== Tier 3: 10 Concept Boxes (Engineering flowchart style) ===== -->
-  <!-- 认知框架 -->
-  <rect x="10" y="182" rx="4" ry="4" width="100" height="32" fill="#fff" stroke="#e67e22" stroke-width="2"/>
-  <text x="60" y="202" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">极限思维 ★</text>
+  <!-- MKS: 极限思维 (gold border) -->
+  <rect x="15" y="235" width="105" height="52" rx="8" fill="#fffefb" stroke="#c4793b" stroke-width="2.5" filter="url(#shadowBrass)"/>
+  <text x="67" y="254" text-anchor="middle" fill="#b3592c" font-size="12" font-weight="bold" font-family="sans-serif">\u2605 极限思维</text>
+  <text x="67" y="274" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">推到极值看本质</text>
 
-  <rect x="50" y="254" rx="4" ry="4" width="100" height="32" fill="#fff" stroke="#e67e22" stroke-width="2"/>
-  <text x="100" y="274" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">务实判断 ★</text>
+  <!-- MKS: 务实判断 (gold border) -->
+  <rect x="77" y="235" width="105" height="52" rx="8" fill="#fffefb" stroke="#c4793b" stroke-width="2.5" filter="url(#shadowBrass)"/>
+  <text x="130" y="254" text-anchor="middle" fill="#b3592c" font-size="12" font-weight="bold" font-family="sans-serif">\u2605 务实判断</text>
+  <text x="130" y="274" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">回归物理约束</text>
 
-  <rect x="120" y="182" rx="4" ry="4" width="100" height="32" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="170" y="202" text-anchor="middle" fill="#5d6d7e" font-size="10">数量级感知</text>
+  <!-- 数量级感知 -->
+  <rect x="155" y="235" width="105" height="52" rx="8" fill="#fffefb" stroke="#c8bfb0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="207" y="254" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold" font-family="sans-serif">数量级感知</text>
+  <text x="207" y="274" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">10倍尺度校准</text>
 
-  <!-- 系统思维 -->
-  <rect x="235" y="182" rx="4" ry="4" width="110" height="32" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="290" y="202" text-anchor="middle" fill="#5d6d7e" font-size="10">复杂系统思维</text>
+  <!-- 系统思维 column: 3 concepts -->
+  <line x1="340" y1="178" x2="260" y2="300" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="340" y1="178" x2="340" y2="300" stroke="#c4793b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrBrass)"/>
+  <line x1="340" y1="178" x2="420" y2="300" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
 
-  <rect x="270" y="254" rx="4" ry="4" width="100" height="32" fill="#fff" stroke="#e67e22" stroke-width="2"/>
-  <text x="320" y="274" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">模型建构 ★</text>
+  <!-- 复杂系统思维 -->
+  <rect x="225" y="305" width="105" height="52" rx="8" fill="#fffefb" stroke="#c8bfb0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="277" y="324" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold" font-family="sans-serif">复杂系统思维</text>
+  <text x="277" y="344" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">多变量交互</text>
 
-  <rect x="375" y="182" rx="4" ry="4" width="90" height="32" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="420" y="202" text-anchor="middle" fill="#5d6d7e" font-size="10">变量分析</text>
+  <!-- MKS: 模型建构 -->
+  <rect x="287" y="305" width="105" height="52" rx="8" fill="#fffefb" stroke="#c4793b" stroke-width="2.5" filter="url(#shadowBrass)"/>
+  <text x="340" y="324" text-anchor="middle" fill="#b3592c" font-size="12" font-weight="bold" font-family="sans-serif">\u2605 模型建构</text>
+  <text x="340" y="344" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">简化复杂现实</text>
 
-  <!-- 推理工具 -->
-  <rect x="485" y="182" rx="4" ry="4" width="90" height="32" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="530" y="202" text-anchor="middle" fill="#5d6d7e" font-size="10">证据挖掘</text>
+  <!-- 变量分析 -->
+  <rect x="385" y="305" width="105" height="52" rx="8" fill="#fffefb" stroke="#c8bfb0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="437" y="324" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold" font-family="sans-serif">变量分析</text>
+  <text x="437" y="344" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">识别关键变量</text>
 
-  <rect x="550" y="254" rx="4" ry="4" width="90" height="32" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="595" y="274" text-anchor="middle" fill="#5d6d7e" font-size="10">计算推理</text>
+  <!-- 推理工具 column: 3 concepts -->
+  <line x1="620" y1="178" x2="540" y2="230" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="620" y1="178" x2="620" y2="230" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="620" y1="178" x2="700" y2="230" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
 
-  <rect x="585" y="182" rx="4" ry="4" width="90" height="32" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="630" y="202" text-anchor="middle" fill="#5d6d7e" font-size="10">概率思维</text>
+  <!-- 证据挖掘 -->
+  <rect x="505" y="235" width="105" height="52" rx="8" fill="#fffefb" stroke="#c8bfb0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="557" y="254" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold" font-family="sans-serif">证据挖掘</text>
+  <text x="557" y="274" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">追溯证据链</text>
 
-  <!-- 元方法论 -->
-  <rect x="710" y="182" rx="4" ry="4" width="130" height="32" fill="#fff" stroke="#e67e22" stroke-width="2"/>
-  <text x="775" y="202" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">科学方法总论 ★</text>
+  <!-- 计算推理 -->
+  <rect x="567" y="235" width="105" height="52" rx="8" fill="#fffefb" stroke="#c8bfb0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="620" y="254" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold" font-family="sans-serif">计算推理</text>
+  <text x="620" y="274" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">量化替代直觉</text>
 
-  <!-- ===== Gauge/仪表装饰圆 ===== -->
-  <circle cx="345" y="182" r="6" fill="none" stroke="#e67e22" stroke-width="1.5"/>
-  <line x1="345" y1="182" x2="348" y2="179" stroke="#e67e22" stroke-width="1.5"/>
+  <!-- 概率思维 -->
+  <rect x="665" y="235" width="105" height="52" rx="8" fill="#fffefb" stroke="#c8bfb0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="717" y="254" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold" font-family="sans-serif">概率思维</text>
+  <text x="717" y="274" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">接纳不确定性</text>
 
-  <circle cx="775" y="254" r="18" fill="none" stroke="#2c3e50" stroke-width="1.5"/>
-  <line x1="775" y1="254" x2="775" y2="240" stroke="#2c3e50" stroke-width="1.5"/>
-  <line x1="775" y1="254" x2="785" y2="244" stroke="#2c3e50" stroke-width="1"/>
+  <!-- 元方法论 column: 1 big MKS concept -->
+  <line x1="830" y1="178" x2="830" y2="300" stroke="#c4793b" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrBrass)"/>
 
-  <!-- ===== Concepts → Integration Bridge ===== -->
-  <line x1="100" y1="286" x2="100" y2="340" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-  <line x1="320" y1="286" x2="320" y2="340" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-  <line x1="580" y1="286" x2="580" y2="340" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-  <line x1="800" y1="214" x2="800" y2="340" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
+  <!-- MKS: 科学方法总论 (larger, prominent) -->
+  <rect x="755" y="305" width="150" height="60" rx="10" fill="url(#mksGrad)" filter="url(#shadowBrass)"/>
+  <text x="830" y="328" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold" font-family="sans-serif">\u2605 科学方法总论</text>
+  <text x="830" y="348" text-anchor="middle" fill="#f0e6d8" font-size="10" font-family="sans-serif">观察\u2192假设\u2192验证\u2192修正</text>
 
-  <!-- Bridge bar -->
-  <rect x="130" y="345" rx="8" ry="8" width="540" height="38" fill="#27ae60" opacity="0.85"/>
-  <text x="400" y="369" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">认知框架 ⟶ 系统思维 ⟶ 推理工具 ⟶ 元方法：四层递进</text>
+  <!-- ===== INTEGRATION ARROWS ===== -->
+  <!-- Arrows from concept rows pointing down to integration -->
+  <line x1="67" y1="287" x2="67" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="130" y1="287" x2="130" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="207" y1="287" x2="207" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="277" y1="357" x2="277" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="340" y1="357" x2="340" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="437" y1="357" x2="437" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="557" y1="287" x2="557" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="620" y1="287" x2="620" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="717" y1="287" x2="717" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="830" y1="365" x2="830" y2="400" stroke="#4a8c5c" stroke-width="1.5" stroke-dasharray="6,4"/>
 
-  <!-- Bridge → Tier 4 -->
-  <line x1="400" y1="383" x2="450" y2="440" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)" stroke-dasharray="6,3"/>
+  <!-- ===== BRIDGE BAR ===== -->
+  <rect x="40" y="405" width="880" height="34" rx="10" fill="#4a8c5c" opacity="0.85"/>
+  <text x="480" y="427" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">认知框架 \u27F6 系统思维 \u27F6 推理工具 \u27F6 元方法：四层递进，形成完整科学认知体系</text>
 
-  <!-- ===== Tier 4: Integration Layer ===== -->
-  <rect x="230" y="448" rx="10" ry="10" width="440" height="50" fill="url(#bottomGrad)"/>
-  <text x="450" y="470" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">复杂系统思维（整合层）</text>
-  <text x="450" y="487" text-anchor="middle" fill="#e8ecf1" font-size="11">所有工具协同作用，形成完整的科学认知体系</text>
+  <!-- Lines from bridge to integration -->
+  <line x1="480" y1="439" x2="480" y2="480" stroke="#4a8c5c" stroke-width="2" marker-end="url(#arrGreen)"/>
 
-  <!-- Legend -->
-  <rect x="20" y="520" rx="4" ry="4" width="14" height="14" fill="#fff" stroke="#e67e22" stroke-width="2"/>
-  <text x="40" y="533" fill="#2c3e50" font-size="11">★ = MKS核心概念</text>
-  <rect x="180" y="520" rx="4" ry="4" width="14" height="14" fill="#fff" stroke="#c8ccd0" stroke-width="1.5"/>
-  <text x="200" y="533" fill="#2c3e50" font-size="11">□ = 支撑概念</text>
-  <rect x="340" y="520" rx="4" ry="4" width="14" height="14" fill="#27ae60" opacity="0.85"/>
-  <text x="360" y="533" fill="#27ae60" font-size="11">⟶ = 应用整合路径</text>
-  <!-- Gauge icon -->
-  <circle cx="560" cy="527" r="8" fill="none" stroke="#2c3e50" stroke-width="1.5"/>
-  <line x1="560" y1="527" x2="560" y2="521" stroke="#2c3e50" stroke-width="1.5"/>
-  <text x="574" y="533" fill="#5d6d7e" font-size="10">工程蓝图桌</text>
+  <!-- ===== TIER 3: INTEGRATION LAYER ===== -->
+  <rect x="200" y="485" width="560" height="56" rx="12" fill="url(#headerGrad)" filter="url(#shadow)"/>
+  <text x="480" y="509" text-anchor="middle" fill="#f0e6d8" font-size="16" font-weight="bold" font-family="sans-serif">\u{1F30D} 复杂系统思维 — 整合应用</text>
+  <text x="480" y="529" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">所有工具协同作用，应对现实世界的复杂性</text>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="30" y="568" width="12" height="12" rx="2" fill="#fffefb" stroke="#c4793b" stroke-width="2"/>
+  <text x="48" y="579" fill="#475569" font-size="10" font-family="sans-serif">\u2605 = MKS核心概念</text>
+  <rect x="180" y="568" width="12" height="12" rx="2" fill="#fffefb" stroke="#c8bfb0" stroke-width="1"/>
+  <text x="198" y="579" fill="#475569" font-size="10" font-family="sans-serif">\u25A1 = 支撑概念</text>
+  <rect x="330" y="568" width="12" height="12" rx="2" fill="#4a8c5c" opacity="0.7"/>
+  <text x="348" y="579" fill="#475569" font-size="10" font-family="sans-serif">\u2501\u2501 = 递进整合路径</text>
+  <text x="510" y="579" fill="#94a3b8" font-size="10" font-family="sans-serif">The Scientist\'s Instrument Workshop \u2014 卓克\u00b7科学思维课</text>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
@@ -1331,13 +1388,9 @@ function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.r
 
 function startQuiz(mode){
   quizState.mode=mode;
-  quizState.index=0;
   quizState.correct=0;
   quizState.total=0;
   quizState.streak=0;
-  quizState.answered=false;
-  quizState.selected=-1;
-  quizState.shortAnswers=[];
   quizState.startTime=Date.now();
   quizState.active=true;
 
@@ -1348,117 +1401,101 @@ function startQuiz(mode){
     qs=[...QUIZ_DATA];
   }
   quizState.questions=qs;
-  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  document.getElementById('quiz-info').textContent='共 '+qs.length+' 题，开始答题！';
   document.getElementById('quiz-result').style.display='none';
-  renderQuizQuestion();
+  renderAllQuiz();
   startQuizTimer();
 }
 
-function renderQuizQuestion(){
+// 渲染全部题目（一页显示所有，点击选项即时判分）
+function renderAllQuiz(){
   const container=document.getElementById('quiz-container');
   const qs=quizState.questions;
-  const idx=quizState.index;
-  if(idx>=qs.length){
-    finishQuiz();
-    return;
-  }
-  const q=qs[idx];
-  container.innerHTML='';
-  const card=document.createElement('div');
-  card.className='quiz-card';
-
-  if(q.type==='choice'){
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
-      <div class="options" id="quiz-options">
-        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  } else {
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
-      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
-      <div style="margin-top:8px;">
-        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  }
-  container.appendChild(card);
-  quizState.answered=false;
-  quizState.selected=-1;
+  let html='';
+  qs.forEach((q,i)=>{
+    if(q.type==='choice'){
+      html+='<div class="quiz-card" id="quiz-card-'+i+'">'+
+        '<h3>第 '+(i+1)+'/'+qs.length+' 题 (选择题)</h3>'+
+        '<p style="font-size:14px;margin-bottom:10px;">'+q.q+'</p>'+
+        '<div class="options" id="quiz-opts-'+i+'">'+
+          q.options.map((opt,j)=>'<div class="option" onclick="answerQuizQ('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+opt+'</div>').join('')+
+        '</div>'+
+        '<div class="feedback" id="quiz-fb-'+i+'"></div>'+
+      '</div>';
+    } else {
+      html+='<div class="quiz-card" id="quiz-card-'+i+'">'+
+        '<h3>第 '+(i+1)+'/'+qs.length+' 题 (简答题)</h3>'+
+        '<p style="font-size:14px;margin-bottom:10px;">'+q.q+'</p>'+
+        '<textarea class="short-input" id="quiz-essay-'+i+'" placeholder="输入你的回答..."></textarea>'+
+        '<div style="margin-top:8px;">'+
+          '<button class="btn btn-primary btn-sm" onclick="answerQuizEssay('+i+')">提交</button>'+
+        '</div>'+
+        '<div class="feedback" id="quiz-fb-'+i+'"></div>'+
+      '</div>';
+    }
+  });
+  html+='<div style="margin-top:16px;text-align:center;">'+
+    '<button class="btn btn-warning" onclick="finishQuiz()">\u{1F4E9} 提交全部答案</button>'+
+  '</div>';
+  container.innerHTML=html;
 }
 
-function selectChoice(i){
-  if(quizState.answered) return;
-  const q=quizState.questions[quizState.index];
-  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
-    el.classList.toggle('selected',idx===i);
+// 选择题作答
+function answerQuizQ(qIdx,optIdx){
+  var optsEl=document.getElementById('quiz-opts-'+qIdx);
+  if(!optsEl || optsEl.dataset.answered==='1') return;
+  optsEl.dataset.answered='1';
+  var q=quizState.questions[qIdx];
+  var isCorrect=optIdx===q.answer;
+  optsEl.querySelectorAll('.option').forEach(function(el,j){
+    el.style.pointerEvents='none';
+    if(j===q.answer) el.classList.add('correct');
+    if(j===optIdx&&!isCorrect) el.classList.add('wrong');
+    if(j===optIdx) el.classList.add('selected');
   });
-  quizState.selected=i;
-}
-
-function submitChoice(){
-  if(quizState.selected===-1) return;
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
-  const options=document.querySelectorAll('#quiz-options .option');
-  options.forEach((el,idx)=>{
-    if(idx===q.answer) el.classList.add('correct');
-    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
-  });
+  var fb=document.getElementById('quiz-fb-'+qIdx);
   quizState.total++;
-  if(quizState.selected===q.answer){
+  if(isCorrect){
     quizState.correct++;
     quizState.streak++;
     fb.className='feedback show correct';
-    fb.innerHTML=`✅ 回答正确！${q.explain||''}`;
+    fb.innerHTML='\u2705 回答正确！'+(q.explain||'');
   } else {
     quizState.streak=0;
     fb.className='feedback show wrong';
-    fb.innerHTML=`❌ 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}`;
+    fb.innerHTML='\u274c 回答错误。正确答案是 '+String.fromCharCode(65+q.answer)+'. '+q.options[q.answer]+'<br>'+(q.explain||'');
     addWrongBook(q.q,q.options[q.answer],q.explain||'');
   }
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2000);
 }
 
-function submitShortAnswer(){
-  const input=document.getElementById('short-input');
-  const val=input.value.trim();
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
+// 简答题作答
+function answerQuizEssay(qIdx){
+  var input=document.getElementById('quiz-essay-'+qIdx);
+  if(!input||input.disabled) return;
+  var val=input.value.trim();
+  if(!val) return;
+  var q=quizState.questions[qIdx];
+  var fb=document.getElementById('quiz-fb-'+qIdx);
+  fb.className='feedback show correct';
+  fb.innerHTML='\u2705 已记录你的回答。<br><strong>参考答案：</strong>'+(q.ans||'');
+  input.disabled=true;
   quizState.total++;
   quizState.correct++;
-  fb.className='feedback show correct';
-  fb.innerHTML=`✅ 已记录你的回答。<br><strong>参考答案：</strong>${q.ans||''}`;
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2500);
 }
 
 function finishQuiz(){
   quizState.active=false;
   document.getElementById('quiz-container').innerHTML='';
-  const el=document.getElementById('quiz-result');
+  var el=document.getElementById('quiz-result');
   el.style.display='block';
-  const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
-  el.innerHTML=`
-    <h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>
-    <p>正确：${quizState.correct} / ${quizState.total}</p>
-    <p>正确率：${pct}%</p>
-    <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
-    <p>连续答对：${quizState.streak}</p>
-    <button class="btn btn-primary btn-sm" onclick="startQuiz('${quizState.mode}')" style="margin-top:10px;">重新开始</button>
-  `;
+  var pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
+  el.innerHTML=
+    '<h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>'+
+    '<p>正确：'+quizState.correct+' / '+quizState.total+'</p>'+
+    '<p>正确率：'+pct+'%</p>'+
+    '<p>用时：'+Math.round((Date.now()-quizState.startTime)/1000)+'秒</p>'+
+    '<p>连续答对：'+quizState.streak+'</p>'+
+    '<button class="btn btn-primary btn-sm" onclick="startQuiz(\''+quizState.mode+'\')" style="margin-top:10px;">重新开始</button>';
   statsData.quizAnswered+=quizState.total;
   statsData.accuracy=Math.round(((statsData.accuracy*(statsData.quizAnswered-quizState.total))+(pct*quizState.total))/Math.max(1,statsData.quizAnswered));
   statsData.streak=Math.max(statsData.streak,quizState.streak);
@@ -1469,12 +1506,12 @@ function finishQuiz(){
 
 function startQuizTimer(){
   clearInterval(quizState._timer);
-  quizState._timer=setInterval(()=>{
+  quizState._timer=setInterval(function(){
     if(!quizState.active){clearInterval(quizState._timer);return;}
-    const elapsed=Math.floor((Date.now()-quizState.startTime)/1000);
-    const m=Math.floor(elapsed/60);
-    const s=elapsed%60;
-    document.getElementById('quiz-timer').textContent=`⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    var elapsed=Math.floor((Date.now()-quizState.startTime)/1000);
+    var m=Math.floor(elapsed/60);
+    var s=elapsed%60;
+    document.getElementById('quiz-timer').textContent='\u23f1 '+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   },1000);
 }
 
@@ -1488,7 +1525,7 @@ function resetQuiz(){
 }
 
 function addWrongBook(q,correctAns,explain){
-  wrongBook.unshift({q,correctAns,explain,time:new Date().toLocaleString()});
+  wrongBook.unshift({q:q,correctAns:correctAns,explain:explain,time:new Date().toLocaleString()});
   if(wrongBook.length>50) wrongBook.pop();
   saveState();
 }
@@ -1665,81 +1702,85 @@ function updateReviewStats(){
 // ==================== TAB 5: MINDMAP ====================
 function renderMindmap(){
   const el=document.getElementById('mindmap');
-  el.innerHTML=`
-    <ul>
-      <li>
-        <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-        <span class="tree-node root">科学思维工具箱</span>
-        <div class="children open">
-          <ul>
-            <li>
-              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-              <span class="tree-node branch">极限思维 → 务实判断</span>
-              <div class="children open">
-                <ul>
-                  <li><span class="tree-node leaf">极限思维：推到极值看本质</span></li>
-                  <li><span class="tree-node leaf">务实判断：回归物理约束</span></li>
-                  <li><span class="tree-node app">应用：商业谈判、工程设计</span></li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-              <span class="tree-node branch">数量级感知 → 变量分析</span>
-              <div class="children open">
-                <ul>
-                  <li><span class="tree-node leaf">数量级感知：10倍尺度校准</span></li>
-                  <li><span class="tree-node leaf">变量分析：识别关键变量</span></li>
-                  <li><span class="tree-node app">应用：费米估算、NEDC续航分析</span></li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-              <span class="tree-node branch">模型建构 → 计算推理</span>
-              <div class="children open">
-                <ul>
-                  <li><span class="tree-node leaf">模型建构：简化复杂现实</span></li>
-                  <li><span class="tree-node leaf">计算推理：量化替代直觉</span></li>
-                  <li><span class="tree-node app">应用：天气预报、质数分解</span></li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-              <span class="tree-node branch">证据挖掘 + 概率思维 → 科学方法总论</span>
-              <div class="children open">
-                <ul>
-                  <li><span class="tree-node leaf">证据挖掘：追溯证据链</span></li>
-                  <li><span class="tree-node leaf">概率思维：接纳不确定性</span></li>
-                  <li><span class="tree-node leaf">科学方法总论：观察→假设→验证→修正</span></li>
-                  <li><span class="tree-node app">应用：科学研究、日常决策</span></li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-              <span class="tree-node branch">复杂系统思维（整合层）</span>
-              <div class="children open">
-                <ul>
-                  <li><span class="tree-node leaf">理解多变量相互作用</span></li>
-                  <li><span class="tree-node leaf">警惕直觉的简单归因</span></li>
-                  <li><span class="tree-node app">应用：堵车分析、航空安全</span></li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li>
-    </ul>
-  `;
+  const branches = [
+    {label:'\u{1F4D0} 认知框架 (3个概念)', cls:'branch', open:true, children:[
+      {label:'\u2605 极限思维 — 推到极值看本质。剥离无关变量，让核心机制暴露。应用：商业谈判底牌试探、物理约束分析。', cls:'leaf mks', open:false},
+      {label:'\u2605 务实判断 — 回归物理约束和工程现实做决策。找到系统中的"承重墙"。应用：手机屏幕变大、CPU多核化。', cls:'leaf mks', open:false},
+      {label:'数量级感知 — 在10倍尺度上校准判断力。用费米估算快速判断方向对错。应用：1亿秒\u2248 3.17年、全球太阳能面积估算。', cls:'leaf', open:false}
+    ]},
+    {label:'\u{1F504} 系统思维 (3个概念)', cls:'branch', open:true, children:[
+      {label:'复杂系统思维 — 理解多变量交互导致的反直觉结果。因果链很长，直觉只看到最近一环。应用：堵车分析、航空安全。', cls:'leaf', open:false},
+      {label:'\u2605 模型建构 — 用简化模型理解和预测复杂现实。所有模型都是错的，但有些有用。应用：数值天气预报、持续可栖息带。', cls:'leaf mks', open:false},
+      {label:'变量分析 — 识别关键变量、区分虚假相关性。在"足够好"和"完美"之间平衡。应用：NEDC续航vs实际驾驶分析。', cls:'leaf', open:false}
+    ]},
+    {label:'\u{1F4CA} 推理工具 (3个概念)', cls:'branch', open:true, children:[
+      {label:'证据挖掘 — 像侦探一样追溯结论的证据链。证据\u2260真理，只是"尚未被证伪"。应用：牛顿身世研究、地质年代命名。', cls:'leaf', open:false},
+      {label:'计算推理 — 用数学和逻辑推理替代直觉判断。质数是乘法的"原子"。应用：笛卡尔XYZ未知数起源。', cls:'leaf', open:false},
+      {label:'概率思维 — 用量化概率替代非黑即白。接纳不确定性，在概率分布中找最优策略。应用：天气预报70%降雨概率、安全带50%风险降低。', cls:'leaf', open:false}
+    ]},
+    {label:'\u{1F3AF} 元方法论 (1个概念)', cls:'branch', open:true, children:[
+      {label:'\u2605 科学方法总论 — 观察\u2192假设\u2192验证\u2192修正。人类知识迭代的最高效方法。"发明了发明的方法"。应用：所有科学领域、日常决策。', cls:'leaf mks', open:false}
+    ]},
+    {label:'\u{1F30D} 整合应用层', cls:'branch app', open:true, children:[
+      {label:'所有工具协同 — 面对复杂现实问题时，先做变量分析识别关键因素，用极限思维找边界，建构简化模型，挖掘证据验证，计算推理量化，概率思维决策，最后通过科学方法迭代修正。', cls:'leaf', open:false},
+      {label:'典型案例：电动汽车续航"虚标" — 变量分析找出4个关键变量\u2192务实判断理解NEDC标准局限\u2192模型建构纳入实时数据\u2192科学方法总论验证修正。', cls:'leaf', open:false},
+      {label:'日常应用：判断保健品 — 证据挖掘查论文\u2192概率思维看统计显著性\u2192科学方法总论修正信念。', cls:'leaf', open:false}
+    ]}
+  ];
+
+  function buildTree(nodes, depth){
+    return nodes.map(n => {
+      const nodeClass = 'tree-node ' + (n.cls||'');
+      const toggleId = 'tgl_' + Math.random().toString(36).slice(2,8);
+      const childrenId = 'ch_' + Math.random().toString(36).slice(2,8);
+      let html = '<li>';
+      if(n.children && n.children.length > 0){
+        const open = n.open !== false;
+        html += '<span class="tree-toggle' + (open?' open':'') + '" id="' + toggleId + '" onclick="toggleMindNode(\'' + toggleId + '\',\'' + childrenId + '\')">' + (open?'\u25BE':'\u25B8') + '</span> ';
+      }else{
+        html += '<span style="display:inline-block;width:14px;"></span> ';
+      }
+      html += '<span class="' + nodeClass + '">' + n.label + '</span>';
+      if(n.children && n.children.length > 0){
+        const open = n.open !== false;
+        html += '<div class="children' + (open?' open':'') + '" id="' + childrenId + '"><ul>' + buildTree(n.children, depth+1) + '</ul></div>';
+      }
+      html += '</li>';
+      return html;
+    }).join('');
+  }
+
+  el.innerHTML = '<ul style="list-style:none;padding-left:0;">' +
+    '<li>' +
+      '<span class="tree-toggle open" id="mind-root-tgl" onclick="toggleMindNode(\'mind-root-tgl\',\'mind-root-ch\')">\u25BE</span> ' +
+      '<span class="tree-node root">\u{1F527} 科学思维工具箱 \u2014 10个核心概念</span>' +
+      '<div class="children open" id="mind-root-ch"><ul>' + buildTree(branches, 1) + '</ul></div>' +
+    '</li>' +
+  '</ul>';
 }
+
+function toggleMindNode(tglId, chId){
+  const tgl = document.getElementById(tglId);
+  const ch = document.getElementById(chId);
+  if(!tgl || !ch) return;
+  const isOpen = ch.classList.contains('open');
+  if(isOpen){
+    ch.classList.remove('open');
+    tgl.classList.remove('open');
+    tgl.textContent = '\u25B8';
+  } else {
+    ch.classList.add('open');
+    tgl.classList.add('open');
+    tgl.textContent = '\u25BE';
+  }
+}
+
 function toggleTree(el){
   const parent=el.parentElement;
   const children=parent.querySelector('.children');
   if(!children) return;
   children.classList.toggle('open');
-  el.textContent=children.classList.contains('open')?'[−]':'[+]';
+  el.textContent=children.classList.contains('open')?'\u2212':'+';
 }
 
 // ==================== TAB 6: SOCRATIC ====================
@@ -1817,13 +1858,7 @@ renderSocratic();
 renderDecision();
 updateReviewStats();
 
-// Override quiz submit on choice click
-document.addEventListener('click',function(e){
-  const opt=e.target.closest('#quiz-options .option');
-  if(opt && !quizState.answered){
-    submitChoice();
-  }
-});
+// Quiz answer handlers use per-question onclick (see answerQuizQ / answerQuizEssay)
 
 // ==================== EXAM TIMER AUTO-START CHECK ====================
 // Ensure exam timer is cleaned up when tab is hidden
