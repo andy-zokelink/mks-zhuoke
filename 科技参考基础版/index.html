@@ -3,1296 +3,783 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克·科技参考基础版 · 最小知识集</title>
+<title>卓克·科技参考基础版 · 科技观测站</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
---bg:#fdf6ec;--card:#fffaf2;--accent:#c0392b;--accent-light:#e74c3c;
---text:#3d2f2f;--text-light:#6b5757;--text-muted:#9b8585;--border:#e8d5c4;
---gold:#b8860b;--gold-light:#d4a853;--success:#27ae60;--warn:#e67e22;--blue:#2980b9;
---shadow:0 2px 12px rgba(60,30,20,.08);--shadow-md:0 4px 18px rgba(60,30,20,.12);
---radius:10px;--radius-sm:6px;
-}
-html{font-size:clamp(14px,1.2vw,16px);scroll-behavior:smooth}
-body{
-font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh;
-}
+/* ============================================================
+   科技观测站 (Tech Observatory) — 卓克·科技参考基础版 导航主页
+   视觉隐喻：暖色系的科技雷达站/观测台，纯 CSS 打造
+   设计语言：黄铜器械 + 暖金光芒 + 学术纸张质感
+   ============================================================ */
 
-/* TOP BAR */
-.top-bar{
-position:sticky;top:0;z-index:100;
-background:linear-gradient(135deg,#3d2f2f 0%,#5a3e3e 100%);
-color:#fdf6ec;padding:10px 16px;
-display:flex;align-items:center;justify-content:space-between;
-flex-wrap:wrap;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.2);
-}
-.top-bar h1{font-size:clamp(14px,2.5vw,18px);font-weight:600;white-space:nowrap}
-.top-bar .home-link{
-color:#d4a574;font-size:13px;border:1px solid #d4a574;
-padding:3px 10px;border-radius:14px;white-space:nowrap;
-transition:all .2s;text-decoration:none;
-}
-.top-bar .home-link:hover{background:#d4a574;color:#3d2f2f}
-
-.container{max-width:960px;margin:0 auto;padding:0 clamp(12px,3vw,24px)}
-
-/* TAB BAR */
-.tab-bar{
-position:sticky;top:44px;z-index:99;
-display:flex;flex-wrap:wrap;gap:4px;
-padding:8px clamp(4px,1vw,12px);
-background:rgba(253,246,236,.95);backdrop-filter:blur(8px);
-border-bottom:2px solid var(--border);
-justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch;
-}
-.tab-btn{
-padding:7px clamp(8px,2vw,14px);border:none;border-radius:18px;
-background:var(--card);color:var(--text-light);font-size:.8rem;
-cursor:pointer;transition:all .2s;white-space:nowrap;border:1px solid var(--border);
-}
-.tab-btn:hover{border-color:var(--accent);color:var(--accent)}
-.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-
-.tab-content{display:none;animation:fadeIn .35s ease}
-.tab-content.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-h2{font-size:clamp(1.1rem,2vw,1.4rem);color:var(--accent);margin:20px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--gold-light)}
-h3{font-size:clamp(1rem,1.5vw,1.15rem);color:var(--text);margin:16px 0 8px}
-
-.card{
-background:var(--card);border-radius:var(--radius);
-padding:clamp(14px,2.5vw,20px);box-shadow:var(--shadow);
-border:1px solid var(--border);margin-bottom:16px;
-}
-.card h3{color:var(--accent);margin-bottom:8px;font-size:1.05rem}
-
-.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
-.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-
-.concept-card{
-background:var(--card);border-radius:var(--radius);padding:16px;
-box-shadow:var(--shadow);border-left:4px solid var(--accent);
-transition:transform .2s;cursor:pointer;
-}
-.concept-card:hover{transform:translateY(-2px)}
-.concept-card.mks{border-left-color:var(--gold);position:relative}
-.concept-card.mks::after{content:'★';position:absolute;top:8px;right:12px;color:var(--gold);font-size:1.2rem}
-.concept-card h4{font-size:.95rem;color:var(--accent);margin-bottom:6px}
-.concept-card p{font-size:.82rem;color:var(--text-light);line-height:1.5}
-
-.mks-hero{text-align:center;padding:clamp(16px,3vw,28px) 0}
-.mks-hero .core-goal{
-font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--accent);
-font-weight:bold;max-width:700px;margin:0 auto;line-height:1.8;
+:root {
+  --bg:            #fdf6ec;
+  --bg-deep:       #f8eedb;
+  --card:          #fffaf2;
+  --card-hover:    #fff8eb;
+  --text:          #3d2f2f;
+  --text-light:    #6b5b5b;
+  --text-muted:    #9b8585;
+  --gold:          #b8860b;
+  --gold-bright:   #d4a853;
+  --gold-pale:     #e8d5a3;
+  --brass:         #c4a840;
+  --brass-dark:    #8a7020;
+  --deep-red:      #8b1a1a;
+  --accent:        #c0392b;
+  --accent-soft:   #d4745c;
+  --border:        #e8d5c4;
+  --border-strong: #d4c0a8;
+  --shadow-sm:     0 2px 8px rgba(60,30,20,.07);
+  --shadow-md:     0 6px 20px rgba(60,30,20,.10);
+  --shadow-lg:     0 12px 32px rgba(60,30,20,.14);
+  --radius:        12px;
+  --radius-sm:     8px;
+  --transition:    0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mks-core-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.mks-core{
-background:linear-gradient(135deg,#fff5f5,#fffaf2);
-border:2px solid var(--accent);border-radius:12px;padding:20px;position:relative;
-}
-.mks-core .star{color:var(--gold);font-size:1.2rem}
-.mks-core .title{font-weight:bold;color:var(--accent);margin:6px 0}
-.mks-core .why{font-size:.82rem;color:var(--text-light);line-height:1.5}
-.mks-core .evidence{font-size:.78rem;color:var(--accent);margin-top:6px;font-style:italic}
+* { margin:0; padding:0; box-sizing:border-box; }
 
-.progress-wrap{margin:16px 0}
-.progress-label{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:4px;color:var(--text-light)}
-.progress-bar{height:10px;border-radius:5px;background:var(--border);overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-light));border-radius:5px;transition:width .5s}
-
-/* SVG */
-.svg-wrap{overflow-x:auto;margin:16px 0;border-radius:var(--radius);background:var(--card);padding:16px;-webkit-overflow-scrolling:touch}
-.svg-wrap svg{min-width:700px;display:block;margin:0 auto}
-
-/* FLIP CARD */
-.flip-card{perspective:1000px;height:clamp(260px,42vw,320px);margin-bottom:14px}
-.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
-.flip-inner.flipped{transform:rotateY(180deg)}
-.flip-front,.flip-back{
-position:absolute;width:100%;height:100%;backface-visibility:hidden;
-border-radius:10px;padding:clamp(16px,3vw,24px);
-display:flex;flex-direction:column;justify-content:center;align-items:center;
-text-align:center;box-shadow:var(--shadow);border:1px solid var(--border);
-}
-.flip-front{background:var(--card)}
-.flip-back{
-background:linear-gradient(135deg,#fffaf2,#fef5e7);
-transform:rotateY(180deg);overflow-y:auto;
-align-items:flex-start;text-align:left;font-size:clamp(.8rem,1.6vw,.9rem);
-}
-.flip-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin:12px 0}
-.flip-nav .btn{min-width:80px}
-
-/* QUIZ */
-.quiz-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
-.quiz-card .q-num{font-weight:700;color:var(--accent);margin-bottom:6px}
-.quiz-card .q-text{font-size:.95rem;margin-bottom:12px;line-height:1.6}
-.quiz-card .option{
-display:block;padding:10px 14px;margin:4px 0;border:1px solid var(--border);
-border-radius:8px;cursor:pointer;transition:all .2s;font-size:.88rem;background:var(--card);
-}
-.quiz-card .option:hover{background:#fff5f0;border-color:var(--accent)}
-.quiz-card .option.selected{background:#ffe8e4;border-color:var(--accent);color:var(--accent);font-weight:600}
-.quiz-card .option.correct{background:#d4edda!important;border-color:var(--success)!important;color:#155724!important}
-.quiz-card .option.wrong{background:#f8d7da!important;border-color:var(--accent)!important;color:#721c24!important}
-.quiz-card .feedback{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.85rem;line-height:1.5}
-.quiz-card .feedback.correct{background:#d4edda;color:#155724}
-.quiz-card .feedback.wrong{background:#f8d7da;color:#721c24}
-.quiz-timer{text-align:center;font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:8px}
-
-.essay-area{
-width:100%;min-height:80px;border:1px solid var(--border);
-border-radius:8px;padding:10px;font-family:inherit;font-size:.88rem;
-resize:vertical;background:var(--bg);
+html {
+  font-size: clamp(14px, 1.2vw, 16px);
+  scroll-behavior: smooth;
 }
 
-/* MINDMAP */
-.mindmap{padding:0}
-.mindmap .node{margin-left:20px}
-.mindmap .node-header{cursor:pointer;padding:6px 0;font-weight:bold;color:var(--accent);display:flex;align-items:center;gap:6px;font-size:.92rem}
-.mindmap .node-header::before{content:"▸";display:inline-block;transition:transform .2s;font-size:.7rem}
-.mindmap .node-header.open::before{transform:rotate(90deg)}
-.mindmap .node-children{display:none;margin-left:16px;border-left:2px solid var(--border);padding-left:10px}
-.mindmap .node-children.open{display:block}
-.mindmap .leaf{padding:3px 0;font-size:.88rem;color:var(--text-light)}
-
-/* SOCRATIC */
-.socratic-item{margin-bottom:12px}
-.socratic-q{cursor:pointer;padding:12px 16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);font-weight:700;transition:all .2s;font-size:.92rem}
-.socratic-q:hover{border-color:var(--accent);background:#fff5f5}
-.socratic-q::before{content:'❓ '}
-.socratic-a{display:none;padding:12px 16px;background:#fef9f4;border-radius:0 0 var(--radius) var(--radius);font-size:.85rem;color:var(--text-light);line-height:1.7}
-.socratic-a.open{display:block}
-.socratic-sub{margin-left:16px;border-left:2px solid var(--gold-light);padding-left:12px;margin-top:8px}
-.socratic-sub .socratic-q{font-size:.85rem;padding:8px 12px}
-.socratic-sub .socratic-q::before{content:'↳ '}
-
-/* DECISION */
-.decision-round{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
-.decision-round .scenario{font-weight:700;margin-bottom:12px;color:var(--accent);line-height:1.6}
-.decision-round .d-choice{display:block;width:100%;text-align:left;padding:10px 14px;margin:4px 0;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--bg);font-family:inherit;font-size:.88rem;transition:all .2s}
-.decision-round .d-choice:hover{background:#fff5f5;border-color:var(--accent)}
-.decision-round .d-choice.chosen{border-color:var(--accent);background:#ffe8e4}
-.decision-round .d-result{display:none;margin-top:12px;padding:14px;border-radius:8px;background:#fef9f4;font-size:.85rem;line-height:1.7}
-
-/* STATS */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.stat-card{text-align:center;padding:16px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
-.stat-card .num{font-size:2rem;font-weight:700;color:var(--accent)}
-.stat-card .lbl{font-size:.78rem;color:var(--text-light);margin-top:4px}
-
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:.84rem;margin:12px 0}
-.tbl th,.tbl td{padding:8px 12px;border:1px solid var(--border);text-align:left}
-.tbl th{background:var(--accent);color:#fff;font-weight:600}
-.tbl tr:nth-child(even){background:#fef9f4}
-
-/* BTN */
-.btn{
-display:inline-block;padding:8px 20px;background:var(--accent);color:#fff;
-border:none;border-radius:20px;cursor:pointer;font-size:.88rem;
-transition:all .2s;font-weight:600;
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background:
+    /* 暖米色基底 */
+    linear-gradient(175deg,
+      #fef9f2 0%,
+      #fdf6ec 8%,
+      #faf0e0 28%,
+      #f5ead5 52%,
+      #faf0e0 76%,
+      #fdf6ec 100%
+    ),
+    /* 纸张纤维纹理 */
+    repeating-linear-gradient(0deg,
+      transparent, transparent 1px,
+      rgba(139,105,20,0.012) 1px, rgba(139,105,20,0.012) 3px
+    ),
+    repeating-linear-gradient(90deg,
+      transparent, transparent 14px,
+      rgba(139,105,20,0.018) 14px, rgba(139,105,20,0.018) 15px
+    );
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
 }
-.btn:hover{background:var(--accent-light)}
-.btn-outline{background:transparent;color:var(--accent);border:2px solid var(--accent)}
-.btn-outline:hover{background:var(--accent);color:#fff}
-.btn-sm{padding:5px 14px;font-size:.78rem}
-.btn-success{background:var(--success);color:#fff}
-.btn-success:hover{background:#219a52}
-.btn-warn{background:var(--warn);color:#fff}
-.btn-gold{background:var(--gold);color:#fff}
 
-.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.75rem;font-weight:700}
-.badge-star{background:#fff3cd;color:var(--gold)}
-.badge-core{background:#fde8e8;color:var(--accent)}
-.badge-done{background:#d4edda;color:var(--success)}
-
-.timer{font-size:1.3rem;font-weight:700;color:var(--accent);text-align:center;padding:10px}
-.timer.warn{animation:pulse .5s infinite alternate}
-@keyframes pulse{from{opacity:1}to{opacity:.5}}
-
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;margin:2px;background:#fef0e0;color:var(--accent)}
-
-.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:10px 0;font-size:.78rem;color:var(--text-light)}
-.legend span{display:flex;align-items:center;gap:4px}
-
-.back-home{text-align:center;margin:16px 0;font-size:.85rem}
-.back-home a{color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--border);padding-bottom:2px}
-
-/* TOPIC SUB-MKS */
-.topic-section{margin:20px 0}
-.topic-section h3{margin-bottom:12px}
-.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.topic-card{background:var(--card);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow);border:1px solid var(--border);font-size:.84rem;transition:transform .2s}
-.topic-card:hover{transform:translateY(-2px)}
-.topic-card strong{color:var(--accent);font-size:.88rem}
-.topic-card .articles{color:var(--text-light);font-size:.78rem;margin-top:4px}
-
-@media(max-width:640px){
-.tab-bar{gap:2px;padding:6px 2px}
-.tab-btn{padding:5px 8px;font-size:.7rem;border-radius:14px}
-.grid2,.grid3,.grid4{grid-template-columns:1fr}
-.flip-card{height:380px}
-.stat-grid{grid-template-columns:repeat(2,1fr)}
+/* 环境光晕 — 暖金光芒从中央扩散 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 32%,
+    rgba(212,168,83,0.10) 0%,
+    rgba(212,168,83,0.04) 25%,
+    transparent 50%,
+    rgba(40,25,10,0.06) 78%,
+    rgba(40,25,10,0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
+
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
+.main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 clamp(16px, 3vw, 32px) 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* ============================================================
+   HEADER — 黄铜铭牌 + 标题
+   ============================================================ */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(20px, 3.5vw, 36px);
+  margin-bottom: clamp(8px, 1.5vw, 16px);
+  text-align: center;
+}
+
+/* 顶部导航链接 — 返回知识主板 */
+.nav-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.brass-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(180deg, #dcc870 0%, #c4a840 25%, #b09030 55%, #c4a840 80%, #d4b860 100%);
+  border: 1.5px solid var(--brass-dark);
+  border-radius: 3px;
+  padding: 5px 14px;
+  text-decoration: none;
+  color: #3d2818;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,220,0.4),
+    inset 0 -1px 2px rgba(0,0,0,0.12);
+  position: relative;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.brass-tag:hover {
+  background: linear-gradient(180deg, #eed880 0%, #d4b850 25%, #c0a040 55%, #d4b850 80%, #e4c870 100%);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,220,0.5);
+}
+.brass-tag::before,
+.brass-tag::after {
+  content: '';
+  position: absolute;
+  width: 4px; height: 4px;
+  background: radial-gradient(circle at 40% 40%, #a08030 0%, #604810 100%);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.brass-tag::before { left: 5px; }
+.brass-tag::after  { right: 5px; }
+
+/* 主标题 */
+.title-main {
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 900;
+  color: var(--deep-red);
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+}
+
+.title-sub {
+  font-size: clamp(0.78rem, 1.3vw, 0.9rem);
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+  font-weight: 400;
+}
+
+/* 分隔装饰线 */
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  margin: 8px 0;
+  opacity: 0.7;
+}
+.divider-ornament::before,
+.divider-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-pale), var(--brass), var(--gold-pale), transparent);
+}
+.divider-ornament .diamond {
+  width: 7px; height: 7px;
+  background: var(--brass);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  box-shadow: 0 0 4px rgba(180,134,11,0.4);
+}
+
+
+/* ============================================================
+   INTRO — 课程简介
+   ============================================================ */
+.intro {
+  max-width: 680px;
+  text-align: center;
+  margin: 0 auto clamp(20px, 2.5vw, 28px);
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  color: var(--text-light);
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+}
+.intro strong {
+  color: var(--deep-red);
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   RADAR OBSERVATORY — 中央雷达站 (纯 CSS)
+   ============================================================ */
+.observatory {
+  position: relative;
+  width: clamp(260px, 38vw, 340px);
+  height: clamp(260px, 38vw, 340px);
+  margin: 0 auto clamp(28px, 3.5vw, 40px);
+  flex-shrink: 0;
+}
+
+/* 外圈光晕 */
+.radar-glow {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(212,168,83,0.09) 55%,
+    rgba(212,168,83,0.03) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* 雷达底盘 */
+.radar-base {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 48% 45%,
+      #fefbf5 0%,
+      #fdf6ec 30%,
+      #f8eedb 60%,
+      #f0e2cc 100%
+    );
+  box-shadow:
+    0 0 0 3px var(--border-strong),
+    0 0 0 6px rgba(212,168,83,0.18),
+    0 0 0 9px var(--border),
+    inset 0 0 60px rgba(180,134,11,0.06),
+    var(--shadow-lg);
+}
+
+/* 同心圆环 */
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed var(--gold-pale);
+  pointer-events: none;
+}
+.radar-ring.r1 { inset: 12%; border-color: rgba(180,134,11,0.25); border-width:1px; }
+.radar-ring.r2 { inset: 28%; border-color: rgba(180,134,11,0.30); border-width:1px; }
+.radar-ring.r3 { inset: 44%; }
+.radar-ring.r4 { inset: 60%; border-style:dotted; border-color:rgba(180,134,11,0.20); }
+
+/* 十字准线 */
+.radar-cross {
+  position: absolute;
+  pointer-events: none;
+}
+.radar-cross.h {
+  top: 50%; left: 4%; right: 4%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(180,134,11,0.18) 8%,
+    rgba(180,134,11,0.35) 50%,
+    rgba(180,134,11,0.18) 92%,
+    transparent 100%
+  );
+  transform: translateY(-50%);
+}
+.radar-cross.v {
+  left: 50%; top: 4%; bottom: 4%;
+  width: 1px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(180,134,11,0.18) 8%,
+    rgba(180,134,11,0.35) 50%,
+    rgba(180,134,11,0.18) 92%,
+    transparent 100%
+  );
+  transform: translateX(-50%);
+}
+
+/* 对角扫描线 */
+.radar-diag {
+  position: absolute;
+  top: 50%; left: 50%;
+  pointer-events: none;
+}
+.radar-diag::before,
+.radar-diag::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 1px;
+  height: 42%;
+  background: linear-gradient(180deg,
+    rgba(180,134,11,0.22) 0%,
+    rgba(180,134,11,0.08) 60%,
+    transparent 100%
+  );
+  transform-origin: top center;
+}
+.radar-diag::before { transform: translate(-50%, -100%) rotate(38deg); }
+.radar-diag::after  { transform: translate(-50%, -100%) rotate(-38deg); }
+
+/* 中心罗盘 */
+.radar-compass {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: clamp(40px, 6vw, 54px);
+  height: clamp(40px, 6vw, 54px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 40%,
+    #d4a853 0%,
+    #b8860b 35%,
+    #8a6518 70%,
+    #6b4a10 100%
+  );
+  box-shadow:
+    0 0 0 3px rgba(180,134,11,0.35),
+    0 0 0 6px rgba(180,134,11,0.12),
+    0 2px 12px rgba(60,30,10,0.3),
+    inset 0 1px 1px rgba(255,255,220,0.25);
+}
+.radar-compass::before {
+  content: '';
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,200,0.3);
+}
+.radar-compass::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 6px; height: 6px;
+  background: #fffef5;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px 2px rgba(255,250,220,0.7);
+  animation: compass-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes compass-pulse {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255,250,220,0.7); }
+  50%      { box-shadow: 0 0 14px 5px rgba(255,250,220,0.95); }
+}
+
+/* 方向标记 */
+.radar-label {
+  position: absolute;
+  font-size: clamp(0.6rem, 0.9vw, 0.7rem);
+  font-weight: 700;
+  color: var(--brass-dark);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+.radar-label.n { top: 4%;    left: 50%; transform: translate(-50%, -50%); }
+.radar-label.s { bottom: 2%; left: 50%; transform: translate(-50%, 50%); }
+.radar-label.e { top: 50%;   right: 3%; transform: translate(50%, -50%); }
+.radar-label.w { top: 50%;   left: 3%;  transform: translate(-50%, -50%); }
+
+/* 扫描光点 */
+.radar-dot {
+  position: absolute;
+  width: clamp(4px, 0.7vw, 6px);
+  height: clamp(4px, 0.7vw, 6px);
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 6px 2px rgba(212,168,83,0.6);
+  pointer-events: none;
+}
+.radar-dot.d1 { top: 18%; left: 32%; animation: dot-blink 3s ease-in-out infinite; }
+.radar-dot.d2 { top: 24%; right:22%; animation: dot-blink 3s ease-in-out 0.5s infinite; }
+.radar-dot.d3 { bottom:22%; left:25%; animation: dot-blink 3s ease-in-out 1s infinite; }
+.radar-dot.d4 { bottom:20%; right:20%;animation: dot-blink 3s ease-in-out 1.5s infinite; }
+.radar-dot.d5 { top: 40%; left:10%;  animation: dot-blink 3s ease-in-out 0.8s infinite; }
+.radar-dot.d6 { top: 38%; right:12%; animation: dot-blink 3s ease-in-out 2s infinite; }
+
+@keyframes dot-blink {
+  0%, 100% { opacity:0.35; transform:scale(1); }
+  50%      { opacity:1;    transform:scale(1.5); }
+}
+
+
+/* ============================================================
+   TOPIC CARDS GRID
+   ============================================================ */
+.cards-section {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.cards-section-label {
+  text-align: center;
+  font-size: clamp(0.75rem, 1.1vw, 0.82rem);
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  margin-bottom: clamp(14px, 2vw, 20px);
+  text-transform: uppercase;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 2vw, 22px);
+}
+
+/* ============================================================
+   INDIVIDUAL CARD
+   ============================================================ */
+.topic-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: clamp(16px, 2.2vw, 24px) clamp(14px, 2vw, 22px);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  overflow: hidden;
+  min-height: 180px;
+}
+
+.topic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gold-pale);
+  background: var(--card-hover);
+}
+
+/* 卡片顶部装饰条 */
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12px; right: 12px;
+  height: 3px;
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold-pale) 20%,
+    var(--gold-bright) 50%,
+    var(--gold-pale) 80%,
+    transparent 100%
+  );
+  opacity: 0.55;
+  transition: opacity var(--transition);
+}
+.topic-card:hover::before {
+  opacity: 0.9;
+}
+
+/* 卡片编号圆圈 */
+.card-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-pale), var(--brass));
+  color: #3d2818;
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(139,105,20,0.25);
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+
+/* 卡片标题 */
+.card-title {
+  font-size: clamp(0.92rem, 1.3vw, 1.05rem);
+  font-weight: 700;
+  color: var(--deep-red);
+  margin-bottom: 6px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+}
+
+/* 卡片副标题 */
+.card-desc {
+  font-size: clamp(0.76rem, 1vw, 0.82rem);
+  color: var(--text-light);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 10px;
+}
+
+/* 文章数量指示器 */
+.card-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.count-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.count-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+  transition: width 0.6s ease;
+}
+
+.count-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+/* 卡片右下角的小箭头 */
+.card-arrow {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all var(--transition);
+  color: var(--gold);
+  font-size: 0.8rem;
+  line-height: 18px;
+  text-align: center;
+}
+.topic-card:hover .card-arrow {
+  opacity: 0.7;
+  transform: translateX(0);
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  margin-top: clamp(28px, 3.5vw, 40px);
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  line-height: 2;
+}
+
+.footer .brass-line {
+  display: block;
+  width: 60px;
+  height: 1px;
+  margin: 0 auto 12px;
+  background: linear-gradient(90deg, transparent, var(--gold-pale), var(--brass), var(--gold-pale), transparent);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 580px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .topic-card {
+    min-height: auto;
+    padding: 16px 14px;
+  }
+  .observatory {
+    width: 220px;
+    height: 220px;
+    margin-bottom: 24px;
+  }
+  .card-arrow {
+    opacity: 0.35;
+    transform: translateX(0);
+  }
+}
+
+/* 小屏隐藏副标题过长文本截断 */
+@media (max-width: 360px) {
+  .title-sub {
+    font-size: 0.7rem;
+  }
+  .intro {
+    font-size: 0.78rem;
+  }
+}
+
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-<h1>📡 卓克·科技参考基础版 · 最小知识集</h1>
-<a class="home-link" href="../index.html" title="返回知识主板">← 知识主板</a>
-</div>
+<div class="main">
+
+  <!-- ======== HEADER ======== -->
+  <header class="header">
+
+    <!-- 顶部导航 -->
+    <nav class="nav-top">
+      <a href="../index.html" class="brass-tag" title="返回知识主板">&#x2190; 知识主板</a>
+    </nav>
+
+    <!-- 主标题 -->
+    <h1 class="title-main">卓克&#xb7;科技参考基础版</h1>
+    <p class="title-sub">&#x5353;&#x514b;&#xb7;科技参考基础版 &#xb7; 317篇深度解读 &#xb7; 最小知识体系</p>
+
+    <!-- 装饰分隔线 -->
+    <div class="divider-ornament">
+      <span class="diamond"></span>
+    </div>
+  </header>
+
+  <!-- ======== INTRO ======== -->
+  <p class="intro">
+    这是一套由<strong>卓克</strong>主理的科技新闻深度解读课程，覆盖
+    <strong>室温超导、基因编辑、核安全、气候变化、三星堆考古、量子计算、人工智能、脑机接口、新冠疫苗、碳中和、太空探索、自动驾驶、食品科学</strong>
+    等全球科技热点。317篇文章构建了一套<strong>可迁移的科技思维操作系统</strong>，
+    帮助你在信息洪流中建立属于自己的认知锚点。
+  </p>
+
+  <!-- ======== CENTRAL RADAR ======== -->
+  <div class="observatory" aria-hidden="true">
+    <div class="radar-glow"></div>
+    <div class="radar-base"></div>
+    <div class="radar-ring r1"></div>
+    <div class="radar-ring r2"></div>
+    <div class="radar-ring r3"></div>
+    <div class="radar-ring r4"></div>
+    <div class="radar-cross h"></div>
+    <div class="radar-cross v"></div>
+    <div class="radar-diag"></div>
+    <div class="radar-compass"></div>
+    <span class="radar-label n">N</span>
+    <span class="radar-label s">S</span>
+    <span class="radar-label e">E</span>
+    <span class="radar-label w">W</span>
+    <div class="radar-dot d1"></div>
+    <div class="radar-dot d2"></div>
+    <div class="radar-dot d3"></div>
+    <div class="radar-dot d4"></div>
+    <div class="radar-dot d5"></div>
+    <div class="radar-dot d6"></div>
+  </div>
+
+  <!-- ======== TOPIC CARDS ======== -->
+  <section class="cards-section">
+    <p class="cards-section-label">&#x2014; 六大观测领域 &#x2014;</p>
+
+    <div class="cards-grid">
+
+      <!-- Card 1 -->
+      <a href="1-智能时代的底层代码.html" class="topic-card">
+        <span class="card-num">01</span>
+        <h2 class="card-title">智能时代的底层代码</h2>
+        <p class="card-desc">人工智能、芯片制程、算力革命与数字文明的基础设施</p>
+        <div class="card-count">
+          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:78%"></span></span>
+          <span class="count-label">~55篇</span>
+        </div>
+        <span class="card-arrow">&#x2192;</span>
+      </a>
+
+      <!-- Card 2 -->
+      <a href="2-生命科学与医学前沿.html" class="topic-card">
+        <span class="card-num">02</span>
+        <h2 class="card-title">生命科学与医学前沿</h2>
+        <p class="card-desc">基因编辑、脑机接口、神经科学、流行病与大健康革命</p>
+        <div class="card-count">
+          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:72%"></span></span>
+          <span class="count-label">~58篇</span>
+        </div>
+        <span class="card-arrow">&#x2192;</span>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="3-能源博弈与地球系统.html" class="topic-card">
+        <span class="card-num">03</span>
+        <h2 class="card-title">能源博弈与地球系统</h2>
+        <p class="card-desc">碳中和路径、核能安全、气候变化科学与全球能源转型</p>
+        <div class="card-count">
+          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:65%"></span></span>
+          <span class="count-label">~52篇</span>
+        </div>
+        <span class="card-arrow">&#x2192;</span>
+      </a>
+
+      <!-- Card 4 -->
+      <a href="4-星辰大海：航天与工程探索.html" class="topic-card">
+        <span class="card-num">04</span>
+        <h2 class="card-title">星辰大海：航天与工程探索</h2>
+        <p class="card-desc">火箭复用、深空探测、空间站、超级工程与极限制造</p>
+        <div class="card-count">
+          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:55%"></span></span>
+          <span class="count-label">~48篇</span>
+        </div>
+        <span class="card-arrow">&#x2192;</span>
+      </a>
+
+      <!-- Card 5 -->
+      <a href="5-饮食、健康与生活科学.html" class="topic-card">
+        <span class="card-num">05</span>
+        <h2 class="card-title">饮食、健康与生活科学</h2>
+        <p class="card-desc">食品科学、营养学、日常科技原理与生活方式的科学证据</p>
+        <div class="card-count">
+          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:58%"></span></span>
+          <span class="count-label">~50篇</span>
+        </div>
+        <span class="card-arrow">&#x2192;</span>
+      </a>
+
+      <!-- Card 6 -->
+      <a href="6-科学思维的操作系统.html" class="topic-card">
+        <span class="card-num">06</span>
+        <h2 class="card-title">科学思维的操作系统</h2>
+        <p class="card-desc">方法论、认知工具、批判性思维与科学决策的底层框架</p>
+        <div class="card-count">
+          <span class="count-bar-wrap"><span class="count-bar-fill" style="width:60%"></span></span>
+          <span class="count-label">~54篇</span>
+        </div>
+        <span class="card-arrow">&#x2192;</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="footer">
+    <span class="brass-line"></span>
+    卓克&#xb7;科技参考基础版 &#xb7; 317篇深度解读<br>
+    构建属于你自己的最小知识体系
+  </footer>
+
+</div><!-- /.main -->
 
-<div class="container">
-
-<p class="subtitle" style="text-align:center;color:var(--text-light);font-size:clamp(.85rem,1.5vw,.95rem);margin:12px 0 20px">
-317篇日更科技新闻解读 · 一套可迁移的科技思维操作系统
-</p>
-
-<!-- TAB BAR -->
-<nav class="tab-bar" id="tabBar">
-<button class="tab-btn active" data-tab="0">📊 总览</button>
-<button class="tab-btn" data-tab="1">🃏 知识卡片</button>
-<button class="tab-btn" data-tab="2">📝 题库</button>
-<button class="tab-btn" data-tab="3">⏱️ 考试</button>
-<button class="tab-btn" data-tab="4">🔄 复习</button>
-<button class="tab-btn" data-tab="5">🧭 思维导图</button>
-<button class="tab-btn" data-tab="6">💬 深度追问</button>
-<button class="tab-btn" data-tab="7">🔍 案例分析</button>
-<button class="tab-btn" data-tab="8">🎲 实战决策</button>
-</nav>
-
-<!-- ========== TAB 0: 总览 ========== -->
-<div class="tab-content active" data-tab="0">
-
-<div class="mks-hero">
-<div class="core-goal">
-卓克不是在教"科技新闻"，而是在教一套<strong>可迁移的科技思维操作系统</strong>。
-317篇文章覆盖AI、芯片、能源、生物、航天等领域，但反复使用的思维工具高度收敛——
-<strong>可能性空间</strong>教你缩减不确定性，<strong>演化思维</strong>教你理解复杂系统，
-<strong>信息量化</strong>教你精确思考，<strong>反馈回路</strong>教你调控系统。
-学完这门课，你带走的不是碎片知识，而是面对任何新技术的<strong>分析框架</strong>。
-</div>
-</div>
-
-<!-- 学习进度 -->
-<div class="progress-wrap">
-<div class="progress-label"><span>📖 学习进度</span><span id="progressPct">0%</span></div>
-<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-</div>
-
-<!-- ★ MKS核心：骨架中的骨架 -->
-<h3 style="margin:20px 0 12px">⭐ 最小知识集核心（4个骨架概念——理解这些，其余自然串联）</h3>
-<div class="mks-core-grid" id="mksCoreGrid"></div>
-
-<!-- 10大核心概念 -->
-<h3 style="margin:20px 0 12px">🔑 全部核心概念（10个）</h3>
-<div class="grid2" id="conceptGrid"></div>
-
-<!-- 概念关系图 -->
-<h3 style="margin:20px 0 12px">🕸️ 概念关系图</h3>
-<div class="svg-wrap" id="svgContainer"></div>
-<div class="legend">
-<span>━━ 主线派生</span><span style="color:var(--gold)">━━ 支撑/应用</span><span style="color:var(--success)">━━ 反馈回路</span>
-</div>
-
-<!-- 8大应用域 -->
-<h3 style="margin:20px 0 12px">🌐 8大应用域（思维工具的实战战场）</h3>
-<div class="grid2" id="topicGrid"></div>
-
-<!-- 边界知识 -->
-<h3 style="margin:20px 0 12px">📋 边界知识（知道存在即可，无需深究）</h3>
-<div class="card" style="overflow-x:auto">
-<table class="tbl" id="boundaryTable"></table>
-</div>
-
-<!-- 学习路径 -->
-<h3 style="margin:20px 0 12px">🗺️ 推荐学习路径（5阶段）</h3>
-<div id="learningPath"></div>
-
-</div>
-
-<!-- ========== TAB 1: 知识卡片 ========== -->
-<div class="tab-content" data-tab="1">
-<div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
-<div class="flip-nav">
-<button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
-<span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
-<button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
-</div>
-<div style="text-align:center;margin:8px 0">
-<button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button>
-</div>
-<div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
-<p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
-</div>
-
-<!-- ========== TAB 2: 题库 ========== -->
-<div class="tab-content" data-tab="2">
-<h3 style="margin-bottom:10px">📝 题库系统（随机抽题练习）</h3>
-<div style="margin-bottom:12px">
-<button class="btn" onclick="startQuiz()">🎲 随机抽题练习</button>
-<button class="btn btn-outline btn-sm" onclick="resetQuiz()" style="margin-left:8px">重置</button>
-<span style="margin-left:8px;font-size:.85rem;color:var(--text-light)" id="quizScore"></span>
-<span id="quizTimer" style="float:right;color:var(--accent);font-weight:700"></span>
-</div>
-<div id="quizContainer"></div>
-</div>
-
-<!-- ========== TAB 3: 考试 ========== -->
-<div class="tab-content" data-tab="3">
-<h3 style="margin-bottom:10px">⏱️ 考试模式</h3>
-<p style="color:var(--text-light);font-size:.85rem;margin-bottom:12px">从题库随机抽取 7道选择题 + 3道简答题，限时15分钟</p>
-<button class="btn" id="startExamBtn" onclick="startExam()">🎯 开始考试</button>
-<div class="quiz-timer" id="examTimer" style="display:none"></div>
-<div id="examContainer"></div>
-</div>
-
-<!-- ========== TAB 4: 复习 ========== -->
-<div class="tab-content" data-tab="4">
-<h3 style="margin-bottom:10px">🔄 复习模式</h3>
-
-<h4 style="margin:12px 0 8px">📊 学习统计</h4>
-<div class="stat-grid" id="statGrid">
-<div class="stat-card"><div class="num" id="statTotal">0</div><div class="lbl">总答题数</div></div>
-<div class="stat-card"><div class="num" id="statCorrect">0</div><div class="lbl">正确数</div></div>
-<div class="stat-card"><div class="num" id="statRate">0%</div><div class="lbl">正确率</div></div>
-<div class="stat-card"><div class="num" id="statDays">0</div><div class="lbl">学习天数</div></div>
-</div>
-
-<h4 style="margin:12px 0 8px">📕 错题本</h4>
-<div id="wrongBook" style="max-height:400px;overflow-y:auto">
-<p style="color:var(--text-light);font-size:.85rem">暂无错题记录</p>
-</div>
-
-<h4 style="margin:12px 0 8px">🎯 概念薄弱点分析</h4>
-<div id="weakAnalysis">
-<p style="color:var(--text-light);font-size:.85rem">暂无答题数据</p>
-</div>
-</div>
-
-<!-- ========== TAB 5: 思维导图 ========== -->
-<div class="tab-content" data-tab="5">
-<h3 style="margin-bottom:10px">🧭 思维导图（可折叠展开）</h3>
-<p style="color:var(--text-light);font-size:.85rem;margin-bottom:14px">三层概念体系 + 8大应用域，点击展开/折叠</p>
-<div class="mindmap" id="mindmap"></div>
-</div>
-
-<!-- ========== TAB 6: 苏格拉底问答 ========== -->
-<div class="tab-content" data-tab="6">
-<h3 style="margin-bottom:10px">💬 苏格拉底深度追问</h3>
-<p style="color:var(--text-light);font-size:.85rem;margin-bottom:14px">对每个核心概念2-3层追问，点击展开答案</p>
-<div id="socraticContainer"></div>
-</div>
-
-<!-- ========== TAB 7: 案例分析 ========== -->
-<div class="tab-content" data-tab="7">
-<h3 style="margin-bottom:10px">🔍 案例分析：室温超导事件</h3>
-<p style="color:var(--text-light);font-size:.85rem;margin-bottom:14px">用MKS四维度拆解2023年室温超导风波</p>
-<div id="caseStudy"></div>
-</div>
-
-<!-- ========== TAB 8: 实战决策 ========== -->
-<div class="tab-content" data-tab="8">
-<h3 style="margin-bottom:10px">🎲 实战决策模拟</h3>
-<p style="color:var(--text-light);font-size:.85rem;margin-bottom:14px">3轮决策模拟，每轮3个选项，选择后查看MKS分析</p>
-<div id="decisionContainer"></div>
-</div>
-
-</div><!-- .container -->
-
-<script>
-// ========== DATA ==========
-
-// 10 Core Concepts
-const concepts = [
-{id:'c1',name:'可能性空间',icon:'🎯',star:true,
-desc:'控制论根基：控制=缩减可能性。幸福家庭相似因为只有一条成功路径，不幸家庭各异因为失败路径无数。面对任何复杂问题，先画出可能性空间再行动。',
-define:'控制论奠基概念。任何系统的状态构成"可能性空间"——一棵无限分叉的状态树。控制的本质是主动缩减可能性，将系统导向目标状态。幸福只有一个状态（通过了所有关键节点的"是"选项），而不幸有无数种组合。',
-analogy:'如同GPS导航：从A到B有无数条路（可能性空间），导航控制就是缩减选项、选择最优路径。每次偏离（选"否"）都会打开新的分叉，最终抵达的地点可能相距甚远。',
-example:'卓克在004期用5个节点（缺点暴露、春节矛盾、孩子出生、婚外恋、财产分配）分析家庭幸福，证明"幸福的家庭总是相似"有严格的数学基础——5个节点各选"是"的唯一路径vs其他31种失败组合。1982年德国核聚变团队随机尝试更高温度反而发现稳定模式——随机控制在未知领域的应用。',
-counter:'可能性空间概念不适用于量子系统（叠加态不可缩减）。也不适用于纯随机过程——骰子的每次投掷可能性空间不变，不存在"控制"。'
-},
-{id:'c2',name:'演化思维',icon:'🧬',star:true,
-desc:'理解复杂系统的第一工具。变异+选择+保留。创新不可设计只能涌现；大灭绝是进步的催化剂；研究去中心化是活力的来源。',
-define:'源自达尔文但远超生物学。三要素：变异（多样性产生）、选择（环境压力淘汰）、保留（优势特征遗传）。应用于科技创新、社会组织、语言演化等一切复杂系统。关键推论：创新无法规划——我们不知道1000个企业中哪5个会成功，所以必须允许995个失败。',
-analogy:'如同投资组合管理：你不知道哪只股票会涨，所以必须分散投资。科技创新政策同理——资助1000个小团队比集中资助10个大项目更可能产出突破。但前者在政治上更难获得拨款。',
-example:'卓克在053-055期详解科技创新四来源：演化（大灭绝+去中心化）、涌现（增加多样性如薛定谔恋爱中写方程）、设计（局部最优）、幸运。英国皇家学会诞生于咖啡馆聚会——如果查理二世成功禁咖啡，牛顿、达尔文可能被"切削"掉。费曼图用30年传遍物理学界，R值高达75——比任何传染病都强。',
-counter:'演化思维容易陷入"描述替代解释"的陷阱——"它之所以是这样，是因为它以前是那样"等于没有解释。且演化理论随时过时：生于1880年的物理学家相信原子是西瓜模型，生于1910年的相信电子云。'
-},
-{id:'c3',name:'信息量化',icon:'📐',star:true,
-desc:'信息=不确定性缩减。用比特思维衡量知识的含金量。看门大爷的"小明在第一车间"提供了-lg(100/1000)=1比特信息——可精确计算的价值。',
-define:'香农信息论的核心：信息量定义为可能性缩减程度的对数。信息浓度=价值浓度。凡是缩减了事情发生可能性的因素都是信息。有效学习=最大化单位时间的信息获取。',
-analogy:'"这段文字是按字数付费的，能删则删；视频是按秒计费的，每多1秒扣10块钱——这样就能砍掉冗余。"信息密度思维如同卡路里计数——你知道可乐是高热量低营养，也应该知道垃圾信息是高时间消耗低信息量。',
-example:'卓克在116期精确定义信息量：找1000人中的小明（-lg(1/1000)≈10比特），大爷说"在第一车间（100人）"贡献-lg(1/10)=3.3比特。业余博主2分钟视频包含90%废话=近乎0信息。微软研究10亿条推文：无法从内容预测传播效果，只能看发帖人的历史转发率。',
-counter:'信息不是越浓越好——连续3分钟高密度信息人类注意力会走神。好的教学设计需要在信息密度和接受舒适度之间找到平衡。'
-},
-{id:'c4',name:'反馈与网络',icon:'🔄',star:true,
-desc:'负反馈让系统稳定（舀汤送入口中的微调），正反馈让系统失控（震颤麻痹症）。网络结构（同配/异配）决定传播模式。超级连接者是网络的关键节点。',
-define:'控制论核心机制。负反馈：每次输出反向调节输入，使系统趋近目标值（恒温器、人体激素调节、机器人平衡）。正反馈：输出放大输入，导致指数增长或崩溃。网络传播动力学：同配性网络（超级连接者互连）→疾病传播快但局限；异配性网络→慢但遍及全员。',
-analogy:'舀汤送入口中：视觉测距→肌肉调整→再测距→再调整，每次修正幅度越来越小（负反馈）。震颤麻痹症患者的神经出问题——每次修正幅度反而加大（正反馈），一勺汤全洒。同理，熬夜失控：晚睡→疲惫→更不想运动→更晚睡（正反馈循环），需要主动建立负反馈打断。',
-example:'卓克在097期分析熬夜问题：缺乏负反馈→身体适应恶化→需要人为建立约束（如定时关灯）。在138-140期分析传播网络：HIV传播符合同配性网络（超级连接者互传），新冠符合同配性（初期慢但终将遍及全员）。2008金融海啸中AIG比雷曼兄弟更像"超级连接者"所以被救。',
-counter:'负反馈过度会导致系统响应迟钝——恒温器开关太频繁反而耗能。正反馈不总是坏的——技术创新、经济增长都是正反馈驱动的。'
-},
-{id:'c5',name:'科学验证机制',icon:'🔬',star:false,
-desc:'理论随测量技术进步而更新。"温水煮青蛙"经100年研究最终证实存在（升温<0.2℃/分钟时）。每埋葬一名权威，科学前进一步。',
-define:'科学知识的本质是"当前最佳解释"而非"终极真理"。理论大灭绝是科学进步的常态——麦克斯韦方程组消灭了所有前现代电磁理论。权威压制竞争理论是科学进步的最大障碍（朗道压制费曼图在苏联传播，牛顿压制莱布尼茨符号致英国数学落后百年）。',
-analogy:'生于1880年的物理学家相信"原子=西瓜"，1890年的相信"原子=太阳系"，1900年的相信"电子有固定轨道"，1910年的相信"电子=概率云"。测量工具每升级一次，旧理论就被"大灭绝"一次。',
-example:'卓克在125期验证经典说法：温水煮青蛙被反复辟谣又反转——1869年戈尔茨发现青蛙35℃逃离，但2002年霍奇森证实升温<0.2℃/分钟时青蛙确实不逃。鲶鱼效应纯属捏造：99.7%鲶鱼是淡水鱼不可能活着进海水鱼舱。普朗克名言："每埋葬一名权威，科学就前进一步。"',
-counter:'"理论随时过时"不等于"所有理论同等荒谬"——麦克斯韦方程组和相对论是近乎永恒的少数例外。也不等于可以随意拒绝主流科学（如疫苗安全性有海量证据）。'
-},
-{id:'c6',name:'工程师思维',icon:'⚙️',star:false,
-desc:'约束条件下求解。航天工程师在真空/低温/微重力三大约束下设计设备。好的工程方案不在理论完美而在可实施。成本-收益-可行性三角形的平衡艺术。',
-define:'与科学家思维互补——科学家问"是什么/为什么"，工程师问"怎么做/花多少钱"。核心是可行性边界分析：任何技术方案都在成本、时间、性能的三角中取舍。关键思维工具：第一性原理（马斯克造火箭先算原材料成本）、量级估算（费米问题）、约束条件分解。',
-analogy:'如同装修：设计师（科学家）画理想效果图，工程师（工长）告诉你在预算和工期约束下能做到什么程度。马斯克不是先造火箭再算成本，而是先算原材料成本（铝+钛+铜的市场价）发现只占火箭售价2%，于是决定自己造。这是典型的工程师第一性原理。',
-example:'卓克在029-031期用工程师思维分析寻找地外生命：不是哲学讨论"生命是什么"，而是"我们用现有仪器能检测到什么信号、成本多少"。特高压输电（009-010期）：不是"理论上能否更高压"，而是"绝缘材料、变压器、线路损耗在工程上是否可行"。',
-counter:'工程师思维可能扼杀突破性创新——贝尔实验室如果严格按ROI评估，就不会允许晶体管的基础研究。有些突破需要在约束条件之外"浪费"资源。'
-},
-{id:'c7',name:'遗传算法与涌现',icon:'🌊',star:false,
-desc:'复杂模式无法自上而下设计，只能通过"变异+选择"的迭代自然涌现。100万日本人玩"马赛克变性感图片"游戏，经过11225代演化——没有人能说出来每一步为什么，但结果确实出现了。',
-define:'遗传算法：模拟生物进化的计算方法——初始化随机解→每代评估适应度→选择优胜者→加入随机变异→产生下一代。涌现：大量简单个体交互产生复杂全局模式（蚁群路径优化、神经网络特征提取）。核心悖论：我们无法预测每一代会变什么样，但我们可以设置"选择标准"来引导方向。',
-analogy:'如同城市形成——没有总设计师规划每条街道，但通过无数个体建造+使用+改造，最终形成了有功能分区的复杂城市。如果由上帝自上而下设计，他需要监督每个人的每个动作是否符合预先制定的1000条规则，最好的结果也只能得到他脑中那张单一的"理想城市"图。',
-example:'卓克在217期详述"马赛克→性感图片"遗传算法实验：11225代后谷歌AdSense自动判定为性感内容。第2232代出现淡黄色斑块向中心聚拢，第2740代出现红点，第5521代出现头发——每一步都无法用语言解释为什么，但累积效果惊人。在151-157期"拉马努金机"系列：AI自动生成关于π等常数的数学猜想（连分数表示法），直觉先行、证据随后。',
-counter:'遗传算法效率极低——11225代才出结果。不适合有明确最优解的问题（如数学证明）。在安全问题领域不可用（不能接受"大多数车不会撞人"）。'
-},
-{id:'c8',name:'直觉与猜想',icon:'💡',star:false,
-desc:'科学的两个真正根基是"事物有规律"和"规律有普遍性"——这两条都是不可证明的信仰。最伟大的科学发现（微积分、进化论、量子力学）都是直觉先行、证据随后的。',
-define:'科学的两个公理（不可证明但必须信仰）：①事物运动变化有规律；②规律具有普遍性。这两条继承自一神教传统——对"统一规律"的信仰。拉马努金是直觉创造的极致：凭美感写出3900多个数学公式，没有完整数学教育，却为后世提供了超弦理论的数学基础。',
-analogy:'牛顿发明微积分时根本没做严密论证——他凭直觉感到"无限细分再加合"可行就用了起来，后续150年的数学家帮他补证明（第二次数学危机）。这不像大众认知的"科学=严密的逻辑+证据"，更像"科学=信仰+直觉+事后验证"。',
-example:'卓克在151-157期用拉马努金的故事说明：拉马努金凭直觉写出3900+公式，包括π的连分数表示中那些"有零有整"的系数（9801、1103、26390...），没有人能解释他脑中如何生成这些数字。微积分（牛顿/莱布尼茨）、进化论（达尔文化石不足100种物种）、量子力学（薛定谔40岁带情人度假4个月写出方程）都是直觉先行。',
-counter:'直觉高度依赖领域知识积累——拉马努金的直觉来自数年沉浸于数学。普通人的"直觉"往往是认知偏误。直觉先行的科学只适用于"天才+开放环境"，不适合复制。'
-},
-{id:'c9',name:'技术采用曲线',icon:'📈',star:false,
-desc:'技术从实验室到普及经历S型曲线。早期被高估（期望膨胀顶峰），中期被低估（幻灭低谷），最终在生产力高原上被正确使用。自动驾驶、元宇宙、VR都在这条曲线上。',
-define:'Gartner技术成熟度曲线的本质：新技术因媒体炒作被高估→期望破灭后被人嘲笑→在安静中真正成熟→最终被视作理所当然。核心规律：技术发展速度被高估（短期），但技术影响被低估（长期）。关键时间窗口：从"实验室可行"到"商业可用"之间往往有10-20年。',
-analogy:'如同互联网历史：1999年.com泡沫（期望膨胀顶峰→幻灭低谷）→2005年Web 2.0（生产力高原）。自动驾驶从2015年被预测"5年内普及"→2023年仍只在有限场景运营——这正是从期望顶峰滑向幻灭低谷的典型轨迹。',
-example:'卓克分析自动驾驶（041-047期连续6期）：从DARPA挑战赛起步→谷歌入局→期望顶峰→短暂转凉→两种路线的竞争。VR（260期）：从2016年"VR元年"→2021年仍在小众市场。元宇宙（274期）：能模拟真实世界吗？回答是能模拟一部分，但不能模拟无限——计算资源有限。',
-counter:'不是所有技术都走S曲线——有些技术直接死亡（如谷歌眼镜），有些跳过幻灭直接普及（如mRNA疫苗因新冠紧急获批）。Gartner曲线是后见之明，对预测未来帮助有限。'
-},
-{id:'c10',name:'能量转换效率',icon:'⚡',star:false,
-desc:'一切技术竞争的本质是能量转换效率的竞争。从锂电池能量密度到碳中和的碳捕捉能耗，从芯片功耗到火箭比冲——数字不会骗人。',
-define:'能量转换效率是贯穿所有技术领域的统一量纲。电池：能量密度（Wh/kg）决定续航。芯片：每瓦特性能（Performance per Watt）决定竞争力。航天：比冲（ISP）衡量火箭效率。碳中和：碳捕捉的能耗如果超过减排收益则毫无意义。核聚变：Q值（输出能量/输入能量）>1才是工程实现的门槛。',
-analogy:'如同一场全球"能量效率奥林匹克"——锂电池的300 Wh/kg vs 汽油的12000 Wh/kg（差了40倍但电池可以充电），解释了为什么电动车续航焦虑是真实物理限制而非"电池厂不努力"。石墨烯电池的宣传如果不提供具体的能量密度数字，就可以判定为忽悠。',
-example:'卓克在057期戳穿石墨烯电池忽悠：关键看能量密度的具体数字，不是看"石墨烯"三个字。036期电池储能：有序的代价——储能背后的热力学原理。氢燃料电池（060-061期）：表面上零排放，但制氢效率约25%（电→氢→电），远低于纯电动的80%以上。碳中和系列（240-246期共6期）：碳捕捉的能耗经济性决定了碳中和策略的可行性。',
-counter:'能量效率不是唯一维度——安全性、环保性、资源可得性同样重要。核聚变Q值即使达到10，如果建造成本是裂变堆的100倍也无法商用。效率指标需要放到"成本-效率-安全性"三角中综合判断。'
-}
-];
-
-// MKS Core IDs (4 skeleton concepts)
-const mksCoreIds = ['c1','c2','c3','c4'];
-
-// Concept detail cards (for flip mode, 4-field format)
-const conceptDetails = concepts.map(c=>({
-name:c.name,icon:c.icon,
-define:c.define,analogy:c.analogy,example:c.example,counter:c.counter
-}));
-
-// Topic areas (8 application domains)
-const topics = [
-{name:'AI与数字智能',icon:'🤖',desc:'AI预测蛋白质结构·脑机接口·VR/元宇宙·拉马努金机·对抗算法·遗传算法',count:59},
-{name:'生物医学',icon:'🧬',desc:'癌症转移规律·CAR-T疗法·基因编辑·阿尔茨海默·衰老研究·返老还童',count:42},
-{name:'能源与碳中和',icon:'⚡',desc:'核聚变·核能·碳中和6步走·电池储能·氢燃料·特高压·固态电池',count:36},
-{name:'芯片与计算',icon:'💻',desc:'芯片缺货·ARM收购·鸿蒙系统·苹果M1·IBM 2nm·Windows 11·RISC-V',count:23},
-{name:'航天探索',icon:'🚀',desc:'SpaceX火箭·空间站·火星移民·UFO报告·太空旅游·中国航天·无人机火星起飞',count:19},
-{name:'食品与健康',icon:'🍎',desc:'FDA历史7部曲·肉链5部曲·盐的化学·咖啡科学·益生菌·玻尿酸食品·减肥药',count:39},
-{name:'交通出行',icon:'🚗',desc:'自动驾驶6部曲·电动车换电·飞行汽车·小米造车·磁悬浮·续航虚标·泡水车',count:20},
-{name:'疫情与公卫',icon:'🦠',desc:'新冠疫苗·病毒变异·核酸检测·mRNA技术·与病毒共存·德尔塔与拉姆达·后遗症',count:28}
-];
-
-// Boundary knowledge
-const boundary = [
-{name:'控制论创始人维纳的生平',scene:'理解可能性空间和反馈概念的来源，在讨论AI和自动化的思想史时引用'},
-{name:'拉马努金的3900个公式细节',scene:'讨论直觉创造力时举例，但绝大部分公式的数学内容超出本课程范围'},
-{name:'石墨烯的物理性质（导电性/强度）',scene:'区分"材料科学突破"和"商业应用可行"两个层次'},
-{name:'苹果M1芯片的微架构细节',scene:'理解芯片设计思路但不需自己设计CPU'},
-{name:'量子计算机"九章"的玻色采样原理',scene:'讨论量子霸权时引用但不需自己计算'},
-{name:'《个人信息保护法》全文条款',scene:'讨论数据隐私时知道法律框架存在即可'},
-{name:'杂交水稻"三系法"的具体育种流程',scene:'理解农业科技但不需自己育种'},
-{name:'福岛核废水中的具体放射性同位素半衰期',scene:'讨论核污染时引用数据但不需背诵'},
-{name:'马斯克SpaceX火箭的梅林发动机技术参数',scene:'讨论商业航天时有基本概念即可'},
-{name:'FDA审批新药的具体流程和法规条文',scene:'理解药物监管逻辑但不需备考FDA认证'},
-{name:'碳中和的全球碳循环模型参数',scene:'讨论气候政策时有量化意识即可'},
-{name:'《荷马史诗》和阿兹特克世界观的具体内容',scene:'理解"事物有规律"这一信念并非天然——古代人认为风雨雷电由神的情绪决定'},
-{name:'室温超导LK-99事件的具体实验记录',scene:'案例分析中作为"科学验证机制"的生动素材'},
-{name:'5G NR标准的详细技术规范',scene:'理解5G作为技术案例但不需自己设计通信协议'},
-{name:'ChatGPT的技术架构（Transformer/RLHF）',scene:'理解AI进展但不需自己训练模型'}
-];
-
-// Learning path (5 stages)
-const learningPath = [
-{step:1,title:'建立思维地基',desc:'首先学习四大骨架概念：可能性空间→演化思维→信息量化→反馈与网络。这四者构成了理解一切新技术的"操作系统"。在004、011、053-055、097、116期中沉浸。'},
-{step:2,title:'掌握科学方法论',desc:'学习科学验证机制、工程师思维——理解"为什么科学结论总在变"（125期温水煮青蛙的百年反转）和"如何在约束下求解"（029-031期寻找地外生命）。'},
-{step:3,title:'深入复杂系统',desc:'学习遗传算法与涌现、直觉与猜想——理解"为什么创新不能设计只能涌现"（217期马赛克实验、151-157期拉马努金机系列）。'},
-{step:4,title:'应用于具体领域',desc:'依次探索8大应用域——AI与数字智能、能源碳中和、生物医学、芯片计算、航天探索、食品健康、交通出行、疫情公卫。每个领域都是在验证骨架概念。'},
-{step:5,title:'内化为思维习惯',desc:'将技术采用曲线和能量转换效率作为日常分析工具——看到任何新技术都自动问：它在S曲线哪个位置？它的能量转换效率是多少？这组数字有没有吹牛？'}
-];
-
-// Quiz data: 25 choice questions
-const quizData = [
-// ans=0: 5 questions
-{q:'控制论的核心概念"可能性空间"说明"幸福的家庭总是相似"是因为什么？',opts:['幸福只有一条成功路径，通过所有关键节点的"是"选项','幸福的家庭有更多钱','名人的判断总是对的','亲眼所见就足够证明结论'],ans:0,
-explain:'卓克在004期用5个家庭节点的模型证明：每个节点选"是"只有1条路径（幸福），但选"否"有31种组合（不幸）。幸福=可能性空间被精确缩减到唯一状态。'},
-{q:'关于"科技创新从何而来"，卓克认为最重要的规律是什么？',opts:['演化——大灭绝和去中心化是创新的核心驱动力','政府集中规划','大企业研发投入','大学专利转化'],ans:0,
-explain:'053-055期：科技创新四个来源（演化/涌现/设计/幸运）中，演化最重要。大灭绝淘汰旧范式释放资源，研究方向去中心化保证多样性。'},
-{q:'在"爆发与传播"系列中，同配性网络的特征是什么？',opts:['超级连接者主要连接其他超级连接者，传播快但局限','所有人都被均匀连接','超级连接者主要连接普通人','网络中没有超级连接者'],ans:0,
-explain:'138-140期：HIV符合同配性网络——主要在性伙伴数量极高的人群中传播。新冠符合异配性网络——初期慢但最终会感染全球大量人口。'},
-{q:'卓克认为对抗消费类算法的最佳方法是什么？',opts:['意识到算法有缺陷+保护数据+主动搜索替代被动推荐','完全不用手机','相信自己的意志力','购买付费版App'],ans:0,
-explain:'206期：三步法——①理解算法在"深度推荐"上不断强化会把我们关进信息茧房；②iPhone一律拒绝跟踪、安卓分机分号；③主动搜索替代被动浏览。'},
-{q:'遗传算法的核心机制是什么？',opts:['变异+选择+保留——大量随机尝试中保留优胜者','由上帝（设计师）自上而下制定规则','每一步都按最优方案前进','只保留第一代结果不再变化'],ans:0,
-explain:'217期：100万日本人用11225代把马赛克变成性感图片——没有任何人能说出每一步为什么，但"走的人多了就成了路"是成本最低的方式。'},
-
-// ans=1: 5 questions
-{q:'卓克在"随机控制"一文中用哪个例子说明该方法？',opts:['用数学公式精确计算','德国核聚变团队尝试更高温度反而发现稳定模式','自上而下的管理决策','精确的市场调研'],ans:1,
-explain:'011期：科学家一直认为降低温度才能维持核聚变稳定，但1982年德国团队"随机尝试"了3000万度以上反而发现了稳定模式——这就是随机控制：在未知领域系统尝试所有可能。'},
-{q:'为什么费曼图在日本的R值高达75（远超美国的15）？',opts:['日本物理学家更聪明','二战后日本物理学界高度依赖美国，学术交流形成正反馈','费曼亲自去日本教学','日本的数学教育更好'],ans:1,
-explain:'138期：二战后日本受到美国大力扶持，物理学界几乎全部依仗美国。一旦物理学家学会费曼图，就会在剩余学术生涯中持续使用并影响学生和同事。'},
-{q:'卓克认为"演化思维"最大的局限性是什么？',opts:['不能解释任何现象','用描述替代解释——"它之所以是这样因为以前是这样"等于没回答','太复杂无法应用','只适用于生物学'],ans:1,
-explain:'145期："人为什会直立行走"的演化解释追溯了化石证据和推测的好处，但完全可以被相反理由反驳（直立增加心脏病/骨折风险/暴露给掠食者）。演化解释本质是对结果的事后合理化。'},
-{q:'关于量化信息，以下哪项描述是正确的？',opts:['看门大爷告诉小明在第一车间提供了-ln(100/1000)的信息量','信息量=可能性缩减程度的对数，缩减越多信息量越大','信息的价值与内容无关','越长的文章信息量越大'],ans:1,
-explain:'116期：-lg(100/1000)=1比特。如果第一车间有999人，大爷几乎没提供信息（-lg(999/1000)=0.00043）。信息量完全取决于缩减了多少可能性，与长度无关。'},
-{q:'关于"拉马努金机"，以下哪项描述正确？',opts:['它是一个数学证明机器','它利用AI自动生成关于数学常数（如π）的猜想（连分数表示法等）','它已经取代了所有数学家','它只能做加减乘除'],ans:1,
-explain:'151期：2021年2月《自然》杂志刊登——利用AI自动生成关于基本常数的猜想。如为π找出新的连分数表示法。这可能会像高斯的研究一样影响几百年后的计算技术。'},
-
-// ans=2: 5 questions
-{q:'"温水煮青蛙"经过100多年科学研究，最终结论是什么？',opts:['完全是谣言，青蛙在任何情况下都会跳','只有沸水才会让青蛙不跳','升温速度<0.2℃/分钟时青蛙确实不会逃离，效应是真实存在的','青蛙根本不怕热水'],ans:2,
-explain:'125期：从戈尔茨1869年→2002年霍奇森最终确认：升温超过1℃/分钟青蛙必跳，但<0.2℃/分钟时青蛙确实不逃离。历经"经典→辟谣→辟谣被反转"三个阶段。'},
-{q:'互联网传播中，推特所有信息总体而言的R值大约是多少？',opts:['2-3，和SARS差不多','20，和麻疹差不多','0.2左右，远小于1——信息传播其实非常困难','75，和费曼图在日本一样'],ans:2,
-explain:'140期：斯坦福2016年分析6.2亿条推文——95%的推文没有任何转发。营销专家也很难设计出R>1的内容。"病毒式传播"这个词本身就是夸张。'},
-{q:'美国政府在2008年金融危机中救AIG而不救雷曼兄弟，决策依据是什么？',opts:['雷曼兄弟规模太小','AIG的政治游说更强','AIG更像金融网络中的"超级连接者"，它的倒闭会引发连锁崩溃','雷曼兄弟故意申请破产'],ans:2,
-explain:'139期：AIG在同配性网络中连接了更多超级连接者，它一倒会导致几十个巨头连锁崩盘。而雷曼兄弟主要连接普通客户，损失虽大但是确定的数值。'},
-{q:'关于"信息传播"，微软研究院分析10亿条推文后的最重要发现是什么？',opts:['正面情绪内容传播更快','短文本传播更广','无法从内容预测传播效果——最佳预测指标是博主历史转发率','含有emoji的内容传播更好'],ans:2,
-explain:'140期：文本分析（情绪/主题/字数）都无法预测传播效果。唯一可靠的指标是：发帖人之前的内容是否总被转发。这再次说明内容质量不是传播的决定因素。'},
-{q:'卓克认为科学最基础的两条公理是什么？',opts:['万物皆数+逻辑至上','实验至上+同行评议','事物运动有规律+规律具有普遍性——这两条不可证明但必须信仰','奥卡姆剃刀+证伪原则'],ans:2,
-explain:'157期：这两条公理是什么也不凭的信仰，恰恰继承自一神教传统——相信一切现象背后有统一规律。古代人认为风雨雷电由不同神的偶然情绪导致。'},
-
-// ans=3: 5 questions
-{q:'"鲶鱼效应"为什么是伪科学管理理论？',opts:['鲶鱼不好吃','企业管理不需要激励','经实验证明无效','99.7%鲶鱼是淡水鱼不可能活着进入海水鱼舱；沙丁鱼从不活体售卖'],ans:3,
-explain:'125期：鲶鱼效应纯属凭空捏造——①淡水鱼在海水中很快死亡；②沙丁鱼从未以活鱼形式售卖（成本不值）；③故事中的每个环节都不符合渔业实际。'},
-{q:'关于工程师思维，马斯克造火箭的"第一性原理"具体是指什么？',opts:['相信火箭一定很贵','招聘最好的火箭科学家','先买现成火箭再研究改进','先算原材料（铝+钛+铜）市场价，发现只占火箭售价2%，于是决定自己造'],ans:3,
-explain:'168-176期马斯克火箭系列：火箭售价6000万美元，但原材料成本只有约120万美元。马斯克认为中间的差价是"制造效率低"，不是物理定律决定的。这是典型的工程师思维。'},
-{q:'玛格丽特·米德《萨摩亚人的成年》一书后来被揭穿什么问题？',opts:['数据太旧','翻译错误','研究方法太复杂','核心数据是编造的——萨摩亚青少年并非她描绘的"无叛逆期、性开放无忧"'],ans:3,
-explain:'146期：米德为证明"文化塑造一切"编造了萨摩亚人的自由性观念。该书影响了一代人的价值观（性解放/女权/堕胎合法化），但被后来的田野调查揭露为学术造假。演化思维因依赖案例而容易被伪造。'},
-{q:'碳中和系列（240-246期共6期）中，卓克强调碳捕捉面临的核心约束是什么？',opts:['技术原理不可能','公众不接受','政策不支持','碳捕捉的能耗如果超过减排收益就毫无意义——这是一个能量转换效率问题'],ans:3,
-explain:'240-246期碳中和6步走：从"是否必须"→"全球碳循环"→"中国两步走"→"二氧化碳捕捉"→"封存与利用"。核心判断工具是能量转换效率——捕捉1吨CO₂消耗的能量如果产生超过1吨CO₂，就是赔本买卖。'},
-{q:'"拉马努金机"被《自然》杂志刊登的研究，其潜在影响力被比作哪位历史人物的成果？',opts:['爱因斯坦','牛顿','达尔文','高斯——他的数学成果200年后仍在支撑数据压缩等现代技术'],ans:3,
-explain:'151期：高斯200年前的数学成果今天在每台计算机中都在使用（数据压缩技术的数学基础）。拉马努金机自动生成数学猜想的潜力可能达到同一级别——影响未来几个世纪的计算科学。'}
-];
-
-// Essay questions (10)
-const essayData = [
-{q:'请用自己的语言解释"可能性空间"，并举一个你工作中的例子说明如何用它来分析问题。',ref:'可能性空间'},
-{q:'结合"演化思维"的三个机制（变异/选择/保留），分析你所在行业过去10年的技术变迁。',ref:'演化思维'},
-{q:'用"信息量化"的视角，评估你每天消费的三种信息源（如短视频/新闻/专业书）的信息密度，并给出优化建议。',ref:'信息量化'},
-{q:'举一个你亲身经历的"正反馈失控"的例子，并说明你可以如何建立"负反馈"来打断这个循环。',ref:'反馈与网络'},
-{q:'找一个最近的科学新闻，用"科学验证机制"的框架（理论暂时性、证据等级、利益相关方）来评估它的可信度。',ref:'科学验证机制'},
-{q:'用"工程师思维"（约束条件、可行性边界、量级估算）分析一个你想解决但还没开始的实际问题。',ref:'工程师思维'},
-{q:'观察一个你常用的App，分析它的推荐算法是在强化"深度"（信息茧房）还是"广度"（多样性），并提出你的对抗策略。',ref:'遗传算法与涌现'},
-{q:'回忆一次你凭直觉做出正确决定的经历。用"直觉与猜想"的框架分析：你的直觉可能来自哪些隐性知识和模式识别？',ref:'直觉与猜想'},
-{q:'选择一项你关注的新技术，判断它在"技术采用曲线"上的位置，并预测未来3-5年的发展趋势。',ref:'技术采用曲线'},
-{q:'用"能量转换效率"的思维分析你日常生活中的一项能源消费（如通勤方式/家电选择），计算不同方案的能量效率差异。',ref:'能量转换效率'}
-];
-
-// ========== STATE ==========
-const LS = {
-get(k,d){try{const v=localStorage.getItem('zk_mks_'+k);return v?JSON.parse(v):d}catch(e){return d}},
-set(k,v){try{localStorage.setItem('zk_mks_'+k,JSON.stringify(v))}catch(e){}}
-};
-let state = {
-learnedCards:LS.get('cards',[]),
-wrongBook:LS.get('wrong',[]),
-quizHistory:LS.get('history',[]),
-studyDays:LS.get('days',0),
-currentCard:0,
-quizMode:false,examActive:false
-};
-
-// ========== INIT ==========
-document.addEventListener('DOMContentLoaded',()=>{
-initTabs();
-initDashboard();
-initFlipCards();
-initMindmap();
-initSocratic();
-initCaseStudy();
-initDecision();
-updateReviewStats();
-recordStudyDay();
-});
-
-function recordStudyDay(){
-const today=new Date().toISOString().slice(0,10);
-const last=LS.get('lastStudy','');
-if(last!==today){
-state.studyDays=LS.get('days',0)+1;
-LS.set('days',state.studyDays);
-LS.set('lastStudy',today);
-}
-}
-
-// ========== TABS ==========
-function initTabs(){
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-btn.addEventListener('click',()=>{
-document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-btn.classList.add('active');
-document.querySelector('[data-tab="'+btn.dataset.tab+'"].tab-content').classList.add('active');
-if(btn.dataset.tab==='4')updateReviewStats();
-});
-});
-}
-
-// ========== TAB 0: DASHBOARD ==========
-function initDashboard(){
-// MKS Core Grid
-const mksGrid=document.getElementById('mksCoreGrid');
-concepts.filter(c=>c.star).forEach(c=>{
-mksGrid.innerHTML+=`<div class="mks-core">
-<div class="star">★</div>
-<div class="title">${c.icon} ${c.name}</div>
-<div class="why">${c.desc}</div>
-<div class="evidence">骨架证明：${c.id==='c1'?'在004期（家庭幸福模型）、011期（核聚变随机控制）等20+篇文章中被反复用作分析框架':''
-}${c.id==='c2'?'在053-055期（科技创新来源）、144-146期（演化思维系列）、217期（遗传算法）等30+篇文章中作为元框架':''
-}${c.id==='c3'?'在116期（信息定义）、140期（传播R值计算）、206期（对抗算法）等15+篇文章中被精确量化应用':''
-}${c.id==='c4'?'在097期（正负反馈）、138-140期（网络传播系列）、139期（金融网络）等20+篇文章中作为系统分析工具':''}</div>
-</div>`;
-});
-
-// Concept Grid
-const cGrid=document.getElementById('conceptGrid');
-concepts.forEach(c=>{
-const cls=c.star?'concept-card mks':'concept-card';
-cGrid.innerHTML+=`<div class="${cls}" onclick="switchTab(1);setCard(${concepts.indexOf(c)})">
-<h4>${c.icon} ${c.name}${c.star?' <span class="badge badge-star">★ 骨架</span>':''}</h4>
-<p>${c.desc}</p>
-</div>`;
-});
-
-// SVG Concept Map
-document.getElementById('svgContainer').innerHTML=buildSVG();
-
-// Topic Grid
-const tGrid=document.getElementById('topicGrid');
-topics.forEach(t=>{
-tGrid.innerHTML+=`<div class="topic-card">
-<strong>${t.icon} ${t.name}</strong>
-<p style="color:var(--text-light);font-size:.82rem;margin-top:4px">${t.desc}</p>
-<p class="articles">📄 ${t.count} 篇文章</p>
-</div>`;
-});
-
-// Boundary Table
-const bt=document.getElementById('boundaryTable');
-bt.innerHTML='<thead><tr><th>知识点</th><th>使用场景</th></tr></thead><tbody>'+boundary.map(b=>`<tr><td>${b.name}</td><td>${b.scene}</td></tr>`).join('')+'</tbody>';
-
-// Learning Path
-const lp=document.getElementById('learningPath');
-learningPath.forEach(s=>{
-lp.innerHTML+=`<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-<span style="background:var(--accent);color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0">${s.step}</span>
-<div><strong>${s.title}</strong><p style="font-size:.82rem;color:var(--text-light);margin-top:2px">${s.desc}</p></div>
-</div>`;
-});
-
-updateProgress();
-}
-
-function buildSVG(){
-return `<svg viewBox="0 0 880 670" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.15"/></filter>
-<marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>
-<marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b8860b"/></marker>
-<marker id="as" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#27ae60"/></marker>
-</defs>
-
-<!-- Root -->
-<rect x="340" y="10" width="200" height="52" rx="26" fill="#c0392b" filter="url(#sh)"/>
-<text x="440" y="33" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">科技思维操作系统</text>
-<text x="440" y="50" text-anchor="middle" fill="#fdd" font-size="10">Tech Thinking OS</text>
-
-<!-- Branch lines from root to 4 MKS cores -->
-<line x1="380" y1="62" x2="160" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>
-<line x1="420" y1="62" x2="340" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>
-<line x1="460" y1="62" x2="540" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>
-<line x1="500" y1="62" x2="720" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>
-
-<!-- Layer 1: 4 MKS Cores -->
-<rect x="60" y="117" width="160" height="52" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>
-<text x="140" y="139" text-anchor="middle" fill="#c0392b" font-size="13" font-weight="bold">🎯 可能性空间</text>
-<text x="140" y="157" text-anchor="middle" fill="#6b5757" font-size="10">控制=缩减可能性</text>
-
-<rect x="240" y="117" width="160" height="52" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>
-<text x="320" y="139" text-anchor="middle" fill="#c0392b" font-size="13" font-weight="bold">🧬 演化思维</text>
-<text x="320" y="157" text-anchor="middle" fill="#6b5757" font-size="10">变异+选择+保留</text>
-
-<rect x="420" y="117" width="160" height="52" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>
-<text x="500" y="139" text-anchor="middle" fill="#c0392b" font-size="13" font-weight="bold">📐 信息量化</text>
-<text x="500" y="157" text-anchor="middle" fill="#6b5757" font-size="10">信息=不确定性缩减</text>
-
-<rect x="600" y="117" width="160" height="52" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>
-<text x="680" y="139" text-anchor="middle" fill="#c0392b" font-size="13" font-weight="bold">🔄 反馈与网络</text>
-<text x="680" y="157" text-anchor="middle" fill="#6b5757" font-size="10">负反馈稳定/正反馈放大</text>
-
-<!-- Connections to Layer 2 -->
-<line x1="100" y1="169" x2="80" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="180" y1="169" x2="180" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="280" y1="169" x2="260" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="360" y1="169" x2="360" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="460" y1="169" x2="440" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="540" y1="169" x2="560" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="640" y1="169" x2="620" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-<line x1="740" y1="169" x2="740" y2="225" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>
-
-<!-- Layer 2: 6 Derivative Concepts -->
-<rect x="10" y="227" width="130" height="44" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1" filter="url(#sh)"/>
-<text x="75" y="246" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">🔬 科学验证</text>
-<text x="75" y="260" text-anchor="middle" fill="#999" font-size="8">理论大灭绝</text>
-
-<rect x="150" y="227" width="120" height="44" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1" filter="url(#sh)"/>
-<text x="210" y="246" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">⚙️ 工程师思维</text>
-<text x="210" y="260" text-anchor="middle" fill="#999" font-size="8">约束下求解</text>
-
-<rect x="285" y="227" width="130" height="44" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1" filter="url(#sh)"/>
-<text x="350" y="246" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">🌊 遗传算法</text>
-<text x="350" y="260" text-anchor="middle" fill="#999" font-size="8">涌现式模式</text>
-
-<rect x="425" y="227" width="120" height="44" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1" filter="url(#sh)"/>
-<text x="485" y="246" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">💡 直觉猜想</text>
-<text x="485" y="260" text-anchor="middle" fill="#999" font-size="8">直觉先行</text>
-
-<rect x="560" y="227" width="130" height="44" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1" filter="url(#sh)"/>
-<text x="625" y="246" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">📈 技术采用</text>
-<text x="625" y="260" text-anchor="middle" fill="#999" font-size="8">S型曲线</text>
-
-<rect x="700" y="227" width="120" height="44" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1" filter="url(#sh)"/>
-<text x="760" y="246" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">⚡ 能量效率</text>
-<text x="760" y="260" text-anchor="middle" fill="#999" font-size="8">通用量纲</text>
-
-<!-- Connections to Layer 3 -->
-<line x1="75" y1="271" x2="75" y2="320" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>
-<line x1="210" y1="271" x2="210" y2="320" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>
-<line x1="350" y1="271" x2="350" y2="320" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>
-<line x1="485" y1="271" x2="485" y2="320" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>
-<line x1="625" y1="271" x2="625" y2="320" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>
-<line x1="760" y1="271" x2="760" y2="320" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>
-
-<!-- Layer 3: 8 Application Domains -->
-<rect x="15" y="322" width="100" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="65" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">🤖 AI数字</text>
-
-<rect x="125" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="172" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">🧬 生物医学</text>
-
-<rect x="230" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="277" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">⚡ 能源</text>
-
-<rect x="335" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="382" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">💻 芯片</text>
-
-<rect x="440" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="487" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">🚀 航天</text>
-
-<rect x="545" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="592" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">🍎 食品</text>
-
-<rect x="650" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="697" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">🚗 交通</text>
-
-<rect x="755" y="322" width="95" height="36" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>
-<text x="802" y="344" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">🦠 疫情</text>
-
-<!-- Cross-layer feedback -->
-<path d="M 60 344 L 60 370 L 880 370" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,3" fill="none"/>
-<text x="440" y="385" text-anchor="middle" fill="#27ae60" font-size="9" font-style="italic">应用反馈持续检验并修正上层概念（如新冠疫情修正了我们对"网络传播模型"的理解）</text>
-
-<!-- Legend -->
-<rect x="190" y="400" width="500" height="70" rx="8" fill="#fdf6ec" stroke="#e8d5c4" stroke-width="1"/>
-<line x1="220" y1="420" x2="270" y2="420" stroke="#c0392b" stroke-width="2.5"/><text x="278" y="424" fill="#3d2f2f" font-size="10">MKS骨架概念</text>
-<line x1="220" y1="440" x2="270" y2="440" stroke="#b8860b" stroke-width="1.5"/><text x="278" y="444" fill="#3d2f2f" font-size="10">衍生方法论</text>
-<line x1="390" y1="420" x2="440" y2="420" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2"/><text x="448" y="424" fill="#3d2f2f" font-size="10">应用域&反馈</text>
-<line x1="390" y1="440" x2="440" y2="440" stroke="#c0392b" stroke-width="2"/><text x="448" y="444" fill="#3d2f2f" font-size="10">直接派生</text>
-</svg>`;
-}
-
-function updateProgress(){
-const total=concepts.length;
-const learned=state.learnedCards.length;
-const pct=total>0?Math.round(learned/total*100):0;
-document.getElementById('progressPct').textContent=pct+'%';
-document.getElementById('progressFill').style.width=pct+'%';
-}
-
-// ========== TAB 1: FLIP CARDS ==========
-function initFlipCards(){
-state.currentCard=LS.get('cardIndex',0);
-renderFlipCard();
-document.getElementById('flipInner').addEventListener('click',function(){this.classList.toggle('flipped')});
-}
-
-function renderFlipCard(){
-const i=state.currentCard;
-const c=conceptDetails[i];
-const isLearned=state.learnedCards.includes(concepts[i].id);
-document.getElementById('flipFront').innerHTML=`<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">${c.icon} ${c.name}</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>${isLearned?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''}`;
-document.getElementById('flipBack').innerHTML=`<div style="margin-bottom:8px"><strong style="color:var(--accent)">📖 定义：</strong>${c.define}</div><div style="margin-bottom:8px"><strong style="color:var(--accent)">🔄 类比：</strong>${c.analogy}</div><div style="margin-bottom:8px"><strong style="color:var(--success)">✅ 示例：</strong>${c.example}</div><div><strong style="color:var(--accent)">⚠️ 反例/边界：</strong>${c.counter}</div>`;
-document.getElementById('cardIndex').textContent=`${i+1} / ${conceptDetails.length}`;
-document.getElementById('cardProgress').style.width=`${Math.round(state.learnedCards.length/concepts.length*100)}%`;
-document.getElementById('cardLearned').textContent=state.learnedCards.length;
-const btn=document.getElementById('markLearnedBtn');
-if(isLearned){btn.textContent='✓ 已学习';btn.style.opacity='0.7'}
-else{btn.textContent='✓ 标记已学习';btn.style.opacity='1'}
-document.getElementById('flipInner').classList.remove('flipped');
-}
-
-function setCard(idx){
-state.currentCard=idx;
-LS.set('cardIndex',idx);
-renderFlipCard();
-}
-
-function prevCard(){
-state.currentCard=(state.currentCard-1+conceptDetails.length)%conceptDetails.length;
-LS.set('cardIndex',state.currentCard);
-renderFlipCard();
-}
-function nextCard(){
-state.currentCard=(state.currentCard+1)%conceptDetails.length;
-LS.set('cardIndex',state.currentCard);
-renderFlipCard();
-}
-function markLearned(){
-const id=concepts[state.currentCard].id;
-if(!state.learnedCards.includes(id)){
-state.learnedCards.push(id);
-LS.set('cards',state.learnedCards);
-}else{
-state.learnedCards=state.learnedCards.filter(x=>x!==id);
-LS.set('cards',state.learnedCards);
-}
-updateProgress();
-renderFlipCard();
-}
-
-// ========== TAB 2: QUIZ ==========
-let currentQuestions=[];
-let quizTimerInterval=null;
-let quizTimeLeft=0;
-let userAnswers={};
-
-function startQuiz(){
-const shuffled=[...quizData].sort(()=>Math.random()-0.5);
-const essayShuffled=[...essayData].sort(()=>Math.random()-0.5);
-currentQuestions=[...shuffled.slice(0,10),...essayShuffled.slice(0,3)];
-userAnswers={};
-quizTimeLeft=900;
-document.getElementById('quizScore').textContent='';
-renderQuiz();
-startQuizTimer('quizTimer');
-}
-
-function startQuizTimer(elemId){
-quizTimeLeft=900;
-clearInterval(quizTimerInterval);
-document.getElementById(elemId).style.display='block';
-updateTimerDisplay(elemId);
-quizTimerInterval=setInterval(()=>{
-quizTimeLeft--;
-updateTimerDisplay(elemId);
-if(quizTimeLeft<=0){clearInterval(quizTimerInterval);submitQuiz()}
-},1000);
-}
-
-function updateTimerDisplay(elemId){
-const m=Math.floor(quizTimeLeft/60);
-const s=quizTimeLeft%60;
-document.getElementById(elemId).textContent='⏱ '+m+':'+(s<10?'0':'')+s;
-if(quizTimeLeft<60)document.getElementById(elemId).style.color='var(--accent-light)';
-}
-
-function renderQuiz(){
-const container=document.getElementById('quizContainer');
-let html='';
-currentQuestions.forEach((q,i)=>{
-if(q.opts){ // choice
-html+=`<div class="quiz-card" id="qcard${i}">
-<div class="q-num">选择题 ${i+1}</div>
-<div class="q-text">${q.q}</div>`;
-q.opts.forEach((o,j)=>{
-const sel=userAnswers[i]===j?' selected':'';
-const dis=userAnswers[i]!==undefined?'disabled':'';
-html+=`<div class="option${sel}" onclick="selectChoice(${i},${j})" id="opt${i}_${j}">${'ABCD'[j]}. ${o}</div>`;
-});
-html+=`<div id="fb${i}"></div></div>`;
-}else{ // essay
-html+=`<div class="quiz-card">
-<div class="q-num">简答题 ${i+1} <span class="badge badge-star">${q.ref}</span></div>
-<div class="q-text">${q.q}</div>
-<textarea class="essay-area" id="essay${i}" placeholder="输入你的回答...">${userAnswers[i]||''}</textarea>
-</div>`;
-}
-});
-html+='<button class="btn" onclick="submitQuiz()">📩 提交答案</button>';
-container.innerHTML=html;
-}
-
-function selectChoice(qIdx,optIdx){
-if(userAnswers[qIdx]!==undefined)return;
-userAnswers[qIdx]=optIdx;
-const q=currentQuestions[qIdx];
-const isCorrect=optIdx===q.ans;
-const allOpts=document.querySelectorAll('#qcard'+qIdx+' .option');
-allOpts.forEach((el,j)=>{
-el.classList.add(j===q.ans?'correct':(j===optIdx&&!isCorrect?'wrong':''));
-el.style.pointerEvents='none';
-});
-const fb=document.getElementById('fb'+qIdx);
-fb.className='feedback '+(isCorrect?'correct':'wrong');
-fb.textContent=(isCorrect?'✓ 正确！':'✗ 错误。')+' '+q.explain;
-// Record
-const rec={qIdx,correct:isCorrect,time:new Date().toISOString()};
-state.quizHistory.push(rec);
-LS.set('history',state.quizHistory);
-if(!isCorrect){
-state.wrongBook.push({...q,userAns:optIdx,time:new Date().toISOString()});
-LS.set('wrong',state.wrongBook);
-}
-const correctCount=Object.values(userAnswers).filter((v,i)=>currentQuestions[i]?.opts&&v===currentQuestions[i].ans).length;
-const totalChoice=currentQuestions.filter(q=>q.opts).length;
-document.getElementById('quizScore').textContent='得分: '+correctCount+'/'+totalChoice;
-}
-
-function submitQuiz(){
-const correctCount=Object.values(userAnswers).filter((v,i)=>currentQuestions[i]?.opts&&v===currentQuestions[i].ans).length;
-const totalChoice=currentQuestions.filter(q=>q.opts).length;
-alert('选择题得分: '+correctCount+'/'+totalChoice+'\n简答题已保存（请对照参考答案自我评估）');
-clearInterval(quizTimerInterval);
-}
-
-function resetQuiz(){
-currentQuestions=[];userAnswers={};
-clearInterval(quizTimerInterval);
-document.getElementById('quizContainer').innerHTML='';
-document.getElementById('quizScore').textContent='';
-document.getElementById('quizTimer').style.display='none';
-}
-
-// ========== TAB 3: EXAM ==========
-function startExam(){
-state.examActive=true;
-const shuffled=[...quizData].sort(()=>Math.random()-0.5);
-const essayShuffled=[...essayData].sort(()=>Math.random()-0.5);
-currentQuestions=[...shuffled.slice(0,7),...essayShuffled.slice(0,3)];
-userAnswers={};
-quizTimeLeft=900;
-document.getElementById('examTimer').style.display='block';
-document.getElementById('startExamBtn').style.display='none';
-renderExam();
-startQuizTimer('examTimer');
-}
-
-function renderExam(){
-const container=document.getElementById('examContainer');
-let html='<p style="margin-bottom:12px;font-weight:600">📋 7道选择题 + 3道简答题 · 限时15分钟</p>';
-currentQuestions.forEach((q,i)=>{
-if(q.opts){
-html+=`<div class="quiz-card" id="ecard${i}">
-<div class="q-num">选择题 ${i+1}</div>
-<div class="q-text">${q.q}</div>`;
-q.opts.forEach((o,j)=>{
-html+=`<div class="option" onclick="selectExamChoice(${i},${j})" id="eopt${i}_${j}">${'ABCD'[j]}. ${o}</div>`;
-});
-html+=`<div id="efb${i}"></div></div>`;
-}else{
-html+=`<div class="quiz-card">
-<div class="q-num">简答题 ${i+1} <span class="badge badge-star">${q.ref}</span></div>
-<div class="q-text">${q.q}</div>
-<textarea class="essay-area" id="eessay${i}" placeholder="输入你的回答...">${userAnswers[i]||''}</textarea>
-</div>`;
-}
-});
-html+='<button class="btn" onclick="submitExam()">📩 提交试卷</button>';
-container.innerHTML=html;
-}
-
-function selectExamChoice(qIdx,optIdx){
-if(userAnswers[qIdx]!==undefined)return;
-userAnswers[qIdx]=optIdx;
-const allOpts=document.querySelectorAll('#ecard'+qIdx+' .option');
-allOpts.forEach((el,j)=>{el.classList.remove('selected');if(j===optIdx)el.classList.add('selected')});
-}
-
-function submitExam(){
-clearInterval(quizTimerInterval);
-state.examActive=false;
-document.getElementById('examTimer').style.display='none';
-document.getElementById('examTimer').textContent='15:00';
-let score=0;
-let detail='';
-currentQuestions.forEach((q,i)=>{
-if(q.opts){
-const user=userAnswers[i];
-const correct=q.ans;
-const isCorrect=user===correct;
-if(isCorrect)score++;
-else if(user!==undefined){
-state.wrongBook.push({...q,userAns:user,time:new Date().toISOString()});
-LS.set('wrong',state.wrongBook);
-}
-detail+=`<div style="margin:6px 0;padding:8px;border-radius:6px;background:${isCorrect?'#d4edda':'#f8d7da'}"><strong>${i+1}. ${q.q}</strong><br>你的答案：${user!==undefined?q.opts[user]:'未作答'} ${isCorrect?'✓':'✗'}<br>正确答案：${q.opts[q.ans]}</div>`;
-}else{
-detail+=`<div style="margin:6px 0;padding:8px;border-radius:6px;background:#fef9f4"><strong>${i+1}. ${q.q}</strong><br><em>请参照概念"${q.ref}"自我评估</em></div>`;
-}
-});
-const totalChoice=currentQuestions.filter(q=>q.opts).length;
-const pct=Math.round(score/totalChoice*100);
-document.getElementById('examContainer').innerHTML=`
-<div style="text-align:center;padding:20px">
-<h3 style="color:${pct>=70?'var(--success)':'var(--accent)'}">得分：${score}/${totalChoice}（${pct}%）</h3>
-${detail}
-<button class="btn btn-outline" style="margin-top:16px" onclick="document.getElementById('examContainer').innerHTML='';document.getElementById('startExamBtn').style.display='inline-block';document.getElementById('examTimer').style.display='none'">重新考试</button>
-</div>`;
-}
-
-// ========== TAB 4: REVIEW ==========
-function updateReviewStats(){
-const history=LS.get('history',[]);
-const wrongBook=LS.get('wrong',[]);
-const totalQ=history.length;
-const correctQ=history.filter(h=>h.correct).length;
-const pct=totalQ>0?Math.round(correctQ/totalQ*100):0;
-const days=LS.get('days',0);
-
-document.getElementById('statTotal').textContent=totalQ;
-document.getElementById('statCorrect').textContent=correctQ;
-document.getElementById('statRate').textContent=pct+'%';
-document.getElementById('statDays').textContent=days;
-
-// Wrong book
-const wb=document.getElementById('wrongBook');
-if(wrongBook.length===0){
-wb.innerHTML='<p style="color:var(--success);font-weight:600">✓ 暂无错题，继续保持！</p>';
-}else{
-wb.innerHTML=wrongBook.slice(-20).reverse().map((w,i)=>`<div style="margin:8px 0;padding:10px;border-left:3px solid var(--accent);background:#fef9f4;border-radius:0 6px 6px 0;font-size:.85rem"><strong>${w.q.slice(0,60)}...</strong><br><span style="color:var(--accent)">你的答案：${w.opts?w.opts[w.userAns]:'简答题'}</span><br><span style="color:var(--success)">正确答案：${w.opts?w.opts[w.ans]:'见参考答案'}</span></div>`).join('');
-}
-
-// Weak analysis
-const weakMap={};
-wrongBook.forEach(w=>{
-const concept=w.explain||'';
-let match='其他';
-for(const c of concepts){
-if(concept.includes(c.name.slice(0,2))){match=c.name;break}
-}
-weakMap[match]=weakMap[match]||{name:match,count:0,questions:[]};
-weakMap[match].count++;
-weakMap[match].questions.push(w.q.slice(0,40));
-});
-const sorted=Object.values(weakMap).sort((a,b)=>b.count-a.count);
-const wa=document.getElementById('weakAnalysis');
-if(sorted.length>0){
-wa.innerHTML=sorted.map(c=>`<div style="margin:4px 0;padding:8px;background:#fff5f5;border-radius:6px;font-size:.85rem"><strong>「${c.name}」错${c.count}题：</strong>${c.questions[0]}...</div>`).join('');
-}else{
-wa.innerHTML='<p style="color:var(--text-light);font-size:.85rem">暂无答题数据，开始练习后自动生成</p>';
-}
-}
-
-// ========== TAB 5: MIND MAP ==========
-function initMindmap(){
-const tree=[
-{label:'🧠 科技思维操作系统',open:true,children:[
-{label:'⭐ Layer 1: 思维操作系统（4个骨架概念）',open:true,children:[
-{label:'🎯 可能性空间与随机控制',leaf:true,children:[
-{label:'控制=缩减可能性；幸福只有一条路径',leaf:true},
-{label:'随机控制：未知领域系统尝试（核聚变高温稳定）',leaf:true}
-]},
-{label:'🧬 演化思维',leaf:true,children:[
-{label:'变异+选择+保留；大灭绝淘汰旧范式',leaf:true},
-{label:'创新不可设计只能涌现；研究方向去中心化',leaf:true}
-]},
-{label:'📐 信息量化',leaf:true,children:[
-{label:'信息=不确定性缩减；用比特衡量价值',leaf:true},
-{label:'信息密度=内容含金量；对抗垃圾信息',leaf:true}
-]},
-{label:'🔄 反馈与网络',leaf:true,children:[
-{label:'负反馈→稳定（喝汤、激素调节、自动驾驶）',leaf:true},
-{label:'正反馈→失控（熬夜、泡沫、恐慌传播）',leaf:true},
-{label:'同配/异配网络决定传播模式',leaf:true}
-]}
-]},
-{label:'🔧 Layer 2: 科学方法论工具（6个衍生概念）',open:true,children:[
-{label:'🔬 科学验证：理论大灭绝；温水煮青蛙百年反转',leaf:true},
-{label:'⚙️ 工程师思维：约束下求解；第一性原理；量级估算',leaf:true},
-{label:'🌊 遗传算法与涌现：马赛克→性感图片；蚁群路径',leaf:true},
-{label:'💡 直觉与猜想：科学两公理；拉马努金3900公式',leaf:true},
-{label:'📈 技术采用：S型曲线；期望膨胀→幻灭→生产力高原',leaf:true},
-{label:'⚡ 能量效率：一切技术竞争的统一量纲',leaf:true}
-]},
-{label:'🌐 Layer 3: 8大应用域（317篇文章的实战战场）',open:true,children:[
-{label:'🤖 AI与数字智能（59篇）：蛋白质预测/脑机接口/VR元宇宙/拉马努金机',leaf:true},
-{label:'🧬 生物医学（42篇）：CAR-T/基因编辑/阿尔茨海默/衰老/返老还童',leaf:true},
-{label:'⚡ 能源碳中和（36篇）：核聚变/碳中和6步/电池/氢燃料/特高压',leaf:true},
-{label:'💻 芯片与计算（23篇）：芯片缺货/ARM/鸿蒙/M1/IBM2nm/Windows11',leaf:true},
-{label:'🚀 航天探索（19篇）：SpaceX火箭/空间站/火星/UFO/太空旅游',leaf:true},
-{label:'🍎 食品与健康（39篇）：FDA7部曲/肉链5部曲/盐/咖啡/益生菌',leaf:true},
-{label:'🚗 交通出行（20篇）：自动驾驶6部曲/电动车/飞行汽车/磁悬浮',leaf:true},
-{label:'🦠 疫情公卫（28篇）：疫苗/变异/核酸检测/mRNA/与病毒共存',leaf:true}
-]},
-{label:'🔄 跨层反馈：应用域→检验修正→方法论→提炼升华→骨架概念',leaf:true}
-]}];
-document.getElementById('mindmap').innerHTML=buildTree(tree);
-document.querySelectorAll('.mindmap .node-header').forEach(el=>{
-el.addEventListener('click',function(){
-this.classList.toggle('open');
-const children=this.nextElementSibling;
-if(children)children.classList.toggle('open');
-});
-});
-}
-
-function buildTree(nodes){
-return nodes.map(n=>{
-if(n.leaf){
-const hasKids=n.children&&n.children.length>0;
-if(hasKids)return `<div class="node"><div class="leaf">${n.label}</div><div class="node-children">${buildTree(n.children)}</div></div>`;
-return `<div class="leaf">${n.label}</div>`;
-}
-const cls=n.open!==false?'open':'';
-return `<div class="node"><div class="node-header ${cls}">${n.label}</div><div class="node-children ${cls}">${buildTree(n.children||[])}</div></div>`;
-}).join('');
-}
-
-// ========== TAB 6: SOCRATIC ==========
-function initSocratic(){
-const data=[
-{q:'为什么"可能性空间"是理解一切复杂问题的第一把钥匙？',
-a:'因为它给出了一个精确的数学隐喻：任何问题的状态空间是一棵分叉树。控制就是缩减分叉，让系统走向目标状态。这种思维方式可以应用到家庭关系（004期）、核聚变设计（011期）、芯片产业策略（055期）、疫情管控（138-140期）等截然不同的领域。它的威力在于——你不需要成为每个领域的专家，你只需要问："这个系统的可能性空间有多大？我们通过什么手段在缩减它？"',
-sub:[
-{q:'既然"控制=缩减可能性"，为什么卓克又说"创新不可控制只能涌现"？这不矛盾吗？',
-a:'不矛盾。控制适合已知目标（把火箭送到指定轨道），涌现适合未知目标（不知道下一代突破性技术长什么样）。055期说得清楚：如果你知道目的地，就加大控制力度；如果你不知道目的地在哪，就扩大多样性等待涌现。中国芯片产业需要两者兼备——短期追赶需要控制（攻关EUV光刻机），长期超越需要涌现（允许995个失败的创业团队）。'}
-]},
-{q:'演化思维的"描述替代解释"陷阱，在现实生活中最常见的表现是什么？',
-a:'最常见的就是"成功学"——把成功企业的做法总结成"成功经验"，却忽略了同期的失败企业也做了同样的事。比如，"乔布斯追求极致→苹果成功"的描述忽略了一个事实：同时期追求极致的手机公司（黑莓、Palm、诺基亚的N系列）几乎全部失败。演化思维的正确用法不是"照着成功者做"，而是问"这个生态位为什么让这种特征存活了下来"。',
-sub:[
-{q:'那投资人看BP时怎么用演化思维？',
-a:'不问你为什么不投，而问你投了多少个。VC的商业模式本身就是演化思维的实践——投100个项目，知道其中5个会成功但不知道是哪5个。个人投资者最大的错误是只投2-3个项目然后期待每个都成功——这是在"设计"而非"演化"。'}
-]},
-{q:'信息量化给了我们一个判断"专家观点"含金量的简单方法，是什么？',
-a:'问自己：他说完这句话后，我对这件事的不确定性缩减了多少？如果他说"这个行业前景广阔，我们要抓住机遇"——信息量≈0。如果他说"根据Gartner数据，这个细分市场2023年规模为47亿美元，年增长12%，前三大厂商合计市场份额为63%"——信息量巨大。116期的看门大爷悖论：大爷虽然热心帮忙（"小明在第一车间"），但如果第一车间有999人（共1000人），他的信息量只有-lg(999/1000)≈0.00043比特，几乎等于没说。',
-sub:[
-{q:'很多"深度分析"文章读起来很过瘾但也包含大量废话，怎么区分真信息和假信息？',
-a:'一个实用技巧：删除文中的所有形容词和副词，只保留数字和因果关系陈述，看剩下什么。剩得越多，信息密度越高。"业界领先的、革命性的、颠覆式的..."统统是噪声。"能量密度达到350 Wh/kg，较上一代提升23%，良率72%"——这是信号。'}
-]},
-{q:'负反馈和正反馈的区别，用一个最简单的标准来判断是什么？',
-a:'看系统的变化趋势：如果偏离目标后系统自动往回修正→负反馈（恒温器、血糖调节、GPS导航纠偏）；如果偏离目标后系统加速远离→正反馈（恐慌抛售、网络暴力、核链式反应）。097期最精妙的例子是"喝汤"——勺子离嘴越近，肌肉修正幅度越小（负反馈）。如果修正幅度反而越来越大，就是震颤麻痹症（正反馈失控）。',
-sub:[
-{q:'社交媒体的算法本质上是正反馈还是负反馈？',
-a:'正反馈——你点赞了一个内容→系统给你更多同类内容→你继续点赞→茧房越缩越小。206期的对抗方法本质就是在手动建立负反馈：拒绝跟踪、分机分号、主动搜索替代被动推荐。'}
-]},
-{q:'看完这门课，我到底学会了什么"可迁移的能力"？',
-a:'你可以带走一整套"科技新闻阅读框架"：①看到新技术→问"它处于S曲线哪个位置？"（技术采用）②看到数据宣传→问"具体的数字是什么？和基准线比怎样？"（信息量化）③看到专家争论→问"谁的利益和这个结论绑定？"（科学验证）④看到创新团队→问"他们允许失败吗？团队多样性够吗？"（演化思维）⑤看到系统问题→问"反馈回路是什么？正反馈还是负反馈？"（反馈机制）⑥看到能源方案→问"能量转换效率多少？全生命周期碳排放多少？"（工程师思维）。这六个问题不需要任何专业背景就能问，但它们足以帮你穿透80%的科技新闻。'}
-];
-document.getElementById('socraticContainer').innerHTML=data.map((d,i)=>`
-<div class="socratic-item">
-<div class="socratic-q" onclick="toggleSocratic(this)">${i+1}. ${d.q}</div>
-<div class="socratic-a">${d.a}${d.sub?d.sub.map((s,j)=>`<div class="socratic-sub"><div class="socratic-q" onclick="event.stopPropagation();toggleSocraticSub(this)">${s.q}</div><div class="socratic-a">${s.a}</div></div>`).join(''):''}</div>
-</div>
-`).join('');
-}
-
-function toggleSocratic(el){const a=el.nextElementSibling;if(a)a.classList.toggle('open')}
-function toggleSocraticSub(el){const a=el.nextElementSibling;if(a)a.classList.toggle('open')}
-
-// ========== TAB 7: CASE STUDY ==========
-function initCaseStudy(){
-document.getElementById('caseStudy').innerHTML=`
-<div class="grid2" style="margin-bottom:14px">
-<div class="card"><strong style="color:var(--accent)">📋 背景</strong><p style="font-size:.85rem;margin-top:4px">2023年7月，韩国研究团队发布预印本论文，声称合成了一种名为LK-99的室温超导材料。全球实验室争相复现。3周后，绝大多数独立实验室宣布无法复现超导特性。韩国团队最终撤稿。</p></div>
-<div class="card"><strong style="color:var(--accent)">📊 结果</strong><p style="font-size:.85rem;margin-top:4px">LK-99并非室温超导体——其抗磁性来自Cu₂S的相变（一级结构相变），而非迈斯纳效应。事件从宣告到证伪历时约4周，是全球科学界集体验证的经典案例。</p></div>
-<div class="card"><strong style="color:var(--accent)">🎯 核心矛盾</strong><p style="font-size:.85rem;margin-top:4px">科学验证的速度vs社交媒体的传播速度。论文上传第1天即引爆全球媒体（股价暴涨、科普文章刷屏），而严格的复现实验需要至少2-3周。信息传播R值暂时性地>>1，而验证R值≈0。</p></div>
-<div class="card"><strong style="color:var(--accent)">🔮 现代映射</strong><p style="font-size:.85rem;margin-top:4px">这不是孤立事件——冷聚变（1989）、砷化镓生命（2010）、STAP干细胞（2014）都是同一模式：预印本→媒体狂欢→多实验室复现失败→证伪。社交媒体加速了这一循环，但不改变科学证伪的底层逻辑。</p></div>
-</div>
-
-<div class="card" style="border-left:4px solid var(--gold)">
-<h3>🔍 MKS四维度拆解</h3>
-
-<div style="margin:12px 0"><strong style="color:var(--accent)">1. 科学验证机制：</strong>
-LK-99事件是"理论大灭绝"的微缩版。室温超导的"可能性空间"巨大——如果为真，它将彻底改变能源传输、磁悬浮、量子计算等领域。但正是因为这个空间太大，所以需要更多证据才能缩减不确定性。韩国团队仅提供了两项证据（电阻下降+抗磁性），但这两项都可以用非超导机制解释（Cu₂S相变导致的电阻跳变和抗磁排斥）。科学界的集体复现相当于一个"分布式随机控制"——各实验室用不同方法、不同样品、不同仪器同时尝试，任何一方成功都能迅速缩小可能性空间。4周内，零复现+出现替代解释→可能性空间被缩减到"几乎不可能"。这就是125期"温水煮青蛙"的逻辑：一个论断历经"经典→被辟谣→辟谣被反转"可能需要100年，但在今天，如果全球实验室协同验证，可能只需要4周。</div>
-
-<div style="margin:12px 0"><strong style="color:var(--accent)">2. 信息量化：</strong>
-韩国团队最初的论文在信息论意义上提供了多少信息？从概率上说，室温超导在人类历史上从未被实现过，事前概率极低（<0.0001%）。论文中两项证据的"信息量"很高——如果为真的话，它们将缩减室温超导可能性空间的绝大部分。但问题是：信息的"可信度"不等于信息的"量"。116期的关键区分——阿花告诉你"答案可能是C"确实提供了信息（缩减了50%的可能性），但如果阿花之前10次猜测只对了1次，你应该大幅折现这条信息的价值。韩国团队的"信用记录"：历史上已有冷聚变等先例，预印本未经同行评议，→信息的有效价值应打极大折扣。</div>
-
-<div style="margin:12px 0"><strong style="color:var(--accent)">3. 反馈与网络：</strong>
-LK-99事件的传播网络是"异配性网络"的典型案例——超级连接者（科普大V、财经媒体）将信息传播给大量普通用户（散户投资者），导致相关股票暴涨。但这是正反馈失控——传播速度远超验证速度。138-140期的网络传播模型预测：这种"信息传播R值短暂>1"但"验证R值≈0"的情况，必然导致"先疯狂后崩溃"的模式。事实上，LK-99相关概念股在4周内完成了一轮完整的"暴涨-暴跌"。这恰好验证了"异配性网络中，传播遍及全员但容易失控"的规律。</div>
-
-<div style="margin:12px 0"><strong style="color:var(--accent)">4. 工程师思维：</strong>
-即便LK-99为真，从"实验室合成了毫克级疑似室温超导材料"到"商用超导电缆替代全球电网"，中间还有一条巨大的鸿沟——工程师思维会问：材料能在空气中稳定存在多久？能做成线材吗？临界电流密度够大吗？制造成本是多少？每公里的能量损耗是多少？量产工艺良率能到多少？这些约束条件中的任何一个都可能让"实验室突破"变成"商业上不可行"。马斯克造火箭的第一性原理同样适用：先算全生命周期的能量和成本账，再决定值不值得做。在LK-99热度最高的时候，用工程师思维算一笔账的任何人都不会去买相关概念股。</div>
-</div>`;
-}
-
-// ========== TAB 8: DECISION SIMULATION ==========
-function initDecision(){
-const scenarios=[
-{s:'你是一家科技媒体的编辑。早上8点，韩国团队发布LK-99室温超导预印本。你的竞争对手已经发了"室温超导时代来临！"的头条。压力巨大，你必须10分钟内决定今天的头条。你应该？',
-choices:[
-{text:'跟进发"室温超导重大突破"，用竞争对手同样的口径抢占流量',result:'短期流量可能很高，但3周后如果被证伪，你的公信力永久受损。这相当于在信息传播的"正反馈"中做加速者——你成了谣言传播网络中的一个超级连接者（参考138-140期）。',mks:'信息量化：未经同行评议的预印本，信息价值需打极大折扣。科学验证：历史上冷聚变、STAP干细胞都是同一模式。'},
-{text:'发"韩国团队声称发现室温超导，但全球科学家尚未复现——我们整理了5个关键问题"',result:'这是最优选择。你既满足了读者对新消息的知情权，又提供了真正有价值的信息——这5个关键问题（临界温度、迈斯纳效应确认、可复现性、材料稳定性、理论解释）本身就是信息量极高的内容。即使LK-99最终被证伪，你的文章依然有价值，因为它教会了读者"如何评估一项科学发现"。',mks:'信息量化：提供5个关键问题=缩减了读者评估这条新闻的不确定性。工程师思维：问的是"可复现性/稳定性"等工程约束。'},
-{text:'不予报道，等科学界有明确结论再说',result:'保守但不可取。3周后如果被证伪，你的读者会问"为什么我在这件事上完全没看到你们的报道？"完全沉默不等于谨慎——这是放弃了"帮助读者理解不确定性"的媒体责任。',mks:'可能性空间：沉默让读者的不确定性保持不变（信息量=0），而解释不确定性本身就是有价值的信息。'}
-]},
-{s:'你在一家VC工作，需要评估一个"AI制药"创业项目。创始人说他们的AI平台可以在3个月内完成传统需要5年的药物发现阶段。团队25人，融资需求5000万，估值5亿。创始人背景：机器学习PhD，之前在Google Brain工作3年，没有制药行业经验。你应该？',
-choices:[
-{text:'立即投资——AI+制药是风口，创始人是Google Brain背景，错过可惜',result:'警惕"工程师思维缺失"。传统药物发现5年周期不是"效率低"，而是牵扯到体内体外实验、动物模型、毒理评估、临床试验审批等无法被AI压缩的物理和监管步骤。AI可能加速"候选分子筛选"这一小环节（占整个过程的约10%），但不可能把5年变成3个月。创始人的Google Brain背景很强，但缺乏制药行业经验意味着他可能严重低估了生物学和监管约束。',mks:'工程师思维：分解药物发现流程，找出AI能加速的部分vs不能加速的部分。量级估算：如果AI只加速了10%的环节，5年缩短到4.5年更合理，而非3个月。'},
-{text:'详细分析药物发现全流程，识别AI能加速的环节和不能加速的环节，计算实际可能缩短的时间跨度',result:'正确。药物发现的完整链条：靶点识别→先导化合物筛选→先导化合物优化→临床前研究（动物实验）→I/II/III期临床试验→审批上市。其中，AI在"先导化合物筛选"和"优化"两个环节确实有很大潜力（可能从12个月缩短到3个月），但临床前研究和临床试验的时间几乎不受AI影响（受制于生物学周期和监管流程）。总体节省2-3年是合理的估计，5年→3个月是严重高估。用这个分析重新计算估值，决定是否投资。',mks:'工程师思维（约束分解+量级估算）+ 技术采用曲线（判断AI制药处于期望膨胀顶峰还是生产力高原）。'},
-{text:'拒绝投资——没有制药背景的团队做AI制药肯定不行',result:'过于粗暴。AI+制药确实有价值——2020年DeepMind的AlphaFold预测蛋白质结构就是一个里程碑（卓克在048期报道过）。问题是"3个月替代5年"这个说法不符合工程师思维的约束分析。你应该向创始人提出你的分析并要求他回应——如果他能给出具体的、符合逻辑的解释（比如他们只做某些特定类型的分子，或者他们解决了某个环节的关键瓶颈），这个项目可能仍然值得投资。',mks:'信息量化：不因为一个不可信的数字就否定整个方向。科学验证：要求创始人提供可验证的证据。'}
-]},
-{s:'你的城市计划新建一条磁悬浮线路（类似卓克253期讨论的）。支持方说"时速600公里，全世界最先进"。反对方说"造价太高，不如建高铁"。作为一个想要用MKS思维分析这件事的市民，你的第一反应应该是？',
-choices:[
-{text:'先问：这条线路的日均客流量预计多少？每公里造价多少？全生命周期每乘客每公里的能耗是多少？和高铁/飞机的比较数据？',result:'这就是工程师思维的正确应用。253期卓克分析磁悬浮的核心方法就是"能量转换效率+成本-收益分析"——磁悬浮在400-600km距离上确实比飞机+高铁有优势（总耗时更短），但这个优势建立在客流量足够大、可以摊薄高昂建设成本的前提下。需要具体数字才能判断。',mks:'工程师思维：第一性原理+量级估算。能量转换效率：磁悬浮vs高铁vs飞机的全生命周期能耗比较。技术采用曲线：判断磁悬浮是否已过"幻灭低谷"。'},
-{text:'支持！时速600公里比高铁快一倍，肯定是更好的技术',result:'速度不是唯一指标。协和超音速客机比波音747快2.5倍，但已于2003年停飞——因为每乘客每英里的运营成本是波音747的4倍。好的技术≠好的产品≠好的商业模式。这个判断忽略了成本约束、客流量约束、线路适配性（磁悬浮需要几乎直线的轨道，征地成本远高于高铁）。',mks:'能量转换效率：好的技术不等于能量效率高的技术。可能性空间：磁悬浮需要很多条件同时满足（客流量/地形/经济水平），只有少数路线位于"可能性空间"中。'},
-{text:'反对！建高铁就行了，不搞花里胡哨的',result:'这也过于简单化。日本东京-名古屋磁悬浮（中央新干线）预计2027年开通，因为东海道新干线已经饱和需要分流。中国的沪杭、京沪等部分线路也存在类似需求。问题不在于"磁悬浮vs高铁"的二选一，而在于"在哪个具体线路上、哪个时间点、哪种技术方案是最优解"。不同线路的可能性和约束条件不同，答案也不同。',mks:'可能性空间：不是在"磁悬浮总是好"或"总是坏"中二选一，而是找出哪条线路处于磁悬浮的可能性空间内。'}
-]}
-];
-
-document.getElementById('decisionContainer').innerHTML=scenarios.map((sc,i)=>`
-<div class="decision-round">
-<div class="scenario">📋 第${i+1}轮：${sc.s}</div>
-${sc.choices.map((ch,j)=>`<button class="d-choice" onclick="showDecision(${i},${j})">${'ABC'[j]}. ${ch.text.slice(0,80)}...</button>`).join('')}
-<div class="d-result" id="dresult${i}"></div>
-</div>
-`).join('');
-
-// Store scenarios for showDecision
-window._scenarios=scenarios;
-}
-
-function showDecision(si,oi){
-const sc=window._scenarios[si];
-const ch=sc.choices[oi];
-const el=document.getElementById('dresult'+si);
-el.style.display='block';
-el.innerHTML=`<div style="margin-bottom:8px"><strong style="color:var(--accent)">📊 反馈：</strong>${ch.result}</div><div style="font-size:.85rem;color:var(--gold)"><strong>🧠 MKS分析：</strong>${ch.mks}</div>`;
-// Mark as chosen
-const allChoices=el.parentElement.querySelectorAll('.d-choice');
-allChoices.forEach((c,j)=>{c.classList.remove('chosen');if(j===oi)c.classList.add('chosen')});
-}
-
-// ========== UTILITY ==========
-function switchTab(idx){
-document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-const btn=document.querySelector('.tab-btn[data-tab="'+idx+'"]');
-if(btn){btn.classList.add('active')}
-const panel=document.querySelector('.tab-content[data-tab="'+idx+'"]');
-if(panel){panel.classList.add('active')}
-if(idx==='4')updateReviewStats();
-}
-
-</script>
 </body>
 </html>

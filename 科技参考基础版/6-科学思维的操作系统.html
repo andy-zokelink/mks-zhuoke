@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科学思维的操作系统 · 最小知识集</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#fdf6ec;--card:#fffaf2;--accent:#c0392b;--accent2:#d4a574;
+--text:#3d2f2f;--text2:#6b5555;--border:#e8d5c0;--gold:#b8860b;
+--shadow:0 2px 12px rgba(60,30,20,.08);--radius:12px;
+}
+/* Top bar */
+.top-bar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#3d2f2f 0%,#5a3e3e 100%);color:#fdf6ec;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.top-bar h1{font-size:clamp(14px,2.5vw,18px);font-weight:600;white-space:nowrap}
+.top-bar .home-link{color:#d4a574;font-size:13px;border:1px solid #d4a574;padding:3px 10px;border-radius:14px;white-space:nowrap;transition:all .2s;text-decoration:none}
+.top-bar .home-link:hover{background:#d4a574;color:#3d2f2f;text-decoration:none}
+html{font-size:clamp(14px,1.2vw,17px);scroll-behavior:smooth}
+body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+.container{max-width:960px;margin:0 auto;padding:0 clamp(12px,3vw,24px)}
+
+.tab-bar{position:sticky;top:44px;z-index:100;display:flex;flex-wrap:wrap;gap:4px;padding:8px clamp(4px,1vw,12px);background:rgba(253,246,236,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);justify-content:center}
+.tab-btn{padding:7px 14px;border:none;border-radius:18px;background:var(--card);color:var(--text2);font-size:.8rem;cursor:pointer;transition:all .2s;white-space:nowrap;border:1px solid transparent}
+.tab-btn:hover{border-color:var(--accent2);color:var(--accent)}
+.tab-btn.active{background:var(--accent);color:#fff}
+
+.tab-content{display:none;animation:fadeIn .35s ease}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+h2{font-size:clamp(1.2rem,2vw,1.5rem);color:var(--accent);margin:20px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--accent2)}
+h3{font-size:clamp(1rem,1.5vw,1.15rem);color:var(--text);margin:16px 0 8px}
+
+.card{background:var(--card);border-radius:var(--radius);padding:clamp(14px,2.5vw,20px);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+
+.concept-card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--accent);transition:transform .2s;cursor:pointer}
+.concept-card:hover{transform:translateY(-2px)}
+.concept-card.mks{border-left-color:var(--gold);position:relative}
+.concept-card.mks::after{content:'\2605';position:absolute;top:8px;right:12px;color:var(--gold);font-size:1.2rem}
+.concept-card h4{font-size:.95rem;color:var(--accent);margin-bottom:6px}
+.concept-card p{font-size:.82rem;color:var(--text2);line-height:1.5}
+
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.75rem;font-weight:700}
+.badge-core{background:#fde8e8;color:var(--accent)}
+.badge-mks{background:#fef3cd;color:var(--gold)}
+.badge-boundary{background:#e8f0fe;color:#3a6ea5}
+
+.progress-wrap{margin:16px 0}
+.progress-bar{height:10px;border-radius:5px;background:var(--border);overflow:hidden}
+.progress-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .5s}
+.progress-label{font-size:.78rem;color:var(--text2);margin-top:4px}
+
+/* SVG */
+.svg-wrap{overflow-x:auto;margin:16px 0;border-radius:var(--radius);background:var(--card);padding:16px;-webkit-overflow-scrolling:touch}
+.svg-wrap svg{min-width:700px;display:block;margin:0 auto}
+
+/* Flip Card */
+.flip-card{perspective:1000px;height:clamp(260px,40vw,360px);margin-bottom:14px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;padding:clamp(16px,3vw,24px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border)}
+.flip-front{background:var(--card)}
+.flip-back{background:linear-gradient(135deg,#fffaf2,#fef5e7);transform:rotateY(180deg);overflow-y:auto;align-items:flex-start;text-align:left;font-size:clamp(.8rem,1.6vw,.9rem)}
+.flip-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin:12px 0}
+.flip-nav .btn{min-width:80px}
+
+/* Quiz */
+.quiz-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
+.quiz-card .q-tag{font-size:.75rem;padding:3px 10px;border-radius:8px;display:inline-block;margin-bottom:8px}
+.q-mc{background:#fde8e8;color:var(--accent)}
+.q-sa{background:#e8f0fe;color:#3a6ea5}
+.quiz-card .q-text{font-weight:700;margin-bottom:12px}
+.quiz-card .q-option{padding:8px 14px;margin:4px 0;border-radius:8px;cursor:pointer;transition:all .2s;border:1px solid var(--border);font-size:.85rem}
+.quiz-card .q-option:hover{border-color:var(--accent2);background:#fef9f4}
+.quiz-card .q-option.selected{border-color:var(--accent);background:#fde8e8}
+.quiz-card .q-option.correct{border-color:#4caf50;background:#e8f5e9}
+.quiz-card .q-option.wrong{border-color:var(--accent);background:#ffebee}
+.quiz-card .q-feedback{margin-top:8px;font-size:.82rem;padding:8px;border-radius:8px;display:none}
+.quiz-card .q-feedback.show{display:block}
+.quiz-card .q-feedback.right{background:#e8f5e9;color:#2e7d32}
+.quiz-card .q-feedback.wrong-msg{background:#ffebee;color:var(--accent)}
+.quiz-card .sa-input{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:.85rem;resize:vertical;min-height:80px;background:#fff}
+.quiz-card .sa-reveal{margin-top:8px;padding:10px;background:#fef9f4;border-radius:8px;font-size:.82rem;display:none}
+.quiz-card .sa-reveal.show{display:block}
+
+#quizContainer .quiz-card{background:var(--card);border-radius:10px;box-shadow:0 2px 12px rgba(60,30,30,.07);padding:20px;margin-bottom:14px}
+#quizContainer .quiz-card .q-num{font-weight:700;color:var(--accent);margin-bottom:6px}
+#quizContainer .quiz-card .q-text{font-size:.95rem;margin-bottom:12px;line-height:1.6}
+#quizContainer .quiz-card .option{display:block;padding:8px 14px;margin:4px 0;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.88rem;background:var(--card)}
+#quizContainer .quiz-card .option:hover{background:#fff5f0;border-color:var(--accent)}
+#quizContainer .quiz-card .option.selected{background:#ffe8e4;border-color:var(--accent);color:var(--accent);font-weight:600}
+#quizContainer .quiz-card .option.correct{background:#d4edda!important;border-color:#4caf50!important;color:#155724!important}
+#quizContainer .quiz-card .option.wrong{background:#f8d7da!important;border-color:var(--accent)!important;color:#721c24!important}
+#quizContainer .quiz-card .feedback{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.85rem;line-height:1.5}
+#quizContainer .quiz-card .feedback.correct{background:#d4edda;color:#155724}
+#quizContainer .quiz-card .feedback.wrong{background:#f8d7da;color:#721c24}
+#quizContainer .essay-area{width:100%;min-height:80px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:inherit;font-size:.88rem;resize:vertical;background:var(--bg)}
+
+.subtitle{font-size:clamp(.85rem,1.5vw,.95rem);color:var(--text2);text-align:center;margin:10px 0 16px}
+
+/* Mindmap */
+.mindmap{padding:0}
+.mindmap .node{margin-left:20px}
+.mindmap .node-header{cursor:pointer;padding:6px 0;font-weight:bold;color:var(--accent);display:flex;align-items:center;gap:6px}
+.mindmap .node-header::before{content:"\25B8";display:inline-block;transition:transform .2s;font-size:.7rem}
+.mindmap .node-header.open::before{transform:rotate(90deg)}
+.mindmap .node-children{display:none;margin-left:16px;border-left:2px solid var(--border);padding-left:10px}
+.mindmap .node-children.open{display:block}
+.mindmap .leaf{padding:3px 0;font-size:.88rem;color:var(--text)}
+
+/* Socratic */
+.socratic-item{margin-bottom:12px}
+.socratic-q{cursor:pointer;padding:12px 16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);font-weight:700;transition:all .2s}
+.socratic-q:hover{border-color:var(--accent2)}
+.socratic-q::before{content:'\2753 '}
+.socratic-a{display:none;padding:12px 16px;background:#fef9f4;border-radius:0 0 var(--radius) var(--radius);font-size:.85rem;color:var(--text2)}
+
+/* Decision */
+.decision-round{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.decision-round .scenario{font-weight:700;margin-bottom:12px;color:var(--accent)}
+.decision-round .d-option{padding:10px 14px;margin:6px 0;border-radius:8px;cursor:pointer;border:1px solid var(--border);transition:all .2s}
+.decision-round .d-option:hover{border-color:var(--accent2);background:#fef9f4}
+.decision-round .d-option.chosen{border-color:var(--accent);background:#fde8e8}
+.decision-round .d-result{display:none;margin-top:12px;padding:14px;border-radius:8px;background:#fef9f4;font-size:.85rem}
+.decision-round .d-result.show{display:block}
+
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat-card{text-align:center;padding:16px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stat-card .num{font-size:2rem;font-weight:700;color:var(--accent)}
+.stat-card .lbl{font-size:.78rem;color:var(--text2);margin-top:4px}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem;margin:12px 0}
+.tbl th,.tbl td{padding:8px 10px;border:1px solid var(--border);text-align:left}
+.tbl th{background:var(--accent);color:#fff;font-weight:600}
+.tbl tr:nth-child(even){background:#fef9f4}
+
+@media(max-width:640px){
+.tab-bar{gap:2px;padding:6px 2px}
+.tab-btn{padding:5px 8px;font-size:.7rem;border-radius:14px}
+.grid2,.grid3,.grid4{grid-template-columns:1fr}
+}
+
+.timer{font-size:1.3rem;font-weight:700;color:var(--accent);text-align:center;padding:10px}
+.timer.warning{animation:pulse .5s infinite alternate}
+@keyframes pulse{from{opacity:1}to{opacity:.5}}
+
+.btn{padding:10px 24px;border-radius:20px;border:2px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-size:.88rem;font-weight:700;transition:all .2s}
+.btn:hover{background:#a93226;border-color:#a93226}
+.btn-outline{background:transparent;color:var(--accent)}
+.btn-outline:hover{background:var(--accent);color:#fff}
+.btn-sm{padding:6px 14px;font-size:.78rem}
+.btn-success{background:#4caf50;border-color:#4caf50;color:#fff}
+.btn-success:hover{background:#388e3c;border-color:#388e3c}
+.tag{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.75rem;font-weight:700;background:#e8f5e9;color:#2e7d32}
+button:disabled{opacity:.5;cursor:not-allowed}
+
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:10px 0;font-size:.78rem}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend .dot{width:10px;height:10px;border-radius:50%}
+
+.hidden{display:none}
+.dim-label{display:inline-block;background:var(--accent);color:#fff;padding:1px 8px;border-radius:4px;font-size:.7rem;margin-right:4px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>科学思维的操作系统 · 最小知识集</h1>
+  <a class="home-link" href="index.html" title="返回知识主板">← 知识主板</a>
+</div>
+<div class="container">
+
+<p class="subtitle">最小知识集 · 卓克《科技参考基础版》· 科学方法论与认知升级专题</p>
+<p class="subtitle" style="font-size:.78rem;margin-top:4px">核心驱动：可能性空间探索 ↔ 证伪反馈校准 · 科学思维作为底层操作系统的可迁移能力</p>
+
+<nav class="tab-bar" id="tabBar">
+<button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
+<button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
+<button class="tab-btn" onclick="switchTab(2)">题库系统</button>
+<button class="tab-btn" onclick="switchTab(3)">考试模式</button>
+<button class="tab-btn" onclick="switchTab(4)">复习模式</button>
+<button class="tab-btn" onclick="switchTab(5)">思维导图</button>
+<button class="tab-btn" onclick="switchTab(6)">深度追问</button>
+<button class="tab-btn" onclick="switchTab(7)">案例分析</button>
+<button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+</nav>
+
+<!-- ========== TAB 0: 知识集总览 ========== -->
+<section class="tab-content active" id="tab0">
+<div class="card">
+<h2>核心目标</h2>
+<p style="font-size:1.05rem">掌握<strong>科学思维的操作系统</strong>——不是记住具体科学结论，而是掌握可迁移到任何领域的思维工具。从可能性空间到随机控制，从演化思维到负反馈，从效应量到证伪逻辑，这套工具让你在面对不确定的世界时拥有更可靠的决策框架。</p>
+</div>
+
+<h2>10个核心概念</h2>
+<div class="grid2" id="conceptGrid"></div>
+
+<h2>★ 4个MKS核心骨架</h2>
+<div class="grid2" id="mksGrid"></div>
+
+<h2>概念关系图</h2>
+<div class="svg-wrap" id="svgContainer"></div>
+<div class="legend">
+<span><span class="dot" style="background:#c0392b"></span> 主线知识</span>
+<span><span class="dot" style="background:#b8860b"></span> 对立张力</span>
+<span><span class="dot" style="background:#3a6ea5"></span> 支撑关系</span>
+<span><span class="dot" style="background:#6b8e23"></span> 应用层</span>
+</div>
+
+<h2>边界知识表</h2>
+<div style="overflow-x:auto">
+<table class="tbl" id="boundaryTable"><thead><tr><th>知识点</th><th>使用场景</th><th>只需知道</th></tr></thead><tbody></tbody></table>
+</div>
+
+<h2>学习路径（5阶段）</h2>
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0" id="learningPath"></div>
+
+<h2>学习进度</h2>
+<div class="progress-wrap">
+<div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
+<div class="progress-label" id="progressLabel">已学习 0/10 个概念</div>
+</div>
+</section>
+
+<!-- ========== TAB 1: 知识卡片 ========== -->
+<section class="tab-content" id="tab1">
+<div class="card" style="text-align:center">
+<div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
+<div class="flip-nav">
+  <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
+  <span style="font-size:.85rem;color:var(--text2)" id="cardIndex">1 / 10</span>
+  <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
+</div>
+<div style="text-align:center;margin:8px 0">
+  <button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
+<p style="text-align:center;font-size:.78rem;color:var(--text2)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+</div>
+</section>
+
+<!-- ========== TAB 2: 题库系统 ========== -->
+<section class="tab-content" id="tab2">
+<div class="card">
+<h3 style="margin-bottom:10px">题库系统</h3>
+<div style="margin-bottom:12px">
+  <button class="btn" onclick="startQuiz()">随机抽题练习</button>
+  <button class="btn btn-outline btn-sm" onclick="resetQuiz()" style="margin-left:8px">重置</button>
+  <span style="margin-left:8px;font-size:.85rem;color:var(--text2)" id="quizScore"></span>
+  <span id="quizTimer" style="float:right;color:var(--accent);font-weight:700;display:none"></span>
+</div>
+<div id="quizContainer"></div>
+<div id="staticQuiz">
+<h2>选择题（20道）<span class="badge badge-core" style="margin-left:8px">即时判分</span></h2>
+<div id="mcqContainer"></div>
+<h2 style="margin-top:24px">简答题（10道）<span class="badge badge-boundary" style="margin-left:8px">点击查看要点</span></h2>
+<div id="saqContainer"></div>
+</div>
+</div>
+</section>
+
+<!-- ========== TAB 3: 考试模式 ========== -->
+<section class="tab-content" id="tab3">
+<div class="card">
+<div style="text-align:center;padding:20px">
+<h2>模拟考试</h2>
+<p style="color:var(--text2)">从题库随机抽取 7道选择 + 3道简答 | 限时15分钟</p>
+<div class="timer" id="examTimer">15:00</div>
+<button class="btn" onclick="startExam()" id="examStartBtn">开始考试</button>
+<div id="examArea"></div>
+<div id="examResult" style="display:none"></div>
+</div>
+</div>
+</section>
+
+<!-- ========== TAB 4: 复习模式 ========== -->
+<section class="tab-content" id="tab4">
+<h2>学习统计</h2>
+<div class="stat-grid" id="statsGrid"></div>
+
+<h2 style="margin-top:20px">错题本</h2>
+<div id="errorBook"></div>
+<p style="font-size:.82rem;color:var(--text2)" id="emptyError">暂无错题，继续保持！</p>
+
+<h2 style="margin-top:20px">概念薄弱点</h2>
+<div id="weakConcepts"></div>
+<div style="margin-top:16px">
+<button class="btn btn-outline btn-sm" onclick="resetProgress()">重置全部进度</button>
+</div>
+</section>
+
+<!-- ========== TAB 5: 思维导图 ========== -->
+<section class="tab-content" id="tab5">
+<div class="card"><h2>可折叠思维导图</h2></div>
+<div class="card mindmap">
+<div class="node" style="margin-left:0">
+<div class="node-header open" onclick="toggleMindmap(this)">科学思维的操作系统 · 知识全景</div>
+<div class="node-children open">
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">一、认识世界的基础框架</div>
+<div class="node-children open">
+<div class="leaf">• 可能性空间：失败模式远多于成功模式</div>
+<div class="leaf">• 随机控制：在无解困境中寻找可控微杠杆</div>
+<div class="leaf">• 信息即不确定性消除：香农信息论核心</div>
+<div class="leaf">• 效应量思维：统计显著≠实际重要</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">二、演化思维的三个层次</div>
+<div class="node-children open">
+<div class="leaf">• 第一层 描述(What)：记录事实——达尔文派 vs 华莱士派分歧</div>
+<div class="leaf">• 第二层 解释(Why)：追问机制——自然选择如何运作</div>
+<div class="leaf">• 第三层 理论(Predict)：预测未知——没有永恒的理论</div>
+<div class="leaf">• 核心洞见：达尔文用描述代替解释的思维革命</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">三、系统控制核心机制</div>
+<div class="node-children open">
+<div class="leaf">• 负反馈的神圣性：好系统靠刹车维持稳定</div>
+<div class="leaf">• 正反馈的危险：增长失控导致系统崩溃</div>
+<div class="leaf">• 网络超级传播者：20%节点贡献80%传播</div>
+<div class="leaf">• 幂律分布：正态是例外，幂律是常态</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">四、科学验证体系</div>
+<div class="node-children open">
+<div class="leaf">• 证伪逻辑：科学的本质是允许被证明错误</div>
+<div class="leaf">• p值的滥用：p<0.05不是真理的通行证</div>
+<div class="leaf">• 重复危机：斯坦福监狱实验、棉花糖实验崩塌</div>
+<div class="leaf">• 拉马努金机器：猜想无需证明——证据不是一切</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">五、学术市场的制度逻辑</div>
+<div class="node-children open">
+<div class="leaf">• 激励扭曲：发表数量KPI→论文异化为职业工具</div>
+<div class="leaf">• 学术出版史：科学家身份演变→虚假繁荣→秩序重建</div>
+<div class="leaf">• 诺贝尔奖造假：激励制度而非道德是主因</div>
+<div class="leaf">• 正常事故理论：复杂系统中的事故是"正常的"</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">六、学习与认知方法</div>
+<div class="node-children open">
+<div class="leaf">• 自然学习/顿悟：非结构化探索的力量</div>
+<div class="leaf">• 记忆宫殿：空间编码增强记忆</div>
+<div class="leaf">• 手写vs键盘：手写笔记的理解深度优势</div>
+<div class="leaf">• 学习时间窗：不同时段适合不同类型学习</div>
+<div class="leaf">• 认知偏见：游戏成瘾/迷信/朋友圈模型/"不要用高级理由压制第一反应"</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">七、应用案例与跨界连接</div>
+<div class="node-children open">
+<div class="leaf">• 苏炳添的科学训练：量化分解+负反馈优化</div>
+<div class="leaf">• 人工合成淀粉：科学方法论在工程中的实战</div>
+<div class="leaf">• 风投逻辑：幂律分布驱动的投资策略</div>
+<div class="leaf">• 中国古代玻璃：技术演化的描述vs解释视角</div>
+<div class="leaf">• 琥珀DNA：证伪与科学边界的经典案例</div>
+<div class="leaf">• 音乐与数学能力：相关≠因果，效应量检验</div>
+<div class="leaf">• 育儿科学：双语教育/挑食的研究方法论审视</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<!-- ========== TAB 6: 深度追问 ========== -->
+<section class="tab-content" id="tab6">
+<div id="socraticContainer"></div>
+</section>
+
+<!-- ========== TAB 7: 案例分析 ========== -->
+<section class="tab-content" id="tab7">
+<div class="card">
+<h2>案例分析：诺贝尔奖得主的论文造假——为什么顶级科学家也会作弊</h2>
+<p style="color:var(--text2);margin-bottom:16px">用MKS四维度拆解学术不端的制度根源</p>
+
+<div class="card" style="border-left:4px solid var(--accent)">
+<h3>问题识别（What）</h3>
+<p style="font-size:.85rem">2018年诺贝尔化学奖得主弗朗西丝·阿诺德(Frances Arnold)在2020年撤回一篇发表在《科学》上的论文，因为实验结果无法重复。更早的案例：2001年诺贝尔物理学奖得主科内尔(Carl Wieman)的学生在《自然》发表造假论文。2014年STAP细胞丑闻中，小保方晴子的导师(诺奖级科学家)也卷入其中。连诺贝尔奖级别的科学家都涉及论文造假，这不是"少数坏苹果"的问题，而是<strong>学术市场激励结构</strong>的系统性问题。</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gold)">
+<h3>核心概念运用（Which Concepts）</h3>
+<p style="font-size:.85rem">
+<strong>① 学术市场的激励扭曲：</strong>当发表论文数量成为KPI，论文从"传递发现的工具"异化为"获取职业利益的手段"。诺贝尔奖得主也不能免于这种压力——他们要维持实验室运转、争取经费、培养更多学生。<br>
+<strong>② 验证的证伪逻辑：</strong>科学的本质不是证明正确而是允许被证明错误。阿诺德主动撤回论文恰恰说明她在践行科学精神——错了就承认。真正危险的是那些从未被检验也无法被检验的"科学结论"。<br>
+<strong>③ 负反馈缺失：</strong>学术系统中造假被发现的概率低、代价小（通常只是撤稿），而发表的收益巨大（职位、经费、声誉）。这是一个负反馈失灵的系统。<br>
+<strong>④ 效应量思维：</strong>媒体的标题"诺奖得主造假"听起来很严重，但我们需要看效应量——在整个学术出版中，彻底造假的比例其实很低。问题不是大多数论文造假，而是<strong>不可重复的研究比例远高于造假比例</strong>。
+</p>
+</div>
+
+<div class="card" style="border-left:4px solid #3a6ea5">
+<h3>解决方案与制度逻辑（How）</h3>
+<p style="font-size:.85rem">
+<strong>事前：改变激励结构。</strong>从"publish or perish"(不发论文就淘汰)转向多样化的学术评价——教学贡献、数据共享、方法严谨性都应被纳入评价。<br>
+<strong>事中：注册报告(Registered Reports)。</strong>在研究开始前先提交研究设计和分析方法，通过同行评审后无论结果如何都发表——切断"为了显著结果而p值操纵"的动机链。<br>
+<strong>事后：提高造假的代价。</strong>目前撤稿的学术代价很低，造假者换个机构继续发论文。需要建立黑名单制度和更透明的学术诚信档案。<br>
+<strong>根本思路：</strong>把学术系统从"正反馈驱动"(发表→资源→更多发表)改为"负反馈校准"(检验→修正→更可靠的知识)。
+</p>
+</div>
+
+<div class="card" style="border-left:4px solid #6b8e23">
+<h3>MKS启示</h3>
+<p style="font-size:.85rem">
+1. <strong>制度>道德：</strong>与其谴责"坏人"，不如设计让好人难以做坏事的制度。学术造假不是道德问题，是激励问题。<br>
+2. <strong>证伪是科学的美德而非缺陷：</strong>阿诺德撤稿恰恰证明科学在起作用——可被证伪的知识才是科学知识。<br>
+3. <strong>负反馈必须强于正反馈：</strong>好系统靠刹车维持稳定。学术系统当前的"刹车"(同行评审、重复实验)太弱，"油门"(发表奖励)太强。<br>
+4. <strong>效应量校准恐慌：</strong>"诺奖得主造假"是大新闻，但实际稀缺的造假案例不能代表整个学术界的质量。真正的危机是大量研究不可重复而非故意造假。
+</p>
+</div>
+</div>
+</section>
+
+<!-- ========== TAB 8: 实战决策 ========== -->
+<section class="tab-content" id="tab8">
+<div id="decisionContainer"></div>
+</section>
+
+</div><!-- container -->
+
+<script>
+// ============ DATA ============
+const concepts = [
+{id:0, name:'可能性空间', desc:'失败模式远多于成功模式。一个系统可以有一万种方式出错但只有少数几种方式正常工作。成功是穿越可能性空间中极窄的通道。', mks:true},
+{id:1, name:'随机控制', desc:'在看似无解的困境中找到一个可控的微小杠杆。二战集中营幸存者找到自己可以控制的微小变量从而维持心理韧性——一定有至少一个自己能控制的变量。', mks:true},
+{id:2, name:'演化思维的三重境界', desc:'描述(这是什么)→解释(为什么是这样)→理论(还能预测什么)。达尔文用描述代替解释——先记录物种分布的事实而非追问"为什么上帝这样设计"。', mks:true},
+{id:3, name:'负反馈的神圣性', desc:'好系统靠刹车而非油门维持稳定。股市熔断、人体血糖调节、气候变化——凡是失控的系统都是负反馈失灵。正反馈=增长(好)、负反馈=衰退(坏)是望文生义。', mks:true},
+{id:4, name:'网络中的超级传播者', desc:'20%的节点贡献80%的传播——不只在病毒领域，在信息、创新、社会运动中同样成立。控制超级传播节点的ROI远高于普适措施。', mks:false},
+{id:5, name:'效应量思维', desc:'统计显著(p<0.05)不等于实际重要(d=0.1)。经过严格检验证明每天多喝一杯水能延长寿命0.3秒——统计显著但毫无意义。', mks:false},
+{id:6, name:'验证的证伪逻辑', desc:'科学的本质不是证明正确而是允许被证明错误。斯坦福监狱实验和棉花糖实验近年因无法重复而崩塌。科学结论的保质期是有条件的。', mks:false},
+{id:7, name:'信息即不确定性的消除', desc:'香农信息论：信息量不是字数而是消除了多少种可能性。明天太阳从东边升起——信息量为零因为是100%确定事件。刷得越多不一定学得越多。', mks:false},
+{id:8, name:'学术市场的激励扭曲', desc:'当发表论文数量成为KPI，论文从"传递发现的工具"异化为"获取职业利益的手段"。诺贝尔奖得主也要论文造假说明激励而非道德是主因。', mks:false},
+{id:9, name:'幂律分布的不公平世界', desc:'大多数自然和社会现象不是正态分布而是极少数人占据绝大多数资源。风投回报——一只基金中最好的一个项目回报超过其他所有项目之和。', mks:false}
+];
+
+const boundaryKnowledge = [
+{name:'控制论(维纳)',scene:'理解反馈回路(feedback loop)的数学起源'},
+{name:'香农信息论',scene:'理解"信息"的严格定义——不确定性消除'},
+{name:'p值与效应量Cohen\'s d',scene:'区分统计显著与实际重要性'},
+{name:'波普尔证伪主义',scene:'理解"科学"的哲学定义——可证伪性'},
+{name:'达尔文vs华莱士分歧',scene:'理解描述vs解释两种科学风格'},
+{name:'拉马努金机器',scene:'理解"猜想无需证明"这一异端方法论'},
+{name:'斯坦福监狱实验',scene:'理解经典实验被证伪的典型案例'},
+{name:'正常事故理论(Perrow)',scene:'理解复杂系统中事故的必然性'},
+{name:'STAP细胞丑闻',scene:'理解学术激励扭曲的极限案例'},
+{name:'苏炳添训练数据',scene:'量化分解+负反馈优化的实战案例'},
+{name:'大壶节超级传播事件',scene:'理解超级传播节点的真实案例'},
+{name:'风投幂律回报',scene:'理解幂律分布在投资中的实战意义'},
+];
+
+const learningPath = [
+{phase:1,title:'基础框架',desc:'可能性空间→随机控制→信息即不确定性消除'},
+{phase:2,title:'演化思维',desc:'描述→解释→理论三重境界 + 达尔文的方法论革命'},
+{phase:3,title:'系统调节',desc:'负反馈/正反馈→超级传播者→幂律分布'},
+{phase:4,title:'验证体系',desc:'证伪逻辑→效应量思维→p值批判→重复危机'},
+{phase:5,title:'制度与实战',desc:'学术市场激励→正常事故理论→学习与决策应用'},
+];
+
+const flipCards = [
+{front:'可能性空间',back:'<span class="dim-label">定义</span>系统的失败模式远多于成功模式。成功是穿越可能性空间中极窄的通道。<br><span class="dim-label">类比</span>脱口秀讲砸的方式远比讲好的方式多——任何偏离最佳路径的选择都会导致冷场。<br><span class="dim-label">示例</span>为什么大部分创业都失败——成功需要在产品、市场、时机、团队等所有维度同时做对。<br><span class="dim-label">反例</span>"只要努力就能成功"——努力是必要条件但远非充分，忽视了可能性空间的残酷不对称性。'},
+{front:'随机控制',back:'<span class="dim-label">定义</span>在看似无解的困境中找到一个可控的微小杠杆，从那里开始重建控制感。<br><span class="dim-label">类比</span>被压在巨石下动弹不得但脚趾还能动——那就从动脚趾开始，这是夺回控制感的第一块多米诺骨牌。<br><span class="dim-label">示例</span>二战集中营幸存者弗兰克尔发现：保持胡子整洁这样微小的自主行为能维持心理韧性。<br><span class="dim-label">反例</span>"什么也做不了就什么都不做"——一定有至少一个自己能控制的变量，找到它并行动。'},
+{front:'演化思维的三重境界',back:'<span class="dim-label">定义</span>描述(What)→解释(Why)→理论(Predict)是一个从观察到理解再到预测的认知升级过程。<br><span class="dim-label">类比</span>看天气预报(描述)→学气象学(解释)→预测气候变化(理论)——三层递进不可跳跃。<br><span class="dim-label">示例</span>达尔文用小猎犬号的物种分布记录替代了对"上帝设计"的追问——先解决"是什么"再谈"为什么"。<br><span class="dim-label">反例</span>跳过描述和解释直接建构宏大理论——没有事实根基的理论只是空中楼阁。'},
+{front:'负反馈的神圣性',back:'<span class="dim-label">定义</span>好系统靠刹车而非油门维持稳定。负反馈=将系统拉回平衡点的力量。<br><span class="dim-label">类比</span>没有刹车的跑车不是好车是凶器——刹车(负反馈)让速度(正反馈)变得安全。<br><span class="dim-label">示例</span>股市熔断机制、人体血糖调节、气候变化——凡是失控的系统都是负反馈失灵。<br><span class="dim-label">反例</span>"正反馈=好(增长)、负反馈=坏(衰退)"——这是望文生义。正反馈让系统爆炸，负反馈让系统生存。'},
+{front:'网络中的超级传播者',back:'<span class="dim-label">定义</span>20%的节点贡献80%的传播——不仅在病毒领域，在信息、创新、社会运动中同样成立。<br><span class="dim-label">类比</span>一个超级连接者认识的人比100个普通人的总和还多——网络不是平的。<br><span class="dim-label">示例</span>印度的"大壶节"作为超级传播事件导致疫情爆炸——控制一个节日比控制日常接触有效百倍。<br><span class="dim-label">反例</span>"平均发力"——控制超级传播节点的ROI远高于普适措施，帕累托法则在传播中同样适用。'},
+{front:'效应量思维',back:'<span class="dim-label">定义</span>统计显著(p<0.05)不等于实际重要。效应量(如Cohen\'s d)衡量差异的实际大小。<br><span class="dim-label">类比</span>严格检验证明每天多喝一杯水能延长寿命0.3秒——统计显著但毫无实际意义。<br><span class="dim-label">示例</span>"培养学生阳刚之气"提案中男女差异的效应量其实很小，统计显著完全来自超大样本量。<br><span class="dim-label">反例</span>"p值小于0.05就是重要发现"——大样本下任何微小差异都能p<0.05，需要看效应量。'},
+{front:'验证的证伪逻辑',back:'<span class="dim-label">定义</span>科学的本质不是证明正确而是允许被证明错误。可证伪性(falsifiability)是科学与伪科学的划界标准。<br><span class="dim-label">类比</span>不是盖楼(累积正确)而是拆楼(如果错了就推倒)——科学进步来自推翻旧理论而非巩固旧理论。<br><span class="dim-label">示例</span>斯坦福监狱实验和棉花糖实验近年因无法重复而崩塌——科学结论的保质期是有条件的。<br><span class="dim-label">反例</span>"经典实验的结论就是真理"——任何科学结论都在等待被新证据推翻。'},
+{front:'信息即不确定性的消除',back:'<span class="dim-label">定义</span>香农信息论：信息量不是字数而是消除了多少种可能性。信息量=log(可能状态数)。<br><span class="dim-label">类比</span>电话簿很厚但信息量很低因为你已经知道有人有电话——新信息必须消除你的不确定性。<br><span class="dim-label">示例</span>"明天太阳从东边升起"信息量为零因为是100%确定事件——没有消除任何不确定性。<br><span class="dim-label">反例</span>"刷得越多学得越多"——大部分你在刷的内容信息量趋近于零，因为它们没有改变你的任何认知。'},
+{front:'学术市场的激励扭曲',back:'<span class="dim-label">定义</span>当发表论文数量成为KPI，论文从"传递发现的工具"异化为"获取职业利益的手段"。<br><span class="dim-label">类比</span>如果老师的KPI是学生考试分数，教学就会变成应试训练——你测量什么，你就得到什么。<br><span class="dim-label">示例</span>诺贝尔奖得主也要论文造假说明激励而非道德是主因——制度设计决定了造假被抓的概率和代价。<br><span class="dim-label">反例</span>"学术造假是少数坏苹果的问题"——制度的设计决定了坏苹果出现的频率和数量。'},
+{front:'幂律分布的不公平世界',back:'<span class="dim-label">定义</span>大多数自然和社会现象不是正态分布而是极少数人占据绝大多数资源。<br><span class="dim-label">类比</span>篮球运动员的身高分布基本均匀(正态)，但NBA球员的身高分布极端偏斜(幂律)——竞争让分布从正态变成幂律。<br><span class="dim-label">示例</span>风投回报——一只基金中最好的一个项目回报超过其他所有项目之和。排名第二的论文引用量可能只有第一名的1/10。<br><span class="dim-label">反例</span>"世界应该是公平的"——幂律是人类社会的基线而非异常，理解它才能做出更好的策略选择。'}
+];
+
+// MCQ: 20 questions, answer distribution exactly 5=A(0), 5=B(1), 5=C(2), 5=D(3)
+const mcQuestions = [
+{q:'科学思维中"可能性空间"概念的核心含义是？',opts:['失败模式远多于成功模式','成功需要把握所有机会','任何事都有可能发生','可能性是可以计算的'],ans:0,exp:'可能性空间的核心是失败模式远多于成功模式——一个系统可以有一万种方式出错但只有少数几种方式正常工作。脱口秀讲砸的方式远比讲好的方式多。'},
+{q:'二战集中营幸存者弗兰克尔找到的"随机控制"变量是什么？',opts:['越狱计划','保持胡子整洁','与看守建立友谊','偷藏食物'],ans:1,exp:'弗兰克尔发现自己可以控制保持胡子整洁这样微小的自主行为，这个可控微杠杆帮他维持了心理韧性。'},
+{q:'负反馈在系统中的作用最接近以下哪个比喻？',opts:['发动机的油门','方向盘的转向','汽车的刹车','后视镜的视野'],ans:2,exp:'负反馈是系统的"刹车"——好系统靠刹车而非油门维持稳定。股市熔断、人体血糖调节都是负反馈在起作用。'},
+{q:'香农信息论中信息量取决于什么？',opts:['文本的字数','消除了多少种可能性','文件的大小','作者的知名度'],ans:1,exp:'信息量不是字数而是消除了多少种可能性——"明天太阳从东边升起"信息量为零因为是100%确定事件。'},
+{q:'演化思维的三个层次从低到高依次是？',opts:['描述→解释→理论','理论→解释→描述','解释→描述→理论','描述→理论→解释'],ans:0,exp:'描述(What)→解释(Why)→理论(Predict)。达尔文先用小猎犬号的物种记录做描述，而不是直接追问"为什么上帝这样设计"。'},
+{q:'"超级传播者"原则对应哪个经典法则？',opts:['摩尔定律','帕累托法则(80/20)','墨菲定律','奥卡姆剃刀'],ans:1,exp:'20%的节点贡献80%的传播——帕累托法则的核心就是少数关键节点驱动大部分结果。'},
+{q:'关于"效应量"的正确理解是？',opts:['效应量越大p值越小','p<0.05说明效应量足够大','大样本下微小差异也能p<0.05','效应量只用于医学研究'],ans:2,exp:'大样本下任何微小差异都能达到p<0.05，需要效应量衡量差异的实际大小。'},
+{q:'波普尔证伪主义认为科学理论最重要的特征是什么？',opts:['能被实验证明正确','由权威科学家提出','数学公式足够优美','能被实验证明错误'],ans:3,exp:'科学的本质不是证明正确而是允许被证明错误。可证伪性是科学与伪科学的划界标准。'},
+{q:'学术市场激励扭曲的核心机制是什么？',opts:['发表数量成为KPI','科学家普遍道德水平低','实验设备太昂贵','同行评审太宽松'],ans:0,exp:'当发表论文数量成为KPI，论文从"传递发现的工具"异化为"获取职业利益的手段"。'},
+{q:'幂律分布在以下哪个场景中最常见？',opts:['工厂产品的重量分布','骰子的点数分布','风投基金的回报分布','学生的身高分布'],ans:2,exp:'风投回报中一只基金最好的一个项目回报超过其他所有项目之和——这是典型的幂律分布。'},
+{q:'"证伪逻辑"与以下哪个说法最一致？',opts:['经典实验的结论是永恒的真理','科学知识越累积越正确','已被证明正确的理论不需要再检验','可被证明错误的知识才是科学的'],ans:3,exp:'可被证明错误的才是科学。斯坦福监狱实验和棉花糖实验近年因无法重复而崩塌。'},
+{q:'"正反馈=好、负反馈=坏"为什么是望文生义？',opts:['因为负反馈让系统稳定而正反馈导致失控','因为在中文里好坏和正负无关','因为反馈不分好坏','因为正负只是数学符号'],ans:0,exp:'负反馈维持系统稳定(刹车)，正反馈导致系统失控(爆炸)。股市熔断(负反馈)是好的，癌细胞无限增殖(正反馈)是坏的。'},
+{q:'达尔文小猎犬号之旅最关键的思维贡献是什么？',opts:['发现了进化论','证明了上帝不存在','发明了分类学','先描述后解释的方法论'],ans:3,exp:'达尔文先记录物种分布的事实(描述)，而不是直接追问"为什么上帝这样设计"(解释)。这种"用描述代替解释"的方法是革命性的。'},
+{q:'"信息即不确定性消除"的最佳实例是？',opts:['读完一本500页的小说','收到天气预报说"明天可能下雨或不下雨"','查到一个冷僻词的精确含义','反复阅读同一篇新闻'],ans:2,exp:'查到一个冷僻词的精确含义消除了你对这个词含义的不确定性，信息量高。'},
+{q:'关于斯坦福监狱实验被证伪，正确的反思是？',opts:['心理学实验没有价值','科学结论需要持续检验','科学实验都不可靠','原始实验者一定是骗人的'],ans:1,exp:'科学结论的保质期是有条件的，持续检验是科学的美德而非缺陷。'},
+{q:'"只要努力就能成功"忽视了？',opts:['天赋的决定性','努力的重要性','运气的作用','可能性空间的不对称性'],ans:3,exp:'失败模式远多于成功模式。努力是必要条件但远非充分。'},
+{q:'"正常事故理论"的核心观点是？',opts:['复杂系统中事故是"正常的"','所有事故都是人为失误','事故可以通过严格管理避免','单一原因导致大部分事故'],ans:0,exp:'正常事故理论(Perrow)认为在足够复杂的系统中，多重小故障同时发生是必然的。'},
+{q:'拉马努金机器倡导"猜想无需证明"意味着？',opts:['数学不需要严谨','证据不是知识的唯一来源','直觉可以替代验证','所有数学证明都是多余的'],ans:1,exp:'它挑战了"证据就是一切"的传统科学观念，展示了直觉生成的价值。'},
+{q:'风投中"最好项目回报超过其他所有项目之和"体现了？',opts:['正态分布','均匀分布','幂律分布','泊松分布'],ans:2,exp:'风投回报是典型的幂律分布——少数极端值主导整体回报。理解幂律才能理解风投为什么要投很多项目。'},
+{q:'关于"不要用高级理由压制第一反应"的正确理解？',opts:['第一反应总是对的','直觉比理性更可靠','高级思维会误导判断','不应否认本能反应的认知价值'],ans:3,exp:'第一反应常常包含有价值的信息，关键是先听到它，再理性检验它，而非先否认它。'}
+];
+
+// SAQ: 10 questions
+const saQuestions = [
+{q:'简述"可能性空间"为什么是理解失败的重要概念，并举一个非科学领域的例子。',hint:'失败模式远多于成功模式→创业/脱口秀/面试/体育比赛——任何偏离最佳路径的微小偏差都可能导致失败。关键是认识到：失败是默认值，成功才是需要解释的异常。'},
+{q:'什么是"随机控制"？为什么它在困境中有实用价值？',hint:'在看似无解的困境中找到至少一个自己可控的微小变量并行动起来——从动脚趾开始。价值在于恢复控制感和能动性(agency)，打破"习得性无助"。弗兰克尔在集中营找到的可控变量是保持胡子整洁。'},
+{q:'负反馈为什么被称为"神圣的"？用一个真实世界的例子说明。',hint:'负反馈维持系统稳定——没有刹车系统的跑车是凶器。例子：股市熔断机制(跌太多自动停市→防止恐慌螺旋)、人体胰岛素调节血糖。失控的系统都是负反馈失灵的结果。'},
+{q:'效应量与p值的区别是什么？为什么只看p值可能误导结论？',hint:'p值只告诉你"差异不太可能是偶然的"，效应量告诉你"差异有多大"。大样本时任何微小差异都能p<0.05(如每天多喝一杯水延长寿命0.3秒)。效应量=实际重要性的度量。'},
+{q:'证伪主义为什么说"允许被证明错误"是科学的核心？',hint:'波普尔的论证：能被证伪的命题才是科学命题。"上帝存在"不能证伪所以不是科学命题。科学的进步来自推翻旧理论而非巩固旧理论。斯坦福监狱实验被重复实验推翻恰恰证明科学在运作。'},
+{q:'演化思维的三重境界(描述→解释→理论)各举一个生物学例子。',hint:'描述：达尔文记录加拉帕戈斯雀喙形状的变异。解释：不同喙形适应不同食物来源→自然选择。理论：预测环境变化会导致喙形演化方向改变(Grant夫妇40年研究验证)。'},
+{q:'学术市场激励扭曲如何导致论文造假？用"KPI异化"的逻辑解释。',hint:'发表=职位+经费+声誉→论文从"传递发现的工具"异化为"获取职业利益的手段"。当造假收益(多发论文)远大于被发现的期望代价(低概率×小惩罚)，理性人会选择走捷径。'},
+{q:'什么是"正常事故理论"？它给我们日常风险管理什么启示？',hint:'在足够复杂的系统中，多重小故障同时发生是必然的(Perrow)。启示：不要把事故归因为个人失误→关注系统设计的安全冗余→接受某些事故是"正常的"→灾难准备而非灾难预防。'},
+{q:'香农信息论中"信息即不确定性的消除"对我们日常获取信息有什么启示？',hint:'大部分刷到的内容信息量为零——它们没有消除你的任何不确定性。启示：减少被动刷信息→主动搜索消除具体不确定性→区分"信息"(不确定性消除)和"数据"(比特流)→高质量信息=高不确定性消除。'},
+{q:'幂律分布与正态分布的区别是什么？为什么幂律分布对人类社会的公平观构成挑战？',hint:'正态：大多数在均值附近(身高)。幂律：极少数占绝大多数(财富、引用量、风投回报)。挑战：我们的公平直觉是"正态分布"直觉——付出相同应得相同——但幂律现实中赢家几乎拿走全部(马太效应+网络效应+累积优势)。'}
+];
+
+// ============ RENDER FUNCTIONS ============
+function renderConceptGrid(){
+const grid = document.getElementById('conceptGrid');
+grid.innerHTML = concepts.map(c=>`
+<div class="concept-card${c.mks?' mks':''}" onclick="switchTab(1);setTimeout(function(){setCard(${c.id})},100)">
+<h4>${c.name}</h4>
+<p>${c.desc}</p>
+</div>`).join('');
+}
+
+function renderMKSGrid(){
+const grid = document.getElementById('mksGrid');
+grid.innerHTML = concepts.filter(c=>c.mks).map(c=>`
+<div class="concept-card mks">
+<h4>${c.name}</h4>
+<p>${c.desc}</p>
+<span class="badge badge-mks">骨架概念</span>
+</div>`).join('');
+}
+
+function renderBoundaryTable(){
+const tbody = document.querySelector('#boundaryTable tbody');
+tbody.innerHTML = boundaryKnowledge.map(b=>`
+<tr><td><strong>${b.name}</strong></td><td>${b.scene}</td><td>知道存在即可，不需要精通</td></tr>
+`).join('');
+}
+
+function renderLearningPath(){
+const wrap = document.getElementById('learningPath');
+wrap.innerHTML = learningPath.map((l,i)=>`
+<div class="card" style="flex:1;min-width:140px;text-align:center;border-top:3px solid var(--accent)">
+<div style="font-weight:700;color:var(--accent);margin-bottom:4px">阶段${l.phase}: ${l.title}</div>
+<div style="font-size:.78rem;color:var(--text2)">${l.desc}</div>
+</div>`).join('');
+}
+
+function renderSVG(){
+const svg = document.getElementById('svgContainer');
+svg.innerHTML = '<svg width="750pt" height="500pt" viewBox="0 0 750 500" xmlns="http://www.w3.org/2000/svg">'+
+'<rect width="750" height="500" fill="#fdf6ec"/>'+
+'<!-- Layer 1: Root -->'+
+'<g transform="translate(375,30)">'+
+'<rect x="-175" y="-18" rx="16" ry="16" width="350" height="36" fill="#c0392b" stroke="#5a3e3e" stroke-width="1.5"/>'+
+'<text text-anchor="middle" y="-4" fill="#fff" font-size="12" font-family="sans-serif">科学思维的操作系统：从认知框架到决策工具</text>'+
+'<text text-anchor="middle" y="11" fill="#fdd" font-size="10" font-family="sans-serif">可迁移的思维工具集</text>'+
+'</g>'+
+'<!-- Layer 2: Four Branches -->'+
+'<!-- Branch 1: 认识框架 -->'+
+'<line x1="375" y1="66" x2="110" y2="140" stroke="#c0392b" stroke-width="1.5"/>'+
+'<text x="210" y="100" fill="#c0392b" font-size="9" font-family="sans-serif">认知基础</text>'+
+'<g transform="translate(110,145)">'+
+'<rect x="-90" y="-24" rx="8" ry="8" width="180" height="48" fill="#d4a574" stroke="#8b6914" stroke-width="1"/>'+
+'<text text-anchor="middle" y="-10" fill="#fff" font-size="11" font-family="sans-serif">认识世界的基础框架</text>'+
+'<text text-anchor="middle" y="6" fill="#fef3cd" font-size="10" font-family="sans-serif">可能性空间 · 随机控制</text>'+
+'<text text-anchor="middle" y="19" fill="#fef3cd" font-size="10" font-family="sans-serif">信息论 · 效应量</text>'+
+'</g>'+
+'<!-- Branch 2: 演化思维 -->'+
+'<line x1="375" y1="66" x2="375" y2="140" stroke="#b8860b" stroke-width="1.5"/>'+
+'<text x="400" y="100" fill="#b8860b" font-size="9" font-family="sans-serif">方法论阶梯</text>'+
+'<g transform="translate(375,145)">'+
+'<rect x="-85" y="-24" rx="8" ry="8" width="170" height="48" fill="#d4a574" stroke="#8b6914" stroke-width="1"/>'+
+'<text text-anchor="middle" y="-10" fill="#fff" font-size="11" font-family="sans-serif">演化思维的三重境界</text>'+
+'<text text-anchor="middle" y="6" fill="#fef3cd" font-size="10" font-family="sans-serif">描述→解释→理论</text>'+
+'<text text-anchor="middle" y="19" fill="#fef3cd" font-size="10" font-family="sans-serif">没有永恒的理论</text>'+
+'</g>'+
+'<!-- Branch 3: 系统控制 -->'+
+'<line x1="375" y1="66" x2="640" y2="140" stroke="#3a6ea5" stroke-width="1.5"/>'+
+'<text x="520" y="100" fill="#3a6ea5" font-size="9" font-family="sans-serif">系统动力学</text>'+
+'<g transform="translate(640,145)">'+
+'<rect x="-90" y="-24" rx="8" ry="8" width="180" height="48" fill="#d4a574" stroke="#8b6914" stroke-width="1"/>'+
+'<text text-anchor="middle" y="-10" fill="#fff" font-size="11" font-family="sans-serif">系统控制核心机制</text>'+
+'<text text-anchor="middle" y="6" fill="#fef3cd" font-size="10" font-family="sans-serif">负反馈 · 超级传播者</text>'+
+'<text text-anchor="middle" y="19" fill="#fef3cd" font-size="10" font-family="sans-serif">幂律分布</text>'+
+'</g>'+
+'<!-- Layer 3: Sub-concepts under 认知基础 -->'+
+'<line x1="110" y1="193" x2="40" y2="270" stroke="#c0392b" stroke-width="1.5"/>'+
+'<text x="65" y="235" fill="#c0392b" font-size="9" font-family="sans-serif">起点</text>'+
+'<g transform="translate(40,278)">'+
+'<rect x="-70" y="-16" rx="6" ry="6" width="140" height="32" fill="#fffaf2" stroke="#c0392b" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">可能性空间</text>'+
+'</g>'+
+'<line x1="110" y1="193" x2="110" y2="270" stroke="#c0392b" stroke-width="1.5"/>'+
+'<text x="125" y="235" fill="#c0392b" font-size="9" font-family="sans-serif">推进</text>'+
+'<g transform="translate(110,278)">'+
+'<rect x="-60" y="-16" rx="6" ry="6" width="120" height="32" fill="#fffaf2" stroke="#c0392b" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">随机控制</text>'+
+'</g>'+
+'<line x1="110" y1="193" x2="180" y2="270" stroke="#c0392b" stroke-width="1.5"/>'+
+'<text x="160" y="235" fill="#c0392b" font-size="9" font-family="sans-serif">度量</text>'+
+'<g transform="translate(180,278)">'+
+'<rect x="-70" y="-16" rx="6" ry="6" width="140" height="32" fill="#fffaf2" stroke="#c0392b" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">信息即不确定性消除</text>'+
+'</g>'+
+'<!-- Layer 3: Sub-concepts under 演化思维 -->'+
+'<line x1="375" y1="193" x2="300" y2="270" stroke="#b8860b" stroke-width="1.5"/>'+
+'<text x="315" y="235" fill="#b8860b" font-size="9" font-family="sans-serif">对立</text>'+
+'<g transform="translate(290,278)">'+
+'<rect x="-65" y="-16" rx="6" ry="6" width="130" height="32" fill="#fffaf2" stroke="#b8860b" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">负反馈的神圣性</text>'+
+'</g>'+
+'<line x1="375" y1="193" x2="450" y2="270" stroke="#b8860b" stroke-width="1.5"/>'+
+'<text x="420" y="235" fill="#b8860b" font-size="9" font-family="sans-serif">统一</text>'+
+'<g transform="translate(460,278)">'+
+'<rect x="-75" y="-16" rx="6" ry="6" width="150" height="32" fill="#fffaf2" stroke="#b8860b" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">网络中的超级传播者</text>'+
+'</g>'+
+'<!-- Layer 3: Sub-concepts under 系统控制 -->'+
+'<line x1="640" y1="193" x2="570" y2="270" stroke="#3a6ea5" stroke-width="1.5"/>'+
+'<text x="585" y="235" fill="#3a6ea5" font-size="9" font-family="sans-serif">检验</text>'+
+'<g transform="translate(560,278)">'+
+'<rect x="-75" y="-16" rx="6" ry="6" width="150" height="32" fill="#fffaf2" stroke="#3a6ea5" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">验证的证伪逻辑</text>'+
+'</g>'+
+'<line x1="640" y1="193" x2="710" y2="270" stroke="#3a6ea5" stroke-width="1.5"/>'+
+'<text x="685" y="235" fill="#3a6ea5" font-size="9" font-family="sans-serif">评判</text>'+
+'<g transform="translate(710,278)">'+
+'<rect x="-60" y="-16" rx="6" ry="6" width="120" height="32" fill="#fffaf2" stroke="#3a6ea5" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">效应量思维</text>'+
+'</g>'+
+'<!-- Layer 4: Application/Institution nodes -->'+
+'<line x1="300" y1="310" x2="200" y2="390" stroke="#6b8e23" stroke-width="1.5"/>'+
+'<text x="220" y="355" fill="#6b8e23" font-size="9" font-family="sans-serif">制度</text>'+
+'<g transform="translate(200,398)">'+
+'<rect x="-80" y="-16" rx="6" ry="6" width="160" height="32" fill="#fef9f4" stroke="#6b8e23" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">学术市场的激励扭曲</text>'+
+'</g>'+
+'<line x1="460" y1="310" x2="550" y2="390" stroke="#6b8e23" stroke-width="1.5"/>'+
+'<text x="530" y="355" fill="#6b8e23" font-size="9" font-family="sans-serif">现实</text>'+
+'<g transform="translate(550,398)">'+
+'<rect x="-80" y="-16" rx="6" ry="6" width="160" height="32" fill="#fef9f4" stroke="#6b8e23" stroke-width="1"/>'+
+'<text text-anchor="middle" y="2" fill="#3d2f2f" font-size="10" font-family="sans-serif">幂律分布的不公平世界</text>'+
+'</g>'+
+'<!-- Cross-layer tension edges -->'+
+'<line x1="245" y1="310" x2="565" y2="310" stroke="#b8860b" stroke-width="1" stroke-dasharray="5,3"/>'+
+'<text x="375" y="304" text-anchor="middle" fill="#b8860b" font-size="9" font-family="sans-serif">认识vs验证的永恒张力</text>'+
+'<!-- Legend -->'+
+'<g transform="translate(20,470)">'+
+'<rect x="0" y="0" width="8" height="8" fill="#c0392b"/>'+
+'<text x="12" y="8" fill="#3d2f2f" font-size="9" font-family="sans-serif">主线知识</text>'+
+'<rect x="80" y="0" width="8" height="8" fill="#b8860b"/>'+
+'<text x="92" y="8" fill="#3d2f2f" font-size="9" font-family="sans-serif">对立张力</text>'+
+'<rect x="160" y="0" width="8" height="8" fill="#3a6ea5"/>'+
+'<text x="172" y="8" fill="#3d2f2f" font-size="9" font-family="sans-serif">支撑关系</text>'+
+'<rect x="240" y="0" width="8" height="8" fill="#6b8e23"/>'+
+'<text x="252" y="8" fill="#3d2f2f" font-size="9" font-family="sans-serif">应用层</text>'+
+'</g>'+
+'</svg>';
+}
+
+// ============ TAB 1: FLIP CARDS ============
+let currentCardIdx = 0;
+let cardFlipped = false;
+let learnedCards = JSON.parse(localStorage.getItem('mks_tech6_learned')||'[]');
+function saveLearned(){localStorage.setItem('mks_tech6_learned',JSON.stringify(learnedCards));}
+
+function setCard(idx){
+  currentCardIdx=idx; cardFlipped=false;
+  const c=flipCards[idx];
+  document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.front+'</h3><p style="color:var(--text2);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(idx)?'<span class="tag" style="margin-top:8px">已学习</span>':'');
+  document.getElementById('flipBack').innerHTML = c.back;
+  document.getElementById('flipInner').classList.remove('flipped');
+  document.getElementById('cardIndex').textContent=(idx+1)+' / '+flipCards.length;
+  document.getElementById('markLearnedBtn').textContent=learnedCards.includes(idx)?'已学习':'标记已学习';
+  var pct = flipCards.length ? Math.round(learnedCards.length/flipCards.length*100) : 0;
+  document.getElementById('cardProgress').style.width = pct+'%';
+  document.getElementById('cardLearned').textContent = learnedCards.length;
+}
+setCard(0);
+
+function prevCard(){if(currentCardIdx>0)setCard(currentCardIdx-1)}
+function nextCard(){if(currentCardIdx<flipCards.length-1)setCard(currentCardIdx+1)}
+function markLearned(){
+  if(learnedCards.includes(currentCardIdx)){learnedCards=learnedCards.filter(function(x){return x!==currentCardIdx})}else{learnedCards.push(currentCardIdx)}
+  saveLearned();updateProgress();setCard(currentCardIdx);
+}
+document.getElementById('flipInner').addEventListener('click',function(){this.classList.toggle('flipped');cardFlipped=!cardFlipped});
+
+// ============ TAB 2: QUIZ ============
+let mcqAnswers = {}; let saqRevealed = {};
+function renderMCQ(){
+const container = document.getElementById('mcqContainer');
+container.innerHTML = mcQuestions.map((q,i)=>`
+<div class="quiz-card">
+<span class="q-tag q-mc">选择题 #${i+1}</span>
+<div class="q-text">${q.q}</div>
+${q.opts.map((o,j)=>'<div class="q-option" onclick="selectMCQ('+i+','+j+')" id="mcq'+i+'_'+j+'">'+'ABCD'[j]+'. '+o+'</div>').join('')}
+<div class="q-feedback" id="mcqFb'+i+'"></div>
+</div>`).join('');
+}
+function renderSAQ(){
+const container = document.getElementById('saqContainer');
+container.innerHTML = saQuestions.map((q,i)=>`
+<div class="quiz-card">
+<span class="q-tag q-sa">简答题 #${i+1}</span>
+<div class="q-text">${q.q}</div>
+<textarea class="sa-input" placeholder="输入你的答案..." id="saInput'+i+'"></textarea>
+<button class="btn btn-sm" style="margin-top:8px" onclick="revealSAQ('+i+')">查看要点提示</button>
+<div class="sa-reveal" id="saRev'+i+'">要点：'+q.hint+'</div>
+</div>`).join('');
+}
+function selectMCQ(qi, optIdx){
+if(mcqAnswers[qi]!==undefined) return;
+mcqAnswers[qi] = optIdx;
+const correct = mcQuestions[qi].ans;
+const fb = document.getElementById('mcqFb'+qi);
+for(let j=0;j<4;j++){
+const el = document.getElementById('mcq'+qi+'_'+j);
+if(j===correct) el.classList.add('correct');
+if(j===optIdx && j!==correct) el.classList.add('wrong');
+if(j===optIdx) el.classList.add('selected');
+}
+if(optIdx===correct){
+fb.className='q-feedback right show';
+fb.textContent='正确！'+mcQuestions[qi].exp;
+saveQuizResult(qi,true);
+}else{
+fb.className='q-feedback wrong-msg show';
+fb.textContent='错误。正确答案是 '+('ABCD'[correct])+'。'+mcQuestions[qi].exp;
+saveQuizResult(qi,false);
+}
+updateProgress();
+}
+function revealSAQ(i){
+document.getElementById('saRev'+i).classList.add('show');
+saqRevealed[i] = true;
+saveQuizResult('sa_'+i, true);
+updateProgress();
+}
+
+function saveQuizResult(id,correct){
+let results = JSON.parse(localStorage.getItem('mks_tech6_quizResults')||'{}');
+results[id] = {correct,time:Date.now()};
+localStorage.setItem('mks_tech6_quizResults',JSON.stringify(results));
+let errors = JSON.parse(localStorage.getItem('mks_tech6_errorBook')||'[]');
+if(!correct && !errors.find(function(e){return e.id===id})){
+errors.push({id,time:Date.now()});
+localStorage.setItem('mks_tech6_errorBook',JSON.stringify(errors));
+}
+}
+
+// ============ TAB 3: EXAM ============
+let examActive = false, examTimer = null, examSeconds = 0, examQuestions = [];
+function startExam(){
+document.getElementById('examStartBtn').style.display='none';
+examActive = true; examSeconds = 15*60;
+examQuestions = [];
+let mcPool = Array.from({length:mcQuestions.length},function(_,i){return i});
+let saPool = Array.from({length:saQuestions.length},function(_,i){return i});
+shuffle(mcPool); shuffle(saPool);
+for(let i=0;i<7;i++) examQuestions.push({type:'mc',idx:mcPool[i]});
+for(let i=0;i<3;i++) examQuestions.push({type:'sa',idx:saPool[i]});
+shuffle(examQuestions);
+renderExam();
+examTimer = setInterval(function(){
+examSeconds--;
+const m = Math.floor(examSeconds/60), s = examSeconds%60;
+const timerEl = document.getElementById('examTimer');
+timerEl.textContent = m+':'+String(s).padStart(2,'0');
+if(examSeconds<60) timerEl.classList.add('warning');
+if(examSeconds<=0){submitExam();}
+},1000);
+}
+function renderExam(){
+const area = document.getElementById('examArea');
+area.innerHTML = examQuestions.map(function(eq,i){
+if(eq.type==='mc'){
+const q = mcQuestions[eq.idx];
+return '<div class="quiz-card"><span class="q-tag q-mc">选择题 #'+(i+1)+'</span><div class="q-text">'+q.q+'</div>'+
+q.opts.map(function(o,j){return '<div class="q-option" onclick="examMCQ('+i+','+j+')" id="exam'+i+'_'+j+'">'+'ABCD'[j]+'. '+o+'</div>'}).join('')+
+'<div class="q-feedback" id="examFb'+i+'"></div></div>';
+}else{
+const q = saQuestions[eq.idx];
+return '<div class="quiz-card"><span class="q-tag q-sa">简答题 #'+(i+1)+'</span><div class="q-text">'+q.q+'</div>'+
+'<textarea class="sa-input" id="examSA'+i+'">(考试模式下快速写出要点)</textarea></div>';
+}
+}).join('');
+document.getElementById('examResult').style.display='none';
+}
+let examAnswers = {};
+function examMCQ(i, optIdx){
+if(examAnswers[i]!==undefined) return;
+examAnswers[i] = optIdx;
+const q = mcQuestions[examQuestions[i].idx];
+const fb = document.getElementById('examFb'+i);
+for(let j=0;j<4;j++){
+const el = document.getElementById('exam'+i+'_'+j);
+if(j===q.ans) el.classList.add('correct');
+if(j===optIdx && j!==q.ans) el.classList.add('wrong');
+if(j===optIdx) el.classList.add('selected');
+}
+fb.className = 'q-feedback show '+(optIdx===q.ans?'right':'wrong-msg');
+fb.textContent = optIdx===q.ans?'正确':'错误。答案：'+'ABCD'[q.ans];
+}
+function submitExam(){
+clearInterval(examTimer); examActive = false;
+const timerEl = document.getElementById('examTimer');
+timerEl.textContent = '考试结束'; timerEl.classList.remove('warning');
+const result = document.getElementById('examResult');
+let score = 0, total = 7;
+examQuestions.forEach(function(eq,i){
+if(eq.type==='mc' && examAnswers[i]===mcQuestions[eq.idx].ans) score++;
+});
+const m = Math.floor((900-examSeconds)/60), s = (900-examSeconds)%60;
+result.style.display='block';
+result.innerHTML = '<div class="card" style="text-align:center"><h3>考试结果</h3>'+
+'<div style="font-size:2.5rem;color:var(--accent);font-weight:700">'+score+'/'+total+'</div>'+
+'<p style="color:var(--text2)">选择题正确率：'+Math.round(score/total*100)+'%</p>'+
+'<p style="color:var(--text2)">用时：'+m+'分'+s+'秒</p>'+
+'<p style="font-size:.82rem;color:var(--text2);margin-top:8px">'+
+(score>=6?'你对科学思维的操作系统理解非常扎实！':
+score>=4?'基础不错，建议回顾错题加深理解。':
+'建议返回知识卡片和思维导图系统学习后再试。')+
+'</p><button class="btn" onclick="resetExam()" style="margin-top:12px">重新考试</button></div>';
+let examResults = JSON.parse(localStorage.getItem('mks_tech6_examResults')||'[]');
+examResults.push({score,total,time:Date.now(),seconds:900-examSeconds});
+localStorage.setItem('mks_tech6_examResults',JSON.stringify(examResults));
+examQuestions.forEach(function(eq,i){
+if(eq.type==='mc' && examAnswers[i]!==undefined && examAnswers[i]!==mcQuestions[eq.idx].ans){
+let errors = JSON.parse(localStorage.getItem('mks_tech6_errorBook')||'[]');
+errors.push({id:'exam_mc_'+eq.idx, time:Date.now()});
+localStorage.setItem('mks_tech6_errorBook',JSON.stringify(errors));
+}
+});
+updateProgress();
+}
+function resetExam(){
+clearInterval(examTimer); examActive = false;
+examAnswers = {}; examQuestions = [];
+document.getElementById('examStartBtn').style.display='inline-block';
+document.getElementById('examResult').style.display='none';
+document.getElementById('examArea').innerHTML='';
+document.getElementById('examTimer').textContent='15:00';
+document.getElementById('examTimer').classList.remove('warning');
+}
+
+// ============ TAB 4: REVIEW ============
+function renderStats(){
+const learned = JSON.parse(localStorage.getItem('mks_tech6_learned')||'[]');
+const results = JSON.parse(localStorage.getItem('mks_tech6_quizResults')||'{}');
+const errors = JSON.parse(localStorage.getItem('mks_tech6_errorBook')||'[]');
+const examResults = JSON.parse(localStorage.getItem('mks_tech6_examResults')||'[]');
+const allQ = Object.values(results);
+const correct = allQ.filter(function(r){return r.correct}).length;
+const totalDays = new Set(allQ.map(function(r){return new Date(r.time).toDateString()})).size || 0;
+
+document.getElementById('statsGrid').innerHTML =
+'<div class="stat-card"><div class="num">'+learned.length+'</div><div class="lbl">已学概念/10</div></div>'+
+'<div class="stat-card"><div class="num">'+allQ.length+'</div><div class="lbl">总答题数</div></div>'+
+'<div class="stat-card"><div class="num">'+(allQ.length?Math.round(correct/allQ.length*100):0)+'%</div><div class="lbl">正确率</div></div>'+
+'<div class="stat-card"><div class="num">'+errors.length+'</div><div class="lbl">错题数</div></div>'+
+'<div class="stat-card"><div class="num">'+examResults.length+'</div><div class="lbl">考试次数</div></div>'+
+'<div class="stat-card"><div class="num">'+totalDays+'</div><div class="lbl">学习天数</div></div>';
+
+const errorBook = document.getElementById('errorBook');
+if(errors.length===0){
+document.getElementById('emptyError').style.display='block';
+errorBook.innerHTML='';
+}else{
+document.getElementById('emptyError').style.display='none';
+errorBook.innerHTML = '<div class="grid2">'+errors.slice(-20).reverse().map(function(e){
+var label=''; var q=null;
+if(typeof e.id==='string' && e.id.indexOf('sa_')===0){
+label='简答题 #'+(parseInt(e.id.split('_')[1])+1);
+q=saQuestions[parseInt(e.id.split('_')[1])];
+}else if(typeof e.id==='string' && e.id.indexOf('exam_mc_')===0){
+const idx = parseInt(e.id.split('_')[2]);
+label='考试选择题 #'+idx;
+q=mcQuestions[idx];
+}else{
+label='选择题 #'+(e.id+1);
+q=mcQuestions[e.id];
+}
+const date = new Date(e.time).toLocaleDateString('zh-CN');
+return '<div class="card" style="font-size:.82rem"><strong>'+label+'</strong><br>'+(q?q.q:'')+'<br><span style="color:var(--accent);font-weight:700">答案：'+(q&&q.ans!==undefined?'ABCD'[q.ans]:q&&q.hint||'')+'</span><br><span style="color:var(--text2)">'+date+'</span></div>';
+}).join('')+'</div>';
+}
+
+const weakEl = document.getElementById('weakConcepts');
+const errorIndices = errors.map(function(e){return typeof e.id==='number'?e.id:-1}).filter(function(i){return i>=0&&i<mcQuestions.length});
+if(errorIndices.length===0){
+weakEl.innerHTML='<p style="color:var(--text2)">暂无薄弱概念数据，多做几道题试试。</p>';
+}else{
+const freq = {};
+errorIndices.forEach(function(i){
+const q=mcQuestions[i]; if(!q)return;
+const topic = q.q.split('？')[0].split('的是')[0].slice(0,12);
+freq[topic] = (freq[topic]||0)+1;
+});
+const sorted = Object.entries(freq).sort(function(a,b){return b[1]-a[1]}).slice(0,5);
+weakEl.innerHTML = sorted.map(function(entry){
+var t=entry[0], n=entry[1];
+return '<div class="card" style="border-left:4px solid var(--accent);padding:10px 14px;margin:6px 0"><strong>'+t+'</strong> — 错误'+n+'次</div>';
+}).join('');
+}
+}
+
+// ============ TAB 6: SOCRATIC ============
+function renderSocratic(){
+const items = [
+{q:'为什么说失败是默认值而成功才需要解释？',a1:'可能性空间的概念告诉我们：失败模式远多于成功模式。在任何一个复杂系统中，正确的路径只有少数几条，而错误的路径数以万计。脱口秀讲砸的方式远比讲好的方式多——这不是悲观主义，而是对现实概率结构的基本认知。',a2:'如果失败是默认值，那么我们应该改变对成功和失败的态度——成功不是"应得的"，失败也不是"丢人的"。我们应该好奇的是：这次成功做对了什么？这次失败暴露出哪种新的失败模式？'},
+{q:'科学方法的本质到底是什么——是证明还是证伪？',a1:'波普尔的证伪主义认为科学的本质不是"证明正确"而是"允许被证明错误"。如果一种理论没有任何方式可以被检验为错误，它就是非科学的——不是因为它是假的，而是因为它不在科学讨论的范围内。斯坦福监狱实验和棉花糖实验近年崩塌恰恰说明科学在正常工作。',a2:'如果所有科学结论都是暂时的，我们应该如何对待"科学常识"？不是不信，而是有条件的信——知道每个结论的前提条件和适用边界。科学不会给你终极答案，但它给你当前已知的最佳近似。'},
+{q:'负反馈为什么比正反馈更重要但却被普遍忽视？',a1:'人类天生喜欢增长(正反馈)，厌恶限制(负反馈)。但好系统靠刹车而非油门维持稳定。股市熔断机制、胰岛素调节、气候变化——凡是失控的系统都是负反馈失灵。我们迷恋正反馈的增长，却忽视负反馈的保护——直到系统崩溃。',a2:'个人生活中有哪些被忽视的负反馈？定期体检(健康负反馈)、客户投诉(产品负反馈)、批评意见(认知负反馈)。聪明人主动建立负反馈回路，而不是等到"撞墙"才被动接受。'},
+{q:'统计显著(p<0.05)为什么不能等同于"重要发现"？',a1:'p值只回答"这个差异不太可能是偶然的"，效应量回答"这个差异有多大"。在超大样本中(如n=10000)，任何微小差异都能达到p<0.05。"每天多喝一杯水可延长寿命0.3秒"统计显著但毫无意义。很多媒体和研究者把p值和重要性混为一谈，这是对统计工具的误用。',a2:'我们需要在每次看到"研究显示..."时问两个问题：这个效应的实际大小是多少(效应量)？这个研究是否被独立重复过(可重复性)？两个问题的答案比p值本身更重要。'},
+{q:'幂律分布的世界里，"公平"是不是一种幻觉？',a1:'幂律分布揭示了一个反直觉的事实：大多数自然和社会现象中，极少数个体占据绝大多数资源——财富、引用量、风投回报、网络流量都是幂律分布，不是正态分布。我们的公平直觉是"正态分布直觉"——付出相同应得相同——但幂律现实中微小的初始优势会被累积放大(马太效应)，导致赢家几乎拿走全部。',a2:'如果世界本质上是幂律的，我们应该怎么做？第一，识别哪些领域的回报是幂律的(在这些领域"差不多就行"的策略是灾难)。第二，接受幂律带来的极端不确定性，用"幂律思维"做决策——比如风投为什么投很多项目？因为单个项目的回报可能是0也可能是1000倍，无法预测但整体能赚钱。'}
+];
+document.getElementById('socraticContainer').innerHTML = items.map(function(item,i){
+return '<div class="socratic-item"><div class="socratic-q" onclick="var a=this.nextElementSibling;a.style.display=a.style.display===\'block\'?\'none\':\'block\'">'+item.q+'</div><div class="socratic-a" style="display:none"><p><strong>第一层：</strong>'+item.a1+'</p><p style="margin-top:8px"><strong>追问：</strong>'+item.a2+'</p></div></div>';
+}).join('');
+}
+
+// ============ TAB 8: DECISION ============
+function renderDecision(){
+document.getElementById('decisionContainer').innerHTML =
+'<h2>实战决策模拟</h2>'+
+'<p style="color:var(--text2);margin-bottom:16px">站在科研、学习和判断的关键节点，你会怎么做？每题选择一个方案后查看分析。</p>'+
+'<div id="decisionRounds"></div>';
+const rounds = [
+{
+scenario:'【第1轮：科研生涯选择】你是一位刚获得博士学位的年轻研究者。你的导师希望你留在他的大实验室做博士后(稳定的经费+高产论文)，但你有一个自己很感兴趣但风险很高的研究方向。你怎么选？',
+options:[
+{text:'留在导师实验室做博后，积累论文和资历',feedback:'这个选择体现了学术市场激励扭曲的现实理解——发表数量是硬通货。留在高产实验室可以快速积累简历，但同时你也把自己锁定在导师的研究范式中，可能失去独立创新的窗口。',mks:'学术市场激励：当发表论文数量成为KPI，研究者会倾向于做"安全"的研究(容易发表)而非"重要"的研究(可能失败)。你测量什么，你就得到什么。'},
+{text:'去做自己感兴趣但风险高的方向',feedback:'这个选择体现了可能性空间思维和随机控制——你在无解的困境中(学术就业市场)找到的可控变量是你的研究热情。高方差策略在幂律分布的学术市场中可能更优，但需要做好承受失败的准备。',mks:'幂律分布：学术影响力是幂律分布——最有影响力的研究通常是开创性的、冒险的。但要注意：你需要先用"生存"解决随机控制的底层需求，再追求"卓越"。'},
+{text:'先做一年博后，同时用业余时间探索新方向',feedback:'这个折中方案最好地运用了负反馈思维——你不用全部押注任一方向，而是同时保持两个选择。用稳定的博后收入(安全网)支撑独立探索(期权价值)，在新方向有初步成果后再决定是否全职投入。',mks:'负反馈+可能性空间：保持选择权(option value)本身就是一种负反馈策略——不让自己陷入无法逆转的单一路径。先用小成本探索(动脚趾)，再决定是否投入更多。'}
+]
+},
+{
+scenario:'【第2轮：学习方法选择】你需要在两周内掌握一个全新领域的基础知识(比如从零学认知科学)。以下三种策略你会选哪个？',
+options:[
+{text:'找一本最权威的教科书从头到尾精读',feedback:'教科书提供的是"解释"和"理论"层面的知识(演化思维的第二三重境界)，但对于初学者而言，缺少"描述"层面的具体事实会让你对抽象概念没有体感。精读教科书适合已有一定基础后的系统化学习。',mks:'演化思维三重境界：描述→解释→理论不可跳跃。初学者需要先积累具体"描述"(案例、实验、现象)，再上升到"解释"(机制和理论)层面。'},
+{text:'先看5-10个经典实验和案例，再读综述文章',feedback:'这恰好遵循了达尔文的方法——先描述(看具体实验和现象)、再解释(看综述是怎么整合这些现象的)、最后形成理论(自己总结规律)。案例驱动学习也符合"信息即不确定性消除"——每个案例消除你对这个领域的部分不确定性。',mks:'达尔文的描述优先方法论+信息论：案例=高信息量(你不知道这个实验的结果)→综述=整合多个信息源→自我总结=最高层次的认知加工(生成效应)。'},
+{text:'找一个该领域的专家做几次深度对话，由他引导',feedback:'专家引导学习有优点(效率)和陷阱(路径依赖)。专家给你的"解释"会跳过他自己当年挣扎的"描述"阶段，你可能学到结论但没学到思维过程。另外专家也可能给你一个有偏的框架，限制你的独立判断。',mks:'证伪逻辑：专家也是有偏的——他们的"标准答案"也许是下一次重复危机中被推翻的对象。保持"有条件的信"而非盲目接受。'}
+]
+},
+{
+scenario:'【第3轮：判断一个争议性科学主张】你看到一篇热门文章说"某保健品能使免疫力提升200%"。作为一个有科学思维的人，你第一步做什么？',
+options:[
+{text:'直接转发/相信，因为文章引用了科学研究',feedback:'引用科学研究≠科学研究可靠。"免疫力提升200%"这种精确数字恰好是一个危险信号——免疫功能是复杂的多维系统，不存在单一测量指标。这可能是p值操纵、选择性报告、或直接造假的产物。',mks:'效应量思维+证伪逻辑："提升200%"听起来很大，但需要问：提升的是什么指标？在什么条件下？对照组是怎么设计的？能否被独立重复？'},
+{text:'查原始论文，看实验设计、样本量、效应量和资金来源',feedback:'这是最符合科学思维的做法。你同时运用了多个概念：证伪逻辑(寻找可能推翻此结论的证据)、效应量思维(200%到底是什么指标上的200%)、学术市场激励(研究谁资助的？有无利益冲突？)。',mks:'四个概念的叠加运用：证伪→效应量→信息消除不确定性→激励审视。好决策=多个思维工具同时激活，而非依赖单一启发式。'},
+{text:'等权威机构(如FDA/卫健委)发布意见后再做判断',feedback:'这个策略的优点是利用了"负反馈"——权威机构的存在就是为了提供刹车和校准。但它也有风险：权威机构也可能出错(如历史上的反应停事件)，且时效性差。最佳策略是B+C：先自己检查原始证据，再用权威意见做校准。',mks:'负反馈+证伪：权威机构的审查=系统的负反馈机制。但个人也需要自己的"负反馈回路"——不盲信也不盲否，用证据和逻辑做自己的裁判。'}
+]
+}
+];
+setTimeout(function(){
+const wrap = document.getElementById('decisionRounds');
+wrap.innerHTML = rounds.map(function(r,i){
+return '<div class="decision-round"><div class="scenario">'+r.scenario+'</div>'+
+r.options.map(function(o,j){return '<div class="d-option" onclick="chooseDecision('+i+','+j+')" id="dopt'+i+'_'+j+'">'+'ABC'[j]+'. '+o.text+'</div>'}).join('')+
+'<div class="d-result" id="dres'+i+'"></div></div>';
+}).join('');
+},100);
+}
+function chooseDecision(round, choice){
+const rounds = [
+{options:[
+{text:'',feedback:'这个选择体现了学术市场激励扭曲的现实理解——发表数量是硬通货。留在高产实验室可以快速积累简历，但同时你也把自己锁定在导师的研究范式中。',mks:'学术市场激励：你测量什么，你就得到什么。论文KPI→安全研究。'},
+{text:'',feedback:'高方差策略在幂律分布的学术市场中可能更优，但需要做好承受失败的准备。',mks:'幂律分布：最有影响力的研究通常是开创性的、冒险的。'},
+{text:'',feedback:'这个折中方案最好地运用了负反馈思维——同时保持两个选择，不让自己陷入无法逆转的单一路径。',mks:'负反馈+可能性空间：保持选择权本身就是一种负反馈策略。先用小成本探索。'},
+]},
+{options:[
+{text:'',feedback:'教科书适合已有基础后的系统化学习。初学者缺少"描述"层面的体感就难以理解抽象概念。',mks:'演化思维三重境界：描述→解释→理论不可跳跃。'},
+{text:'',feedback:'案例驱动学习遵循达尔文的方法——先描述(看具体实验和现象)、再解释(看综述)、最后形成理论(自己总结)。',mks:'达尔文方法+信息论：案例=高信息量→综述=整合→自我总结=生成效应。'},
+{text:'',feedback:'专家引导效率高但有陷阱——你可能学到结论但没学到思维过程，且专家可能有偏。',mks:'证伪逻辑：专家的"标准答案"也许是下一次重复危机中被推翻的对象。'},
+]},
+{options:[
+{text:'',feedback:'引用科学研究≠科学研究可靠。"提升200%"这种精确数字是危险信号——免疫功能不存在单一测量指标。',mks:'效应量思维+证伪逻辑：需要问提升的是什么指标？什么条件下？能重复吗？'},
+{text:'',feedback:'同时运用了证伪逻辑、效应量思维、信息消除不确定性和激励审视——好决策=多个思维工具同时激活。',mks:'四个概念叠加：证伪→效应量→信息→激励。好决策=多工具激活。'},
+{text:'',feedback:'权威校准是有价值的负反馈，但权威也可能出错。最佳是B+C：先自己检查原始证据，再用权威意见做校准。',mks:'负反馈+证伪：权威机构的审查=系统负反馈。个人也需要自己的负反馈回路。'},
+]}
+];
+const r = rounds[round];
+const res = document.getElementById('dres'+round);
+for(let j=0;j<3;j++){
+document.getElementById('dopt'+round+'_'+j).classList.remove('chosen');
+}
+document.getElementById('dopt'+round+'_'+choice).classList.add('chosen');
+res.className = 'd-result show';
+res.innerHTML = '<p><strong>'+r.options[choice].feedback+'</strong></p><p style="margin-top:6px;color:var(--accent);font-size:.8rem">【MKS分析】'+r.options[choice].mks+'</p>';
+}
+
+// ============ GLOBAL FUNCTIONS ============
+function switchTab(idx){
+document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active')});
+document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active')});
+document.getElementById('tab'+idx).classList.add('active');
+document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+if(idx===4) renderStats();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(){
+const learned = JSON.parse(localStorage.getItem('mks_tech6_learned')||'[]');
+const results = JSON.parse(localStorage.getItem('mks_tech6_quizResults')||'{}');
+const allQ = Object.values(results);
+const correct = allQ.filter(function(r){return r.correct}).length;
+const total = concepts.length + allQ.length*0.5;
+const done = learned.length + correct;
+const pct = Math.min(100,Math.round(done/Math.max(1,total)*100));
+document.getElementById('overallProgress').style.width = pct+'%';
+document.getElementById('progressLabel').textContent = '已学习 '+learned.length+'/10 个概念 | 正确率 '+(allQ.length?Math.round(correct/allQ.length*100):0)+'%';
+}
+
+function resetProgress(){
+if(confirm('确定要重置所有学习进度、错题和考试记录吗？此操作不可恢复。')){
+localStorage.removeItem('mks_tech6_learned');
+localStorage.removeItem('mks_tech6_quizResults');
+localStorage.removeItem('mks_tech6_errorBook');
+localStorage.removeItem('mks_tech6_examResults');
+mcqAnswers = {}; saqRevealed = {};
+renderMCQ(); renderSAQ(); updateProgress(); renderStats();
+alert('已重置全部进度。');
+}
+}
+
+function toggleMindmap(el) {
+  el.classList.toggle('open');
+  var children = el.nextElementSibling;
+  if (children && children.classList.contains('node-children')) {
+    children.classList.toggle('open');
+  }
+}
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+
+// ============ QUIZ PRACTICE SYSTEM ============
+let currentQuestions = [];
+let userAnswers = {};
+let quizTimeLeft = 900;
+let quizTimerInterval = null;
+
+function startQuiz(){
+  const shuffled = mcQuestions.slice().sort(function(){return Math.random()-0.5});
+  const essayShuffled = saQuestions.slice().sort(function(){return Math.random()-0.5});
+  currentQuestions = shuffled.slice(0,10).concat(essayShuffled.slice(0,3));
+  userAnswers = {};
+  quizTimeLeft = 900;
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('quizTimer').style.display = 'inline';
+  document.getElementById('staticQuiz').style.display = 'none';
+  renderQuizPractice();
+  startQuizTimer();
+}
+function startQuizTimer(){
+  clearInterval(quizTimerInterval);
+  updateQuizTimerDisplay();
+  quizTimerInterval = setInterval(function(){
+    quizTimeLeft--;
+    updateQuizTimerDisplay();
+    if(quizTimeLeft<=0){clearInterval(quizTimerInterval);submitQuizPractice();}
+  },1000);
+}
+function updateQuizTimerDisplay(){
+  var m = Math.floor(quizTimeLeft/60);
+  var s = quizTimeLeft%60;
+  document.getElementById('quizTimer').textContent = '⏱ '+m+':'+(s<10?'0':'')+s;
+}
+function renderQuizPractice(){
+  var container = document.getElementById('quizContainer');
+  var html = '';
+  currentQuestions.forEach(function(q,i){
+    if(q.opts){
+      html += '<div class="quiz-card" id="qcard'+i+'"><div class="q-num">选择题 '+(i+1)+'</div><div class="q-text">'+q.q+'</div>';
+      q.opts.forEach(function(o,j){
+        var sel = userAnswers[i]===j ? ' selected' : '';
+        html += '<div class="option'+sel+'" onclick="selectQuizChoice('+i+','+j+')" id="opt'+i+'_'+j+'">'+'ABCD'[j]+'. '+o+'</div>';
+      });
+      html += '<div id="fb'+i+'"></div></div>';
+    } else {
+      html += '<div class="quiz-card"><div class="q-num">简答题 '+(i+1)+'</div><div class="q-text">'+q.q+'</div><textarea class="essay-area" id="essay'+i+'" placeholder="输入你的回答...">'+(userAnswers[i]||'')+'</textarea></div>';
+    }
+  });
+  html += '<button class="btn" onclick="submitQuizPractice()">提交答案</button>';
+  container.innerHTML = html;
+}
+function selectQuizChoice(qIdx,optIdx){
+  if(userAnswers[qIdx]!==undefined) return;
+  userAnswers[qIdx] = optIdx;
+  var q = currentQuestions[qIdx];
+  var correctIdx = q.ans;
+  var isCorrect = optIdx === correctIdx;
+  var allOpts = document.querySelectorAll('#qcard'+qIdx+' .option');
+  allOpts.forEach(function(el,j){
+    el.classList.add(j===correctIdx?'correct':(j===optIdx&&!isCorrect?'wrong':''));
+    el.style.pointerEvents = 'none';
+  });
+  var fb = document.getElementById('fb'+qIdx);
+  fb.className = isCorrect ? 'feedback correct' : 'feedback wrong';
+  fb.textContent = isCorrect ? '正确！' : '错误。';
+  if(q.exp) fb.textContent += ' ' + q.exp;
+  var correctCount = Object.values(userAnswers).filter(function(v,i){
+    var qi = currentQuestions[i];
+    return v === qi.ans;
+  }).length;
+  var totalChoice = currentQuestions.filter(function(qi){return qi.opts;}).length;
+  document.getElementById('quizScore').textContent = '得分: '+correctCount+'/'+totalChoice;
+}
+function submitQuizPractice(){
+  var correctCount = Object.values(userAnswers).filter(function(v,i){
+    var qi = currentQuestions[i];
+    return v === qi.ans;
+  }).length;
+  var totalChoice = currentQuestions.filter(function(qi){return qi.opts;}).length;
+  clearInterval(quizTimerInterval);
+  var msg = '选择题得分: '+correctCount+'/'+totalChoice+'\n简答题已保存（自我对照参考答案）';
+  // Save errors
+  currentQuestions.forEach(function(q,i){
+    if(q.opts && userAnswers[i]!==undefined && userAnswers[i]!==q.ans){
+      let errors = JSON.parse(localStorage.getItem('mks_tech6_errorBook')||'[]');
+      // Find original index
+      for(var oi=0; oi<mcQuestions.length; oi++){
+        if(mcQuestions[oi].q === q.q){errors.push({id:oi, time:Date.now()}); break;}
+      }
+      localStorage.setItem('mks_tech6_errorBook',JSON.stringify(errors));
+    }
+  });
+  setTimeout(function(){ alert(msg); }, 200);
+  updateProgress();
+}
+function resetQuiz(){
+  currentQuestions = [];
+  userAnswers = {};
+  clearInterval(quizTimerInterval);
+  document.getElementById('quizContainer').innerHTML = '';
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('quizTimer').style.display = 'none';
+  document.getElementById('staticQuiz').style.display = 'block';
+}
+
+// ============ INIT ============
+function init(){
+renderConceptGrid();
+renderMKSGrid();
+renderBoundaryTable();
+renderLearningPath();
+renderSVG();
+renderMCQ();
+renderSAQ();
+renderSocratic();
+renderDecision();
+updateProgress();
+}
+init();
+</script>
+</body>
+</html>

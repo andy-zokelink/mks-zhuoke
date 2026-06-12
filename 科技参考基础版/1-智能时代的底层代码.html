@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能时代的底层代码 · 最小知识集</title>
+<style>
+/* ============================================================
+   智能时代的底层代码 · The Underlying Code of the Intelligent Era
+   设计理念：温润的科技感 —— 深红/金色/奶油色，克制而有力
+   ============================================================ */
+:root {
+  --bg: #fdf6ec;
+  --card: #fffaf2;
+  --accent: #c0392b;
+  --accent2: #d4a574;
+  --text: #3d2f2f;
+  --text2: #6b5555;
+  --border: #e8d5c0;
+  --gold: #b8860b;
+  --gold-light: #d4a853;
+  --success: #27ae60;
+  --warn: #e67e22;
+  --blue: #2980b9;
+  --shadow: 0 2px 12px rgba(60,30,20,.08);
+  --shadow-md: 0 4px 18px rgba(60,30,20,.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{font-size:clamp(14px,1.2vw,16px);scroll-behavior:smooth}
+
+body{
+  font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== TOP BAR ===== */
+.top-bar{
+  position: sticky; top:0; z-index:200;
+  background: linear-gradient(135deg, #3d2f2f 0%, #5a3e3e 100%);
+  color: #fdf6ec; padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.top-bar .course-title{
+  font-size: clamp(14px, 2.2vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.top-bar .home-link{
+  color: var(--accent2);
+  font-size: 13px;
+  border: 1px solid var(--accent2);
+  padding: 4px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.top-bar .home-link:hover{
+  background: var(--accent2);
+  color: #3d2f2f;
+}
+
+/* ===== TAB BAR ===== */
+.tab-bar{
+  position: sticky; top: 44px; z-index:199;
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: 8px clamp(4px,1vw,12px);
+  background: rgba(253,246,236,.95); backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--border);
+  justify-content: center;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.tab-btn{
+  padding: 7px clamp(8px,2vw,14px);
+  border: none; border-radius: 18px;
+  background: var(--card); color: var(--text2);
+  font-size: .8rem; cursor: pointer;
+  transition: all .2s; white-space: nowrap;
+  border: 1px solid var(--border);
+}
+.tab-btn:hover{ border-color: var(--accent); color: var(--accent); }
+.tab-btn.active{ background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.tab-content{ display: none; animation: fadeIn .35s ease; }
+.tab-content.active{ display: block; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+
+.container{ max-width: 960px; margin: 0 auto; padding: 0 clamp(12px, 3vw, 24px); }
+
+h2{ font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--accent); margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--gold-light); }
+h3{ font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--text); margin: 16px 0 8px; }
+
+/* ===== CARD ===== */
+.card{
+  background: var(--card); border-radius: var(--radius);
+  padding: clamp(14px, 2.5vw, 20px); box-shadow: var(--shadow);
+  border: 1px solid var(--border); margin-bottom: 16px;
+}
+.card h3{ color: var(--accent); margin-bottom: 8px; font-size: 1.05rem; }
+
+.grid2{ display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.grid3{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.grid4{ display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+
+/* ===== CONCEPT CARD ===== */
+.concept-card{
+  background: var(--card); border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--shadow); border-left: 4px solid var(--accent);
+  transition: transform .2s; cursor: pointer;
+}
+.concept-card:hover{ transform: translateY(-2px); }
+.concept-card.mks{ border-left-color: var(--gold); position: relative; }
+.concept-card.mks::after{ content: '\2605'; position: absolute; top: 8px; right: 12px; color: var(--gold); font-size: 1.2rem; }
+.concept-card h4{ font-size: .95rem; color: var(--accent); margin-bottom: 6px; }
+.concept-card p{ font-size: .82rem; color: var(--text2); line-height: 1.5; }
+
+/* ===== MKS HERO ===== */
+.mks-hero{ text-align: center; padding: clamp(16px, 3vw, 28px) 0; }
+.core-goal{
+  font-size: clamp(.95rem, 1.8vw, 1.15rem); color: var(--accent);
+  font-weight: bold; max-width: 700px; margin: 0 auto; line-height: 1.8;
+}
+
+.mks-core-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.mks-core{
+  background: linear-gradient(135deg, #fff5f5, #fffaf2);
+  border: 2px solid var(--accent); border-radius: 12px; padding: 20px; position: relative;
+}
+.mks-core .star{ color: var(--gold); font-size: 1.2rem; }
+.mks-core .title{ font-weight: bold; color: var(--accent); margin: 6px 0; }
+.mks-core .why{ font-size: .82rem; color: var(--text2); line-height: 1.5; }
+.mks-core .evidence{ font-size: .78rem; color: var(--accent); margin-top: 6px; font-style: italic; }
+
+/* ===== PROGRESS ===== */
+.progress-wrap{ margin: 16px 0; }
+.progress-label{ display: flex; justify-content: space-between; font-size: .85rem; margin-bottom: 4px; color: var(--text2); }
+.progress-bar{ height: 10px; border-radius: 5px; background: var(--border); overflow: hidden; }
+.progress-fill{
+  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 5px; transition: width .5s;
+}
+
+/* ===== SVG ===== */
+.svg-wrap{
+  overflow-x: auto; margin: 16px 0; border-radius: var(--radius);
+  background: var(--card); padding: 16px; -webkit-overflow-scrolling: touch;
+}
+.svg-wrap svg{ min-width: 700px; display: block; margin: 0 auto; }
+
+/* ===== FLIP CARD ===== */
+.flip-card{ perspective: 1000px; height: clamp(260px, 42vw, 320px); margin-bottom: 14px; }
+.flip-inner{
+  position: relative; width: 100%; height: 100%;
+  transition: transform .6s; transform-style: preserve-3d; cursor: pointer;
+}
+.flip-inner.flipped{ transform: rotateY(180deg); }
+.flip-front, .flip-back{
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: 10px; padding: clamp(16px, 3vw, 24px);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.flip-front{ background: var(--card); }
+.flip-back{
+  background: linear-gradient(135deg, #fffaf2, #fef5e7);
+  transform: rotateY(180deg); overflow-y: auto;
+  align-items: flex-start; text-align: left; font-size: clamp(.8rem, 1.6vw, .9rem);
+}
+.flip-nav{ display: flex; justify-content: center; align-items: center; gap: 16px; margin: 12px 0; }
+.flip-nav .btn{ min-width: 80px; }
+
+/* ===== QUIZ ===== */
+.quiz-card{ background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 14px; }
+.quiz-card .q-num{ font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+.quiz-card .q-text{ font-size: .95rem; margin-bottom: 12px; line-height: 1.6; }
+.quiz-card .option{
+  display: block; padding: 10px 14px; margin: 4px 0; border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer; transition: all .2s; font-size: .88rem; background: var(--card);
+}
+.quiz-card .option:hover{ background: #fff5f0; border-color: var(--accent); }
+.quiz-card .option.selected{ background: #ffe8e4; border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.quiz-card .option.correct{ background: #d4edda!important; border-color: var(--success)!important; color: #155724!important; }
+.quiz-card .option.wrong{ background: #f8d7da!important; border-color: var(--accent)!important; color: #721c24!important; }
+.quiz-card .feedback{ margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: .85rem; line-height: 1.5; }
+.quiz-card .feedback.correct{ background: #d4edda; color: #155724; }
+.quiz-card .feedback.wrong{ background: #f8d7da; color: #721c24; }
+.quiz-timer{ text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+
+.essay-area{
+  width: 100%; min-height: 80px; border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px; font-family: inherit; font-size: .88rem;
+  resize: vertical; background: var(--bg);
+}
+
+/* ===== MINDMAP ===== */
+.mindmap{ padding: 0; }
+.mindmap .node{ margin-left: 20px; }
+.mindmap .node-header{
+  cursor: pointer; padding: 6px 0; font-weight: bold; color: var(--accent);
+  display: flex; align-items: center; gap: 6px; font-size: .92rem;
+}
+.mindmap .node-header::before{ content: '\25B8'; display: inline-block; transition: transform .2s; font-size: .7rem; }
+.mindmap .node-header.open::before{ transform: rotate(90deg); }
+.mindmap .node-children{ display: none; margin-left: 16px; border-left: 2px solid var(--border); padding-left: 10px; }
+.mindmap .node-children.open{ display: block; }
+.mindmap .leaf{ padding: 3px 0; font-size: .88rem; color: var(--text2); }
+
+/* ===== SOCRATIC ===== */
+.socratic-item{ margin-bottom: 12px; }
+.socratic-q{
+  cursor: pointer; padding: 12px 16px; border-radius: var(--radius);
+  background: var(--card); border: 1px solid var(--border);
+  font-weight: 700; transition: all .2s; font-size: .92rem;
+}
+.socratic-q:hover{ border-color: var(--accent); background: #fff5f5; }
+.socratic-q::before{ content: '\2753 '; }
+.socratic-a{
+  display: none; padding: 12px 16px; background: #fef9f4;
+  border-radius: 0 0 var(--radius) var(--radius); font-size: .85rem;
+  color: var(--text2); line-height: 1.7;
+}
+.socratic-a.open{ display: block; }
+
+/* ===== DECISION ===== */
+.decision-round{ background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
+.decision-round .scenario{ font-weight: 700; margin-bottom: 12px; color: var(--accent); line-height: 1.6; }
+.decision-round .d-choice{
+  display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 4px 0;
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  background: var(--bg); font-family: inherit; font-size: .88rem; transition: all .2s;
+}
+.decision-round .d-choice:hover{ background: #fff5f5; border-color: var(--accent); }
+.decision-round .d-choice.chosen{ border-color: var(--accent); background: #ffe8e4; }
+.decision-round .d-result{
+  display: none; margin-top: 12px; padding: 14px; border-radius: 8px;
+  background: #fef9f4; font-size: .85rem; line-height: 1.7;
+}
+
+/* ===== STATS ===== */
+.stat-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.stat-card{ text-align: center; padding: 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
+.stat-card .num{ font-size: 2rem; font-weight: 700; color: var(--accent); }
+.stat-card .lbl{ font-size: .78rem; color: var(--text2); margin-top: 4px; }
+
+/* ===== TABLE ===== */
+.tbl{ width: 100%; border-collapse: collapse; font-size: .84rem; margin: 12px 0; }
+.tbl th, .tbl td{ padding: 8px 12px; border: 1px solid var(--border); text-align: left; }
+.tbl th{ background: var(--accent); color: #fff; font-weight: 600; }
+.tbl tr:nth-child(even){ background: #fef9f4; }
+
+/* ===== BTN ===== */
+.btn{
+  display: inline-block; padding: 8px 20px; background: var(--accent); color: #fff;
+  border: none; border-radius: 20px; cursor: pointer; font-size: .88rem;
+  transition: all .2s; font-weight: 600;
+}
+.btn:hover{ background: #e74c3c; }
+.btn-outline{ background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+.btn-outline:hover{ background: var(--accent); color: #fff; }
+.btn-sm{ padding: 5px 14px; font-size: .78rem; }
+.btn-success{ background: var(--success); color: #fff; }
+.btn-success:hover{ background: #219a52; }
+.btn-gold{ background: var(--gold); color: #fff; }
+
+.badge{ display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: .75rem; font-weight: 700; }
+.badge-star{ background: #fff3cd; color: var(--gold); }
+.badge-core{ background: #fde8e8; color: var(--accent); }
+.badge-done{ background: #d4edda; color: var(--success); }
+
+.timer{ font-size: 1.3rem; font-weight: 700; color: var(--accent); text-align: center; padding: 10px; }
+.timer.warn{ animation: pulse .5s infinite alternate; }
+@keyframes pulse{ from{ opacity: 1; } to{ opacity: .5; } }
+
+.tag{ display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .72rem; margin: 2px; background: #fef0e0; color: var(--accent); }
+
+.legend{ display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 10px 0; font-size: .78rem; color: var(--text2); }
+.legend span{ display: flex; align-items: center; gap: 4px; }
+
+.back-home{ text-align: center; margin: 16px 0; font-size: .85rem; }
+.back-home a{ color: var(--text2); text-decoration: none; border-bottom: 1px dashed var(--border); padding-bottom: 2px; }
+
+/* ===== MOBILE ===== */
+@media(max-width: 640px){
+  .tab-bar{ gap: 2px; padding: 6px 2px; }
+  .tab-btn{ padding: 5px 8px; font-size: .7rem; border-radius: 14px; }
+  .grid2, .grid3, .grid4{ grid-template-columns: 1fr; }
+  .flip-card{ height: 380px; }
+  .stat-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+  <span class="course-title">智能时代的底层代码 · 最小知识集</span>
+  <a class="home-link" href="index.html">返回知识主板</a>
+</div>
+
+<div class="container">
+
+<!-- ===== TAB BAR ===== -->
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="0">知识集总览</button>
+  <button class="tab-btn" data-tab="1">知识卡片</button>
+  <button class="tab-btn" data-tab="2">题库系统</button>
+  <button class="tab-btn" data-tab="3">考试模式</button>
+  <button class="tab-btn" data-tab="4">复习模式</button>
+  <button class="tab-btn" data-tab="5">思维导图</button>
+  <button class="tab-btn" data-tab="6">深度追问</button>
+  <button class="tab-btn" data-tab="7">案例分析</button>
+  <button class="tab-btn" data-tab="8">实战决策</button>
+</nav>
+
+<!-- ========== TAB 0: 知识集总览 ========== -->
+<div class="tab-content active" data-tab="0">
+
+<div class="mks-hero">
+  <div class="core-goal">
+    智能时代不是某个单一技术的胜利，而是一整套底层逻辑的重写。
+    从摩尔定律的黄昏到算力即权力的地缘博弈，从算法偏见的放大效应到数据主权的重新定义，
+    这些概念不是用来背诵的知识点，而是用来穿透科技新闻、理解时代走向的<strong>思维操作系统</strong>。
+    掌握这10个核心概念，你带走的不是碎片信息，而是一整套面对新技术时的<strong>分析框架</strong>。
+  </div>
+</div>
+
+<!-- 学习进度 -->
+<div class="progress-wrap">
+  <div class="progress-label"><span>学习进度</span><span id="progressPct">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+
+<!-- MKS核心 -->
+<h3 style="margin:20px 0 12px">最小知识集核心（4个骨架概念）</h3>
+<div class="mks-core-grid" id="mksCoreGrid"></div>
+
+<!-- 10大核心概念 -->
+<h3 style="margin:20px 0 12px">全部核心概念（10个）</h3>
+<div class="grid2" id="conceptGrid"></div>
+
+<!-- 概念关系图 -->
+<h3 style="margin:20px 0 12px">概念关系图</h3>
+<div class="svg-wrap" id="svgContainer"></div>
+<div class="legend">
+  <span>━━ 核心派生</span><span style="color:var(--gold)">━━ 支撑关联</span><span style="color:var(--success)">━━ 反馈应用</span>
+</div>
+
+<!-- 边界知识 -->
+<h3 style="margin:20px 0 12px">边界知识（知道存在即可，无需深究）</h3>
+<div class="card" style="overflow-x:auto">
+  <table class="tbl" id="boundaryTable"></table>
+</div>
+
+<!-- 学习路径 -->
+<h3 style="margin:20px 0 12px">推荐学习路径（5阶段）</h3>
+<div id="learningPath"></div>
+
+</div>
+
+<!-- ========== TAB 1: 知识卡片 ========== -->
+<div class="tab-content" data-tab="1">
+  <div class="flip-card">
+    <div class="flip-inner" id="flipInner">
+      <div class="flip-front" id="flipFront"></div>
+      <div class="flip-back" id="flipBack"></div>
+    </div>
+  </div>
+  <div class="flip-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevCard()">上一张</button>
+    <span style="font-size:.85rem;color:var(--text2)" id="cardIndex">1 / 10</span>
+    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张</button>
+  </div>
+  <div style="text-align:center;margin:8px 0">
+    <button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">标记已学习</button>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:.78rem;color:var(--text2)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+</div>
+
+<!-- ========== TAB 2: 题库系统 ========== -->
+<div class="tab-content" data-tab="2">
+  <h3 style="margin-bottom:10px">题库系统（随机抽题练习）</h3>
+  <div style="margin-bottom:12px">
+    <button class="btn" onclick="startQuiz()">随机抽题练习</button>
+    <button class="btn btn-outline btn-sm" onclick="resetQuiz()" style="margin-left:8px">重置</button>
+    <span style="margin-left:8px;font-size:.85rem;color:var(--text2)" id="quizScore"></span>
+    <span id="quizTimer" style="float:right;color:var(--accent);font-weight:700;display:none"></span>
+  </div>
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ========== TAB 3: 考试模式 ========== -->
+<div class="tab-content" data-tab="3">
+  <h3 style="margin-bottom:10px">考试模式</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:12px">从题库随机抽取 7道选择题 + 3道简答题，限时15分钟</p>
+  <button class="btn" id="startExamBtn" onclick="startExam()">开始考试</button>
+  <div class="quiz-timer" id="examTimer" style="display:none"></div>
+  <div id="examContainer"></div>
+</div>
+
+<!-- ========== TAB 4: 复习模式 ========== -->
+<div class="tab-content" data-tab="4">
+  <h3 style="margin-bottom:10px">复习模式</h3>
+
+  <h4 style="margin:12px 0 8px">学习统计</h4>
+  <div class="stat-grid" id="statGrid">
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="lbl">总答题数</div></div>
+    <div class="stat-card"><div class="num" id="statCorrect">0</div><div class="lbl">正确数</div></div>
+    <div class="stat-card"><div class="num" id="statRate">0%</div><div class="lbl">正确率</div></div>
+    <div class="stat-card"><div class="num" id="statDays">0</div><div class="lbl">学习天数</div></div>
+  </div>
+
+  <h4 style="margin:12px 0 8px">错题本</h4>
+  <div id="wrongBook" style="max-height:400px;overflow-y:auto">
+    <p style="color:var(--text2);font-size:.85rem">暂无错题记录</p>
+  </div>
+
+  <h4 style="margin:12px 0 8px">概念薄弱点分析</h4>
+  <div id="weakAnalysis">
+    <p style="color:var(--text2);font-size:.85rem">暂无答题数据</p>
+  </div>
+</div>
+
+<!-- ========== TAB 5: 思维导图 ========== -->
+<div class="tab-content" data-tab="5">
+  <h3 style="margin-bottom:10px">思维导图（可折叠展开）</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">三层概念体系，点击展开/折叠</p>
+  <div class="mindmap" id="mindmap"></div>
+</div>
+
+<!-- ========== TAB 6: 深度追问 ========== -->
+<div class="tab-content" data-tab="6">
+  <h3 style="margin-bottom:10px">苏格拉底深度追问</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">对每个核心概念2-3层追问，点击展开答案</p>
+  <div id="socraticContainer"></div>
+</div>
+
+<!-- ========== TAB 7: 案例分析 ========== -->
+<div class="tab-content" data-tab="7">
+  <h3 style="margin-bottom:10px">案例分析：苹果M1芯片的战略转型</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">用MKS四维度拆解苹果抛弃Intel、自研ARM架构芯片的底层逻辑</p>
+  <div id="caseStudy"></div>
+</div>
+
+<!-- ========== TAB 8: 实战决策 ========== -->
+<div class="tab-content" data-tab="8">
+  <h3 style="margin-bottom:10px">实战决策模拟</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">3轮决策模拟，每轮3个选项，选择后查看MKS分析</p>
+  <div id="decisionContainer"></div>
+</div>
+
+</div><!-- .container -->
+
+<script>
+// ========== DATA ==========
+
+// 10 Core Concepts
+const concepts = [
+  {id:'c1',name:'摩尔定律的黄昏',icon:'',star:true,
+    desc:'传统通用计算的缩放瓶颈 vs 专业芯片的崛起。苹果M1的统一内存架构代表新范式：不是把CPU做得更快，而是把计算、图形、AI集成在一个芯片上。',
+    define:'摩尔定律（每18个月晶体管翻倍）正接近物理极限。通用CPU的性能提升从每年52%降到3%。但这不意味着计算停滞——专业芯片（GPU/TPU/NPU/统一内存SoC）正在替代"一刀切"的通用架构。如同瑞士军刀被专业工具箱取代：不是"万能工具"更好，而是"每个任务用专用工具"更高效。',
+    analogy:'瑞士军刀vs专用工具箱。瑞士军刀什么都能做但什么都做不好——切菜不如厨刀、锯木不如锯子。通用CPU同理：能运行所有程序但每个任务都不是最优。苹果M1就像为你量身定做了一套工具——CPU、GPU、神经引擎、统一内存全部在一块芯片上，数据不需要在组件之间搬运。',
+    example:'苹果M1 Max拥有570亿晶体管、400GB/s内存带宽、统一内存架构让CPU和GPU共享数据无需复制。相比Intel芯片+独立显卡的方案，在同样功耗下M1的每瓦性能高出3-5倍。这解释了为什么M1 MacBook的续航从10小时跳到20小时。',
+    counter:'Intel并非不知道这个方向——它尝试了Larrabee（GPU）、Xeon Phi（加速器）、Mobileye（自动驾驶芯片），但"通用CPU"的路径依赖让它无法果断转型。如同柯达发明了数码相机但不敢放弃胶卷业务。'
+  },
+  {id:'c2',name:'生态锁定效应',icon:'',star:true,
+    desc:'操作系统的网络效应如何锁定用户。鸿蒙试图打破Android/iOS双寡头，但Windows Phone证明：体验好不等于能成功——生态才是护城河。',
+    define:'当一个平台的用户越多，开发者越愿意为它开发应用；应用越多，越吸引用户。这个正反馈循环形成"生态锁定"——即使出现更好技术的替代品，用户也无法迁移，因为迁移成本太高。操作系统是最典型的生态锁定战场。',
+    analogy:'电话网络——第一部电话毫无价值（没人可打），第100万部电话极其有价值（可以打给100万人）。操作系统同理：第一个用户面临空的应用商店，第10亿个用户拥有数百万应用。Windows Phone的技术体验被评为优于Android，但因为它只有1%的市场份额，开发者不愿为它开发应用，死循环。',
+    example:'鸿蒙（HarmonyOS）的策略不是"做一个比Android更好的操作系统"——那已经被Windows Phone证明走不通。鸿蒙的策略是兼容Android应用（降低用户迁移成本），同时在IoT设备上建立新战场（智能家居/车载/工业），用"分布式能力"作为差异化——比如手机上的视频可以无缝流转到平板继续播放。',
+    counter:'生态锁定并非不可打破——互联网从IE独霸变成Chrome主导，社交媒体从MySpace变成Facebook再变成TikTok。关键在于"迁移成本+网络效应"是否被新平台的差异化优势压倒。如果鸿蒙在IoT领域的优势足够大，可能在特定场景打破双寡头。'
+  },
+  {id:'c3',name:'算力即权力',icon:'',star:true,
+    desc:'芯片制造能力决定国家科技主权。英伟达收购ARM引发全球监管审查——如同工业时代控制钢铁产量，智能时代控制芯片产能。',
+    define:'芯片设计+制造能力已经成为国家战略资源，其重要性堪比工业时代的钢铁、石油时代的原油。拥有先进制程（5nm/3nm/2nm）的国家可以定义AI、通信、军事技术的上限。台积电一家企业生产了全球90%以上的先进芯片，这种集中度本身就是地缘政治风险。',
+    analogy:'工业时代的钢铁产量决定一个国家的工业化和军事实力——你可以买钢铁，但"自己能造"和"只能买"是完全不同的地缘政治地位。今天芯片同理：你可以买高通/英伟达的芯片，但如果被制裁断供（如华为），手机业务直接归零。',
+    example:'2020年英伟达宣布以400亿美元收购ARM，引发英国、欧盟、中国、美国的联合监管审查。因为ARM的芯片架构授权给苹果、高通、华为、三星等全球所有移动芯片厂商——如果ARM被英伟达控制，相当于"高速公路收费站被一家卡车公司收购"。日本1980年代芯片产业曾占全球50%以上，被美国以"国家安全"为由打压后衰落，是"算力权力转移"的经典案例。',
+    counter:'算力不是物理定律——荷兰ASML垄断EUV光刻机，但中国在成熟制程（28nm以上）正在快速追赶，而成熟制程覆盖了汽车电子、IoT等巨大市场。也不排除新技术（光子计算/量子计算/存内计算）绕过传统芯片制程。日本当年被超越不全是政治原因，也是因为固守DRAM而错过了微处理器革命。'
+  },
+  {id:'c4',name:'算法偏见',icon:'',star:true,
+    desc:'推荐系统放大认知偏差而非纠正。抖音vs快手的不同算法哲学揭示：算法不是中立的镜子，而是有价值观的放大器。',
+    define:'推荐算法并非被动反映用户兴趣，而是主动塑造用户行为。算法的优化目标（停留时长/点击率/互动率）决定了它会放大哪些内容——如果目标是"最大化停留时长"，算法会优先推荐极端情绪化、争议性强、容易上瘾的内容，而不是"对用户最有价值"的内容。"算法偏见"不是算法的bug，而是优化目标本身的结果。',
+    analogy:'不是给你想看的最优解，而是给你最容易上瘾的内容。如同餐厅推荐——如果餐厅的目标是"最大化利润"而非"最大化顾客健康"，它会推荐利润率最高的炸鸡而非营养价值最高的沙拉。推荐算法同理：目标是广告收入=推荐最刺激、最上瘾的内容。',
+    example:'抖音的算法偏向"爆款逻辑"——一个视频如果前1秒的完播率高就推给更多人，导致内容越来越极端化以争夺注意力。快手的算法偏向"普惠逻辑"——给普通用户的视频也分配初始流量，内容生态更多元但平均刺激性较低。这是"算法价值观"的不同选择。对抗算法的方法是：主动搜索替代被动推荐，定期清理历史记录重置推荐模型，使用RSS订阅替代算法推送。',
+    counter:'算法也可以被设计为"减少偏见"——比如Polaris（政治立场多样化推荐工具）刻意在信息流中插入不同观点的内容。问题是：用户不喜欢看到反对观点，所以这种"纠偏算法"的商业可行性较低。算法的"偏见"本质上是商业模式的偏见。'
+  },
+  {id:'c5',name:'虚拟与现实的边界',icon:'',star:false,
+    desc:'元宇宙不是替代现实而是增强现实。VR在技能训练中的效果远超社交——这不是"新世界替代旧世界"的故事，而是"新工具增强旧能力"的故事。',
+    define:'元宇宙概念被严重炒作的根源是错误类比——把它想象成"虚拟世界替代现实世界"。但历史证明，新技术几乎从不"替代"旧模式，而是"增强"和"补充"。电话没有替代面对面交流（实际上通话越多见面越多），互联网没有替代纸书（电子书销量增长后纸书也增长了）。VR/AR的真正价值不在"虚拟社交"，而在"增强训练"。',
+    analogy:'电话没有替代面对面交流，但改变了沟通方式。电话刚发明时，有人说它会让人们不再见面——结果人们通话越多，见面也越多，因为沟通成本降低增加了社交总量。VR同理：它不会让你"活在虚拟世界"，而是让你在现实世界中多了一种获取信息和技能的手段。',
+    example:'VR在外科手术训练、飞行模拟、设备维修培训中的效果已被大量验证——受训者的操作错误率降低40-60%，因为VR提供了"零风险犯错"的环境。但VR社交（如Meta的Horizon Worlds）用户活跃度持续下降——人们在虚拟会议室里开会不如在现实中开会，除非有特殊需求（如跨国团队减少出差成本）。Second Life的衰落证明：纯虚拟世界缺乏长期粘性，因为人类终究是肉身动物。',
+    counter:'不能完全排除"虚拟世界"的长期吸引力。年轻一代从小在Minecraft/Roblox/Fortnite中长大，"虚拟身份"和"现实身份"的边界对他们来说比老一辈模糊得多。但即使如此，这些平台的成功恰恰因为它们增强了社交（一起玩/一起创造），而非替代社交。'
+  },
+  {id:'c6',name:'脑机接口的两条路',icon:'',star:false,
+    desc:'侵入式（高精度高风险）vs非侵入式（低精度高安全）。Neuralink的猪实验是侵入式的里程碑，脑电波治疗自闭症是非侵入式的现实——两者不是竞争关系，而是互补关系。',
+    define:'脑机接口（BCI）分为两派：侵入式在大脑皮层植入电极阵列，信号精度可达单个神经元级别但需开颅手术，存在感染和排异风险；非侵入式通过头皮电极或近红外光谱读取脑电波，安全无创但信号噪声大，只能识别大致的脑区活动模式。两条路针对不同应用场景——侵入式瞄准瘫痪患者的运动功能重建，非侵入式瞄准注意力训练、情绪调节等消费级场景。',
+    analogy:'开胸手术vs体检。如果你需要做心脏搭桥，非侵入式的体检帮不了你；如果你只是年度体检，侵入式开胸是过度医疗。脑机接口同理：瘫痪患者装个电极在运动皮层来控制机械臂是合理的风险收益比；健康人植入电极来"更快打字"完全不合理。',
+    example:'2020年Neuralink展示了植入脑机接口的猪——电极读取猪鼻子触碰物体时的神经元放电（约1024个电极），信号实时显示在屏幕上。这是侵入式的技术验证。与此同时，非侵入式的脑电波治疗已被用于儿童自闭症的注意力训练，FDA批准了部分设备用于ADHD治疗。两个方向同时在推进，但应用场景完全不同。',
+    counter:'公众对"脑机接口"的想象被科幻作品误导——"精神控制"不等于"读心术"。解码特定运动信号（手向左还是向右）只需要识别运动皮层的几十个神经元的放电模式；但要"读取你正在想什么"需要同时解码数十亿神经元的交互——在可预见的未来技术上不可能实现。脑机接口能做的是"解读意图"，不能"解读思想"。'
+  },
+  {id:'c7',name:'去中心化迷思',icon:'',star:false,
+    desc:'区块链解决的是信任问题而非效率问题。比特币耗电量堪比一个国家，NFT的真正价值不在数字化而在社区共识——去中心化的代价是效率的断崖式下降。',
+    define:'区块链的核心创新是"去信任化"——在不信任任何单一中介的情况下，通过分布式账本和共识机制实现可信交易。但这带来了巨大的效率代价：比特币每笔交易消耗约700kWh电力（够美国一个家庭用24天），每秒只能处理约7笔交易（Visa可以处理约1700笔/秒）。因此，区块链适合"信任成本极高"的场景（跨境汇款、智能合约、数字身份），而非日常支付。',
+    analogy:'公证处——有用但日常不需要。你去买房需要公证处（第三方信任），但你去便利店买水不需要公证处。区块链就是一个全球分布式公证处——当信任成本极其高昂时（如跨国汇款需要3-5天、中间费用5-10%），它的价值超过成本；但当你买一杯咖啡时，Visa的0.1秒+2%手续费远比区块链便宜。',
+    example:'比特币网络年耗电量约130TWh，相当于阿根廷全国用电量。但这个代价换来的是：任何人都可以在没有银行账户的情况下持有和转移资产（全球17亿人没有银行账户）、在货币崩溃的国家（如委内瑞拉/津巴布韦）保值。NFT的真正价值不在于"你拥有这张图片的链上凭证"，而在于社区共识——BAYC无聊猿俱乐部本质是一个付费社交网络，NFT只是会员卡。',
+    counter:'不是所有区块链都像比特币一样低效。以太坊从PoW转PoS后将能耗降低了99.95%。Layer 2方案（如闪电网络、Rollup）可以将交易速度提升几个数量级。Chia用"空间证明"替代"工作量证明"，降低了能源消耗。但核心矛盾不变：去中心化必然牺牲效率——这是分布式系统的基本定理（CAP定理的体现）。'
+  },
+  {id:'c8',name:'数据主权',icon:'',star:false,
+    desc:'个人信息不是石油（用完即弃）而是器官（需持续保护）。iPhone的ATT框架对广告业造成百亿美元冲击——用户终于可以说"不"。',
+    define:'个人信息不应被类比为"新石油"——石油被开采后卖给炼油厂，所有权转移、一次性使用。个人信息更应被类比为"器官"——可以捐赠（给可靠的医疗研究）、可以检查（但医生不能偷偷卖掉你的血样）、需要持续保护（不能今天同意明天就不能撤回）。数据主权的核心是：个人有权决定谁可以使用自己的数据、用于什么目的、使用多久。',
+    analogy:'血液样本——你可以自愿捐血给医院做研究，但医院不能把你的血样偷偷卖给药企赚钱，也不能在你不治了之后继续保存你的血样。如果你的数据是"石油"，公司采了就卖了；如果数据是"器官"，你必须持续拥有控制权。',
+    example:'2021年苹果推出ATT（App Tracking Transparency）框架，要求所有App在跟踪用户之前获得明确许可。结果是全球约75%的用户选择了"不允许跟踪"。这对Facebook/Meta的广告业务造成了约100亿美元/年的损失，因为广告主无法精确投放定向广告。中国的《个人信息保护法》也在2021年11月生效，规定了"告知-同意"原则、数据最小化原则、用户删除权。',
+    counter:'过度保护数据主权可能导致"数据饥荒"——医疗AI需要大量病例数据来训练，如果每个人的数据都被严格锁死，AI诊断系统的进步会大幅放缓。北欧国家采用"选择退出"（opt-out）而非"选择加入"（opt-in）模式来平衡隐私和科研需求。关键不是"保护vs不保护"，而是"谁决定、怎么用、用多久"的制度设计。'
+  },
+  {id:'c9',name:'人机协作第三条路',icon:'',star:false,
+    desc:'AI不是替代人类也不是工具，而是"外脑"。AlphaFold预测蛋白质结构后人类仍需设计实验验证——AI提出假设，人类做最终判断。',
+    define:'人机关系有三条路：①AI替代人类（自动化取代工作）、②AI是工具（人类完全控制AI做什么）、③AI是"外脑"（协作伙伴——AI提供候选方案和建议，人类做批判性判断和最终决策）。第三条路最符合当前AI的实际能力：AI在模式识别、大规模搜索、假设生成方面超越人类，但在因果推理、常识判断、价值权衡方面远不如人类。因此最佳协作方式是"AI生成候选，人类选择+验证"。',
+    analogy:'计算器没有替代数学家，但改变了数学。计算器出现后，数学家不再花时间在长除法上，而是把精力投入到概念推理和证明上。但计算器的计算结果仍然需要数学家的专业判断——计算结果对不对？适用范围是什么？AI同理：它能帮你做大量"计算性"工作，但判断结果对不对、该不该用的责任在人类。',
+    example:'DeepMind的AlphaFold预测了几乎所有已知蛋白质的3D结构——但这不意味着"结构生物学结束了"。AlphaFold给出的是一个"预测"，需要实验验证（X射线晶体学或冷冻电镜确认结构是否正确），也需要人类科学家设计后续实验来理解"这个结构为什么有某种功能"。AI大幅加速了"提出候选结构"这一步，但"验证结构+解释功能"仍然需要人类。',
+    counter:'完全依赖AI判断的医疗诊断系统可能出错并造成灾难——2018年IBM Watson for Oncology被曝给出了"不安全"的治疗建议。原因不是AI算法差，而是训练数据来自少数美国顶级医院的病历，推广到全球其他地区时出现偏差。AI的"建议"不等于"事实"——人类必须保持批判性判断，否则"外脑"会变成"外包责任"。'
+  },
+  {id:'c10',name:'信息过载与注意力稀缺',icon:'',star:false,
+    desc:'在信息无限的世界里，注意力是唯一的稀缺资源。从Zoom疲劳到远程办公的注意力管理——不是水太多，而是杯子太小。',
+    define:'信息时代的核心悖论：信息的生产成本趋近于零（任何人可以随时发布内容），但注意力的总量是固定的（每人每天只有24小时）。因此，稀缺资源从"信息获取"转移到了"注意力管理"。多任务处理是一个迷思——人脑实际上是在多个任务间快速切换（task-switching）而非并行处理（parallel processing），每次切换都有认知成本。',
+    analogy:'不是水太多而是杯子太小。把无限的信息比作汪洋大海，但你的注意力只是一个杯子。问题不在于"怎么从海里取更多水"（这个世界上大部分水已经是垃圾信息），而在于"怎么让杯子里的水更干净、更有营养"。信息节食比信息获取更重要。',
+    example:'2020年远程办公大规模普及后，"Zoom疲劳"成为普遍现象。研究发现：视频会议比面对面会议更容易疲劳，因为①你被迫长时间盯着人脸（现实中你会看别处）；②你看到自己实时画面产生自我监控压力；③多任务诱惑（边开会边回邮件）导致每个任务都做不好。有效的对策：异步沟通（用文字替代会议）、番茄工作法（25分钟专注+5分钟休息）、关闭通知（减少任务切换）。',
+    counter:'"注意力稀缺"是结构性问题而非个人问题——公司期望员工"随时在线"、社交媒体被设计为"最大化用户时长"、开放式办公室设计降低专注力。仅仅教个人"管理注意力"是不够的——需要组织层面和文化层面的改变，比如"不开会日"、"异步优先"的协作文化、禁止下班后发工作消息。'
+  }
+];
+
+// MKS Core IDs
+const mksCoreIds = ['c1','c2','c3','c4'];
+
+// Concept details for flip cards
+const conceptDetails = concepts.map(c => ({
+  name: c.name, icon: c.icon,
+  define: c.define, analogy: c.analogy, example: c.example, counter: c.counter
+}));
+
+// Boundary knowledge
+const boundary = [
+  {name: 'DeepMind AlphaFold的具体网络架构（Evoformer模块）', scene: '理解AI预测蛋白质结构的能力但不需自己训练模型'},
+  {name: 'ARM指令集架构的技术细节（ARMv8/v9差异）', scene: '讨论英伟达收购ARM时理解为什么ARM架构如此关键'},
+  {name: '台积电5nm/3nm制程的具体工艺参数', scene: '讨论芯片制造时有量化概念但不需自己设计芯片'},
+  {name: 'EUV光刻机的光学系统（蔡司反射镜组）', scene: '理解芯片制造的物理极限但不需操作光刻机'},
+  {name: '比特币SHA-256哈希算法的数学细节', scene: '讨论加密货币能耗时理解"工作量证明"的基本原理即可'},
+  {name: 'Neuralink N1芯片的1024个电极的具体布线方式', scene: '讨论脑机接口时知道技术参数但不需设计植入设备'},
+  {name: '鸿蒙分布式软总线的通信协议细节', scene: '理解操作系统生态竞争但不需开发鸿蒙应用'},
+  {name: '星链卫星的激光星间链路（ISL）技术规范', scene: '讨论低轨卫星通信时了解技术可行性即可'},
+  {name: '量子计算机"九章"的光子探测效率数据', scene: '讨论量子计算进展时有基本概念即可'},
+  {name: '时间晶体的非平衡态量子多体理论', scene: '了解物理学前沿概念但不需做理论物理'},
+  {name: '《个人信息保护法》全文76条具体条款', scene: '讨论数据隐私时知道法律框架存在即可'},
+  {name: 'Chia的空间证明（PoST）算法的数学基础', scene: '理解"绿色加密货币"的技术理念但不需挖矿'}
+];
+
+// Learning path
+const learningPath = [
+  {step: 1, title: '建立算力认知', desc: '首先理解"摩尔定律的黄昏"和"算力即权力"——这两者构成了理解智能时代硬件基础的框架。从苹果M1的架构革命（为什么统一内存比独立GPU更高效）到全球芯片供应链的地缘博弈（为什么台积电一个工厂能影响全球经济）。'},
+  {step: 2, title: '拆解生态逻辑', desc: '学习"生态锁定效应"和"算法偏见"——理解为什么好产品不一定能赢（Windows Phone的教训），以及为什么你看到的推荐内容不是"最好的"而是"最能留住你的"。这两个概念帮你穿透消费科技的表象。'},
+  {step: 3, title: '重新定义边界', desc: '进入"虚拟与现实的边界"和"脑机接口的两条路"——理解为什么元宇宙不是替代现实而是增强现实，为什么侵入式和非侵入式BCI是针对完全不同场景的互补方案。避免被炒作概念误导。'},
+  {step: 4, title: '审视技术与权力', desc: '学习"去中心化迷思"和"数据主权"——理解区块链解决的是信任问题而非效率问题（为什么比特币效率极低但有存在价值），理解个人信息保护不是技术问题而是制度设计问题。'},
+  {step: 5, title: '内化为思维习惯', desc: '将"人机协作第三条路"和"信息过载与注意力稀缺"作为日常分析工具——看到任何AI产品都问：它是替代人类还是增强人类？看到任何信息产品都问：它在帮你管理注意力还是在掠夺你的注意力？这两个问题不需要任何技术背景就能问，但它们足以帮你穿透80%的科技表象。'}
+];
+
+// ========== QUIZ DATA ==========
+// 20 MCQs, answer distribution: 0:5, 1:5, 2:5, 3:5
+const quizData = [
+  // ans=0: 5 questions
+  {q:'苹果M1芯片的"统一内存架构"（UMA）相比传统Intel+独立显卡方案的核心优势是什么？',opts:['CPU和GPU共享同一块物理内存，数据无需在组件间来回拷贝','苹果的内存芯片更便宜','M1使用的是比Intel更先进的制程','苹果的散热设计更好'],ans:0,
+  explain:'M1的UMA让CPU和GPU访问同一块内存——比如视频渲染时CPU解压视频流直接放入统一内存，GPU直接读取渲染，无需像传统架构那样把数据从CPU内存复制到GPU显存。这同时降低了延迟和功耗，是M1每瓦性能大幅领先的根本原因。'},
+  {q:'Windows Phone失败的根本原因是什么？',opts:['生态锁定——缺乏开发者支持导致应用匮乏，形成恶性循环','系统体验太差','微软品牌不够好','手机价格太高'],ans:0,
+  explain:'Windows Phone的Metro UI被评为当时最好的移动操作系统体验之一，诺基亚Lumia的硬件设计也备受赞誉。但它只有1%左右的市场份额，开发者不愿为一个小市场开发应用——"没人买因为没应用，没应用因为没人买"的死循环。这就是生态锁定的威力。'},
+  {q:'以下哪项最能代表"算力即权力"这一概念的本质？',opts:['谁控制先进芯片产能，谁就拥有定义AI和军事技术上限的话语权','电脑越多越好','程序员是高薪职业','每个国家都应该有自己的芯片品牌'],ans:0,
+  explain:'算力即权力强调的是芯片制造能力直接影响国家的技术主权和军事能力。台积电一家企业生产全球90%以上的先进芯片，美国通过出口管制限制中国获取先进芯片——这不是商业竞争，而是地缘政治的延伸。'},
+  {q:'关于推荐算法，"算法偏见"的核心来源是什么？',opts:['算法的优化目标（停留时长/点击率）本身决定了它会放大极端和上瘾内容','程序员故意写偏见的代码','数据量不够大','AI本身有意识形态'],ans:0,
+  explain:'推荐算法本身是没有"价值观"的数学函数——但它有"优化目标"。如果目标是"最大化用户停留时长"（因为停留时长=广告收入），算法自然会推荐最刺激、最争议、最容易上瘾的内容，因为这些内容恰好最能延长停留时长。偏见不在算法代码里，在商业模式里。'},
+  {q:'关于"去中心化迷思"，以下哪个描述是正确的？',opts:['区块链解决的是信任问题而非效率问题——它在信任成本极高的场景有价值，在日常支付场景效率不如Visa','区块链在所有场景都比传统数据库更好','去中心化是免费的','比特币交易不需要消耗任何电力'],ans:0,
+  explain:'区块链的核心价值是"去信任化"——不需要信任任何中介就能完成交易。但这有巨大代价：比特币每秒7笔交易、每笔耗电700kWh。对于日常买咖啡，Visa的0.1秒+2%手续费远比区块链高效。区块链只在"信任成本极高"的场景（跨境汇款、抗审查支付）有绝对优势。'},
+
+  // ans=1: 5 questions
+  {q:'鸿蒙（HarmonyOS）打破Android/iOS双寡头的主要策略是什么？',opts:['做一个比Android更流畅的操作系统','兼容Android应用降低迁移成本+在IoT设备建立新战场用分布式能力做差异化','直接禁止Android应用在华为手机上运行','只做高端市场不管份额'],ans:1,
+  explain:'鸿蒙最难的地方不是"做一个更好的系统"——Windows Phone已经证明这条路走不通。鸿蒙的策略是两条腿走路：①兼容Android应用让用户无缝迁移（降低迁移成本）；②在智能家居/车载/工业等Android和iOS覆盖不到的新战场定义"分布式能力"标准。'},
+  {q:'区块链"去中心化"必须付出的核心代价是什么？',opts:['以牺牲效率为代价','节点越多速度越快','去中心化是免费的','去中心化不需要网络'],ans:1,
+  explain:'去中心化意味着网络中的每个节点都要验证和存储全部交易记录——这是分布式系统的CAP定理决定的：一致性、可用性、分区容忍性只能同时满足两个。区块链为了"去中心化"（分区容忍性）牺牲了效率（每秒交易数远低于中心化系统）。'},
+  {q:'为什么说"个人信息不是石油而是器官"？',opts:['因为信息比石油更贵','石油卖给炼油厂后所有权转移且一次性使用，个人信息需要持续的、可撤销的控制权——就像你不能卖了器官但还需要它','信息可以多次使用','石油污染环境'],ans:1,
+  explain:'"数据是石油"这个比喻的问题在于——石油开采权一旦卖出就和原主人无关了。但个人信息不同：你今天同意一个App使用你的位置数据，不代表你永远同意、也不代表它可以卖掉你的数据。个人信息需要持续的保护和可撤销的控制权——就像器官，你可以捐（同意特定用途），但你不能卖（所有权不能转让），而且你可以随时撤回同意。'},
+  {q:'关于"人机协作第三条路"（AI作为外脑），以下哪个应用场景最符合这一理念？',opts:['AI完全替代医生进行诊断','AI生成候选诊断方案，人类医生判断+验证+做最终决策','人类医生完全不用AI','AI和人类各自独立诊断然后投票'],ans:1,
+  explain:'"外脑"模式的核心是AI负责它擅长的事（大规模模式识别、从海量数据中检索相似病例、列出一组候选诊断），人类负责自己擅长的事（因果推理、常识判断、结合病人个体情况的综合决策、承担最终责任）。这种协作方式利用了各自的比较优势。'},
+  {q:'关于"信息过载"的核心洞见是什么？',opts:['信息越多越好','在信息无限的世界里，注意力是唯一的稀缺资源——问题不是获取更多信息，而是保护和管理有限的注意力','我们应该每天阅读所有新闻','多任务处理是最佳工作方式'],ans:1,
+  explain:'信息的生产成本趋近于零，但注意力总量固定（每天24小时）。如同水无限但你的杯子有限——信息过载的问题不是"怎么可能从大海里再舀一杯水"，而是"怎么让我杯子里的水干净有营养"。信息节食比信息获取更重要。'},
+
+  // ans=2: 5 questions
+  {q:'苹果推出ATT（App Tracking Transparency）框架后，对广告业产生了什么影响？',opts:['没有任何影响','广告业反而更赚钱了','Facebook/Meta每年损失约100亿美元广告收入，因为~75%用户选择不允许跟踪','所有App都下架了'],ans:2,
+  explain:'2021年苹果iOS 14.5引入ATT框架，要求App在跟踪用户跨应用行为前弹窗请求许可。结果全球约75%的用户选择"不允许"。这对精准广告投放造成巨大打击——Meta在2022年公开表示ATT导致其损失约100亿美元收入。这体现了"数据主权"概念的实际威力和商业冲击。'},
+  {q:'比特币的"工作量证明"（PoW）机制耗电堪比一个中等国家，以下哪项对其能耗的描述是准确的？',opts:['比特币几乎不耗电','比特币耗电只是因为挖矿的人多','比特币年耗电量约130TWh，约等于阿根廷全国用电量——但这个代价换来的是无需任何第三方中介的全球价值传输网络','比特币耗电的数据是编造的'],ans:2,
+  explain:'比特币的能耗确实惊人——约130TWh/年，相当于阿根廷全国用电。但需要理解的是：这个能耗并非"浪费"——它是在"去信任化"约束下，目前人类已知的最有效方式（通过消耗真实世界的能源来证明"我付出的成本足够大，所以不会作恶"）。问题不是"是否该耗电"，而是"哪些场景值得消耗这么多能源来换取去信任化"。'},
+  {q:'NFT（非同质化代币）的真正价值在哪？',opts:['数字图片本身值钱','区块链技术比传统技术更好','社区共识——NFT本质是会员卡/社区通行证，价值来自人们对其"独家归属权"的共同认可，而非图片文件本身','所有NFT都很值钱'],ans:2,
+  explain:'网上随便可以右键保存任何NFT图片——图片文件本身毫无稀缺性。NFT的真实价值在于它创造了一种数字化的"社区成员身份证明"：持有BAYC无聊猿NFT代表你进入了一个特定的社交网络（可以参加线下派对、获得空投资格、和名人互动）。这本质上和名流俱乐部的会员卡没有区别，只是记录在链上而已。'},
+  {q:'关于"摩尔定律的黄昏"，以下哪个判断是正确的？',opts:['摩尔定律将永远持续','芯片已经完全不需要进步了','通用CPU的性能提升已从每年52%降至约3%——这不意味着计算停滞，而是计算能力从"通用架构"转向"专用异构架构"','摩尔定律是物理定律'],ans:2,
+  explain:'摩尔定律是工程规律而非物理定律——它描述的是经济上可行的晶体管密度翻倍周期。如今晶体管已逼近原子级别（IBM 2nm制程的晶体管栅极只有12个硅原子宽），再往下翻倍面临量子隧穿等物理极限。但这不意味着计算能力增长停滞——从苹果M1的UMA到英伟达的GPU+DPU，计算正在从"一个通用CPU搞定一切"变成"多种专用处理器异构协作"。'},
+  {q:'关于"脑机接口"，以下哪个说法准确地描述了当前的技术边界？',opts:['可以读取任何人的全部思想','脑机接口已经可以取代所有肢体','侵入式BCI可以解码特定运动信号（如手往哪个方向移动），但无法"读心"——解码数十亿神经元的全部交互在可预见的未来不可能','脑机接口完全不安全'],ans:2,
+  explain:'当前最先进的脑机接口（如Neuralink）可以在运动皮层解码"手往左还是往右移动"这类简单的运动意图——因为只需要识别几十到几百个神经元的放电模式。但"读取你正在想什么"需要同时解码大脑皮层数十亿神经元的复杂交互——这不仅是电极数量的问题，更是我们对大脑编码原理的理解远远不够。科幻不等于科学。'},
+
+  // ans=3: 5 questions
+  {q:'日本1980年代芯片产业从全球50%+份额衰落的原因是什么？',opts:['日本技术不够好','日本芯片太贵了','日本市场太小','美国以国家安全为由打压+日本固守DRAM而错过了微处理器（CPU）革命'],ans:3,
+  explain:'1980年代日本在DRAM（动态随机存储器）市场称霸全球，NEC、东芝、日立等企业占据50%以上份额。美国通过"301条款"贸易制裁、反倾销诉讼、强迫日本签订《日美半导体协议》来打压日本。但更深层的原因：日本整个产业押注在DRAM上，而美国转向了附加值更高的微处理器（Intel 8086→奔腾系列）——这是"技术大灭绝"的经典案例。'},
+  {q:'为什么"用VR替代线下社交"在可预见的未来不可能成功？',opts:['VR设备太贵了','网速不够快','VR画面不够清晰','人类是肉身动物——技术从不"替代"旧模式而是"增强"它，如同电话没有减少面对面交流反而增加了社交总量'],ans:3,
+  explain:'历史反复证明：新技术几乎从不"替代"旧的人类行为模式，而是"增强"和"补充"。电话发明后人们通话越多见面也越多（沟通成本降低增加了社交总量）。互联网没有消灭纸书。VR社交的问题是——它试图"替代"而不是"增强"人类最本能的需求（面对面交流中的肢体语言、微表情、共处同一空间的氛围），这些是当前VR技术无法模拟的。VR在技能训练（外科手术/飞行模拟）中表现卓越，恰恰因为这些场景不是"社交"而是"任务执行"。'},
+  {q:'关于"数据主权"和医疗AI之间的平衡，以下哪个方案在现实中可行？',opts:['完全禁止医疗数据用于AI训练','医院可以随意使用任何病人的数据','不需要任何数据也可以训练AI','北欧"选择退出"（opt-out）模式——默认允许数据用于科研但患者可以主动退出，同时严格限制数据脱敏后仅用于非商业目的'],ans:3,
+  explain:'在"完全保护"（影响科研进步）和"完全开放"（侵犯隐私）之间有一个中间地带。北欧国家的做法：默认患者的匿名化数据可以用于科研（因为大量公共利益），但如果患者主动选择退出则立即停止使用。这既保证了大部分数据可用于训练AI（推进医学进步），又尊重了每个人的自主选择权。关键是透明度和退出机制的设计。'},
+  {q:'"Zoom疲劳"背后的认知科学原因不包括以下哪项？',opts:['视频会议让人被迫长时间盯着人脸（现实中你会自然地看别处）','看到自己的实时画面导致持续的自我监控压力','边开会边回邮件产生多任务切换成本','视频会议比面对面会议消耗更少注意力'],ans:3,
+  explain:'Zoom疲劳的研究指出了三个核心原因：①你被迫盯着人脸（现实中你会出于礼貌偶尔移开视线，但在视频会议中为了表现得"专注"而持续注视屏幕）；②你看到自己的实时画面（自我监控消耗额外的认知资源）；③多任务诱惑（又开会又回邮件——每次切换任务都有认知成本）。这三个因素导致视频会议反而比面对面更累——这与"远程办公=轻松"的直觉相反。'},
+  {q:'关于Chia（奇亚币），它试图解决比特币的什么问题？',opts:['比特币价格波动太大的问题','比特币转账太慢的问题','比特币不流行的问题','比特币耗电过高的问题——用"空间证明"（存储硬盘空间）替代"工作量证明"（算力竞赛）来降低能源消耗'],ans:3,
+  explain:'Chia的"空间证明"（Proof of Space and Time）用闲置硬盘空间替代GPU算力来"耕种"币。理论上这比比特币的PoW更节能——但实际效果是：Chia的热潮导致全球硬盘短期缺货和价格上涨，大量硬盘被一次性写入后闲置，造成了新的电子垃圾问题。"绿色加密货币"仍然是未解的难题。'}
+];
+
+// Essay questions (10)
+const essayData = [
+  {q:'用"摩尔定律的黄昏"的框架，解释为什么苹果M1的成功不代表Intel技术差，而代表计算范式转移。',ref:'摩尔定律的黄昏'},
+  {q:'找一个你日常使用的App（如微信/抖音/淘宝），用"生态锁定效应"分析：你的迁移成本有多高？这个生态的护城河在哪些方面？',ref:'生态锁定效应'},
+  {q:'结合"算力即权力"，分析2020年代全球芯片供应链重组的趋势及对中国科技产业的影响。',ref:'算力即权力'},
+  {q:'用"算法偏见"的框架，分析你获取信息的主要渠道（推荐算法订阅），并提出三条对抗策略。',ref:'算法偏见'},
+  {q:'找一个你关注的新技术领域（VR/AR/脑机接口/自动驾驶），用"虚拟与现实的边界"判断它是在"替代"还是"增强"人的能力。',ref:'虚拟与现实的边界'},
+  {q:'假设你是投资人，一个团队找你融资做"侵入式脑机接口消费级产品"。用"脑机接口的两条路"的风险-收益框架分析这个项目。',ref:'脑机接口的两条路'},
+  {q:'用"去中心化迷思"分析：为什么说"用区块链替代所有中心化服务"这个口号站不住脚？给出两个最适合区块链的应用场景和两个最不适合的场景。',ref:'去中心化迷思'},
+  {q:'结合"数据主权"，评价苹果ATT框架和中国《个人信息保护法》各自的优势和不足，并提出你的改进建议。',ref:'数据主权'},
+  {q:'用"人机协作第三条路"分析：未来5年你所在的行业中，哪些任务应该交给AI，哪些必须由人类完成？',ref:'人机协作第三条路'},
+  {q:'记录未来一周内你的"注意力消耗"情况（每天花在不同信息渠道上的时间），用"信息过载与注意力稀缺"的框架分析你的注意力管理是否健康，并提出改进方案。',ref:'信息过载与注意力稀缺'}
+];
+
+// ========== STATE ==========
+const PREFIX = 'mks_tech1_';
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(PREFIX + k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(PREFIX + k, JSON.stringify(v)); }catch(e){} }
+};
+let state = {
+  learnedCards: LS.get('cards', []),
+  wrongBook: LS.get('wrong', []),
+  quizHistory: LS.get('history', []),
+  studyDays: LS.get('days', 0),
+  currentCard: 0,
+  quizMode: false,
+  examActive: false
+};
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initDashboard();
+  initFlipCards();
+  initMindmap();
+  initSocratic();
+  initCaseStudy();
+  initDecision();
+  updateReviewStats();
+  recordStudyDay();
+});
+
+function recordStudyDay(){
+  const today = new Date().toISOString().slice(0, 10);
+  const last = LS.get('lastStudy', '');
+  if (last !== today) {
+    state.studyDays = LS.get('days', 0) + 1;
+    LS.set('days', state.studyDays);
+    LS.set('lastStudy', today);
+  }
+}
+
+// ========== TABS ==========
+function initTabs(){
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector('[data-tab="' + btn.dataset.tab + '"].tab-content').classList.add('active');
+      if (btn.dataset.tab === '4') updateReviewStats();
+    });
+  });
+}
+
+// ========== TAB 0: DASHBOARD ==========
+function initDashboard(){
+  // MKS Core Grid
+  const mksGrid = document.getElementById('mksCoreGrid');
+  concepts.filter(c => c.star).forEach(c => {
+    mksGrid.innerHTML += '<div class="mks-core"><div class="star">' +
+      (c.id === 'c1' ? 'CPU' : c.id === 'c2' ? 'ECO' : c.id === 'c3' ? 'PWR' : 'BIAS') +
+      '</div><div class="title">' + c.name + '</div><div class="why">' + c.desc +
+      '</div><div class="evidence">骨架证明：' +
+      (c.id === 'c1' ? '苹果M1统一架构/IBM 2nm/ARM收购/全球芯片缺货潮——硬件范式转移的核心分析框架' : '') +
+      (c.id === 'c2' ? '鸿蒙挑战双寡头/Windows Phone失败教训/星链的规模网络效应——理解平台竞争的第一原理' : '') +
+      (c.id === 'c3' ? '英伟达ARM收购审查/日本芯片产业兴衰/台积电地缘角色——地缘政治与技术权力的交汇点' : '') +
+      (c.id === 'c4' ? '抖音vs快手算法哲学/ATT框架对广告业冲击/对抗算法的策略——穿透推荐系统黑箱的利器' : '') +
+      '</div></div>';
+  });
+
+  // Concept Grid
+  const cGrid = document.getElementById('conceptGrid');
+  concepts.forEach(c => {
+    const cls = c.star ? 'concept-card mks' : 'concept-card';
+    cGrid.innerHTML += '<div class="' + cls + '" onclick="switchTab(1);setCard(' + concepts.indexOf(c) + ')"><h4>' +
+      c.name + (c.star ? ' <span class="badge badge-star">MKS</span>' : '') +
+      '</h4><p>' + c.desc + '</p></div>';
+  });
+
+  // SVG Concept Map
+  document.getElementById('svgContainer').innerHTML = buildSVG();
+
+  // Boundary Table
+  const bt = document.getElementById('boundaryTable');
+  bt.innerHTML = '<thead><tr><th>知识点</th><th>使用场景</th></tr></thead><tbody>' +
+    boundary.map(b => '<tr><td>' + b.name + '</td><td>' + b.scene + '</td></tr>').join('') + '</tbody>';
+
+  // Learning Path
+  const lp = document.getElementById('learningPath');
+  learningPath.forEach(s => {
+    lp.innerHTML += '<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">' +
+      '<span style="background:var(--accent);color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0">' + s.step + '</span>' +
+      '<div><strong>' + s.title + '</strong><p style="font-size:.82rem;color:var(--text2);margin-top:2px">' + s.desc + '</p></div></div>';
+  });
+
+  updateProgress();
+}
+
+function buildSVG(){
+  return '<svg viewBox="0 0 900 720" xmlns="http://www.w3.org/2000/svg">' +
+  '<defs>' +
+  '<filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>' +
+  '<marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>' +
+  '<marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b8860b"/></marker>' +
+  '<marker id="as" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#27ae60"/></marker>' +
+  '</defs>' +
+  '<!-- Root -->' +
+  '<rect x="350" y="10" width="200" height="50" rx="25" fill="#c0392b" filter="url(#sh)"/>' +
+  '<text x="450" y="32" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">智能时代底层代码</text>' +
+  '<text x="450" y="48" text-anchor="middle" fill="#fdd" font-size="9">Underlying Code of the Intelligent Era</text>' +
+  '<!-- Level 1 branches -->' +
+  '<line x1="380" y1="60" x2="180" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>' +
+  '<line x1="420" y1="60" x2="350" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>' +
+  '<line x1="480" y1="60" x2="550" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>' +
+  '<line x1="520" y1="60" x2="730" y2="115" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ar)"/>' +
+  '<!-- Level 1: 4 MKS Cores -->' +
+  '<rect x="80" y="117" width="170" height="58" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>' +
+  '<text x="165" y="140" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">摩尔定律的黄昏</text>' +
+  '<text x="165" y="158" text-anchor="middle" fill="#6b5757" font-size="9">专用芯片 vs 通用计算</text>' +
+  '<rect x="270" y="117" width="160" height="58" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>' +
+  '<text x="350" y="140" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">生态锁定效应</text>' +
+  '<text x="350" y="158" text-anchor="middle" fill="#6b5757" font-size="9">操作系统的网络效应</text>' +
+  '<rect x="450" y="117" width="160" height="58" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>' +
+  '<text x="530" y="140" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">算力即权力</text>' +
+  '<text x="530" y="158" text-anchor="middle" fill="#6b5757" font-size="9">芯片制造与地缘政治</text>' +
+  '<rect x="630" y="117" width="170" height="58" rx="10" fill="#fff5f5" stroke="#c0392b" stroke-width="2.5" filter="url(#sh)"/>' +
+  '<text x="715" y="140" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">算法偏见</text>' +
+  '<text x="715" y="158" text-anchor="middle" fill="#6b5757" font-size="9">推荐系统的放大效应</text>' +
+  '<!-- Edges to Level 2 -->' +
+  '<line x1="130" y1="175" x2="110" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="200" y1="175" x2="220" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="310" y1="175" x2="290" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="390" y1="175" x2="400" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="490" y1="175" x2="480" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="570" y1="175" x2="590" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="670" y1="175" x2="660" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<line x1="760" y1="175" x2="780" y2="232" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ag)"/>' +
+  '<!-- Level 2: 6 Derivative Concepts -->' +
+  '<rect x="15" y="234" width="145" height="50" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1.2" filter="url(#sh)"/>' +
+  '<text x="87" y="254" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">虚拟与现实的边界</text>' +
+  '<text x="87" y="270" text-anchor="middle" fill="#999" font-size="8">增强而非替代</text>' +
+  '<rect x="172" y="234" width="145" height="50" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1.2" filter="url(#sh)"/>' +
+  '<text x="244" y="254" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">脑机接口的两条路</text>' +
+  '<text x="244" y="270" text-anchor="middle" fill="#999" font-size="8">侵入式vs非侵入式</text>' +
+  '<rect x="330" y="234" width="135" height="50" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1.2" filter="url(#sh)"/>' +
+  '<text x="397" y="254" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">去中心化迷思</text>' +
+  '<text x="397" y="270" text-anchor="middle" fill="#999" font-size="8">信任vs效率悖论</text>' +
+  '<rect x="478" y="234" width="135" height="50" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1.2" filter="url(#sh)"/>' +
+  '<text x="545" y="254" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">数据主权</text>' +
+  '<text x="545" y="270" text-anchor="middle" fill="#999" font-size="8">信息器官而非石油</text>' +
+  '<rect x="626" y="234" width="135" height="50" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1.2" filter="url(#sh)"/>' +
+  '<text x="693" y="254" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">人机协作第三条路</text>' +
+  '<text x="693" y="270" text-anchor="middle" fill="#999" font-size="8">AI作为外脑</text>' +
+  '<rect x="774" y="234" width="105" height="50" rx="8" fill="#fef9f4" stroke="#b8860b" stroke-width="1.2" filter="url(#sh)"/>' +
+  '<text x="826" y="254" text-anchor="middle" fill="#b8860b" font-size="10" font-weight="bold">注意力稀缺</text>' +
+  '<text x="826" y="270" text-anchor="middle" fill="#999" font-size="8">信息过载</text>' +
+  '<!-- Edges to Level 3 -->' +
+  '<line x1="87" y1="284" x2="87" y2="340" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>' +
+  '<line x1="244" y1="284" x2="244" y2="340" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>' +
+  '<line x1="397" y1="284" x2="397" y2="340" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>' +
+  '<line x1="545" y1="284" x2="545" y2="340" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>' +
+  '<line x1="693" y1="284" x2="693" y2="340" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>' +
+  '<line x1="826" y1="284" x2="826" y2="340" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#as)"/>' +
+  '<!-- Level 3: Applications -->' +
+  '<rect x="15" y="342" width="130" height="40" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>' +
+  '<text x="80" y="366" text-anchor="middle" fill="#27ae60" font-size="10" font-weight="bold">苹果M1架构</text>' +
+  '<rect x="155" y="342" width="125" height="40" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>' +
+  '<text x="217" y="366" text-anchor="middle" fill="#27ae60" font-size="10" font-weight="bold">鸿蒙+Windows 11</text>' +
+  '<rect x="290" y="342" width="125" height="40" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>' +
+  '<text x="352" y="366" text-anchor="middle" fill="#27ae60" font-size="10" font-weight="bold">ARM收购+芯片战争</text>' +
+  '<rect x="425" y="342" width="125" height="40" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>' +
+  '<text x="487" y="366" text-anchor="middle" fill="#27ae60" font-size="10" font-weight="bold">抖音vs快手算法</text>' +
+  '<rect x="560" y="342" width="125" height="40" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>' +
+  '<text x="622" y="366" text-anchor="middle" fill="#27ae60" font-size="10" font-weight="bold">VR/元宇宙+BCI</text>' +
+  '<rect x="695" y="342" width="125" height="40" rx="6" fill="#e8f8f0" stroke="#27ae60" stroke-width="1" filter="url(#sh)"/>' +
+  '<text x="757" y="366" text-anchor="middle" fill="#27ae60" font-size="10" font-weight="bold">比特币+NFT+Chia</text>' +
+  '<!-- Feedback loop -->' +
+  '<path d="M 80 392 L 80 420 L 900 420" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,3" fill="none"/>' +
+  '<text x="450" y="435" text-anchor="middle" fill="#27ae60" font-size="9" font-style="italic">实际应用反馈持续检验并修正上层概念（如鸿蒙的IoT策略检验生态锁定的边界）</text>' +
+  '<!-- Legend -->' +
+  '<rect x="230" y="450" width="440" height="60" rx="8" fill="#fdf6ec" stroke="#e8d5c0" stroke-width="1"/>' +
+  '<line x1="255" y1="470" x2="295" y2="470" stroke="#c0392b" stroke-width="2.5"/><text x="303" y="474" fill="#3d2f2f" font-size="10">MKS骨架概念</text>' +
+  '<line x1="255" y1="490" x2="295" y2="490" stroke="#b8860b" stroke-width="1.5"/><text x="303" y="494" fill="#3d2f2f" font-size="10">衍生支撑概念</text>' +
+  '<line x1="425" y1="470" x2="465" y2="470" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2"/><text x="473" y="474" fill="#3d2f2f" font-size="10">应用域&反馈</text>' +
+  '<line x1="425" y1="490" x2="465" y2="490" stroke="#c0392b" stroke-width="2"/><text x="473" y="494" fill="#3d2f2f" font-size="10">直接派生</text>' +
+  '</svg>';
+}
+
+function updateProgress(){
+  const total = concepts.length;
+  const learned = state.learnedCards.length;
+  const pct = total > 0 ? Math.round(learned / total * 100) : 0;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ========== TAB 1: FLIP CARDS ==========
+function initFlipCards(){
+  state.currentCard = LS.get('cardIndex', 0);
+  renderFlipCard();
+  document.getElementById('flipInner').addEventListener('click', function(){ this.classList.toggle('flipped'); });
+}
+
+function renderFlipCard(){
+  const i = state.currentCard;
+  const c = conceptDetails[i];
+  const isLearned = state.learnedCards.includes(concepts[i].id);
+  document.getElementById('flipFront').innerHTML =
+    '<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">' + c.name + '</h3>' +
+    '<p style="color:var(--text2);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>' +
+    (isLearned ? '<span class="tag" style="margin-top:8px">已学习</span>' : '');
+  document.getElementById('flipBack').innerHTML =
+    '<div style="margin-bottom:8px"><strong style="color:var(--accent)">定义：</strong>' + c.define + '</div>' +
+    '<div style="margin-bottom:8px"><strong style="color:var(--accent)">类比：</strong>' + c.analogy + '</div>' +
+    '<div style="margin-bottom:8px"><strong style="color:var(--success)">示例：</strong>' + c.example + '</div>' +
+    '<div><strong style="color:var(--accent)">反例/边界：</strong>' + c.counter + '</div>';
+  document.getElementById('cardIndex').textContent = (i + 1) + ' / ' + conceptDetails.length;
+  document.getElementById('cardProgress').style.width = Math.round(state.learnedCards.length / concepts.length * 100) + '%';
+  document.getElementById('cardLearned').textContent = state.learnedCards.length;
+  const btn = document.getElementById('markLearnedBtn');
+  if (isLearned) { btn.textContent = '已学习'; btn.style.opacity = '0.7'; }
+  else { btn.textContent = '标记已学习'; btn.style.opacity = '1'; }
+  document.getElementById('flipInner').classList.remove('flipped');
+}
+
+function setCard(idx){
+  state.currentCard = idx;
+  LS.set('cardIndex', idx);
+  renderFlipCard();
+}
+
+function prevCard(){
+  state.currentCard = (state.currentCard - 1 + conceptDetails.length) % conceptDetails.length;
+  LS.set('cardIndex', state.currentCard);
+  renderFlipCard();
+}
+function nextCard(){
+  state.currentCard = (state.currentCard + 1) % conceptDetails.length;
+  LS.set('cardIndex', state.currentCard);
+  renderFlipCard();
+}
+function markLearned(){
+  const id = concepts[state.currentCard].id;
+  if (!state.learnedCards.includes(id)) {
+    state.learnedCards.push(id);
+  } else {
+    state.learnedCards = state.learnedCards.filter(x => x !== id);
+  }
+  LS.set('cards', state.learnedCards);
+  updateProgress();
+  renderFlipCard();
+}
+
+// ========== TAB 2: QUIZ ==========
+let currentQuestions = [];
+let quizTimerInterval = null;
+let quizTimeLeft = 0;
+let userAnswers = {};
+
+function startQuiz(){
+  const shuffled = [...quizData].sort(() => Math.random() - 0.5);
+  const essayShuffled = [...essayData].sort(() => Math.random() - 0.5);
+  currentQuestions = [...shuffled.slice(0, 10), ...essayShuffled.slice(0, 3)];
+  userAnswers = {};
+  quizTimeLeft = 900;
+  document.getElementById('quizScore').textContent = '';
+  renderQuiz();
+  startQuizTimer('quizTimer');
+}
+
+function startQuizTimer(elemId){
+  quizTimeLeft = 900;
+  clearInterval(quizTimerInterval);
+  document.getElementById(elemId).style.display = 'block';
+  updateTimerDisplay(elemId);
+  quizTimerInterval = setInterval(() => {
+    quizTimeLeft--;
+    updateTimerDisplay(elemId);
+    if (quizTimeLeft <= 0) { clearInterval(quizTimerInterval); submitQuiz(); }
+  }, 1000);
+}
+
+function updateTimerDisplay(elemId){
+  const m = Math.floor(quizTimeLeft / 60);
+  const s = quizTimeLeft % 60;
+  document.getElementById(elemId).textContent = ' ' + m + ':' + (s < 10 ? '0' : '') + s;
+  if (quizTimeLeft < 60) document.getElementById(elemId).style.color = 'var(--accent2)';
+}
+
+function renderQuiz(){
+  const container = document.getElementById('quizContainer');
+  let html = '';
+  currentQuestions.forEach((q, i) => {
+    if (q.opts) {
+      html += '<div class="quiz-card" id="qcard' + i + '"><div class="q-num">选择题 ' + (i + 1) + '</div><div class="q-text">' + q.q + '</div>';
+      q.opts.forEach((o, j) => {
+        const sel = userAnswers[i] === j ? ' selected' : '';
+        const dis = userAnswers[i] !== undefined ? 'disabled' : '';
+        html += '<div class="option' + sel + '" onclick="selectChoice(' + i + ',' + j + ')" id="opt' + i + '_' + j + '">' + 'ABCD'[j] + '. ' + o + '</div>';
+      });
+      html += '<div id="fb' + i + '"></div></div>';
+    } else {
+      html += '<div class="quiz-card"><div class="q-num">简答题 ' + (i + 1) + ' <span class="badge badge-star">' + q.ref + '</span></div><div class="q-text">' + q.q + '</div><textarea class="essay-area" id="essay' + i + '" placeholder="输入你的回答...">' + (userAnswers[i] || '') + '</textarea></div>';
+    }
+  });
+  html += '<button class="btn" onclick="submitQuiz()">提交答案</button>';
+  container.innerHTML = html;
+}
+
+function selectChoice(qIdx, optIdx){
+  if (userAnswers[qIdx] !== undefined) return;
+  userAnswers[qIdx] = optIdx;
+  const q = currentQuestions[qIdx];
+  const isCorrect = optIdx === q.ans;
+  const allOpts = document.querySelectorAll('#qcard' + qIdx + ' .option');
+  allOpts.forEach((el, j) => {
+    el.classList.add(j === q.ans ? 'correct' : (j === optIdx && !isCorrect ? 'wrong' : ''));
+    el.style.pointerEvents = 'none';
+  });
+  const fb = document.getElementById('fb' + qIdx);
+  fb.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+  fb.textContent = (isCorrect ? '正确！' : '错误。') + ' ' + q.explain;
+  const rec = { qIdx, correct: isCorrect, time: new Date().toISOString() };
+  state.quizHistory.push(rec);
+  LS.set('history', state.quizHistory);
+  if (!isCorrect) {
+    state.wrongBook.push({ ...q, userAns: optIdx, time: new Date().toISOString() });
+    LS.set('wrong', state.wrongBook);
+  }
+  const correctCount = Object.values(userAnswers).filter((v, i) => currentQuestions[i] && currentQuestions[i].opts && v === currentQuestions[i].ans).length;
+  const totalChoice = currentQuestions.filter(q => q.opts).length;
+  document.getElementById('quizScore').textContent = '得分: ' + correctCount + '/' + totalChoice;
+}
+
+function submitQuiz(){
+  const correctCount = Object.values(userAnswers).filter((v, i) => currentQuestions[i] && currentQuestions[i].opts && v === currentQuestions[i].ans).length;
+  const totalChoice = currentQuestions.filter(q => q.opts).length;
+  alert('选择题得分: ' + correctCount + '/' + totalChoice + '\n简答题已保存（请对照参考答案自我评估）');
+  clearInterval(quizTimerInterval);
+}
+
+function resetQuiz(){
+  currentQuestions = []; userAnswers = {};
+  clearInterval(quizTimerInterval);
+  document.getElementById('quizContainer').innerHTML = '';
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('quizTimer').style.display = 'none';
+}
+
+// ========== TAB 3: EXAM ==========
+function startExam(){
+  state.examActive = true;
+  const shuffled = [...quizData].sort(() => Math.random() - 0.5);
+  const essayShuffled = [...essayData].sort(() => Math.random() - 0.5);
+  currentQuestions = [...shuffled.slice(0, 7), ...essayShuffled.slice(0, 3)];
+  userAnswers = {};
+  quizTimeLeft = 900;
+  document.getElementById('examTimer').style.display = 'block';
+  document.getElementById('startExamBtn').style.display = 'none';
+  renderExam();
+  startQuizTimer('examTimer');
+}
+
+function renderExam(){
+  const container = document.getElementById('examContainer');
+  let html = '<p style="margin-bottom:12px;font-weight:600">7道选择题 + 3道简答题 · 限时15分钟</p>';
+  currentQuestions.forEach((q, i) => {
+    if (q.opts) {
+      html += '<div class="quiz-card" id="ecard' + i + '"><div class="q-num">选择题 ' + (i + 1) + '</div><div class="q-text">' + q.q + '</div>';
+      q.opts.forEach((o, j) => {
+        html += '<div class="option" onclick="selectExamChoice(' + i + ',' + j + ')" id="eopt' + i + '_' + j + '">' + 'ABCD'[j] + '. ' + o + '</div>';
+      });
+      html += '<div id="efb' + i + '"></div></div>';
+    } else {
+      html += '<div class="quiz-card"><div class="q-num">简答题 ' + (i + 1) + ' <span class="badge badge-star">' + q.ref + '</span></div><div class="q-text">' + q.q + '</div><textarea class="essay-area" id="eessay' + i + '" placeholder="输入你的回答...">' + (userAnswers[i] || '') + '</textarea></div>';
+    }
+  });
+  html += '<button class="btn" onclick="submitExam()">提交试卷</button>';
+  container.innerHTML = html;
+}
+
+function selectExamChoice(qIdx, optIdx){
+  if (userAnswers[qIdx] !== undefined) return;
+  userAnswers[qIdx] = optIdx;
+  const allOpts = document.querySelectorAll('#ecard' + qIdx + ' .option');
+  allOpts.forEach((el, j) => { el.classList.remove('selected'); if (j === optIdx) el.classList.add('selected'); });
+}
+
+function submitExam(){
+  clearInterval(quizTimerInterval);
+  state.examActive = false;
+  document.getElementById('examTimer').style.display = 'none';
+  document.getElementById('examTimer').textContent = '15:00';
+  let score = 0;
+  let detail = '';
+  currentQuestions.forEach((q, i) => {
+    if (q.opts) {
+      const user = userAnswers[i];
+      const correct = q.ans;
+      const isCorrect = user === correct;
+      if (isCorrect) score++;
+      else if (user !== undefined) {
+        state.wrongBook.push({ ...q, userAns: user, time: new Date().toISOString() });
+        LS.set('wrong', state.wrongBook);
+      }
+      detail += '<div style="margin:6px 0;padding:8px;border-radius:6px;background:' +
+        (isCorrect ? '#d4edda' : '#f8d7da') + '"><strong>' + (i + 1) + '. ' + q.q + '</strong><br>' +
+        '你的答案：' + (user !== undefined ? q.opts[user] : '未作答') + ' ' + (isCorrect ? '' : '') +
+        '<br>正确答案：' + q.opts[q.ans] + '</div>';
+    } else {
+      detail += '<div style="margin:6px 0;padding:8px;border-radius:6px;background:#fef9f4"><strong>' +
+        (i + 1) + '. ' + q.q + '</strong><br><em>请参照概念「' + q.ref + '」自我评估</em></div>';
+    }
+  });
+  const totalChoice = currentQuestions.filter(q => q.opts).length;
+  const pct = Math.round(score / totalChoice * 100);
+  document.getElementById('examContainer').innerHTML =
+    '<div style="text-align:center;padding:20px"><h3 style="color:' +
+    (pct >= 70 ? 'var(--success)' : 'var(--accent)') + '">得分：' + score + '/' + totalChoice +
+    '（' + pct + '%）</h3>' + detail +
+    '<button class="btn btn-outline" style="margin-top:16px" onclick="document.getElementById(\'examContainer\').innerHTML=\'\';document.getElementById(\'startExamBtn\').style.display=\'inline-block\';document.getElementById(\'examTimer\').style.display=\'none\'">重新考试</button></div>';
+}
+
+// ========== TAB 4: REVIEW ==========
+function updateReviewStats(){
+  const history = LS.get('history', []);
+  const wrongBook = LS.get('wrong', []);
+  const totalQ = history.length;
+  const correctQ = history.filter(h => h.correct).length;
+  const pct = totalQ > 0 ? Math.round(correctQ / totalQ * 100) : 0;
+  const days = LS.get('days', 0);
+
+  document.getElementById('statTotal').textContent = totalQ;
+  document.getElementById('statCorrect').textContent = correctQ;
+  document.getElementById('statRate').textContent = pct + '%';
+  document.getElementById('statDays').textContent = days;
+
+  const wb = document.getElementById('wrongBook');
+  if (wrongBook.length === 0) {
+    wb.innerHTML = '<p style="color:var(--success);font-weight:600">暂无错题，继续保持！</p>';
+  } else {
+    wb.innerHTML = wrongBook.slice(-20).reverse().map((w, i) =>
+      '<div style="margin:8px 0;padding:10px;border-left:3px solid var(--accent);background:#fef9f4;border-radius:0 6px 6px 0;font-size:.85rem">' +
+      '<strong>' + w.q.slice(0, 60) + '...</strong><br>' +
+      '<span style="color:var(--accent)">你的答案：' + (w.opts ? w.opts[w.userAns] : '简答题') + '</span><br>' +
+      '<span style="color:var(--success)">正确答案：' + (w.opts ? w.opts[w.ans] : '见参考答案') + '</span></div>'
+    ).join('');
+  }
+
+  const weakMap = {};
+  wrongBook.forEach(w => {
+    let match = '其他';
+    for (const c of concepts) {
+      if (w.q && w.q.includes(c.name.slice(0, 3))) { match = c.name; break; }
+    }
+    if (!weakMap[match]) weakMap[match] = { name: match, count: 0, questions: [] };
+    weakMap[match].count++;
+    weakMap[match].questions.push((w.q || '').slice(0, 40));
+  });
+  const sorted = Object.values(weakMap).sort((a, b) => b.count - a.count);
+  const wa = document.getElementById('weakAnalysis');
+  if (sorted.length > 0) {
+    wa.innerHTML = sorted.map(c =>
+      '<div style="margin:4px 0;padding:8px;background:#fff5f5;border-radius:6px;font-size:.85rem">' +
+      '<strong>「' + c.name + '」错' + c.count + '题：</strong>' + (c.questions[0] || '') + '...</div>'
+    ).join('');
+  } else {
+    wa.innerHTML = '<p style="color:var(--text2);font-size:.85rem">暂无答题数据，开始练习后自动生成</p>';
+  }
+}
+
+// ========== TAB 5: MIND MAP ==========
+function initMindmap(){
+  const tree = [
+    {label: '智能时代底层代码', open: true, children: [
+      {label: 'Layer 1: 硬件与生态基础（4个骨架概念）', open: true, children: [
+        {label: '摩尔定律的黄昏', leaf: true, children: [
+          {label: '通用CPU Scaling瓶颈：每年3% vs 52%', leaf: true},
+          {label: '专用芯片崛起：GPU/TPU/NPU/统一内存SoC', leaf: true},
+          {label: '苹果M1：570亿晶体管 统一内存架构', leaf: true},
+          {label: 'IBM 2nm：12个硅原子宽的晶体管栅极', leaf: true}
+        ]},
+        {label: '生态锁定效应', leaf: true, children: [
+          {label: '操作系统网络效应：用户越多->开发者越多', leaf: true},
+          {label: 'Windows Phone：体验好但生态不足->失败', leaf: true},
+          {label: '鸿蒙：兼容Android+分布式IoT新战场', leaf: true},
+          {label: '星链：低轨卫星的网络效应', leaf: true}
+        ]},
+        {label: '算力即权力', leaf: true, children: [
+          {label: '芯片制造=国家科技主权的基础设施', leaf: true},
+          {label: '英伟达收购ARM引发全球监管审查', leaf: true},
+          {label: '日本1980s芯片称霸后被美国打压', leaf: true},
+          {label: '台积电生产全球90%+先进芯片', leaf: true}
+        ]},
+        {label: '算法偏见', leaf: true, children: [
+          {label: '推荐系统放大认知偏差而非纠正', leaf: true},
+          {label: '抖音爆款逻辑 vs 快手普惠逻辑', leaf: true},
+          {label: '对抗算法：主动搜索 拒绝跟踪 RSS', leaf: true},
+          {label: 'ATT框架对广告业100亿美元冲击', leaf: true}
+        ]}
+      ]},
+      {label: 'Layer 2: 边界与替代（6个衍生概念）', open: true, children: [
+        {label: '虚拟与现实边界：VR/AR增强而非替代', leaf: true},
+        {label: '脑机接口两条路：侵入式高精度vs非侵入式高安全', leaf: true},
+        {label: '去中心化迷思：区块链=信任机制而非效率提升', leaf: true},
+        {label: '数据主权：信息是器官——可持续保护可撤销', leaf: true},
+        {label: '人机协作第三条路：AI作为外脑而非替代品', leaf: true},
+        {label: '注意力稀缺：无限信息中唯一有限的是注意力', leaf: true}
+      ]},
+      {label: 'Layer 3: 实战战场', open: true, children: [
+        {label: '苹果M1/鸿蒙/Windows 11：OS与芯片架构', leaf: true},
+        {label: 'ARM收购/芯片缺货/IBM 2nm：半导体地缘', leaf: true},
+        {label: '抖音vs快手/ATT框架：算法与数据主权', leaf: true},
+        {label: '比特币/NFT/Chia：加密货币的去中心化迷思', leaf: true},
+        {label: 'VR/元宇宙/Neuralink/BCI：虚拟与脑机', leaf: true},
+        {label: '5G/星链/量子计算/时间晶体：通信与计算前沿', leaf: true},
+        {label: 'DeepMind/拉马努金机/AI辩论：AI能力边界', leaf: true},
+        {label: '个人信息保护法/远程办公：制度与工作方式', leaf: true}
+      ]}
+    ]}
+  ];
+  document.getElementById('mindmap').innerHTML = buildTree(tree);
+  document.querySelectorAll('.mindmap .node-header').forEach(el => {
+    el.addEventListener('click', function(){
+      this.classList.toggle('open');
+      const children = this.nextElementSibling;
+      if (children) children.classList.toggle('open');
+    });
+  });
+}
+
+function buildTree(nodes){
+  return nodes.map(n => {
+    if (n.leaf) {
+      const hasKids = n.children && n.children.length > 0;
+      if (hasKids) return '<div class="node"><div class="leaf">' + n.label + '</div><div class="node-children">' + buildTree(n.children) + '</div></div>';
+      return '<div class="leaf">' + n.label + '</div>';
+    }
+    const cls = n.open !== false ? 'open' : '';
+    return '<div class="node"><div class="node-header ' + cls + '">' + n.label + '</div><div class="node-children ' + cls + '">' + buildTree(n.children || []) + '</div></div>';
+  }).join('');
+}
+
+// ========== TAB 6: SOCRATIC ==========
+function initSocratic(){
+  const data = [
+    {q: '摩尔定律结束了吗？如果结束了，为什么苹果M1还能让电脑性能翻倍？',
+    a: '摩尔定律描述的是通用CPU晶体管密度的翻倍速度——这部分确实在放缓（堆更多晶体管的成本越来越高、散热越来越难）。但苹果M1的成功恰好证明：计算性能的提升不只有"堆晶体管"一条路。M1通过统一内存架构消除了CPU和GPU之间的数据搬运瓶颈，通过专用神经引擎加速AI任务，通过大小核设计（4性能+4效率）在待机时几乎不耗电。这就像高速公路堵车了，但你们改走高铁——运力翻了但道路没有加宽。所以答案不是"摩尔定律完蛋了"，而是"通用CPU的时代正在过去，异构专用架构的时代正在到来"。',
+    sub: [
+      {q: '既然通用CPU不行了，Intel为什么不转型？',
+      a: 'Intel并非不了解趋势——它尝试过Larrabee（GPU）、Xeon Phi（加速器）、Mobileye（自动驾驶芯片）。但问题在于，Intel的商业模式（设计+制造一体）和利润结构（通用CPU毛利率60%+）让它无法果断放弃最赚钱的业务去赌一个不确定的新方向。这就是经典的"创新者的窘境"：当你的核心客户（PC厂商）还在大量采购通用CPU时，你很难说服自己投资一个可能蚕食核心业务的新产品线。苹果没有这个包袱：它不卖芯片，它只需要让Mac的体验更好。'}
+    ]},
+    {q: '如果"生态锁定"这么强大，华为鸿蒙还有机会吗？',
+    a: '有机会，但需要换战场。在智能手机OS上正面挑战Android/iOS几乎不可能——Windows Phone的惨败已经证明了这一点。但鸿蒙的策略不是"在手机上打败Android"，而是在IoT（物联网）设备上创建新生态——智能家居、车载系统、工业控制、可穿戴设备。这些新战场还没有形成Android/iOS那样的生态锁定，鸿蒙的"分布式能力"（手机上的视频可以无缝流转到电视、平板、车机）在这些场景中可能是真实的差异化优势。如同当年Android不是从桌面操作系统切入（那里Windows已经锁定了），而是从移动端建立新生态。核心问题是：IoT设备的碎片化远比手机严重，鸿蒙能否在足够多的设备类型上统一体验？',
+    sub: [
+      {q: '没有GMS（Google Mobile Services）的华为手机在海外还能卖吗？',
+      a: '短期内极其困难。海外用户高度依赖Google全家桶（Gmail/Youtube/Google Maps/Google Pay），没有GMS的手机就像在中国没有微信、支付宝的手机——技术上可以打电话上网，但实际使用体验打骨折。华为的策略是两步走：短期用AppGallery（华为应用商店）和Petal Maps/Maps Kit等替代方案填补空缺，长期让鸿蒙的IoT生态优势大到用户愿意为了"跨设备无缝体验"而容忍缺失GMS。这个长期可能需要5-10年，取决于IoT生态的建设速度。'}
+    ]},
+    {q: '区块链真的能"去中心化"一切吗？如果不行，它最适合的场景是什么？',
+    a: '区块链不是万能药——它本质上是"用效率换信任"的技术。最适合区块链的场景是：信任成本极高、效率要求不高的场景。例如：①跨境汇款——传统SWIFT系统需要3-5天、费用5-10%，区块链可以实现10分钟到账、费用<1%，即使它"低效"（每秒7笔），也比传统方案快得多；②供应链溯源——你不需要每秒验证1000笔咖啡豆交易，你只需要在关键节点把批次信息上链，任何人在任何时间都能验证；③数字身份——在难民/无银行账户人群中，区块链身份可以让他们获得金融服务而不依赖任何政府机构。最不适合区块链的场景：日常消费支付（Visa每秒1700笔，区块链望尘莫及）、高频交易、文件存储（IPFS的检索效率远不如中心化CDN）。',
+    sub: [
+      {q: 'Chia（奇亚币）用"空间证明"替代"工作证明"，是不是解决了比特币的能耗问题？',
+      a: '部分解决但引入了新问题。Chia用闲置硬盘空间替代算力竞赛——理论上确实更节能（硬盘待机功耗远低于GPU满负荷挖矿）。但实际效果是：Chia热潮导致全球硬盘短期缺货、价格翻倍，大量硬盘被一次性写入（Plotting过程需要SSD大量写入）后闲置，产生了电子垃圾和资源浪费的新问题。此外，Chia的"空间证明"能否提供和比特币PoW同等程度的安全性（即"攻击者需要付出足够大的成本来伪造账本"），在理论上仍有争议。区块链能耗问题的根本矛盾在于：你需要消耗真实世界的资源来证明"我不会作恶"。除非找到一种同样可信但更高效的共识机制，否则能耗问题无法根本解决。'}
+    ]},
+    {q: '苹果的ATT框架真的保护了用户隐私，还是只是把广告垄断权收归己有？',
+    a: '两者皆有，这是隐私保护中最复杂的灰色地带。ATT确实给了用户一个说"不"的权利——全球约75%用户选择不被跟踪，这是真实的赋权。苹果自己的广告业务（App Store搜索广告）使用的是第一方数据（你搜索了什么关键词），不涉及跨应用跟踪，所以不受ATT限制。这就造成了"潜规则"：第三方广告商（如Facebook）无法跟踪你，但苹果可以在App Store卖广告。这是"数据主权"概念的核心张力——谁来决定"什么程度的保护是合理的"？如果是苹果单方面决定（以它自己的商业利益为标准），那它就成了数据主权的"独裁者"。所以真正需要的是中立的立法（如欧盟GDPR、中国个人信息保护法），而非依赖一家公司的商业决策。',
+    sub: [
+      {q: '《个人信息保护法》和GDPR有什么区别？关键条款是什么？',
+      a: '中国《个人信息保护法》（2021年11月生效）和欧盟GDPR的核心相似之处：①告知-同意原则（收集前必须告知用途并获得同意）；②数据最小化（只收集实现目的所需的最少数据）；③用户删除权（用户可以要求删除其数据）；④数据出境限制（跨境数据传输需要安全评估）。差异在于：中国的执法由网信办主导（更强调国家安全+公共利益的例外条款），GDPR由独立数据保护机构（DPA）执法（更强调个人权利的不可侵犯性）。APP的"一揽子同意"（不点同意就闪退）在两者下都是违规的——但真正落实需要时间。'}
+    ]}
+  ];
+  document.getElementById('socraticContainer').innerHTML = data.map((d, i) =>
+    '<div class="socratic-item"><div class="socratic-q" onclick="toggleSocratic(this)">' + (i + 1) + '. ' + d.q + '</div><div class="socratic-a">' + d.a +
+    (d.sub ? d.sub.map(s => '<div style="margin-left:16px;border-left:2px solid var(--accent2);padding-left:12px;margin-top:8px"><div class="socratic-q" style="font-size:.85rem;padding:8px 12px" onclick="toggleSocraticSub(this)">' + s.q + '</div><div class="socratic-a">' + s.a + '</div></div>').join('') : '') +
+    '</div></div>'
+  ).join('');
+}
+
+function toggleSocratic(el){ const a = el.nextElementSibling; if (a) a.classList.toggle('open'); }
+function toggleSocraticSub(el){ const a = el.nextElementSibling; if (a) a.classList.toggle('open'); }
+
+// ========== TAB 7: CASE STUDY ==========
+function initCaseStudy(){
+  document.getElementById('caseStudy').innerHTML =
+    '<div class="grid2" style="margin-bottom:14px">' +
+    '<div class="card"><strong style="color:var(--accent)">背景</strong><p style="font-size:.85rem;margin-top:4px">2020年11月，苹果发布首款自研ARM架构的Mac芯片——M1。此前15年，Mac一直使用Intel的x86处理器。这一转型不是简单的"换个供应商"，而是苹果史上最大规模的硬件平台迁移。M1将CPU、GPU、神经引擎、统一内存全部集成在一块SoC上，采用台积电5nm制程，拥有160亿晶体管。</p></div>' +
+    '<div class="card"><strong style="color:var(--accent)">结果</strong><p style="font-size:.85rem;margin-top:4px">M1 MacBook Air的续航从Intel版的约10小时跳到15-18小时，而性能（单核/多核）超过了当时最贵的Intel MacBook Pro。M1的每瓦性能是Intel同级芯片的3-5倍。2021年M1 Pro/Max进一步将这一优势扩展到专业级工作负载。到2022年，苹果完成了全产品线从Intel到自研芯片的迁移。</p></div>' +
+    '<div class="card"><strong style="color:var(--accent)">核心矛盾</strong><p style="font-size:.85rem;margin-top:4px">通用计算（x86"一刀切"架构）vs专用计算（ARM+统一内存+神经引擎的异构架构）。Intel的商业模式是"造一个让所有人都能用的芯片"（最大兼容性），苹果的策略是"只为我自己造芯片"（深度垂直整合）。这场博弈的深层问题是：在AI和移动时代，计算效率的天平正在从"通用性"向"专用性"倾斜。</p></div>' +
+    '<div class="card"><strong style="color:var(--accent)">现代映射</strong><p style="font-size:.85rem;margin-top:4px">苹果M1的成功触发了连锁反应：微软也开始自研ARM芯片（传闻中的Surface芯片），Google自研Tensor芯片（用于Pixel手机），Amazon自研Graviton服务器芯片。科技巨头的"芯片自研化"正在重塑全球半导体产业格局——这不再是"苹果很牛"的故事，而是"垂直整合替代水平分工"的范式转移。</p></div>' +
+    '</div>' +
+    '<div class="card" style="border-left:4px solid var(--gold)"><h3>MKS四维度拆解</h3>' +
+    '<div style="margin:12px 0"><strong style="color:var(--accent)">1. 利益分析：谁从M1转型中获益？谁受损？</strong><br>' +
+    '获益方：苹果（每台Mac的芯片成本从约200美元（Intel采购价）降到约50美元（自研成本），同时获得差异化竞争优势）、台积电（获得苹果独家先进制程大单）、Mac用户（更长续航、更好性能）。受损方：Intel（失去苹果这个高端大客户，年损失约30亿美元收入+约20亿美元利润，同时品牌形象受损——"连苹果都抛弃Intel了"）、PC厂商（无法复制苹果的垂直整合优势，在续航和每瓦性能上被远远甩开）、x86软件生态（开发者需要重新编译和优化ARM版本的软件）。核心洞见：苹果用"放弃兼容性"换来"控制力"——这一取舍的决策只有拥有完整软硬件控制权（macOS+iOS+芯片）的公司才能做。其他PC厂商受制于Windows生态，即使想抄M1的方案也无能为力。</div>' +
+    '<div style="margin:12px 0"><strong style="color:var(--accent)">2. 制度设计：苹果的组织结构如何支持M1的诞生？</strong><br>' +
+    '苹果从2008年收购P.A. Semi芯片设计公司→2010年推出A4（iPhone 4）→持续迭代A系列到A14（5nm）→2020年M1（基于A14架构放大），整整投入了12年、数百亿美元、数千名芯片工程师。这需要一种特殊的制度设计：①允许一个部门持续亏损12年不盈利（芯片团队本身不产生收入，只为产品服务）；②软硬件团队的深度耦合（macOS工程师和芯片工程师坐在一起设计指令集）；③"功能型组织"而非"事业部制"——苹果没有独立的"Mac事业部"和"芯片事业部"各自考核利润，而是围绕产品组建跨职能团队，消除了部门墙。其他公司难以复制M1商业模式的原因，往往不是技术不行，而是组织体制不允许——芯片部门可能被要求自负盈亏、软件部门可能不愿配合硬件部门的指令集设计、PC部门可能不想放弃Intel的规模采购折扣。</div>' +
+    '<div style="margin:12px 0"><strong style="color:var(--accent)">3. 人性假设：苹果凭什么相信消费者愿意接受ARM迁移？</strong><br>' +
+    'ARM迁移的最大风险是软件兼容性——历史上苹果从PowerPC迁移到Intel（2005-2006）成功了，微软Windows RT（ARM迁移2012年）失败了。两者的区别在哪？苹果对用户行为的假设：①大多数用户只使用少量核心软件（浏览器、Office、视频播放），Rosetta 2转译器可以覆盖这些场景的过渡期；②追求极致体验的用户（Mac的核心用户群）愿意容忍短暂的兼容性阵痛来换取显著的性能/续航提升；③开发者会跟随用户基数迁移——只要苹果卖掉足够多的M1 Mac，开发者自然会编译ARM原生版本。Windows RT失败的原因之一是微软假定用户和开发者会跟随它——但这个假定没成立，因为ARM版Windows RT只能运行商店应用而无法运行海量的x86桌面软件（连Office都不支持ARM原生），直接导致用户拒绝。苹果的人性假设更精准：给用户一个"足够好的迁移体验"（Rosetta 2的转译效率高达80-90%，用户几乎无感），而不是"我们造了个新平台你们都必须来"。</div>' +
+    '<div style="margin:12px 0"><strong style="color:var(--accent)">4. 文化土壤：为什么是苹果而不是其他公司完成了这场转型？</strong><br>' +
+    '苹果的文化基因中有三个关键要素：①乔布斯留下的"整合狂"基因——"真正认真做软件的人应该自己做硬件"（1997年苹果收购NeXT时乔布斯的名言）。这种"软硬件必须耦合"的信念在苹果已经成为文化DNA，不是商业策略而是信仰。②Tim Cook的供应链管理能力——M1不仅要设计出来，还要以合理的良率和成本在台积电5nm产线上量产。Cook作为前COO在供应链上的极端控制力（提前锁产能、预付数十亿美元建产线）是M1成功的隐性基础设施。③封闭生态的"优势面"——苹果经常因封闭生态被批评（App Store霸权、不可安装第三方应用商店），但M1的成功恰恰展示了封闭生态的优势：当你控制了OS和芯片，你可以做别人做不到的深度优化。这种"从封闭中获得创新红利"的文化，在科技行业是一个持续的争议——开放vs封闭的平衡点在哪？M1给出了一个有力的"封闭派"论据。</div>' +
+    '</div>';
+}
+
+// ========== TAB 8: DECISION SIMULATION ==========
+function initDecision(){
+  const scenarios = [
+    {s: '你是一家国内手机厂商的CTO。华为被制裁后，你看到了高端市场的机会。CEO给你两个选择：A)基于高通骁龙最新芯片做一个"国产高端旗舰"，配置拉满、定价5000+；B)开始自研芯片项目，从最基础的ISP（图像处理器）做起，预计5年后才能用在旗舰机上。你会怎么选？',
+    choices: [
+      {text: '选A——用高通芯片快速抢占市场，先把份额做起来再说', result: '短期可取但长期有隐患。高通芯片的供应和价格受制于人（2020年的芯片短缺已经证明了这一点），而且你能用的芯片你的竞争对手也能用——差异化来自软件和品牌，而非底层硬件。如果高通涨价30%或断供（地缘政治不可预测），你的5000元手机可能造不出来。', mks: '算力即权力：依赖外部芯片=技术主权缺失。生态锁定：在Android阵营内，差异化空间被高通芯片拉平。'},
+      {text: '选B——开始自研芯片，同时用半定制芯片（和高通联合开发专属版本）作为过渡方案', result: '这是最优策略。纯粹的"完全自研"需要5-10年，期间市场份额可能丢失。但纯粹"依赖高通"放弃了长期竞争力。半定制路线（如OPPO的马里亚纳NPU、vivo的V系列ISP）是务实的渐进策略——先做最擅长的模块（影像处理），逐步扩展到更多模块。自研芯片不是"有或没有"的二元问题，而是一步一步的路径设计。', mks: '摩尔定律的黄昏：专用芯片（ISP/NPU/充电芯片）可以小步快跑，不必一步到位做SoC。工程师思维：在成本和能力的约束条件下找到渐进的可行路径。'},
+      {text: '选B但更激进——直接宣布3年内做全自研SoC，对标苹果A系列', result: '过于冒进。苹果自研芯片花了12年（2008收购P.A. Semi→2020 M1），华为海思花了15年（2004成立→2019麒麟990达到巅峰），小米澎湃S1（2017年发布）至今没有成功迭代。全自研SoC不仅需要数百亿美元投入，还需要能开发出和ARM/高通/联发科竞争的产品——在3年窗口内，概率极低。更糟糕的是，这个决策可能成为"大跃进"——资源被过度集中在一个超高风险的赌注上，常规业务反而被忽视。', mks: '技术采用曲线：自研SoC处于"期望膨胀顶峰"——很多公司宣布了但极少成功。工程师思维：量级估算——自研SoC的成功概率、时间窗口、成本边界。'}
+    ]},
+    {s: '你是一家科技媒体的投资人。两个创业团队来推销：A)做个"元宇宙办公平台"（在VR里开会、协作），估值2亿，团队15人来自游戏行业；B)做个"AI辅助远程办公工具"（自动生成会议摘要、智能分配任务、异步协作优化），估值1亿，团队10人来自企业协作和NLP。你的基金只能投一个。',
+    choices: [
+      {text: '投A——元宇宙是风口，Meta都All in了', result: '高风险赌注。VR办公有三个难以逾越的障碍：①用户基数（有多少人愿意戴着VR头盔开2小时会？）；②硬件迭代速度（Quest系列虽然销量不错但远未到"必须拥有"的级别）；③替代品（Zoom/Teams/飞书已经解决了远程办公的核心需求，VR提供的是增量价值还是"酷炫但非必需"？）。Meta在元宇宙上投入了360亿美元（Reality Labs 2021-2022），但Horizon Worlds的月活用户还在下降。跟着Meta投"前沿概念"不等于跟着它赚钱。', mks: '虚拟与现实的边界：VR办公试图"替代"面对面会议但没解决核心需求。技术采用曲线：元宇宙处于"期望膨胀顶峰"，离"生产力高原"还很远。'},
+      {text: '投B——AI辅助远程办公解决的是真实痛点（信息过载、多任务疲劳、会议效率低），市场有验证', result: '更低风险、更清晰价值主张的投资。"AI协作"不是替代人来开会，而是让人开得更少、更好——自动摘要减少"这场会我参加了就为了知道结论"的时间浪费、智能任务分配减少信息在不同工具间搬运的摩擦、异步文档协作减少实时会议依赖。这些都是疫情后混合办公时代的真实痛点，而且AI（大语言模型）在摘要、翻译、任务理解方面的能力已足够商业化。投资这个方向的核心风险是巨头入场（微软Copilot/Google Workspace AI/飞书智能助手），但创业公司也可以通过切入特定垂直场景（如法律/医疗行业的协作工具）来避开正面竞争。', mks: '人机协作第三条路：AI增强而非替代人类的协作能力。信息过载与注意力稀缺：这个工具直接解决了远程办公中最大的痛点。'},
+      {text: '两个都不投——现在不是投资的好时机', result: '过于保守可能让你错过结构性机会。远程办公不是疫情催生的临时现象，而是正在固化为长期的工作方式。微软2022年调查显示全球约50%的员工在混合办公模式中，且这个比例还在上升。AI在2023年后因为大语言模型的突破正处于能力爆发期。不投是放弃了这两个趋势的交汇点。更好的策略可能是：小金额进入B项目，同时和A团队保持联系观察VR硬件的渗透率数据更新。', mks: '工程师思维：不因为短期宏观环境就全盘否定——需要微观的项目级别判断。可能性空间：两个都不投=关闭了所有可能性，而非缩减了风险空间。'}
+    ]},
+    {s: '你是某省网信办的顾问。《个人信息保护法》刚生效，你需要在以下三个方向中建议优先执法的重点：A)严查App的"一揽子同意"（不点同意就闪退）；B)监控跨境数据传输（特别是医疗/金融敏感数据流向境外服务器）；C)建立用户投诉和快速处理机制。省领导要你选一个最优先的。',
+    choices: [
+      {text: '选A——严查App违规收集，这直接影响老百姓的日常体验', result: '具有最高民众感知度和社会传播效应。中国的App生态中大量存在"不点同意就闪退"或"默认勾选了一大堆无关权限"的行为——这是最容易被普通用户感受到的隐私侵犯。整治这些行为可以在短期内建立执法机构的公信力和民众信任。但需要注意：过度严查可能让大量中小App因为合规成本过高而下架或退出市场，反而减少了用户的竞争性选择。需要设置合理的整改窗口期和分级处罚（警告→罚款→下架）。', mks: '生态锁定：即使是好的监管也可能固化大厂的优势（只有大厂有法务团队处理合规）。数据主权：告知-同意是数据主权的第一道防线，但不是唯一防线。'},
+      {text: '选B——优先关注跨境数据传输，这涉及国家数据安全', result: '这是安全维度最高优先级的选项，但从执法角度看最复杂。你需要①识别哪些数据涉及跨境传输（技术上需要网络流量审计）；②判断哪些传输是合法的（跨国公司的内部数据流动vs非法数据走私）；③协调多部门（网信办/公安部/央行/医疗监管机构）联合执法。跨境数据监管是全球难题——欧盟GDPR也花了5年以上才建立起有效执法体系。建议作为中长期核心方向，但不适合作为"第一个开刀"的切入点——因为第一个案子如果执法不力会损害整个法规的威慑力。', mks: '算力即权力：数据是智能时代的战略资源。数据主权：跨境数据流动是国家数字主权的核心战场。'},
+      {text: '选C——优先建立投诉和快速处理机制', result: '这是最容易被忽视但最务实的选项。法律的有效性不是靠"写得有多严"而是靠"执行得有多快"。如果用户投诉一个App违规收集数据后3个月才收到回复，这个法律就形同虚设。快速处理机制（比如7个工作日内必须回复投诉结果）能建立"投诉有用"的社会认知——而这会触发正反馈：用户越觉得投诉有用就越愿意投诉，越多的投诉越能揭露行业违规现象，越多的案例越能指导后续修订和执法细化。这比从某一个方向"重拳出击"更符合执法资源的边际效益最大化。同时，投诉数据的汇集也自然为A和B方向的执法提供了线索（哪些App被投诉最多、哪些跨境传输行为被举报最频繁）。', mks: '反馈与网络：投诉处理机制是建立"执法正反馈"的起点。工程师思维：在有限执法资源下，从建立反馈机制开始逐步迭代优化，而非一开始就全面铺开。'}
+    ]}
+  ];
+
+  document.getElementById('decisionContainer').innerHTML = scenarios.map((sc, i) =>
+    '<div class="decision-round"><div class="scenario">第' + (i + 1) + '轮：' + sc.s + '</div>' +
+    sc.choices.map((ch, j) => '<button class="d-choice" onclick="showDecision(' + i + ',' + j + ')">' + 'ABC'[j] + '. ' + ch.text.slice(0, 80) + '...</button>').join('') +
+    '<div class="d-result" id="dresult' + i + '"></div></div>'
+  ).join('');
+
+  window._scenarios = scenarios;
+}
+
+function showDecision(si, oi){
+  const sc = window._scenarios[si];
+  const ch = sc.choices[oi];
+  const el = document.getElementById('dresult' + si);
+  el.style.display = 'block';
+  el.innerHTML = '<div style="margin-bottom:8px"><strong style="color:var(--accent)">反馈：</strong>' + ch.result + '</div><div style="font-size:.85rem;color:var(--gold)"><strong>MKS分析：</strong>' + ch.mks + '</div>';
+  const allChoices = el.parentElement.querySelectorAll('.d-choice');
+  allChoices.forEach((c, j) => { c.classList.remove('chosen'); if (j === oi) c.classList.add('chosen'); });
+}
+
+// ========== UTILITY ==========
+function switchTab(idx){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const btn = document.querySelector('.tab-btn[data-tab="' + idx + '"]');
+  if (btn) { btn.classList.add('active'); }
+  const panel = document.querySelector('.tab-content[data-tab="' + idx + '"]');
+  if (panel) { panel.classList.add('active'); }
+  if (idx === '4') updateReviewStats();
+}
+
+</script>
+
+</body>
+</html>

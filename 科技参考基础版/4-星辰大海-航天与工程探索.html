@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星辰大海：航天与工程探索 · 最小知识集</title>
+<style>
+/* ============================================================
+   星辰大海：航天与工程探索 · 最小知识集
+   设计理念：温润的科技感 —— 深红/金色/奶油色，克制而有力
+   ============================================================ */
+:root {
+  --bg: #fdf6ec;
+  --card: #fffaf2;
+  --accent: #c0392b;
+  --accent2: #d4a574;
+  --text: #3d2f2f;
+  --text2: #6b5555;
+  --border: #e8d5c0;
+  --gold: #b8860b;
+  --gold-light: #d4a853;
+  --success: #27ae60;
+  --warn: #e67e22;
+  --blue: #2980b9;
+  --shadow: 0 2px 12px rgba(60,30,20,.08);
+  --shadow-md: 0 4px 18px rgba(60,30,20,.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{font-size:clamp(14px,1.2vw,16px);scroll-behavior:smooth}
+
+body{
+  font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== TOP BAR ===== */
+.top-bar{
+  position: sticky; top:0; z-index:200;
+  background: linear-gradient(135deg, #3d2f2f 0%, #5a3e3e 100%);
+  color: #fdf6ec; padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.top-bar .course-title{
+  font-size: clamp(14px, 2.2vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.top-bar .home-link{
+  color: var(--accent2);
+  font-size: 13px;
+  border: 1px solid var(--accent2);
+  padding: 4px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.top-bar .home-link:hover{
+  background: var(--accent2);
+  color: #3d2f2f;
+}
+
+/* ===== TAB BAR ===== */
+.tab-bar{
+  position: sticky; top: 44px; z-index:199;
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: 8px clamp(4px,1vw,12px);
+  background: rgba(253,246,236,.95); backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--border);
+  justify-content: center;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.tab-btn{
+  padding: 7px clamp(8px,2vw,14px);
+  border: none; border-radius: 18px;
+  background: var(--card); color: var(--text2);
+  font-size: .8rem; cursor: pointer;
+  transition: all .2s; white-space: nowrap;
+  border: 1px solid var(--border);
+}
+.tab-btn:hover{ border-color: var(--accent); color: var(--accent); }
+.tab-btn.active{ background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.tab-content{ display: none; animation: fadeIn .35s ease; }
+.tab-content.active{ display: block; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+
+.container{ max-width: 960px; margin: 0 auto; padding: 0 clamp(12px, 3vw, 24px); }
+
+h2{ font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--accent); margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--gold-light); }
+h3{ font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--text); margin: 16px 0 8px; }
+
+/* ===== CARD ===== */
+.card{
+  background: var(--card); border-radius: var(--radius);
+  padding: clamp(14px, 2.5vw, 20px); box-shadow: var(--shadow);
+  border: 1px solid var(--border); margin-bottom: 16px;
+}
+.card h3{ color: var(--accent); margin-bottom: 8px; font-size: 1.05rem; }
+
+.grid2{ display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.grid3{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.grid4{ display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+
+/* ===== CONCEPT CARD ===== */
+.concept-card{
+  background: var(--card); border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--shadow); border-left: 4px solid var(--accent);
+  transition: transform .2s; cursor: pointer;
+}
+.concept-card:hover{ transform: translateY(-2px); }
+.concept-card.mks{ border-left-color: var(--gold); position: relative; }
+.concept-card.mks::after{ content: '\2605'; position: absolute; top: 8px; right: 12px; color: var(--gold); font-size: 1.2rem; }
+.concept-card h4{ font-size: .95rem; color: var(--accent); margin-bottom: 6px; }
+.concept-card p{ font-size: .82rem; color: var(--text2); line-height: 1.5; }
+
+/* ===== MKS HERO ===== */
+.mks-hero{ text-align: center; padding: clamp(16px, 3vw, 28px) 0; }
+.core-goal{
+  font-size: clamp(.95rem, 1.8vw, 1.15rem); color: var(--accent);
+  font-weight: bold; max-width: 700px; margin: 0 auto; line-height: 1.8;
+}
+
+/* ===== PROGRESS ===== */
+.progress-wrap{ margin: 16px 0; }
+.progress-label{ display: flex; justify-content: space-between; font-size: .85rem; margin-bottom: 4px; color: var(--text2); }
+.progress-bar{ height: 10px; border-radius: 5px; background: var(--border); overflow: hidden; }
+.progress-fill{
+  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 5px; transition: width .5s;
+}
+
+/* ===== SVG ===== */
+.svg-wrap{
+  overflow-x: auto; margin: 16px 0; border-radius: var(--radius);
+  background: var(--card); padding: 16px; -webkit-overflow-scrolling: touch;
+}
+.svg-wrap svg{ min-width: 700px; display: block; margin: 0 auto; }
+
+/* ===== FLIP CARD ===== */
+.flip-card{ perspective: 1000px; height: clamp(260px, 42vw, 320px); margin-bottom: 14px; }
+.flip-inner{
+  position: relative; width: 100%; height: 100%;
+  transition: transform .6s; transform-style: preserve-3d; cursor: pointer;
+}
+.flip-inner.flipped{ transform: rotateY(180deg); }
+.flip-front, .flip-back{
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: 10px; padding: clamp(16px, 3vw, 24px);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.flip-front{ background: var(--card); }
+.flip-back{
+  background: linear-gradient(135deg, #fffaf2, #fef5e7);
+  transform: rotateY(180deg); overflow-y: auto;
+  align-items: flex-start; text-align: left; font-size: clamp(.8rem, 1.6vw, .9rem);
+}
+.flip-nav{ display: flex; justify-content: center; align-items: center; gap: 16px; margin: 12px 0; }
+.flip-nav .btn{ min-width: 80px; }
+
+/* ===== QUIZ ===== */
+.quiz-card{ background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 14px; }
+.quiz-card .q-num{ font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+.quiz-card .q-text{ font-size: .95rem; margin-bottom: 12px; line-height: 1.6; }
+
+/* ===== QUIZ OPTIONS (for both file1-style and file4-style) ===== */
+.quiz-card .option,
+.q-option{
+  display: block; padding: 10px 14px; margin: 4px 0; border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer; transition: all .2s; font-size: .88rem; background: var(--card);
+}
+.quiz-card .option:hover,
+.q-option:hover{ background: #fff5f0; border-color: var(--accent); }
+.quiz-card .option.selected,
+.q-option.selected{ background: #ffe8e4; border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.quiz-card .option.correct,
+.q-option.correct{ background: #d4edda!important; border-color: var(--success)!important; color: #155724!important; }
+.quiz-card .option.wrong,
+.q-option.wrong{ background: #f8d7da!important; border-color: var(--accent)!important; color: #721c24!important; }
+
+/* ===== FEEDBACK ===== */
+.quiz-card .feedback{ margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: .85rem; line-height: 1.5; }
+.quiz-card .feedback.correct{ background: #d4edda; color: #155724; }
+.quiz-card .feedback.wrong{ background: #f8d7da; color: #721c24; }
+.q-feedback{ display: none; margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: .85rem; line-height: 1.5; }
+.q-feedback.show{ display: block; }
+.q-feedback.right{ background: #d4edda; color: #155724; }
+.q-feedback.wrong-msg{ background: #f8d7da; color: #721c24; }
+
+.quiz-timer{ text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+
+.essay-area,
+.sa-input{
+  width: 100%; min-height: 80px; border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px; font-family: inherit; font-size: .88rem;
+  resize: vertical; background: var(--bg); margin-top: 8px;
+}
+.sa-reveal{ display: none; margin-top: 8px; padding: 10px 14px; background: #fef9f4; border-radius: 8px; font-size: .85rem; color: var(--text2); line-height: 1.7; }
+.sa-reveal.show{ display: block; }
+
+/* ===== QUIZ TAGS ===== */
+.q-tag{ display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: .75rem; font-weight: 700; margin-bottom: 6px; }
+.q-mc{ background: #fde8e8; color: var(--accent); }
+.q-sa{ background: #e8f0f8; color: var(--blue); }
+
+/* ===== MINDMAP ===== */
+.mindmap{ padding: 0; }
+.mindmap .node{ margin-left: 20px; }
+.mindmap .node-header{
+  cursor: pointer; padding: 6px 0; font-weight: bold; color: var(--accent);
+  display: flex; align-items: center; gap: 6px; font-size: .92rem;
+}
+.mindmap .node-header::before{ content: '\25B8'; display: inline-block; transition: transform .2s; font-size: .7rem; }
+.mindmap .node-header.open::before{ transform: rotate(90deg); }
+.mindmap .node-children{ display: none; margin-left: 16px; border-left: 2px solid var(--border); padding-left: 10px; }
+.mindmap .node-children.open{ display: block; }
+.mindmap .leaf{ padding: 3px 0; font-size: .88rem; color: var(--text2); }
+
+/* ===== SOCRATIC ===== */
+.socratic-item{ margin-bottom: 12px; }
+.socratic-q{
+  cursor: pointer; padding: 12px 16px; border-radius: var(--radius);
+  background: var(--card); border: 1px solid var(--border);
+  font-weight: 700; transition: all .2s; font-size: .92rem;
+}
+.socratic-q:hover{ border-color: var(--accent); background: #fff5f5; }
+.socratic-q::before{ content: '\2753 '; }
+.socratic-a{
+  display: none; padding: 12px 16px; background: #fef9f4;
+  border-radius: 0 0 var(--radius) var(--radius); font-size: .85rem;
+  color: var(--text2); line-height: 1.7;
+}
+.socratic-a.open{ display: block; }
+
+/* ===== DECISION ===== */
+.decision-round{ background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
+.decision-round .scenario{ font-weight: 700; margin-bottom: 12px; color: var(--accent); line-height: 1.6; }
+.decision-round .d-choice,
+.d-option{
+  display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 4px 0;
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  background: var(--bg); font-family: inherit; font-size: .88rem; transition: all .2s;
+}
+.decision-round .d-choice:hover,
+.d-option:hover{ background: #fff5f5; border-color: var(--accent); }
+.decision-round .d-choice.chosen,
+.d-option.chosen{ border-color: var(--accent); background: #ffe8e4; }
+.decision-round .d-result,
+.d-result{
+  display: none; margin-top: 12px; padding: 14px; border-radius: 8px;
+  background: #fef9f4; font-size: .85rem; line-height: 1.7;
+}
+.d-result.show{ display: block; }
+
+/* ===== STATS ===== */
+.stat-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.stat-card{ text-align: center; padding: 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
+.stat-card .num{ font-size: 2rem; font-weight: 700; color: var(--accent); }
+.stat-card .lbl{ font-size: .78rem; color: var(--text2); margin-top: 4px; }
+
+/* ===== TABLE ===== */
+.tbl{ width: 100%; border-collapse: collapse; font-size: .84rem; margin: 12px 0; }
+.tbl th, .tbl td{ padding: 8px 12px; border: 1px solid var(--border); text-align: left; }
+.tbl th{ background: var(--accent); color: #fff; font-weight: 600; }
+.tbl tr:nth-child(even){ background: #fef9f4; }
+
+/* ===== BTN ===== */
+.btn{
+  display: inline-block; padding: 8px 20px; background: var(--accent); color: #fff;
+  border: none; border-radius: 20px; cursor: pointer; font-size: .88rem;
+  transition: all .2s; font-weight: 600;
+}
+.btn:hover{ background: #e74c3c; }
+.btn-outline{ background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+.btn-outline:hover{ background: var(--accent); color: #fff; }
+.btn-sm{ padding: 5px 14px; font-size: .78rem; }
+.btn-success{ background: var(--success); color: #fff; }
+.btn-success:hover{ background: #219a52; }
+.btn-gold{ background: var(--gold); color: #fff; }
+
+.badge{ display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: .75rem; font-weight: 700; }
+.badge-star{ background: #fff3cd; color: var(--gold); }
+.badge-core{ background: #fde8e8; color: var(--accent); }
+.badge-done{ background: #d4edda; color: var(--success); }
+.badge-mks{ background: #fde8e8; color: var(--accent); font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: .72rem; }
+
+.timer{ font-size: 1.3rem; font-weight: 700; color: var(--accent); text-align: center; padding: 10px; }
+.timer.warning{ animation: pulse .5s infinite alternate; }
+@keyframes pulse{ from{ opacity: 1; } to{ opacity: .5; } }
+
+.tag{ display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .72rem; margin: 2px; background: #fef0e0; color: var(--accent); }
+
+.dim-label{ display: inline-block; color: var(--accent); font-weight: 700; font-size: .8rem; margin-right: 6px; min-width: 42px; }
+
+.legend{ display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 10px 0; font-size: .78rem; color: var(--text2); }
+.legend span{ display: flex; align-items: center; gap: 4px; }
+
+.back-home{ text-align: center; margin: 16px 0; font-size: .85rem; }
+.back-home a{ color: var(--text2); text-decoration: none; border-bottom: 1px dashed var(--border); padding-bottom: 2px; }
+
+/* ===== MOBILE ===== */
+@media(max-width: 640px){
+  .tab-bar{ gap: 2px; padding: 6px 2px; }
+  .tab-btn{ padding: 5px 8px; font-size: .7rem; border-radius: 14px; }
+  .grid2, .grid3, .grid4{ grid-template-columns: 1fr; }
+  .flip-card{ height: 380px; }
+  .stat-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+  <span class="course-title">星辰大海：航天与工程探索 · 最小知识集</span>
+  <a class="home-link" href="index.html">返回知识主板</a>
+</div>
+
+<div class="container">
+
+<!-- ===== TAB BAR ===== -->
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
+  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
+  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
+  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
+  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
+  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
+  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
+  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
+  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+</nav>
+
+<!-- ========== TAB 0: 知识集总览 ========== -->
+<div class="tab-content active" id="tab0">
+
+<div class="mks-hero">
+  <div class="core-goal">
+    航天与工程探索不仅是技术挑战，更是一整套面对极端约束条件时的思维方式。
+    从火箭复用革命到自动驾驶的五波浪潮，从空间站政治博弈到火星移民的物理现实，
+    从电动汽车的能量三角到太空经济学的二八定律——
+    这些概念不是用来记忆的知识点，而是用来穿透科技新闻、理解工程极限的<strong>思维操作系统</strong>。
+    掌握这10个核心概念，你带走的不是碎片信息，而是一整套面对复杂工程问题时的<strong>分析框架</strong>。
+  </div>
+</div>
+
+<!-- 学习进度 -->
+<div class="progress-wrap">
+  <div class="progress-label"><span id="progressLabel">已学习 0/10 个概念</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
+</div>
+
+<!-- MKS核心 -->
+<h3 style="margin:20px 0 12px">最小知识集核心（4个骨架概念）</h3>
+<div id="mksGrid"></div>
+
+<!-- 10大核心概念 -->
+<h3 style="margin:20px 0 12px">全部核心概念（10个）</h3>
+<div class="grid2" id="conceptGrid"></div>
+
+<!-- 概念关系图 -->
+<h3 style="margin:20px 0 12px">概念关系图</h3>
+<div class="svg-wrap" id="svgContainer"></div>
+
+<!-- 边界知识 -->
+<h3 style="margin:20px 0 12px">边界知识（知道存在即可，无需深究）</h3>
+<div class="card" style="overflow-x:auto">
+  <table class="tbl" id="boundaryTable">
+    <thead><tr><th>知识点</th><th>使用场景</th><th>掌握程度</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- 学习路径 -->
+<h3 style="margin:20px 0 12px">推荐学习路径（5阶段）</h3>
+<div id="learningPath" style="display:flex;flex-wrap:wrap;gap:12px"></div>
+
+</div>
+
+<!-- ========== TAB 1: 知识卡片 ========== -->
+<div class="tab-content" id="tab1">
+  <div class="flip-card">
+    <div class="flip-inner" id="flipInner">
+      <div class="flip-front" id="flipFront"></div>
+      <div class="flip-back" id="flipBack"></div>
+    </div>
+  </div>
+  <div class="flip-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevCard()">上一张</button>
+    <span style="font-size:.85rem;color:var(--text2)" id="cardIndex">1 / 10</span>
+    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张</button>
+  </div>
+  <div style="text-align:center;margin:8px 0">
+    <button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">标记已学习</button>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:.78rem;color:var(--text2)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+</div>
+
+<!-- ========== TAB 2: 题库系统 ========== -->
+<div class="tab-content" id="tab2">
+  <h3 style="margin-bottom:10px">题库系统</h3>
+
+  <!-- Static question display (shown by default) -->
+  <div id="staticQuiz">
+    <h4 style="margin:12px 0 8px">选择题（20道）</h4>
+    <div id="mcqContainer"></div>
+    <h4 style="margin:12px 0 8px">简答题（10道）</h4>
+    <div id="saqContainer"></div>
+  </div>
+
+  <!-- Random practice quiz -->
+  <h4 style="margin:16px 0 8px">随机抽题练习</h4>
+  <div style="margin-bottom:12px">
+    <button class="btn" onclick="startQuiz()">随机抽题练习</button>
+    <button class="btn btn-outline btn-sm" onclick="resetQuiz()" style="margin-left:8px">重置</button>
+    <span style="margin-left:8px;font-size:.85rem;color:var(--text2)" id="quizScore"></span>
+    <span id="quizTimer" style="float:right;color:var(--accent);font-weight:700;display:none"></span>
+  </div>
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ========== TAB 3: 考试模式 ========== -->
+<div class="tab-content" id="tab3">
+  <h3 style="margin-bottom:10px">考试模式</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:12px">从题库随机抽取 7道选择题 + 3道简答题，限时15分钟</p>
+  <div style="margin-bottom:12px">
+    <button class="btn" id="examStartBtn" onclick="startExam()">开始考试</button>
+  </div>
+  <div class="quiz-timer" id="examTimer" style="display:none">15:00</div>
+  <div id="examArea"></div>
+  <div id="examResult"></div>
+</div>
+
+<!-- ========== TAB 4: 复习模式 ========== -->
+<div class="tab-content" id="tab4">
+  <h3 style="margin-bottom:10px">复习模式</h3>
+
+  <h4 style="margin:12px 0 8px">学习统计</h4>
+  <div class="stat-grid" id="statsGrid">
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="lbl">总答题数</div></div>
+    <div class="stat-card"><div class="num" id="statCorrect">0</div><div class="lbl">正确数</div></div>
+    <div class="stat-card"><div class="num" id="statRate">0%</div><div class="lbl">正确率</div></div>
+    <div class="stat-card"><div class="num" id="statDays">0</div><div class="lbl">学习天数</div></div>
+  </div>
+
+  <h4 style="margin:12px 0 8px">错题本</h4>
+  <div id="emptyError" style="display:block"><p style="color:var(--text2);font-size:.85rem">暂无错题记录</p></div>
+  <div id="errorBook"></div>
+
+  <h4 style="margin:12px 0 8px">概念薄弱点分析</h4>
+  <div id="weakConcepts">
+    <p style="color:var(--text2);font-size:.85rem">暂无答题数据</p>
+  </div>
+
+  <div style="margin-top:20px">
+    <button class="btn btn-outline btn-sm" onclick="resetProgress()">重置全部学习进度</button>
+  </div>
+</div>
+
+<!-- ========== TAB 5: 思维导图 ========== -->
+<div class="tab-content" id="tab5">
+  <h3 style="margin-bottom:10px">思维导图（可折叠展开）</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">三层概念体系，点击展开/折叠</p>
+  <div class="mindmap" id="treeContainer">
+
+<div class="node">
+<div class="node-header open" onclick="toggleMindmap(this)">航天与工程探索</div>
+<div class="node-children open">
+
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">Layer 1: 工程思维与火箭革命（4个骨架概念）</div>
+<div class="node-children">
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">工程师思维</div>
+<div class="node-children">
+<div class="leaf">约束条件下寻找最优解而非完美解</div>
+<div class="leaf">NASA阿波罗13号：纸板+胶带做CO2过滤器</div>
+<div class="leaf">SpaceX垂直整合：80%部件自研消除层层外包</div>
+<div class="leaf">第一性原理分析：火箭材料成本仅占售价2%</div>
+</div>
+</div>
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">火箭的可复用革命</div>
+<div class="node-children">
+<div class="leaf">从「一次性筷子」到「飞机模式」的范式转换</div>
+<div class="leaf">猎鹰9号复用10次+将发射成本降低90%</div>
+<div class="leaf">航天飞机反例：设计复用但维护成本更贵</div>
+<div class="leaf">梅林发动机：针栓式喷注器简单可靠</div>
+</div>
+</div>
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">火星移民的现实滤镜</div>
+<div class="node-children">
+<div class="leaf">火星无全球磁场→无法阻挡宇宙辐射</div>
+<div class="leaf">地下居住(2-3米厚火星土壤)是唯一方案</div>
+<div class="leaf">南极科考站70年无人定居→火星恶劣100倍</div>
+<div class="leaf">辐射剂量是国际空间站的40-50倍</div>
+</div>
+</div>
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">太空经济学的二八定律</div>
+<div class="node-children">
+<div class="leaf">发射成本只占太空产业总成本约20%</div>
+<div class="leaf">星链卫星制造成本远高于发射成本</div>
+<div class="leaf">类比：建摩天大楼钢材成本只占20%</div>
+<div class="leaf">「火箭便宜太空就便宜」是片面认知</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">Layer 2: 空间站政治与自动驾驶（4个支撑概念）</div>
+<div class="node-children">
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">空间站的真实价值</div>
+<div class="node-children">
+<div class="leaf">科研只是副产品→核心是政治合作+工业展示</div>
+<div class="leaf">ISS最大成就：美俄政治敌对期维持技术合作</div>
+<div class="leaf">50余年未产生诺贝尔奖级科学突破</div>
+<div class="leaf">中国空间站(天宫)：积木式，自主建造</div>
+</div>
+</div>
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">自动驾驶的五次浪潮</div>
+<div class="node-children">
+<div class="leaf">DARPA挑战赛(2004)→Google进场(2009)</div>
+<div class="leaf">→Waymo商业化缓慢(2018+)</div>
+<div class="leaf">Gartner曲线：期望膨胀→泡沫破裂→稳步爬升</div>
+<div class="leaf">激光雷达vs纯视觉路线之争</div>
+</div>
+</div>
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">电动汽车的物理账</div>
+<div class="node-children">
+<div class="leaf">续航-低温-安全三角不可兼得</div>
+<div class="leaf">-20°C析锂→枝晶刺穿隔膜→容量永久衰减</div>
+<div class="leaf">固态电池：实验室≠量产，固-固界面阻抗是瓶颈</div>
+<div class="leaf">电动车起火本质是「化学火灾」非普通火灾</div>
+</div>
+</div>
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">技术路线的锁定效应</div>
+<div class="node-children">
+<div class="leaf">QWERTY键盘非最优但最早普及→锁定</div>
+<div class="leaf">激光雷达vs纯视觉：先积累数据者形成飞轮</div>
+<div class="leaf">苹果造车十年未果：软件思维vs硬件制造</div>
+<div class="leaf">天问一号：绕-着-巡一次完成，后发优势</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-header" onclick="toggleMindmap(this)">Layer 3: 极限工程与国际博弈（2个综合概念）</div>
+<div class="node-children">
+<div class="leaf"><strong>极限工程的脆弱性：</strong>系统越复杂单点故障越灾难——挑战者号O形环(1986)7人遇难。正态意外在紧密耦合系统中防不胜防</div>
+<div class="leaf"><strong>国际合作是被迫的：</strong>ISS总成本1500亿美元，任何单一国家无法独立承担——不是因为友谊而是因为付不起</div>
+<div class="leaf"><strong>飞行汽车/磁悬浮：</strong>能量密度+噪音+安全三重硬约束短期内不可突破</div>
+<div class="leaf"><strong>嫦娥五号：</strong>1731g月壤采样返回(2020)，距上次人类月壤采样44年</div>
+</div>
+</div>
+
+</div>
+</div>
+
+  </div>
+</div>
+
+<!-- ========== TAB 6: 深度追问 ========== -->
+<div class="tab-content" id="tab6">
+  <h3 style="margin-bottom:10px">苏格拉底深度追问</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">对每个核心概念2-3层追问，点击展开答案</p>
+  <div id="socraticContainer"></div>
+</div>
+
+<!-- ========== TAB 7: 案例分析 ========== -->
+<div class="tab-content" id="tab7">
+  <h3 style="margin-bottom:10px">案例分析：SpaceX可复用火箭——打破航天成本神话</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">用工程师思维+太空经济学二八定律拆解SpaceX如何颠覆传统航天</p>
+
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card">
+      <strong style="color:var(--accent)">背景</strong>
+      <p style="font-size:.85rem;margin-top:4px">2002年马斯克创立SpaceX时，传统航天界普遍认为「火箭复用」在经济上不可行。航天飞机的失败（设计目标复用100次但每次发射摊销15亿美元）成为反对者最有力的论据。但马斯克用第一性原理分析：火箭材料（铝合金/钛合金/铜）的现货价格仅占火箭售价约2%——这意味着火箭的昂贵不是因为材料，而是因为「成本加成合同」+ 层层分包 + 过度保守的设计冗余。</p>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">结果</strong>
+      <p style="font-size:.85rem;margin-top:4px">猎鹰9号一级助推器创下复用超过20次的纪录，单次发射成本从传统1.5-2亿美元降至约6200万美元（降幅约90%）。2022年SpaceX发射次数超过全球其他所有国家/公司总和。星链(Starlink)已在轨超过5000颗卫星，为全球提供低轨宽带服务——没有低成本发射就没有星链。</p>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">核心矛盾</strong>
+      <p style="font-size:.85rem;margin-top:4px">传统航天（成本加成→NASA+承包商联合体）vs 商业航天（固定价格+垂直整合+允许失败快速迭代）。这不是技术路线的分歧，而是制度设计的分歧。NASA不缺乏聪明人，但「成本加成」合同从根本上消灭了降低成本的动力——承包商花得越多赚得越多。</p>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">现代映射</strong>
+      <p style="font-size:.85rem;margin-top:4px">SpaceX的成功触发了全球商业航天浪潮：中国涌现出蓝箭航天、星河动力等商业火箭公司；火箭实验室(Rocket Lab)在新西兰/美国运营小卫星专用发射；甚至传统巨头联合发射联盟(ULA)也被迫降价应对。但太空经济学的二八定律提醒我们：发射成本降低只解决了20%的问题——卫星制造、运营、地面设备、频谱资源仍然是重头。</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--gold)">
+    <h3>工程师思维四维度拆解</h3>
+    <div style="margin:12px 0">
+      <strong style="color:var(--accent)">1. 约束条件分析：SpaceX面临的真实约束是什么？</strong><br>
+      传统观点认为航天必须「绝对安全」——NASA的载人航天标准要求失败概率低于1/500。但SpaceX面临的是不同的约束：资金有限（2002年马斯克自掏1亿美元，仅够3次发射尝试）、时间压力（必须在钱烧完前证明可行性）、以及在「不够完美」和「完全失败」之间的存活空间。猎鹰1号前3次发射全部失败，第4次才成功——如果SpaceX坚持「第1次必须成功」，它会在2006年破产。工程师思维在这里体现为：不是追求零失败，而是在「用失败换取学习」的成本效益比最优。<strong>核心洞见：不同约束条件产生完全不同的「最优解」。NASA受政治/安全约束，SpaceX受资金/时间约束。</strong>
+    </div>
+    <div style="margin:12px 0">
+      <strong style="color:var(--accent)">2. 制度设计：为什么NASA和ULA不能复制SpaceX？</strong><br>
+      NASA的「成本加成」(cost-plus)合同模式：承包商提交预算→NASA批准→承包商执行→花超了再追加。这个模式下，承包商没有任何降低成本的动力——成本越低利润越低。（ULA每年从美国空军获得约8亿美元的「发射准备费」以确保随时有火箭可用，不管是否实际发射。）SpaceX采用固定价格合同：多少钱就多少钱，超支自负。此外SpaceX约80%的火箭部件自研自产（包括梅林发动机、航电系统、箭体结构），消除了层层外包的成本加成效应。这不是技术能力的问题，而是制度激励的问题。<strong>核心洞见：同样的聪明人，放在不同的制度设计下会做出完全不同的工程决策。</strong>
+    </div>
+    <div style="margin:12px 0">
+      <strong style="color:var(--accent)">3. 技术路线选择：为什么选择针栓式喷注器而非分级燃烧循环？</strong><br>
+      梅林发动机使用相对「原始」的针栓式喷注器（燃气发生器循环），而非更高效但更复杂的分级燃烧循环（如航天飞机主发动机RS-25或俄罗斯RD-180）。这个选择用「最优解」替代了「完美解」：虽然比冲(specific impulse)略低，但制造成本极低（约100万美元/台）、可靠性高（简单设计故障点少）、易于快速迭代改进（制造周期短）。分级燃烧循环虽然效率更高但研发成本巨大、制造复杂、故障模式多。<strong>核心洞见：工程师思维的核心——在约束下找最优解，不追求单项指标的最大化。</strong>
+    </div>
+    <div style="margin:12px 0">
+      <strong style="color:var(--accent)">4. 文化土壤：允许失败 vs 零容错的文化张力</strong><br>
+      SpaceX有一种独特的工程文化——「硬件丰富的测试」(hardware-rich testing)：与其在纸上分析3年确保第1次就成功，不如快速建造、发射、爆炸、学习、迭代。2023年星舰(Starship)首飞在发射台就发生了爆炸——但SpaceX将此视为「成功收集了数据」。这种文化在载人航天领域是极具争议的：NASA在阿波罗1号火灾(1967年，3名宇航员在地面测试中遇难)和挑战者号(1986)与哥伦比亚号(2003)事故后形成了极度的风险厌恶文化。SpaceX需要在「快速迭代文化」和「载人安全」之间找到一个微妙的平衡点。<strong>核心洞见：不同的工程文化不是「谁对谁错」，而是为了适应不同的约束条件（商业vs政府、无人vs载人）演化出的不同生存策略。</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 8: 实战决策 ========== -->
+<div class="tab-content" id="tab8">
+  <h3 style="margin-bottom:10px">实战决策模拟</h3>
+  <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">3轮决策模拟，每轮3个选项，选择后查看MKS分析</p>
+  <div id="decisionContainer"></div>
+</div>
+
+</div><!-- .container -->
+
+<div class="back-home" style="margin:20px 0"><a href="index.html">返回知识主板</a></div>
+
+<script>
+// ============ DATA ============
+const concepts = [
+{id:0, name:'工程师思维', desc:'在约束条件下寻找最优解而非完美解。不抱怨条件不足，而是把手头资源发挥到极致。NASA用纸板和胶带做阿波罗13号CO2过滤器——这就是工程师思维的极致体现。', mks:true},
+{id:1, name:'火箭的可复用革命', desc:'从「一次性筷子」到「飞机模式」的范式转换。猎鹰9号一级助推器复用10次以上将发射成本降低90%。航天飞机设计目标也是复用但维护成本反而更贵，证明「复用」一词不等于「经济复用」。', mks:true},
+{id:2, name:'空间站的真实价值', desc:'科研只是副产品，核心是政治合作与工业能力展示。国际空间站最大成就：让美俄在政治敌对期维持技术合作。空间站能产出诺贝尔奖级成果是常见误解——真正的价值在于「被迫合作」创造了不可替代的外交通道。', mks:false},
+{id:3, name:'火星移民的现实滤镜', desc:'浪漫想象与物理约束之间的巨大鸿沟。火星没有磁场无法阻挡宇宙辐射，地下居住是唯一选择。南极科考站建了70年至今无人定居，火星恶劣程度是南极100倍。', mks:true},
+{id:4, name:'自动驾驶的五次浪潮', desc:'技术成熟不是线性的——期望膨胀-泡沫破裂-稳步爬升。DARPA挑战赛(2004)-Google进场(2009)-Waymo商业化缓慢(2018+)。2025年实现完全无人驾驶已被证明是过度乐观。', mks:false},
+{id:5, name:'电动汽车的物理账', desc:'续航、低温、安全三者互相制约不可兼得。锂电池在-20°C析锂导致容量永久衰减，这是电化学本质不可消除。固态电池「很快商用解决所有问题」是典型的期望膨胀。', mks:false},
+{id:6, name:'太空经济学的二八定律', desc:'发射成本只占太空产业总成本的20%。建一栋摩天大楼——钢材成本只占20%，设计/施工/运营占80%。星链的卫星制造成本远高于发射成本。「火箭复用后太空就很便宜」是片面认知。', mks:true},
+{id:7, name:'国际合作是被迫的', desc:'太空合作不是因为友谊而是任何一国都付不起全部账单。国际空间站总成本约1500亿美元美国一己之力也无法持续承担。类比：几个人合租不是因为感情好，而是一个人付不起整套房的租金。', mks:false},
+{id:8, name:'技术路线的锁定效应', desc:'先发优势一旦形成，后来者即便技术更好也难以翻盘。QWERTY键盘不是因为最优而胜出，是因为最早普及。自动驾驶激光雷达vs纯视觉——先积累数据者形成飞轮。', mks:false},
+{id:9, name:'极限工程的脆弱性', desc:'系统越复杂，单点故障的连锁反应越灾难性。挑战者号因为一个O形环失效导致7人遇难。多冗余设计不能保证绝对安全——正态意外(Normal Accidents)在紧密耦合系统中防不胜防。', mks:false}
+];
+
+const boundaryKnowledge = [
+{name:'梅林发动机',scene:'理解SpaceX为何选择相对简单的针栓式喷注器而非复杂的分级燃烧循环'},
+{name:'猎鹰重型运载火箭',scene:'理解可复用技术的极限载荷能力(近地轨道63.8吨)'},
+{name:'星舰(Starship)',scene:'理解「完全可复用」的工程野心与33台发动机并联的复杂性'},
+{name:'DARPA无人车挑战赛',scene:'追溯自动驾驶技术从军事需求到民用转化的起点'},
+{name:'激光雷达LiDAR',scene:'理解自动驾驶传感器技术路线之争的核心分歧'},
+{name:'锂电池析锂现象',scene:'理解电动车冬季续航衰减的不可消除物理原因'},
+{name:'嫦娥五号月壤采样',scene:'理解中国航天「绕-落-回」三步走战略的完成'},
+{name:'长征五号B残骸再入',scene:'理解大型火箭不可控再入的国际争议与工程设计权衡'},
+{name:'固体vs液体火箭',scene:'理解运载火箭技术流派的选择逻辑(储存/能量密度/可控性)'},
+{name:'太空旅游价格',scene:'理解太空经济「二八定律」——发射成本下降不等于面向大众'},
+{name:'热失控',scene:'理解电动车起火本质是「化学火灾」而非普通火灾'},
+{name:'国际空间站退役',scene:'理解空间站生命周期(1998-2030)及后续商业空间站计划'},
+];
+
+const learningPath = [
+{phase:1,title:'火箭革命',desc:'火箭技术流派→可复用革命→SpaceX优势与风险→火星移民现实'},
+{phase:2,title:'空间站政治',desc:'空间站真实价值→被迫合作→中国空间站→宇航员生活'},
+{phase:3,title:'自动驾驶',desc:'DARPA起源→技术商业化→路线之争→期望膨胀到稳步爬升'},
+{phase:4,title:'电动与交通',desc:'物理账→换电vs充电→低温困境→飞行汽车/磁悬浮'},
+{phase:5,title:'中国航天',desc:'嫦娥探月→天问火星→月球基地→太空能力评估'},
+];
+
+const flipCards = [
+{front:'工程师思维',back:'<span class="dim-label">定义</span>在约束条件(时间/金钱/物理/材料)下寻找最优解而非完美解的思维模式。<br><span class="dim-label">类比</span>做菜时食材有限但要做出一桌好菜——不抱怨超市没货，而是把手头的东西发挥到极致。<br><span class="dim-label">示例</span>NASA用纸板和胶带做阿波罗13号的二氧化碳过滤器，在生死时速中找到可用方案。<br><span class="dim-label">反例</span>等所有条件都具备再行动——现实中永远等不到。完美主义是工程师思维的天敌。'},
+{front:'火箭的可复用革命',back:'<span class="dim-label">定义</span>从「一次性筷子」到「飞机模式」的范式转换——火箭发射后回收并再次使用。<br><span class="dim-label">类比</span>如果每次坐飞机都要扔掉飞机，机票就不是几千而是几千万——火箭复用同理。<br><span class="dim-label">示例</span>猎鹰9号一级助推器复用10次以上将发射成本降低90%，单次发射约6200万美元。<br><span class="dim-label">反例</span>航天飞机——设计目标也是复用(可重复使用100次)但维护成本反而比一次性火箭更贵，证明「技术复用」不等于「经济复用」。'},
+{front:'空间站的真实价值',back:'<span class="dim-label">定义</span>科研只是空间站的副产品，核心价值是国际政治合作与工业能力展示。<br><span class="dim-label">类比</span>奥运村——运动员成绩重要但不是唯一目的，展示组织能力和国家实力才是。<br><span class="dim-label">示例</span>国际空间站最大成就是让美俄在政治敌对期维持技术合作通道——即便乌克兰危机期间合作也未中断。<br><span class="dim-label">反例</span>空间站能产出一大批诺贝尔奖级成果——50余年空间站历史并未产生诺贝尔奖级科学突破。'},
+{front:'火星移民的现实滤镜',back:'<span class="dim-label">定义</span>揭开「几十年内普通人去火星生活」的浪漫化叙事，直面物理约束的硬边界。<br><span class="dim-label">类比</span>南极科考站建了70年至今无人定居——火星恶劣程度是南极的100倍(无大气/无磁场/极低温/强辐射)。<br><span class="dim-label">示例</span>火星没有磁场无法阻挡宇宙辐射和太阳风暴，地下居住(覆盖2-3米厚火星土壤)是唯一可行的屏蔽方案。<br><span class="dim-label">反例</span>几十年内普通人就能去火星生活——这忽视了一个基本事实：火星表面辐射剂量是国际空间站的40-50倍。'},
+{front:'自动驾驶的五次浪潮',back:'<span class="dim-label">定义</span>技术成熟不是线性的，而是遵循Gartner技术成熟度曲线：期望膨胀→泡沫破裂→稳步爬升。<br><span class="dim-label">类比</span>AI的三次寒冬——每次都觉得快到AGI了然后发现还差得远，但每次寒冬后AI确实取得了实质性进步。<br><span class="dim-label">示例</span>DARPA挑战赛(2004)→Google进场(2009)→Waymo商业化(2018，进展缓慢)→特斯拉FSD(持续迭代但始终未达L4)。<br><span class="dim-label">反例</span>2025年实现完全无人驾驶——事实证明城市开放道路的corner case(边缘场景)数量远超预期。'},
+{front:'电动汽车的物理账',back:'<span class="dim-label">定义</span>续航、低温、安全三者互相制约不可兼得——任何声称「全都要」的技术突破都需要审慎验证。<br><span class="dim-label">类比</span>手机电池——要轻薄、续航长、充电快，三者只能选两个。这是电化学的底层约束。<br><span class="dim-label">示例</span>锂电池在-20°C充电时，锂离子无法嵌入石墨负极，以金属锂形式析出(锂枝晶)，刺穿隔膜导致短路和容量永久衰减——这是电化学本质，不可通过软件消除。<br><span class="dim-label">反例</span>固态电池很快就能商用解决所有问题——实验室突破不等于量产可行，固-固界面的离子传导阻抗是核心瓶颈。'},
+{front:'太空经济学的二八定律',back:'<span class="dim-label">定义</span>发射成本只占太空产业总成本的约20%，降低发射成本不等于太空产业整体便宜。<br><span class="dim-label">类比</span>建一栋摩天大楼——钢材成本只占20%，设计/施工/装修/运营占80%。钢材降价不等于高楼便宜。<br><span class="dim-label">示例</span>星链(Starlink)的卫星制造成本远高于发射成本——猎鹰9号一次发射约60颗卫星，每颗制造成本约25-50万美元。<br><span class="dim-label">反例</span>火箭复用后太空就会很便宜——这只解决了20%的成本问题，卫星制造/运营/地面设备/保险/频谱仍然是重头。'},
+{front:'国际合作是被迫的',back:'<span class="dim-label">定义</span>太空合作不是因为各国关系好，而是因为任何单一国家都付不起全部账单。<br><span class="dim-label">类比</span>几个人合租不是因为有感情，而是因为一个人付不起整套房的租金——国际空间站同理。<br><span class="dim-label">示例</span>国际空间站总成本约1500亿美元(30年)，美国承担大头(约1000亿)但一己之力也无法持续。俄罗斯提供关键推进技术和联盟号载人飞船。<br><span class="dim-label">反例</span>国际合作说明各国关系好——乌克兰危机后美俄在地面上剑拔弩张，但空间站合作照旧，恰恰证明了「利益捆绑」而非「友谊」。'},
+{front:'技术路线的锁定效应',back:'<span class="dim-label">定义</span>先发优势一旦形成，后来者即便技术更优也难以翻盘——路径依赖的残酷性。<br><span class="dim-label">类比</span>QWERTY键盘不是因为打字最快而胜出，而是因为最早普及——打字员已经形成肌肉记忆不可能整体迁移。<br><span class="dim-label">示例</span>自动驾驶传感器路线之争：特斯拉押注纯视觉(低成本+海量数据飞轮)，Waymo押注激光雷达(高精度+昂贵)。先积累10亿英里路测数据的一方将形成难以逾越的护城河。<br><span class="dim-label">反例</span>最好的技术总会赢——Beta录像带画质优于VHS但输给了VHS的更长录制时间和更广泛的生态联盟。'},
+{front:'极限工程的脆弱性',back:'<span class="dim-label">定义</span>系统越复杂、耦合越紧密，单点故障的连锁反应越灾难性——Normal Accidents理论。<br><span class="dim-label">类比</span>多米诺骨牌——每块单独的牌很脆弱但连锁倒塌的力量不可阻挡，且很难预测第一块牌倒下的位置。<br><span class="dim-label">示例</span>挑战者号航天飞机(1986)：因为右侧固体助推器一个O形密封环在低温下失效，导致7名宇航员全部遇难——一个价值数美元的零件毁掉了价值数十亿美元的系统。<br><span class="dim-label">反例</span>多冗余设计就能保证绝对安全——正态意外(Normal Accidents)在紧密耦合系统中防不胜防，冗余本身也增加了系统复杂性(新的故障模式)。'},
+];
+
+// MCQ answers: 0=A, 1=B, 2=C, 3=D. Distribute evenly: 5 each for 20 questions.
+const mcQuestions = [
+{q:'工程师思维的核心特征是什么？',opts:['追求没有缺陷的完美解','在约束条件下寻找最优解','等待所有条件具备再行动','尽量增加系统冗余以保证绝对安全'],ans:1,exp:'工程师思维的本质是在资源(时间/金钱/材料/物理)约束下找到可用的最优解，而非等待完美条件或追求零缺陷。阿波罗13号的CO2过滤器改造是其经典体现。'},
+{q:'猎鹰9号一级助推器复用最重要的经济意义是什么？',opts:['证明火箭可以飞得更远','让SpaceX成为全球最大公司','将发射成本降低约90%','使火箭制造不再需要人力'],ans:2,exp:'猎鹰9号复用使单次发射成本从传统1.5-2亿美元降至约6200万美元，降低约90%。这从根本上改变了太空产业的成本结构。'},
+{q:'航天飞机的复用设计存在什么根本问题？',opts:['飞行次数太少','外观设计不够美观','运载能力不足','维护成本反而比一次性火箭更贵'],ans:3,exp:'航天飞机设计目标可重复使用100次，但实际每次返航后的维护翻修成本极高(防热瓦片逐个检查更换)，全周期摊销后每次发射约15亿美元，反而比一次性火箭更贵。这就是「技术复用不等于经济复用」。'},
+{q:'国际空间站最大的成就是什么？',opts:['产出了一批诺贝尔奖级成果','培养了大量宇航员','让美俄在政治敌对期维持技术合作','实现了人类永久定居太空的梦想'],ans:2,exp:'空间站的核心价值不是科研(50余年未产生诺奖级成果)，而是政治——作为美俄之间不可替代的外交通道，在乌克兰危机等政治敌对期间合作从未中断。'},
+{q:'火星不适合人类居住的最根本原因是什么？',opts:['没有全球磁场阻挡宇宙辐射','没有液态水','距离太远','温度太低'],ans:0,exp:'火星内核已冷却，没有全球偶极磁场，无法像地球磁场那样偏转太阳风和高能宇宙射线。火星表面辐射剂量是国际空间站的40-50倍，长期暴露必然致癌。地下2-3米居住是目前唯一的物理可行方案。'},
+{q:'Gartner技术成熟度曲线的正确顺序是？',opts:['稳步爬升→泡沫破裂→期望膨胀','期望膨胀→泡沫破裂→稳步爬升','泡沫破裂→期望膨胀→稳步爬升','期望膨胀→稳步爬升→泡沫破裂'],ans:1,exp:'正确顺序：技术触发→期望膨胀(过高期待)→泡沫破裂(现实打击)→稳步爬升(真正成熟)→生产力高原。自动驾驶正处于泡沫破裂向稳步爬升过渡的阶段。'},
+{q:'锂电池在-20°C充电产生析锂的后果是什么？',opts:['电池容量暂时减小，回暖后恢复','电池变得更轻','电池外观膨胀变形','金属锂枝晶刺穿隔膜导致短路，容量永久衰减'],ans:3,exp:'低温下锂离子无法嵌入石墨负极，以金属锂形式在负极表面析出形成枝晶。枝晶会刺穿隔膜导致内部短路，既造成容量永久性衰减，也可能引发热失控起火。这是电化学本质，不可通过软件消除。'},
+{q:'太空经济学二八定律中，发射成本占太空产业总成本约多少？',opts:['80%','50%','20%','5%'],ans:2,exp:'发射成本仅占太空产业总成本的约20%。卫星制造/运营/地面设备/保险/频谱费用/数据处理才是大头。类比：建摩天大楼钢材成本只占20%。「火箭便宜太空就便宜」是片面认知。'},
+{q:'国际空间站的总成本约为多少？',opts:['1500亿美元','150亿美元','1.5万亿美元','15亿美元'],ans:0,exp:'国际空间站30年(1998-2030)总成本约1500亿美元，美国承担约1000亿，其余由俄罗斯、欧洲、日本、加拿大分担。任何单一国家都无力且不愿独立承担。'},
+{q:'技术路线锁定效应中，QWERTY键盘胜出的原因是什么？',opts:['打字速度最快','最早广泛普及形成用户习惯锁定','制造成本最低','政府强制推广'],ans:1,exp:'QWERTY布局最早随雷明顿打字机普及，打字员群体形成肌肉记忆后不可逆转。Dvorak键盘虽打字效率更高(减少手指移动距离)但无法打破「已安装基础」的锁定效应。'},
+{q:'挑战者号航天飞机事故的直接原因是什么？',opts:['发动机爆炸','燃料泄漏','宇航员操作失误','一个O形密封环在低温下失效'],ans:3,exp:'1986年1月28日，右侧固体火箭助推器的一个O形密封环因低温(发射时-1°C)变硬失去弹性，导致高温气体泄漏并引发爆炸，7名宇航员全部遇难。一个几美元的零件摧毁了价值数十亿美元的系统。'},
+{q:'SpaceX的垂直整合策略指什么？',opts:['从发射到回收全流程自己做','只做火箭发动机，其他外包','从采矿开始自己提炼火箭燃料','只负责设计，制造全部外包'],ans:0,exp:'SpaceX约80%的火箭部件自研自产(包括梅林发动机、航电系统、箭体结构)，仅少数特殊材料外购。垂直整合消除了传统航天层层外包的成本加成，且使快速迭代成为可能。'},
+{q:'中国空间站(天宫)属于第几代空间站技术？',opts:['第一代(单体式)','第四代(轮辐式)','第三代(桁架式)','第二代(积木式)'],ans:3,exp:'天宫空间站采用第二代积木式构型(多个舱段对接组合)，类似于苏联/俄罗斯的和平号空间站。国际空间站是第三代桁架式(大型桁架结构连接各舱段)。天宫的规模虽小于ISS但独立自主建造，技术完整度高。'},
+{q:'天问一号火星任务的独特之处是什么？',opts:['一次任务实现环绕+着陆+巡视','携带了最多科学仪器','最早抵达火星','成本最低'],ans:0,exp:'天问一号(2021年)是全球首次在一次火星任务中实现「绕(轨道器)、着(着陆器)、巡(火星车)」三步，此前其他国家均分多次任务完成。祝融号火星车在乌托邦平原成功工作超过设计寿命。'},
+{q:'「正态意外」(Normal Accidents)理论的核心主张是什么？',opts:['大多数事故是可以预防的','在紧密耦合的复杂系统中，事故是「正常」的而非异常的','只要加强培训就能消除事故','事故主要由人为错误导致'],ans:3,exp:'Charles Perrow的正态意外理论指出：在紧密耦合+高度复杂的系统中，多个小故障的不可预测交互是系统固有属性，无法通过增加冗余完全消除(冗余本身引入新的复杂性)。挑战者号O形环/三里岛核事故都是典型。'},
+{q:'飞行汽车短期内无法规模化的核心物理约束是什么？',opts:['法律法规限制','能量密度不足+噪音+安全性','没有合适的飞行场地','驾驶员培训困难'],ans:1,exp:'飞行汽车面临三重硬约束：(1)电池能量密度远不足以支持垂直起降所需功率(续航往往<30分钟)；(2)旋翼噪音在城市环境中不可接受(80-100分贝)；(3)低空飞行安全——任何一个旋翼故障都可能导致坠毁。这三者短期均不可突破。'},
+{q:'自动驾驶技术中，激光雷达相对于纯视觉的主要劣势是什么？',opts:['精度不够','探测距离短','成本高且无法利用海量视觉数据飞轮','容易被干扰'],ans:2,exp:'激光雷达的主要劣势：(1)成本(机械式雷达数万美元)，(2)无法像摄像头那样利用道路上已有的数十亿台车载摄像头产生的巨量训练数据。纯视觉的优势在于数据飞轮——车越多数据越多算法越好。'},
+{q:'苹果造车项目(Titan)十年未果的根本原因是什么？',opts:['软件公司的思维与硬件制造的深层冲突','资金不足','没有找到合适的CEO','竞争对手太强大'],ans:0,exp:'苹果的核心能力是消费电子(高毛利/短迭代周期/封闭生态)，而汽车制造是低毛利/长周期/重资产/强供应链依赖。苹果试图用「设计完美再量产」的消费电子逻辑造车，但汽车需要「先量产再迭代」的工业逻辑。'},
+{q:'嫦娥五号的核心任务成就是什么？',opts:['首次绕月飞行','首次月球软着陆','采集并返回1731克月壤样本','实现了载人登月'],ans:2,exp:'嫦娥五号(2020年)完成了中国首次地外天体采样返回，在月球风暴洋北部的吕姆克山脉附近采集了1731克月壤样本并成功返回地球。这距离上一次人类月壤采样(苏联月球24号，1976年)已过去44年。'},
+{q:'电动车换电模式面临的最大挑战是什么？',opts:['换电站建设成本为零','标准化困难+电池产权归属复杂','换电速度不如充电','用户根本不需要换电'],ans:1,exp:'换电模式的核心障碍：(1)各车企电池包规格/接口不统一，无法跨品牌换电；(2)电池作为整车最贵部件(约占30-40%成本)，用户担心「用自己的新电池换来旧电池」；(3)换电站的电池库存和维护成本极高。蔚来是唯一坚持换电的主流车企。'},
+];
+
+// Short answer questions
+const saQuestions = [
+{q:'用工程师思维解释SpaceX为什么选择相对简单的针栓式喷注器(梅林发动机)而非更高效的分级燃烧循环。',hint:'工程师思维的三大约束：成本(研发+制造成本可控)、可靠性(简单设计故障点少)、迭代速度(简单设计更容易修改测试)。针栓式喷注器虽然比冲略低但满足「飞到轨道」的最低要求，且可以快速迭代改进——这是「最优解」而非「完美解」。'},
+{q:'简述火箭复用降低发射成本的经济学原理，以及为什么航天飞机的复用反而更贵。',hint:'火箭复用降低成本：一次制造成本分摊到多次发射(类似飞机)。航天飞机的失败原因：设计过于复杂(3个主发动机+2个固体助推器+轨道器)，返航后维护翻修成本极高(数万块防热瓦逐一检查更换)，每次发射全周期摊销约15亿美元。「复用」不等于「经济复用」——维护成本必须显著低于制造成本才成立。'},
+{q:'为什么国际空间站的科研产出远不如地面实验室，但它的存在仍然有价值？',hint:'空间站的真正价值排序：①政治/外交(美俄合作通道)>②工业能力展示(大型空间结构建造与运营)>③技术验证(长期载人航天生命支持系统)>④科普教育(激励青少年)>⑤科学研究。微重力环境下的科研确实有一定价值(蛋白质晶体生长、燃烧物理等)，但远不能与1500亿美元的成本匹配。价值不在于「赚回来」而在于「买不来的东西」——政治信任。'},
+{q:'讨论自动驾驶技术从「期望膨胀」到「泡沫破裂」的演变过程，并举出一个具体证据。',hint:'期望膨胀期(2016-2018)：多家公司宣布「2020年实现L4无人驾驶出租车商业运营」。泡沫破裂证据：Waymo在2018年推出无人出租车服务，但至今(2026)仍有安全驾驶员在场、限定在凤凰城郊区等特定区域运营、规模远小于最初宣传。Cruise(通用旗下)2023年因事故被加州吊销运营许可。关键认知：开放道路的corner case数量远超预期，解决最后1%问题需要99%的工程投入。'},
+{q:'解释锂电池在低温下「析锂」的本质机理和不可消除原因。',hint:'锂离子电池充电时Li+需嵌入石墨负极层间。低温(<0°C)下：①电解液粘度增大导致Li+迁移速率下降；②石墨负极对Li+的嵌入动力学变慢。当充电电流超过负极接收能力时，Li+直接在负极表面以金属锂形式沉积(析锂)。形成的锂枝晶可能刺穿隔膜造成内部短路。这是电化学热力学/动力学决定的，与电池管理系统(BMS)软件无关——低温下唯一的安全策略是限制充电速率或预热电池。'},
+{q:'从中国经济与技术发展阶段的角度，评估中国为何要独立建设空间站。',hint:'三个核心驱动：①技术主权——空间站涉及的自主交会对接、长期载人生命保障、空间科学实验等能力，无法通过购买获得；②国际博弈——美国2011年「沃尔夫条款」禁止NASA与中国任何航天合作，中国被排除在ISS之外，只能自己建；③产业升级——航天技术溢出效应(材料、通信、精密制造)辐射到民用产业。中国空间站虽技术代次低于ISS但完全自主可控，本身就是成功。'},
+{q:'比较自动驾驶的「渐进式路线」(L2+/L3辅助驾驶)与「跨越式路线」(直接L4无人驾驶)的优劣。',hint:'渐进式(特斯拉为代表)：优势——巨量真实路测数据积累/渐进改进用户可接受/商业变现快(FSD订阅)；劣势——驾驶员可能过度信任导致事故/「自动化自满」风险/从L2到L4存在质的鸿沟。跨越式(Waymo为代表)：优势——技术目标明确/安全设计不考虑人类接管/不存在L2→L4过渡问题；劣势——商业化缓慢(限定区域运营)/成本极高/没有利用消费者车辆的巨量数据。'},
+{q:'解释马斯克「第一性原理」分析火箭成本的逻辑，以及它为什么在传统航天界被忽视。',hint:'马斯克第一性原理分析：火箭材料(铝合金/钛合金/铜)的现货市场价是多少？加起来，材料成本仅占火箭售价的2%左右。那么价格为什么那么贵？答案：传统航天「成本加成」合同模式(花得越多赚得越多)+供应链层层分包+极度保守的设计冗余。传统航天界忽视的原因：体制惯性——没有人被激励问「为什么这么贵」，因为现有模式对所有参与者都有利可图。'},
+{q:'从「技术路线的锁定效应」视角分析中国在自动驾驶领域的竞争策略。',hint:'中国自动驾驶竞争策略：利用「后发优势」而非「先发劣势」。①选择渐进式路线，通过庞大的电动车保有量积累海量中国路况数据(数据飞轮)；②中国城市道路复杂度高于美国(行人/电动车/三轮车混行)，在中国能跑的方案在全球适应性更强；③政策支持——多地开放自动驾驶测试道路，法规比美国更宽松。风险：如果纯视觉路线最终胜出，特斯拉已经积累了全球最大规模的路测数据，锁定效应可能不可逆转。'},
+{q:'为什么「飞行汽车」这个概念几乎不可能在可预见的未来实现大规模商用？从能量密度、安全、噪音三个维度分析。',hint:'①能量密度：垂直起降需要巨大功率，现有电池能量密度(约250Wh/kg)远不足支撑有意义的航程(>100km)，绝大多数eVTOL续航<30分钟。②安全：固定翼飞机滑翔比飞行汽车好得多——飞行汽车任何一个旋翼/电机故障都可能导致无法控制的坠落，而城市上空坠落的伤亡是不可接受的。③噪音：多个大直径旋翼产生的噪音(80-100dB)在城市居民区完全不可接受。④规模经济困境：即便解决技术问题，年产量不足以分摊研发成本——「先有鸡还是先有蛋」。'},
+];
+
+// ============ RENDER FUNCTIONS ============
+
+function renderConceptGrid(){
+const grid = document.getElementById('conceptGrid');
+grid.innerHTML = concepts.map(function(c){return '\
+<div class="concept-card'+ (c.mks?' mks':'') +'" onclick="switchTab(1);setCard('+c.id+');">\
+<h4>'+c.name+'</h4>\
+<p>'+c.desc+'</p>\
+</div>';}).join('');
+}
+
+function renderMKSGrid(){
+const grid = document.getElementById('mksGrid');
+grid.innerHTML = concepts.filter(function(c){return c.mks;}).map(function(c){return '\
+<div class="concept-card mks">\
+<h4>'+c.name+'</h4>\
+<p>'+c.desc+'</p>\
+<span class="badge badge-mks">骨架概念</span>\
+</div>';}).join('');
+}
+
+function renderBoundaryTable(){
+const tbody = document.querySelector('#boundaryTable tbody');
+tbody.innerHTML = boundaryKnowledge.map(function(b){return '\
+<tr><td><strong>'+b.name+'</strong></td><td>'+b.scene+'</td><td>知道存在即可，不需要精通</td></tr>\
+';}).join('');
+}
+
+function renderLearningPath(){
+const wrap = document.getElementById('learningPath');
+wrap.innerHTML = learningPath.map(function(l,i){return '\
+<div class="card" style="flex:1;min-width:140px;text-align:center;border-top:3px solid var(--accent)">\
+<div style="font-weight:700;color:var(--accent);margin-bottom:4px">阶段'+l.phase+': '+l.title+'</div>\
+<div style="font-size:.78rem;color:var(--text2)">'+l.desc+'</div>\
+</div>';}).join('');
+}
+
+function renderSVG(){
+const svg = document.getElementById('svgContainer');
+svg.innerHTML = '<svg width="720pt" height="460pt" viewBox="0.00 0.00 720.00 460.00" xmlns="http://www.w3.org/2000/svg">\
+<g id="graph0" transform="scale(1 1) rotate(0) translate(4 456)">\
+<title>航天与工程探索概念关系图</title>\
+<polygon fill="#fdf6ec" stroke="none" points="-4,4 -4,-456 716,-456 716,4 -4,4"/>\
+<!-- root -->\
+<g id="node1"><title>核心驱动</title>\
+<ellipse fill="#c0392b" stroke="#5a3e3e" stroke-width="2" cx="356" cy="-426" rx="160" ry="24"/>\
+<text text-anchor="middle" x="356" y="-430" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13" fill="#ffffff">工程师思维：约束条件下寻求最优解</text>\
+<text text-anchor="middle" x="356" y="-415" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#ffe8cc">第一性原理 · 快速迭代 · 垂直整合</text>\
+</g>\
+<!-- rocket -->\
+<g id="node2"><title>火箭复用</title>\
+<polygon fill="#d4a574" stroke="#5a3e3e" points="240,-350 130,-350 130,-315 240,-315 240,-315 240,-350"/>\
+<text text-anchor="middle" x="185" y="-337" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#ffffff">火箭可复用革命</text>\
+<text text-anchor="middle" x="185" y="-323" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#ffffff">一次性→飞机模式</text>\
+</g>\
+<!-- root->rocket -->\
+<g id="edge1"><title>驱动</title>\
+<path fill="none" stroke="#c0392b" stroke-width="1.5" d="M289,-405C271,-394 251,-382 233,-371"/>\
+<polygon fill="#c0392b" stroke="#c0392b" points="234.5,-368 224,-365 231,-373.6 234.5,-368"/>\
+<text text-anchor="middle" x="300" y="-384" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#c0392b">降本90%</text>\
+</g>\
+<!-- auto -->\
+<g id="node3"><title>自动驾驶</title>\
+<polygon fill="#d4a574" stroke="#5a3e3e" points="470,-350 360,-350 360,-315 470,-315 470,-350"/>\
+<text text-anchor="middle" x="415" y="-337" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#ffffff">自动驾驶五波浪潮</text>\
+<text text-anchor="middle" x="415" y="-323" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#ffffff">膨胀→破裂→爬升</text>\
+</g>\
+<!-- root->auto -->\
+<g id="edge2"><title>驱动</title>\
+<path fill="none" stroke="#c0392b" stroke-width="1.5" d="M373,-405C380,-394 388,-382 396,-370"/>\
+<polygon fill="#c0392b" stroke="#c0392b" points="399,-371.5 401,-364 393,-368 399,-371.5"/>\
+<text text-anchor="middle" x="430" y="-384" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#c0392b">技术成熟曲线</text>\
+</g>\
+<!-- evcar -->\
+<g id="node4"><title>电动车</title>\
+<polygon fill="#d4a574" stroke="#5a3e3e" points="620,-350 520,-350 520,-315 620,-315 620,-350"/>\
+<text text-anchor="middle" x="570" y="-337" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#ffffff">电动汽车物理账</text>\
+<text text-anchor="middle" x="570" y="-323" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#ffffff">续航↔低温↔安全</text>\
+</g>\
+<!-- root->evcar -->\
+<g id="edge3"><title>驱动</title>\
+<path fill="none" stroke="#c0392b" stroke-width="1.5" d="M415,-405C444,-394 479,-382 508,-371"/>\
+<polygon fill="#c0392b" stroke="#c0392b" points="509.5,-374 517,-368 507,-368 509.5,-374"/>\
+<text text-anchor="middle" x="495" y="-384" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#c0392b">物理约束三角</text>\
+</g>\
+<!-- space station -->\
+<g id="node5"><title>空间站</title>\
+<polygon fill="#fffaf2" stroke="#5a3e3e" points="150,-268 20,-268 20,-233 150,-233 150,-268"/>\
+<text text-anchor="middle" x="85" y="-255" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#3d2f2f">空间站真实价值</text>\
+<text text-anchor="middle" x="85" y="-241" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#6b5555">政治>科研</text>\
+</g>\
+<!-- rocket->space station -->\
+<g id="edge4"><title>支撑</title>\
+<path fill="none" stroke="#3a6ea5" stroke-width="1.5" d="M156,-314C144,-303 130,-291 119,-278"/>\
+<polygon fill="#3a6ea5" stroke="#3a6ea5" points="121.5,-276 112,-268 116,-279 121.5,-276"/>\
+<text text-anchor="middle" x="160" y="-294" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#3a6ea5">运载工具</text>\
+</g>\
+<!-- mars -->\
+<g id="node6"><title>火星</title>\
+<polygon fill="#fffaf2" stroke="#c0392b" points="320,-268 210,-268 210,-233 320,-233 320,-268"/>\
+<text text-anchor="middle" x="265" y="-255" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#3d2f2f">火星移民现实滤镜</text>\
+<text text-anchor="middle" x="265" y="-241" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#6b5555">无磁场·地下居住</text>\
+</g>\
+<!-- rocket->mars tension -->\
+<g id="edge5"><title>对立张力</title>\
+<path fill="none" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="5,3" d="M207,-314C217,-303 229,-291 240,-278"/>\
+<polygon fill="#b8860b" stroke="#b8860b" points="242.5,-280 246,-270 237,-275 242.5,-280"/>\
+<text text-anchor="middle" x="253" y="-294" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#b8860b">浪漫↔现实</text>\
+</g>\
+<!-- space eco -->\
+<g id="node7"><title>太空经济</title>\
+<polygon fill="#fffaf2" stroke="#5a3e3e" points="490,-268 380,-268 380,-233 490,-233 490,-268"/>\
+<text text-anchor="middle" x="435" y="-255" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#3d2f2f">太空经济学二八定律</text>\
+<text text-anchor="middle" x="435" y="-241" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#6b5555">发射成本≠总成本</text>\
+</g>\
+<!-- rocket->space eco -->\
+<g id="edge6"><title>应用</title>\
+<path fill="none" stroke="#6b8e23" stroke-width="1.5" d="M248,-325C283,-310 335,-290 370,-275"/>\
+<polygon fill="#6b8e23" stroke="#6b8e23" points="371.5,-278 379,-271 369,-272 371.5,-278"/>\
+</g>\
+<!-- lockin -->\
+<g id="node8"><title>锁定效应</title>\
+<polygon fill="#fffaf2" stroke="#5a3e3e" points="640,-268 520,-268 520,-233 640,-233 640,-268"/>\
+<text text-anchor="middle" x="580" y="-255" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#3d2f2f">技术路线锁定效应</text>\
+<text text-anchor="middle" x="580" y="-241" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#6b5555">路径依赖→先发优势</text>\
+</g>\
+<!-- auto->lockin -->\
+<g id="edge7"><title>应用</title>\
+<path fill="none" stroke="#6b8e23" stroke-width="1.5" d="M462,-314C485,-300 514,-283 537,-270"/>\
+<polygon fill="#6b8e23" stroke="#6b8e23" points="539,-273 545,-265 535,-267 539,-273"/>\
+<text text-anchor="middle" x="530" y="-290" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#6b8e23">激光vs视觉</text>\
+</g>\
+<!-- fragile -->\
+<g id="node9"><title>脆弱性</title>\
+<polygon fill="#fffaf2" stroke="#c0392b" points="640,-268 520,-268 520,-233 520,-233 640,-233 640,-268"/>\
+<text text-anchor="middle" x="580" y="-255" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#3d2f2f">极限工程脆弱性</text>\
+<text text-anchor="middle" x="580" y="-241" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#6b5555">正态意外·紧密耦合</text>\
+</g>\
+<!-- ev->fragile tension -->\
+<g id="edge8"><title>张力</title>\
+<path fill="none" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="5,3" d="M572,-314C574,-303 576,-291 578,-278"/>\
+<polygon fill="#b8860b" stroke="#b8860b" points="581.5,-278 580,-268 574.5,-277 581.5,-278"/>\
+<text text-anchor="middle" x="610" y="-294" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#b8860b">电池热失控</text>\
+</g>\
+<!-- china -->\
+<g id="node10"><title>中国航天</title>\
+<polygon fill="#fffaf2" stroke="#3a6ea5" points="85,-186 5,-186 5,-151 85,-151 85,-186"/>\
+<text text-anchor="middle" x="45" y="-172" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">嫦娥探月</text>\
+<text text-anchor="middle" x="45" y="-160" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">1731g月壤</text>\
+</g>\
+<!-- space->china -->\
+<g id="edge9"><title>支撑</title>\
+<path fill="none" stroke="#3a6ea5" stroke-width="1.5" d="M76,-232C71,-222 65,-210 59,-196"/>\
+<polygon fill="#3a6ea5" stroke="#3a6ea5" points="62,-195 55,-187 56,-197 62,-195"/>\
+</g>\
+<!-- china2 -->\
+<g id="node11"><title>天问</title>\
+<polygon fill="#fffaf2" stroke="#3a6ea5" points="210,-186 130,-186 130,-151 210,-151 210,-186"/>\
+<text text-anchor="middle" x="170" y="-172" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">天问火星</text>\
+<text text-anchor="middle" x="170" y="-160" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">绕-着-巡一次完成</text>\
+</g>\
+<!-- china3 -->\
+<g id="node12"><title>空间站C</title>\
+<polygon fill="#fffaf2" stroke="#3a6ea5" points="330,-186 250,-186 250,-151 330,-151 330,-186"/>\
+<text text-anchor="middle" x="290" y="-172" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">中国空间站</text>\
+<text text-anchor="middle" x="290" y="-160" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">积木式·自主建造</text>\
+</g>\
+<!-- forced cooper -->\
+<g id="node13"><title>被迫合作</title>\
+<polygon fill="#fffaf2" stroke="#b8860b" points="460,-186 350,-186 350,-151 460,-151 460,-186"/>\
+<text text-anchor="middle" x="405" y="-172" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">被迫的国际合作</text>\
+<text text-anchor="middle" x="405" y="-160" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">谁都无法独立承担</text>\
+</g>\
+<!-- space->cooper -->\
+<g id="edge10"><title>延伸</title>\
+<path fill="none" stroke="#3a6ea5" stroke-width="1.5" d="M134,-232C188,-218 258,-201 317,-187"/>\
+<polygon fill="#3a6ea5" stroke="#3a6ea5" points="318,-190 326,-185 316,-184 318,-190"/>\
+</g>\
+<!-- flight car -->\
+<g id="node14"><title>飞行汽车</title>\
+<polygon fill="#fffaf2" stroke="#5a3e3e" points="620,-186 520,-186 520,-151 620,-151 620,-186"/>\
+<text text-anchor="middle" x="570" y="-172" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">飞行汽车/磁悬浮</text>\
+<text text-anchor="middle" x="570" y="-160" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">能量密度·噪音·安全</text>\
+</g>\
+<!-- apple car -->\
+<g id="node15"><title>苹果造车</title>\
+<polygon fill="#fffaf2" stroke="#6b8e23" points="100,-100 0,-100 0,-65 100,-65 100,-100"/>\
+<text text-anchor="middle" x="50" y="-86" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">苹果造车(十年未果)</text>\
+<text text-anchor="middle" x="50" y="-74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">软件思维vs硬件制造</text>\
+</g>\
+<!-- xiaomi -->\
+<g id="node16"><title>小米造车</title>\
+<polygon fill="#fffaf2" stroke="#6b8e23" points="240,-100 140,-100 140,-65 240,-65 240,-100"/>\
+<text text-anchor="middle" x="190" y="-86" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">小米造车</text>\
+<text text-anchor="middle" x="190" y="-74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">互联网效率vs汽车工业</text>\
+</g>\
+<!-- ev fire -->\
+<g id="node17"><title>电动车起火</title>\
+<polygon fill="#fffaf2" stroke="#6b8e23" points="370,-100 270,-100 270,-65 370,-65 370,-100"/>\
+<text text-anchor="middle" x="320" y="-86" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">电动车起火/涉水</text>\
+<text text-anchor="middle" x="320" y="-74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">热失控·化学火灾</text>\
+</g>\
+<!-- maglev -->\
+<g id="node18"><title>磁悬浮</title>\
+<polygon fill="#fffaf2" stroke="#6b8e23" points="500,-100 400,-100 400,-65 500,-65 500,-100"/>\
+<text text-anchor="middle" x="450" y="-86" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">新材料与新交通</text>\
+<text text-anchor="middle" x="450" y="-74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f">高温超导·低成本复用</text>\
+</g>\
+<!-- legend box -->\
+<g id="legend">\
+<rect fill="#fef9f4" stroke="#e8d5c0" x="560" y="-455" width="148" height="82" rx="6"/>\
+<text x="634" y="-442" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10" fill="#3d2f2f" text-anchor="middle" font-weight="bold">图例</text>\
+<line x1="568" y1="-432" x2="588" y2="-432" stroke="#c0392b" stroke-width="2"/>\
+<text x="594" y="-429" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#3d2f2f">主线逻辑</text>\
+<line x1="568" y1="-418" x2="588" y2="-418" stroke="#b8860b" stroke-width="2" stroke-dasharray="5,3"/>\
+<text x="594" y="-415" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#3d2f2f">对立张力</text>\
+<line x1="568" y1="-404" x2="588" y2="-404" stroke="#3a6ea5" stroke-width="2"/>\
+<text x="594" y="-401" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#3d2f2f">支撑关系</text>\
+<line x1="568" y1="-390" x2="588" y2="-390" stroke="#6b8e23" stroke-width="2"/>\
+<text x="594" y="-387" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9" fill="#3d2f2f">应用层</text>\
+</g>\
+</g>\
+</svg>';
+}
+
+// ============ TAB 1: FLIP CARDS ============
+let currentCardIdx = 0;
+let cardFlipped = false;
+let learnedCards = JSON.parse(localStorage.getItem('mks_tech4_learned')||'[]');
+function saveLearned(){localStorage.setItem('mks_tech4_learned',JSON.stringify(learnedCards));}
+
+function setCard(idx){
+  currentCardIdx=idx; cardFlipped=false;
+  var c=flipCards[idx];
+  document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.front+'</h3><p style="color:var(--text2);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.indexOf(idx)>=0?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':'');
+  document.getElementById('flipBack').innerHTML = c.back;
+  document.getElementById('flipInner').classList.remove('flipped');
+  document.getElementById('cardIndex').textContent=(idx+1)+' / '+flipCards.length;
+  document.getElementById('markLearnedBtn').textContent=learnedCards.indexOf(idx)>=0?'✓ 已学习':'✓ 标记已学习';
+  var pct = flipCards.length ? Math.round(learnedCards.length/flipCards.length*100) : 0;
+  document.getElementById('cardProgress').style.width = pct+'%';
+  document.getElementById('cardLearned').textContent = learnedCards.length;
+}
+setCard(0);
+
+function prevCard(){if(currentCardIdx>0)setCard(currentCardIdx-1);}
+function nextCard(){if(currentCardIdx<flipCards.length-1)setCard(currentCardIdx+1);}
+function markLearned(){
+  var pos = learnedCards.indexOf(currentCardIdx);
+  if(pos>=0){learnedCards.splice(pos,1);}else{learnedCards.push(currentCardIdx);}
+  saveLearned();updateProgress();setCard(currentCardIdx);
+}
+document.getElementById('flipInner').addEventListener('click',function(){this.classList.toggle('flipped');cardFlipped=!cardFlipped;});
+
+// ============ TAB 2: QUIZ ============
+let mcqAnswers = {}; let saqRevealed = {};
+function renderMCQ(){
+var container = document.getElementById('mcqContainer');
+container.innerHTML = mcQuestions.map(function(q,i){return '\
+<div class="quiz-card">\
+<span class="q-tag q-mc">选择题 #'+(i+1)+'</span>\
+<div class="q-text">'+q.q+'</div>\
+'+q.opts.map(function(o,j){return '<div class="q-option" onclick="selectMCQ('+i+','+j+')" id="mcq'+i+'_'+j+'">'+('ABCD'[j])+'. '+o+'</div>';}).join('')+'\
+<div class="q-feedback" id="mcqFb'+i+'"></div>\
+</div>';}).join('');
+}
+function renderSAQ(){
+var container = document.getElementById('saqContainer');
+container.innerHTML = saQuestions.map(function(q,i){return '\
+<div class="quiz-card">\
+<span class="q-tag q-sa">简答题 #'+(i+1)+'</span>\
+<div class="q-text">'+q.q+'</div>\
+<textarea class="sa-input" placeholder="输入你的答案..." id="saInput'+i+'"></textarea>\
+<button class="btn btn-sm" style="margin-top:8px" onclick="revealSAQ('+i+')">查看要点提示</button>\
+<div class="sa-reveal" id="saRev'+i+'">💡 <strong>要点：</strong>'+q.hint+'</div>\
+</div>';}).join('');
+}
+function selectMCQ(qi, optIdx){
+if(mcqAnswers[qi]!==undefined) return;
+mcqAnswers[qi] = optIdx;
+var correct = mcQuestions[qi].ans;
+var fb = document.getElementById('mcqFb'+qi);
+for(var j=0;j<4;j++){
+var el = document.getElementById('mcq'+qi+'_'+j);
+if(j===correct) el.classList.add('correct');
+if(j===optIdx && j!==correct) el.classList.add('wrong');
+if(j===optIdx) el.classList.add('selected');
+}
+if(optIdx===correct){
+fb.className='q-feedback right show';
+fb.textContent='✅ 正确！'+mcQuestions[qi].exp;
+saveQuizResult(qi,true);
+}else{
+fb.className='q-feedback wrong-msg show';
+fb.textContent='❌ 错误。正确答案是 '+('ABCD'[correct])+'。'+mcQuestions[qi].exp;
+saveQuizResult(qi,false);
+}
+updateProgress();
+}
+function revealSAQ(i){
+document.getElementById('saRev'+i).classList.add('show');
+saqRevealed[i] = true;
+saveQuizResult('sa_'+i, true);
+updateProgress();
+}
+
+function saveQuizResult(id,correct){
+var results = JSON.parse(localStorage.getItem('mks_tech4_quizResults')||'{}');
+results[id] = {correct:correct,time:Date.now()};
+localStorage.setItem('mks_tech4_quizResults',JSON.stringify(results));
+var errors = JSON.parse(localStorage.getItem('mks_tech4_errorBook')||'[]');
+if(!correct && !errors.find(function(e){return e.id===id;})){
+errors.push({id:id,time:Date.now()});
+localStorage.setItem('mks_tech4_errorBook',JSON.stringify(errors));
+}
+}
+
+// ============ TAB 3: EXAM ============
+let examActive = false, examTimer = null, examSeconds = 0, examQuestions = [];
+function startExam(){
+document.getElementById('examStartBtn').style.display='none';
+examActive = true; examSeconds = 15*60;
+examQuestions = [];
+var mcPool = mcQuestions.map(function(_,i){return i;});
+var saPool = saQuestions.map(function(_,i){return i;});
+shuffle(mcPool); shuffle(saPool);
+for(var i=0;i<7;i++) examQuestions.push({type:'mc',idx:mcPool[i]});
+for(var i=0;i<3;i++) examQuestions.push({type:'sa',idx:saPool[i]});
+shuffle(examQuestions);
+renderExam();
+examTimer = setInterval(function(){
+examSeconds--;
+var m = Math.floor(examSeconds/60), s = examSeconds%60;
+var timerEl = document.getElementById('examTimer');
+timerEl.textContent = m+':'+(s<10?'0':'')+s;
+if(examSeconds<60) timerEl.classList.add('warning');
+if(examSeconds<=0){submitExam();}
+},1000);
+}
+function renderExam(){
+var area = document.getElementById('examArea');
+area.innerHTML = examQuestions.map(function(eq,i){
+if(eq.type==='mc'){
+var q = mcQuestions[eq.idx];
+return '<div class="quiz-card"><span class="q-tag q-mc">选择题 #'+(i+1)+'</span><div class="q-text">'+q.q+'</div>\
+'+q.opts.map(function(o,j){return '<div class="q-option" onclick="examMCQ('+i+','+j+')" id="exam'+i+'_'+j+'">'+('ABCD'[j])+'. '+o+'</div>';}).join('')+'\
+<div class="q-feedback" id="examFb'+i+'"></div></div>';
+}else{
+var q = saQuestions[eq.idx];
+return '<div class="quiz-card"><span class="q-tag q-sa">简答题 #'+(i+1)+'</span><div class="q-text">'+q.q+'</div>\
+<textarea class="sa-input" id="examSA'+i+'">(考试模式下快速写出要点)</textarea></div>';
+}
+}).join('');
+document.getElementById('examResult').style.display='none';
+}
+let examAnswers = {};
+function examMCQ(i, optIdx){
+if(examAnswers[i]!==undefined) return;
+examAnswers[i] = optIdx;
+var q = mcQuestions[examQuestions[i].idx];
+var fb = document.getElementById('examFb'+i);
+for(var j=0;j<4;j++){
+var el = document.getElementById('exam'+i+'_'+j);
+if(j===q.ans) el.classList.add('correct');
+if(j===optIdx && j!==q.ans) el.classList.add('wrong');
+if(j===optIdx) el.classList.add('selected');
+}
+fb.className = 'q-feedback show '+(optIdx===q.ans?'right':'wrong-msg');
+fb.textContent = optIdx===q.ans?'✅ 正确':'❌ 错误。答案：'+('ABCD'[q.ans]);
+}
+function submitExam(){
+clearInterval(examTimer); examActive = false;
+var timerEl = document.getElementById('examTimer');
+timerEl.textContent = '考试结束'; timerEl.classList.remove('warning');
+var result = document.getElementById('examResult');
+var score = 0, total = 7;
+examQuestions.forEach(function(eq,i){
+if(eq.type==='mc' && examAnswers[i]===mcQuestions[eq.idx].ans) score++;
+});
+var m = Math.floor((900-examSeconds)/60), s = (900-examSeconds)%60;
+result.style.display='block';
+result.innerHTML = '<div class="card" style="text-align:center">\
+<h3>考试结果</h3>\
+<div style="font-size:2.5rem;color:var(--accent);font-weight:700">'+score+'/'+total+'</div>\
+<p style="color:var(--text2)">选择题正确率：'+Math.round(score/total*100)+'%</p>\
+<p style="color:var(--text2)">用时：'+m+'分'+s+'秒</p>\
+<p style="font-size:.82rem;color:var(--text2);margin-top:8px">\
+'+(score>=6?'🎉 你对航天与工程探索的理解非常扎实！':score>=4?'👍 基础不错，建议回顾错题加深理解。':'📚 建议返回「知识卡片」和「思维导图」系统学习后再试。')+'\
+</p>\
+<button class="btn" onclick="resetExam()" style="margin-top:12px">重新考试</button>\
+</div>';
+var examResults = JSON.parse(localStorage.getItem('mks_tech4_examResults')||'[]');
+examResults.push({score:score,total:total,time:Date.now(),seconds:900-examSeconds});
+localStorage.setItem('mks_tech4_examResults',JSON.stringify(examResults));
+examQuestions.forEach(function(eq,i){
+if(eq.type==='mc' && examAnswers[i]!==undefined && examAnswers[i]!==mcQuestions[eq.idx].ans){
+var errors = JSON.parse(localStorage.getItem('mks_tech4_errorBook')||'[]');
+errors.push({id:'exam_mc_'+eq.idx, time:Date.now()});
+localStorage.setItem('mks_tech4_errorBook',JSON.stringify(errors));
+}
+});
+updateProgress();
+}
+function resetExam(){
+clearInterval(examTimer); examActive = false;
+examAnswers = {}; examQuestions = [];
+document.getElementById('examStartBtn').style.display='inline-block';
+document.getElementById('examResult').style.display='none';
+document.getElementById('examArea').innerHTML='';
+document.getElementById('examTimer').textContent='15:00';
+document.getElementById('examTimer').classList.remove('warning');
+}
+
+// ============ TAB 4: REVIEW ============
+function renderStats(){
+var learned = JSON.parse(localStorage.getItem('mks_tech4_learned')||'[]');
+var results = JSON.parse(localStorage.getItem('mks_tech4_quizResults')||'{}');
+var errors = JSON.parse(localStorage.getItem('mks_tech4_errorBook')||'[]');
+var examResults = JSON.parse(localStorage.getItem('mks_tech4_examResults')||'[]');
+var allQ = Object.values(results);
+var correct = allQ.filter(function(r){return r.correct;}).length;
+var daySet = {};
+allQ.forEach(function(r){daySet[new Date(r.time).toDateString()]=true;});
+var totalDays = Object.keys(daySet).length;
+
+document.getElementById('statsGrid').innerHTML = '\
+<div class="stat-card"><div class="num">'+learned.length+'</div><div class="lbl">已学概念/10</div></div>\
+<div class="stat-card"><div class="num">'+allQ.length+'</div><div class="lbl">总答题数</div></div>\
+<div class="stat-card"><div class="num">'+(allQ.length?Math.round(correct/allQ.length*100):0)+'%</div><div class="lbl">正确率</div></div>\
+<div class="stat-card"><div class="num">'+errors.length+'</div><div class="lbl">错题数</div></div>\
+<div class="stat-card"><div class="num">'+examResults.length+'</div><div class="lbl">考试次数</div></div>\
+<div class="stat-card"><div class="num">'+totalDays+'</div><div class="lbl">学习天数</div></div>\
+';
+
+var errorBook = document.getElementById('errorBook');
+if(errors.length===0){
+document.getElementById('emptyError').style.display='block';
+errorBook.innerHTML='';
+}else{
+document.getElementById('emptyError').style.display='none';
+errorBook.innerHTML = '<div class="grid2">'+errors.slice(-20).reverse().map(function(e){
+var label=''; var q=null;
+if(typeof e.id==='string' && e.id.indexOf('sa_')===0){
+var idx = parseInt(e.id.split('_')[1]);
+label='简答题 #'+(idx+1);
+q=saQuestions[idx];
+}else if(typeof e.id==='string' && e.id.indexOf('exam_mc_')===0){
+var idx = parseInt(e.id.split('_')[2]);
+label='考试选择题 #'+idx;
+q=mcQuestions[idx];
+}else{
+label='选择题 #'+(e.id+1);
+q=mcQuestions[e.id];
+}
+var date = new Date(e.time).toLocaleDateString('zh-CN');
+return '<div class="card" style="font-size:.82rem"><strong>'+label+'</strong><br>'+(q?q.q:'')+'<br><span style="color:var(--accent);font-weight:700">答案：'+(q&&q.ans!==undefined?('ABCD'[q.ans]):(q&&q.hint||''))+'</span><br><span style="color:var(--text2)">'+date+'</span></div>';
+}).join('')+'</div>';
+}
+
+var weakEl = document.getElementById('weakConcepts');
+var errorIndices = errors.map(function(e){return typeof e.id==='number'?e.id:-1;}).filter(function(i){return i>=0&&i<mcQuestions.length;});
+if(errorIndices.length===0){
+weakEl.innerHTML='<p style="color:var(--text2)">暂无薄弱概念数据，多做几道题试试。</p>';
+}else{
+var freq = {};
+errorIndices.forEach(function(i){
+var q=mcQuestions[i]; if(!q)return;
+var topic = q.q.split('？')[0].split('的是')[0].slice(0,12);
+freq[topic] = (freq[topic]||0)+1;
+});
+var sorted = Object.entries(freq).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+weakEl.innerHTML = sorted.map(function(e){return '\
+<div class="card" style="border-left:4px solid var(--accent);padding:10px 14px;margin:6px 0">\
+<strong>'+e[0]+'</strong> — 错误'+e[1]+'次\
+</div>';}).join('');
+}
+}
+
+// ============ TAB 5: TREE ============
+function renderTree(){} // no-op, inline HTML
+
+// ============ TAB 6: SOCRATIC ============
+function renderSocratic(){
+var items = [
+{q:'为什么SpaceX能做出可复用火箭而NASA做不到？',a1:'核心差异不在技术而在制度设计。NASA的「成本加成」合同模式——承包商花得越多赚得越多——从根本上消灭了降低成本的动力。SpaceX采用固定价格合同，成本越低利润越高，同时80%部件自研自产(垂直整合)消除了供应链层层加价。马斯克用第一性原理分析：火箭材料成本仅占售价2%，技术上复用完全可行。',a2:'这跟「工程师思维」有什么关系？工程师思维的核心是在约束条件下找最优解。NASA的约束是政治/安全(宇航员不能出事)，SpaceX的约束是成本(钱不够必须想办法)。不同的约束条件产生了完全不同的「最优解」。NASA不是没有聪明人，而是聪明人被体制约束了。'},
+{q:'自动驾驶到底离我们有多远？',a1:'取决于你对「实现」的定义。L2/L3辅助驾驶(自适应巡航+车道保持)已在百万辆车上使用。L4无人驾驶(限定区域无安全员)Waymo在凤凰城郊区运营但规模远小于预期。关键瓶颈不是感知算法而是「corner case」——长尾的罕见场景(路上突然出现的沙发、穿奇装异服的行人)数量远超最初的估计。',a2:'为什么用了十年还不成熟？因为技术成熟不是线性的。2016-2018年是「期望膨胀期」——多家公司宣称2020年L4商用。2020-2023是「泡沫破裂期」——Uber出售自动驾驶部门、Argo AI倒闭、Cruise被吊销许可。现在我们处于「稳步爬升期的起点」——真正的无人驾驶还需要解决最后1%的场景，而这1%需要99%的工程投入。'},
+{q:'电动汽车真的环保吗？',a1:'从全生命周期碳排放看：电动车制造阶段的碳排放高于燃油车(电池制造能耗高)，但使用阶段显著低于燃油车(电能转换效率远高于内燃机)。综合来看，在电力结构较清洁的地区(如法国核电/北欧水电)电动车全生命周期碳排放约为燃油车的30-50%。在中国(煤电占比约60%)约为燃油车的60-70%。随着清洁能源占比上升，环保优势会持续扩大。',a2:'电池生产和废弃的环境问题呢？锂电池生产确实涉及锂矿开采(消耗大量水资源)、钴矿开采(刚果童工问题)等环境与伦理问题。电池回收产业尚未规模化——当前锂电池回收率不足5%。但这是「技术发展的阶段性代价」而非「根本性不可行」——类比19世纪马车换汽车时的「马粪危机」，新技术的副作用需要在发展过程中解决。'},
+{q:'为什么飞行汽车听起来很酷但似乎永远停在「明年量产」？',a1:'飞行汽车(eVTOL)面临三重无法绕过的物理约束：①能量密度——垂直起降需要巨大功率，现有锂电池能量密度(~250Wh/kg)只能支撑<30分钟航程；②噪音——多个大直径旋翼产生的80-100dB噪音在城市居民区完全不可接受；③安全——固定翼飞机滑翔比远高于多旋翼飞行器，任何单个旋翼/电机故障都可能导致无法控制的坠落。',a2:'那为什么还有这么多公司在投入？两重驱动力：①资本市场需要「下一代大故事」——投资人经历过共享经济/AI/自动驾驶后需要新的叙事；②部分技术(动力电池/飞控算法/碳纤维结构)确实在进步，但距离「安全可靠经济」有一到两个数量级的差距。关键是区分「技术可行」(实验室飞起来了)和「商业可行」(比出租车便宜+比汽车安全)。'},
+{q:'中国航天为什么在最近十年突然「加速」了？',a1:'不是突然加速，是长期积累的必然结果。中国航天遵循「三步走」战略的典型节奏：①载人航天三步(1992-2020)：神舟无人→神舟载人→空间实验室→空间站；②探月三步(2004-2020)：绕(嫦娥一二)→落(嫦娥三四)→回(嫦娥五，1731g月壤返回)；③火星一步(2021)：天问一号一次实现绕-着-巡。每一步都积累了上一步的技术基础。',a2:'中国航天的优势和劣势分别是什么？优势：①国家主导，长期稳定投入不受政党轮替影响；②「集中力量办大事」的体制效率；③从「跟跑」到「并跑」到部分「领跑」的工程学习能力强。劣势：①商业航天生态薄弱(SpaceX证明了市场化效率)；②基础科研(空间科学)投入不足——「重工程轻科学」导致原创性成果少；③国际合作受限——沃尔夫条款阻断了中美航天技术交流。'},
+];
+document.getElementById('socraticContainer').innerHTML = items.map(function(item,i){return '\
+<div class="socratic-item">\
+<div class="socratic-q" onclick="var a=this.nextElementSibling;a.style.display=a.style.display===\'block\'?\'none\':\'block\'">'+item.q+'</div>\
+<div class="socratic-a" style="display:none">\
+<p><strong>第一层：</strong>'+item.a1+'</p>\
+<p style="margin-top:8px"><strong>追问：</strong>'+item.a2+'</p>\
+</div>\
+</div>';}).join('');
+}
+
+// ============ TAB 7: CASE STUDY ============
+function renderCase(){} // no-op, inline HTML
+
+// ============ TAB 8: DECISION ============
+function renderDecision(){
+document.getElementById('decisionContainer').innerHTML = '\
+<h2>实战决策模拟</h2>\
+<p style="color:var(--text2);margin-bottom:16px">站在航天与工程探索的关键节点，你会怎么选择？每题选一个方案后查看MKS分析。</p>\
+<div id="decisionRounds"></div>\
+';
+var rounds = [
+{
+scenario:'【第1轮】你是一个手握30亿人民币预算的风险投资人。两个团队来找你：A团队要做「可复用商业火箭」，对标SpaceX；B团队要做「太空旅游」(亚轨道体验，200万/人)。你必须二选一。',
+options:[
+{text:'投A：可复用火箭——硬核技术壁垒高，长期价值大',feedback:'✅ 从「太空经济学二八定律」看：发射成本虽只占20%，但它是「卡脖子」环节——没有廉价发射，卫星制造/太空旅游/太空采矿都无从谈起。中国商业航天最缺的就是低成本发射能力。风险：技术难度极高，极可能前3次发射都失败(猎鹰1号也是第4次才成功)。',mks:'太空经济学二八定律 + 工程师思维：发射能力是太空产业的「操作系统」，控制了这个就控制了整个生态的底层。但需要评估团队是否具有SpaceX式的「允许失败-快速迭代」文化。'},
+{text:'投B：太空旅游——现金流快，市场故事好讲',feedback:'⚠️ 亚轨道太空旅游本质是「豪华过山车」——几分钟的失重体验，看不到地球全景，与轨道旅游(国际空间站级别)有天壤之别。200万/座的市场规模极为有限(全球愿意花200万体验几分钟失重的人不超过几千)。维珍银河和蓝色起源已证明这个路径的商业天花板很低。',mks:'火星移民现实滤镜：短期商业吸引力不等于长期价值。需要区分「看上去很酷」和「真正能改变行业格局」。太空旅游的物理约束(高成本+极小市场)决定了它在可预见未来是一个利基市场。'},
+{text:'两个都不投——商业航天风险太大，还是投互联网',feedback:'❌ 这是一个经典的「完美主义陷阱」。工程师思维不是找完美项目，而是在可选项中选最优。如果你用商业航天的硬约束(技术风险/资金需求/回报周期)对比互联网的相对确定性，永远会觉得后者更好。但这也意味着你永远错过范式转换级别的机会。',mks:'工程师思维的反面案例：等待「完美条件」意味着等不到任何条件。2002年马斯克投SpaceX时没有任何人认为可能成功——但「不可能」与「需要一种新思路」之间的边界需要第一性原理分析来区分。'},
+]
+},
+{
+scenario:'【第2轮】你是一个985高校的工科博士生，研究方向是自动驾驶感知算法。你有三个offer：A. 加入Waymo(美国，纯L4研究)；B. 加入蔚来/小鹏(中国，渐进式L2+/L3量产)；C. 留在学术界继续做纯研究。你会选？',
+options:[
+{text:'选A：去Waymo——站在技术最前沿，发表顶级论文',feedback:'⚠️ Waymo无疑是L4技术最领先的公司，但需要考虑「技术路线的锁定效应」——如果渐进式路线(通过海量L2车辆积累数据)最终胜出，Waymo的纯L4路线(少量高精度车辆)可能被边缘化。另外，作为中国公民在Waymo可能面临技术出口管制限制。',mks:'技术路线的锁定效应：先发优势不一定属于技术最优者。需要判断哪条路线「数据飞轮」的转速更快——特斯拉100万+台车的影子模式数据积累速度远超Waymo的数千台测试车。'},
+{text:'选B：去中国造车新势力——数据多、迭代快、商业落地快',feedback:'✅ 从自动驾驶五波浪潮的视角：行业正处于「泡沫破裂→稳步爬升」的过渡期。这个阶段最值钱的能力不是发表论文而是解决真实世界corner case的工程经验。中国城市道路复杂度全球最高(行人/电动车/三轮车混行)，在这里积累的工程经验有不可替代性。',mks:'自动驾驶五波浪潮 + 工程师思维：在「稳步爬升期」，工程能力(解决真实问题的速度和成本)比学术创新更稀缺。中国复杂的路况是「天然的corner case生成器」。'},
+{text:'选C：留在学术界——做真正的前沿突破，不受企业KPI束缚',feedback:'❌ 自动驾驶行业已进入「数据为王」阶段——最新的算法突破(如端到端/大模型)高度依赖海量真实路测数据，学术界无法获取(最多用公开数据集)。计算机视觉领域最顶尖的教授也在纷纷加入企业(或与企业联合实验室)。学术界的「纯研究」在自动驾驶这个工程密集型领域正变得越来越边缘化。',mks:'技术路线的锁定效应：数据飞轮一旦转起来——车企拥有的数据量呈指数增长，学术界的相对优势会持续衰减。但这不意味着学术研究没有价值——基础理论(如可解释性/安全性验证)仍然是企业无法独立解决的长期问题。'},
+]
+},
+{
+scenario:'【第3轮】你是一个中国二线城市的交通规划官员。上级要求你制定「未来十年智慧交通规划」。有专家建议「All in自动驾驶专用车道」，另有人建议「先做好传统公交+共享单车」。你怎么做？',
+options:[
+{text:'规划自动驾驶专用车道，抢占未来先机',feedback:'⚠️ 从自动驾驶五波浪潮视角：L4无人驾驶至少在5-10年内不会在城市全区域实现。提前十年规划专用车道可能导致「有车道没车跑」的尴尬(类比早期城市「有轨电车专用道」的浪费)。更理性的策略是「弹性预留」——设计可变车道而非固定专用道。',mks:'极限工程的脆弱性 + 工程师思维：政策规划也需要「在约束下找最优解」。全部押注单一技术路线(自动驾驶专用车道)在不确定性面前极为脆弱——一旦技术路线或时间表变化，沉没成本无法回收。'},
+{text:'先完善传统公交+共享单车+地铁接驳——这些已证明有效',feedback:'✅ 工程师思维的核心原则：「先用已有的工具解决眼前的问题。」 BRT(快速公交)+共享单车+地铁接驳的组合在成本/覆盖/可靠性上已被全球城市验证有效。自动驾驶是一个「可选插件」而非「替代核心」——当自动驾驶技术真正成熟时，可以无缝融入已有的公交体系。这是「渐进式路线」在城市规划中的体现。',mks:'电动汽车的物理账 + 自动驾驶五波浪潮：技术采纳需要区分「技术可行」与「社会可行/经济可行」。城市规划的周期(10-20年)远超技术创业周期(2-3年)——用最成熟而非最酷的技术是对纳税人的负责。'},
+{text:'两边同时推进：自动驾驶专用道+传统公交体系并重',feedback:'⚠️ 在预算有限的约束下，「并重」往往意味着「两边都不够」。二线城市的财政预算无法同时支撑大规模自动驾驶基建和传统公交升级。需要做的是：①判断未来5年的最大痛点(是交通拥堵？空气污染？出行公平？)；②在痛点最痛处投入最多资源。自动驾驶是手段不是目的。',mks:'太空经济学二八定律的类比：80%的交通改善来自20%的最核心投入(公交频次/线路优化)。需要找到你所在城市交通问题的「20%杠杆点」，而非追逐技术热点。'},
+]
+}
+];
+setTimeout(function(){
+var wrap = document.getElementById('decisionRounds');
+wrap.innerHTML = rounds.map(function(r,i){return '\
+<div class="decision-round">\
+<div class="scenario">'+r.scenario+'</div>\
+'+r.options.map(function(o,j){return '<div class="d-option" onclick="chooseDecision('+i+','+j+')" id="dopt'+i+'_'+j+'">'+('ABC'[j])+'. '+o.text+'</div>';}).join('')+'\
+<div class="d-result" id="dres'+i+'"></div>\
+</div>';}).join('');
+},100);
+}
+function chooseDecision(round, choice){
+var rounds = [
+{options:[
+{text:'',feedback:'✅ 从「太空经济学二八定律」看：发射成本虽只占20%，但它是「卡脖子」环节——没有廉价发射，卫星制造/太空旅游/太空采矿都无从谈起。中国商业航天最缺的就是低成本发射能力。',mks:'太空经济学二八定律 + 工程师思维：发射能力是太空产业的「操作系统」。'},
+{text:'',feedback:'⚠️ 亚轨道太空旅游本质是「豪华过山车」——几分钟失重体验，200万/座的市场极为有限。维珍银河和蓝色起源已证明这个路径的商业天花板很低。',mks:'火星移民现实滤镜：短期商业吸引力不等于长期价值。'},
+{text:'',feedback:'❌ 这是一个经典的「完美主义陷阱」。工程师思维不是找完美项目，而是在可选项中选最优。',mks:'工程师思维的反面案例：等待「完美条件」意味着等不到任何条件。'},
+]},
+{options:[
+{text:'',feedback:'⚠️ Waymo无疑是L4技术最领先的公司，但需要考虑「技术路线的锁定效应」——如果渐进式路线最终胜出，Waymo的纯L4路线可能被边缘化。',mks:'技术路线的锁定效应：先发优势不一定属于技术最优者。'},
+{text:'',feedback:'✅ 从自动驾驶五波浪潮的视角：行业正处于「泡沫破裂→稳步爬升」的过渡期。这个阶段最值钱的能力不是发表论文而是解决真实世界corner case的工程经验。',mks:'自动驾驶五波浪潮 + 工程师思维：在「稳步爬升期」，工程能力比学术创新更稀缺。'},
+{text:'',feedback:'❌ 自动驾驶行业已进入「数据为王」阶段——最新的算法突破高度依赖海量真实路测数据，学术界无法获取。',mks:'技术路线的锁定效应：数据飞轮一旦转起来，学术界的相对优势会持续衰减。'},
+]},
+{options:[
+{text:'',feedback:'⚠️ 从自动驾驶五波浪潮视角：L4无人驾驶至少在5-10年内不会在城市全区域实现。更理性的策略是「弹性预留」而非固定专用道。',mks:'极限工程的脆弱性：政策规划也需要「在约束下找最优解」。'},
+{text:'',feedback:'✅ 工程师思维的核心原则：「先用已有的工具解决眼前的问题。」 BRT+共享单车+地铁接驳的组合在成本/覆盖/可靠性上已被全球城市验证有效。',mks:'电动汽车的物理账 + 自动驾驶五波浪潮：城市规划的周期远超技术创业周期。'},
+{text:'',feedback:'⚠️ 在预算有限的约束下，「并重」往往意味着「两边都不够」。需要找到你所在城市交通问题的「20%杠杆点」。',mks:'太空经济学二八定律的类比：80%的交通改善来自20%的最核心投入。'},
+]}
+];
+var r = rounds[round];
+var res = document.getElementById('dres'+round);
+for(var j=0;j<3;j++){
+var el = document.getElementById('dopt'+round+'_'+j);
+el.classList.remove('chosen');
+}
+document.getElementById('dopt'+round+'_'+choice).classList.add('chosen');
+res.className = 'd-result show';
+res.innerHTML = '<p><strong>'+r.options[choice].feedback+'</strong></p><p style="margin-top:6px;color:var(--accent);font-size:.8rem">【MKS分析】'+r.options[choice].mks+'</p>';
+}
+
+// ============ GLOBAL FUNCTIONS ============
+function switchTab(idx){
+document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+document.getElementById('tab'+idx).classList.add('active');
+document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+if(idx===4) renderStats();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(){
+var learned = JSON.parse(localStorage.getItem('mks_tech4_learned')||'[]');
+var results = JSON.parse(localStorage.getItem('mks_tech4_quizResults')||'{}');
+var total = concepts.length + Object.keys(results).length*0.5;
+var done = learned.length + Object.values(results).filter(function(r){return r.correct;}).length;
+var pct = Math.min(100,Math.round(done/Math.max(1,total)*100));
+document.getElementById('overallProgress').style.width = pct+'%';
+document.getElementById('progressLabel').textContent = '已学习 '+learned.length+'/10 个概念 | 正确率 '+(Object.values(results).length?Math.round(Object.values(results).filter(function(r){return r.correct;}).length/Object.values(results).length*100):0)+'%';
+}
+
+function resetProgress(){
+if(confirm('确定要重置所有学习进度、错题和考试记录吗？此操作不可恢复。')){
+localStorage.removeItem('mks_tech4_learned');
+localStorage.removeItem('mks_tech4_quizResults');
+localStorage.removeItem('mks_tech4_errorBook');
+localStorage.removeItem('mks_tech4_examResults');
+mcqAnswers = {}; saqRevealed = {};
+renderMCQ(); renderSAQ(); updateProgress(); renderStats(); setCard(0);
+alert('已重置全部进度。');
+}
+}
+
+function toggleMindmap(el) {
+  el.classList.toggle('open');
+  var children = el.nextElementSibling;
+  if (children && children.classList.contains('node-children')) {
+    children.classList.toggle('open');
+  }
+}
+
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;}}
+
+// ============ QUIZ PRACTICE SYSTEM ==========
+let currentQuestions = [];
+let userAnswers = {};
+let quizTimeLeft = 900;
+let quizTimerInterval = null;
+
+function startQuiz(){
+  var shuffled = mcQuestions.slice().sort(function(){return Math.random()-0.5});
+  var essayShuffled = saQuestions.slice().sort(function(){return Math.random()-0.5});
+  currentQuestions = shuffled.slice(0,10).concat(essayShuffled.slice(0,3));
+  userAnswers = {};
+  quizTimeLeft = 900;
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('quizTimer').style.display = 'inline';
+  document.getElementById('staticQuiz').style.display = 'none';
+  renderQuizPractice();
+  startQuizTimer();
+}
+function startQuizTimer(){
+  clearInterval(quizTimerInterval);
+  updateQuizTimerDisplay();
+  quizTimerInterval = setInterval(function(){
+    quizTimeLeft--;
+    updateQuizTimerDisplay();
+    if(quizTimeLeft<=0){clearInterval(quizTimerInterval);submitQuizPractice();}
+  },1000);
+}
+function updateQuizTimerDisplay(){
+  var m = Math.floor(quizTimeLeft/60);
+  var s = quizTimeLeft%60;
+  document.getElementById('quizTimer').textContent = '⏱ '+m+':'+(s<10?'0':'')+s;
+}
+function renderQuizPractice(){
+  var container = document.getElementById('quizContainer');
+  var html = '';
+  currentQuestions.forEach(function(q,i){
+    var isChoice = q.opts || q.options || q.o;
+    if(isChoice){
+      var options = q.opts || q.options;
+      html += '<div class="quiz-card" id="qcard'+i+'"><div class="q-num">选择题 '+(i+1)+'</div><div class="q-text">'+(q.q||q.question)+'</div>';
+      options.forEach(function(o,j){
+        var sel = userAnswers[i]===j ? ' selected' : '';
+        html += '<div class="option'+sel+'" onclick="selectQuizChoice('+i+','+j+')" id="opt'+i+'_'+j+'">'+('ABCD'[j])+'. '+o+'</div>';
+      });
+      html += '<div id="fb'+i+'"></div></div>';
+    } else {
+      html += '<div class="quiz-card"><div class="q-num">简答题 '+(i+1)+'</div><div class="q-text">'+(q.q||q.question)+'</div><textarea class="essay-area" id="essay'+i+'" placeholder="输入你的回答...">'+(userAnswers[i]||'')+'</textarea></div>';
+    }
+  });
+  html += '<button class="btn" onclick="submitQuizPractice()">📩 提交答案</button>';
+  container.innerHTML = html;
+}
+function selectQuizChoice(qIdx,optIdx){
+  if(userAnswers[qIdx]!==undefined) return;
+  userAnswers[qIdx] = optIdx;
+  var q = currentQuestions[qIdx];
+  var correctIdx = q.a !== undefined ? q.a : (q.ans !== undefined ? q.ans : (q.answer !== undefined ? q.answer : -1));
+  var isCorrect = optIdx === correctIdx;
+  var allOpts = document.querySelectorAll('#qcard'+qIdx+' .option');
+  allOpts.forEach(function(el,j){
+    el.classList.add(j===correctIdx?'correct':(j===optIdx&&!isCorrect?'wrong':''));
+    el.style.pointerEvents = 'none';
+  });
+  var fb = document.getElementById('fb'+qIdx);
+  fb.className = isCorrect ? 'feedback correct' : 'feedback wrong';
+  fb.textContent = isCorrect ? '✓ 正确！' : '✗ 错误。';
+  var explainText = q.exp || q.explain || q.explanation || q.r || ''; if(explainText) fb.textContent += ' ' + explainText;
+  var correctCount = Object.values(userAnswers).filter(function(v,i){
+    var qi = currentQuestions[i];
+    var ci = qi.a !== undefined ? qi.a : (qi.ans !== undefined ? qi.ans : (qi.answer !== undefined ? qi.answer : -1));
+    return v === ci;
+  }).length;
+  var totalChoice = currentQuestions.filter(function(qi){return qi.opts||qi.options||qi.o;}).length;
+  document.getElementById('quizScore').textContent = '得分: '+correctCount+'/'+totalChoice;
+  saveQuizResult(qIdx,isCorrect);
+  updateProgress();
+}
+function submitQuizPractice(){
+  var correctCount = Object.values(userAnswers).filter(function(v,i){
+    var qi = currentQuestions[i];
+    var ci = qi.a !== undefined ? qi.a : (qi.ans !== undefined ? qi.ans : (qi.answer !== undefined ? qi.answer : -1));
+    return v === ci;
+  }).length;
+  var totalChoice = currentQuestions.filter(function(qi){return qi.opts||qi.options||qi.o;}).length;
+  alert('选择题得分: '+correctCount+'/'+totalChoice+'\n简答题已保存（自我对照参考答案）');
+  clearInterval(quizTimerInterval);
+}
+function resetQuiz(){
+  currentQuestions = [];
+  userAnswers = {};
+  clearInterval(quizTimerInterval);
+  document.getElementById('quizContainer').innerHTML = '';
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('quizTimer').style.display = 'none';
+}
+
+// ============ INIT ============
+function init(){
+renderConceptGrid();
+renderMKSGrid();
+renderBoundaryTable();
+renderLearningPath();
+renderSVG();
+renderMCQ();
+renderSAQ();
+renderTree();
+renderSocratic();
+renderCase();
+renderDecision();
+updateProgress();
+}
+init();
+</script>
+
+</body>
+</html>
