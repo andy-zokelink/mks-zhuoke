@@ -362,20 +362,23 @@ body {
 .progress-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--gold)); border-radius:3px; transition:width .5s ease; }
 
 /* ===== Flip card ===== */
-.flip-container { -webkit-perspective:1200px; perspective:1200px; max-width:520px; margin:20px auto; }
-.flip-card {
-  display:grid;
+.flip-container { max-width:520px; margin:20px auto; }
+.flip-card { perspective:1200px; -webkit-perspective:1200px; margin-bottom:14px; }
+.flip-inner {
+  position:relative;
   width:100%;
-  -webkit-transition:-webkit-transform .6s cubic-bezier(0.4,0,0.2,1);
+  min-height:360px;
   transition:transform .6s cubic-bezier(0.4,0,0.2,1);
-  -webkit-transform-style:preserve-3d;
+  -webkit-transition:-webkit-transform .6s cubic-bezier(0.4,0,0.2,1);
   transform-style:preserve-3d;
+  -webkit-transform-style:preserve-3d;
   cursor:pointer;
-  border-radius:14px;
 }
-.flip-card.flipped { -webkit-transform:rotateY(180deg); transform:rotateY(180deg); }
+.flip-inner.flipped { transform:rotateY(180deg); -webkit-transform:rotateY(180deg); }
 .flip-front,.flip-back {
-  grid-area:1 / 1;
+  position:absolute;
+  top:0; left:0;
+  width:100%;
   min-height:360px;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
@@ -388,7 +391,7 @@ body {
   overflow-y:auto;
   overflow-wrap:break-word;
 }
-.flip-back { -webkit-transform:rotateY(180deg); transform:rotateY(180deg); }
+.flip-back { transform:rotateY(180deg); -webkit-transform:rotateY(180deg); }
 .flip-container .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
 .flip-container .nav button { padding:7px 18px; border:1px solid rgba(255,255,255,0.12); border-radius:20px; background:rgba(21,26,64,0.6); color:var(--text-dim); cursor:pointer; font-size:13px; font-family:inherit; transition:all .2s; }
 .flip-container .nav button:hover { border-color:var(--gold); color:var(--text); background:rgba(226,176,74,0.08); }
@@ -760,9 +763,11 @@ svg text { font-family:"PingFang SC","Microsoft YaHei","SimSun",sans-serif; }
   <h2 class="section-title">知识卡片 · 翻转学习</h2>
   <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
   <div class="flip-container">
-    <div class="flip-card" id="flip-card">
-      <div class="flip-front" id="flip-front"></div>
-      <div class="flip-back" id="flip-back"></div>
+    <div class="flip-card">
+      <div class="flip-inner" id="flip-inner">
+        <div class="flip-front" id="flip-front"></div>
+        <div class="flip-back" id="flip-back"></div>
+      </div>
     </div>
     <div class="nav">
       <button onclick="prevCard()">&larr; 上一个</button>
@@ -964,7 +969,7 @@ const DECISION_ROUNDS = [
 let flipIndex = 0;
 let learnedSet = new Set();
 let wrongBook = [];
-let quizState = {active:false,questions:[],index:0,correct:0,total:0,streak:0,answered:false,selected:-1,shortAnswers:[],mode:'all',startTime:null};
+let quizState = {active:false,questions:[],correct:0,total:0,streak:0,mode:'all',startTime:null};
 let examState = {active:false,questions:[],answers:[],startTime:null,timer:null,minutes:15};
 let statsData = {learned:0,quizAnswered:0,accuracy:0,streak:0,examCount:0};
 
@@ -1307,7 +1312,14 @@ function renderFlipCard(idx){
     <p style="font-size:13px;color:var(--text-dim);"><strong style="color:var(--gold-dim);">反例/边界：</strong>${c.counter}</p>
   `;
   document.getElementById('flip-counter').textContent=`${idx+1}/${CONCEPTS.length}`;
-  document.getElementById('flip-card').classList.remove('flipped');
+  const inner=document.getElementById('flip-inner');
+  inner.classList.remove('flipped');
+  // Auto-adjust height after render
+  requestAnimationFrame(()=>{
+    const frontH=document.getElementById('flip-front').scrollHeight;
+    const backH=document.getElementById('flip-back').scrollHeight;
+    inner.style.height=Math.max(frontH,backH,360)+'px';
+  });
   const btn=document.getElementById('mark-learned-btn');
   if(learnedSet.has(c.id)){
     btn.textContent='✓ 已学会';
@@ -1319,7 +1331,7 @@ function renderFlipCard(idx){
 }
 
 function flipCard(){
-  document.getElementById('flip-card').classList.toggle('flipped');
+  document.getElementById('flip-inner').classList.toggle('flipped');
 }
 function prevCard(){flipIndex=(flipIndex-1+CONCEPTS.length)%CONCEPTS.length;renderFlipCard(flipIndex);}
 function nextCard(){flipIndex=(flipIndex+1)%CONCEPTS.length;renderFlipCard(flipIndex);}
@@ -1341,13 +1353,9 @@ function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.r
 
 function startQuiz(mode){
   quizState.mode=mode;
-  quizState.index=0;
   quizState.correct=0;
   quizState.total=0;
   quizState.streak=0;
-  quizState.answered=false;
-  quizState.selected=-1;
-  quizState.shortAnswers=[];
   quizState.startTime=Date.now();
   quizState.active=true;
 
@@ -1358,101 +1366,86 @@ function startQuiz(mode){
     qs=[...QUIZ_DATA];
   }
   quizState.questions=qs;
-  document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
+  document.getElementById('quiz-info').textContent='共 '+qs.length+' 题，开始答题！';
   document.getElementById('quiz-result').style.display='none';
-  renderQuizQuestion();
+  renderAllQuiz();
   startQuizTimer();
 }
 
-function renderQuizQuestion(){
+// 渲染全部题目（一页显示所有，点击选项即时判分）
+function renderAllQuiz(){
   const container=document.getElementById('quiz-container');
   const qs=quizState.questions;
-  const idx=quizState.index;
-  if(idx>=qs.length){
-    finishQuiz();
-    return;
-  }
-  const q=qs[idx];
-  container.innerHTML='';
-  const card=document.createElement('div');
-  card.className='quiz-card';
-
-  if(q.type==='choice'){
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">${q.q}</p>
-      <div class="options" id="quiz-options">
-        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  } else {
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">${q.q}</p>
-      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
-      <div style="margin-top:8px;">
-        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  }
-  container.appendChild(card);
-  quizState.answered=false;
-  quizState.selected=-1;
+  let html='';
+  qs.forEach((q,i)=>{
+    if(q.type==='choice'){
+      html+='<div class="quiz-card" id="quiz-card-'+i+'">'+
+        '<h3>第 '+(i+1)+'/'+qs.length+' 题 (选择题)</h3>'+
+        '<p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">'+q.q+'</p>'+
+        '<div class="options" id="quiz-opts-'+i+'">'+
+          q.options.map((opt,j)=>'<div class="option" onclick="answerQuizQ('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+opt+'</div>').join('')+
+        '</div>'+
+        '<div class="feedback" id="quiz-fb-'+i+'"></div>'+
+      '</div>';
+    } else {
+      html+='<div class="quiz-card" id="quiz-card-'+i+'">'+
+        '<h3>第 '+(i+1)+'/'+qs.length+' 题 (简答题)</h3>'+
+        '<p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">'+q.q+'</p>'+
+        '<textarea class="short-input" id="quiz-essay-'+i+'" placeholder="输入你的回答..."></textarea>'+
+        '<div style="margin-top:8px;">'+
+          '<button class="btn btn-primary btn-sm" onclick="answerQuizEssay('+i+')">提交</button>'+
+        '</div>'+
+        '<div class="feedback" id="quiz-fb-'+i+'"></div>'+
+      '</div>';
+    }
+  });
+  html+='<div style="margin-top:16px;text-align:center;">'+
+    '<button class="btn btn-warning" onclick="finishQuiz()">&#x1F4E9; 提交全部答案</button>'+
+  '</div>';
+  container.innerHTML=html;
 }
 
-function selectChoice(i){
-  if(quizState.answered) return;
-  const q=quizState.questions[quizState.index];
-  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
-    el.classList.toggle('selected',idx===i);
+// 选择题作答
+function answerQuizQ(qIdx,optIdx){
+  const optsEl=document.getElementById('quiz-opts-'+qIdx);
+  if(!optsEl || optsEl.dataset.answered==='1') return;
+  optsEl.dataset.answered='1';
+  const q=quizState.questions[qIdx];
+  const isCorrect=optIdx===q.answer;
+  optsEl.querySelectorAll('.option').forEach((el,j)=>{
+    el.style.pointerEvents='none';
+    if(j===q.answer) el.classList.add('correct');
+    if(j===optIdx&&!isCorrect) el.classList.add('wrong');
+    if(j===optIdx) el.classList.add('selected');
   });
-  quizState.selected=i;
-}
-
-function submitChoice(){
-  if(quizState.selected===-1) return;
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
-  const options=document.querySelectorAll('#quiz-options .option');
-  options.forEach((el,idx)=>{
-    if(idx===q.answer) el.classList.add('correct');
-    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
-  });
+  const fb=document.getElementById('quiz-fb-'+qIdx);
   quizState.total++;
-  if(quizState.selected===q.answer){
+  if(isCorrect){
     quizState.correct++;
     quizState.streak++;
     fb.className='feedback show correct';
-    fb.innerHTML=`&#10004; 回答正确！${q.explain||''}`;
+    fb.innerHTML='&#10004; 回答正确！'+(q.explain||'');
   } else {
     quizState.streak=0;
     fb.className='feedback show wrong';
-    fb.innerHTML=`&#10008; 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}`;
+    fb.innerHTML='&#10008; 回答错误。正确答案是 '+String.fromCharCode(65+q.answer)+'. '+q.options[q.answer]+'<br>'+(q.explain||'');
     addWrongBook(q.q,q.options[q.answer],q.explain||'');
   }
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2000);
 }
 
-function submitShortAnswer(){
-  const input=document.getElementById('short-input');
+// 简答题作答
+function answerQuizEssay(qIdx){
+  const input=document.getElementById('quiz-essay-'+qIdx);
+  if(!input||input.disabled) return;
   const val=input.value.trim();
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
+  if(!val) return;
+  const q=quizState.questions[qIdx];
+  const fb=document.getElementById('quiz-fb-'+qIdx);
+  fb.className='feedback show correct';
+  fb.innerHTML='&#10004; 已记录你的回答。<br><strong>参考答案：</strong>'+(q.ans||'');
+  input.disabled=true;
   quizState.total++;
   quizState.correct++;
-  fb.className='feedback show correct';
-  fb.innerHTML=`&#10004; 已记录你的回答。<br><strong>参考答案：</strong>${q.ans||''}`;
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2500);
 }
 
 function finishQuiz(){
