@@ -433,21 +433,23 @@ body {
 }
 
 /* ===== FLIP CARD ===== */
-.flip-container { perspective: 1200px; max-width: 520px; margin: 24px auto; }
+.flip-container { -webkit-perspective: 1200px; perspective: 1200px; max-width: 520px; margin: 24px auto; }
 .flip-card {
   position: relative;
   width: 100%;
   min-height: 340px;
   transition: transform .7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   cursor: pointer;
 }
-.flip-card.flipped { transform: rotateY(180deg); }
+.flip-card.flipped { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
 .flip-front, .flip-back {
   position: absolute;
   top: 0; left: 0;
   width: 100%;
   min-height: 340px;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: var(--radius-lg);
   padding: 28px 24px;
@@ -460,6 +462,7 @@ body {
   border-top: 4px solid var(--brass);
 }
 .flip-back {
+  -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
   background: linear-gradient(160deg, #faf7f1 0%, #f5efe4 100%);
   border-top: 4px solid var(--steel);
@@ -1334,7 +1337,7 @@ function startQuiz(mode){
 
   let qs=[];
   if(mode==='random'){
-    qs=shuffleArray([...QUIZ_DATA]).slice(0,5);
+    qs=shuffleArray([...QUIZ_DATA]).slice(0,10);
   } else {
     qs=[...QUIZ_DATA];
   }
@@ -1662,58 +1665,69 @@ function renderMindmap(){
         <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
         <span class="tree-node root">科学思维工具箱</span>
         <div class="children open">
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">极限思维 → 务实判断</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">极限思维：推到极值看本质</span></li>
-              <li><span class="tree-node leaf">务实判断：回归物理约束</span></li>
-              <li><span class="tree-node app">应用：商业谈判、工程设计</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">数量级感知 → 变量分析</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">数量级感知：10倍尺度校准</span></li>
-              <li><span class="tree-node leaf">变量分析：识别关键变量</span></li>
-              <li><span class="tree-node app">应用：费米估算、NEDC续航分析</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">模型建构 → 计算推理</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">模型建构：简化复杂现实</span></li>
-              <li><span class="tree-node leaf">计算推理：量化替代直觉</span></li>
-              <li><span class="tree-node app">应用：天气预报、质数分解</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">证据挖掘 + 概率思维 → 科学方法总论</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">证据挖掘：追溯证据链</span></li>
-              <li><span class="tree-node leaf">概率思维：接纳不确定性</span></li>
-              <li><span class="tree-node leaf">科学方法总论：观察→假设→验证→修正</span></li>
-              <li><span class="tree-node app">应用：科学研究、日常决策</span></li>
-            </div>
-          </li>
-          <li>
-            <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
-            <span class="tree-node branch">复杂系统思维（整合层）</span>
-            <div class="children open">
-              <li><span class="tree-node leaf">理解多变量相互作用</span></li>
-              <li><span class="tree-node leaf">警惕直觉的简单归因</span></li>
-              <li><span class="tree-node app">应用：堵车分析、航空安全</span></li>
-            </div>
-          </li>
+          <ul>
+            <li>
+              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+              <span class="tree-node branch">极限思维 → 务实判断</span>
+              <div class="children open">
+                <ul>
+                  <li><span class="tree-node leaf">极限思维：推到极值看本质</span></li>
+                  <li><span class="tree-node leaf">务实判断：回归物理约束</span></li>
+                  <li><span class="tree-node app">应用：商业谈判、工程设计</span></li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+              <span class="tree-node branch">数量级感知 → 变量分析</span>
+              <div class="children open">
+                <ul>
+                  <li><span class="tree-node leaf">数量级感知：10倍尺度校准</span></li>
+                  <li><span class="tree-node leaf">变量分析：识别关键变量</span></li>
+                  <li><span class="tree-node app">应用：费米估算、NEDC续航分析</span></li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+              <span class="tree-node branch">模型建构 → 计算推理</span>
+              <div class="children open">
+                <ul>
+                  <li><span class="tree-node leaf">模型建构：简化复杂现实</span></li>
+                  <li><span class="tree-node leaf">计算推理：量化替代直觉</span></li>
+                  <li><span class="tree-node app">应用：天气预报、质数分解</span></li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+              <span class="tree-node branch">证据挖掘 + 概率思维 → 科学方法总论</span>
+              <div class="children open">
+                <ul>
+                  <li><span class="tree-node leaf">证据挖掘：追溯证据链</span></li>
+                  <li><span class="tree-node leaf">概率思维：接纳不确定性</span></li>
+                  <li><span class="tree-node leaf">科学方法总论：观察→假设→验证→修正</span></li>
+                  <li><span class="tree-node app">应用：科学研究、日常决策</span></li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="tree-toggle" onclick="toggleTree(this)">[−]</span>
+              <span class="tree-node branch">复杂系统思维（整合层）</span>
+              <div class="children open">
+                <ul>
+                  <li><span class="tree-node leaf">理解多变量相互作用</span></li>
+                  <li><span class="tree-node leaf">警惕直觉的简单归因</span></li>
+                  <li><span class="tree-node app">应用：堵车分析、航空安全</span></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
         </div>
       </li>
     </ul>
   `;
 }
-
 function toggleTree(el){
   const parent=el.parentElement;
   const children=parent.querySelector('.children');
