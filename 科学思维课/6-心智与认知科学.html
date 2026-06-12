@@ -1914,99 +1914,83 @@ function startQuiz(mode){
   quizState.questions=qs;
   document.getElementById('quiz-info').textContent=`共 ${qs.length} 题，开始答题！`;
   document.getElementById('quiz-result').style.display='none';
-  renderQuizQuestion();
+  renderAllQuiz();
   startQuizTimer();
 }
 
-function renderQuizQuestion(){
+// 渲染全部题目（一页显示所有，点击选项即时判分）
+function renderAllQuiz(){
   const container=document.getElementById('quiz-container');
   const qs=quizState.questions;
-  const idx=quizState.index;
-  if(idx>=qs.length){
-    finishQuiz();
-    return;
-  }
-  const q=qs[idx];
-  container.innerHTML='';
-  const card=document.createElement('div');
-  card.className='quiz-card';
-
-  if(q.type==='choice'){
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">${q.q}</p>
-      <div class="options" id="quiz-options">
-        ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  } else {
-    card.innerHTML=`
-      <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">${q.q}</p>
-      <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
-      <div style="margin-top:8px;">
-        <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
-      </div>
-      <div class="feedback" id="quiz-feedback"></div>
-    `;
-  }
-  container.appendChild(card);
-  quizState.answered=false;
-  quizState.selected=-1;
-}
-
-function selectChoice(i){
-  if(quizState.answered) return;
-  const q=quizState.questions[quizState.index];
-  document.querySelectorAll('#quiz-options .option').forEach((el,idx)=>{
-    el.classList.toggle('selected',idx===i);
+  let html='';
+  qs.forEach((q,i)=>{
+    if(q.type==='choice'){
+      html+='<div class="quiz-card" id="quiz-card-'+i+'">'
+        +'<h3>第 '+(i+1)+'/'+qs.length+' 题 (选择题)</h3>'
+        +'<p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">'+q.q+'</p>'
+        +'<div class="options" id="quiz-opts-'+i+'">'
+        +q.options.map((opt,j)=>'<div class="option" onclick="answerQuizQ('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+opt+'</div>').join('')
+        +'</div>'
+        +'<div class="feedback" id="quiz-fb-'+i+'"></div>'
+        +'</div>';
+    } else {
+      html+='<div class="quiz-card" id="quiz-card-'+i+'">'
+        +'<h3>第 '+(i+1)+'/'+qs.length+' 题 (简答题)</h3>'
+        +'<p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">'+q.q+'</p>'
+        +'<textarea class="short-input" id="quiz-essay-'+i+'" placeholder="输入你的回答..."></textarea>'
+        +'<div style="margin-top:8px;">'
+        +'<button class="btn btn-primary btn-sm" onclick="answerQuizEssay('+i+')">提交</button>'
+        +'</div>'
+        +'<div class="feedback" id="quiz-fb-'+i+'"></div>'
+        +'</div>';
+    }
   });
-  quizState.selected=i;
+  html+='<div style="margin-top:16px;text-align:center;">'
+    +'<button class="btn btn-warning" onclick="finishQuiz()">📩 提交全部答案</button>'
+    +'</div>';
+  container.innerHTML=html;
 }
 
-function submitChoice(){
-  if(quizState.selected===-1) return;
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
-  const options=document.querySelectorAll('#quiz-options .option');
-  options.forEach((el,idx)=>{
-    if(idx===q.answer) el.classList.add('correct');
-    if(idx===quizState.selected && idx!==q.answer) el.classList.add('wrong');
+// 选择题作答（一次性显示所有题目）
+function answerQuizQ(qIdx,optIdx){
+  const q=quizState.questions[qIdx];
+  const optsEl=document.getElementById('quiz-opts-'+qIdx);
+  const fb=document.getElementById('quiz-fb-'+qIdx);
+  if(!optsEl||!fb) return;
+  // Prevent re-answering
+  if(optsEl.classList.contains('answered')) return;
+  optsEl.classList.add('answered');
+  optsEl.querySelectorAll('.option').forEach((el,j)=>{
+    el.style.pointerEvents='none';
+    if(j===q.answer) el.classList.add('correct');
+    if(j===optIdx&&j!==q.answer) el.classList.add('wrong');
+    if(j===optIdx) el.classList.add('selected');
   });
   quizState.total++;
-  if(quizState.selected===q.answer){
+  if(optIdx===q.answer){
     quizState.correct++;
     quizState.streak++;
     fb.className='feedback show correct';
-    fb.innerHTML=`<p>✅ 回答正确！${q.explain||''}</p>`;
+    fb.innerHTML='<p>✅ 回答正确！'+(q.explain||'')+'</p>';
   } else {
     quizState.streak=0;
     fb.className='feedback show wrong';
-    fb.innerHTML=`<p>❌ 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}</p>`;
+    fb.innerHTML='<p>❌ 回答错误。正确答案是 '+String.fromCharCode(65+q.answer)+'. '+q.options[q.answer]+'<br>'+(q.explain||'')+'</p>';
     addWrongBook(q.q,q.options[q.answer],q.explain||'');
   }
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2000);
 }
 
-function submitShortAnswer(){
-  const input=document.getElementById('short-input');
-  const val=input.value.trim();
-  const q=quizState.questions[quizState.index];
-  const fb=document.getElementById('quiz-feedback');
+// 简答题作答
+function answerQuizEssay(qIdx){
+  const fb=document.getElementById('quiz-fb-'+qIdx);
+  const textarea=document.getElementById('quiz-essay-'+qIdx);
+  if(!fb||!textarea) return;
+  if(fb.classList.contains('show')) return;
+  const q=quizState.questions[qIdx];
   quizState.total++;
   quizState.correct++;
   fb.className='feedback show correct';
-  fb.innerHTML=`<p>📝 已记录你的回答。</p><p><strong>参考答案：</strong>${q.ans||''}</p>`;
-  quizState.answered=true;
-  setTimeout(()=>{
-    quizState.index++;
-    renderQuizQuestion();
-  },2500);
+  fb.innerHTML='<p>📝 已记录你的回答。</p><p><strong>参考答案：</strong>'+(q.ans||'')+'</p>';
 }
 
 function finishQuiz(){
@@ -2472,13 +2456,7 @@ renderSocratic();
 renderDecision();
 updateReviewStats();
 
-// Auto-submit quiz when choice is clicked
-document.addEventListener('click',function(e){
-  const opt=e.target.closest('#quiz-options .option');
-  if(opt && !quizState.answered){
-    submitChoice();
-  }
-});
+// Quiz answers are now handled by direct onclick="answerQuizQ(i,j)" / "answerQuizEssay(i)"
 
 // Ensure exam timer is cleaned up when tab is hidden
 window.addEventListener('beforeunload',function(){
