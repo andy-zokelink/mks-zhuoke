@@ -212,7 +212,7 @@ body::before {
 
 /* ===== 3D Flip Cards ===== */
 .flip-container { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 32px; }
-.flip-card { width: 100%; max-width: 500px; height: 320px; perspective: 1200px; cursor: pointer; }
+.flip-card { width: 100%; max-width: 500px; height: clamp(220px, 40vw, 280px); perspective: 1200px; cursor: pointer; }
 .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
 .flip-inner.flipped { transform: rotateY(180deg); }
 .flip-front, .flip-back {
@@ -339,7 +339,7 @@ body::before {
   .mks-grid { grid-template-columns: 1fr; }
   .path-steps { flex-direction: column; align-items: center; gap: 16px; }
   .path-steps::before { display: none; }
-  .flip-card { height: 360px; }
+  .flip-card { height: clamp(220px, 40vw, 280px); }
   .tab-btn { font-size: 0.68rem; padding: 4px 8px; }
   .top-bar h1 { font-size: 0.85rem; }
 }
@@ -442,17 +442,16 @@ body::before {
 <!-- TAB 2: 题库系统 -->
 <!-- ================================================================ -->
 <div class="tab-panel" id="panel2">
+<div class="quiz-actions">
+  <button class="btn btn-pri" onclick="startQuiz()">🎲 随机抽题练习</button>
+  <button class="btn btn-sec" onclick="resetQuiz()">重置</button>
+</div>
+<div id="quizContainer"></div>
+<div id="staticQuiz" style="display:none;">
 <h3 class="sec-title">📝 选择题（20题）</h3>
 <div id="mcqContainer"></div>
-<div class="quiz-actions">
-  <button class="btn btn-pri" onclick="renderMCQ()">🔄 重新出题</button>
-  <button class="btn btn-sec" onclick="resetAllMCQ()">↺ 全部重置</button>
-</div>
-
 <h3 class="sec-title" style="margin-top:32px;">✍ 简答题（10题）</h3>
 <div id="saqContainer"></div>
-<div class="quiz-actions">
-  <button class="btn btn-sec" onclick="revealAllSAQ()">📖 显示全部参考答案</button>
 </div>
 </div>
 
@@ -924,6 +923,55 @@ function selectMCQ(qi, oi, btn) {
 function resetAllMCQ() {
   currentMCQ = [];
   document.getElementById('mcqContainer').innerHTML = '';
+}
+
+// ===== Standardized Quiz (startQuiz / resetQuiz) =====
+function startQuiz() {
+  document.getElementById('staticQuiz').style.display = 'none';
+  var mcPool = mcqData.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 10);
+  var saPool = saqData.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 3);
+  window.quizItems = mcPool.concat(saPool);
+  window.quizAnswers = {};
+  var html = '';
+  window.quizItems.forEach(function(q, i) {
+    if (q.opts) {
+      html += '<div class="quiz-q"><div class="q-title">' + (i+1) + '. ' + q.q + '</div><div class="q-opts">';
+      q.opts.forEach(function(o, oi) {
+        html += '<button class="q-opt" onclick="selectQuizItem(' + i + ',' + oi + ', this)" id="qi' + i + '_' + oi + '">' + ['A','B','C','D'][oi] + '. ' + o + '</button>';
+      });
+      html += '</div><div class="q-feedback" id="qfb' + i + '"></div></div>';
+    } else {
+      html += '<div class="saq-item"><div class="saq-q">' + (i+1) + '. ' + q.q + '</div>';
+      html += '<textarea placeholder="输入你的答案..." id="qsa' + i + '"></textarea>';
+      html += '<div style="margin-top:8px;"><button class="btn btn-sec" onclick="document.getElementById(\'qsaa' + i + '\').classList.add(\'show\')" style="font-size:0.75rem;">查看参考要点</button></div>';
+      html += '<div class="saq-ans" id="qsaa' + i + '">' + q.hint + '</div></div>';
+    }
+  });
+  document.getElementById('quizContainer').innerHTML = html;
+}
+function selectQuizItem(i, oi, btn) {
+  if (window.quizAnswers[i] !== undefined) return;
+  window.quizAnswers[i] = oi;
+  var q = window.quizItems[i];
+  var correct = q.ans === oi;
+  var qqEl = btn.parentElement.parentElement;
+  var allBtns = qqEl.querySelectorAll('.q-opt');
+  allBtns.forEach(function(o, j) {
+    o.disabled = true;
+    if (j === q.ans) o.classList.add('correct');
+    if (j === oi && !correct) o.classList.add('wrong');
+    if (j === oi) o.classList.add('chosen');
+  });
+  var fb = document.getElementById('qfb' + i);
+  fb.className = 'q-feedback show ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = (correct ? '✅ 正确！' : '❌ 错误。') + ' ' + (q.exp || '');
+  saveQuizResult('mcq_' + i, correct);
+  updateProgress();
+}
+function resetQuiz() {
+  document.getElementById('quizContainer').innerHTML = '';
+  window.quizItems = [];
+  window.quizAnswers = [];
 }
 
 // ===== SAQ System =====
