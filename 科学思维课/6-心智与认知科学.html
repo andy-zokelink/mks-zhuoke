@@ -3,340 +3,1254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>心智、衰老与认知科学 · 最小知识集</title>
+<title>心智、衰老与认知科学 · 意识深潜</title>
 <style>
+/* ========================================
+   CONSCIOUSNESS DEEP DIVE · 意识深潜
+   Abyss + Neuroscience Design System
+   ======================================== */
+
 :root {
-  --bg:#0d1b2a;
-  --card:#162b3f;
-  --accent:#7b2ff7;
-  --accent-light:#f59e0b;
-  --text:#e0e6ed;
-  --text-light:#8899aa;
-  --border:#2a4058;
-  --gold:#f59e0b;
-  --success:#00b894;
-  --warning:#f59e0b;
-  --panel-glow:0 0 20px rgba(123,47,247,0.08);
-  --amber-glow:0 0 12px rgba(245,158,11,0.15);
+  --abyss: #020617;
+  --deep: #060f1f;
+  --trench: #0a1628;
+  --surface: #0f1d35;
+  --card-bg: rgba(15, 29, 53, 0.55);
+  --glass: rgba(10, 22, 40, 0.7);
+  --glass-hover: rgba(18, 34, 58, 0.85);
+  --accent: #38bdf8;
+  --accent-dim: #0284c7;
+  --accent-light: #fb923c;
+  --accent-light-dim: #ea580c;
+  --success: #34d399;
+  --warning: #fb923c;
+  --danger: #f87171;
+  --text: #e2e8f0;
+  --text-dim: #cbd5e1;
+  --muted: #94a3b8;
+  --border: rgba(56, 189, 248, 0.12);
+  --border-amber: rgba(251, 146, 60, 0.2);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
-  background: var(--bg);
-  background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(123,47,247,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse at 85% 20%, rgba(245,158,11,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 15% 60%, rgba(0,184,148,0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(123,47,247,0.08) 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='0.7' fill='%237b2ff7' opacity='0.15'/%3E%3Ccircle cx='15' cy='45' r='0.5' fill='%23f59e0b' opacity='0.1'/%3E%3Ccircle cx='48' cy='12' r='0.6' fill='%2300b894' opacity='0.08'/%3E%3C/svg%3E");
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, sans-serif;
+  background: var(--abyss);
   color: var(--text);
-  line-height:1.8;
-  padding-bottom:60px;
-  position:relative;
+  line-height: 1.75;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
-/* Deep-sea ambient particles overlay */
+
+/* ── Abyssal Background Layers ── */
 body::before {
-  content:'';
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  pointer-events:none; z-index:0;
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
-    radial-gradient(circle at 20% 30%, rgba(123,47,247,0.04) 0%, transparent 40%),
-    radial-gradient(circle at 75% 55%, rgba(245,158,11,0.05) 0%, transparent 35%),
-    radial-gradient(circle at 45% 80%, rgba(0,184,148,0.03) 0%, transparent 45%);
+    /* Deep ocean gradient */
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(56,189,248,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 85% 40%, rgba(251,146,60,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 15% 70%, rgba(52,211,153,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(56,189,248,0.05) 0%, transparent 50%),
+    /* Subtle neural network texture */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(56,189,248,0.015) 2px,
+      rgba(56,189,248,0.015) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(56,189,248,0.01) 2px,
+      rgba(56,189,248,0.01) 4px
+    );
 }
-/* Ensure content sits above pseudo-elements */
-.tab-content, .tab-bar, .top-bar { position:relative; z-index:1; }
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 25% 15%, rgba(56,189,248,0.08) 0%, transparent 25%),
+    radial-gradient(circle at 78% 55%, rgba(251,146,60,0.06) 0%, transparent 30%),
+    radial-gradient(circle at 40% 85%, rgba(52,211,153,0.05) 0%, transparent 35%);
+}
+
+/* ── Floating Particles ── */
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+@keyframes float-diagonal {
+  0% { transform: translate(0, 100vh) scale(0); opacity: 0; }
+  20% { opacity: 0.5; }
+  80% { opacity: 0.2; }
+  100% { transform: translate(30px, -10vh) scale(1.2); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+.particle {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  animation: float-up 12s linear infinite;
+}
+
+.particle:nth-child(odd) { animation-name: float-diagonal; animation-duration: 16s; }
+.particle:nth-child(3n) { animation-duration: 14s; }
+.particle:nth-child(5n) { animation-duration: 18s; }
+.particle:nth-child(7n) { animation-duration: 10s; }
+
+/* ── Top Bar ── */
 .top-bar {
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:linear-gradient(135deg,#0a0e1a,#1a1040,#0d1b2a);
-  color:#fff;
-  padding:14px 24px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid var(--border);
-  box-shadow:0 2px 24px rgba(123,47,247,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(6,15,31,0.98) 0%, rgba(6,15,31,0.92) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #fff;
+  padding: 16px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 32px rgba(56,189,248,0.06);
 }
-.top-bar h1 { font-size:20px; font-weight:700; text-shadow:0 0 20px rgba(123,47,247,0.4); }
-.top-bar a { color:#8899cc; text-decoration:none; font-size:14px; }
-.top-bar a:hover { color:var(--accent-light); }
+
+.top-bar h1 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #38bdf8 60%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.top-bar a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(148,163,184,0.2);
+  transition: var(--transition);
+}
+
+.top-bar a:hover {
+  color: #38bdf8;
+  border-color: rgba(56,189,248,0.4);
+  background: rgba(56,189,248,0.06);
+}
+
+/* ── Tab Bar ── */
 .tab-bar {
-  position:sticky;
-  top:47px;
-  z-index:99;
-  background:var(--card);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  padding:8px 12px;
-  box-shadow:0 2px 12px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 61px;
+  z-index: 99;
+  background: rgba(6,15,31,0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
+
 .tab-btn {
-  padding:6px 14px;
-  border:1px solid var(--border);
-  border-radius:20px;
-  background:rgba(22,43,63,0.7);
-  color:var(--text-light);
-  cursor:pointer;
-  font-size:13px;
-  transition:all .2s;
-  white-space:nowrap;
+  padding: 7px 16px;
+  border: 1px solid transparent;
+  border-radius: 24px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition);
+  white-space: nowrap;
+  font-family: inherit;
 }
-.tab-btn:hover { background:var(--border); color:var(--text); }
+
+.tab-btn:hover {
+  background: rgba(56,189,248,0.06);
+  color: #bae6fd;
+  border-color: rgba(56,189,248,0.15);
+}
+
 .tab-btn.active {
-  background:linear-gradient(135deg,var(--accent),#5a1fc7);
-  color:#fff;
-  border-color:var(--accent);
-  box-shadow:0 0 12px rgba(123,47,247,0.3);
+  background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(2,132,199,0.1));
+  color: #38bdf8;
+  border-color: rgba(56,189,248,0.35);
+  box-shadow: 0 0 16px rgba(56,189,248,0.12), inset 0 1px 0 rgba(56,189,248,0.1);
+  font-weight: 600;
 }
-.tab-content { max-width:1100px; margin:0 auto; padding:20px 16px; }
-.tab-panel { display:none; }
-.tab-panel.active { display:block; }
+
+/* ── Content Container ── */
+.tab-content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-panel { display: none; animation: fadeSlideIn 0.4s ease; }
+.tab-panel.active { display: block; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Cards ── */
 .card {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:16px;
-  box-shadow:var(--panel-glow);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  transition: var(--transition);
 }
-.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent-light); }
-.card h3 { font-size:16px; margin-bottom:8px; color:var(--text); }
-.card p { font-size:14px; color:var(--text-light); margin-bottom:6px; }
+
+.card:hover {
+  border-color: rgba(56,189,248,0.2);
+  box-shadow: 0 4px 28px rgba(56,189,248,0.06);
+}
+
+.card h2, .tab-content h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.card p {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  line-height: 1.7;
+}
+
+/* ── Core Goal ── */
 .core-goal {
-  background:linear-gradient(135deg,#162b3f,#1a3050,#162b3f);
-  border:2px solid var(--gold);
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:20px;
-  text-align:center;
-  box-shadow:var(--amber-glow), inset 0 0 30px rgba(245,158,11,0.05);
+  background: linear-gradient(135deg, rgba(251,146,60,0.08), rgba(56,189,248,0.06), rgba(15,29,53,0.7));
+  border: 1px solid var(--border-amber);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(251,146,60,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
-.core-goal h2 { color:var(--accent-light); font-size:20px; }
-.core-goal p { font-size:15px; color:var(--text-light); max-width:700px; margin:8px auto 0; }
+
+.core-goal h2 {
+  color: var(--accent-light);
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.core-goal p {
+  font-size: 14.5px;
+  color: var(--text-dim);
+  max-width: 720px;
+  margin: 8px auto 0;
+  line-height: 1.8;
+}
+
+/* ── Concept Grid ── */
 .concept-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:12px;
-  margin-bottom:20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
 }
+
 .concept-card {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-left:3px solid var(--accent-light);
-  border-radius:10px;
-  padding:14px;
-  cursor:pointer;
-  transition:all .25s;
-  position:relative;
-  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56,189,248,0.1);
+  border-left: 3px solid var(--accent-light);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  overflow: hidden;
 }
+
+.concept-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 100% 0%, rgba(56,189,248,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
 .concept-card:hover {
-  border-color:var(--accent-light);
-  box-shadow:0 6px 24px rgba(245,158,11,0.15), 0 0 0 1px rgba(245,158,11,0.15);
-  transform:translateY(-2px);
+  border-color: var(--accent-light);
+  box-shadow: 0 6px 28px rgba(251,146,60,0.12), 0 0 0 1px rgba(251,146,60,0.1);
+  transform: translateY(-2px);
 }
+
 .concept-card .label {
-  display:inline-block;
-  background:var(--accent-light);
-  color:#0d1b2a;
-  font-size:11px;
-  padding:2px 8px;
-  border-radius:10px;
-  margin-bottom:6px;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent-light), #ea580c);
+  color: #020617;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
 }
+
 .concept-card .label.mks {
-  background:var(--accent);
-  color:#fff;
-  box-shadow:0 0 8px rgba(123,47,247,0.4);
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(56,189,248,0.3);
 }
-.concept-card h3 { font-size:15px; margin-bottom:4px; }
-.concept-card .def { font-size:13px; color:var(--text-light); }
-.concept-card .extra { display:none; margin-top:8px; font-size:13px; color:var(--text-light); border-top:1px dashed var(--border); padding-top:8px; }
-.concept-card .extra.show { display:block; }
-.concept-card .extra strong { color:var(--text); }
-.mks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:20px; }
-.mks-core { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:16px; text-align:center; box-shadow:0 0 16px rgba(123,47,247,0.12); transition:all .25s; }
-.mks-core:hover { box-shadow:0 0 24px rgba(123,47,247,0.2); transform:translateY(-2px); }
-.mks-core .icon { font-size:28px; }
-.mks-core h3 { font-size:15px; color:var(--accent); }
-.mks-core p { font-size:13px; color:var(--text-light); }
-.svg-wrap { margin:20px 0; text-align:center; }
-.boundary-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
-.boundary-table th,.boundary-table td { border:1px solid var(--border); padding:10px 12px; text-align:left; font-size:13px; }
-.boundary-table th { background:linear-gradient(135deg,#1a1040,#162b3f); color:var(--accent-light); font-weight:600; }
-.boundary-table tr:nth-child(even) { background:rgba(22,43,63,0.5); }
-.boundary-table tr:hover { background:rgba(123,47,247,0.06); }
-.learning-path { counter-reset:step; }
-.learning-path .step { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:all .25s; }
-.learning-path .step:hover { border-color:var(--accent); box-shadow:0 4px 20px rgba(123,47,247,0.15); transform:translateX(4px); }
-.learning-path .step::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; background:linear-gradient(135deg,var(--accent),#5a1fc7); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; box-shadow:0 0 8px rgba(123,47,247,0.4); }
-.learning-path .step h3 { font-size:14px; margin-bottom:4px; color:var(--text); }
-.learning-path .step p { font-size:13px; color:var(--text-light); }
-.progress-bar { height:8px; background:var(--border); border-radius:4px; margin:8px 0; overflow:hidden; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-light)); border-radius:4px; transition:width .5s; box-shadow:0 0 8px rgba(123,47,247,0.4); }
 
-/* Flip card */
-.flip-container { perspective:1000px; max-width:500px; margin:20px auto; }
-.flip-card { position:relative; width:100%; min-height:320px; transition:transform .6s; transform-style:preserve-3d; }
-.flip-card.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; top:0; left:0; width:100%; min-height:320px; backface-visibility:hidden; border-radius:12px; padding:24px; border:1px solid var(--border); background:var(--card); box-shadow:var(--panel-glow); }
-.flip-back { transform:rotateY(180deg); }
-.flip-card .nav { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
-.flip-card .nav button { padding:6px 16px; border:1px solid var(--border); border-radius:6px; background:var(--card); color:var(--text); cursor:pointer; font-size:13px; }
-.flip-card .nav button:hover { background:var(--border); color:var(--accent-light); }
-.flip-card .mark-btn { background:var(--accent); color:#fff; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
-.flip-card .mark-btn:hover { background:#5a1fc7; }
-.flip-card .counter { font-size:13px; color:var(--text-light); }
+.concept-card h3 {
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
 
-/* Quiz */
-.quiz-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; box-shadow:var(--panel-glow); }
-.quiz-card h3 { font-size:15px; margin-bottom:10px; color:var(--text); }
-.quiz-card .options { display:flex; flex-direction:column; gap:6px; }
-.quiz-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; color:var(--text); }
-.quiz-card .option:hover { background:var(--border); border-color:var(--accent); }
-.quiz-card .option.selected { border-color:var(--accent); background:rgba(123,47,247,0.12); }
-.quiz-card .option.correct { border-color:var(--success); background:rgba(0,184,148,0.1); }
-.quiz-card .option.wrong { border-color:var(--warning); background:rgba(245,158,11,0.1); }
-.quiz-card .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
-.quiz-card .feedback.show { display:block; }
-.quiz-card .feedback.correct { background:rgba(0,184,148,0.1); border:1px solid var(--success); }
-.quiz-card .feedback.wrong { background:rgba(245,158,11,0.1); border:1px solid var(--warning); }
-.quiz-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; background:var(--bg); color:var(--text); }
-.quiz-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+.concept-card .def {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
 
-/* Exam */
-.exam-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; box-shadow:var(--panel-glow); }
-.exam-card h3 { font-size:15px; margin-bottom:10px; color:var(--text); }
-.exam-card .options { display:flex; flex-direction:column; gap:6px; }
-.exam-card .option { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; color:var(--text); }
-.exam-card .option.selected { border-color:var(--accent); background:rgba(123,47,247,0.12); }
-.exam-card .option.correct { border-color:var(--success); background:rgba(0,184,148,0.1); }
-.exam-card .option.wrong { border-color:var(--warning); background:rgba(245,158,11,0.1); }
-.exam-card .feedback { margin-top:8px; padding:8px; border-radius:6px; font-size:13px; display:none; }
-.exam-card .feedback.show { display:block; }
-.exam-card .short-input { width:100%; min-height:60px; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; resize:vertical; background:var(--bg); color:var(--text); }
-.exam-timer { font-size:14px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+.concept-card .extra {
+  display: none;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  border-top: 1px dashed var(--border);
+  padding-top: 10px;
+  line-height: 1.65;
+}
 
-/* Review */
-.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
-.stat-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; box-shadow:var(--panel-glow); }
-.stat-card .num { font-size:28px; font-weight:700; color:var(--accent-light); }
-.stat-card .label { font-size:13px; color:var(--text-light); margin-top:4px; }
+.concept-card .extra.show { display: block; animation: fadeSlideIn 0.3s ease; }
 
-/* Mindmap */
-.mindmap { padding:10px 0; }
-.mindmap ul { list-style:none; padding-left:24px; }
-.mindmap li { position:relative; margin:4px 0; }
-.mindmap .tree-toggle { cursor:pointer; color:var(--accent); font-size:13px; user-select:none; }
-.mindmap .tree-toggle:hover { color:var(--accent-light); }
-.mindmap .tree-node { padding:6px 10px; border-radius:6px; font-size:13px; display:inline-block; }
-.mindmap .tree-node.root { background:linear-gradient(135deg,var(--accent),#5a1fc7); color:#fff; font-weight:700; box-shadow:0 0 10px rgba(123,47,247,0.3); }
-.mindmap .tree-node.branch { background:#1a3050; color:var(--accent-light); }
-.mindmap .tree-node.leaf { background:var(--card); border:1px solid var(--border); color:var(--text); }
-.mindmap .tree-node.app { background:var(--success); color:#fff; }
-.mindmap .children { display:none; padding-left:20px; border-left:2px solid var(--accent); margin:4px 0 4px 12px; }
-.mindmap .children.open { display:block; }
+.concept-card .extra strong { color: var(--text-dim); font-weight: 600; }
 
-/* Socratic */
-.socratic-card { background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; box-shadow:var(--panel-glow); }
-.socratic-q { padding:14px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent-light); display:flex; justify-content:space-between; align-items:center; user-select:none; }
-.socratic-q:hover { background:rgba(245,158,11,0.06); }
-.socratic-q .arrow { transition:transform .3s; font-size:12px; color:var(--accent-light); }
-.socratic-q .arrow.open { transform:rotate(180deg); }
-.socratic-a { display:none; padding:0 16px 14px; border-top:1px dashed var(--border); }
-.socratic-a.open { display:block; }
-.socratic-a p { font-size:13px; color:var(--text-light); margin-top:10px; }
-.socratic-a p strong { color:var(--text); }
+/* ── MKS Grid ── */
+.mks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
 
-/* Case Study */
-.case-dim { background:var(--card); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:10px; padding:16px; margin-bottom:10px; box-shadow:var(--panel-glow); }
-.case-dim h3 { font-size:14px; color:var(--accent-light); margin-bottom:6px; }
-.case-dim p { font-size:13px; color:var(--text-light); }
+.mks-core {
+  background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(2,132,199,0.04));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(56,189,248,0.06);
+  transition: var(--transition);
+}
 
-/* Decision */
-.decision-round { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; box-shadow:var(--panel-glow); }
-.decision-round h3 { font-size:15px; margin-bottom:10px; color:var(--text); }
-.decision-round .scenario { font-size:14px; color:var(--text-light); margin-bottom:12px; padding:10px; background:rgba(123,47,247,0.06); border-left:3px solid var(--accent); border-radius:8px; }
-.decision-round .choices { display:flex; flex-direction:column; gap:8px; }
-.decision-round .choice { padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; color:var(--text); }
-.decision-round .choice:hover { background:var(--border); border-color:var(--accent-light); }
-.decision-round .choice.selected { border-color:var(--accent); background:rgba(123,47,247,0.12); }
-.decision-round .feedback { margin-top:10px; padding:10px; border-radius:8px; font-size:13px; display:none; }
-.decision-round .feedback.show { display:block; border-left:4px solid; }
-.decision-round .feedback.correct { background:rgba(0,184,148,0.1); border-left-color:var(--success); }
-.decision-round .feedback.wrong { background:rgba(245,158,11,0.1); border-left-color:var(--warning); }
-.decision-round .feedback.warning { background:rgba(245,158,11,0.08); border-left-color:var(--warning); }
-.decision-round .choice.disabled { pointer-events:none; opacity:0.6; }
+.mks-core:hover {
+  box-shadow: 0 0 32px rgba(56,189,248,0.14);
+  transform: translateY(-2px);
+  border-color: rgba(56,189,248,0.35);
+}
 
-/* Buttons */
+.mks-core .icon { font-size: 28px; margin-bottom: 6px; }
+
+.mks-core h3 {
+  font-size: 14.5px;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.mks-core p {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── SVG Map ── */
+.svg-wrap { margin: 24px 0; text-align: center; }
+
+.svg-wrap svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* ── Hero Brain ── */
+.hero-brain {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.hero-brain svg {
+  max-width: 520px;
+  filter: drop-shadow(0 0 20px rgba(56,189,248,0.15));
+}
+
+/* ── Boundary Table ── */
+.boundary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.boundary-table th, .boundary-table td {
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.boundary-table th {
+  background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(15,29,53,0.8));
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.boundary-table tr:nth-child(even) { background: rgba(56,189,248,0.02); }
+
+.boundary-table tr:hover { background: rgba(56,189,248,0.05); }
+
+/* ── Learning Path ── */
+.learning-path { counter-reset: step; margin: 8px 0 20px; }
+
+.learning-path .step {
+  position: relative;
+  padding: 16px 16px 16px 52px;
+  margin-bottom: 10px;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-left: 3px solid #38bdf8;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  transition: var(--transition);
+}
+
+.learning-path .step:hover {
+  border-color: rgba(56,189,248,0.3);
+  box-shadow: 0 4px 24px rgba(56,189,248,0.08);
+  transform: translateX(4px);
+}
+
+.learning-path .step::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 14px;
+  top: 16px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(56,189,248,0.3);
+}
+
+.learning-path .step h3 {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.learning-path .step p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── Progress Bar ── */
+.progress-bar {
+  height: 6px;
+  background: rgba(56,189,248,0.08);
+  border-radius: 3px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #06b6d4, #34d399);
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(56,189,248,0.3);
+}
+
+/* ── Flip Cards ── */
+.flip-container {
+  perspective: 1200px;
+  max-width: 560px;
+  margin: 24px auto;
+}
+
+.flip-card {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped { transform: rotateY(180deg); }
+
+.flip-front, .flip-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 340px;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  padding: 28px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.flip-back { transform: rotateY(180deg); background: rgba(18,34,58,0.8); }
+
+.flip-card .nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.flip-card .nav button {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.flip-card .nav button:hover {
+  background: rgba(56,189,248,0.08);
+  border-color: rgba(56,189,248,0.25);
+  color: #38bdf8;
+}
+
+.flip-card .mark-btn {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  transition: var(--transition);
+  box-shadow: 0 0 12px rgba(56,189,248,0.2);
+}
+
+.flip-card .mark-btn:hover {
+  box-shadow: 0 0 20px rgba(56,189,248,0.35);
+  transform: translateY(-1px);
+}
+
+.flip-card .counter {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Quiz ── */
+.quiz-timer {
+  font-size: 15px;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.quiz-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+}
+
+.quiz-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.quiz-card .options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quiz-card .option {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-size: 13.5px;
+  transition: var(--transition);
+  color: var(--text-dim);
+  background: rgba(15,29,53,0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.quiz-card .option:hover {
+  background: rgba(56,189,248,0.08);
+  border-color: rgba(56,189,248,0.25);
+}
+
+.quiz-card .option.selected {
+  border-color: #38bdf8;
+  background: rgba(56,189,248,0.12);
+  box-shadow: 0 0 12px rgba(56,189,248,0.1);
+}
+
+.quiz-card .option.correct {
+  border-color: var(--success);
+  background: rgba(52,211,153,0.1);
+}
+
+.quiz-card .option.wrong {
+  border-color: var(--danger);
+  background: rgba(248,113,113,0.08);
+}
+
+.quiz-card .feedback {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  display: none;
+  line-height: 1.65;
+}
+
+.quiz-card .feedback.show { display: block; animation: fadeSlideIn 0.3s ease; }
+
+.quiz-card .feedback.correct {
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.25);
+  color: #a7f3d0;
+}
+
+.quiz-card .feedback.wrong {
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.2);
+  color: #fecaca;
+}
+
+.quiz-card .short-input {
+  width: 100%;
+  min-height: 70px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-size: 13.5px;
+  font-family: inherit;
+  resize: vertical;
+  background: rgba(6,15,31,0.6);
+  color: var(--text);
+  transition: var(--transition);
+}
+
+.quiz-card .short-input:focus {
+  border-color: rgba(56,189,248,0.4);
+  outline: none;
+  box-shadow: 0 0 12px rgba(56,189,248,0.08);
+}
+
+/* ── Exam ── */
+.exam-timer {
+  font-size: 15px;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.exam-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+
+.exam-card h3 {
+  font-size: 14.5px;
+  margin-bottom: 10px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.exam-card .options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exam-card .option {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-dim);
+  background: rgba(15,29,53,0.3);
+  transition: var(--transition);
+}
+
+.exam-card .option:hover {
+  background: rgba(56,189,248,0.06);
+  border-color: rgba(56,189,248,0.2);
+}
+
+.exam-card .option.selected {
+  border-color: #38bdf8;
+  background: rgba(56,189,248,0.12);
+}
+
+.exam-card .option.correct {
+  border-color: var(--success);
+  background: rgba(52,211,153,0.1);
+}
+
+.exam-card .option.wrong {
+  border-color: var(--danger);
+  background: rgba(248,113,113,0.08);
+}
+
+.exam-card .feedback {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  display: none;
+}
+
+.exam-card .feedback.show { display: block; }
+
+.exam-card .short-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  background: rgba(6,15,31,0.5);
+  color: var(--text);
+}
+
+/* ── Stats Grid ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 18px 14px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  border-color: rgba(56,189,248,0.2);
+  box-shadow: 0 0 20px rgba(56,189,248,0.06);
+}
+
+.stat-card .num {
+  font-size: 30px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #38bdf8, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card .label {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ── Mindmap ── */
+.mindmap { padding: 12px 0; }
+
+.mindmap ul {
+  list-style: none;
+  padding-left: 24px;
+}
+
+.mindmap li {
+  position: relative;
+  margin: 3px 0;
+}
+
+.mindmap .tree-toggle {
+  cursor: pointer;
+  color: #38bdf8;
+  font-size: 12px;
+  user-select: none;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.mindmap .tree-toggle:hover { color: var(--accent-light); }
+
+.mindmap .tree-node {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  display: inline-block;
+  transition: var(--transition);
+}
+
+.mindmap .tree-node.root {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(56,189,248,0.25);
+}
+
+.mindmap .tree-node.branch {
+  background: rgba(56,189,248,0.08);
+  color: #38bdf8;
+  font-weight: 600;
+  border: 1px solid rgba(56,189,248,0.15);
+}
+
+.mindmap .tree-node.leaf {
+  background: rgba(15,29,53,0.5);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.mindmap .tree-node.app {
+  background: rgba(52,211,153,0.12);
+  color: #6ee7b7;
+  font-weight: 600;
+  border: 1px solid rgba(52,211,153,0.2);
+}
+
+.mindmap .children {
+  display: none;
+  padding-left: 20px;
+  border-left: 2px solid rgba(56,189,248,0.2);
+  margin: 4px 0 4px 14px;
+}
+
+.mindmap .children.open { display: block; animation: fadeSlideIn 0.3s ease; }
+
+/* ── Socratic ── */
+.socratic-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  transition: var(--transition);
+}
+
+.socratic-card:hover { border-color: rgba(56,189,248,0.18); }
+
+.socratic-q {
+  padding: 14px 18px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: var(--transition);
+}
+
+.socratic-q:hover { background: rgba(251,146,60,0.04); }
+
+.socratic-q .arrow {
+  transition: transform 0.3s ease;
+  font-size: 11px;
+  color: var(--accent-light);
+  opacity: 0.7;
+}
+
+.socratic-q .arrow.open { transform: rotate(180deg); opacity: 1; }
+
+.socratic-a {
+  display: none;
+  padding: 0 18px 16px;
+  border-top: 1px dashed var(--border);
+}
+
+.socratic-a.open { display: block; animation: fadeSlideIn 0.3s ease; }
+
+.socratic-a p {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 12px;
+  line-height: 1.7;
+}
+
+.socratic-a p strong { color: var(--text-dim); font-weight: 600; }
+
+/* ── Case Study ── */
+.case-dim {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-left: 3px solid #38bdf8;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  transition: var(--transition);
+}
+
+.case-dim:hover { border-color: rgba(56,189,248,0.2); }
+
+.case-dim h3 {
+  font-size: 14.5px;
+  color: #38bdf8;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.case-dim p {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── Decision ── */
+.decision-round {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  transition: var(--transition);
+}
+
+.decision-round:hover { border-color: rgba(56,189,248,0.15); }
+
+.decision-round h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.decision-round .scenario {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  background: rgba(56,189,248,0.05);
+  border-left: 3px solid #38bdf8;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  line-height: 1.65;
+}
+
+.decision-round .choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.decision-round .choice {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-size: 13.5px;
+  transition: var(--transition);
+  color: var(--text-dim);
+  background: rgba(15,29,53,0.3);
+}
+
+.decision-round .choice:hover {
+  background: rgba(251,146,60,0.06);
+  border-color: rgba(251,146,60,0.2);
+}
+
+.decision-round .choice.selected {
+  border-color: #38bdf8;
+  background: rgba(56,189,248,0.1);
+  box-shadow: 0 0 10px rgba(56,189,248,0.08);
+}
+
+.decision-round .choice.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.decision-round .feedback {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--radius-xs);
+  font-size: 13.5px;
+  display: none;
+  line-height: 1.65;
+}
+
+.decision-round .feedback.show {
+  display: block;
+  border-left: 4px solid;
+  animation: fadeSlideIn 0.3s ease;
+}
+
+.decision-round .feedback.correct {
+  background: rgba(52,211,153,0.08);
+  border-left-color: var(--success);
+  color: #a7f3d0;
+}
+
+.decision-round .feedback.wrong {
+  background: rgba(248,113,113,0.06);
+  border-left-color: var(--danger);
+  color: #fecaca;
+}
+
+.decision-round .feedback.warning {
+  background: rgba(251,146,60,0.06);
+  border-left-color: var(--warning);
+  color: #fed7aa;
+}
+
+/* ── Buttons ── */
 .btn {
-  display:inline-block;
-  padding:8px 20px;
-  border:none;
-  border-radius:8px;
-  font-size:14px;
-  cursor:pointer;
-  transition:all .2s;
-  font-family:inherit;
+  display: inline-block;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 24px;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
-.btn-primary { background:linear-gradient(135deg,var(--accent),#5a1fc7); color:#fff; }
-.btn-primary:hover { opacity:0.85; box-shadow:0 0 12px rgba(123,47,247,0.3); }
-.btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); }
-.btn-secondary:hover { background:var(--border); color:var(--accent-light); }
-.btn-success { background:var(--success); color:#fff; }
-.btn-success:hover { opacity:0.9; }
-.btn-warning { background:var(--warning); color:#0d1b2a; }
-.btn-warning:hover { opacity:0.9; }
-.btn-sm { padding:5px 12px; font-size:12px; }
 
-/* Responsive */
-@media(max-width:640px) {
-  .top-bar h1 { font-size:16px; }
-  .tab-btn { font-size:12px; padding:4px 10px; }
-  .concept-grid { grid-template-columns:1fr; }
-  .mks-grid { grid-template-columns:1fr; }
-  .stats-grid { grid-template-columns:1fr 1fr; }
+.btn-primary {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(56,189,248,0.2);
 }
-/* SVG */
-svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
-/* Hero brain section */
-.hero-brain { text-align:center; padding:20px 0 10px; }
-.hero-brain svg { max-width:500px; }
-/* Section title accent */
-.tab-content h2 { color:var(--accent-light); }
-.tab-content h2:first-of-type { margin-top:0; }
-/* Deep panel labels for h2 inside tab-content */
-.tab-content > h2 { border-bottom:1px solid var(--border); padding-bottom:6px; }
-/* MKS case card in tab-7 */
-#tab-7 .card[style] { background:rgba(123,47,247,0.06) !important; border-color:var(--accent) !important; }
+
+.btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(56,189,248,0.06);
+  border-color: rgba(56,189,248,0.2);
+  color: #38bdf8;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #34d399, #059669);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(52,211,153,0.2);
+}
+
+.btn-success:hover { opacity: 0.9; }
+
+.btn-warning {
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(251,146,60,0.2);
+}
+
+.btn-warning:hover { opacity: 0.9; }
+
+.btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 20px; }
+
+/* ── Section Headers ── */
+.tab-content > h2 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 17px;
+  margin-top: 24px;
+  margin-bottom: 14px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .top-bar { padding: 12px 16px; }
+  .top-bar h1 { font-size: 16px; }
+  .tab-bar { top: 49px; padding: 6px 10px; }
+  .tab-btn { font-size: 11.5px; padding: 5px 12px; }
+  .tab-content { padding: 16px 12px 40px; }
+  .concept-grid { grid-template-columns: 1fr; }
+  .mks-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .card { padding: 16px; }
+  .hero-brain svg { max-width: 90vw; }
+}
+
+@media (max-width: 480px) {
+  .mks-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .top-bar a { font-size: 11px; padding: 4px 10px; }
+}
+
+/* ── SVG text ── */
+svg text {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ── MKS case card highlight ── */
+#tab-7 .card[style] {
+  background: rgba(56,189,248,0.06) !important;
+  border-color: rgba(56,189,248,0.3) !important;
+}
 </style>
 </head>
 <body>
 
+<!-- Floating particles for abyssal atmosphere -->
+<div class="particle" style="left:8%;width:2px;height:2px;background:rgba(56,189,248,0.5);animation-delay:0s;animation-duration:14s;bottom:0;"></div>
+<div class="particle" style="left:18%;width:3px;height:3px;background:rgba(56,189,248,0.35);animation-delay:2s;animation-duration:16s;bottom:0;"></div>
+<div class="particle" style="left:28%;width:1.5px;height:1.5px;background:rgba(251,146,60,0.4);animation-delay:4s;animation-duration:12s;bottom:0;"></div>
+<div class="particle" style="left:38%;width:2px;height:2px;background:rgba(52,211,153,0.3);animation-delay:1s;animation-duration:18s;bottom:0;"></div>
+<div class="particle" style="left:48%;width:3px;height:3px;background:rgba(56,189,248,0.4);animation-delay:5s;animation-duration:15s;bottom:0;"></div>
+<div class="particle" style="left:58%;width:1.5px;height:1.5px;background:rgba(251,146,60,0.35);animation-delay:3s;animation-duration:13s;bottom:0;"></div>
+<div class="particle" style="left:68%;width:2.5px;height:2.5px;background:rgba(56,189,248,0.3);animation-delay:7s;animation-duration:17s;bottom:0;"></div>
+<div class="particle" style="left:78%;width:2px;height:2px;background:rgba(52,211,153,0.35);animation-delay:6s;animation-duration:11s;bottom:0;"></div>
+<div class="particle" style="left:88%;width:3px;height:3px;background:rgba(56,189,248,0.4);animation-delay:8s;animation-duration:19s;bottom:0;"></div>
+<div class="particle" style="left:94%;width:1.5px;height:1.5px;background:rgba(251,146,60,0.3);animation-delay:9s;animation-duration:14s;bottom:0;"></div>
+
 <!-- Top Bar -->
 <div class="top-bar">
-  <h1>心智、衰老与认知科学</h1>
+  <h1>🧠 心智、衰老与认知科学</h1>
   <a href="index.html">← 返回课程首页</a>
 </div>
 
 <!-- Tab Bar -->
 <div class="tab-bar">
-  <button class="tab-btn active" data-tab="0">知识集总览</button>
-  <button class="tab-btn" data-tab="1">知识卡片</button>
-  <button class="tab-btn" data-tab="2">题库系统</button>
-  <button class="tab-btn" data-tab="3">考试模式</button>
-  <button class="tab-btn" data-tab="4">复习模式</button>
-  <button class="tab-btn" data-tab="5">思维导图</button>
-  <button class="tab-btn" data-tab="6">深度追问</button>
-  <button class="tab-btn" data-tab="7">案例分析</button>
-  <button class="tab-btn" data-tab="8">实战决策</button>
+  <button class="tab-btn active" data-tab="0">🌊 知识集总览</button>
+  <button class="tab-btn" data-tab="1">🃏 知识卡片</button>
+  <button class="tab-btn" data-tab="2">📝 题库系统</button>
+  <button class="tab-btn" data-tab="3">🎯 考试模式</button>
+  <button class="tab-btn" data-tab="4">📊 复习模式</button>
+  <button class="tab-btn" data-tab="5">🗺️ 思维导图</button>
+  <button class="tab-btn" data-tab="6">💬 深度追问</button>
+  <button class="tab-btn" data-tab="7">🔬 案例分析</button>
+  <button class="tab-btn" data-tab="8">⚡ 实战决策</button>
 </div>
 
-<!-- Tab Content -->
+<!-- Tab Content Wrapper -->
 <div class="tab-content">
 
 <!-- ===== TAB 0: 知识集总览 ===== -->
@@ -345,23 +1259,27 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="brainGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#7b2ff7" stop-opacity="0.3"/>
-          <stop offset="100%" stop-color="#7b2ff7" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
         </radialGradient>
         <linearGradient id="hemiL" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#7b2ff7" stop-opacity="0.5"/>
-          <stop offset="100%" stop-color="#5a1fc7" stop-opacity="0.2"/>
+          <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#0284c7" stop-opacity="0.2"/>
         </linearGradient>
         <linearGradient id="hemiR" x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/>
-          <stop offset="100%" stop-color="#7b2ff7" stop-opacity="0.2"/>
+          <stop offset="0%" stop-color="#fb923c" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.2"/>
         </linearGradient>
+        <filter id="glowSvg">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
       <rect width="500" height="220" fill="none"/>
       <!-- Background glow -->
-      <ellipse cx="250" cy="110" rx="220" ry="120" fill="url(#brainGlow)"/>
-      <!-- Neural network connections background -->
-      <g opacity="0.12" stroke="#7b2ff7" stroke-width="0.8">
+      <ellipse cx="250" cy="105" rx="230" ry="125" fill="url(#brainGlow)"/>
+      <!-- Neural connections background -->
+      <g opacity="0.1" stroke="#38bdf8" stroke-width="0.7">
         <line x1="130" y1="40" x2="180" y2="80"/>
         <line x1="130" y1="40" x2="100" y2="95"/>
         <line x1="180" y1="80" x2="140" y2="120"/>
@@ -376,7 +1294,6 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
         <line x1="360" y1="120" x2="330" y2="160"/>
         <line x1="440" y1="140" x2="370" y2="175"/>
         <line x1="330" y1="160" x2="250" y2="175"/>
-        <!-- Cross-hemisphere connections -->
         <line x1="130" y1="175" x2="250" y2="180"/>
         <line x1="370" y1="175" x2="250" y2="180"/>
         <line x1="170" y1="120" x2="330" y2="120"/>
@@ -384,59 +1301,60 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
       </g>
       <!-- Nodes -->
       <g opacity="0.25">
-        <circle cx="130" cy="40" r="3" fill="#7b2ff7"/>
-        <circle cx="180" cy="80" r="2.5" fill="#7b2ff7"/>
-        <circle cx="100" cy="95" r="2.5" fill="#f59e0b"/>
-        <circle cx="140" cy="120" r="3.5" fill="#7b2ff7"/>
-        <circle cx="60" cy="140" r="2" fill="#00b894"/>
-        <circle cx="170" cy="160" r="3" fill="#f59e0b"/>
-        <circle cx="130" cy="175" r="2.5" fill="#7b2ff7"/>
-        <circle cx="370" cy="40" r="3" fill="#f59e0b"/>
-        <circle cx="320" cy="80" r="2.5" fill="#7b2ff7"/>
-        <circle cx="400" cy="95" r="2.5" fill="#7b2ff7"/>
-        <circle cx="360" cy="120" r="3.5" fill="#f59e0b"/>
-        <circle cx="440" cy="140" r="2" fill="#00b894"/>
-        <circle cx="330" cy="160" r="3" fill="#7b2ff7"/>
-        <circle cx="370" cy="175" r="2.5" fill="#f59e0b"/>
-        <circle cx="250" cy="180" r="2" fill="#7b2ff7"/>
+        <circle cx="130" cy="40" r="3" fill="#38bdf8"/>
+        <circle cx="180" cy="80" r="2.5" fill="#38bdf8"/>
+        <circle cx="100" cy="95" r="2.5" fill="#fb923c"/>
+        <circle cx="140" cy="120" r="3.5" fill="#38bdf8"/>
+        <circle cx="60" cy="140" r="2" fill="#34d399"/>
+        <circle cx="170" cy="160" r="3" fill="#fb923c"/>
+        <circle cx="130" cy="175" r="2.5" fill="#38bdf8"/>
+        <circle cx="370" cy="40" r="3" fill="#fb923c"/>
+        <circle cx="320" cy="80" r="2.5" fill="#38bdf8"/>
+        <circle cx="400" cy="95" r="2.5" fill="#38bdf8"/>
+        <circle cx="360" cy="120" r="3.5" fill="#fb923c"/>
+        <circle cx="440" cy="140" r="2" fill="#34d399"/>
+        <circle cx="330" cy="160" r="3" fill="#38bdf8"/>
+        <circle cx="370" cy="175" r="2.5" fill="#fb923c"/>
+        <circle cx="250" cy="180" r="2" fill="#38bdf8"/>
       </g>
-      <!-- Left hemisphere (analytical/rational - purple) -->
+      <!-- Left hemisphere -->
       <path d="M250 15 C180 10, 60 30, 35 95 C15 150, 60 190, 150 200 C210 205, 245 195, 250 195 Z"
-            fill="url(#hemiL)" stroke="#7b2ff7" stroke-width="1.8" opacity="0.7"/>
-      <!-- Right hemisphere (creative/intuitive - amber) -->
+            fill="url(#hemiL)" stroke="#38bdf8" stroke-width="1.8" opacity="0.75"/>
+      <!-- Right hemisphere -->
       <path d="M250 15 C320 10, 440 30, 465 95 C485 150, 440 190, 350 200 C290 205, 255 195, 250 195 Z"
-            fill="url(#hemiR)" stroke="#f59e0b" stroke-width="1.8" opacity="0.7"/>
+            fill="url(#hemiR)" stroke="#fb923c" stroke-width="1.8" opacity="0.75"/>
       <!-- Central fissure -->
-      <line x1="250" y1="18" x2="250" y2="195" stroke="#7b2ff7" stroke-width="1" opacity="0.4"/>
-      <!-- Gyri/sulci lines left -->
-      <path d="M180 40 Q200 70, 150 100" fill="none" stroke="#7b2ff7" stroke-width="0.8" opacity="0.35"/>
-      <path d="M130 60 Q160 100, 90 130" fill="none" stroke="#7b2ff7" stroke-width="0.8" opacity="0.35"/>
-      <path d="M220 70 Q180 130, 130 170" fill="none" stroke="#7b2ff7" stroke-width="0.8" opacity="0.3"/>
-      <!-- Gyri/sulci lines right -->
-      <path d="M320 40 Q300 70, 350 100" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0.35"/>
-      <path d="M370 60 Q340 100, 410 130" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0.35"/>
-      <path d="M280 70 Q320 130, 370 170" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0.3"/>
+      <line x1="250" y1="18" x2="250" y2="195" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+      <!-- Gyri/sulci left -->
+      <path d="M180 40 Q200 70, 150 100" fill="none" stroke="#38bdf8" stroke-width="0.8" opacity="0.35"/>
+      <path d="M130 60 Q160 100, 90 130" fill="none" stroke="#38bdf8" stroke-width="0.8" opacity="0.35"/>
+      <path d="M220 70 Q180 130, 130 170" fill="none" stroke="#38bdf8" stroke-width="0.8" opacity="0.3"/>
+      <!-- Gyri/sulci right -->
+      <path d="M320 40 Q300 70, 350 100" fill="none" stroke="#fb923c" stroke-width="0.8" opacity="0.35"/>
+      <path d="M370 60 Q340 100, 410 130" fill="none" stroke="#fb923c" stroke-width="0.8" opacity="0.35"/>
+      <path d="M280 70 Q320 130, 370 170" fill="none" stroke="#fb923c" stroke-width="0.8" opacity="0.3"/>
       <!-- Labels -->
-      <text x="145" y="225" text-anchor="middle" fill="#8899aa" font-size="10" opacity="0.6">理性·分析</text>
-      <text x="355" y="225" text-anchor="middle" fill="#8899aa" font-size="10" opacity="0.6">直觉·创造</text>
-      <text x="250" y="218" text-anchor="middle" fill="#e0e6ed" font-size="12" font-weight="bold" opacity="0.7">意识之海</text>
+      <text x="145" y="225" text-anchor="middle" fill="#94a3b8" font-size="10" opacity="0.6">理性·分析</text>
+      <text x="355" y="225" text-anchor="middle" fill="#94a3b8" font-size="10" opacity="0.6">直觉·创造</text>
+      <text x="250" y="218" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold" opacity="0.7" filter="url(#glowSvg)">意识之海</text>
     </svg>
   </div>
+
   <div class="core-goal">
-    <h2>理解我们自己的终极问题</h2>
-    <p>掌握心理学的科学化历程、衰老的线粒体理论、自由基假说的兴衰——理解心智与身体的运作机制，学会用科学方法思考"我是谁"这个最古老的哲学问题。卓克说："理解衰老就是理解生命本身，而理解大脑就是理解'理解'本身。"</p>
+    <h2>🌊 理解我们自己的终极命题</h2>
+    <p>以科学之眼潜入意识深海——心理学的科学化如何重塑自我认知？衰老的线粒体理论与自由基假说的兴衰揭示生命运作的物理机制，批判性思维与认知偏见则照亮"我是谁"这个古老追问。卓克说："理解衰老就是理解生命本身，而理解大脑就是理解'理解'本身。"</p>
   </div>
 
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">10个核心概念</h2>
+  <h2>🧬 10个核心概念</h2>
   <div class="concept-grid" id="concept-grid"></div>
 
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">MKS 核心工具箱（4个）</h2>
+  <h2>⭐ MKS 核心工具箱（4个）</h2>
   <div class="mks-grid" id="mks-grid"></div>
 
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">概念关系图</h2>
+  <h2>🔗 概念关系图</h2>
   <div class="svg-wrap" id="svg-map"></div>
 
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">边界知识</h2>
+  <h2>📋 边界知识</h2>
   <table class="boundary-table">
     <thead><tr><th style="width:40px;">#</th><th>知识点</th><th>用途说明</th></tr></thead>
     <tbody>
@@ -455,7 +1373,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     </tbody>
   </table>
 
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">🌊 意识探索·潜水路径</h2>
+  <h2>🌊 意识探索 · 潜水路径</h2>
   <div class="learning-path">
     <div class="step"><h3>🌊 浅层水域 — 心理学科学化 & 双盲实验</h3><p>理解心理学如何从"躺椅推测"变成统计驱动的实验科学，双盲实验为什么是一切"有效"声称的试金石。这是进入意识之海的第一个深度。</p></div>
     <div class="step"><h3>🏊 中层水域 — 衰老的线粒体理论 & 自由基假说的兴衰</h3><p>掌握细胞能量代谢与衰老的关系，见证一个漂亮假说被临床证据推翻的科学过程。从此你开始理解科学的自我纠错能力。</p></div>
@@ -464,18 +1382,18 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     <div class="step"><h3>💎 海底真相 — 认知偏见 & 死亡基因 + 综合应用</h3><p>从演化和认知科学角度理解信仰和死亡的生物学本质，在真实场景中综合运用所有概念。抵达意识之海的最深处。</p></div>
   </div>
 
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">学习进度</h2>
+  <h2>📈 学习进度</h2>
   <div class="card">
-    <p style="font-size:13px;color:var(--text-light);">已掌握概念 <span id="learned-count">0</span>/10</p>
+    <p style="font-size:13px;color:var(--muted);">已掌握概念 <span id="learned-count">0</span>/10</p>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <p style="font-size:12px;color:var(--text-light);margin-top:4px;" id="progress-text">继续努力，学习理解心智与衰老</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:4px;" id="progress-text">潜入意识之海，探索心智与衰老的奥秘</p>
   </div>
 </div>
 
 <!-- ===== TAB 1: 知识卡片 ===== -->
 <div class="tab-panel" id="tab-1">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">知识卡片 · 翻转学习</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
+  <h2>🃏 知识卡片 · 翻转学习</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">点击卡片翻转查看详细内容。标记"已学会"来跟踪进度。</p>
   <div class="flip-container">
     <div class="flip-card" id="flip-card">
       <div class="flip-front" id="flip-front"></div>
@@ -495,15 +1413,15 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
 <!-- ===== TAB 2: 题库系统 ===== -->
 <div class="tab-panel" id="tab-2">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">题库系统</h2>
-  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
-    <button class="btn btn-primary" onclick="startQuiz('random')">随机抽题</button>
-    <button class="btn btn-secondary" onclick="startQuiz('all')">全部题目</button>
-    <button class="btn btn-warning btn-sm" onclick="resetQuiz()">重置</button>
+  <h2>📝 题库系统</h2>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+    <button class="btn btn-primary" onclick="startQuiz('random')">🎲 随机抽题</button>
+    <button class="btn btn-secondary" onclick="startQuiz('all')">📋 全部题目</button>
+    <button class="btn btn-warning btn-sm" onclick="resetQuiz()">🔄 重置</button>
     <span class="quiz-timer" id="quiz-timer"></span>
   </div>
   <div class="card">
-    <p style="font-size:13px;color:var(--text-light);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
+    <p style="font-size:13px;color:var(--muted);" id="quiz-info">包含20道选择题和10道简答题。点击"随机抽题"开始练习。</p>
   </div>
   <div id="quiz-container"></div>
   <div id="quiz-result" style="display:none;" class="card"></div>
@@ -511,9 +1429,9 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
 <!-- ===== TAB 3: 考试模式 ===== -->
 <div class="tab-panel" id="tab-3">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">考试模式</h2>
-  <div style="margin-bottom:14px;">
-    <button class="btn btn-primary" id="start-exam-btn" onclick="startExam()">开始考试</button>
+  <h2>🎯 考试模式</h2>
+  <div style="margin-bottom:14px;display:flex;gap:12px;align-items:center;">
+    <button class="btn btn-primary" id="start-exam-btn" onclick="startExam()">🚀 开始考试</button>
     <span class="exam-timer" id="exam-timer"></span>
   </div>
   <div id="exam-container"></div>
@@ -522,7 +1440,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
 <!-- ===== TAB 4: 复习模式 ===== -->
 <div class="tab-panel" id="tab-4">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">复习模式</h2>
+  <h2>📊 复习模式</h2>
   <div class="stats-grid" id="stats-grid">
     <div class="stat-card"><div class="num" id="stat-learned">0</div><div class="label">已学会概念</div></div>
     <div class="stat-card"><div class="num" id="stat-total">10</div><div class="label">总概念</div></div>
@@ -531,33 +1449,33 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     <div class="stat-card"><div class="num" id="stat-streak">0</div><div class="label">连续答对</div></div>
     <div class="stat-card"><div class="num" id="stat-exam">0</div><div class="label">考试完成</div></div>
   </div>
-  <h3 style="font-size:15px;margin-bottom:8px;color:var(--text);">错题本</h3>
+  <h3 style="font-size:15px;margin-bottom:8px;color:var(--text-dim);">📕 错题本</h3>
   <div id="wrong-book" class="card">
-    <p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
+    <p style="font-size:13px;color:var(--muted);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>
   </div>
-  <h3 style="font-size:15px;margin:12px 0 8px;color:var(--text);">薄弱概念分析</h3>
+  <h3 style="font-size:15px;margin:14px 0 8px;color:var(--text-dim);">📉 薄弱概念分析</h3>
   <div id="weak-concepts" class="card">
-    <p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
+    <p style="font-size:13px;color:var(--muted);">完成更多题目后，系统将自动分析你的薄弱概念。</p>
   </div>
 </div>
 
 <!-- ===== TAB 5: 思维导图 ===== -->
 <div class="tab-panel" id="tab-5">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">思维导图 · 心智、衰老与认知科学</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
+  <h2>🗺️ 思维导图 · 心智、衰老与认知科学</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">点击 + / - 展开或收起分支</p>
   <div class="mindmap" id="mindmap"></div>
 </div>
 
 <!-- ===== TAB 6: 深度追问 ===== -->
 <div class="tab-panel" id="tab-6">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">深度追问 · 苏格拉底式问答</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
+  <h2>💬 深度追问 · 苏格拉底式问答</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">点击问题展开多层次的深度回答，层层递进理解核心概念。</p>
   <div id="socratic-container"></div>
 </div>
 
 <!-- ===== TAB 7: 案例分析 ===== -->
 <div class="tab-panel" id="tab-7">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">案例分析 · 自由基假说：一个被推翻的漂亮理论</h2>
+  <h2>🔬 案例分析 · 自由基假说：一个被推翻的漂亮理论</h2>
   <div class="card">
     <h3>案例背景</h3>
     <p>1950年代，丹汉·哈曼（Denham Harman）提出自由基衰老理论：细胞代谢过程中产生的自由基（带有未配对电子的活性分子）会攻击DNA、蛋白质和细胞膜，造成累积性损伤，最终导致衰老。这个理论非常漂亮——直观（氧化损伤→生锈→衰老）、机制清晰（自由基攻击生物大分子）、预测明确（抗氧化剂应该延缓衰老）。</p>
@@ -579,7 +1497,7 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
     <h3>维度四：今天如何看待衰老研究？</h3>
     <p>尽管自由基假说被推翻，衰老研究并未止步。目前更有希望的衰老研究方向包括：(1)热量限制（caloric restriction）——在不造成营养不良的前提下减少热量摄入，是唯一在各种物种中反复验证能延长寿命的干预手段；(2)线粒体自噬（mitophagy）——清除受损线粒体的质量控制机制；(3)Senolytics——选择性清除衰老细胞（senescent cells）的药物。关键教训：不要被"机制听起来有道理"的理论所迷惑，证据是科学唯一的标准。</p>
   </div>
-  <div class="card" style="background:#e3f2fd;border-color:var(--gold);">
+  <div class="card" style="background:#e3f2fd;border-color:var(--accent-light);">
     <h3>MKS启示</h3>
     <p>自由基假说的命运告诉我们：一个假说可以被逻辑完美、实验支持、深入人心，但最终还是可能被证据推翻。这不是科学的失败，而是科学最大的优点——自我纠错能力。双盲实验是这些错位的唯一天平。当你再看到"抗氧化抗衰老"的广告时，问自己三个问题：有双盲人体试验证据吗？证据的量级和效应大小是多少？研究的资助方是谁？</p>
   </div>
@@ -587,8 +1505,8 @@ svg text { font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
 
 <!-- ===== TAB 8: 实战决策 ===== -->
 <div class="tab-panel" id="tab-8">
-  <h2 style="font-size:17px;margin-bottom:10px;color:var(--text);">实战决策模拟</h2>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px;">模拟三个现实场景，测试你对心智与衰老科学的理解。每个场景有三个选择，点击查看反馈。</p>
+  <h2>⚡ 实战决策模拟</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">模拟三个现实场景，测试你对心智与衰老科学的理解。每个场景有三个选择，点击查看反馈。</p>
   <div id="decision-container"></div>
 </div>
 
@@ -734,15 +1652,15 @@ function renderConcepts(){
 function renderSVGMap(){
   const svg=`<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#f59e0b"/></marker>
-    <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7b2ff7"/></marker>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
+    <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#38bdf8"/></marker>
     <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     <filter id="glowAmber"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
-  <rect width="900" height="620" fill="#0d1b2a" rx="12"/>
+  <rect width="900" height="620" fill="#060f1f" rx="12"/>
 
   <!-- Background neural connections (faint) -->
-  <g opacity="0.06" stroke="#7b2ff7" stroke-width="1">
+  <g opacity="0.05" stroke="#38bdf8" stroke-width="1">
     <line x1="100" y1="50" x2="300" y2="200"/><line x1="300" y1="50" x2="500" y2="250"/>
     <line x1="600" y1="50" x2="400" y2="300"/><line x1="800" y1="80" x2="600" y2="250"/>
     <line x1="150" y1="350" x2="350" y2="500"/><line x1="450" y1="300" x2="650" y2="450"/>
@@ -752,73 +1670,73 @@ function renderSVGMap(){
   </g>
 
   <!-- Edges to MKS nodes (amber) -->
-  <line x1="450" y1="50" x2="150" y2="135" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
-  <line x1="450" y1="50" x2="320" y2="135" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
-  <line x1="450" y1="50" x2="570" y2="135" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
-  <line x1="450" y1="50" x2="740" y2="135" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
+  <line x1="450" y1="50" x2="150" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
+  <line x1="450" y1="50" x2="320" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
+  <line x1="450" y1="50" x2="570" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
+  <line x1="450" y1="50" x2="740" y2="135" stroke="#fb923c" stroke-width="2.5" marker-end="url(#arrow)" filter="url(#glowAmber)"/>
 
-  <!-- Edges to leaf nodes (purple) -->
-  <line x1="150" y1="160" x2="90" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="150" y1="160" x2="210" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="320" y1="160" x2="280" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="320" y1="160" x2="370" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="570" y1="160" x2="520" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="570" y1="160" x2="620" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="740" y1="160" x2="700" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
-  <line x1="740" y1="160" x2="790" y2="265" stroke="#7b2ff7" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <!-- Edges to leaf nodes (purple/cyan) -->
+  <line x1="150" y1="160" x2="90" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="150" y1="160" x2="210" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="320" y1="160" x2="280" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="320" y1="160" x2="370" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="570" y1="160" x2="520" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="570" y1="160" x2="620" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="740" y1="160" x2="700" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
+  <line x1="740" y1="160" x2="790" y2="265" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowP)"/>
 
   <!-- Bottom integration -->
-  <line x1="210" y1="295" x2="280" y2="405" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
-  <line x1="700" y1="295" x2="450" y2="405" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
-  <line x1="790" y1="295" x2="620" y2="405" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
+  <line x1="210" y1="295" x2="280" y2="405" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
+  <line x1="700" y1="295" x2="450" y2="405" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
+  <line x1="790" y1="295" x2="620" y2="405" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3" filter="url(#glowAmber)"/>
 
   <!-- Integration to bottom -->
-  <line x1="300" y1="430" x2="400" y2="535" stroke="#00b894" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
-  <line x1="600" y1="430" x2="500" y2="535" stroke="#00b894" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <line x1="300" y1="430" x2="400" y2="535" stroke="#34d399" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <line x1="600" y1="430" x2="500" y2="535" stroke="#34d399" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
 
   <!-- Root node (central glow) -->
-  <ellipse cx="450" cy="25" rx="140" ry="24" fill="none" stroke="#7b2ff7" stroke-width="1.5" opacity="0.5"/>
-  <ellipse cx="450" cy="25" rx="130" ry="22" fill="#1a1040" stroke="#7b2ff7" stroke-width="2" filter="url(#glow)"/>
-  <text x="450" y="30" text-anchor="middle" fill="#e0e6ed" font-size="15" font-weight="bold">心智、衰老与认知科学</text>
+  <ellipse cx="450" cy="25" rx="140" ry="24" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.5"/>
+  <ellipse cx="450" cy="25" rx="130" ry="22" fill="#0a1628" stroke="#38bdf8" stroke-width="2" filter="url(#glow)"/>
+  <text x="450" y="30" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">心智、衰老与认知科学</text>
 
   <!-- MKS Branch nodes (amber glow) -->
-  <rect x="60" y="135" rx="20" ry="20" width="180" height="40" fill="#162b3f" stroke="#f59e0b" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="150" y="160" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">心理学科学化</text>
-  <rect x="240" y="135" rx="20" ry="20" width="160" height="40" fill="#162b3f" stroke="#f59e0b" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="320" y="160" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">双盲实验</text>
-  <rect x="490" y="135" rx="20" ry="20" width="160" height="40" fill="#162b3f" stroke="#f59e0b" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="570" y="160" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">衰老的线粒体理论</text>
-  <rect x="660" y="135" rx="20" ry="20" width="160" height="40" fill="#162b3f" stroke="#f59e0b" stroke-width="2" filter="url(#glowAmber)"/>
-  <text x="740" y="160" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">自由基假说的兴衰</text>
+  <rect x="60" y="135" rx="20" ry="20" width="180" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
+  <text x="150" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">心理学科学化</text>
+  <rect x="240" y="135" rx="20" ry="20" width="160" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
+  <text x="320" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">双盲实验</text>
+  <rect x="490" y="135" rx="20" ry="20" width="160" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
+  <text x="570" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">衰老的线粒体理论</text>
+  <rect x="660" y="135" rx="20" ry="20" width="160" height="40" fill="#0f1d35" stroke="#fb923c" stroke-width="2" filter="url(#glowAmber)"/>
+  <text x="740" y="160" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="bold">自由基假说的兴衰</text>
 
-  <!-- Leaf nodes (purple glow) -->
-  <rect x="20" y="245" rx="12" ry="12" width="140" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="90" y="268" text-anchor="middle" fill="#8899cc" font-size="12">安慰剂效应</text>
-  <rect x="170" y="245" rx="12" ry="12" width="100" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="220" y="268" text-anchor="middle" fill="#8899cc" font-size="12">脑死亡与生命意义</text>
-  <rect x="230" y="245" rx="12" ry="12" width="100" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="280" y="268" text-anchor="middle" fill="#8899cc" font-size="12">端粒的谎言</text>
-  <rect x="325" y="245" rx="12" ry="12" width="100" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="375" y="268" text-anchor="middle" fill="#8899cc" font-size="12">批判性思维</text>
-  <rect x="475" y="245" rx="12" ry="12" width="100" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="525" y="268" text-anchor="middle" fill="#8899cc" font-size="12">认知偏见</text>
-  <rect x="575" y="245" rx="12" ry="12" width="110" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="630" y="268" text-anchor="middle" fill="#8899cc" font-size="12">死亡基因</text>
-  <rect x="735" y="245" rx="12" ry="12" width="110" height="36" fill="#162b3f" stroke="#7b2ff7" stroke-width="1.5"/>
-  <text x="790" y="268" text-anchor="middle" fill="#8899cc" font-size="12">意识与大脑</text>
+  <!-- Leaf nodes (cyan) -->
+  <rect x="20" y="245" rx="12" ry="12" width="140" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="90" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">安慰剂效应</text>
+  <rect x="170" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="220" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">脑死亡与生命意义</text>
+  <rect x="230" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="280" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">端粒的谎言</text>
+  <rect x="325" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="375" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">批判性思维</text>
+  <rect x="475" y="245" rx="12" ry="12" width="100" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="525" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">认知偏见</text>
+  <rect x="575" y="245" rx="12" ry="12" width="110" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="630" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">死亡基因</text>
+  <rect x="735" y="245" rx="12" ry="12" width="110" height="36" fill="#0f1d35" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="790" y="268" text-anchor="middle" fill="#7dd3fc" font-size="12">意识与大脑</text>
 
   <!-- Application nodes (green) -->
-  <rect x="200" y="385" rx="14" ry="14" width="160" height="36" fill="#00b894"/>
-  <text x="280" y="408" text-anchor="middle" fill="#0d1b2a" font-size="12" font-weight="bold">理解自我·认识衰老</text>
-  <rect x="530" y="385" rx="14" ry="14" width="140" height="36" fill="#00b894"/>
-  <text x="600" y="408" text-anchor="middle" fill="#0d1b2a" font-size="12" font-weight="bold">科学验证·逻辑辨析</text>
+  <rect x="200" y="385" rx="14" ry="14" width="160" height="36" fill="#34d399"/>
+  <text x="280" y="408" text-anchor="middle" fill="#020617" font-size="12" font-weight="bold">理解自我·认识衰老</text>
+  <rect x="530" y="385" rx="14" ry="14" width="140" height="36" fill="#34d399"/>
+  <text x="600" y="408" text-anchor="middle" fill="#020617" font-size="12" font-weight="bold">科学验证·逻辑辨析</text>
 
   <!-- Bottom: Integration -->
-  <ellipse cx="450" cy="545" rx="200" ry="28" fill="#1a1040" stroke="#7b2ff7" stroke-width="2" filter="url(#glow)"/>
-  <text x="450" y="550" text-anchor="middle" fill="#e0e6ed" font-size="15" font-weight="bold">科学地理解"我是谁"（整合层）</text>
+  <ellipse cx="450" cy="545" rx="200" ry="28" fill="#0a1628" stroke="#38bdf8" stroke-width="2" filter="url(#glow)"/>
+  <text x="450" y="550" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">科学地理解"我是谁"（整合层）</text>
 
   <!-- Synapse dots at connections -->
-  <g fill="#7b2ff7" opacity="0.6">
+  <g fill="#38bdf8" opacity="0.6">
     <circle cx="150" cy="260" r="3"/><circle cx="320" cy="260" r="3"/>
     <circle cx="570" cy="260" r="3"/><circle cx="740" cy="260" r="3"/>
     <circle cx="280" cy="400" r="3"/><circle cx="600" cy="400" r="3"/>
@@ -833,7 +1751,7 @@ function updateProgress(){
   document.getElementById('learned-count').textContent=count;
   const pct=Math.round(count/10*100);
   document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('progress-text').textContent=count>=10?'恭喜！你已掌握所有核心概念！':`已掌握 ${count}/10，继续努力！`;
+  document.getElementById('progress-text').textContent=count>=10?'🎉 恭喜！你已掌握所有核心概念！':`已掌握 ${count}/10，继续深潜！`;
   statsData.learned=count;
   saveState();
 }
@@ -845,23 +1763,23 @@ function renderFlipCard(idx){
   const front=document.getElementById('flip-front');
   const back=document.getElementById('flip-back');
   front.innerHTML=`
-    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name}</h3>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:10px;">${c.mks?'MKS核心概念':'核心概念'}</p>
-    <p style="font-size:14px;">${c.def}</p>
-    <div style="margin-top:12px;font-size:13px;color:var(--text-light);text-align:center;">点击"翻转卡片"查看详情</div>
+    <h3 style="font-size:18px;color:#38bdf8;margin-bottom:8px;font-weight:700;">${c.name}</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">${c.mks?'⭐ MKS核心概念':'核心概念'}</p>
+    <p style="font-size:14px;color:var(--text-dim);line-height:1.7;">${c.def}</p>
+    <div style="margin-top:16px;font-size:13px;color:var(--muted);text-align:center;">点击 "翻转卡片" 查看详情</div>
   `;
   back.innerHTML=`
-    <h3 style="font-size:18px;color:var(--accent);margin-bottom:8px;">${c.name} · 深层理解</h3>
-    <p style="font-size:13px;margin-bottom:8px;"><strong>类比：</strong>${c.analogy}</p>
-    <p style="font-size:13px;margin-bottom:8px;"><strong>示例：</strong>${c.example}</p>
-    <p style="font-size:13px;"><strong>反例/边界：</strong>${c.counter}</p>
+    <h3 style="font-size:18px;color:#38bdf8;margin-bottom:8px;font-weight:700;">${c.name} · 深层理解</h3>
+    <p style="font-size:13px;margin-bottom:8px;line-height:1.6;"><strong style="color:#38bdf8;">类比：</strong>${c.analogy}</p>
+    <p style="font-size:13px;margin-bottom:8px;line-height:1.6;"><strong style="color:#38bdf8;">示例：</strong>${c.example}</p>
+    <p style="font-size:13px;line-height:1.6;"><strong style="color:#fb923c;">反例/边界：</strong>${c.counter}</p>
   `;
   document.getElementById('flip-counter').textContent=`${idx+1}/${CONCEPTS.length}`;
   document.getElementById('flip-card').classList.remove('flipped');
   const btn=document.getElementById('mark-learned-btn');
   if(learnedSet.has(c.id)){
     btn.textContent='✓ 已学会';
-    btn.style.background='var(--success)';
+    btn.style.background='linear-gradient(135deg, #34d399, #059669)';
   } else {
     btn.textContent='✓ 标记已学会';
     btn.style.background='';
@@ -930,7 +1848,7 @@ function renderQuizQuestion(){
   if(q.type==='choice'){
     card.innerHTML=`
       <h3>第 ${idx+1}/${qs.length} 题 (选择题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">${q.q}</p>
       <div class="options" id="quiz-options">
         ${q.options.map((opt,i)=>`<div class="option" data-idx="${i}" onclick="selectChoice(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
       </div>
@@ -939,7 +1857,7 @@ function renderQuizQuestion(){
   } else {
     card.innerHTML=`
       <h3>第 ${idx+1}/${qs.length} 题 (简答题)</h3>
-      <p style="font-size:14px;margin-bottom:10px;">${q.q}</p>
+      <p style="font-size:14px;margin-bottom:10px;color:var(--text-dim);">${q.q}</p>
       <textarea class="short-input" id="short-input" placeholder="输入你的回答..."></textarea>
       <div style="margin-top:8px;">
         <button class="btn btn-primary btn-sm" onclick="submitShortAnswer()">提交</button>
@@ -975,11 +1893,11 @@ function submitChoice(){
     quizState.correct++;
     quizState.streak++;
     fb.className='feedback show correct';
-    fb.innerHTML=`<p>回答正确！${q.explain||''}</p>`;
+    fb.innerHTML=`<p>✅ 回答正确！${q.explain||''}</p>`;
   } else {
     quizState.streak=0;
     fb.className='feedback show wrong';
-    fb.innerHTML=`<p>回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}</p>`;
+    fb.innerHTML=`<p>❌ 回答错误。正确答案是 ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain||''}</p>`;
     addWrongBook(q.q,q.options[q.answer],q.explain||'');
   }
   quizState.answered=true;
@@ -997,7 +1915,7 @@ function submitShortAnswer(){
   quizState.total++;
   quizState.correct++;
   fb.className='feedback show correct';
-  fb.innerHTML=`<p>已记录你的回答。</p><p><strong>参考答案：</strong>${q.ans||''}</p>`;
+  fb.innerHTML=`<p>📝 已记录你的回答。</p><p><strong>参考答案：</strong>${q.ans||''}</p>`;
   quizState.answered=true;
   setTimeout(()=>{
     quizState.index++;
@@ -1012,7 +1930,7 @@ function finishQuiz(){
   el.style.display='block';
   const pct=quizState.total>0?Math.round(quizState.correct/quizState.total*100):0;
   el.innerHTML=`
-    <h3 style="color:var(--accent);margin-bottom:8px;">答题完成！</h3>
+    <h3 style="color:#38bdf8;margin-bottom:8px;">🎯 答题完成！</h3>
     <p>正确：${quizState.correct} / ${quizState.total}</p>
     <p>正确率：${pct}%</p>
     <p>用时：${Math.round((Date.now()-quizState.startTime)/1000)}秒</p>
@@ -1075,14 +1993,14 @@ function renderExam(){
     card.className='exam-card';
     if(q.type==='choice'){
       card.innerHTML=`
-        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(选择题)</span></h3>
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--muted);">(选择题)</span></h3>
         <div class="options" id="exam-opt-${i}">
           ${q.options.map((opt,j)=>`<div class="option" data-exam="${i}" data-idx="${j}" onclick="selectExamChoice(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</div>`).join('')}
         </div>
       `;
     } else {
       card.innerHTML=`
-        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--text-light);">(简答题)</span></h3>
+        <h3>${i+1}. ${q.q} <span style="font-weight:normal;font-size:12px;color:var(--muted);">(简答题)</span></h3>
         <textarea class="short-input" data-exam="${i}" placeholder="输入你的回答..." oninput="examState.answers[${i}]=this.value"></textarea>
       `;
     }
@@ -1116,7 +2034,7 @@ function startExamTimer(){
     const s=remaining%60;
     document.getElementById('exam-timer').textContent=`⏱ 剩余 ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     if(remaining<60){
-      document.getElementById('exam-timer').style.color='var(--accent)';
+      document.getElementById('exam-timer').style.color='#fb923c';
     }
   };
   update();
@@ -1149,7 +2067,7 @@ function submitExam(){
   const pct=total>0?Math.round(correct/total*100):0;
   el.style.display='block';
   let html=`
-    <h3 style="color:var(--accent);margin-bottom:8px;">考试结果</h3>
+    <h3 style="color:#38bdf8;margin-bottom:8px;">📋 考试结果</h3>
     <p><strong>选择题：</strong>${correct} / ${total} 正确 (${pct}%)</p>
     <p><strong>简答题：</strong>已答 ${results.filter(r=>r.type==='short'&&r.userAns!=='未作答').length} / ${results.filter(r=>r.type==='short').length}</p>
     <p><strong>用时：</strong>${Math.round((Date.now()-examState.startTime)/1000)}秒</p>
@@ -1158,11 +2076,11 @@ function submitExam(){
   `;
   results.forEach(r=>{
     if(r.type==='choice'){
-      const icon=r.isCorrect?'✓':'✗';
-      html+=`<div style="padding:8px;margin-bottom:6px;background:${r.isCorrect?'#e8f5e9':'#ffebee'};border-radius:6px;font-size:13px;">
+      const icon=r.isCorrect?'✅':'❌';
+      html+=`<div style="padding:10px;margin-bottom:6px;background:${r.isCorrect?'rgba(52,211,153,0.08)':'rgba(248,113,113,0.08)'};border-radius:8px;font-size:13px;">
         <p><strong>${r.question}</strong></p>
         <p>${icon} 你的答案：${r.userAns} ${r.isCorrect?'':'| 正确答案：'+r.correctAns}</p>
-        ${!r.isCorrect?`<p style="color:var(--text-light);">${r.explain}</p>`:''}
+        ${!r.isCorrect?`<p style="color:var(--muted);">${r.explain}</p>`:''}
       </div>`;
     }
   });
@@ -1184,14 +2102,14 @@ function updateReviewStats(){
 
   const wb=document.getElementById('wrong-book');
   if(wrongBook.length===0){
-    wb.innerHTML='<p style="font-size:13px;color:var(--text-light);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
+    wb.innerHTML='<p style="font-size:13px;color:var(--muted);">暂无错题记录。完成题目后，做错的题目会出现在这里。</p>';
   } else {
     wb.innerHTML=wrongBook.slice(0,10).map(item=>
-      `<div style="padding:8px;margin-bottom:6px;background:#ffebee;border-radius:6px;font-size:13px;">
+      `<div style="padding:10px;margin-bottom:6px;background:rgba(248,113,113,0.06);border-radius:8px;font-size:13px;">
         <p><strong>${item.q}</strong></p>
-        <p>正确答案：${item.correctAns}</p>
-        ${item.explain?`<p style="color:var(--text-light);">${item.explain}</p>`:''}
-        <p style="font-size:11px;color:var(--text-light);">${item.time}</p>
+        <p style="color:#34d399;">正确答案：${item.correctAns}</p>
+        ${item.explain?`<p style="color:var(--muted);">${item.explain}</p>`:''}
+        <p style="font-size:11px;color:var(--muted);">${item.time}</p>
       </div>`
     ).join('');
   }
@@ -1211,12 +2129,12 @@ function updateReviewStats(){
   });
   const weakList=Object.entries(weakMap).sort((a,b)=>b[1]-a[1]);
   if(weakList.length===0){
-    weak.innerHTML='<p style="font-size:13px;color:var(--text-light);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
+    weak.innerHTML='<p style="font-size:13px;color:var(--muted);">完成更多题目后，系统将自动分析你的薄弱概念。</p>';
   } else {
     weak.innerHTML=weakList.map(([name,count])=>
-      `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:#e3f2fd;border-radius:6px;font-size:13px;">
+      `<div style="display:flex;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:rgba(56,189,248,0.06);border-radius:8px;font-size:13px;">
         <span>${name}</span>
-        <span style="color:var(--accent);font-weight:700;">错${count}题</span>
+        <span style="color:#38bdf8;font-weight:700;">错${count}题</span>
       </div>`
     ).join('');
   }
@@ -1371,7 +2289,7 @@ function selectDecision(ri,ci){
     if(i===ci) el.classList.add('selected');
   });
   fb.className=`feedback show ${choice.type}`;
-  const icon=choice.type==='correct'?'✓':choice.type==='wrong'?'✗':'!';
+  const icon=choice.type==='correct'?'✓':choice.type==='wrong'?'✗':'⚠';
   fb.innerHTML=`${icon} ${choice.feedback}`;
 }
 
