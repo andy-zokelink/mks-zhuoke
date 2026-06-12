@@ -958,22 +958,27 @@ body::before {
 
 /* ===== CASE STUDY ===== */
 .case-dim {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 18px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   color: var(--text);
   box-shadow: var(--shadow-sm);
   border-left: 5px solid var(--accent);
   transition: all .25s;
+  writing-mode: horizontal-tb;
+  word-break: normal;
 }
 .case-dim:hover {
   border-left-color: var(--primary);
   box-shadow: var(--shadow-md);
 }
-.case-dim h3 { font-size: 15px; color: var(--accent); margin-bottom: 8px; font-weight: 700; }
-.case-dim p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+.case-dim h3 { font-size: 15px; color: var(--accent); margin-bottom: 0; font-weight: 700; writing-mode: horizontal-tb; word-break: normal; }
+.case-dim p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; writing-mode: horizontal-tb; word-break: normal; }
 
 /* ===== DECISION ROUND ===== */
 .decision-round {
@@ -1585,7 +1590,7 @@ function renderConcepts(){
 }
 
 function renderSVGMap(){
-  const svg=`<svg viewBox="0 0 900 650" xmlns="http://www.w3.org/2000/svg">
+  const svg=`<svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <filter id="cardShadow" x="-5%" y="-5%" width="115%" height="120%">
       <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#1a3a5c" flood-opacity="0.15"/>
@@ -1594,8 +1599,8 @@ function renderSVGMap(){
       <feGaussianBlur stdDeviation="3" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="radarBg" cx="50%" cy="45%">
-      <stop offset="0%" stop-color="#0d7377" stop-opacity="0.08"/>
+    <radialGradient id="radarBg" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#0d7377" stop-opacity="0.06"/>
       <stop offset="60%" stop-color="#0d7377" stop-opacity="0.02"/>
       <stop offset="100%" stop-color="#0d7377" stop-opacity="0"/>
     </radialGradient>
@@ -1603,193 +1608,273 @@ function renderSVGMap(){
       <stop offset="0%" stop-color="#d97706"/>
       <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="100%" stop-color="#2c5f8a"/>
+    </linearGradient>
+    <linearGradient id="infoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dc2626" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.08"/>
+    </linearGradient>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#dc2626" opacity="0.6"/>
+    </marker>
+    <marker id="arrowTeal" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#0d7377" opacity="0.6"/>
+    </marker>
+    <marker id="arrowGold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#d97706" opacity="0.6"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#059669" opacity="0.6"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2563eb" opacity="0.5"/>
+    </marker>
   </defs>
 
   <!-- Background -->
-  <rect width="900" height="650" fill="#f8fafc" rx="8"/>
-  <rect width="900" height="650" fill="url(#radarBg)" rx="8"/>
+  <rect width="900" height="680" fill="#f8fafc" rx="8"/>
+  <rect width="900" height="680" fill="url(#radarBg)" rx="8"/>
 
-  <!-- Radar scope at center-left -->
-  <g transform="translate(210,280)">
-    <!-- Outer rings -->
-    <circle cx="0" cy="0" r="140" fill="none" stroke="#cbd5e1" stroke-width="1.5" opacity="0.6"/>
-    <circle cx="0" cy="0" r="110" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="8 5" opacity="0.4"/>
-    <circle cx="0" cy="0" r="75" fill="none" stroke="#0d7377" stroke-width="1" opacity="0.5"/>
-    <circle cx="0" cy="0" r="40" fill="none" stroke="#0d7377" stroke-width="1.5" opacity="0.7"/>
+  <!-- ===== LAYER 0: 信息洪流源 (top-left) ===== -->
+  <g transform="translate(20,20)">
+    <rect x="0" y="0" rx="10" width="150" height="52" fill="url(#infoGrad)" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.8"/>
+    <text x="75" y="20" text-anchor="middle" fill="#dc2626" font-size="13" font-weight="bold">🌊 信息洪流</text>
+    <text x="75" y="38" text-anchor="middle" fill="#64748b" font-size="10">Information Flood</text>
+    <line x1="-18" y1="26" x2="-2" y2="26" stroke="#dc2626" stroke-width="1.8" opacity="0.5" marker-end="url(#arrowRed)"/>
+  </g>
+
+  <!-- ===== LAYER 1: 雷达显示屏 (center-left) ===== -->
+  <g transform="translate(210,315)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="160" fill="none" stroke="#e2e8f0" stroke-width="1" opacity="0.25"/>
+    <!-- Radar rings -->
+    <circle cx="0" cy="0" r="140" fill="none" stroke="#cbd5e1" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="0" cy="0" r="110" fill="none" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="10 6" opacity="0.35"/>
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#0d7377" stroke-width="1" opacity="0.4"/>
+    <circle cx="0" cy="0" r="45" fill="none" stroke="#0d7377" stroke-width="1.2" opacity="0.55"/>
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#0d7377" stroke-width="1.5" opacity="0.65"/>
+    <!-- Center pulse -->
     <circle cx="0" cy="0" r="8" fill="#0d7377" opacity="0.9">
-      <animate attributeName="r" values="8;14;8" dur="2.5s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="8;15;8" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.9;0.35;0.9" dur="2.5s" repeatCount="indefinite"/>
     </circle>
-
     <!-- Sweep line -->
-    <line x1="0" y1="0" x2="0" y2="-140" stroke="#0d7377" stroke-width="2" opacity="0.4">
-      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite"/>
+    <line x1="0" y1="0" x2="0" y2="-140" stroke="#0d7377" stroke-width="2.5" opacity="0.35">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="7s" repeatCount="indefinite"/>
     </line>
-
-    <!-- Signal dots (detected truth) -->
-    <circle cx="35" cy="-55" r="4" fill="#059669" opacity="0.8">
-      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.2s" repeatCount="indefinite"/>
+    <!-- Signal dots: truth detected (green/blue) -->
+    <circle cx="40" cy="-60" r="4.5" fill="#059669" opacity="0.85">
+      <animate attributeName="opacity" values="0.85;0.15;0.85" dur="2.2s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="-50" cy="-30" r="3.5" fill="#2563eb" opacity="0.7">
-      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite"/>
+    <circle cx="-55" cy="-35" r="4" fill="#2563eb" opacity="0.7">
+      <animate attributeName="opacity" values="0.35;0.9;0.35" dur="3.2s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="-30" cy="65" r="3" fill="#059669" opacity="0.7">
-      <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.8s" repeatCount="indefinite"/>
+    <circle cx="-35" cy="70" r="3.5" fill="#059669" opacity="0.75">
+      <animate attributeName="opacity" values="0.9;0.25;0.9" dur="2.8s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="55" cy="40" r="3.5" fill="#2563eb" opacity="0.8">
-      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.4s" repeatCount="indefinite"/>
+    <circle cx="60" cy="45" r="4" fill="#2563eb" opacity="0.8">
+      <animate attributeName="opacity" values="0.25;0.85;0.25" dur="2.5s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="10" cy="-95" r="2.5" fill="#0d7377" opacity="0.6">
-      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="1.8s" repeatCount="indefinite"/>
+    <circle cx="15" cy="-100" r="3" fill="#0d7377" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="1.9s" repeatCount="indefinite"/>
     </circle>
-
-    <!-- Noise dots (filtered out) -->
-    <circle cx="120" cy="-80" r="2.5" fill="#dc2626" opacity="0.25">
-      <animate attributeName="opacity" values="0.25;0.05;0.25" dur="1.5s" repeatCount="indefinite"/>
+    <circle cx="-85" cy="15" r="3.5" fill="#059669" opacity="0.65">
+      <animate attributeName="opacity" values="0.4;0.85;0.4" dur="3s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="-110" cy="70" r="2" fill="#dc2626" opacity="0.2"/>
-    <circle cx="90" cy="100" r="1.8" fill="#dc2626" opacity="0.18"/>
-    <circle cx="-90" cy="-100" r="2.2" fill="#dc2626" opacity="0.15"/>
-    <circle cx="130" cy="20" r="1.5" fill="#dc2626" opacity="0.12"/>
-    <circle cx="-130" cy="-30" r="1.8" fill="#dc2626" opacity="0.1"/>
-
-    <!-- Crosshair -->
-    <line x1="-150" y1="0" x2="150" y2="0" stroke="#e2e8f0" stroke-width="0.5" opacity="0.5"/>
-    <line x1="0" y1="-150" x2="0" y2="150" stroke="#e2e8f0" stroke-width="0.5" opacity="0.5"/>
-
+    <!-- Noise dots: pseudo-science (red, dim) -->
+    <circle cx="125" cy="-85" r="2.5" fill="#dc2626" opacity="0.2">
+      <animate attributeName="opacity" values="0.2;0.04;0.2" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="-115" cy="75" r="2" fill="#dc2626" opacity="0.18"/>
+    <circle cx="95" cy="105" r="1.8" fill="#dc2626" opacity="0.15"/>
+    <circle cx="-95" cy="-105" r="2.2" fill="#dc2626" opacity="0.12"/>
+    <circle cx="135" cy="15" r="1.6" fill="#dc2626" opacity="0.1"/>
+    <circle cx="-135" cy="-35" r="1.8" fill="#dc2626" opacity="0.08"/>
+    <circle cx="80" cy="-35" r="1.5" fill="#dc2626" opacity="0.13"/>
+    <circle cx="-55" cy="100" r="1.7" fill="#dc2626" opacity="0.11"/>
+    <!-- Crosshair grid -->
+    <line x1="-155" y1="0" x2="155" y2="0" stroke="#cbd5e1" stroke-width="0.4" opacity="0.4"/>
+    <line x1="0" y1="-155" x2="0" y2="155" stroke="#cbd5e1" stroke-width="0.4" opacity="0.4"/>
+    <line x1="-110" y1="-110" x2="110" y2="110" stroke="#e2e8f0" stroke-width="0.3" opacity="0.2"/>
+    <line x1="110" y1="-110" x2="-110" y2="110" stroke="#e2e8f0" stroke-width="0.3" opacity="0.2"/>
     <!-- Labels -->
-    <text x="0" y="110" text-anchor="middle" fill="#0d7377" font-size="12" font-weight="700" letter-spacing="2">科学思维</text>
-    <text x="0" y="126" text-anchor="middle" fill="#94a3b8" font-size="10" letter-spacing="1">RADAR SCOPE</text>
-
-    <!-- Signal legend arrows pointing right -->
-    <text x="155" y="-10" fill="#059669" font-size="10">信号 ✓</text>
-    <text x="155" y="12" fill="#dc2626" font-size="10" opacity="0.6">噪声 ✗</text>
+    <text x="0" y="118" text-anchor="middle" fill="#0d7377" font-size="12" font-weight="700" letter-spacing="2">科学思维雷达</text>
+    <text x="0" y="135" text-anchor="middle" fill="#94a3b8" font-size="9" letter-spacing="1.5">SIGNAL · NOISE · FILTER</text>
+    <!-- Legend -->
+    <rect x="158" y="-18" width="10" height="10" rx="2" fill="#059669" opacity="0.8"/>
+    <text x="174" y="-8" fill="#059669" font-size="9" opacity="0.8">信号/真相</text>
+    <rect x="158" y="4" width="10" height="10" rx="2" fill="#dc2626" opacity="0.25"/>
+    <text x="174" y="14" fill="#dc2626" font-size="9" opacity="0.5">噪声/伪科学</text>
   </g>
 
-  <!-- ===== CONCEPT NODES (right side) ===== -->
+  <!-- 信息洪流 → 雷达 -->
+  <path d="M170 55 C185 55, 195 160, 200 215" fill="none" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.25" marker-end="url(#arrowRed)"/>
 
-  <!-- Row 1: Title -->
-  <g transform="translate(370,25)">
-    <rect x="0" y="0" rx="10" width="500" height="44" fill="#1a3a5c" filter="url(#cardShadow)"/>
-    <text x="250" y="28" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">在信息洪流中，让科学思维成为你的雷达</text>
-  </g>
-
-  <!-- Row 2: MKS Core (4 detectors) -->
-  <!-- MKS01 -->
-  <g transform="translate(400,95)">
-    <rect x="0" y="0" rx="7" width="230" height="40" fill="#fff" stroke="#d97706" stroke-width="2" filter="url(#cardShadow)"/>
-    <rect x="0" y="0" rx="7" width="6" height="40" fill="url(#mksGrad)"/>
-    <text x="16" y="17" fill="#d97706" font-size="10" font-weight="bold">MKS 01</text>
-    <text x="120" y="26" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">伪科学识别法</text>
-  </g>
-  <!-- MKS02 -->
-  <g transform="translate(645,95)">
-    <rect x="0" y="0" rx="7" width="230" height="40" fill="#fff" stroke="#d97706" stroke-width="2" filter="url(#cardShadow)"/>
-    <rect x="0" y="0" rx="7" width="6" height="40" fill="url(#mksGrad)"/>
-    <text x="16" y="17" fill="#d97706" font-size="10" font-weight="bold">MKS 02</text>
-    <text x="120" y="26" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">民科心理画像</text>
+  <!-- ===== LAYER 2: 主标题栏 ===== -->
+  <g transform="translate(370,18)">
+    <rect x="0" y="0" rx="10" width="510" height="46" fill="url(#titleGrad)" filter="url(#cardShadow)"/>
+    <text x="255" y="29" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">在信息洪流中，让科学思维成为你的雷达</text>
   </g>
 
-  <!-- Row 3: MKS Core continued -->
-  <g transform="translate(400,150)">
-    <rect x="0" y="0" rx="7" width="230" height="40" fill="#fff" stroke="#d97706" stroke-width="2" filter="url(#cardShadow)"/>
-    <rect x="0" y="0" rx="7" width="6" height="40" fill="url(#mksGrad)"/>
-    <text x="16" y="17" fill="#d97706" font-size="10" font-weight="bold">MKS 03</text>
-    <text x="120" y="26" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">泡沫科学</text>
-  </g>
-  <g transform="translate(645,150)">
-    <rect x="0" y="0" rx="7" width="230" height="40" fill="#fff" stroke="#d97706" stroke-width="2" filter="url(#cardShadow)"/>
-    <rect x="0" y="0" rx="7" width="6" height="40" fill="url(#mksGrad)"/>
-    <text x="16" y="17" fill="#d97706" font-size="10" font-weight="bold">MKS 04</text>
-    <text x="120" y="26" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">严谨测量</text>
+  <!-- 信息洪流 → Title -->
+  <path d="M170 72 C250 55, 280 41, 370 41" fill="none" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.25"/>
+
+  <!-- ===== LAYER 3: MKS核心检测引擎 ===== -->
+  <g transform="translate(370,80)">
+    <rect x="0" y="0" rx="5" width="20" height="114" fill="#d97706" opacity="0.08"/>
+    <text x="10" y="63" text-anchor="middle" fill="#d97706" font-size="10" font-weight="bold" transform="rotate(-90,10,63)">MKS 检测引擎</text>
   </g>
 
-  <!-- Connection lines: radar → MKS cards -->
-  <line x1="380" y1="280" x2="515" y2="115" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-  <line x1="380" y1="280" x2="760" y2="115" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-  <line x1="380" y1="280" x2="515" y2="170" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-  <line x1="380" y1="280" x2="760" y2="170" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-
-  <!-- Row 4: Analysis tools (6 secondary concepts) -->
-  <!-- Col 1 -->
-  <g transform="translate(400,220)">
-    <rect x="0" y="0" rx="6" width="155" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
-    <circle cx="15" cy="17" r="4" fill="#2563eb"/>
-    <text x="28" y="22" fill="#1e293b" font-size="12" font-weight="600">科学共识</text>
+  <!-- MKS 01: 伪科学识别 -->
+  <g transform="translate(395,88)">
+    <rect x="0" y="0" rx="8" width="235" height="48" fill="#fff" stroke="#d97706" stroke-width="2.2" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" rx="8" width="7" height="48" fill="url(#mksGrad)"/>
+    <text x="18" y="20" fill="#d97706" font-size="10" font-weight="bold">MKS 01</text>
+    <text x="128" y="22" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">伪科学识别法</text>
+    <text x="128" y="39" text-anchor="middle" fill="#94a3b8" font-size="9">三大特征 · 可证伪性 · 术语辨析</text>
   </g>
-  <g transform="translate(565,220)">
-    <rect x="0" y="0" rx="6" width="155" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
-    <circle cx="15" cy="17" r="4" fill="#2563eb"/>
-    <text x="28" y="22" fill="#1e293b" font-size="12" font-weight="600">媒体科学素养</text>
+  <!-- MKS 02: 民科画像 -->
+  <g transform="translate(645,88)">
+    <rect x="0" y="0" rx="8" width="235" height="48" fill="#fff" stroke="#d97706" stroke-width="2.2" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" rx="8" width="7" height="48" fill="url(#mksGrad)"/>
+    <text x="18" y="20" fill="#d97706" font-size="10" font-weight="bold">MKS 02</text>
+    <text x="128" y="22" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">民科心理画像</text>
+    <text x="128" y="39" text-anchor="middle" fill="#94a3b8" font-size="9">方法论缺失 · 迫害叙事 · 拒绝同行评议</text>
   </g>
-  <g transform="translate(730,220)">
-    <rect x="0" y="0" rx="6" width="145" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
-    <circle cx="15" cy="17" r="4" fill="#2563eb"/>
-    <text x="28" y="22" fill="#1e293b" font-size="12" font-weight="600">神药陷阱</text>
+  <!-- MKS 03: 泡沫破除 -->
+  <g transform="translate(395,148)">
+    <rect x="0" y="0" rx="8" width="235" height="48" fill="#fff" stroke="#d97706" stroke-width="2.2" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" rx="8" width="7" height="48" fill="url(#mksGrad)"/>
+    <text x="18" y="20" fill="#d97706" font-size="10" font-weight="bold">MKS 03</text>
+    <text x="128" y="22" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">泡沫破除</text>
+    <text x="128" y="39" text-anchor="middle" fill="#94a3b8" font-size="9">好泡沫vs坏泡沫 · 效应大小 · 过度神化</text>
   </g>
-
-  <!-- Col 2 -->
-  <g transform="translate(400,268)">
-    <rect x="0" y="0" rx="6" width="155" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
-    <circle cx="15" cy="17" r="4" fill="#2563eb"/>
-    <text x="28" y="22" fill="#1e293b" font-size="12" font-weight="600">相关≠因果</text>
-  </g>
-  <g transform="translate(565,268)">
-    <rect x="0" y="0" rx="6" width="155" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
-    <circle cx="15" cy="17" r="4" fill="#2563eb"/>
-    <text x="28" y="22" fill="#1e293b" font-size="12" font-weight="600">双盲实验</text>
-  </g>
-  <g transform="translate(730,268)">
-    <rect x="0" y="0" rx="6" width="145" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
-    <circle cx="15" cy="17" r="4" fill="#2563eb"/>
-    <text x="28" y="22" fill="#1e293b" font-size="12" font-weight="600">谬误辨析</text>
+  <!-- MKS 04: 严谨测量 -->
+  <g transform="translate(645,148)">
+    <rect x="0" y="0" rx="8" width="235" height="48" fill="#fff" stroke="#d97706" stroke-width="2.2" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" rx="8" width="7" height="48" fill="url(#mksGrad)"/>
+    <text x="18" y="20" fill="#d97706" font-size="10" font-weight="bold">MKS 04</text>
+    <text x="128" y="22" text-anchor="middle" fill="#1a3a5c" font-size="14" font-weight="bold">严谨测量</text>
+    <text x="128" y="39" text-anchor="middle" fill="#94a3b8" font-size="9">标准化 · 可复现 · 从米原器到光速定义</text>
   </g>
 
-  <!-- Connection: MKS → secondary -->
-  <line x1="515" y1="135" x2="477" y2="220" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
-  <line x1="760" y1="135" x2="642" y2="220" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
-  <line x1="515" y1="190" x2="477" y2="268" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
-  <line x1="760" y1="190" x2="642" y2="268" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <!-- Radar → MKS -->
+  <path d="M375 315 L395 112" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.35" marker-end="url(#arrowGold)"/>
+  <path d="M375 315 L645 112" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.35" marker-end="url(#arrowGold)"/>
+  <path d="M375 315 L395 172" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.35" marker-end="url(#arrowGold)"/>
+  <path d="M375 315 L645 172" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.35" marker-end="url(#arrowGold)"/>
 
-  <!-- Row 5: Application nodes -->
-  <g transform="translate(420,340)">
-    <rect x="0" y="0" rx="7" width="200" height="38" fill="#059669" filter="url(#cardShadow)"/>
-    <circle cx="20" cy="19" r="5" fill="#047857"/>
-    <text x="100" y="24" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">识别 · 辟谣 · 判断</text>
-  </g>
-  <g transform="translate(650,340)">
-    <rect x="0" y="0" rx="7" width="200" height="38" fill="#059669" filter="url(#cardShadow)"/>
-    <circle cx="20" cy="19" r="5" fill="#047857"/>
-    <text x="100" y="24" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">验证 · 实验 · 逻辑</text>
-  </g>
+  <!-- Cross-connections between MKS -->
+  <line x1="630" y1="112" x2="645" y2="112" stroke="#d97706" stroke-width="0.8" opacity="0.2"/>
+  <line x1="630" y1="172" x2="645" y2="172" stroke="#d97706" stroke-width="0.8" opacity="0.2"/>
+  <line x1="512" y1="136" x2="512" y2="148" stroke="#d97706" stroke-width="0.8" opacity="0.2"/>
+  <line x1="762" y1="136" x2="762" y2="148" stroke="#d97706" stroke-width="0.8" opacity="0.2"/>
 
-  <!-- Connection: secondary → application -->
-  <line x1="477" y1="254" x2="520" y2="340" stroke="#059669" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.5"/>
-  <line x1="642" y1="254" x2="520" y2="340" stroke="#059669" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.5"/>
-  <line x1="642" y1="302" x2="750" y2="340" stroke="#059669" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.5"/>
-  <line x1="802" y1="302" x2="750" y2="340" stroke="#059669" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.5"/>
-
-  <!-- Row 6: Integration -->
-  <g transform="translate(370,430)">
-    <rect x="0" y="0" rx="10" width="500" height="46" fill="#d97706" filter="url(#cardShadow)"/>
-    <text x="250" y="29" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">🔍 信息鉴别综合素养</text>
+  <!-- ===== LAYER 4: 分析工具箱 ===== -->
+  <g transform="translate(370,222)">
+    <rect x="0" y="0" rx="5" width="20" height="114" fill="#2563eb" opacity="0.06"/>
+    <text x="10" y="63" text-anchor="middle" fill="#2563eb" font-size="10" font-weight="bold" transform="rotate(-90,10,63)">分析工具</text>
   </g>
 
-  <!-- Connection: application → integration -->
-  <line x1="520" y1="378" x2="550" y2="430" stroke="#d97706" stroke-width="2" stroke-dasharray="6 5" opacity="0.6"/>
-  <line x1="750" y1="378" x2="690" y2="430" stroke="#d97706" stroke-width="2" stroke-dasharray="6 5" opacity="0.6"/>
-
-  <!-- Annotations -->
-  <g transform="translate(400,500)">
-    <rect x="0" y="0" rx="6" width="470" height="55" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
-    <text x="235" y="18" text-anchor="middle" fill="#1a3a5c" font-size="11" font-weight="bold">核心逻辑：信息洪流 → 雷达扫描 → 识别信号（真相） vs 过滤噪声（伪科学）</text>
-    <text x="235" y="36" text-anchor="middle" fill="#64748b" font-size="10">MKS四大核心（伪科学识别·民科画像·泡沫科学·严谨测量）构成识别引擎</text>
-    <text x="235" y="50" text-anchor="middle" fill="#64748b" font-size="10">五大分析工具提供验证链路 → 最终形成信息鉴别综合素养</text>
+  <g transform="translate(395,225)">
+    <rect x="0" y="0" rx="6" width="148" height="36" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="16" cy="18" r="4.5" fill="#2563eb"/>
+    <text x="30" y="23" fill="#1e293b" font-size="12" font-weight="600">科学共识</text>
+  </g>
+  <g transform="translate(553,225)">
+    <rect x="0" y="0" width="148" height="36" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="16" cy="18" r="4.5" fill="#2563eb"/>
+    <text x="30" y="23" fill="#1e293b" font-size="12" font-weight="600">媒体科学素养</text>
+  </g>
+  <g transform="translate(711,225)">
+    <rect x="0" y="0" width="152" height="36" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="16" cy="18" r="4.5" fill="#2563eb"/>
+    <text x="30" y="23" fill="#1e293b" font-size="12" font-weight="600">神药陷阱</text>
   </g>
 
-  <!-- Decorative: subtle corner elements -->
-  <circle cx="30" cy="30" r="20" fill="none" stroke="#e2e8f0" stroke-width="1" opacity="0.3"/>
-  <circle cx="870" cy="620" r="20" fill="none" stroke="#e2e8f0" stroke-width="1" opacity="0.3"/>
+  <g transform="translate(395,271)">
+    <rect x="0" y="0" rx="6" width="148" height="36" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="16" cy="18" r="4.5" fill="#2563eb"/>
+    <text x="30" y="23" fill="#1e293b" font-size="12" font-weight="600">相关≠因果</text>
+  </g>
+  <g transform="translate(553,271)">
+    <rect x="0" y="0" width="148" height="36" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="16" cy="18" r="4.5" fill="#2563eb"/>
+    <text x="30" y="23" fill="#1e293b" font-size="12" font-weight="600">双盲实验</text>
+  </g>
+  <g transform="translate(711,271)">
+    <rect x="0" y="0" width="152" height="36" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="16" cy="18" r="4.5" fill="#2563eb"/>
+    <text x="30" y="23" fill="#1e293b" font-size="12" font-weight="600">谬误辨析</text>
+  </g>
+
+  <!-- MKS → Tools -->
+  <line x1="512" y1="136" x2="469" y2="225" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3" marker-end="url(#arrowBlue)"/>
+  <line x1="512" y1="136" x2="627" y2="225" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <line x1="762" y1="136" x2="787" y2="225" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3" marker-end="url(#arrowBlue)"/>
+  <line x1="512" y1="196" x2="469" y2="271" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <line x1="512" y1="196" x2="627" y2="271" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3" marker-end="url(#arrowBlue)"/>
+  <line x1="762" y1="196" x2="787" y2="271" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+
+  <!-- Cross-connections between tools -->
+  <line x1="543" y1="243" x2="553" y2="243" stroke="#cbd5e1" stroke-width="0.6" opacity="0.25"/>
+  <line x1="701" y1="243" x2="711" y2="243" stroke="#cbd5e1" stroke-width="0.6" opacity="0.25"/>
+  <line x1="469" y1="289" x2="469" y2="271" stroke="#cbd5e1" stroke-width="0.6" opacity="0.25"/>
+  <line x1="627" y1="289" x2="627" y2="271" stroke="#cbd5e1" stroke-width="0.6" opacity="0.25"/>
+  <line x1="787" y1="289" x2="787" y2="271" stroke="#cbd5e1" stroke-width="0.6" opacity="0.25"/>
+
+  <!-- ===== LAYER 5: 应用输出 ===== -->
+  <g transform="translate(410,340)">
+    <rect x="0" y="0" rx="8" width="195" height="48" fill="#059669" filter="url(#cardShadow)"/>
+    <circle cx="22" cy="24" r="6" fill="#047857"/>
+    <text x="38" y="20" fill="#fff" font-size="13" font-weight="bold">识别 · 辟谣 · 判断</text>
+    <text x="38" y="36" fill="rgba(255,255,255,0.7)" font-size="10">识别伪科学 · 破除谣言 · 理性判断</text>
+  </g>
+  <g transform="translate(620,340)">
+    <rect x="0" y="0" rx="8" width="195" height="48" fill="#2563eb" filter="url(#cardShadow)"/>
+    <circle cx="22" cy="24" r="6" fill="#1d4ed8"/>
+    <text x="38" y="20" fill="#fff" font-size="13" font-weight="bold">验证 · 实验 · 逻辑</text>
+    <text x="38" y="36" fill="rgba(255,255,255,0.7)" font-size="10">设计实验 · 验证假设 · 逻辑推理</text>
+  </g>
+
+  <!-- Tools → Application (fan-in) -->
+  <path d="M469 307 L507 340" fill="none" stroke="#059669" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.4" marker-end="url(#arrowGreen)"/>
+  <path d="M627 307 L507 340" fill="none" stroke="#059669" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.4"/>
+  <path d="M787 307 L507 340" fill="none" stroke="#059669" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.4"/>
+  <path d="M469 307 L717 340" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.35"/>
+  <path d="M627 307 L717 340" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.35"/>
+  <path d="M787 307 L717 340" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.35" marker-end="url(#arrowBlue)"/>
+
+  <!-- ===== LAYER 6: 综合素养输出 ===== -->
+  <g transform="translate(370,415)">
+    <rect x="0" y="0" rx="10" width="510" height="52" fill="#d97706" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" rx="10" width="10" height="52" fill="#b45309"/>
+    <text x="255" y="23" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">🔍 信息鉴别综合素养</text>
+    <text x="255" y="43" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="11">伪科学识别 · 民科辨识 · 泡沫破除 · 谬误辨析 · 严谨测量 · 信息鉴别</text>
+  </g>
+
+  <!-- Application → Integration -->
+  <path d="M507 388 L550 415" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 5" opacity="0.5" marker-end="url(#arrowGold)"/>
+  <path d="M717 388 L670 415" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 5" opacity="0.5" marker-end="url(#arrowGold)"/>
+
+  <!-- ===== LAYER 7: 注解说明 ===== -->
+  <g transform="translate(370,490)">
+    <rect x="0" y="0" rx="7" width="510" height="70" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.2"/>
+    <rect x="0" y="0" rx="7" width="4" height="70" fill="#0d7377" opacity="0.2"/>
+    <text x="20" y="20" fill="#1a3a5c" font-size="12" font-weight="bold">📡 概念关系图谱 · 数据流</text>
+    <text x="20" y="39" fill="#64748b" font-size="10.5">信息洪流 → 雷达扫描（信号/噪声分离）→ MKS检测引擎（伪科学识别·民科画像·泡沫破除·严谨测量）</text>
+    <text x="20" y="54" fill="#64748b" font-size="10.5">→ 六维分析工具（共识/素养/陷阱/因果/实验/谬误）→ 应用输出（识别辟谣 + 验证实验）→ 信息鉴别综合素养</text>
+    <text x="20" y="68" fill="#94a3b8" font-size="9.5">核心隐喻：科学思维 = 信息海洋中的雷达系统 — 过滤噪声、锁定信号、交叉验证、形成判断</text>
+  </g>
+
+  <!-- Decorative corner elements -->
+  <circle cx="30" cy="655" r="22" fill="none" stroke="#e2e8f0" stroke-width="1" opacity="0.2"/>
+  <circle cx="30" cy="655" r="13" fill="none" stroke="#e2e8f0" stroke-width="0.7" opacity="0.15"/>
+  <circle cx="875" cy="655" r="22" fill="none" stroke="#e2e8f0" stroke-width="1" opacity="0.2"/>
+  <circle cx="875" cy="655" r="13" fill="none" stroke="#e2e8f0" stroke-width="0.7" opacity="0.15"/>
+  <circle cx="875" cy="30" r="16" fill="none" stroke="#e2e8f0" stroke-width="0.7" opacity="0.15"/>
 </svg>`;
   document.getElementById('svg-map').innerHTML=svg;
 }
