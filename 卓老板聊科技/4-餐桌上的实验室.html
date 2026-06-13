@@ -5,562 +5,251 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>餐桌上的实验室 — 卓老板聊科技 MKS</title>
 <style>
-:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+/* ===== 餐桌上的实验室 — 设计语言 =====
+ * 本质洞察：把厨房变成实验室——日常食物背后有惊人的科学
+ * 情感基调：恍然大悟 — 读者再也不能用原来的眼光看冰箱
+ * 叙事锚点：厨房实验台 — 每件日常食物都是科学实验对象
+ * 视觉策略：琥珀焦糖色+奶油白 — 温暖食欲感中藏着科学冰冷
+ * 差异化：暖琥珀厨房色调，不同于宇宙深酒红/生命有机绿/身体陶土色
+ */
+:root { --bg:#fef9f2; --card:#fffcf7; --accent:#b85a1a; --accent2:#d4844a; --gold:#c47a20; --gold-light:#e8c090; --success:#5a9e6f; --text:#2a1f14; --text-light:#5c4030; --border:#e0c8a8; --shadow:0 2px 14px rgba(42,31,20,.06); --radius:12px; --nav-bg:#2a1a0a; --nav-text:#fef9f2; --kitchen-bg:rgba(184,90,26,.04); }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
-.container { max-width:960px; margin:0 auto; padding:0 16px; }
-.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
-.top-bar .title { font-size:1.05rem; font-weight:600; }
-.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
-.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
-.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
-.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
+body { font-family:'Noto Serif SC','Source Han Serif SC',Georgia,serif; background:var(--bg); color:var(--text); line-height:1.8; padding-top:56px; font-size:16px; }
+.container { max-width:980px; margin:0 auto; padding:0 20px; }
+.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; box-shadow:0 2px 12px rgba(0,0,0,.3); }
+.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; }
+.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.85rem; padding:6px 16px; border:1px solid rgba(255,255,255,.25); border-radius:20px; font-family:'Noto Sans SC',sans-serif; transition:all .2s; }
+.top-bar .home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--accent2); color:var(--gold-light); }
+.tab-bar { display:flex; flex-wrap:wrap; gap:6px; padding:14px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:24px; }
+.tab-btn { padding:8px 16px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .25s; white-space:nowrap; font-family:'Noto Sans SC',sans-serif; }
+.tab-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--kitchen-bg); }
 .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel { display:none; animation:fadeIn .4s ease; }
 .tab-panel.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
-.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
-.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
-.skeleton-list { list-style:none; padding:0; }
-.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
-.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
-.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
-.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
-.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+.hero { position:relative; overflow:hidden; background:linear-gradient(175deg,#fef9f2 0%,#f5e4c8 35%,#e0c090 60%,#b85a1a 82%,#2a1a0a 100%); border-radius:var(--radius); margin-bottom:32px; min-height:370px; display:flex; align-items:center; justify-content:center; }
+.hero-svg { width:100%; max-width:900px; height:auto; display:block; }
+.hero-caption { position:absolute; bottom:36px; left:0; right:0; text-align:center; color:#fef9f2; font-size:1.15rem; letter-spacing:2px; font-family:'Noto Serif SC',serif; opacity:.85; text-shadow:0 1px 8px rgba(0,0,0,.5); }
+.narrative-block { background:linear-gradient(135deg,#fffcf8,#fef6ec); border-left:4px solid var(--accent); padding:28px 32px; margin:28px 0; border-radius:0 var(--radius) var(--radius) 0; box-shadow:var(--shadow); }
+.narrative-block .lead { font-size:1.2rem; color:var(--accent); font-weight:600; margin-bottom:12px; }
+.narrative-block p { color:var(--text-light); font-size:.95rem; line-height:1.9; margin-bottom:8px; }
+
+/* Kitchen-item cards — unique layout for this topic */
+.kitchen-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0; }
+.kitchen-item { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); transition:all .3s; }
+.kitchen-item:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(42,31,20,.1); }
+.kitchen-item .ki-emoji { font-size:2rem; margin-bottom:8px; }
+.kitchen-item h3 { color:var(--accent); font-size:1rem; margin-bottom:8px; font-family:'Noto Sans SC',sans-serif; }
+.kitchen-item .ki-myth { background:linear-gradient(135deg,#fef0e8,#fef9f2); padding:10px; border-radius:6px; font-size:.82rem; margin-bottom:8px; color:var(--text-light); }
+.kitchen-item .ki-fact { font-size:.85rem; color:var(--text); line-height:1.7; }
+.ki-myth::before { content:'🔊 '; font-size:.75rem; }
+.ki-fact::before { content:'🔬 '; font-size:.75rem; }
+
+.article-excerpt { background:var(--card); border-radius:var(--radius); padding:18px; margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border); }
+.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
+.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; }
+
+.svg-stage { background:var(--card); border-radius:var(--radius); padding:20px; margin:28px 0; box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
+.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
+.socratic-panel { background:linear-gradient(135deg,#fef6ec,#fef9f2); border:1px dashed var(--accent); border-radius:var(--radius); padding:24px; margin:20px 0; }
+.socratic-panel .q-a { margin-bottom:20px; }
+.socratic-panel .question { font-weight:600; color:var(--accent); margin-bottom:6px; font-size:.95rem; }
+.socratic-panel .question::before { content:'问：'; color:var(--accent2); }
+.socratic-panel .answer { color:var(--text-light); font-size:.9rem; padding-left:16px; border-left:2px solid var(--gold-light); }
+.socratic-panel .answer::before { content:'答：'; color:var(--success); font-weight:600; }
+.mindmap { margin:16px 0; }
+.mindmap .node { margin-bottom:6px; }
+.mindmap .node-header { display:flex; align-items:center; gap:8px; cursor:pointer; padding:10px 14px; background:var(--card); border-radius:8px; border:1px solid var(--border); transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
+.mindmap .node-header:hover { border-color:var(--accent); background:var(--kitchen-bg); }
+.mindmap .node-header .toggle { font-size:.7rem; transition:transform .3s; color:var(--accent); width:16px; text-align:center; }
+.mindmap .node-header .toggle.open { transform:rotate(90deg); }
+.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
+.mindmap .node-body.open { display:block; }
+.mindmap .leaf { padding:6px 12px; margin:4px 0; font-size:.85rem; color:var(--text-light); border-left:2px solid var(--gold-light); }
+.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
+.boundary-table th { background:var(--accent); color:#fff; padding:12px 16px; text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500; }
+.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
 .boundary-table tr:nth-child(even) td { background:var(--card); }
-.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
-.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
-.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
-.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
-.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
-.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
-.flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
-.flip-front { background:var(--card); }
-.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
-.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
-.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
+.level-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; }
+.level-core { background:var(--accent); color:#fff; }
+.level-understand { background:var(--gold); color:#fff; }
+.level-know { background:#ddd; color:#555; }
+.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
+.q-option { display:block; width:100%; text-align:left; padding:10px 16px; margin:6px 0; border:1px solid var(--border); border-radius:8px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.88rem; font-family:inherit; }
+.q-option:hover { border-color:var(--accent); background:var(--kitchen-bg); }
+.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
+.q-option.wrong { background:#f8d7da; border-color:var(--accent); color:#721c24; }
+.q-option:disabled { cursor:default; }
+.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
+.sa-input { width:100%; min-height:100px; padding:14px; font-family:inherit; font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg); resize:vertical; }
+.sa-reveal { background:var(--card); padding:16px; border-radius:var(--radius); margin-top:10px; display:none; border:1px dashed var(--accent); font-size:.9rem; line-height:1.8; }
+.decision-scene { background:linear-gradient(135deg,#fef6ec,#f7e8d0); border-radius:var(--radius); padding:24px; margin:20px 0; border:1px solid var(--gold-light); }
+.decision-scene h3 { color:var(--accent); margin-bottom:12px; }
+.decision-scene .scenario { background:var(--card); padding:18px; border-radius:8px; margin-bottom:14px; border-left:3px solid var(--accent); }
+.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-scene .choice-btn { text-align:left; padding:10px 16px; border:1px solid var(--border); border-radius:8px; background:var(--card); cursor:pointer; transition:all .2s; font-family:inherit; font-size:.88rem; }
+.decision-scene .choice-btn:hover { border-color:var(--accent); background:var(--kitchen-bg); }
+.score-bar { text-align:center; padding:16px; font-size:1.1rem; font-weight:600; color:var(--accent); }
+.progress-bar { width:100%; height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .5s ease; }
+.section-title { font-size:1.25rem; color:var(--accent); margin:32px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border); font-family:'Noto Sans SC',sans-serif; letter-spacing:1px; }
+.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
 .btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
 .btn-outline:hover { background:var(--accent); color:#fff; }
-.btn-success { background:var(--success); color:#fff; }
-.btn-sm { padding:5px 12px; font-size:.8rem; }
-.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
-.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
-.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
-.q-option:hover { border-color:var(--accent); background:#fff5f5; }
-.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
-.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
-.q-option:disabled { cursor:default; }
-.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
-.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
-.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
-.mindmap { padding:10px 0; }
-.mindmap .node { margin:4px 0 4px 20px; }
-.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
-.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
-.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
-.mindmap .node-title.open::before { transform:rotate(90deg); }
-.mindmap .node-body { display:none; }
-.mindmap .node-body.open { display:block; }
-.inquiry-item { margin-bottom:12px; }
-.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
-.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
-.inquiry-q.open::after { content:' \25B2'; }
-.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.inquiry-a.open { display:block; }
-.case-item { margin-bottom:14px; }
-.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.case-title:hover { border-color:var(--accent); background:#fff5f5; }
-.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
-.case-title.open::after { content:' \25B2'; }
-.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.case-body.open { display:block; }
-.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.d-scenario { margin-bottom:16px; }
-.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
-.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
-.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
-.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
-.svg-wrap svg { max-width:100%; height:auto; }
-.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
-.toast.show { opacity:1; }
-@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
+.footer { text-align:center; padding:32px 20px; margin-top:40px; border-top:1px solid var(--border); color:var(--text-light); font-size:.82rem; }
+.footer a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
-<div class="top-bar"><span class="title">🍽️ 餐桌上的实验室</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+
+<nav class="top-bar"><span class="title">🍽️ 餐桌上的实验室</span><a href="index.html" class="home-btn">← 返回课程首页</a></nav>
 <div class="container">
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
-  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
-  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
-  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
-  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
-  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
-  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
-  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
-  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+
+<div class="hero">
+<svg class="hero-svg" viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="kg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9f2" stop-opacity=".8"/><stop offset="100%" stop-color="#e0c090" stop-opacity="0"/></radialGradient></defs>
+  <rect width="900" height="370" fill="none" rx="12"/>
+  <!-- Kitchen table -->
+  <g opacity=".5"><ellipse cx="450" cy="240" rx="300" ry="80" fill="none" stroke="#c47a20" stroke-width="1"/></g>
+  <!-- Items on table as scientific specimens -->
+  <g filter="url(#gl4)" opacity=".6">
+    <circle cx="250" cy="180" r="25" fill="url(#kg)" stroke="#b85a1a" stroke-width="1"/><text x="250" y="184" fill="#b85a1a" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">糖</text>
+    <circle cx="450" cy="160" r="25" fill="url(#kg)" stroke="#b85a1a" stroke-width="1"/><text x="450" y="164" fill="#b85a1a" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">脂肪</text>
+    <circle cx="650" cy="180" r="25" fill="url(#kg)" stroke="#b85a1a" stroke-width="1"/><text x="650" y="184" fill="#b85a1a" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">代糖</text>
+    <circle cx="350" cy="120" r="20" fill="url(#kg)" stroke="#b85a1a" stroke-width="1"/><text x="350" y="124" fill="#b85a1a" font-size="8" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">维生素</text>
+    <circle cx="550" cy="120" r="20" fill="url(#kg)" stroke="#b85a1a" stroke-width="1"/><text x="550" y="124" fill="#b85a1a" font-size="8" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">添加剂</text>
+  </g>
+  <!-- Molecular structures hint -->
+  <g stroke="#c47a20" stroke-width=".4" opacity=".3"><line x1="250" y1="205" x2="350" y2="140"/><line x1="450" y1="185" x2="350" y2="140"/><line x1="450" y1="185" x2="550" y2="140"/><line x1="650" y1="205" x2="550" y2="140"/></g>
+  <text x="450" y="28" fill="#fef9f2" font-size="15" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="6" opacity=".8">餐桌上的实验室</text>
+  <text x="450" y="360" fill="#fef9f2" font-size="11" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="3" opacity=".7">你冰箱里的每一样东西，都可以是一道科学题</text>
+</svg>
+<div class="hero-caption">红糖补血？燕窝美容？让我们打开冰箱，用科学重新审视</div>
 </div>
-<div class="tab-panel active" id="panel0">
-  <div class="section-title">核心目标</div>
-  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
-  <div class="section-title">核心概念</div>
-  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
-<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
-<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
-<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
-<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
-<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
-<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
-<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
-<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
-<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
-  <div class="section-title">最小知识集（骨架中的骨架）</div>
-  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
-<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
-<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
-<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
-  <div class="section-title">概念关系图</div>
-  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
- viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
-<title>G</title>
-<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
-<g id="clust1" class="cluster">
-<title>cluster_legend</title>
-<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
-<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
-</g>
-<!-- root -->
-<g id="node1" class="node">
-<title>root</title>
-<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
-<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">餐桌上的实验室——物理定律的层级结构</text>
-</g>
-<!-- qm -->
-<g id="node2" class="node">
-<title>qm</title>
-<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
-<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
-</g>
-<!-- root&#45;&gt;qm -->
-<g id="edge1" class="edge">
-<title>root&#45;&gt;qm</title>
-<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
-<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
-<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- gr -->
-<g id="node3" class="node">
-<title>gr</title>
-<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
-<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
-</g>
-<!-- root&#45;&gt;gr -->
-<g id="edge2" class="edge">
-<title>root&#45;&gt;gr</title>
-<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
-<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
-<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- th -->
-<g id="node4" class="node">
-<title>th</title>
-<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
-<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
-</g>
-<!-- root&#45;&gt;th -->
-<g id="edge3" class="edge">
-<title>root&#45;&gt;th</title>
-<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
-<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
-<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- u -->
-<g id="node5" class="node">
-<title>u</title>
-<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
-<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
-</g>
-<!-- qm&#45;&gt;u -->
-<g id="edge4" class="edge">
-<title>qm&#45;&gt;u</title>
-<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
-<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
-<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
-</g>
-<!-- w -->
-<g id="node6" class="node">
-<title>w</title>
-<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
-<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
-</g>
-<!-- qm&#45;&gt;w -->
-<g id="edge5" class="edge">
-<title>qm&#45;&gt;w</title>
-<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
-<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
-<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
-</g>
-<!-- v -->
-<g id="node7" class="node">
-<title>v</title>
-<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
-<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
-</g>
-<!-- qm&#45;&gt;v -->
-<g id="edge6" class="edge">
-<title>qm&#45;&gt;v</title>
-<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
-<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
-<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
-</g>
-<!-- sy -->
-<g id="node8" class="node">
-<title>sy</title>
-<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
-<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
-</g>
-<!-- qm&#45;&gt;sy -->
-<g id="edge7" class="edge">
-<title>qm&#45;&gt;sy</title>
-<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
-<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
-<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
-</g>
-<!-- st -->
-<g id="node9" class="node">
-<title>st</title>
-<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
-<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
-</g>
-<!-- gr&#45;&gt;st -->
-<g id="edge8" class="edge">
-<title>gr&#45;&gt;st</title>
-<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
-<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
-<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
-</g>
-<!-- bh -->
-<g id="node10" class="node">
-<title>bh</title>
-<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
-<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
-</g>
-<!-- gr&#45;&gt;bh -->
-<g id="edge9" class="edge">
-<title>gr&#45;&gt;bh</title>
-<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
-<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
-<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
-</g>
-<!-- co -->
-<g id="node11" class="node">
-<title>co</title>
-<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
-<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
-</g>
-<!-- gr&#45;&gt;co -->
-<g id="edge10" class="edge">
-<title>gr&#45;&gt;co</title>
-<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
-<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
-<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
-</g>
-<!-- en -->
-<g id="node12" class="node">
-<title>en</title>
-<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
-<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
-</g>
-<!-- th&#45;&gt;en -->
-<g id="edge11" class="edge">
-<title>th&#45;&gt;en</title>
-<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
-<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
-<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
-</g>
-<!-- u&#45;&gt;v -->
-<g id="edge14" class="edge">
-<title>u&#45;&gt;v</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
-<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
-<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
-</g>
-<!-- ob -->
-<g id="node19" class="node">
-<title>ob</title>
-<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
-</g>
-<!-- w&#45;&gt;ob -->
-<g id="edge20" class="edge">
-<title>w&#45;&gt;ob</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
-<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
-<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
-</g>
-<!-- hr -->
-<g id="node14" class="node">
-<title>hr</title>
-<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
-<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
-<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
-<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
-</g>
-<!-- v&#45;&gt;hr -->
-<g id="edge12" class="edge">
-<title>v&#45;&gt;hr</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
-<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
-<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
-</g>
-<!-- sm -->
-<g id="node16" class="node">
-<title>sm</title>
-<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
-<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
-<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
-<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
-</g>
-<!-- sy&#45;&gt;sm -->
-<g id="edge16" class="edge">
-<title>sy&#45;&gt;sm</title>
-<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
-<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
-<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
-</g>
-<!-- gp -->
-<g id="node15" class="node">
-<title>gp</title>
-<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
-<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
-<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
-<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
-</g>
-<!-- st&#45;&gt;gp -->
-<g id="edge15" class="edge">
-<title>st&#45;&gt;gp</title>
-<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
-<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
-<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
-</g>
-<!-- bh&#45;&gt;hr -->
-<g id="edge13" class="edge">
-<title>bh&#45;&gt;hr</title>
-<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
-<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
-<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
-</g>
-<!-- nu -->
-<g id="node13" class="node">
-<title>nu</title>
-<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
-<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
-</g>
-<!-- en&#45;&gt;nu -->
-<g id="edge18" class="edge">
-<title>en&#45;&gt;nu</title>
-<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
-<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
-<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
-</g>
-<!-- it -->
-<g id="node17" class="node">
-<title>it</title>
-<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
-<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
-<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
-<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
-</g>
-<!-- en&#45;&gt;it -->
-<g id="edge17" class="edge">
-<title>en&#45;&gt;it</title>
-<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
-<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
-<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
-</g>
-<!-- se -->
-<g id="node18" class="node">
-<title>se</title>
-<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
-<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
-<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
-<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
-</g>
-<!-- nu&#45;&gt;se -->
-<g id="edge19" class="edge">
-<title>nu&#45;&gt;se</title>
-<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
-<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
-<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
-</g>
-<!-- hr&#45;&gt;bh -->
-<g id="edge21" class="edge">
-<title>hr&#45;&gt;bh</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
-<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
-<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
-<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
-</g>
-<!-- l1 -->
-<g id="node20" class="node">
-<title>l1</title>
-<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
-<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
-</g>
-<!-- l2 -->
-<g id="node21" class="node">
-<title>l2</title>
-<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
-<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
-</g>
-<!-- l1&#45;&gt;l2 -->
-<!-- l3 -->
-<g id="node22" class="node">
-<title>l3</title>
-<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
-<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
-</g>
-<!-- l2&#45;&gt;l3 -->
-<!-- l4 -->
-<g id="node23" class="node">
-<title>l4</title>
-<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
-<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
-<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
-<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
-</g>
-<!-- l3&#45;&gt;l4 -->
-<!-- l5 -->
-<g id="node24" class="node">
-<title>l5</title>
-<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
-<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
-</g>
-</g>
-</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
-  <div class="section-title">边界知识表</div>
-  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
-  <div class="section-title">学习路径</div>
-  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
-<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
-<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
-<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
-<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
-  <div class="section-title">学习进度</div>
-  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="t0">🔬 打开冰箱</button>
+  <button class="tab-btn" data-tab="t1">🧪 核心概念</button>
+  <button class="tab-btn" data-tab="t2">🗺️ 食物关系图</button>
+  <button class="tab-btn" data-tab="t3">❌ 餐桌迷思</button>
+  <button class="tab-btn" data-tab="t4">🔬 深度追问</button>
+  <button class="tab-btn" data-tab="t5">🧭 思维导图</button>
+  <button class="tab-btn" data-tab="t6">⚠️ 知识边界</button>
+  <button class="tab-btn" data-tab="t7">📝 题库系统</button>
+  <button class="tab-btn" data-tab="t8">🎯 购物决策</button>
 </div>
-<div class="tab-panel" id="panel1">
-  <div class="section-title">知识卡片</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
-  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
-  <div class="flip-nav">
-    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
-    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
-    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
-  </div>
-  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+
+<div class="tab-panel active" id="t0">
+  <div class="narrative-block"><div class="lead">你的厨房，是一个等待被探索的实验室</div><p>卓老板用22篇文章，把餐桌变成了实验台。糖为什么危险？红糖能补血吗？燕窝的营养价值有多高？品酒行家真能分辨红酒好坏吗？每个问题都从你厨房里的东西出发，用科学给出让你"原来如此"的答案。</p></div>
+  <div class="section-title">从卓老板的厨房里，找出几样东西看看</div>
+  <div class="article-excerpt"><div class="excerpt-title">《危险的糖》</div><p>世界卫生组织建议：每天游离糖摄入不超过总热量的10%，建议低于5%。游离糖包括蛋糕、饮料、巧克力、炒菜放的糖、蜂蜜、甚至鲜榨果汁中的糖。对男性来说，5%的建议值就是每天不超过27.5克——大约是一罐可乐的量。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《吃燕窝对身体有益吗？》</div><p>燕窝的主要成分是蛋白质和碳水化合物。从营养学角度看，吃一个鸡蛋喝一杯牛奶与吃燕窝没有本质区别。燕窝的高价来自于采集难度和文化传统——不是来自于独特的营养价值。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《就算是再牛的品酒行家，也分辨不出红酒的好坏》</div><p>多项盲品测试表明：即便是专业的品酒师，在看不到酒标的情况下也无法可靠地分辨"好酒"和"普通酒"。价格标签和品牌预期对味觉体验的影响远比我们以为的要大。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《可口可乐的配方很神秘吗？》</div><p>可口可乐的配方从化学上来说并不神秘——现代分析技术可以精确测定其中的每种成分。所谓"神秘配方"更多是一种营销策略。非常可乐味道不同是因为配方不同，而不是因为"破解不了可口可乐的秘方"。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《红糖补血吗？》</div><p>红糖的铁含量极低，且是非血红素铁——人体吸收率远低于动物性食物中的血红素铁。红糖补不了血，只能补糖和热量。"红糖补血"是一个基于颜色的朴素联想——红糖是红色的，血也是红色的。</p></div>
 </div>
-<div class="tab-panel" id="panel2">
-  <div class="section-title">题库系统</div>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
-    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
-  </div>
-  <div id="quizContainer"></div>
-  <div id="staticQuiz" style="display:none"></div>
-</div>
-<div class="tab-panel" id="panel3">
-  <div class="section-title">考试模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
-    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
-  </div>
-  <div id="examContainer"></div>
-  <div id="examResult" style="display:none;text-align:center;padding:20px;">
-    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
-    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
-    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+
+<div class="tab-panel" id="t1">
+  <div class="section-title">十个核心概念 — 打开你的食物科学工具箱</div>
+  <div class="narrative-block"><p>以下概念每一条都能直接改变你的购物选择。</p></div>
+  <div class="kitchen-grid">
+    <div class="kitchen-item"><div class="ki-emoji">🍬</div><h3>① 游离糖 vs 内源糖</h3><div class="ki-myth">糖都是坏的</div><div class="ki-fact">游离糖（添加的糖+果汁中的糖）需要限制——每天<5%总热量。但水果中完整的糖（内源糖）被纤维包裹，吸收缓慢，不在此限制范围内。吃水果≠喝果汁。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🧈</div><h3>② 营养密度 vs 热量密度</h3><div class="ki-myth">贵的东西营养价值高</div><div class="ki-fact">燕窝、螺旋藻的"神奇功效"缺乏大样本临床证据。营养密度=营养素含量/热量。鸡蛋、牛奶、豆制品是极高营养密度的平价食物。价格不等于营养价值。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🧬</div><h3>③ 代糖的安全性</h3><div class="ki-myth">代糖致癌</div><div class="ki-fact">阿斯巴甜、三氯蔗糖等代糖经过了全球食品安全机构数十年的评估，在正常摄入量下是安全的。它们提供甜味但不提供热量——对控制体重有用。但不要过度依赖。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🍷</div><h3>④ 味觉的期望效应</h3><div class="ki-myth">品酒师能喝出好坏</div><div class="ki-fact">盲品实验反复证明：价格标签和品牌预期极大影响味觉判断。同样一瓶酒，告诉品鉴者"很贵"和"便宜"会得到完全不同的评价。你的大脑在"喝"之前已经替你做了一半的判断。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🥛</div><h3>⑤ 乳糖不耐受</h3><div class="ki-myth">牛奶不健康所以喝了拉肚子</div><div class="ki-fact">乳糖不耐受是乳糖酶基因在成年后关闭——这是人类的"默认设置"。北欧人群因进化出乳糖酶持久性(LP)而能成年后喝奶。拉肚子不代表牛奶"有毒"——是缺少乳糖酶。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🥚</div><h3>⑥ 蛋白质质量与互补</h3><div class="ki-myth">红皮鸡蛋更有营养</div><div class="ki-fact">鸡蛋壳的颜色由鸡的品种决定——与营养无关。蛋白质质量由氨基酸组成和消化率决定，鸡蛋的蛋白质评分是满分100。红皮和白皮鸡蛋的营养价值没有区别。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🧪</div><h3>⑦ 味精的安全性</h3><div class="ki-myth">味精是化学合成物，致癌</div><div class="ki-fact">味精（谷氨酸钠）是谷氨酸的钠盐——谷氨酸是一种天然氨基酸。发酵法生产的味精和酱油、奶酪中的谷氨酸是同一个物质。全球食品安全机构确认正常使用下安全。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🍺</div><h3>⑧ 酒精代谢路径</h3><div class="ki-myth">喝酒脸红的人能喝</div><div class="ki-fact">喝酒脸红是因为乙醛脱氢酶活性低——乙醛无法快速分解为乙酸。乙醛是酒精代谢的中间产物，具有强致癌性。喝酒脸红的人不是"能喝"——是体内的致癌物乙醛在累积。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">💊</div><h3>⑨ 维生素补充原则</h3><div class="ki-myth">维生素吃越多越好</div><div class="ki-fact">水溶性维生素（B族、C）过量随尿液排出。脂溶性维生素（A、D、E、K）过量会蓄积中毒。均衡饮食者通常不需要额外补充。大剂量维生素防癌——没有证据支持，部分研究提示可能增加风险。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🧫</div><h3>⑩ 发酵食品与微生物</h3><div class="ki-myth">臭的食物坏了，不能吃</div><div class="ki-fact">臭味来自特定微生物发酵产生的含硫化合物——这些微生物通常对人体无害。瑞典鲱鱼罐头、臭豆腐、蓝纹奶酪的臭味是"生物工程"的产物，不是腐败。但腐坏和发酵的边界需要专业知识判断。</div></div>
   </div>
 </div>
-<div class="tab-panel" id="panel4">
-  <div class="section-title">复习模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
-  <div id="reviewContainer">
-    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
-    <div id="reviewWeakAreas"></div>
+
+<div class="tab-panel" id="t2">
+  <div class="section-title">食物科学关系图</div>
+  <div class="svg-stage"><svg viewBox="0 0 880 440" xmlns="http://www.w3.org/2000/svg"><defs><filter id="s4"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#2a1f14" flood-opacity=".08"/></filter></defs><rect width="880" height="440" fill="#fffcf7" rx="12"/><g filter="url(#s4)"><rect x="60" y="50" width="170" height="44" rx="22" fill="#b85a1a"/><text x="145" y="77" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">糖与代糖</text><rect x="300" y="50" width="170" height="44" rx="22" fill="#b85a1a"/><text x="385" y="77" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">脂肪与体重</text><rect x="540" y="50" width="170" height="44" rx="22" fill="#b85a1a"/><text x="625" y="77" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">蛋白质与营养</text><rect x="150" y="340" width="170" height="44" rx="22" fill="#c47a20"/><text x="235" y="367" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">酒精代谢</text><rect x="560" y="340" width="170" height="44" rx="22" fill="#c47a20"/><text x="645" y="367" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">添加剂与安全</text><rect x="340" y="190" width="200" height="48" rx="24" fill="#d4844a"/><text x="440" y="219" fill="#fff" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">我们的饮食选择</text></g><g stroke="#c47a20" stroke-width=".8" fill="none" opacity=".4" stroke-dasharray="4,3"><line x1="200" y1="94" x2="340" y2="214"/><line x1="440" y1="94" x2="440" y2="190"/><line x1="680" y1="94" x2="540" y2="214"/><line x1="235" y1="340" x2="340" y2="238"/><line x1="645" y1="340" x2="540" y2="238"/></g><text x="440" y="22" fill="#b85a1a" font-size="14" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">你的饮食决策体系</text></svg></div>
+</div>
+
+<div class="tab-panel" id="t3">
+  <div class="section-title">餐桌迷思 — 打开冰箱，逐件检查</div>
+  <div class="kitchen-grid">
+    <div class="kitchen-item"><div class="ki-emoji">🍬</div><h3>红糖补血</h3><div class="ki-myth">红糖富含铁，坐月子要多喝</div><div class="ki-fact">红糖铁含量极低（约2mg/100g），且是非血红素铁，吸收率仅2-5%。真正补血的食物是动物肝脏、红肉（血红素铁，吸收率15-35%）。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🐦</div><h3>燕窝美容</h3><div class="ki-myth">燕窝含"燕窝酸"能美容养颜</div><div class="ki-fact">燕窝的主要成分是蛋白质+碳水化合物。"燕窝酸"(唾液酸)人体自身能合成。从营养学来看，燕窝≈鸡蛋+糖水。贵是因为难采集，不是因为有奇效。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🍷</div><h3>品酒大师</h3><div class="ki-myth">专业品酒师能分辨酒的品质和价格</div><div class="ki-fact">多项盲品实验无法证明品酒师能在不知价格的情况下可靠区分酒的品质。2001年波尔多大学实验：品酒师对同一瓶酒的两次评价相关度很低。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🧂</div><h3>味精有害</h3><div class="ki-myth">味精是"化学合成物"导致头痛</div><div class="ki-fact">味精=谷氨酸+钠，与天然食物中的谷氨酸相同。所谓的"中餐馆综合征"从未被双盲实验证实。WHO和FDA确认味精在正常使用下安全。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🌿</div><h3>螺旋藻万能</h3><div class="ki-myth">螺旋藻含所有必需营养素</div><div class="ki-fact">螺旋藻确实含蛋白质和部分微量元素，但含量并没有超越常规食物。声称的功效缺乏大样本临床证据。它不是超级食物——只是普通的藻类。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🥚</div><h3>红皮蛋更营养</h3><div class="ki-myth">红皮鸡蛋比白皮鸡蛋有营养</div><div class="ki-fact">蛋壳颜色由鸡的品种基因决定——与营养完全无关。无论什么颜色的蛋壳，鸡蛋都是自然界最完美的蛋白质来源之一。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🍺</div><h3>脸红能喝</h3><div class="ki-myth">喝酒上脸说明血液循环好</div><div class="ki-fact">脸部潮红=乙醛脱氢酶活性低=致癌物乙醛在体内堆积。这是东亚人群特有的基因变异(ALDH2*2)。喝酒上脸的人恰恰最不能喝——他们在累积致癌物。</div></div>
+    <div class="kitchen-item"><div class="ki-emoji">🥤</div><h3>零度可乐无害</h3><div class="ki-myth">零度可乐用代糖，可以随便喝</div><div class="ki-fact">代糖本身安全，但零度可乐不是"免费午餐"——它维持了对甜味的渴望，可能间接导致过量摄入其他甜食。最好的饮料永远是水。</div></div>
   </div>
-  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
 </div>
-<div class="tab-panel" id="panel5">
-  <div class="section-title">思维导图</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
-  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">餐桌上的实验室——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
-</div>
-<div class="tab-panel" id="panel6">
+
+<div class="tab-panel" id="t4">
   <div class="section-title">深度追问</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
-  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
+  <div class="socratic-panel">
+    <div class="q-a"><div class="question">如果代糖安全，为什么有人说它致癌？</div><div class="answer">这个谣言起源于1970年代的糖精实验——给大鼠极高剂量（相当于人每天喝几百瓶代糖饮料的量）导致膀胱癌。但大鼠的致癌机制在人体中不存在。此后40+年、数百项研究确认：正常剂量下代糖不致癌。但公众记忆对"致癌"标签比对"安全"结论更深刻。</div></div>
+    <div class="q-a"><div class="question">"戒掉碳水化合物"这个建议科学吗？</div><div class="answer">《谷物大脑》这本书的核心观点——谷物导致大脑疾病——缺乏充分的科学证据支持。碳水化合物是人体首选的能量来源，大脑尤其依赖葡萄糖。完全戒断碳水会导致酮症、便秘、营养不均衡。关键是选择<strong>复杂碳水</strong>（全谷物、豆类）而非精制碳水（白面包、含糖饮料），而非"戒掉所有碳水"。</div></div>
+    <div class="q-a"><div class="question">为什么食品安全谣言特别多？</div><div class="answer">食品安全触及了最根本的生存焦虑——"我吃的东西会不会伤害我？"这种焦虑在进化中保护了我们，但在信息时代容易被放大。三个特征帮你识别谣言：①声称"所有XX都致癌"（剂量决定毒性）②使用"化学"作为贬义词（一切物质都是化学物质）③没有引用任何具体的研究或机构名称。</div></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel7">
-  <div class="section-title">案例分析</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
-  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
+
+<div class="tab-panel" id="t5">
+  <div class="section-title">思维导图</div>
+  <div class="mindmap" id="mm4"><div class="node"><div class="node-header" onclick="toggleM4(this)" style="background:var(--accent);color:#fff;"><span class="toggle open">▶</span> 餐桌上的实验室</div><div class="node-body open">
+    <div class="node"><div class="node-header" onclick="toggleM4(this)"><span class="toggle">▶</span> 糖与甜味</div><div class="node-body"><div class="leaf">游离糖：每天<5%总热量(男27.5g/女22.5g)</div><div class="leaf">代糖安全但别依赖</div><div class="leaf">鲜榨果汁=游离糖来源</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM4(this)"><span class="toggle">▶</span> 蛋白质来源</div><div class="node-body"><div class="leaf">鸡蛋：满分蛋白质，壳色无关营养</div><div class="leaf">燕窝≠超级食物；牛奶≠人人能喝</div><div class="leaf">乳糖不耐受是成年哺乳动物默认状态</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM4(this)"><span class="toggle">▶</span> 食品安全与误解</div><div class="node-body"><div class="leaf">味精安全：被污名化的天然氨基酸盐</div><div class="leaf">剂量决定毒性：一切物质都有安全剂量</div><div class="leaf">"化学"不是贬义词：水也是化学物质</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM4(this)"><span class="toggle">▶</span> 酒精与代谢</div><div class="node-body"><div class="leaf">乙醇→乙醛(致癌)→乙酸</div><div class="leaf">脸红=乙醛堆积=应该少喝</div></div></div>
+  </div></div></div>
 </div>
-<div class="tab-panel" id="panel8">
-  <div class="section-title">实战决策</div>
-  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
+
+<div class="tab-panel" id="t6">
+  <div class="section-title">知识边界</div>
+  <table class="boundary-table"><thead><tr><th>知识条目</th><th>掌握程度</th><th>理由</th></tr></thead><tbody>
+    <tr><td>游离糖vs内源糖的区别</td><td><span class="level-tag level-core">核心</span></td><td>直接影响每日饮食选择</td></tr>
+    <tr><td>代糖安全性</td><td><span class="level-tag level-core">核心</span></td><td>消除常见恐惧</td></tr>
+    <tr><td>营养密度概念</td><td><span class="level-tag level-core">核心</span></td><td>识破保健品营销的关键</td></tr>
+    <tr><td>乳糖不耐受机制</td><td><span class="level-tag level-understand">理解</span></td><td>理解为什么有人喝奶拉肚子</td></tr>
+    <tr><td>酒精代谢路径</td><td><span class="level-tag level-understand">理解</span></td><td>解释喝酒脸红</td></tr>
+    <tr><td>各种代糖的化学结构差异</td><td><span class="level-tag level-know">知道</span></td><td>食品科学专业领域</td></tr>
+    <tr><td>FDA食品添加剂审批流程</td><td><span class="level-tag level-know">知道</span></td><td>复杂法规体系</td></tr>
+  </tbody></table>
 </div>
+
+<div class="tab-panel" id="t7">
+  <div class="section-title">题库系统 — 20题</div>
+  <div class="score-bar" id="qs4">已答：0 / 20</div><div class="progress-bar"><div class="progress-fill" id="qp4" style="width:0%"></div></div>
+  <div id="qc4"></div><button class="btn btn-outline" onclick="resetQ4()" style="margin-top:16px;">🔄 重新作答</button>
+  <div class="section-title">简答</div>
+  <div class="quiz-card"><p class="q-text">🖊️ 为什么"红糖补血"是个误解？从铁含量和吸收率两个角度说明。</p><textarea class="sa-input" id="sa4_1"></textarea><button class="btn btn-outline" onclick="showSA4(1)" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR4_1">红糖的铁含量极低（约2mg/100g），且是非血红素铁——人体吸收率仅2-5%。相比之下，动物肝脏含血红素铁，吸收率15-35%。要补血（补铁），吃一两猪肝远胜过喝一公斤红糖水。红糖只能补充热量和糖分，"补血"是基于"红色=血"的朴素联想。</div></div>
+  <div class="quiz-card"><p class="q-text">🖊️ 用"剂量决定毒性"的原则解释：为什么说"代糖安全"和"水喝多了也会中毒"是同一逻辑？</p><textarea class="sa-input" id="sa4_2"></textarea><button class="btn btn-outline" onclick="showSA4(2)" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR4_2">毒理学的基本原理是：所有物质都有毒——关键在于剂量。水在短时间内摄入过量（>6L）会导致低钠血症（水中毒），可致死。代糖在正常使用量下经数十年研究确认安全，但给大鼠喂食相当于人每天喝几百瓶代糖饮料的剂量时会导致癌症。<strong>脱离剂量谈毒性，是所有食品安全谣言的核心逻辑漏洞。</strong></div></div>
 </div>
-<div class="toast" id="toast"></div>
+
+<div class="tab-panel" id="t8">
+  <div class="section-title">购物决策模拟</div>
+  <div class="decision-scene"><h3>场景：超市燕窝专柜前</h3><div class="scenario">朋友花3000元买了一盒燕窝说"女人要对自己好一点"。你知道燕窝的主要营养=蛋白质+碳水化合物。你怎么说？</div><div class="choice-btn" onclick="evalD4(this,'a')">A) 沉默——花钱买开心挺好的</div><div class="choice-btn" onclick="evalD4(this,'b')">B) 善意告知——"燕窝的营养和鸡蛋差不多。贵是因为采集难，不是营养价值高。但如果你是为了犒劳自己，开心就值。"</div><div class="choice-btn" onclick="evalD4(this,'c')">C) 直接说"你在交智商税"</div><div id="dfb4_1" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div></div>
+</div>
+
+<div class="footer"><p>🍽️ 餐桌上的实验室 — 卓老板聊科技 MKS</p><p style="margin-top:4px;">22篇文章 · 10核心概念</p><p style="margin-top:4px;"><a href="index.html">← 返回课程首页</a></p></div>
+</div>
+
 <script>
-const concepts = [{"id": "c1", "name": "游离糖的隐形危害", "def": "食物中添加的游离糖（蔗糖、果糖、蜂蜜、果汁）是肥胖和糖尿病的核心驱动力——世卫组织建议每日游离糖<总热量5%。", "analogy": "就像往油箱里加糖浆而非汽油——短期内发动机可能还能转，但长期必然损坏引擎。", "example": "一瓶500ml可乐含53g糖（超男人日建议值27.5g近2倍）。鲜榨苹果汁含糖80g——'天然'不等于'健康'。", "counter": "未加工水果中的糖被纤维包裹需时间消化→不会导致血糖飙升。游离糖和水果糖是两种完全不同的摄入方式。"}, {"id": "c2", "name": "剂量决定毒性", "def": "任何物质的安全性取决于剂量——'有毒'和'安全'不是非黑即白，而是剂量的函数。大米中的砷、红酒中的酒精、咖啡中的咖啡因都适用此原则。", "analogy": "水在适量时维持生命，极端过量导致水中毒（低钠血症）。任何东西过量都有害——但'过量'的阈值差异极大。", "example": "BBC测试：中国焖饭砷残留84%、捞饭43%、泡一夜再捞饭18%。但即使焖饭砷含量仍在安全范围——'有害'不等于'达到危害剂量'。", "counter": "剂量-毒性关系不总是线性的。有些物质有安全阈值（低于则无害），有些无阈值（任何剂量都有概率性致癌风险）。"}, {"id": "c3", "name": "营养还原论陷阱", "def": "食物的营养价值不等于其成分列表之和——完整的食物矩阵（纤维、微量元素协同、食物结构）比孤立营养素重要得多。", "analogy": "拆开一辆车：有铁、橡胶、玻璃、塑料——但把等量材料堆在一起不等于一辆车。食物同理：分离出的'有效成分'不等于食物本身的效果。", "example": "红皮鸡蛋vs白皮鸡蛋、土鸡蛋vs养殖鸡蛋——营养成分分析显示几乎无差异。蛋壳颜色由卟啉决定，蛋黄颜色取决于饲料中叶黄素——都非营养指标。", "counter": "营养素补充剂不能替代食物。β-胡萝卜素补充剂在RCT中增加（非降低）吸烟者肺癌风险——而饮食中的β-胡萝卜素是保护因子。"}, {"id": "c4", "name": "乳糖不耐受的演化故事", "def": "全球约70%成年人乳糖不耐受——这不是'病'而是人类祖先的正常状态。能消化乳糖的成年人才是'突变种'。", "analogy": "就像大多数成年猫科动物不喝奶——哺乳动物成年后关闭乳糖酶基因是默认程序。北欧人因数千年牧牛史而'解锁'了成年消化乳糖的能力。", "example": "东亚人93%乳糖不耐受，芬兰人仅15%。这差异反映了农牧业历史：北欧人依赖牛奶获取钙和维生素D→乳糖耐受基因(LCT)被强选择→频率飙升。", "counter": "乳糖不耐受≠不能喝任何牛奶。大多数不耐受者可耐受12g乳糖（约一杯牛奶）——酸奶和奶酪中乳糖已发酵分解，通常安全。"}, {"id": "c5", "name": "益生菌与肠道生态", "def": "肠道微生物是一个有400+物种的生态系统——益生菌补充剂能否'改善'这个系统取决于菌株特异性、剂量和受体肠道环境，而非'补充益生菌=健康'的简单等式。", "analogy": "不是往雨林里随便撒种子就能恢复生态——需要合适的物种、合适的位置、合适的环境。大多数商业益生菌在胃酸中就死了。", "example": "粪便移植(FMT)治疗艰难梭菌感染：移植健康人完整菌群→治愈率>90%。而大多数非处方益生菌对同一疾病的RCT证据极其薄弱。", "counter": "并非所有发酵食品都含活性益生菌。面包烘焙杀死酵母，巴氏杀菌杀死乳酸菌。泡菜、酸奶、康普茶含活性菌但菌株和数量差异极大。"}, {"id": "c6", "name": "食品恐惧与风险理性", "def": "公众对食品风险的感知常常与实际风险倒挂：微量农药残留引恐慌，而高盐高糖高脂饮食（确定的心血管杀手）反被忽视。", "analogy": "怕坐飞机（百万分之一死亡率）却开车不系安全带（万分之一）——风险感知由'可控感'和'媒体曝光度'驱动，非实际概率。", "example": "反式脂肪(部分氢化油)每年致50万人死于心血管病——已被FDA禁止。而转基因食品在科学共识中'与常规食品同样安全'，却被公众列为最担忧的食品安全问题。", "counter": "'天然'≠安全。黄曲霉毒素（花生中的天然致癌物）是全球肝癌主因之一。氰化物存在于苦杏仁中。风险不在'天然vs人造'，而在具体物质的剂量-效应关系。"}, {"id": "c7", "name": "甜味剂与代谢欺骗", "def": "代糖（阿斯巴甜、三氯蔗糖、甜菊糖）几乎无热量，但它们对肠道菌群、胰岛素反应和食欲调节的长期影响仍在研究中——'零卡'≠'零影响'。", "analogy": "用假钞购物——收银员可能一时分辨不出，但商店的安保系统（身体代谢调控）最终可能产生意外反应。", "example": "有研究提示某些代糖改变肠道菌群组成→影响葡萄糖耐受。但证据强度远低于糖对健康的确定危害。从含糖饮料切换到无糖饮料→净收益几乎确定为正。", "counter": "代糖种类的安全性差异巨大。阿斯巴甜有40年安全数据；三氯蔗糖较新但证据良好；糖精曾被认为是致癌物后平反。需按具体物质而非'代糖'笼统判断。"}, {"id": "c8", "name": "烹饪化学：热如何改变食物", "def": "加热不仅杀菌——它引发美拉德反应（蛋白质+糖→褐色+香味）、焦糖化、淀粉糊化等数百种化学反应，从根本上改变食物的营养价值和安全性。", "analogy": "生土豆=难消化+含龙葵碱（发芽时剧毒）；烤土豆=易消化+安全+香甜。同样的分子，加热前后是两种完全不同的食物。", "example": "美拉德反应：烤面包的褐色外皮、煎牛排的焦香、咖啡豆的烘焙香——都是还原糖和氨基酸在140-165°C下的反应产物。但过度加热(烧焦)产生丙烯酰胺和杂环胺→潜在致癌。", "counter": "并非所有食物都'生吃更营养'。番茄加热后番茄红素生物利用度提高；胡萝卜加热破坏细胞壁释放β-胡萝卜素。但维生素C不耐热——营养和烹饪是权衡。"}, {"id": "c9", "name": "传统饮食智慧的科学检验", "def": "'辟谷''断食''轻断食'等传统饮食实践有些在科学框架下获得部分验证——但应区分'机制上说得通'和'RCT证实有效'。", "analogy": "古人知道柳树皮退热（含水杨酸），但不知道有效成分和剂量——现代阿司匹林是提纯+剂量优化+副作用控制的版本。传统饮食智慧是'原料'，科学是'精炼'。", "example": "间歇性禁食(5:2轻断食)：初步RCT显示体重减轻和胰岛素敏感性改善。但长期依从性和安全性数据有限。BBC纪录片《进食、断食和长寿》推动了此趋势——但纪录片≠科学证据。", "counter": "大部分'传统养生'食物(燕窝、蜂蜜、红糖)经化学分析后并无特殊功效成分。燕窝=唾液酸+蛋白质（含量低于鸡蛋）；红糖=蔗糖+微量矿物质（远不足以'补血'）。"}, {"id": "c10", "name": "食品标签的读取术", "def": "配料表按含量降序排列——前三位配料决定食品本质。营养成分表告诉你三大营养素的量，但不告诉你'质量'（加工度、添加糖类型、脂肪种类）。", "analogy": "配料表是食品的'身份证'——前三位如果是糖、植物油、精制面粉，这就是高热量低营养的加工食品，不管包装上印了多少'天然''健康'字样。", "example": "'全麦面包'：看配料表第一位是否为'全麦粉'而非'小麦粉+焦糖色'。'零反式脂肪'：可能仍含部分氢化油(<0.5g/份可标0)。'无添加糖'：可能含浓缩果汁(天然果糖仍算游离糖)。", "counter": "营养标签是必要的但不充分的判断工具。加工度（整粒vs粉末）、添加剂种类数、食材可辨认度——这些不写在标签上但同样重要。"}];
-const mcqAll = [{"q": "世卫组织建议每日游离糖摄入不超过总热量的多少？", "opts": ["5%（约男人27.5克女人22.5克）", "20%", "可以随意吃", "取决于运动量"], "answer": 0}, {"q": "红皮鸡蛋比白皮鸡蛋更有营养吗？", "opts": ["是——蛋壳颜色由卟啉决定与营养无关，不同颜色鸡蛋的营养成分几乎无差异", "红皮更营养", "白皮更营养", "取决于鸡品种"], "answer": 0}, {"q": "味精(谷氨酸钠)是否致癌？", "opts": ["FDA总结9000+论文结论是长期食用无害且安全——120℃以上会变焦谷氨酸钠(无鲜味)但不致癌", "是确定致癌物", "只有鸡精才致癌", "高温下产生致癌物"], "answer": 0}, {"q": "中国焖饭vs欧美捞饭的砷含量差异有多大？", "opts": ["焖饭砷残留84%，捞饭43%——但都在安全范围内。改变烹饪方式可降低风险", "焖饭有毒", "捞饭完全无砷", "没有差异"], "answer": 0}, {"q": "为什么红糖不能补血？", "opts": ["红糖含铁量极低(远低于红肉和绿叶菜)，'补血'是颜色联想而非科学", "红糖可以补血", "红糖比白糖含铁多100倍", "只有白糖不能补血"], "answer": 0}, {"q": "以下哪种食物含糖量最高？(以500ml计)", "opts": ["冰糖雪梨(63g)>可乐(53g)>茉莉清茶(24g)", "可乐最高", "果汁最高", "茶饮料最高"], "answer": 1}, {"q": "乳糖不耐受在全球人口中的比例约为？", "opts": ["约70%——这是人类祖先的正常状态，能消化乳糖的成年人才是'突变种'", "约10%", "约30%", "约95%"], "answer": 1}, {"q": "益生菌补充剂和粪便移植(FMT)的关键区别是什么？", "opts": ["完全相同", "FMT移植完整菌群(400+种)，大多数益生菌仅含1-10种。证据强度差异巨大——FMT对艰难梭菌治愈率>90%", "益生菌更有效", "都对健康有益"], "answer": 1}, {"q": "'全麦面包'配料表第一位应该是什么？", "opts": ["全麦粉——如果不是而是'小麦粉+焦糖色'则是染色假全麦", "小麦粉", "白砂糖", "麸皮"], "answer": 1}, {"q": "为什么未加工水果比鲜榨果汁更健康？", "opts": ["水果中的纤维包裹糖分需时间消化——不会导致血糖飙升。一杯鲜榨苹果汁含糖80g远超建议值", "水果含糖少", "果汁含更多维生素", "加工破坏营养"], "answer": 1}, {"q": "以下哪项风险最被公众低估？", "opts": ["高盐高糖高脂饮食——确定的心血管杀手（全球每年数千万死亡归因）", "转基因食品", "农药残留", "食品添加剂"], "answer": 2}, {"q": "美拉德反应是什么？", "opts": ["还原糖和氨基酸在140-165°C下的反应——产生褐色和香味（烤面包皮、煎牛排焦香、咖啡烘焙香）", "淀粉变糖的过程", "蛋白质分解为氨基酸", "脂肪氧化的过程"], "answer": 2}, {"q": "代糖（如阿斯巴甜）对健康的净效应是什么？", "opts": ["和糖一样有害", "比糖更危险", "从含糖饮料切换到无糖饮料的净收益几乎确定为正——糖的确定危害远大于代糖的不确定性风险", "完全无影响"], "answer": 2}, {"q": "燕窝的主要营养成分是什么？", "opts": ["唾液酸+蛋白质——含量不高于鸡蛋，无任何已被科学证实的'美容''益智'功效", "胶原蛋白", "透明质酸", "燕窝酸超高"], "answer": 2}, {"q": "食品配料表按什么顺序排列？", "opts": ["按含量降序——前三位配料决定食品本质", "随机顺序", "按字母顺序", "按添加顺序"], "answer": 2}, {"q": "为什么营养素补充剂不能替代食物？", "opts": ["β-胡萝卜素补充剂在RCT中增加(非降低)吸烟者肺癌风险——完整食物矩阵的效果≠分离的营养素", "补充剂价格太高", "食物更好吃", "补充剂吸收率低"], "answer": 3}, {"q": "间歇性禁食(5:2轻断食)的科学证据强度如何？", "opts": ["已完全证实", "初步RCT显示体重减轻和胰岛素敏感性改善但长期安全性和依从性数据有限——纪录片≠科学证据", "完全无效", "比每日节食更有效"], "answer": 3}, {"q": "'反式脂肪'和'饱和脂肪'哪个对心血管危害更确定？", "opts": ["相同", "反式脂肪(部分氢化油)每年致约50万人死于心血管病——已被FDA禁止。饱和脂肪危害证据仍在争议中", "饱和脂肪更危险", "都不危险"], "answer": 3}, {"q": "面包烘焙后酵母哪里去了？", "opts": ["留在面包里继续发酵", "在高温烘焙中全部被杀死——烘焙面包不含活性益生菌。只有未经巴氏杀菌的发酵食品才含活性菌", "变成益生菌", "蒸发到空气中"], "answer": 3}, {"q": "为什么番茄加热后反而'更营养'(对番茄红素而言)？", "opts": ["番茄红素在加热和油脂中生物利用度大幅提高——破坏细胞壁释放更多", "加热破坏营养总是坏事", "番茄红素怕热", "加热产生新营养素"], "answer": 3}];
-const saqAll = [{"q": "用'剂量决定毒性'解释为什么'某某食物含致癌物'的新闻标题不可全信。", "hint": "任何物质在高剂量下都有毒，在低剂量下都安全。关键不是'有没有'而是'多少'——脱离剂量谈毒性是误导"}, {"q": "为什么说'营养还原论'是食品健康传播中的常见陷阱？", "hint": "食物≠营养素之和。纤维基质、协同作用、消化过程都影响营养效果。β-胡萝卜素补充剂vs完整蔬果的RCT结果相反"}, {"q": "从演化角度解释为什么大多数人类成年后乳糖不耐受。", "hint": "哺乳动物成年后关闭乳糖酶基因是默认程序。北欧人群因数千年牧牛史被强选择出乳糖耐受基因——他们是'例外'"}, {"q": "如何用科学方法评估'轻断食/辟谷'这类传统饮食实践？", "hint": "区分'机制假设'和'RCT证据'；注意长期安全性数据是否充足；纪录片和个案≠科学证据。间歇性禁食有初步阳性数据但远非定论"}, {"q": "为什么'天然=安全'和'人造=危险'是食品认知中的常见谬误？", "hint": "黄曲霉毒素(天然)是强致癌物；阿斯巴甜(人造)有40年安全数据。安全性取决于物质本身和剂量，非来源"}, {"q": "学会读食品配料表的三个关键技巧是什么？", "hint": "①前三位配料决定本质；②注意'零反式脂肪'可能仍含部分氢化油(<0.5g可标0)；③'无添加糖'可能含浓缩果汁"}, {"q": "代糖(人工甜味剂)能否帮助减重？证据和争议是什么？", "hint": "短期：减少热量摄入效果明确。长期：对菌群和食欲调节的影响在研究中。净收益：从糖到代糖的切换几乎确定为正"}, {"q": "为什么美拉德反应是'双刃剑'？", "hint": "产生诱人香味和褐色(正面)但也产生丙烯酰胺和杂环胺(潜在致癌物)——控制温度和时间是关键"}, {"q": "如何判断一个'超级食物'的营销是否可靠？", "hint": "看是否有RCT证据、是否夸大孤立研究、是否声称'包治百病'。燕窝、螺旋藻等的化学分析不支持任何神奇功效"}, {"q": "为什么发酵食品中的益生菌和补充剂中的益生菌不是一回事？", "hint": "发酵食品的菌种未经临床验证；加工(巴氏杀菌、烘焙)杀灭大多数菌；补充剂有菌株特异性但需胃酸保护技术"}];
-const SK = 'mks_1';
-let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
-let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
-let currentCardIdx = 0;
-function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
-function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
-function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
-function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
-function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
-function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
-function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
-function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
-document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
-function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
-function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
-function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
-function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
-function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
-let et=null,el=1800,eq=[],ea={};
-function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
-function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
-function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
-function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
-function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
-function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
-setCard(0);updateProgress();
+(function(){var t=document.querySelectorAll('#tabBar .tab-btn'),p=document.querySelectorAll('.tab-panel'),s=localStorage.getItem('mks-food-tab');t.forEach(function(b){b.addEventListener('click',function(){t.forEach(function(x){x.classList.remove('active');});p.forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');localStorage.setItem('mks-food-tab',this.getAttribute('data-tab'));});});if(s){var b=document.querySelector('[data-tab="'+s+'"]');if(b)b.click();}})();
+function toggleM4(h){var t=h.querySelector('.toggle'),b=h.parentElement.querySelector('.node-body');if(b){b.classList.toggle('open');t.classList.toggle('open');}}
+
+var q4=[{q:'世界卫生组织建议每天游离糖摄入不超过总热量的多少？', opts:['10%，建议低于5%','20%','5%，建议低于2%','无需限制'], ans:0, expl:'WHO建议游离糖摄入<10%总热量，建议<5%。以男性为例，5%约27.5克——大约一罐可乐的量。'},{q:'以下哪项属于"游离糖"？', opts:['完整水果中的糖','鲜榨果汁中的糖','蔬菜中的糖','全谷物中的糖'], ans:1, expl:'鲜榨果汁去除了纤维，其中的糖被快速吸收——因此被归类为游离糖。完整水果中的糖被纤维包裹，吸收缓慢，不属于游离糖。'},{q:'红糖的铁含量和吸收率如何？', opts:['极高','和红肉相当','极低（约2mg/100g），吸收率仅2-5%','比红枣高10倍'], ans:2, expl:'红糖铁含量~2mg/100g，且是非血红素铁（吸收率2-5%）。动物肝脏和红肉含血红素铁（吸收率15-35%）——这才是真正的补铁食物。'},{q:'燕窝的主要营养成分是什么？', opts:['独特的燕窝酸','维生素D','胶原蛋白','蛋白质和碳水化合物（和鸡蛋类似）'], ans:3, expl:'燕窝的主要成分与鸡蛋+糖水在营养学上无本质区别。燕窝酸人体自身能合成。高价来自采集难度和文化传统，不是独特的营养价值。'},{q:'以下哪项关于代糖（如阿斯巴甜）的说法正确？', opts:['在正常摄入量下安全，经过数十年评估','代糖致癌已被证实','代糖比糖更危险','代糖会导致糖尿病'], ans:0, expl:'全球食品安全机构经数十年评估确认代糖在正常摄入量下安全。大鼠致癌实验使用的剂量相当于人类每天喝数百瓶代糖饮料——不符合实际摄入。'},{q:'喝酒脸红的人体内缺少什么？', opts:['酒精','乙醛脱氢酶活性低','乙醇脱氢酶','肝细胞'], ans:1, expl:'喝酒脸红=乙醛脱氢酶(ALDH2)活性低→乙醛（致癌物）无法快速分解→脸部血管扩张。这是东亚人群特有的基因变异(ALDH2*2)，约30-50%东亚人携带。'},{q:'乳糖不耐受的根本原因是什么？', opts:['牛奶变质','对牛奶过敏','乳糖酶基因在成年后关闭','肠胃不好'], ans:2, expl:'成年哺乳动物默认关闭乳糖酶基因——人类本来也不应该成年后喝奶。北欧人群进化出乳糖酶持久性突变，使得他们成年后仍然能消化乳糖。'},{q:'味精（谷氨酸钠）的主要成分是什么？', opts:['人工化学合成物','重金属','石油提炼物','谷氨酸的钠盐——一种天然氨基酸'], ans:3, expl:'味精是谷氨酸（一种天然氨基酸）的钠盐。发酵法生产的味精与酱油、奶酪中的谷氨酸是同一物质。WHO和FDA确认正常使用下安全。'},{q:'"谷物导致大脑疾病"这个说法来自哪本书？', opts:['《谷物大脑》','《柳叶刀》','《新英格兰医学杂志》','《自然》'], ans:0, expl:'《谷物大脑》由David Perlmutter所写。其核心观点（谷物导致阿尔茨海默症等脑疾病）缺乏充分的科学证据支持。碳水化合物是大脑的首选能量来源。'},{q:'鸡蛋蛋白质的生物利用度（蛋白质评分）是多少？', opts:['50分','满分100分','70分','20分'], ans:1, expl:'鸡蛋的蛋白质评分是满分100——是所有食物中蛋白质质量的参照标准。无论红皮白皮，鸡蛋都是自然界最完美的蛋白质来源之一。'},{q:'以下哪种维生素过量可能蓄积中毒？', opts:['维生素C','维生素B族','维生素A(脂溶性)','核黄素'], ans:2, expl:'脂溶性维生素(A、D、E、K)过量会蓄积在脂肪组织中导致中毒。水溶性维生素(B族、C)过量随尿液排出——但也无需过量补充。'},{q:'为什么鲜榨果汁也被列为游离糖来源？', opts:['果汁含添加糖','果汁含防腐剂','果汁比可乐更不健康','去除了纤维，糖被快速吸收'], ans:3, expl:'鲜榨果汁虽然不含添加糖，但榨汁过程去除了水果的纤维——糖被快速吸收，代谢效果与含糖饮料类似。吃完整水果≠喝果汁。'},{q:'可口可乐配方的神秘性主要来自什么？', opts:['营销策略','独特的化学成分','法律保护','真的无法破解'], ans:0, expl:'可口可乐成分可用现代分析技术精确测定。"神秘配方"是成功的营销故事。非常可乐味道不同是因为配方不同（不同的香料配比），而非"破解不了"。'},{q:'"索克尔事件"证明了什么？', opts:['品酒师很厉害','后现代学术期刊可能发表了毫无意义的文章','物理学很强大','红酒确实有好坏之分'], ans:1, expl:'纽约大学物理学教授索克尔故意写了一篇将物理术语和后现代术语胡乱拼接的文章投稿《社会文本》——被接受了。这证明了某些学术期刊的审稿质量存在问题。'},{q:'关于防蚊产品DEET，以下哪项正确？', opts:['DEET有毒','DEET能杀蚊子','DEET无毒但属农药管理体系需标注微毒','DEET已禁用'], ans:2, expl:'DEET（避蚊胺）无毒，但因中国农药管理体系规定必须标注"微毒"。它不是杀虫剂——只能驱蚊不能灭蚊。高浓度DEET防护效果更好但肤感黏腻。'},{q:'螺旋藻的健康声称目前有充分科学证据吗？', opts:['有大量临床证据','可以替代所有食物','已被证实是超级食物','缺乏大样本随机对照临床试验证据'], ans:3, expl:'螺旋藻确实含蛋白质和微量元素，但其"神奇功效"的声称缺乏高质量临床证据。它不是超级食物——只是普通藻类。'},{q:'以下哪项对减重效果最不明显？', opts:['增加运动（单纯靠运动）','控制饮食','减少游离糖','增加蛋白质摄入'], ans:0, expl:'运动对减重效果微弱。每天跑步30分钟消耗的热量大约只有一块饼干的热量。减重的关键是饮食结构调整（控制摄入），运动的作用是改善代谢健康和体成分。'},{q:'成年人乳糖酶持久性(LP)突变在哪些人群中频率最高？', opts:['东亚人群','北欧人群','非洲人群','南美原住民'], ans:1, expl:'北欧人群（如瑞典、丹麦）的乳糖酶持久性突变频率>90%。东亚人群只有约10-20%。这反映了不同人群历史上畜牧业和奶制品消费的不同强度。'},{q:'以下哪项食品安全原则最重要？', opts:['只吃有机食品','避免所有添加剂','剂量决定毒性','不吃加工食品'], ans:2, expl:'毒理学最基本的原则：一切物质都有毒，关键在剂量。水喝太多也会中毒。评估食品安全时，永远要问：什么物质？多少剂量？而不是"有没有XX"。'},{q:'关于"品酒师能分辨酒的好坏"这一说法，科学证据怎么说？', opts:['已被完全证实','品酒师都是骗子','只适用于法国酒','盲品实验无法证实品酒师能可靠区分品质'], ans:3, expl:'多项双盲实验表明：品酒师在不知道价格和品牌的情况下，评价的可靠性大幅下降。价格标签和品牌预期对味觉体验的影响远超我们以为的。这是"期望效应"的经典案例。'}];
+var qa4=0,qc4=0;
+function renderQ4(){var c=document.getElementById('qc4'),h='';q4.forEach(function(item,idx){h+='<div class=\"quiz-card\" id=\"q4'+idx+'\"><div class=\"q-text\">'+(idx+1)+'. '+item.q+'</div>';var l=['A','B','C','D'];item.opts.forEach(function(o,oi){h+='<button class=\"q-option\" id=\"q4'+idx+'o'+oi+'\" onclick=\"answerQ4('+idx+','+oi+')\">'+l[oi]+'. '+o+'</button>';});h+='<div class=\"q-feedback\" id=\"q4'+idx+'fb\"></div></div>';});c.innerHTML=h;var s=localStorage.getItem('mks-food-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){var ob=document.getElementById('q4'+st.i+'o'+st.c);if(ob){ob.classList.add(st.ok?'correct':'wrong');ob.disabled=true;}var fb=document.getElementById('q4'+st.i+'fb');fb.style.display='block';fb.innerHTML=st.ok?'✅ 正确！'+q4[st.i].expl:'❌ 错误。'+q4[st.i].expl;fb.style.background=st.ok?'#d4edda':'#f8d7da';for(var oi=0;oi<4;oi++){var o2=document.getElementById('q4'+st.i+'o'+oi);if(o2)o2.disabled=true;}}});up4();}}
+function answerQ4(i,c){var it=q4[i],ok=c===it.ans;if(ok)qc4++;qa4++;var fb=document.getElementById('q4'+i+'fb');document.getElementById('q4'+i+'o'+c).classList.add(ok?'correct':'wrong');if(!ok)document.getElementById('q4'+i+'o'+it.ans).classList.add('correct');for(var oi=0;oi<4;oi++){var ob=document.getElementById('q4'+i+'o'+oi);if(ob)ob.disabled=true;}fb.style.display='block';fb.innerHTML=ok?'✅ 正确！'+it.expl:'❌ 错误。'+it.expl;fb.style.background=ok?'#d4edda':'#f8d7da';up4();save4();}
+function up4(){document.getElementById('qs4').textContent='已答：'+qa4+' / '+q4.length+' | 正确：'+qc4;document.getElementById('qp4').style.width=(qa4/q4.length*100)+'%';}
+function save4(){var st=[];for(var i=0;i<q4.length;i++){for(var oi=0;oi<4;oi++){var ob=document.getElementById('q4'+i+'o'+oi);if(ob&&(ob.classList.contains('correct')||ob.classList.contains('wrong'))){st.push({i:i,c:oi,ok:oi===q4[i].ans,d:true});break;}}}localStorage.setItem('mks-food-quiz',JSON.stringify(st));}
+function resetQ4(){qa4=0;qc4=0;localStorage.removeItem('mks-food-quiz');renderQ4();}
+function showSA4(i){var r=document.getElementById('saR4_'+i);r.style.display=r.style.display==='block'?'none':'block';}
+function evalD4(el,ch){var fb=el.parentElement.querySelector('[id^=\"dfb4\"]');var bs=el.parentElement.querySelectorAll('.choice-btn');bs.forEach(function(b){b.disabled=true;});if(ch==='b'){fb.innerHTML='✅ <strong>这是科学传播的艺术。</strong>传播真相不等于扫兴。对方可能是在给自己辛苦工作的奖励——营养学的精确不等同于生活的全貌。告知真相的同时保留对他人选择的尊重。';fb.style.background='#d4edda';}else if(ch==='c'){fb.innerHTML='⚠️ 说"智商税"只会让对方防御。科学传播的最高境界是让人自己得出结论，而不是被告知。';fb.style.background='#fff3cd';}else{fb.innerHTML='🤔 沉默是安全的，但一个温和的真相可能帮朋友省下很多钱。关键在于怎么说，而不是说不说。';fb.style.background='#fff3cd';}fb.style.display='block';}
+document.addEventListener('DOMContentLoaded',function(){renderQ4();var s=localStorage.getItem('mks-food-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){qa4++;if(st.ok)qc4++;}});up4();}});
 </script>
 </body>
 </html>
