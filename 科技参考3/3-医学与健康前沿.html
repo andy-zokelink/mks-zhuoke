@@ -1318,7 +1318,7 @@ function renderMCQ(mcqs){
     opts.forEach(function(oi){
       html += '<label><input type="radio" name="mcq-' + idx + '" value="' + oi + '"> ' + m.opts[oi] + '</label>';
     });
-    html += '<button onclick="checkMCQ(' + idx + ')" style="padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-top:8px">提交</button>';
+    html += '<button class="js-check-mcq" data-mcq-idx="' + idx + '" style="padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-top:8px">提交</button>';
     html += '<div class="quiz-feedback" id="fb-mcq-' + idx + '"></div>';
     html += '</div>';
   });
@@ -1327,7 +1327,7 @@ function renderMCQ(mcqs){
   window._currentMCQs = mcqs;
 }
 
-window.checkMCQ = function(idx){
+var checkMCQ = function(idx){
   var mcq = window._currentMCQs[idx];
   var selected = document.querySelector('input[name="mcq-' + idx + '"]:checked');
   var fb = document.getElementById('fb-mcq-' + idx);
@@ -1352,7 +1352,7 @@ function renderSA(sas){
     html += '<div class="sa-item">';
     html += '<h4>' + (idx + 1) + '. ' + s.q + '</h4>';
     html += '<textarea placeholder="输入你的回答..."></textarea>';
-    html += '<button onclick="document.getElementById(\'sa-ans-' + idx + '\').style.display=\'block\'" style="padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">显示参考答案</button>';
+    html += '<button class="js-show-sa" data-sa-idx="' + idx + '" style="padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">显示参考答案</button>';
     html += '<div class="show-answer" id="sa-ans-' + idx + '"><strong>参考答案：</strong><br>' + s.answer.replace(/\n/g, '<br>') + '</div>';
     html += '</div>';
   });
@@ -1368,6 +1368,25 @@ document.getElementById('randomSA').addEventListener('click', function(){
 document.getElementById('resetQuiz').addEventListener('click', function(){
   document.getElementById('quizContainer').innerHTML = '<p style="text-align:center;color:var(--text-light)">请点击"随机抽题"开始练习</p>';
   window._currentMCQs = [];
+});
+
+// Quiz event delegation (MCQ check + SA show answer)
+document.getElementById('quizContainer').addEventListener('click', function(e){
+  var target = e.target;
+  // MCQ check button
+  if(target.classList.contains('js-check-mcq')){
+    var idx = parseInt(target.getAttribute('data-mcq-idx'));
+    checkMCQ(idx);
+  }
+  // SA show answer button
+  if(target.classList.contains('js-show-sa')){
+    var saIdx = parseInt(target.getAttribute('data-sa-idx'));
+    var saItem = target.closest('.sa-item');
+    if(saItem){
+      var ansDiv = saItem.querySelector('.show-answer');
+      if(ansDiv) ansDiv.style.display = 'block';
+    }
+  }
 });
 
 // ============================================================
@@ -1463,7 +1482,7 @@ document.getElementById('startReview').addEventListener('click', function(){
   }
   var html = '';
   wrong.forEach(function(w, i){
-    html += '<li onclick="this.classList.toggle(\'reviewed\')" id="review-' + i + '">';
+    html += '<li class="js-toggle-reviewed" id="review-' + i + '">';
     html += '<strong>' + (w.type === 'mcq' ? '[选择题]' : '[简答题]') + '</strong> ' + w.q + '<br>';
     html += '<small style="color:var(--text-lighter)">' + new Date(w.date).toLocaleDateString() + '</small>';
     html += '</li>';
@@ -1492,6 +1511,14 @@ document.getElementById('exportWrong').addEventListener('click', function(){
   showToast('错题导出完成！');
 });
 
+// Review list event delegation (toggle reviewed)
+document.getElementById('reviewList').addEventListener('click', function(e){
+  var target = e.target.closest('.js-toggle-reviewed');
+  if(target){
+    target.classList.toggle('reviewed');
+  }
+});
+
 // ============================================================
 // DEEP ASK
 // ============================================================
@@ -1500,7 +1527,7 @@ function renderDeepAsk(){
   var html = '';
   deepQuestions.forEach(function(d, i){
     html += '<div class="dq-item">';
-    html += '<div class="dq-question" onclick="var ans=this.nextElementSibling;ans.style.display=ans.style.display===\'block\'?\'none\':\'block\'">' + (i+1) + '. ' + d.q + '</div>';
+    html += '<div class="dq-question js-dq-toggle">' + (i+1) + '. ' + d.q + '</div>';
     html += '<div class="dq-answer">' + d.a + '</div>';
     html += '</div>';
   });
@@ -1539,7 +1566,7 @@ function renderDecisions(){
     d.opts.forEach(function(o, oi){
       html += '<label style="display:block;margin:6px 0"><input type="radio" name="dec-' + i + '" value="' + oi + '"> ' + opts[oi] + '. ' + o + '</label>';
     });
-    html += '<button onclick="checkDecision(' + i + ')">确认选择</button>';
+    html += '<button class="js-check-decision" data-dec-idx="' + i + '">确认选择</button>';
     html += '<div class="decision-output" id="decOut-' + i + '"></div>';
     html += '</div>';
   });
@@ -1547,7 +1574,7 @@ function renderDecisions(){
 }
 renderDecisions();
 
-window.checkDecision = function(i){
+var checkDecision = function(i){
   var sel = document.querySelector('input[name="dec-' + i + '"]:checked');
   var out = document.getElementById('decOut-' + i);
   if(!sel){ out.style.display='block'; out.innerHTML='请先选择一个选项'; return; }
@@ -1560,6 +1587,15 @@ window.checkDecision = function(i){
     out.innerHTML = '<strong>⚠️ 并非最优。</strong>推荐选项' + ['A','B','C','D'][s.ans] + '。<br>' + s.explain;
   }
 };
+
+// Decision event delegation
+document.getElementById('decisionContainer').addEventListener('click', function(e){
+  var target = e.target;
+  if(target.classList.contains('js-check-decision')){
+    var idx = parseInt(target.getAttribute('data-dec-idx'));
+    checkDecision(idx);
+  }
+});
 
 // ============================================================
 // ARTICLE LIST (render 10 featured articles)
