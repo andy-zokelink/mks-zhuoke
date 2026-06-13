@@ -5,562 +5,261 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>思维的武器 — 卓老板聊科技 MKS</title>
 <style>
-:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+/* ===== 思维的武器 — 设计语言 =====
+ * 本质洞察：科学思维是一套可以锻造的认知工具——抵御偏差、识破伪科学
+ * 情感基调：锋利与清晰 — 读者获得一套新的思考工具
+ * 叙事锚点：锻造车间 — 每件思维工具都经过锤打淬火
+ * 视觉策略：深紫灰+铁灰 — 精工锻造的冷锐感
+ */
+:root { --bg:#f7f5f9; --card:#fcfbfe; --accent:#5b4a7a; --accent2:#7a6b9a; --gold:#8a6a3a; --gold-light:#c8b8a0; --success:#4a7c5e; --text:#211a2a; --text-light:#4a4058; --border:#d0c8d8; --shadow:0 2px 14px rgba(33,26,42,.06); --radius:12px; --nav-bg:#1a1424; --nav-text:#f7f5f9; --forge-bg:rgba(91,74,122,.04); }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
-.container { max-width:960px; margin:0 auto; padding:0 16px; }
-.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
-.top-bar .title { font-size:1.05rem; font-weight:600; }
-.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
-.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
-.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
-.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
+body { font-family:'Noto Serif SC','Source Han Serif SC',Georgia,serif; background:var(--bg); color:var(--text); line-height:1.8; padding-top:56px; font-size:16px; }
+.container { max-width:980px; margin:0 auto; padding:0 20px; }
+.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; box-shadow:0 2px 12px rgba(0,0,0,.3); }
+.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; }
+.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.85rem; padding:6px 16px; border:1px solid rgba(255,255,255,.25); border-radius:20px; font-family:'Noto Sans SC',sans-serif; transition:all .2s; }
+.home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--accent2); color:var(--gold-light); }
+.tab-bar { display:flex; flex-wrap:wrap; gap:6px; padding:14px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:24px; }
+.tab-btn { padding:8px 16px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .25s; white-space:nowrap; font-family:'Noto Sans SC',sans-serif; }
+.tab-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--forge-bg); }
 .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel { display:none; animation:fadeIn .4s ease; }
 .tab-panel.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
-.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
-.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
-.skeleton-list { list-style:none; padding:0; }
-.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
-.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
-.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
-.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
-.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+.hero { position:relative; overflow:hidden; background:linear-gradient(175deg,#f7f5f9 0%,#e8e4f0 35%,#c8c0d8 60%,#5b4a7a 82%,#1a1424 100%); border-radius:var(--radius); margin-bottom:32px; min-height:370px; display:flex; align-items:center; justify-content:center; }
+.hero-svg { width:100%; max-width:900px; height:auto; display:block; }
+.hero-caption { position:absolute; bottom:36px; left:0; right:0; text-align:center; color:#f7f5f9; font-size:1.15rem; letter-spacing:2px; font-family:'Noto Serif SC',serif; opacity:.85; text-shadow:0 1px 8px rgba(0,0,0,.5); }
+.narrative-block { background:linear-gradient(135deg,#fcfbfe,#f7f4fa); border-left:4px solid var(--accent); padding:28px 32px; margin:28px 0; border-radius:0 var(--radius) var(--radius) 0; box-shadow:var(--shadow); }
+.narrative-block .lead { font-size:1.2rem; color:var(--accent); font-weight:600; margin-bottom:12px; }
+.narrative-block p { color:var(--text-light); font-size:.95rem; line-height:1.9; margin-bottom:8px; }
+
+/* Tool cards — forge workshop style */
+.tool-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:20px 0; }
+.tool-card { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); border-top:3px solid var(--accent); }
+.tool-card .tool-icon { font-size:1.8rem; margin-bottom:8px; }
+.tool-card h3 { color:var(--accent); font-size:.95rem; margin-bottom:6px; font-family:'Noto Sans SC',sans-serif; }
+.tool-card p { font-size:.84rem; color:var(--text-light); line-height:1.7; }
+.tool-card .tool-source { font-size:.7rem; color:var(--accent2); margin-top:6px; }
+
+.article-excerpt { background:var(--card); border-radius:var(--radius); padding:18px; margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border); }
+.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
+.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; }
+.svg-stage { background:var(--card); border-radius:var(--radius); padding:20px; margin:28px 0; box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
+.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
+.socratic-panel { background:linear-gradient(135deg,#f7f4fa,#fcfbfe); border:1px dashed var(--accent); border-radius:var(--radius); padding:24px; margin:20px 0; }
+.socratic-panel .q-a { margin-bottom:20px; }
+.socratic-panel .question { font-weight:600; color:var(--accent); margin-bottom:6px; font-size:.95rem; }
+.socratic-panel .question::before { content:'挑战：'; color:var(--accent2); }
+.socratic-panel .answer { color:var(--text-light); font-size:.9rem; padding-left:16px; border-left:2px solid var(--gold-light); }
+.mindmap { margin:16px 0; }
+.mindmap .node { margin-bottom:6px; }
+.mindmap .node-header { display:flex; align-items:center; gap:8px; cursor:pointer; padding:10px 14px; background:var(--card); border-radius:8px; border:1px solid var(--border); transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
+.mindmap .node-header:hover { border-color:var(--accent); background:var(--forge-bg); }
+.mindmap .node-header .toggle { font-size:.7rem; transition:transform .3s; color:var(--accent); width:16px; text-align:center; }
+.mindmap .node-header .toggle.open { transform:rotate(90deg); }
+.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
+.mindmap .node-body.open { display:block; }
+.mindmap .leaf { padding:6px 12px; margin:4px 0; font-size:.85rem; color:var(--text-light); border-left:2px solid var(--gold-light); }
+.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
+.boundary-table th { background:var(--accent); color:#fff; padding:12px 16px; text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500; }
+.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
 .boundary-table tr:nth-child(even) td { background:var(--card); }
-.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
-.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
-.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
-.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
-.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
-.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
-.flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
-.flip-front { background:var(--card); }
-.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
-.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
-.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
-.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
-.btn-outline:hover { background:var(--accent); color:#fff; }
-.btn-success { background:var(--success); color:#fff; }
-.btn-sm { padding:5px 12px; font-size:.8rem; }
-.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
+.level-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; }
+.level-core { background:var(--accent); color:#fff; }
+.level-understand { background:var(--accent2); color:#fff; }
+.level-know { background:#ddd; color:#555; }
 .quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
-.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
-.q-option:hover { border-color:var(--accent); background:#fff5f5; }
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
+.q-option { display:block; width:100%; text-align:left; padding:10px 16px; margin:6px 0; border:1px solid var(--border); border-radius:8px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.88rem; font-family:inherit; }
+.q-option:hover { border-color:var(--accent); background:var(--forge-bg); }
 .q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
 .q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
 .q-option:disabled { cursor:default; }
-.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
-.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
-.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
-.mindmap { padding:10px 0; }
-.mindmap .node { margin:4px 0 4px 20px; }
-.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
-.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
-.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
-.mindmap .node-title.open::before { transform:rotate(90deg); }
-.mindmap .node-body { display:none; }
-.mindmap .node-body.open { display:block; }
-.inquiry-item { margin-bottom:12px; }
-.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
-.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
-.inquiry-q.open::after { content:' \25B2'; }
-.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.inquiry-a.open { display:block; }
-.case-item { margin-bottom:14px; }
-.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.case-title:hover { border-color:var(--accent); background:#fff5f5; }
-.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
-.case-title.open::after { content:' \25B2'; }
-.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.case-body.open { display:block; }
-.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.d-scenario { margin-bottom:16px; }
-.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
-.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
-.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
-.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
-.svg-wrap svg { max-width:100%; height:auto; }
-.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
-.toast.show { opacity:1; }
-@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
+.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
+.sa-input { width:100%; min-height:100px; padding:14px; font-family:inherit; font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg); resize:vertical; }
+.sa-reveal { background:var(--card); padding:16px; border-radius:var(--radius); margin-top:10px; display:none; border:1px dashed var(--accent); font-size:.9rem; line-height:1.8; }
+.decision-scene { background:linear-gradient(135deg,#f7f4fa,#e8e4f0); border-radius:var(--radius); padding:24px; margin:20px 0; border:1px solid var(--gold-light); }
+.decision-scene h3 { color:var(--accent); margin-bottom:12px; }
+.decision-scene .scenario { background:var(--card); padding:18px; border-radius:8px; margin-bottom:14px; border-left:3px solid var(--accent); }
+.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-scene .choice-btn { text-align:left; padding:10px 16px; border:1px solid var(--border); border-radius:8px; background:var(--card); cursor:pointer; transition:all .2s; font-family:inherit; font-size:.88rem; }
+.decision-scene .choice-btn:hover { border-color:var(--accent); background:var(--forge-bg); }
+.score-bar { text-align:center; padding:16px; font-size:1.1rem; font-weight:600; color:var(--accent); }
+.progress-bar { width:100%; height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .5s ease; }
+.section-title { font-size:1.25rem; color:var(--accent); margin:32px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border); font-family:'Noto Sans SC',sans-serif; letter-spacing:1px; }
+.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
+.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
+.btn-outline:hover { background:var(--accent); color:#fff; }
+.footer { text-align:center; padding:32px 20px; margin-top:40px; border-top:1px solid var(--border); color:var(--text-light); font-size:.82rem; }
+.footer a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
-<div class="top-bar"><span class="title">🧠 思维的武器</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+<nav class="top-bar"><span class="title">🧠 思维的武器</span><a href="index.html" class="home-btn">← 返回课程首页</a></nav>
 <div class="container">
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
-  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
-  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
-  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
-  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
-  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
-  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
-  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
-  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+
+<div class="hero">
+<svg class="hero-svg" viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="fg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fcfbfe" stop-opacity=".8"/><stop offset="100%" stop-color="#7a6b9a" stop-opacity=".1"/></radialGradient></defs>
+  <rect width="900" height="370" fill="none" rx="12"/>
+  <!-- Forge/anvil metaphor for mental tools -->
+  <g opacity=".5"><rect x="250" y="260" width="400" height="40" rx="8" fill="#5b4a7a"/><text x="450" y="286" fill="#f7f5f9" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">认知锻造车间</text></g>
+  <!-- Tool shapes being forged -->
+  <g filter="url(#gf)" opacity=".6">
+    <rect x="120" y="140" width="80" height="16" rx="4" fill="#7a6b9a"/><text x="160" y="132" fill="#5b4a7a" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">概率思维</text>
+    <rect x="280" y="100" width="80" height="16" rx="4" fill="#8a7baa"/><text x="320" y="92" fill="#5b4a7a" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">博弈论</text>
+    <rect x="500" y="100" width="80" height="16" rx="4" fill="#7a6b9a"/><text x="540" y="92" fill="#5b4a7a" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">批判性思考</text>
+    <rect x="660" y="140" width="80" height="16" rx="4" fill="#8a7baa"/><text x="700" y="132" fill="#5b4a7a" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">科学方法</text>
+  </g>
+  <!-- Sparks -->
+  <g fill="#e8d5a3" opacity=".4"><circle cx="300" cy="180" r="2"/><circle cx="520" cy="170" r="1.5"/><circle cx="400" cy="200" r="2"/><circle cx="600" cy="190" r="1"/></g>
+  <text x="450" y="28" fill="#f7f5f9" font-size="15" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="6" opacity=".8">思维的武器</text>
+  <text x="450" y="360" fill="#f7f5f9" font-size="11" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="3" opacity=".7">用科学思维锻造一套抵御认知偏差的理性工具</text>
+</svg>
+<div class="hero-caption">一个问题：为什么聪明人也相信伪科学？因为我们缺少正确的思维工具</div>
 </div>
-<div class="tab-panel active" id="panel0">
-  <div class="section-title">核心目标</div>
-  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
-  <div class="section-title">核心概念</div>
-  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
-<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
-<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
-<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
-<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
-<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
-<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
-<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
-<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
-<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
-  <div class="section-title">最小知识集（骨架中的骨架）</div>
-  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
-<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
-<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
-<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
-  <div class="section-title">概念关系图</div>
-  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
- viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
-<title>G</title>
-<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
-<g id="clust1" class="cluster">
-<title>cluster_legend</title>
-<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
-<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
-</g>
-<!-- root -->
-<g id="node1" class="node">
-<title>root</title>
-<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
-<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">思维的武器——物理定律的层级结构</text>
-</g>
-<!-- qm -->
-<g id="node2" class="node">
-<title>qm</title>
-<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
-<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
-</g>
-<!-- root&#45;&gt;qm -->
-<g id="edge1" class="edge">
-<title>root&#45;&gt;qm</title>
-<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
-<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
-<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- gr -->
-<g id="node3" class="node">
-<title>gr</title>
-<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
-<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
-</g>
-<!-- root&#45;&gt;gr -->
-<g id="edge2" class="edge">
-<title>root&#45;&gt;gr</title>
-<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
-<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
-<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- th -->
-<g id="node4" class="node">
-<title>th</title>
-<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
-<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
-</g>
-<!-- root&#45;&gt;th -->
-<g id="edge3" class="edge">
-<title>root&#45;&gt;th</title>
-<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
-<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
-<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- u -->
-<g id="node5" class="node">
-<title>u</title>
-<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
-<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
-</g>
-<!-- qm&#45;&gt;u -->
-<g id="edge4" class="edge">
-<title>qm&#45;&gt;u</title>
-<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
-<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
-<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
-</g>
-<!-- w -->
-<g id="node6" class="node">
-<title>w</title>
-<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
-<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
-</g>
-<!-- qm&#45;&gt;w -->
-<g id="edge5" class="edge">
-<title>qm&#45;&gt;w</title>
-<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
-<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
-<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
-</g>
-<!-- v -->
-<g id="node7" class="node">
-<title>v</title>
-<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
-<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
-</g>
-<!-- qm&#45;&gt;v -->
-<g id="edge6" class="edge">
-<title>qm&#45;&gt;v</title>
-<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
-<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
-<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
-</g>
-<!-- sy -->
-<g id="node8" class="node">
-<title>sy</title>
-<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
-<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
-</g>
-<!-- qm&#45;&gt;sy -->
-<g id="edge7" class="edge">
-<title>qm&#45;&gt;sy</title>
-<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
-<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
-<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
-</g>
-<!-- st -->
-<g id="node9" class="node">
-<title>st</title>
-<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
-<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
-</g>
-<!-- gr&#45;&gt;st -->
-<g id="edge8" class="edge">
-<title>gr&#45;&gt;st</title>
-<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
-<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
-<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
-</g>
-<!-- bh -->
-<g id="node10" class="node">
-<title>bh</title>
-<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
-<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
-</g>
-<!-- gr&#45;&gt;bh -->
-<g id="edge9" class="edge">
-<title>gr&#45;&gt;bh</title>
-<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
-<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
-<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
-</g>
-<!-- co -->
-<g id="node11" class="node">
-<title>co</title>
-<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
-<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
-</g>
-<!-- gr&#45;&gt;co -->
-<g id="edge10" class="edge">
-<title>gr&#45;&gt;co</title>
-<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
-<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
-<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
-</g>
-<!-- en -->
-<g id="node12" class="node">
-<title>en</title>
-<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
-<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
-</g>
-<!-- th&#45;&gt;en -->
-<g id="edge11" class="edge">
-<title>th&#45;&gt;en</title>
-<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
-<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
-<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
-</g>
-<!-- u&#45;&gt;v -->
-<g id="edge14" class="edge">
-<title>u&#45;&gt;v</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
-<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
-<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
-</g>
-<!-- ob -->
-<g id="node19" class="node">
-<title>ob</title>
-<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
-</g>
-<!-- w&#45;&gt;ob -->
-<g id="edge20" class="edge">
-<title>w&#45;&gt;ob</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
-<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
-<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
-</g>
-<!-- hr -->
-<g id="node14" class="node">
-<title>hr</title>
-<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
-<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
-<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
-<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
-</g>
-<!-- v&#45;&gt;hr -->
-<g id="edge12" class="edge">
-<title>v&#45;&gt;hr</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
-<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
-<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
-</g>
-<!-- sm -->
-<g id="node16" class="node">
-<title>sm</title>
-<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
-<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
-<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
-<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
-</g>
-<!-- sy&#45;&gt;sm -->
-<g id="edge16" class="edge">
-<title>sy&#45;&gt;sm</title>
-<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
-<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
-<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
-</g>
-<!-- gp -->
-<g id="node15" class="node">
-<title>gp</title>
-<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
-<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
-<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
-<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
-</g>
-<!-- st&#45;&gt;gp -->
-<g id="edge15" class="edge">
-<title>st&#45;&gt;gp</title>
-<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
-<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
-<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
-</g>
-<!-- bh&#45;&gt;hr -->
-<g id="edge13" class="edge">
-<title>bh&#45;&gt;hr</title>
-<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
-<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
-<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
-</g>
-<!-- nu -->
-<g id="node13" class="node">
-<title>nu</title>
-<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
-<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
-</g>
-<!-- en&#45;&gt;nu -->
-<g id="edge18" class="edge">
-<title>en&#45;&gt;nu</title>
-<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
-<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
-<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
-</g>
-<!-- it -->
-<g id="node17" class="node">
-<title>it</title>
-<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
-<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
-<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
-<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
-</g>
-<!-- en&#45;&gt;it -->
-<g id="edge17" class="edge">
-<title>en&#45;&gt;it</title>
-<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
-<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
-<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
-</g>
-<!-- se -->
-<g id="node18" class="node">
-<title>se</title>
-<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
-<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
-<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
-<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
-</g>
-<!-- nu&#45;&gt;se -->
-<g id="edge19" class="edge">
-<title>nu&#45;&gt;se</title>
-<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
-<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
-<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
-</g>
-<!-- hr&#45;&gt;bh -->
-<g id="edge21" class="edge">
-<title>hr&#45;&gt;bh</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
-<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
-<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
-<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
-</g>
-<!-- l1 -->
-<g id="node20" class="node">
-<title>l1</title>
-<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
-<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
-</g>
-<!-- l2 -->
-<g id="node21" class="node">
-<title>l2</title>
-<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
-<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
-</g>
-<!-- l1&#45;&gt;l2 -->
-<!-- l3 -->
-<g id="node22" class="node">
-<title>l3</title>
-<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
-<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
-</g>
-<!-- l2&#45;&gt;l3 -->
-<!-- l4 -->
-<g id="node23" class="node">
-<title>l4</title>
-<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
-<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
-<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
-<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
-</g>
-<!-- l3&#45;&gt;l4 -->
-<!-- l5 -->
-<g id="node24" class="node">
-<title>l5</title>
-<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
-<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
-</g>
-</g>
-</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
-  <div class="section-title">边界知识表</div>
-  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
-  <div class="section-title">学习路径</div>
-  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
-<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
-<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
-<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
-<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
-  <div class="section-title">学习进度</div>
-  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="t0">🔨 锻造车间</button>
+  <button class="tab-btn" data-tab="t1">🛠️ 核心概念</button>
+  <button class="tab-btn" data-tab="t2">🗺️ 工具图谱</button>
+  <button class="tab-btn" data-tab="t3">🔬 识破伪科学</button>
+  <button class="tab-btn" data-tab="t4">💡 深度追问</button>
+  <button class="tab-btn" data-tab="t5">🧭 思维导图</button>
+  <button class="tab-btn" data-tab="t6">⚠️ 知识边界</button>
+  <button class="tab-btn" data-tab="t7">📝 题库系统</button>
+  <button class="tab-btn" data-tab="t8">🎯 实战检验</button>
 </div>
-<div class="tab-panel" id="panel1">
-  <div class="section-title">知识卡片</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
-  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
-  <div class="flip-nav">
-    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
-    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
-    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
-  </div>
-  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+
+<div class="tab-panel active" id="t0">
+  <div class="narrative-block"><div class="lead">思维是有工具的——而大多数人不曾学过如何使用它们</div><p>卓老板用46篇文章，锻造了一套认知武器。概率思维教你量化不确定性，博弈论教你理解合作与背叛，批判性思考教你识破伪科学——这些不是"学霸技能"，是每个人在信息洪流中生存的<strong>必备装备</strong>。</p></div>
+  <div class="section-title">从锻造车间里，挑几件兵器看看</div>
+  <div class="article-excerpt"><div class="excerpt-title">《精准的判断，离不开精准的概率计算》</div><p>贝叶斯定理不是数学家的玩具——它是每个人做决策的底层逻辑。你根据现有信息给出一个"先验概率"，然后根据新证据不断更新。医生诊断、法官判案、投资者选择——本质上都是贝叶斯更新。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《合作与背叛的数学解释》</div><p>囚徒困境、重复博弈、一报还一报——博弈论揭示了合作如何在自私的个体之间自然涌现。不需要道德说教，数学本身就能告诉你在什么条件下"做好人"是最优策略。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《科学思维为什么反直觉？》</div><p>我们的大脑进化来是为了在草原上生存——识别模式、快速判断、从众避险。而科学思维要求质疑直觉、接受不确定性、用数据而非故事做判断。这不是"聪明人vs笨人"的区别——这是<strong>训练过vs没训练过</strong>的区别。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《水知道答案是伪科学吗？》</div><p>是的。江本胜的"水知道答案"实验——对着水说不同的话然后看冰晶形状——缺少对照组、没有双盲设计、没有可重复性。这是伪科学的经典套路：用一个看似科学的包装（冰晶照片）来销售一个不科学的结论。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《烟草业的罪》</div><p>烟草业不是不知道吸烟致癌——他们比任何人都早知道。但他们花了半个世纪用"怀疑科学"的策略来延迟监管：资助有偏见的研究、攻击每一项不利证据、制造"专家还在争论"的假象。这是<strong>制度化的伪科学</strong>。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《阴阳五行该写入科学素养准则吗？》</div><p>阴阳五行是中国古代的一种哲学框架——它在历史上帮助人们组织对自然界的观察。但它不是科学理论——它不产生可检验的预测、不涉及证伪机制。把它写入科学素养准则——等于混淆了<strong>文化遗产</strong>和<strong>科学知识</strong>。</p></div>
 </div>
-<div class="tab-panel" id="panel2">
-  <div class="section-title">题库系统</div>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
-    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
-  </div>
-  <div id="quizContainer"></div>
-  <div id="staticQuiz" style="display:none"></div>
-</div>
-<div class="tab-panel" id="panel3">
-  <div class="section-title">考试模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
-    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
-  </div>
-  <div id="examContainer"></div>
-  <div id="examResult" style="display:none;text-align:center;padding:20px;">
-    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
-    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
-    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+
+<div class="tab-panel" id="t1">
+  <div class="section-title">十个核心概念 — 你的认知武器库</div>
+  <div class="tool-grid">
+    <div class="tool-card"><div class="tool-icon">🎲</div><h3>① 贝叶斯概率思维</h3><p>先验概率×新证据=后验概率。不是"信或不信"的二元判断，而是"根据新证据更新信心程度"的连续过程。这是对抗确认偏误最有效的工具。</p><div class="tool-source">📻 《精准的判断，离不开精准的概率计算》</div></div>
+    <div class="tool-card"><div class="tool-icon">🤝</div><h3>② 博弈论</h3><p>"囚徒困境"揭示了个体理性如何导致集体非理性。在重复博弈中，"一报还一报"是最稳健的策略——先合作，然后复制对手上一轮的行为。合作可以纯粹是理性选择，不需要道德前提。</p><div class="tool-source">📻 《合作与背叛的数学解释》《利益相争如何博弈》</div></div>
+    <div class="tool-card"><div class="tool-icon">🔍</div><h3>③ 可证伪性</h3><p>波普尔的标准：一个理论是科学的，当且仅当它做出了可以被证明为错的预测。不能被证伪的"理论"（如"一切都是命"）不是科学——因为它可以解释一切结果，因而什么也没解释。</p><div class="tool-source">📻 《科学思维为什么反直觉？》《经济学算科学吗？》</div></div>
+    <div class="tool-card"><div class="tool-icon">📊</div><h3>④ 相关≠因果</h3><p>两件事同时发生不代表一个导致了另一个。冰激凌销量和溺水率正相关——因为夏天人们既吃冰激凌又游泳。"超级月亮"和地震的"关联"是选择性注意——你只记得同时发生的那几次。</p><div class="tool-source">📻 《细说超级月亮》《得不得癌症是靠运气吗？》</div></div>
+    <div class="tool-card"><div class="tool-icon">🎯</div><h3>⑤ 确认偏误</h3><p>人类最普遍的认知偏误——倾向于寻找支持自己已有观点的证据，忽略反驳的证据。这不是智力问题——是大脑的默认设置。克服它的唯一方法是<strong>主动寻找反对自己的证据</strong>。</p><div class="tool-source">📻 《新闻社交App会导致思想退步？》《比喻的害处》</div></div>
+    <div class="tool-card"><div class="tool-icon">🧪</div><h3>⑥ 双盲与对照组</h3><p>判断一个疗法是否有效的黄金标准。病人不知道自己在用药还是安慰剂（单盲），医生也不知道（双盲），并且有安慰剂对照组。任何声称有效但没有经过双盲对照试验的"疗法"都应该被质疑。</p><div class="tool-source">📻 《水知道答案是伪科学吗？》《人体特异功能》</div></div>
+    <div class="tool-card"><div class="tool-icon">🌐</div><h3>⑦ 网络思维</h3><p>复杂系统不能还原为个体之和。蚁群的行为无法从单只蚂蚁预测——网络结构本身产生涌现性质。理解互联网、社会舆论、金融市场，需要网络思维而非线性思维。</p><div class="tool-source">📻 《网络思维与复杂性》《混沌世界》</div></div>
+    <div class="tool-card"><div class="tool-icon">⚖️</div><h3>⑧ 证据金字塔</h3><p>不是所有证据都等值。从高到低：Meta分析>随机对照试验>队列研究>病例对照>专家意见>个人经验。当有人用"我亲身经历"来反驳一项Meta分析时——他在用金字塔底层的证据挑战顶层的证据。</p><div class="tool-source">📻 《证明转基因食品安全的证据在哪儿？》</div></div>
+    <div class="tool-card"><div class="tool-icon">🗣️</div><h3>⑨ 信息的信源评估</h3><p>看到一条信息时先问：谁说的？凭什么这么说？有没有利益冲突？有没有被独立验证？"我一个朋友说"的信源权重约等于零。学术论文经过了同行评议，但也要看发表期刊的质量和被引情况。</p><div class="tool-source">📻 《杀不尽的网络谣言》《日本学术造假》</div></div>
+    <div class="tool-card"><div class="tool-icon">🧠</div><h3>⑩ 认知谦逊</h3><p>知道自己不知道什么——这是所有思维工具中最重要的一件。科学的力量不在于它"知道一切"，而在于它承认"目前最好的理解可能是错的"。保持认知谦逊不会让你变弱——它让你变强，因为你是唯一不会被新证据击垮的人。</p><div class="tool-source">📻 《科学是不是万能的？》《中国古代科学发达吗？》</div></div>
   </div>
 </div>
-<div class="tab-panel" id="panel4">
-  <div class="section-title">复习模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
-  <div id="reviewContainer">
-    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
-    <div id="reviewWeakAreas"></div>
+
+<div class="tab-panel" id="t2">
+  <div class="section-title">思维武器关系图谱</div>
+  <div class="svg-stage"><svg viewBox="0 0 880 440" xmlns="http://www.w3.org/2000/svg"><defs><filter id="s5"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#211a2a" flood-opacity=".08"/></filter></defs><rect width="880" height="440" fill="#fcfbfe" rx="12"/><g filter="url(#s5)"><rect x="340" y="190" width="200" height="52" rx="26" fill="#5b4a7a"/><text x="440" y="221" fill="#fff" font-size="14" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">理性决策核心</text><rect x="60" y="60" width="160" height="44" rx="22" fill="#7a6b9a"/><text x="140" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">概率思维</text><rect x="280" y="60" width="160" height="44" rx="22" fill="#7a6b9a"/><text x="360" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">博弈论</text><rect x="600" y="60" width="160" height="44" rx="22" fill="#7a6b9a"/><text x="680" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">可证伪性</text><rect x="60" y="340" width="160" height="44" rx="22" fill="#8a7baa"/><text x="140" y="367" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">批判性思考</text><rect x="660" y="340" width="160" height="44" rx="22" fill="#8a7baa"/><text x="740" y="367" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">认知谦逊</text></g><g stroke="#7a6b9a" stroke-width=".8" fill="none" opacity=".4"><line x1="200" y1="82" x2="340" y2="216"/><line x1="420" y1="82" x2="440" y2="190"/><line x1="660" y1="82" x2="540" y2="216"/><line x1="200" y1="362" x2="340" y2="242"/><line x1="700" y1="362" x2="540" y2="242"/></g><text x="440" y="25" fill="#5b4a7a" font-size="14" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">你的理性决策武器系统</text></svg></div>
+</div>
+
+<div class="tab-panel" id="t3">
+  <div class="section-title">识破伪科学 — 六步检验法</div>
+  <div class="narrative-block"><p>下次看到"震惊！XX竟然能治癌"时，请用这六个问题来检验：</p></div>
+  <div style="counter-reset:step;padding:0 20px;">
+    <div style="counter-increment:step;margin:16px 0;padding:14px 20px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">检验一：</strong>这个说法做出了可被检验的预测吗？如果不能——它不是科学。</div>
+    <div style="counter-increment:step;margin:16px 0;padding:14px 20px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">检验二：</strong>有双盲对照试验的证据吗？如果没有——把信心降到"暂时存疑"。</div>
+    <div style="counter-increment:step;margin:16px 0;padding:14px 20px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">检验三：</strong>声称者有没有利益冲突？（卖药的人说药有效——这不能算独立证据。）</div>
+    <div style="counter-increment:step;margin:16px 0;padding:14px 20px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">检验四：</strong>这个说法依赖"个案"还是"统计"？（"我二舅吃了就好了"≠有效。）</div>
+    <div style="counter-increment:step;margin:16px 0;padding:14px 20px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">检验五：</strong>其他独立研究团队复现了这个结果吗？不能复现=不确定。</div>
+    <div style="counter-increment:step;margin:16px 0;padding:14px 20px;background:var(--card);border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">检验六：</strong>这个说法是否"太完美了"？（包治百病=什么都不治。）</div>
   </div>
-  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
 </div>
-<div class="tab-panel" id="panel5">
-  <div class="section-title">思维导图</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
-  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">思维的武器——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
-</div>
-<div class="tab-panel" id="panel6">
+
+<div class="tab-panel" id="t4">
   <div class="section-title">深度追问</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
-  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
+  <div class="socratic-panel">
+    <div class="q-a"><div class="question">如果科学思维这么有用，为什么大多数人不用？</div><div class="answer">因为科学思维是反直觉的。我们的大脑默认模式是：快速判断（不等待证据）、确认已有信念（不主动寻找反证）、相信故事（不喜欢统计数据）、追随群体（不敢独立判断）。科学思维是对这些默认模式的系统性对抗——它需要<strong>训练、练习、和持续的自我监控</strong>。这不是智商问题，是习惯问题。</div></div>
+    <div class="q-a"><div class="question">"阴阳五行"到底是不是科学？</div><div class="answer">阴阳五行是一个古代哲学框架——在2000多年前，它是人类组织对自然界观察的一种方式。但它不满足科学的标准：①不做可检验的定量预测 ②不包含自我修正机制 ③不可证伪。阴阳五行是<strong>文化遗产</strong>，不是<strong>科学理论</strong>。两者可以并存——但把文化遗产当成科学来教，是对两者的双重损害。</div></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel7">
-  <div class="section-title">案例分析</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
-  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
+
+<div class="tab-panel" id="t5">
+  <div class="section-title">思维导图</div>
+  <div class="mindmap" id="mm5"><div class="node"><div class="node-header" onclick="toggleM5(this)" style="background:var(--accent);color:#fff;"><span class="toggle open">▶</span> 思维的武器</div><div class="node-body open">
+    <div class="node"><div class="node-header" onclick="toggleM5(this)"><span class="toggle">▶</span> 概率与统计</div><div class="node-body"><div class="leaf">贝叶斯更新：先验概率×证据→后验</div><div class="leaf">相关≠因果</div><div class="leaf">大数定律vs小数偏误</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM5(this)"><span class="toggle">▶</span> 博弈与合作</div><div class="node-body"><div class="leaf">囚徒困境：个体理性→集体非理性</div><div class="leaf">一报还一报：重复博弈最优策略</div><div class="leaf">网络思维：涌现性</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM5(this)"><span class="toggle">▶</span> 科学方法</div><div class="node-body"><div class="leaf">可证伪性：科学的边界</div><div class="leaf">双盲对照：检验疗效的金标准</div><div class="leaf">Meta分析：证据的最高形式</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM5(this)"><span class="toggle">▶</span> 认知偏误</div><div class="node-body"><div class="leaf">确认偏误：只找支持自己观点的证据</div><div class="leaf">可得性偏误：记得住的=重要的</div><div class="leaf">从众偏误：大家都信=真的</div></div></div>
+  </div></div></div>
 </div>
-<div class="tab-panel" id="panel8">
-  <div class="section-title">实战决策</div>
-  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
+
+<div class="tab-panel" id="t6">
+  <div class="section-title">知识边界</div>
+  <table class="boundary-table"><thead><tr><th>知识条目</th><th>掌握程度</th><th>理由</th></tr></thead><tbody>
+    <tr><td>贝叶斯更新的基本逻辑</td><td><span class="level-tag level-core">核心</span></td><td>日常决策的底层工具</td></tr>
+    <tr><td>可证伪性概念</td><td><span class="level-tag level-core">核心</span></td><td>区分科学与非科学的基准线</td></tr>
+    <tr><td>双盲对照实验的意义</td><td><span class="level-tag level-core">核心</span></td><td>判断医学声称的黄金标准</td></tr>
+    <tr><td>博弈论基本模型</td><td><span class="level-tag level-understand">理解</span></td><td>理解合作与竞争的理论框架</td></tr>
+    <tr><td>常见认知偏误类型</td><td><span class="level-tag level-understand">理解</span></td><td>识别自己思维中的陷阱</td></tr>
+    <tr><td>贝叶斯公式的数学推导</td><td><span class="level-tag level-know">知道</span></td><td>需要概率论基础</td></tr>
+    <tr><td>博弈论的纳什均衡证明</td><td><span class="level-tag level-know">知道</span></td><td>需要数学专业背景</td></tr>
+  </tbody></table>
 </div>
+
+<div class="tab-panel" id="t7">
+  <div class="section-title">题库系统 — 20题</div>
+  <div class="score-bar" id="qs5">已答：0 / 20</div><div class="progress-bar"><div class="progress-fill" id="qp5" style="width:0%"></div></div>
+  <div id="qc5"></div><button class="btn btn-outline" onclick="resetQ5()" style="margin-top:16px;">🔄 重新作答</button>
+  <div class="section-title">简答</div>
+  <div class="quiz-card"><p class="q-text">🖊️ 什么是"确认偏误"？举一个你在自己身上观察到的例子。</p><textarea class="sa-input" id="sa5_1"></textarea><button class="btn btn-outline" onclick="showSA5(1)" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR5_1">确认偏误是指：人类倾向于寻找、注意、记住支持自己已有观点的信息，同时忽略或贬低反对的证据。例如：相信某个投资策略的人会记住所有"预测对了"的案例，忘记或合理化所有错误的预测。</div></div>
+  <div class="quiz-card"><p class="q-text">🖊️ 为什么"我亲身经历"不能作为判断疗法有效的充分证据？</p><textarea class="sa-input" id="sa5_2"></textarea><button class="btn btn-outline" onclick="showSA5(2)" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR5_2">个人经历无法排除三个关键混淆因素：①自然康复（很多病自己会好）②安慰剂效应（相信有效→感觉好转）③回归均值（症状波动后会自然回归平均水平）。只有双盲对照试验能同时排除这三种混淆。个案是证据金字塔中最底层的形式。</div></div>
 </div>
-<div class="toast" id="toast"></div>
+
+<div class="tab-panel" id="t8">
+  <div class="section-title">实战检验</div>
+  <div class="decision-scene"><h3>场景：收到一条"震惊！"消息</h3><div class="scenario">朋友转发一条消息："科学家发现手机辐射会导致脑瘤！转发让更多人知道！"你用六步检验法分析后，最可能的结论是？</div><div class="choice-btn" onclick="evalD5(this,'a')">A) 立刻转发</div><div class="choice-btn" onclick="evalD5(this,'b')">B) 存疑——手机辐射是非电离辐射，不足以破坏DNA。查一下原始研究和信源再决定</div><div class="choice-btn" onclick="evalD5(this,'c')">C) 无所谓</div><div id="dfb5" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div></div>
+</div>
+
+<div class="footer"><p>🧠 思维的武器 — 卓老板聊科技 MKS</p><p>46篇文章 · 10核心概念</p><p><a href="index.html">← 返回课程首页</a></p></div>
+</div>
+
 <script>
-const concepts = [{"id": "c1", "name": "贝叶斯更新", "def": "新证据不应推翻旧信念，而应按概率规则更新旧信念的置信度——这是应对不确定性的最优推理框架。", "analogy": "你估计明天下雨概率30%，看了天气预报说会下雨（准确率80%），用贝叶斯公式更新：新概率不是100%也不是30%，而是约63%。", "example": "肝癌检测：甲胎蛋白阳性时实际患病率仅28.6%——因为发病率仅万分之四，假阳性率抵消了看似高的检测准确率。贝叶斯定理强制你考虑基础概率。", "counter": "贝叶斯更新要求你有'先验概率'——对完全未知的事件（黑天鹅）贝叶斯方法无法提供初始先验。"}, {"id": "c2", "name": "纳什均衡", "def": "当每个参与者都已选定策略，且无人能通过单方面改变策略来提高自己收益——这个策略组合就是纳什均衡点。不是'对所有人最优'，而是'无人有动机偏离'。", "analogy": "两个人在拥挤走廊迎面相遇——如果都向左或都向右则顺畅通过（均衡点）；一左一右则撞上。纳什均衡不保证最优结果（囚徒困境中双方都供认是均衡但非最优）。", "example": "劳资谈判：调解员的任务就是找到纳什均衡点——让劳方知道资方被建议妥协时，劳方的最优策略就是坚持。找到均衡=找到双方都不能单方面改进的方案。", "counter": "纳什均衡不总是唯一的。有些博弈有多个均衡点（如'认怂'和'死磕'各是一个均衡），需要额外规则（如谁先行动）来选择。"}, {"id": "c3", "name": "囚徒困境中的合作演化", "def": "单次囚徒困境中背叛占优——但重复博弈中'一报还一报'(tit-for-tat)策略：第一轮合作，之后模仿对手上一轮行为——在所有策略竞赛中胜出。", "analogy": "你和邻居每天见面：今天你帮他收快递，明天他帮你喂猫。如果只一次交往→占便宜就走最优。但反复博弈→合作自然涌现。", "example": "阿克塞尔罗德囚徒困境竞赛：14种策略200局对战→'一报还一报'平均分最高(504.5)。它不'聪明'，只是①善良(先合作)、②报复(对方背叛就惩罚)、③宽容(对方恢复合作就原谅)。", "counter": "在嘈杂环境(信息不完全)中，一报还一报因连锁报复而失效——'宽容版一报还一报'(偶尔原谅一次背叛)在有误差的现实中更优。"}, {"id": "c4", "name": "数学作为思维脚手架", "def": "数学不是关于数字的学科，而是关于模式和结构的语言——它给思维搭建了逻辑脚手架，让模糊直觉变成可推导、可验证的推理链条。", "analogy": "像建筑工地的脚手架——没有它也能盖小棚子，但盖摩天大楼是妄想。数学是思维的基础设施，让你接触直觉无法企及的复杂推理。", "example": "黎曼猜想：一个关于素数分布的猜想，看似纯数学。但破解它将重塑我们对'随机性'和'结构'关系的理解——影响密码学、量子混沌、甚至物理中的能级分布。", "counter": "数学作为工具也可能'过拟合'——强行为复杂现实套用优美模型。经济学对2008年金融危机的预测失败部分来自对数学模型的过度信仰。"}, {"id": "c5", "name": "伪科学识别框架", "def": "伪科学常具有以下特征：不可证伪、依赖个案、逃避同行评议、使用科学术语但无操作化定义、声称被体制打压。学会识别这些'红旗信号'。", "analogy": "如果你的车发出奇怪声音，你去找了三个修车师傅，一个说'你这车的灵气不纯'，一个说'需要换机油'，一个说'先检查发动机'——哪个更可能是对的？看谁给出可验证的判断。", "example": "《水知道答案》声称水能'感知'人类情绪并形成不同结晶——但实验未设盲法、未控制温度湿度、未独立复现。'被体制打压'叙事不能替代实验证据。", "counter": "并非所有非主流观点都是伪科学。魏格纳的大陆漂移说最初遭主流地质学界抵制——但他提供了可验证的预测（化石分布、海岸线匹配）。区别在是否愿意接受实证检验。"}, {"id": "c6", "name": "统计显著性的陷阱", "def": "p<0.05意味着'如果零假设为真，观察到这样的数据（或更极端）的概率小于5%'——不是'假设备择为真的概率是95%'。混淆两者是最常见的统计误解。", "analogy": "你在赌场连赢10把——如果骰子公平，概率极低(p<0.001)。这不等于'你确实出千的概率是99.9%'——还需考虑先验概率(多少人会出千？)。", "example": "p值黑客(p-hacking)：研究者尝试多种分析方法、排除'不理想'数据点、选择性报告——直到找到p<0.05。这导致大量已发表的'显著'发现无法复现（可重复性危机）。", "counter": "p值不是效应大小的度量。超大样本下，一个微小的无关紧要的差异也能p<0.001。报告效应量和置信区间比单纯报告p值更有信息量。"}, {"id": "c7", "name": "反直觉思维：科学为什么'反常识'", "def": "科学结论常与直觉相悖：地球绕太阳转（而非相反）、重的和轻的物体下落一样快、随机事件会出现'热手'错觉——因为我们的直觉是为非洲草原生存优化的，不是为理解量子力学演化的。", "analogy": "你的直觉告诉你太阳'升起落下'——地球不动太阳在转。花了人类几千年才接受'其实是我们在转'。科学是系统性地纠正直觉偏误的方法。", "example": "热手谬误：篮球运动员连中几球后，人们相信他'手热'——但统计分析(包括NBA数据)发现投篮命中率并不依赖于前一次是否命中。独立随机事件中'手感'是幻觉。", "counter": "反直觉≠反常识。有些科学结论与常识一致（吸烟有害），有些相反（运动对减重效果有限）。科学的价值恰在于它能区分两者。"}, {"id": "c8", "name": "科学vs文化权威", "def": "科学知识通过可复现的公共证据建立权威——而非通过传统、经典、大师或政治权力。文化权威在事实问题上不享有特权。", "analogy": "法官判案：最终权威是证据和法律的公共推理——不是法官的职称或年龄。科学同理：一个博士后可以推翻诺奖得主的结论——如果他的实验数据更有力。", "example": "牛顿和莱布尼茨的微积分之争导致英国数学落后欧洲150年——因为英国人出于民族自尊拒绝使用莱布尼茨的更优符号系统。把科学权威和文化权威混淆的代价。", "counter": "科学界内部也有权威等级——资深科学家更容易获得经费和发表机会。科学社会学研究的是'科学实际如何运作'而非'科学应该如何运作'——两者不同。"}, {"id": "c9", "name": "混沌与可预测性边界", "def": "确定性系统可以产生完全不可长期预测的行为——不是因为我们无知，而是因为初始条件的微小差异会被指数放大（蝴蝶效应）。混沌不是无序，而是'确定的不可预测性'。", "analogy": "精确知道台球桌上每个球的初始位置和速度→你可以预测前几秒的碰撞→但10秒后空气分子和重力的微小扰动就被放大到不可忽略→1分钟后完全无法预测。不是知识不够，是系统的本质属性。", "example": "天气预报：即使有完美的模型和无限计算力，超过2-3周的天气预报在理论上就不可能——因为大气是混沌系统。但短期预报准确率已从50%(1980)提升到95%+(今天)。", "counter": "混沌≠随机。混沌系统的短期行为是可预测的（明天天气），长期行为虽不可预测但有统计规律（气候模式）。可预测性是有时间边界的。"}, {"id": "c10", "name": "从相关性到因果性的推理阶梯", "def": "确立因果关系需要：①时间先后(因在前)、②相关性、③排除替代解释(混杂变量)、④剂量-效应关系、⑤机制合理性、⑥实验证据(RCT)。相关性只是阶梯的第一级。", "analogy": "冰淇淋销量和溺水死亡正相关——共同原因：夏天。如果你根据相关性建议'禁止卖冰淇淋以防止溺水'，那就是经典的因果谬误。", "example": "吸烟与肺癌：①吸烟在前(时间)、②强相关(相对风险>10)、③排除职业暴露等混杂、④吸烟量越大风险越高(剂量-效应)、⑤动物实验证实致癌机制(机制)、⑥戒烟后风险下降(实验类证据)——因果推断的黄金标准。", "counter": "有些因果关系无法做RCT（如'教育对收入的影响'），需用自然实验、工具变量、断点回归等方法逼近因果。因果关系的确立是一个渐进的证据积累过程。"}];
-const mcqAll = [{"q": "贝叶斯定理最关键的应用是什么？", "opts": ["利用新证据按概率规则更新旧信念的置信度——而非全盘接受或全盘否定", "证明旧信念总是错的", "计算精确的未来概率", "消除所有不确定性"], "answer": 0}, {"q": "纳什均衡的核心定义是什么？", "opts": ["无人能通过单方面改变策略提高自己的收益时的策略组合", "对所有参与者最优的策略组合", "得分最高的策略", "双方都妥协的策略"], "answer": 0}, {"q": "'一报还一报'(tit-for-tat)策略在囚徒困境竞赛中胜出的原因是什么？", "opts": ["善良(先合作)、报复(对方背叛则惩罚)、宽容(对方恢复合作则原谅)——简单而有效", "它总是选择背叛", "它总是选择合作", "它是随机策略"], "answer": 0}, {"q": "为什么p<0.05不等于'假设备择为真的概率是95%'？", "opts": ["p值条件于零假设为真——不涉及备择假设的概率。这混淆了P(data|H0)和P(H1|data)", "p值正是这个含义", "只有p<0.01才不能这样解释", "这是统计学家的过度谨慎"], "answer": 0}, {"q": "伪科学最常见的特征是什么？", "opts": ["不可证伪、依赖个案、逃避同行评议、声称被体制打压——而非提供可复现的证据", "发表在学术期刊上", "使用复杂数学", "被科学家反对"], "answer": 0}, {"q": "混沌系统的核心特征是什么？", "opts": ["确定性方程产生完全不可长期预测的行为——初始条件微小差异被指数放大", "完全随机无序", "所有行为可精确预测", "只有天气系统是混沌的"], "answer": 1}, {"q": "为什么牛顿和莱布尼茨的微积分之争导致英国数学落后150年？", "opts": ["英国人出于民族自尊拒绝莱布尼茨更优符号系统——把科学权威和文化权威混淆", "莱布尼茨的微积分是错的", "英国不重视数学", "牛顿禁止英国人使用微积分"], "answer": 1}, {"q": "p值黑客(p-hacking)指什么？", "opts": ["尝试多种分析、排除不理想数据、选择性报告——直到找到p<0.05", "用黑客技术改数据", "只报告显著结果但不操纵数据", "一种统计软件"], "answer": 1}, {"q": "为什么科学结论常与直觉相悖？", "opts": ["人类直觉为非洲草原生存优化而非为理解量子力学演化——科学系统性纠正直觉偏误", "科学家故意说反话", "直觉总是错的", "科学太复杂"], "answer": 1}, {"q": "吸烟与肺癌确立因果关系的关键证据链不包括什么？", "opts": ["中医古籍记载", "时间先后+强相关+排除混杂+剂量效应+动物实验+戒烟后风险下降——这是因果推断黄金标准", "大规模队列研究", "生物学机制实验"], "answer": 1}, {"q": "贝叶斯更新在什么情况下最有用？", "opts": ["有先验信念且新证据不完全确定时——更新而非替换旧信念", "完全无知时", "证据100%确定时", "不需要做决策时"], "answer": 2}, {"q": "'蝴蝶效应'是指什么？", "opts": ["巴西蝴蝶扇翅理论上可引发德州龙卷风——微小初始差异在混沌系统中被放大", "蝴蝶能预测天气", "蝴蝶翅膀有特殊能力", "只是一种文学比喻"], "answer": 2}, {"q": "为什么经济学模型在2008年金融危机中失败？", "opts": ["部分源于对数学模型的过度信仰——强行将复杂现实套用优美模型(过拟合)", "经济学不是科学", "模型太简单", "没有人预测到危机"], "answer": 2}, {"q": "科学权威和文化权威的根本区别是什么？", "opts": ["科学权威通过可复现的公共证据建立——博士后可推翻诺奖得主(如果数据更有力)", "科学权威更高", "文化权威更高", "两者没有区别"], "answer": 2}, {"q": "确立因果关系需要满足什么条件？", "opts": ["时间先后+相关性+排除替代解释+剂量效应+机制合理性+实验证据——相关性只是第一步", "只需要强相关", "只需要时间先后", "只需要专家意见"], "answer": 2}, {"q": "'热手谬误'(hot hand fallacy)指什么？", "opts": ["篮球运动员连中几球后人们相信他'手热'——但统计分析发现命中率不依赖前一次是否命中", "球员手真的会变热", "只有篮球有这现象", "这是真实的体育现象"], "answer": 3}, {"q": "天气预报为什么不能精确预测2周后的天气？", "opts": ["大气是混沌系统——即使有完美模型和无限计算力，长期预测在理论上就不可能", "气象学家不够努力", "计算机不够快", "数据不够多"], "answer": 3}, {"q": "如何区分真正的科学创新和被体制打压的伪科学？", "opts": ["看是否愿意接受实证检验——魏格纳给出可验证预测(化石分布)，伪科学逃避检验", "看有多少人相信", "看是否被主流反对", "看发表在什么期刊"], "answer": 3}, {"q": "数学为什么被称为'思维脚手架'？", "opts": ["它给逻辑搭建基础设施——让模糊直觉变成可推导可验证的推理链条", "数学就是数字计算", "只有科学家需要数学", "数学限制思维"], "answer": 3}, {"q": "'善良-报复-宽容'三个特质为什么是重复博弈中合作演化的关键？", "opts": ["善良启动合作、报复防止被剥削、宽容避免连锁报复——三者缺一则策略脆弱", "只需要善良", "只需要报复", "只需要宽容"], "answer": 3}];
-const saqAll = [{"q": "用贝叶斯更新解释为什么'甲胎蛋白检测阳性=肝癌'是错误推理。", "hint": "需考虑肝癌发病率(万分之四)的先验概率——即使检测99%准确，阳性结果的阳性预测值仅28.6%。先验概率不能被忽略"}, {"q": "纳什均衡和'最优结果'有什么区别？以囚徒困境为例说明。", "hint": "纳什均衡=无人有动机单方面偏离。囚徒困境中双方供认是均衡但非最优(最优是双方沉默)。均衡≠最优"}, {"q": "为什么'一报还一报'策略在有噪声的现实环境中需要'宽容版本'？", "hint": "噪声导致误判对方背叛→连锁报复永不停止。偶尔原谅一次→打破报复循环。这是'信任但要留余地'的数学基础"}, {"q": "给一个现实生活中的p值误解例子并纠正。", "hint": "媒体报道'每天喝咖啡降低心脏病风险30%(p<0.05)'→实际可能是观察性研究的混杂效应。p值不等于效应大小，也不等于临床意义"}, {"q": "用'混沌'概念解释为什么长期经济预测和长期天气预报都不靠谱。", "hint": "两者都是混沌系统——初始条件微小差异被指数放大。可预测性有明确的时间边界：天气2-3周、经济可能更短"}, {"q": "如何用'反直觉思维'评估一个'听起来很有道理'的健康建议？", "hint": "检查是否经过RCT验证、是否与已知科学一致、提供者是否有利益冲突。直觉正确≠事实正确"}, {"q": "为什么p-hacking是科学可重复性危机的核心问题之一？", "hint": "多种分析+选择性报告→大量假阳性结果被发表→后续研究无法复现。解决：预注册研究方案+报告所有分析"}, {"q": "如何区分'被体制打压的创新'和'因缺乏证据被拒绝的伪科学'？", "hint": "创新者愿意接受严格检验并提出可验证预测；伪科学者逃避检验、依赖个案和阴谋论叙事"}, {"q": "用科学vs文化权威的概念分析'古人的智慧被现代科学证实'这类说法。", "hint": "古代观察可能是原料但≠科学证据。古人知道柳树皮退热但不知有效成分和剂量——现代阿司匹林才是可靠的。崇古心态混淆文化权威和科学权威"}, {"q": "为什么确立因果关系需要多重证据而非单一统计相关？", "hint": "相关可能被混杂变量解释(Bradford Hill标准)。吸烟-肺癌用了时间先后+强相关+排除混杂+剂量效应+机制+实验证据六条链——每条都增加因果推断的信心"}];
-const SK = 'mks_1';
-let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
-let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
-let currentCardIdx = 0;
-function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
-function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
-function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
-function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
-function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
-function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
-function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
-function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
-document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
-function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
-function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
-function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
-function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
-function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
-let et=null,el=1800,eq=[],ea={};
-function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
-function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
-function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
-function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
-function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
-function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
-setCard(0);updateProgress();
+(function(){var t=document.querySelectorAll('#tabBar .tab-btn'),p=document.querySelectorAll('.tab-panel'),s=localStorage.getItem('mks-mind-tab');t.forEach(function(b){b.addEventListener('click',function(){t.forEach(function(x){x.classList.remove('active');});p.forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');localStorage.setItem('mks-mind-tab',this.getAttribute('data-tab'));});});if(s){var b=document.querySelector('[data-tab="'+s+'"]');if(b)b.click();}})();
+function toggleM5(h){var t=h.querySelector('.toggle'),b=h.parentElement.querySelector('.node-body');if(b){b.classList.toggle('open');t.classList.toggle('open');}}
+
+var q5=[
+{q:'贝叶斯定理的核心是？',opts:['根据新证据更新概率估计','概率永远不变','只相信亲眼所见','直觉比数据可靠'],ans:0,expl:'贝叶斯更新：先验概率（初始判断）×新证据的似然比→后验概率（更新后的判断）。这是理性决策的数学基础。'},
+{q:'"囚徒困境"说明了什么？',opts:['合作总是最好的','个体理性选择可能导致集体更差的结果','背叛总是最好的','博弈论没用'],ans:1,expl:'在囚徒困境中，无论对方选择什么，背叛都是个人的最优选择——但双方都背叛的结果比双方都合作更差。个体理性和集体理性的冲突。'},
+{q:'科学理论的最重要特征是什么？',opts:['能解释一切','可证伪性','作者有名','历史悠久'],ans:1,expl:'波普尔提出：科学理论必须做出可被证明为错的预测。不能被证伪的理论不是科学——因为它可以解释一切结果，因而什么也没有解释。'},
+{q:'"确认偏误"指的是什么？',opts:['总是做对的决定','倾向于寻找支持自己已有观点的证据','记忆力超强','计算能力差'],ans:1,expl:'人类默认倾向于关注和记住支持已有信念的信息，忽略或贬低反对的证据。这是最常见的认知偏误。'},
+{q:'在重复博弈中最稳健的策略是什么？',opts:['永远背叛','永远合作','一报还一报（tit-for-tat）','随机选择'],ans:2,expl:'阿克塞尔罗德的博弈竞赛证明：一报还一报（先合作，然后复制对手上一轮的行为）是最稳健的策略。善良、报复、宽容、清晰。'},
+{q:'医学疗法检验的黄金标准是什么？',opts:['专家推荐','病人反馈','双盲随机对照试验','历史悠久'],ans:2,expl:'双盲随机对照试验（RCT）是判断疗法有效性的黄金标准：患者和医生都不知道谁在接受治疗、谁在吃安慰剂，且有随机分组和对照组。'},
+{q:'以下哪项是"相关不等于因果"的正确例子？',opts:['吸烟导致肺癌','冰激凌销量和溺水率正相关（共同原因是夏天）','疫苗预防传染病','运动改善健康'],ans:1,expl:'冰激凌销量和溺水率确实正相关——但吃冰激凌不会导致溺水，溺水也不会让人吃冰激凌。共同原因是"夏天"。相关≠因果。'},
+{q:'伪科学的常见特征不包括以下哪项？',opts:['声称能解释一切','依赖个案而非统计证据','提供可重复的实验数据','使用科学术语但无实际含义'],ans:2,expl:'伪科学常声称包治百病（无法证伪）、依赖个案（非统计）、滥用科学术语。但它们不能提供可重复的实验数据——可重复性恰恰是科学的标志。'},
+{q:'关于"信源评估"，以下哪项权重最高？',opts:['朋友圈转发','Meta分析（多研究系统综述）','名人代言','个人经验'],ans:1,expl:'证据金字塔：Meta分析>随机对照试验>队列研究>病例对照>专家意见>个人经验。Meta分析综合了多个高质量研究的结果。'},
+{q:'烟草业应对吸烟致癌证据的策略核心是什么？',opts:['承认错误','制造"科学争议"的假象','立即改善产品','公开道歉'],ans:1,expl:'烟草业资助有偏见的研究、攻击每一项不利证据、让公众以为"专家还在争论"——实则科学共识早已确立。这是制度化伪科学的典型。'},
+{q:'《水知道答案》的实验缺少什么？',opts:['好看的照片','对照组和双盲设计','水的参与','作者签名'],ans:1,expl:'江本胜的实验没有对照组、没有双盲设计、不能重复——缺乏科学实验的所有基本要素。漂亮的冰晶照片≠科学证据。'},
+{q:'"比喻的害处"一文中卓克想表达什么？',opts:['比喻永远不要用','比喻可能误导——似是而非的类比会替代真正的理解','比喻是最好的教学方式','不要用语言'],ans:1,expl:'比喻是双刃剑——它能让复杂概念变得可理解，但也会让人以为"理解了这个比喻就是理解了概念本身"。在科学传播中，不恰当的比喻可能产生持久的误解。'},
+{q:'阴阳五行与现代科学的关系是？',opts:['阴阳五行就是科学','阴阳五行是古代哲学框架，不是科学理论','阴阳五行超越科学','科学不如阴阳五行'],ans:1,expl:'阴阳五行是文化遗产和古代哲学框架，但它不做可检验的定量预测、不包含自我修正机制。它不应被当作科学来教——混淆文化与科学对两者都是伤害。'},
+{q:'网络思维(Network Thinking)的核心是什么？',opts:['每个人都一样','系统不能还原为个体之和——网络结构产生涌现性质','互联网最重要','数量比质量重要'],ans:1,expl:'复杂系统（蚁群、大脑、社会）的行为无法从单个个体预测——网络连接的结构和强度决定了系统的整体行为。涌现性是网络思维的核心概念。'},
+{q:'"可得性偏误"(Availability Bias)指的是什么？',opts:['大家都可得','容易想到的=更可能发生','信息不可得','偏见不可得'],ans:1,expl:'人类倾向于认为容易回忆起来的事件更常见。飞机失事被媒体报道后人们觉得飞行很危险——但实际上开车比坐飞机危险得多。生动性≠概率。'},
+{q:'关于转基因食品安全性，科学共识怎么说？',opts:['不安全','与常规作物一样安全','绝对安全','只在欧洲安全'],ans:1,expl:'美国国家科学院、英国皇家学会、世界卫生组织等一致评估：经过安全审批的转基因作物与常规作物一样安全。科学共识建立在数百项独立研究之上。'},
+{q:'日本学术造假事件(小保方晴子)给科学的启示是什么？',opts:['科学家从不造假','科学有自我修正机制——造假被同行评议和重复实验揭露','日本科学不如欧美','造假是无法避免的'],ans:1,expl:'小保方晴子的STAP细胞造假事件表明：科学体系有自我纠错能力——虽然造假可以通过初步审查，但无法通过独立重复实验的检验。这是科学的免疫系统在工作。'},
+{q:'"科学是不是万能的"一文中卓克的回答是？',opts:['科学是万能的','科学不是万能的——但它是最可靠的获取知识的方法','科学一点用都没有','科学可以解释一切'],ans:1,expl:'科学不是万能的——它不能回答价值问题（什么是好的？）、不能提供确定性（只提供概率性知识）。但它是最可靠的获取可检验知识的方法——没有替代品。'},
+{q:'"中国古代科学发达吗"一文的核心观点是？',opts:['中国古代科学世界领先','中国古代有丰富的技术发明但没有形成现代科学体系','没有讨论'],ans:1,expl:'中国古代在技术上极为发达（造纸、火药、指南针、印刷术等），但没有发展出现代科学的方法论——包括系统实验、数学化、和可证伪的理论框架。技术≠科学。'},
+{q:'保持认知谦逊(cognitive humility)意味着什么？',opts:['什么都不信','承认自己的知识有限，当前最好的理解可能是错的','不要思考','只听取专家意见'],ans:1,expl:'认知谦逊是所有思维工具中最重要的一件——知道自己不知道什么，承认当前的理论可能被未来证据修正。这不让你变弱——让你变强，因为你是唯一不会被新证据击垮的人。'}
+];
+var qa5=0,qc5=0;
+function renderQ5(){var c=document.getElementById('qc5'),h='';q5.forEach(function(item,idx){h+='<div class="quiz-card" id="q5'+idx+'"><div class="q-text">'+(idx+1)+'. '+item.q+'</div>';var l=['A','B','C','D'];item.opts.forEach(function(o,oi){h+='<button class="q-option" id="q5'+idx+'o'+oi+'" onclick="answerQ5('+idx+','+oi+')">'+l[oi]+'. '+o+'</button>';});h+='<div class="q-feedback" id="q5'+idx+'fb"></div></div>';});c.innerHTML=h;var s=localStorage.getItem('mks-mind-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){var ob=document.getElementById('q5'+st.i+'o'+st.c);if(ob){ob.classList.add(st.ok?'correct':'wrong');ob.disabled=true;}var fb=document.getElementById('q5'+st.i+'fb');fb.style.display='block';fb.innerHTML=st.ok?'✅ 正确！'+q5[st.i].expl:'❌ 错误。'+q5[st.i].expl;fb.style.background=st.ok?'#d4edda':'#f8d7da';for(var oi=0;oi<4;oi++){var o2=document.getElementById('q5'+st.i+'o'+oi);if(o2)o2.disabled=true;}}});up5();}}
+function answerQ5(i,c){var it=q5[i],ok=c===it.ans;if(ok)qc5++;qa5++;var fb=document.getElementById('q5'+i+'fb');document.getElementById('q5'+i+'o'+c).classList.add(ok?'correct':'wrong');if(!ok)document.getElementById('q5'+i+'o'+it.ans).classList.add('correct');for(var oi=0;oi<4;oi++){var ob=document.getElementById('q5'+i+'o'+oi);if(ob)ob.disabled=true;}fb.style.display='block';fb.innerHTML=ok?'✅ 正确！'+it.expl:'❌ 错误。'+it.expl;fb.style.background=ok?'#d4edda':'#f8d7da';up5();save5();}
+function up5(){document.getElementById('qs5').textContent='已答：'+qa5+' / '+q5.length+' | 正确：'+qc5;document.getElementById('qp5').style.width=(qa5/q5.length*100)+'%';}
+function save5(){var st=[];for(var i=0;i<q5.length;i++){for(var oi=0;oi<4;oi++){var ob=document.getElementById('q5'+i+'o'+oi);if(ob&&(ob.classList.contains('correct')||ob.classList.contains('wrong'))){st.push({i:i,c:oi,ok:oi===q5[i].ans,d:true});break;}}}localStorage.setItem('mks-mind-quiz',JSON.stringify(st));}
+function resetQ5(){qa5=0;qc5=0;localStorage.removeItem('mks-mind-quiz');renderQ5();}
+function showSA5(i){var r=document.getElementById('saR5_'+i);r.style.display=r.style.display==='block'?'none':'block';}
+function evalD5(el,ch){var fb=el.parentElement.querySelector('[id^="dfb5"]');var bs=el.parentElement.querySelectorAll('.choice-btn');bs.forEach(function(b){b.disabled=true;});if(ch==='b'){fb.innerHTML='✅ <strong>正确。</strong>手机辐射是非电离辐射——不足以破坏DNA。WHO的IARC将手机辐射列为2B类（可能致癌）——和咖啡、泡菜同级。这个分类意味着"证据不足但不能排除"，日常使用的风险极低。六步检验法的价值就在这里：它让你在转发之前先停下来想一想。';fb.style.background='#d4edda';}else if(ch==='a'){fb.innerHTML='❌ 转发之前请先验证。手机辐射是非电离辐射，能量不足以破坏化学键。大多数"XX致癌"的社交媒体消息都经不起六步检验法。';fb.style.background='#f8d7da';}else{fb.innerHTML='⚠️ 无所谓的态度在这个信息过载的时代是危险的——你转发的每一条错误信息都在污染别人的信息环境。学会使用六步检验法，做一个负责任的信息节点。';fb.style.background='#fff3cd';}fb.style.display='block';}
+document.addEventListener('DOMContentLoaded',function(){renderQ5();var s=localStorage.getItem('mks-mind-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){qa5++;if(st.ok)qc5++;}});up5();}});
 </script>
 </body>
 </html>
