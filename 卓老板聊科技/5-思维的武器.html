@@ -721,138 +721,597 @@ function selectWeapon(card, idx) {
   setTimeout(() => { bar.style.width = bar.dataset.width; }, 100);
 }
 
-// ===== NARRATIVE SVG ART =====
+// ===== FORGE WORKSHOP INTERACTIVE CANVAS (v2 - Enhanced) =====
 (function(){
   const container = document.getElementById('narrativeArt');
-  container.innerHTML = `
-    <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;">
-      <defs>
-        <radialGradient id="forgeGlow" cx="50%" cy="85%" r="60%">
-          <stop offset="0%" stop-color="#f97316" stop-opacity="0.15"/>
-          <stop offset="60%" stop-color="#f0c060" stop-opacity="0.04"/>
-          <stop offset="100%" stop-color="transparent"/>
-        </radialGradient>
-        <linearGradient id="anvilGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#4a4058"/>
-          <stop offset="50%" stop-color="#3a3048"/>
-          <stop offset="100%" stop-color="#2a2038"/>
-        </linearGradient>
-        <linearGradient id="bladeGrad" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stop-color="#5a5068"/>
-          <stop offset="40%" stop-color="#7a7088"/>
-          <stop offset="100%" stop-color="#f0c060"/>
-        </linearGradient>
-        <linearGradient id="sparkGrad" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stop-color="#f97316"/>
-          <stop offset="100%" stop-color="#fbbf24"/>
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
+  if(!container) return;
 
-      <!-- Background -->
-      <rect width="900" height="540" fill="url(#forgeGlow)"/>
+  // roundRect polyfill for older browsers
+  if(!CanvasRenderingContext2D.prototype.roundRect){
+    CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+      if(typeof r==='number') r={tl:r,tr:r,br:r,bl:r};
+      this.beginPath();
+      this.moveTo(x+r.tl,y);
+      this.lineTo(x+w-r.tr,y);
+      this.quadraticCurveTo(x+w,y,x+w,y+r.tr);
+      this.lineTo(x+w,y+h-r.br);
+      this.quadraticCurveTo(x+w,y+h,x+w-r.br,y+h);
+      this.lineTo(x+r.bl,y+h);
+      this.quadraticCurveTo(x,y+h,x,y+h-r.bl);
+      this.lineTo(x,y+r.tl);
+      this.quadraticCurveTo(x,y,x+r.tl,y);
+      this.closePath();
+    };
+  }
 
-      <!-- Anvil -->
-      <polygon points="300,440 600,440 630,460 570,460 555,490 345,490 330,460 270,460" fill="url(#anvilGrad)" stroke="#5a5068" stroke-width="2"/>
-      <rect x="340" y="420" width="220" height="22" rx="4" fill="#4a4058" stroke="#5a5068" stroke-width="1.5"/>
+  container.innerHTML =
+    '<canvas id="forgeWorkshopCanvas" style="width:100%;max-width:900px;height:auto;border-radius:12px;cursor:pointer;display:block;"></canvas>'+
+    '<div id="forgeInfoPanel" style="text-align:center;margin-top:12px;min-height:65px;color:#9888a8;font-size:13px;line-height:1.7;font-family:inherit;">🖱️ 点击武器查看锻造参数</div>';
 
-      <!-- Hammer (raised) -->
-      <rect x="530" y="260" width="10" height="140" rx="3" fill="#6a5a48"/>
-      <rect x="500" y="240" width="70" height="30" rx="6" fill="#5a4a38" stroke="#7a6a48" stroke-width="1.5"/>
+  const canvas = document.getElementById('forgeWorkshopCanvas');
+  const ctx = canvas.getContext('2d');
+  const infoPanel = document.getElementById('forgeInfoPanel');
 
-      <!-- Six blades on the anvil -->
-      <!-- Blade 1: 科学方法 -->
-      <g transform="translate(370, 350)">
-        <polygon points="0,70 12,0 24,70" fill="url(#bladeGrad)" stroke="#f0c060" stroke-width="1"/>
-        <text x="12" y="92" text-anchor="middle" fill="#e2dce8" font-size="9" font-weight="600">科学方法</text>
-      </g>
-      <!-- Blade 2: 概率思维 -->
-      <g transform="translate(420, 355)">
-        <polygon points="0,65 11,5 22,65" fill="url(#bladeGrad)" stroke="#f0c060" stroke-width="1"/>
-        <text x="11" y="87" text-anchor="middle" fill="#e2dce8" font-size="9" font-weight="600">概率思维</text>
-      </g>
-      <!-- Blade 3: 博弈论 -->
-      <g transform="translate(465, 350)">
-        <polygon points="0,70 12,0 24,70" fill="url(#bladeGrad)" stroke="#f0c060" stroke-width="1"/>
-        <text x="12" y="92" text-anchor="middle" fill="#e2dce8" font-size="9" font-weight="600">博弈论</text>
-      </g>
-      <!-- Blade 4: 伪科学识别 -->
-      <g transform="translate(510, 355)">
-        <polygon points="0,65 11,5 22,65" fill="url(#bladeGrad)" stroke="#f0c060" stroke-width="1"/>
-        <text x="11" y="87" text-anchor="middle" fill="#e2dce8" font-size="9" font-weight="600">伪科学识别</text>
-      </g>
-      <!-- Blade 5: 批判性思维 -->
-      <g transform="translate(345, 375)">
-        <polygon points="0,55 9,3 18,55" fill="url(#bladeGrad)" stroke="#f0c060" stroke-width="1"/>
-        <text x="9" y="74" text-anchor="middle" fill="#e2dce8" font-size="8" font-weight="600">批判思维</text>
-      </g>
-      <!-- Blade 6: 认知偏误 -->
-      <g transform="translate(555, 375)">
-        <polygon points="0,55 9,3 18,55" fill="url(#bladeGrad)" stroke="#f0c060" stroke-width="1"/>
-        <text x="9" y="74" text-anchor="middle" fill="#e2dce8" font-size="8" font-weight="600">认知偏误</text>
-      </g>
+  let W=700, H=500, animId, time=0, selectedWeapon=-1, selectionTransition=0;
+  const CX=W/2, CY=H*0.50, FORGE_R=68, ORBIT_R=155;
 
-      <!-- Sparks from hammer -->
-      <circle cx="535" cy="230" r="3" fill="#fbbf24" filter="url(#glow)" opacity="0.9">
-        <animate attributeName="cy" values="230;180;140" dur="1.8s" repeatCount="indefinite"/>
-        <animate attributeName="cx" values="535;520;510" dur="1.8s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.9;0.4;0" dur="1.8s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="555" cy="235" r="2" fill="#f97316" filter="url(#glow)" opacity="0.8">
-        <animate attributeName="cy" values="235;170;120" dur="2s" repeatCount="indefinite"/>
-        <animate attributeName="cx" values="555;570;585" dur="2s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.8;0.3;0" dur="2s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="545" cy="240" r="2.5" fill="#f0c060" filter="url(#glow)" opacity="0.85">
-        <animate attributeName="cy" values="240;190;150" dur="2.2s" repeatCount="indefinite"/>
-        <animate attributeName="cx" values="545;530;515" dur="2.2s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.85;0.35;0" dur="2.2s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="520" cy="238" r="2" fill="#fbbf24" filter="url(#glow)" opacity="0.75">
-        <animate attributeName="cy" values="238;185;135" dur="1.6s" repeatCount="indefinite"/>
-        <animate attributeName="cx" values="520;505;495" dur="1.6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.75;0.3;0" dur="1.6s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="565" cy="242" r="1.8" fill="#f97316" filter="url(#glow)" opacity="0.7">
-        <animate attributeName="cy" values="242;175;110" dur="2.4s" repeatCount="indefinite"/>
-        <animate attributeName="cx" values="565;590;610" dur="2.4s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.7;0.25;0" dur="2.4s" repeatCount="indefinite"/>
-      </circle>
+  function resize(){
+    const maxW = Math.min(container.clientWidth, 900);
+    const scale = maxW / 700;
+    canvas.width = maxW;
+    canvas.height = Math.round(500 * scale);
+    W=canvas.width; H=canvas.height;
+  }
+  resize();
+  window.addEventListener('resize', ()=>{ resize(); selectionTransition=0; });
 
-      <!-- Forge fire (bottom) -->
-      <ellipse cx="450" cy="470" rx="120" ry="20" fill="#f97316" opacity="0.12" filter="url(#glow)"/>
-      <ellipse cx="450" cy="470" rx="60" ry="10" fill="#fbbf24" opacity="0.06" filter="url(#glow)"/>
+  // 6 weapons data
+  const weapons = [
+    {id:0, icon:'⚔️', name:'科学方法', type:'重剑', temp:'1700°C', hammer:'1200次', quench:'冰盐水',
+     desc:'可证伪性、同行评审、控制变量', color:'#f0c060', connects:[1,3,4]},
+    {id:1, icon:'🎯', name:'概率思维', type:'瞄准镜', temp:'1450°C', hammer:'800次', quench:'数理油',
+     desc:'贝叶斯更新——先验+证据=后验', color:'#6a8aaa', connects:[0,5]},
+    {id:2, icon:'🪞', name:'博弈论', type:'镜子', temp:'1350°C', hammer:'650次', quench:'盐水',
+     desc:'囚徒困境、纳什均衡——人际互动的底层算法', color:'#c0a0f0', connects:[3,5]},
+    {id:3, icon:'🛡️', name:'伪科学识别', type:'盾牌', temp:'1600°C', hammer:'1000次', quench:'硼砂水',
+     desc:'识别实验设计漏洞、利益冲突、统计操纵', color:'#f0a060', connects:[0,2,4]},
+    {id:4, icon:'🔬', name:'批判性思维', type:'解剖刀', temp:'1550°C', hammer:'950次', quench:'冰油混合',
+     desc:'精确解剖论证的骨骼——前提、逻辑链、替代解释', color:'#60c0f0', connects:[0,3,5]},
+    {id:5, icon:'🧠', name:'认知偏误防御', type:'内视镜', temp:'1400°C', hammer:'700次', quench:'温水',
+     desc:'确认偏误、可用性启发——大脑的出厂设置', color:'#f0a0c0', connects:[1,2,4]}
+  ];
 
-      <!-- Labels: left side - raw materials -->
-      <text x="80" y="120" text-anchor="middle" fill="#9888a8" font-size="11">原料</text>
-      <rect x="30" y="135" width="100" height="24" rx="4" fill="#1a1424" stroke="#3a2a48" stroke-width="1"/>
-      <text x="80" y="152" text-anchor="middle" fill="#6a8aaa" font-size="9">46篇文章</text>
+  // Legend items
+  const legendItems = [
+    {color:'#f0c060', label:'科学方法'},
+    {color:'#6a8aaa', label:'概率思维'},
+    {color:'#c0a0f0', label:'博弈论'},
+    {color:'#f0a060', label:'伪科学识别'},
+    {color:'#60c0f0', label:'批判性思维'},
+    {color:'#f0a0c0', label:'认知偏误防御'}
+  ];
 
-      <text x="80" y="180" text-anchor="middle" fill="#9888a8" font-size="10">直觉与经验</text>
-      <text x="80" y="198" text-anchor="middle" fill="#685878" font-size="8">(需要熔炼的矿石)</text>
+  function getWeaponPos(i){
+    const angle = (i/6)*Math.PI*2 - Math.PI/2;
+    const r = selectedWeapon===i ? ORBIT_R*1.28 : ORBIT_R;
+    return { x: CX+Math.cos(angle)*r, y: CY+Math.sin(angle)*r, angle: angle };
+  }
 
-      <!-- Arrow: materials → forge -->
-      <path d="M130,160 Q220,160 260,280" stroke="#6a8aaa" stroke-width="1" fill="none" stroke-dasharray="5,3" opacity="0.4"/>
+  // Enhanced particle system
+  const particles=[];
+  const sparks=[];
+  function spawnFireParticle(){
+    const a = Math.random()*Math.PI*2;
+    const spd = 0.6+Math.random()*2.8;
+    particles.push({
+      x:CX+(Math.random()-0.5)*FORGE_R*0.8, y:CY+(Math.random()-0.5)*FORGE_R*0.3,
+      vx:Math.cos(a)*spd*0.6, vy:Math.sin(a)*spd*0.4-spd*0.7,
+      life:35+Math.random()*55, age:0, r:1+Math.random()*3.5,
+      hue:Math.random()<0.55?'#fbbf24':(Math.random()<0.5?'#f97316':'#fef08a')
+    });
+  }
+  function spawnSpark(){
+    const a = Math.random()*Math.PI*2;
+    const spd = 1.5+Math.random()*3.5;
+    sparks.push({
+      x:CX, y:CY-FORGE_R*0.2,
+      vx:Math.cos(a)*spd, vy:-Math.abs(Math.sin(a))*spd-1.5,
+      life:18+Math.random()*30, age:0, r:0.7+Math.random()*1.8,
+      hue:'#fef08a'
+    });
+  }
 
-      <!-- Labels: right side - finished weapons -->
-      <text x="820" y="120" text-anchor="middle" fill="#9888a8" font-size="11">成品</text>
-      <rect x="770" y="135" width="100" height="24" rx="4" fill="#1a1424" stroke="#3a2a48" stroke-width="1"/>
-      <text x="820" y="152" text-anchor="middle" fill="#f0c060" font-size="9">6件思维武器</text>
+  // Draw enhanced forge center
+  function drawForge(){
+    // Ambient outer glow (pulsing)
+    const pulse = 0.82+0.18*Math.sin(time*0.055);
+    const glow = ctx.createRadialGradient(CX, CY, FORGE_R*0.2, CX, CY, FORGE_R*2.2*pulse);
+    glow.addColorStop(0, 'rgba(249,115,22,0.30)');
+    glow.addColorStop(0.4, 'rgba(240,192,96,0.10)');
+    glow.addColorStop(0.7, 'rgba(249,115,22,0.03)');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle=glow;
+    ctx.beginPath(); ctx.arc(CX, CY, FORGE_R*2.2*pulse, 0, Math.PI*2); ctx.fill();
 
-      <text x="820" y="180" text-anchor="middle" fill="#9888a8" font-size="10">淬火完成</text>
-      <text x="820" y="198" text-anchor="middle" fill="#685878" font-size="8">(带上战场)</text>
+    // Secondary heat ring
+    const heatRing = ctx.createRadialGradient(CX, CY, FORGE_R*0.85, CX, CY, FORGE_R*1.35);
+    heatRing.addColorStop(0, 'rgba(255,100,30,0.0)');
+    heatRing.addColorStop(0.5, 'rgba(255,120,40,0.12)');
+    heatRing.addColorStop(1, 'rgba(255,80,20,0.0)');
+    ctx.fillStyle=heatRing;
+    ctx.beginPath(); ctx.arc(CX, CY, FORGE_R*1.35, 0, Math.PI*2); ctx.fill();
 
-      <!-- Arrow: forge → weapons -->
-      <path d="M640,280 Q720,190 770,160" stroke="#f0c060" stroke-width="1" fill="none" stroke-dasharray="5,3" opacity="0.4"/>
+    // Forge base (metallic bowl look)
+    const baseGrd=ctx.createLinearGradient(CX-FORGE_R, CY-FORGE_R*0.25, CX+FORGE_R, CY+FORGE_R*0.25);
+    baseGrd.addColorStop(0, '#2a1a38');
+    baseGrd.addColorStop(0.3, '#4a3a58');
+    baseGrd.addColorStop(0.55, '#6a5a78');
+    baseGrd.addColorStop(0.75, '#3a2a48');
+    baseGrd.addColorStop(1, '#1a1028');
+    ctx.fillStyle=baseGrd;
+    ctx.beginPath();
+    ctx.arc(CX, CY, FORGE_R, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle='rgba(249,115,22,0.4)';
+    ctx.lineWidth=2.5;
+    ctx.stroke();
 
-      <!-- Title -->
-      <text x="450" y="120" text-anchor="middle" fill="#f0c060" font-size="16" font-weight="900" letter-spacing="3">锻造车间 · THE FORGE</text>
-      <text x="450" y="145" text-anchor="middle" fill="#685878" font-size="10">大脑出厂时没有附带批判性思维——这些是后裝的武器</text>
-    </svg>
-  `;
+    // Inner forge wall (rim)
+    ctx.beginPath();
+    ctx.arc(CX, CY, FORGE_R*0.78, 0, Math.PI*2);
+    ctx.strokeStyle='rgba(200,100,30,0.5)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    // Core fire (multi-layer)
+    const innerPulse=0.85+0.15*Math.sin(time*0.07);
+    for(let layer=0;layer<3;layer++){
+      const lr=FORGE_R*(0.6-layer*0.15)*innerPulse;
+      const stops=[
+        ['rgba(255,255,220,0.95)','rgba(255,255,180,0.7)','rgba(251,191,36,0.35)','rgba(200,60,10,0.05)'],
+        ['rgba(255,240,180,0.6)','rgba(255,200,80,0.4)','rgba(249,115,22,0.2)','rgba(200,40,10,0.02)'],
+        ['rgba(251,191,36,0.35)','rgba(249,115,22,0.18)','rgba(220,80,20,0.08)','rgba(0,0,0,0)']
+      ][layer];
+      const grd=ctx.createRadialGradient(CX, CY-FORGE_R*0.05, lr*0.05, CX, CY, lr);
+      grd.addColorStop(0, stops[0]);
+      grd.addColorStop(0.35, stops[1]);
+      grd.addColorStop(0.7, stops[2]);
+      grd.addColorStop(1, stops[3]);
+      ctx.fillStyle=grd;
+      ctx.beginPath();
+      ctx.arc(CX, CY, lr, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // Flickering flame tongues
+    const numFlames=10;
+    for(let i=0;i<numFlames;i++){
+      const baseAngle=(i/numFlames)*Math.PI*2+time*0.008;
+      const fl=FORGE_R*(0.08+0.28*Math.abs(Math.sin(time*0.12+i*1.7+Math.sin(time*0.05))));
+      const flWidth=0.12+0.08*Math.sin(time*0.09+i*2.1);
+      const alphaVal=0.35+0.3*Math.sin(time*0.11+i*1.3);
+      ctx.beginPath();
+      ctx.moveTo(CX+Math.cos(baseAngle-flWidth)*FORGE_R*0.18, CY+Math.sin(baseAngle-flWidth)*FORGE_R*0.18);
+      ctx.quadraticCurveTo(
+        CX+Math.cos(baseAngle)*FORGE_R*0.45, CY+Math.sin(baseAngle)*FORGE_R*0.45-fl*1.5,
+        CX+Math.cos(baseAngle)*(FORGE_R*0.15+fl), CY+Math.sin(baseAngle)*(FORGE_R*0.15+fl)-fl*0.5
+      );
+      ctx.quadraticCurveTo(
+        CX+Math.cos(baseAngle)*FORGE_R*0.45, CY+Math.sin(baseAngle)*FORGE_R*0.45+fl*0.5,
+        CX+Math.cos(baseAngle+flWidth)*FORGE_R*0.18, CY+Math.sin(baseAngle+flWidth)*FORGE_R*0.18
+      );
+      ctx.fillStyle=`rgba(255,${160+Math.floor(Math.random()*60)},${20+Math.floor(Math.random()*30)},${alphaVal})`;
+      ctx.fill();
+    }
+
+    // Forge center label
+    ctx.fillStyle='#fbbf24';
+    ctx.font=`bold ${Math.round(W*0.017)}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('🔥', CX, CY-2);
+    ctx.font=`bold ${Math.round(W*0.013)}px "Noto Sans SC", sans-serif`;
+    ctx.fillStyle='#e2dce8';
+    ctx.fillText('锻造炉', CX, CY+FORGE_R+20);
+
+    // Particle emissions
+    if(time%2===0){
+      if(particles.length<80) spawnFireParticle();
+      if(sparks.length<25 && time%4===0) spawnSpark();
+    }
+    particles.forEach((p,i)=>{
+      p.age++; if(p.age>p.life){particles.splice(i,1);return;}
+      const alpha=(1-p.age/p.life)*0.75;
+      const hueVal=p.hue==='#fbbf24'?[251,191,36]:p.hue==='#f97316'?[249,115,22]:[254,240,138];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r*(1-p.age/p.life), 0, Math.PI*2);
+      ctx.fillStyle=`rgba(${hueVal[0]},${hueVal[1]},${hueVal[2]},${alpha})`;
+      ctx.fill();
+      if(p.r>2 && p.age<15){
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r*2*(1-p.age/p.life), 0, Math.PI*2);
+        ctx.fillStyle=`rgba(${hueVal[0]},${hueVal[1]},${hueVal[2]},${alpha*0.15})`;
+        ctx.fill();
+      }
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.015; p.vx*=0.995;
+    });
+    sparks.forEach((s,i)=>{
+      s.age++; if(s.age>s.life){sparks.splice(i,1);return;}
+      const alpha=(1-s.age/s.life);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r*alpha, 0, Math.PI*2);
+      ctx.fillStyle=`rgba(254,240,138,${alpha})`;
+      ctx.fill();
+      s.x+=s.vx; s.y+=s.vy; s.vy+=0.03;
+    });
+  }
+
+  // Draw weapon node
+  function drawWeapon(w, i, pos){
+    const isSel=selectedWeapon===i;
+    const scale=isSel?1.45:1;
+    ctx.save();
+    ctx.translate(pos.x, pos.y);
+
+    // === Connection lines from selected weapon to complementary weapons ===
+    if(isSel){
+      w.connects.forEach(cid=>{
+        const cpos=getWeaponPos(cid);
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(cpos.x-pos.x, cpos.y-pos.y);
+        ctx.strokeStyle='rgba(251,191,36,0.7)';
+        ctx.lineWidth=2.5;
+        ctx.setLineDash([5,3]);
+        ctx.stroke();
+        // Arrow head on connection
+        const dx=cpos.x-pos.x, dy=cpos.y-pos.y;
+        const len=Math.hypot(dx,dy);
+        if(len>0){
+          const ux=dx/len, uy=dy/len;
+          const ax=cpos.x-pos.x-ux*28*1.28, ay=cpos.y-pos.y-uy*28*1.28;
+          ctx.beginPath();
+          ctx.moveTo(ax, ay);
+          ctx.lineTo(ax-ux*8+uy*4, ay-uy*8-ux*4);
+          ctx.lineTo(ax-ux*8-uy*4, ay-uy*8+ux*4);
+          ctx.closePath();
+          ctx.fillStyle='rgba(251,191,36,0.7)';
+          ctx.fill();
+        }
+        ctx.setLineDash([]);
+        ctx.restore();
+      });
+    }
+
+    // Glow around selected weapon
+    if(isSel){
+      const selGlow=ctx.createRadialGradient(0,0,20*scale,0,0,38*scale);
+      selGlow.addColorStop(0, `${w.color}30`);
+      selGlow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle=selGlow;
+      ctx.beginPath(); ctx.arc(0,0,38*scale,0,Math.PI*2); ctx.fill();
+
+      // Pulsing ring
+      const ringPulse = 0.9+0.1*Math.sin(time*0.1);
+      ctx.beginPath();
+      ctx.arc(0,0,30*scale*ringPulse,0,Math.PI*2);
+      ctx.strokeStyle=`${w.color}88`;
+      ctx.lineWidth=2;
+      ctx.setLineDash([3,3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Weapon base hexagon
+    ctx.beginPath();
+    const baseR = 24*scale;
+    for(let j=0;j<6;j++){
+      const a6=(j/6)*Math.PI*2-Math.PI/6;
+      const px=Math.cos(a6)*baseR, py=Math.sin(a6)*baseR;
+      if(j===0) ctx.moveTo(px,py);
+      else ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+    ctx.fillStyle=isSel?`${w.color}22`:'rgba(26,20,36,0.85)';
+    ctx.fill();
+    ctx.strokeStyle=isSel?w.color:'#5a4a68';
+    ctx.lineWidth=isSel?2.8:1.5;
+    ctx.stroke();
+
+    // Icon
+    ctx.font=`${Math.round(22*scale)}px serif`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(w.icon, 0, -1);
+
+    // Weapon name below
+    ctx.fillStyle=isSel?w.color:'#9888a8';
+    ctx.font=`bold ${Math.round(12*scale)}px "Noto Sans SC", sans-serif`;
+    ctx.textBaseline='top';
+    ctx.fillText(w.name, 0, 20*scale);
+
+    // Type badge (small)
+    if(!isSel){
+      ctx.font=`${Math.round(8.5*scale)}px "Noto Sans SC", sans-serif`;
+      ctx.fillStyle='#685878';
+      ctx.fillText(w.type, 0, 35*scale);
+    } else {
+      // Type badge for selected
+      ctx.font=`${Math.round(9*scale)}px "Noto Sans SC", sans-serif`;
+      ctx.fillStyle=w.color;
+      ctx.fillText(w.type, 0, 35*scale);
+    }
+
+    // === Parameter popup when selected ===
+    if(isSel){
+      const popY=-90;
+      // Popup background
+      ctx.fillStyle='rgba(16,12,22,0.94)';
+      ctx.strokeStyle=w.color;
+      ctx.lineWidth=1.5;
+      ctx.beginPath();
+      ctx.roundRect(-68, popY-68, 136, 78, 8);
+      ctx.fill(); ctx.stroke();
+
+      // Parameter rows
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      // Row 1: temperature
+      ctx.fillStyle='#fbbf24';
+      ctx.font=`bold ${Math.round(10*scale)}px "Noto Sans SC", sans-serif`;
+      ctx.fillText(`🌡 锻造温度`, -30, popY-52);
+      ctx.fillStyle='#f97316';
+      ctx.fillText(w.temp, 30, popY-52);
+      // Row 2: hammer
+      ctx.fillStyle='#fbbf24';
+      ctx.fillText(`🔨 锤击次数`, -30, popY-34);
+      ctx.fillStyle='#f97316';
+      ctx.fillText(w.hammer, 30, popY-34);
+      // Row 3: quench
+      ctx.fillStyle='#fbbf24';
+      ctx.fillText(`❄️ 淬火介质`, -30, popY-16);
+      ctx.fillStyle='#6a8aaa';
+      ctx.fillText(w.quench, 30, popY-16);
+      // Row 4: description
+      ctx.fillStyle='#9888a8';
+      ctx.font=`${Math.round(9*scale)}px "Noto Sans SC", sans-serif`;
+      ctx.fillText(w.desc, 0, popY+6);
+
+      // Connection line from weapon back to forge
+      ctx.beginPath();
+      ctx.setLineDash([3,2]);
+      ctx.moveTo(0, 0);
+      const fx=CX-pos.x+Math.cos(pos.angle)*FORGE_R*0.7;
+      const fy=CY-pos.y+Math.sin(pos.angle)*FORGE_R*0.7;
+      ctx.lineTo(fx, fy);
+      ctx.strokeStyle=`${w.color}55`;
+      ctx.lineWidth=2;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.restore();
+  }
+
+  // Draw raw materials zone (bottom-left)
+  function drawRawMaterials(){
+    const ry=H*0.90, rx=W*0.06, rw=W*0.22, rh=H*0.07;
+    ctx.fillStyle='rgba(16,12,22,0.85)';
+    ctx.strokeStyle='#3a2a48';
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.roundRect(rx, ry, rw, rh, 6);
+    ctx.fill(); ctx.stroke();
+
+    // Ore icon decoration
+    ctx.font=`${Math.round(W*0.018)}px serif`;
+    ctx.fillText('⛏️', rx+14, ry+rh/2+3);
+
+    ctx.fillStyle='#6a8aaa';
+    ctx.font=`bold ${Math.round(W*0.012)}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='left';
+    ctx.fillText('原料区', rx+32, ry+rh*0.32);
+    ctx.fillStyle='#9888a8';
+    ctx.font=`${Math.round(W*0.010)}px "Noto Sans SC", sans-serif`;
+    ctx.fillText('46篇文章矿石', rx+32, ry+rh*0.68);
+
+    ctx.textAlign='center';
+    // Dashed arrow from raw materials up toward forge
+    ctx.beginPath();
+    ctx.moveTo(rx+rw*0.5, ry);
+    ctx.lineTo(CX-FORGE_R*1.3, CY+FORGE_R*0.8);
+    ctx.strokeStyle='rgba(106,138,170,0.35)';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([4,5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Small arrow tip
+    const adx=CX-FORGE_R*1.3-rx-rw*0.5, ady=CY+FORGE_R*0.8-ry;
+    const alen=Math.hypot(adx,ady);
+    if(alen>0){
+      const aux=adx/alen, auy=ady/alen;
+      ctx.beginPath();
+      ctx.moveTo(CX-FORGE_R*1.3, CY+FORGE_R*0.8);
+      ctx.lineTo(CX-FORGE_R*1.3-aux*8+auy*4, CY+FORGE_R*0.8-auy*8-aux*4);
+      ctx.lineTo(CX-FORGE_R*1.3-aux*8-auy*4, CY+FORGE_R*0.8-auy*8+aux*4);
+      ctx.closePath();
+      ctx.fillStyle='rgba(106,138,170,0.35)';
+      ctx.fill();
+    }
+  }
+
+  // Draw finished products zone (top)
+  function drawFinishedProducts(){
+    const fy=H*0.025, fx=W*0.33, fw=W*0.34, fh=H*0.06;
+    ctx.fillStyle='rgba(16,12,22,0.85)';
+    ctx.strokeStyle='#f0c060';
+    ctx.lineWidth=1.8;
+    ctx.beginPath();
+    ctx.roundRect(fx, fy, fw, fh, 6);
+    ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle='#f0c060';
+    ctx.font=`bold ${Math.round(W*0.013)}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('⚡ 成品区', fx+fw/2, fy+fh*0.35);
+    ctx.fillStyle='#fbbf24';
+    ctx.font=`${Math.round(W*0.011)}px "Noto Sans SC", sans-serif`;
+    ctx.fillText('6件淬火武器', fx+fw/2, fy+fh*0.73);
+
+    // Dashed connection down from forge
+    ctx.beginPath();
+    ctx.moveTo(fx+fw/2, fy+fh);
+    ctx.lineTo(CX+FORGE_R*0.3, CY-FORGE_R*1.1);
+    ctx.strokeStyle='rgba(240,192,96,0.3)';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([4,5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Draw legend (top-right area, below title)
+  function drawLegend(){
+    const lx=W*0.74, ly=H*0.07, lw=W*0.22, lh=H*0.18;
+    ctx.fillStyle='rgba(16,12,22,0.7)';
+    ctx.strokeStyle='#3a2a48';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.roundRect(lx, ly, lw, lh, 6);
+    ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle='#685878';
+    ctx.font=`bold ${Math.round(W*0.010)}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('图 例', lx+lw/2, ly+14);
+
+    legendItems.forEach((item,i)=>{
+      const iy=ly+26+i*15;
+      ctx.beginPath();
+      ctx.arc(lx+12, iy, 4, 0, Math.PI*2);
+      ctx.fillStyle=item.color;
+      ctx.fill();
+      ctx.strokeStyle=item.color;
+      ctx.lineWidth=1;
+      ctx.stroke();
+      ctx.fillStyle='#9888a8';
+      ctx.font=`${Math.round(W*0.009)}px "Noto Sans SC", sans-serif`;
+      ctx.textAlign='left';
+      ctx.fillText(item.label, lx+22, iy+2);
+    });
+    ctx.textAlign='center';
+  }
+
+  // Draw title
+  function drawTitle(){
+    ctx.fillStyle='#f0c060';
+    ctx.font=`bold ${Math.round(W*0.022)}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('锻造车间 · THE FORGE', W/2, H*0.04);
+    ctx.fillStyle='#685878';
+    ctx.font=`${Math.round(W*0.011)}px "Noto Sans SC", sans-serif`;
+    ctx.fillText('大脑出厂时没有附带批判性思维——这些是后装的武器', W/2, H*0.065);
+  }
+
+  // Main draw loop
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Dark forge background with radial gradient
+    const bgGrd=ctx.createRadialGradient(CX, CY-FORGE_R*0.3, 0, CX, CY, Math.max(W,H)*0.85);
+    bgGrd.addColorStop(0, '#1f1828');
+    bgGrd.addColorStop(0.5, '#1a1424');
+    bgGrd.addColorStop(1, '#0d0b12');
+    ctx.fillStyle=bgGrd;
+    ctx.fillRect(0,0,W,H);
+
+    // Subtle forge floor grid
+    ctx.strokeStyle='rgba(42,32,56,0.25)';
+    ctx.lineWidth=0.5;
+    const gridSize=Math.round(W*0.045);
+    for(let x=0;x<W;x+=gridSize){
+      ctx.beginPath(); ctx.moveTo(x, H*0.12); ctx.lineTo(x, H*0.88); ctx.stroke();
+    }
+    for(let y=H*0.12;y<H*0.88;y+=gridSize){
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    drawTitle();
+    drawLegend();
+    drawRawMaterials();
+    drawFinishedProducts();
+
+    // Faint connection web between all weapons
+    weapons.forEach(w=>{
+      w.connects.forEach(cid=>{
+        if(w.id<cid){
+          const p1=getWeaponPos(w.id), p2=getWeaponPos(cid);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle='rgba(90,80,104,0.18)';
+          ctx.lineWidth=0.7;
+          ctx.setLineDash([5,7]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      });
+    });
+
+    // Draw forge (must be drawn before weapons to layer correctly)
+    drawForge();
+
+    // Draw weapon nodes on top
+    weapons.forEach((w,i)=>{
+      const pos=getWeaponPos(i);
+      drawWeapon(w, i, pos);
+    });
+
+    time++;
+  }
+
+  // Click handler
+  canvas.addEventListener('click', (e)=>{
+    const rect=canvas.getBoundingClientRect();
+    const scaleX=W/rect.width, scaleY=H/rect.height;
+    const mx=(e.clientX-rect.left)*scaleX;
+    const my=(e.clientY-rect.top)*scaleY;
+
+    let clicked=-1, minDist=Infinity;
+    weapons.forEach((w,i)=>{
+      const pos=getWeaponPos(i);
+      const d=Math.hypot(mx-pos.x, my-pos.y);
+      if(d<40 && d<minDist){ clicked=i; minDist=d; }
+    });
+
+    if(clicked>=0){
+      if(selectedWeapon===clicked) selectedWeapon=-1;
+      else selectedWeapon=clicked;
+    } else {
+      selectedWeapon=-1;
+    }
+
+    if(selectedWeapon>=0){
+      const w=weapons[selectedWeapon];
+      infoPanel.innerHTML=
+        `<span style="display:inline-block;padding:4px 14px;border-radius:14px;background:${w.color}22;border:1px solid ${w.color}55;margin-bottom:3px;">`+
+        `<span style="color:${w.color};font-weight:700;font-size:14px;">${w.icon} ${w.name}</span>`+
+        `<span style="color:${w.color};font-size:11px;margin-left:4px;">${w.type}</span></span><br>`+
+        `<span style="color:#fbbf24;">🌡 锻造温度：${w.temp}</span> &nbsp;·&nbsp; `+
+        `<span style="color:#f97316;">🔨 锤击次数：${w.hammer}</span> &nbsp;·&nbsp; `+
+        `<span style="color:#6a8aaa;">❄️ 淬火介质：${w.quench}</span><br>`+
+        `<span style="color:#9888a8;font-size:11px;">${w.desc}</span>`;
+    } else {
+      infoPanel.innerHTML='🖱️ 点击武器查看锻造参数';
+    }
+  });
+
+  // Animation loop
+  function animate(){
+    draw();
+    animId=requestAnimationFrame(animate);
+  }
+  animId=requestAnimationFrame(animate);
 })();
 
 // ===== DECISION SIMULATOR =====
