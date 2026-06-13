@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI与数字革命 — 一场正在发生的现场报道</title>
+<style>
+:root {
+  --bg: #080c14;
+  --surface: #101624;
+  --surface2: #161e30;
+  --surface3: #1c253a;
+  --blue: #4da8ff;
+  --blue-dim: #2a6090;
+  --blue-bright: #66bbff;
+  --orange: #f0883e;
+  --orange-dim: #b86028;
+  --orange-bright: #f5a623;
+  --cyan: #4dd9c0;
+  --cyan-dim: #2a8068;
+  --red: #f06070;
+  --red-dim: #a03040;
+  --green: #48c878;
+  --green-dim: #2a7040;
+  --yellow: #f0c848;
+  --purple: #a080e0;
+  --text: #dde2ee;
+  --text-dim: #8898b8;
+  --text-subtle: #586880;
+  --border: #1c2840;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --shadow-blue: 0 0 30px rgba(77,168,255,.12);
+  --shadow-orange: 0 0 30px rgba(240,136,62,.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #2a3050; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a4060; }
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(8,12,20,.9); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border); padding: 10px 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+.top-nav .home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--orange-dim), var(--orange));
+  color: #fff; font-size: 13px; font-weight: 700;
+  text-decoration: none; transition: transform .2s, box-shadow .2s;
+}
+.top-nav .home-link:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,136,62,.35); }
+.top-nav .breadcrumb { font-size: 12px; color: var(--text-dim); }
+.top-nav .breadcrumb span { color: var(--blue); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+  padding: 80px 20px 40px;
+}
+.hero canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-bg-overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, var(--bg) 70%);
+  z-index: 1; pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; text-align: center; max-width: 860px; }
+.hero-badge {
+  display: inline-block; padding: 4px 16px; border-radius: 20px;
+  background: rgba(77,168,255,.12); border: 1px solid rgba(77,168,255,.25);
+  color: var(--blue); font-size: .78rem; font-weight: 600;
+  letter-spacing: 2px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 900; line-height: 1.25;
+  background: linear-gradient(135deg, var(--blue-bright), #88ccff, var(--cyan), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 16px;
+}
+.hero .tagline {
+  font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-dim);
+  margin-bottom: 10px; line-height: 1.6;
+}
+.hero .tagline em {
+  font-style: normal; color: var(--orange); font-weight: 600;
+}
+.hero .hero-meta {
+  display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-top: 28px;
+}
+.hero .hero-stat { text-align: center; }
+.hero .hero-stat .num {
+  font-size: 2.2rem; font-weight: 900;
+  background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .hero-stat .num.orange {
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero .hero-stat .label { font-size: .78rem; color: var(--text-dim); margin-top: 2px; }
+.hero .scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: var(--text-subtle); font-size: 12px; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(8px)}
+}
+
+/* ===== SECTION ===== */
+.section {
+  position: relative; padding: 80px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.section::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77,168,255,.3), transparent);
+}
+.section-header { text-align: center; margin-bottom: 48px; max-width: 700px; }
+.section-header .section-num {
+  font-size: .7rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--blue-dim); margin-bottom: 8px;
+}
+.section-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--text-dim));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 10px; line-height: 1.3;
+}
+.section-header p { color: var(--text-dim); font-size: .95rem; max-width: 560px; margin: 0 auto; }
+.section-body { max-width: 1060px; width: 100%; }
+
+/* Section accent overrides */
+.sec-timeline .section-header h2 { background-image: linear-gradient(135deg, var(--cyan), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-contrast .section-header h2 { background-image: linear-gradient(135deg, var(--orange-bright), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-canvas .section-header h2 { background-image: linear-gradient(135deg, var(--blue-bright), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-flip .section-header h2 { background-image: linear-gradient(135deg, var(--cyan), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-decision .section-header h2 { background-image: linear-gradient(135deg, var(--orange-bright), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-quote .section-header h2 { background-image: linear-gradient(135deg, var(--red), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-collapse .section-header h2 { background-image: linear-gradient(135deg, var(--purple), var(--blue-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.sec-closing .section-header h2 { background-image: linear-gradient(135deg, var(--blue-bright), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ===== 1. TIMELINE ===== */
+.timeline-wrap { position: relative; padding: 10px 0; }
+.timeline-wrap::before {
+  content: ''; position: absolute; left: 28px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(180deg, var(--cyan), var(--blue-dim), var(--orange-dim));
+}
+.tl-item {
+  position: relative; padding-left: 64px; margin-bottom: 22px;
+  cursor: pointer; transition: all .25s;
+}
+.tl-item::before {
+  content: ''; position: absolute; left: 18px; top: 8px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border);
+  transition: all .3s; z-index: 2;
+}
+.tl-item:hover::before, .tl-item.active::before {
+  border-color: var(--cyan); background: rgba(77,217,192,.15);
+  box-shadow: 0 0 14px rgba(77,217,192,.35); transform: scale(1.15);
+}
+.tl-item .tl-date {
+  font-size: .72rem; color: var(--cyan); font-weight: 700;
+  letter-spacing: 1px; font-family: "SF Mono","JetBrains Mono",monospace;
+}
+.tl-item .tl-title { font-size: 1rem; font-weight: 700; margin: 2px 0; color: var(--text); }
+.tl-item .tl-source { font-size: .7rem; color: var(--text-subtle); margin-bottom: 4px; }
+.tl-item .tl-detail {
+  display: none; margin-top: 10px; padding: 14px 18px;
+  background: var(--surface2); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--cyan); font-size: .85rem;
+  color: var(--text-dim); line-height: 1.75;
+}
+.tl-item .tl-detail.show { display: block; animation: fadeUp .3s; }
+.tl-item .tl-detail .quote-mark {
+  color: var(--orange); font-weight: 700; margin-right: 4px;
+  font-family: Georgia, serif; font-size: 1.2rem; line-height: 0;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== 2. CONTRAST SCREEN ===== */
+.contrast-wrap {
+  display: grid; grid-template-columns: 1fr 80px 1fr; align-items: start; gap: 0;
+}
+.contrast-col {
+  background: var(--surface); border-radius: var(--radius-lg);
+  padding: 28px; border: 1px solid var(--border);
+}
+.contrast-col.left { border-color: rgba(240,96,112,.3); }
+.contrast-col.right { border-color: rgba(77,168,255,.3); }
+.contrast-col h4 {
+  text-align: center; font-size: 1.1rem; font-weight: 800; margin-bottom: 16px;
+}
+.contrast-col.left h4 { color: var(--red); }
+.contrast-col.right h4 { color: var(--blue); }
+.contrast-col .metric {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--border); font-size: .85rem;
+}
+.contrast-col .metric .m-label { color: var(--text-dim); }
+.contrast-col .metric .m-val { font-weight: 700; font-size: .9rem; }
+.contrast-col.left .metric .m-val { color: var(--red); }
+.contrast-col.right .metric .m-val { color: var(--blue-bright); }
+.contrast-vs {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px;
+}
+.contrast-vs .vs-badge {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--red-dim), var(--blue-dim));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 1rem; color: #fff;
+  border: 2px solid var(--border);
+}
+.contrast-vs .vs-line {
+  width: 2px; flex: 1; min-height: 40px;
+  background: linear-gradient(180deg, var(--red-dim), var(--blue-dim));
+}
+.contrast-source {
+  grid-column: 1/-1; text-align: center; margin-top: 16px;
+  font-size: .78rem; color: var(--text-subtle); padding: 0 20px;
+}
+
+/* ===== 3. CANVAS ANIMATION ===== */
+.canvas-stage {
+  background: var(--surface); border-radius: var(--radius-lg);
+  padding: 20px; border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.canvas-stage canvas { display: block; width: 100%; height: 420px; border-radius: var(--radius-sm); }
+.canvas-stage .canvas-controls {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 16px;
+}
+.canvas-stage .ctrl-btn {
+  padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text-dim); cursor: pointer;
+  font-size: .82rem; font-weight: 600; transition: all .25s;
+}
+.canvas-stage .ctrl-btn:hover, .canvas-stage .ctrl-btn.active {
+  border-color: var(--blue); color: var(--blue-bright);
+  background: rgba(77,168,255,.08);
+}
+.canvas-stage .canvas-legend {
+  margin-top: 14px; text-align: center; font-size: .78rem; color: var(--text-dim);
+  min-height: 48px; display: flex; align-items: center; justify-content: center;
+  gap: 16px; flex-wrap: wrap;
+}
+
+/* ===== 4. FLIP CARDS ===== */
+.flip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.flip-card {
+  perspective: 900px; height: 280px;
+}
+.flip-inner {
+  width: 100%; height: 100%; transition: transform .6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d; cursor: pointer; position: relative;
+}
+.flip-inner.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius); padding: 22px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.flip-front {
+  background: var(--surface); border: 1px solid var(--border);
+  text-align: center; gap: 10px;
+}
+.flip-front .flip-icon { font-size: 2.8rem; }
+.flip-front .flip-title { font-weight: 800; font-size: 1.05rem; color: var(--cyan); }
+.flip-front .flip-hint { font-size: .72rem; color: var(--text-subtle); }
+.flip-back {
+  background: var(--surface2); border: 2px solid var(--cyan);
+  transform: rotateY(180deg); overflow-y: auto;
+  text-align: left; justify-content: flex-start; padding: 18px 16px;
+  font-size: .82rem; line-height: 1.7;
+}
+.flip-back h4 { color: var(--cyan); margin-bottom: 8px; font-size: .9rem; }
+.flip-back .f-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: .65rem; font-weight: 700; margin-right: 4px; margin-bottom: 4px;
+}
+.tag-break { background: rgba(77,168,255,.18); color: var(--blue-bright); }
+.tag-warn { background: rgba(240,96,112,.18); color: var(--red); }
+.tag-future { background: rgba(240,200,72,.18); color: var(--yellow); }
+.tag-now { background: rgba(72,200,120,.18); color: var(--green); }
+
+/* ===== 5. SVG DIAGRAM ===== */
+.svg-diagram {
+  background: var(--surface); border-radius: var(--radius-lg);
+  padding: 24px; border: 1px solid var(--border); overflow-x: auto;
+}
+.svg-diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.svg-diagram .svg-hint {
+  text-align: center; font-size: .78rem; color: var(--text-subtle); margin-top: 12px;
+}
+
+/* ===== 6. DECISION TREE ===== */
+.decision-box {
+  background: var(--surface); border-radius: var(--radius-lg); padding: 28px;
+  border: 1px solid var(--border); max-width: 700px; margin: 0 auto;
+}
+.decision-box h4 { color: var(--orange); margin-bottom: 8px; font-size: 1.1rem; }
+.decision-box .dq { color: var(--text-dim); font-size: .9rem; margin-bottom: 18px; }
+.decision-box .d-options { display: flex; flex-direction: column; gap: 8px; }
+.decision-box .d-options button {
+  padding: 12px 18px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text); cursor: pointer;
+  font-size: .9rem; text-align: left; transition: all .2s;
+  font-family: inherit;
+}
+.decision-box .d-options button:hover {
+  border-color: var(--orange); background: rgba(240,136,62,.06);
+  transform: translateX(4px);
+}
+.decision-box .d-result {
+  margin-top: 18px; padding: 16px; border-radius: var(--radius-sm);
+  display: none; line-height: 1.7; font-size: .88rem;
+}
+.decision-box .d-result.show { display: block; animation: fadeUp .3s; }
+.decision-box .d-result.level-a { background: rgba(240,96,112,.1); border: 1px solid rgba(240,96,112,.3); color: #f0a0a8; }
+.decision-box .d-result.level-b { background: rgba(240,200,72,.1); border: 1px solid rgba(240,200,72,.3); color: #f0d878; }
+.decision-box .d-result.level-c { background: rgba(72,200,120,.1); border: 1px solid rgba(72,200,120,.3); color: #80e0a0; }
+.decision-box .d-reset {
+  margin-top: 14px; padding: 8px 20px; border-radius: 20px;
+  background: transparent; border: 1px solid var(--orange-dim); color: var(--orange);
+  cursor: pointer; font-size: .82rem; transition: all .2s; display: none;
+  font-family: inherit;
+}
+.decision-box .d-reset.show { display: inline-block; }
+.decision-box .d-reset:hover { background: rgba(240,136,62,.1); }
+
+/* ===== 7. COLLAPSIBLE Q&A ===== */
+.collapse-list { display: flex; flex-direction: column; gap: 12px; }
+.collapse-item {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); overflow: hidden;
+  transition: all .3s;
+}
+.collapse-item.open { border-color: rgba(160,128,224,.3); box-shadow: 0 0 20px rgba(160,128,224,.08); }
+.collapse-trigger {
+  padding: 18px 20px; cursor: pointer; display: flex;
+  align-items: center; justify-content: space-between; gap: 12px;
+  font-weight: 700; font-size: .95rem; user-select: none;
+  transition: background .2s;
+}
+.collapse-trigger:hover { background: rgba(255,255,255,.02); }
+.collapse-trigger .c-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--border); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--purple); transition: transform .3s;
+  flex-shrink: 0;
+}
+.collapse-item.open .collapse-trigger .c-icon { transform: rotate(45deg); border-color: var(--purple); }
+.collapse-content {
+  max-height: 0; overflow: hidden; transition: max-height .45s cubic-bezier(.4,0,.2,1);
+}
+.collapse-content-inner {
+  padding: 0 20px 18px; font-size: .85rem; color: var(--text-dim);
+  line-height: 1.8;
+}
+.collapse-content-inner blockquote {
+  border-left: 3px solid var(--purple); padding: 8px 16px;
+  margin: 12px 0; background: rgba(160,128,224,.06);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic; color: #c8b8f0;
+}
+
+/* ===== 8. QUOTE WALL ===== */
+.quote-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.quote-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 22px; border: 1px solid var(--border);
+  position: relative; transition: all .3s;
+}
+.quote-card:hover {
+  border-color: rgba(240,136,62,.25);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(240,136,62,.08);
+}
+.quote-card::before {
+  content: '"'; position: absolute; top: 8px; left: 16px;
+  font-size: 3rem; color: var(--orange-dim); font-family: Georgia, serif;
+  line-height: 1; opacity: .4;
+}
+.quote-card .q-text {
+  font-size: .88rem; line-height: 1.7; color: var(--text);
+  margin-bottom: 12px; padding-top: 12px; position: relative; z-index: 1;
+}
+.quote-card .q-source {
+  font-size: .72rem; color: var(--orange); font-weight: 600;
+}
+.quote-card .q-source::before { content: '— '; color: var(--text-subtle); }
+
+/* ===== CLOSING ===== */
+.closing-block {
+  max-width: 700px; margin: 0 auto; text-align: center;
+  padding: 40px 20px;
+}
+.closing-block .closing-quote {
+  font-size: 1.15rem; line-height: 1.8; color: var(--text);
+  margin-bottom: 16px; font-weight: 600;
+}
+.closing-block .closing-quote::before { content: '「'; color: var(--blue-bright); }
+.closing-block .closing-quote::after { content: '」'; color: var(--blue-bright); }
+.closing-block .closing-source { font-size: .8rem; color: var(--text-subtle); margin-bottom: 32px; }
+.closing-block .closing-tagline {
+  font-size: 1rem; color: var(--text-dim); line-height: 1.7;
+}
+
+/* ===== PROGRESS METER ===== */
+.progress-meter {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  background: rgba(16,22,36,.92); border: 1px solid var(--border);
+  border-radius: 16px; padding: 12px 16px; font-size: .78rem;
+  display: flex; align-items: center; gap: 10px;
+  backdrop-filter: blur(12px); transition: opacity .4s;
+}
+.progress-ring {
+  width: 36px; height: 36px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-ring svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+.progress-ring svg circle {
+  fill: none; stroke-width: 3; stroke-linecap: round;
+  transition: stroke-dashoffset .5s;
+}
+.progress-ring .pct { font-weight: 900; font-size: .78rem; color: var(--orange); }
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center; padding: 48px 20px 32px;
+  border-top: 1px solid var(--border); color: var(--text-subtle); font-size: .8rem;
+  line-height: 1.8;
+}
+.footer a { color: var(--orange); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .top-nav { padding: 8px 14px; }
+  .top-nav .breadcrumb { display: none; }
+  .section { padding: 48px 14px; }
+  .contrast-wrap {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .contrast-vs { flex-direction: row; }
+  .contrast-vs .vs-line { width: 40px; height: 2px; min-height: 0; }
+  .flip-grid { grid-template-columns: 1fr; }
+  .flip-card { height: 240px; }
+  .canvas-stage canvas { height: 280px; }
+  .quote-wall { grid-template-columns: 1fr; }
+  .tl-item { padding-left: 50px; }
+  .tl-item::before { left: 10px; width: 18px; height: 18px; }
+  .timeline-wrap::before { left: 18px; }
+  .progress-meter { bottom: 12px; right: 12px; padding: 8px 12px; font-size: .7rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.7rem; }
+  .hero .hero-meta { gap: 14px; }
+  .hero .hero-stat .num { font-size: 1.6rem; }
+  .canvas-stage canvas { height: 220px; }
+  .flip-card { height: 220px; }
+  .flip-front { padding: 14px; }
+  .flip-back { padding: 12px; font-size: .76rem; }
+  .decision-box { padding: 20px 16px; }
+  .quote-card { padding: 16px; }
+  .contrast-col { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== TOP NAV ==================== -->
+<nav class="top-nav">
+  <a href="../index.html" class="home-link">← 科技参考4 首页</a>
+  <span class="breadcrumb">1 · <span>AI与数字革命</span> · 沉浸叙事 · 113篇文章现场报道</span>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">MKS v4 · 沉浸叙事</div>
+    <h1>AI与数字革命</h1>
+    <p class="tagline">
+      2024–2025年，AI从实验室玩具变成了改变世界的力量。<br>
+      卓克用<em>113篇文章</em>记录了这场技术洪流——<br>
+      这不是「AI来了」的预言，是<em>「AI已经在这里」</em>的现场报道。
+    </p>
+    <div class="hero-meta">
+      <div class="hero-stat"><div class="num">113</div><div class="label">篇深度文章</div></div>
+      <div class="hero-stat"><div class="num orange">2024–2025</div><div class="label">AI变革关键两年</div></div>
+      <div class="hero-stat"><div class="num">2×🏆</div><div class="label">诺贝尔奖花落AI</div></div>
+      <div class="hero-stat"><div class="num orange">万亿+</div><div class="label">全球AI投资(美元)</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>↓ 向下探索</span>
+    <span style="font-size:16px">⌄</span>
+  </div>
+</section>
+
+<!-- ==================== SECTION 1: TIMELINE ==================== -->
+<section class="section sec-timeline" id="timeline">
+  <div class="section-header">
+    <div class="section-num">第壹章</div>
+    <h2>关键转折：2024–2025 AI编年史</h2>
+    <p>点击每个节点，查看卓克原文对该事件的深度解读</p>
+  </div>
+  <div class="section-body">
+    <div class="timeline-wrap" id="timelineWrap">
+      <!-- Items injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 2: CONTRAST SCREEN ==================== -->
+<section class="section sec-contrast" id="contrast">
+  <div class="section-header">
+    <div class="section-num">第贰章</div>
+    <h2>DeepSeek vs 传统巨头：AI成本下降一个数量级</h2>
+    <p>不是「技术领先」，是「成本革命」——DeepSeek如何改变了全球AI竞争格局</p>
+  </div>
+  <div class="section-body">
+    <div class="contrast-wrap">
+      <div class="contrast-col left">
+        <h4>🔴 传统AI巨头模式</h4>
+        <div class="metric"><span class="m-label">训练成本(GPT-4级)</span><span class="m-val">$1亿+</span></div>
+        <div class="metric"><span class="m-label">月费(Plus/Pro)</span><span class="m-val">$20/$200</span></div>
+        <div class="metric"><span class="m-label">开源程度</span><span class="m-val">闭源</span></div>
+        <div class="metric"><span class="m-label">推理透明度</span><span class="m-val">黑箱</span></div>
+        <div class="metric"><span class="m-label">芯片依赖</span><span class="m-val">H100/B200</span></div>
+        <div class="metric"><span class="m-label">商业模式</span><span class="m-val">订阅+API</span></div>
+      </div>
+      <div class="contrast-vs">
+        <div class="vs-badge">VS</div>
+        <div class="vs-line"></div>
+      </div>
+      <div class="contrast-col right">
+        <h4>🔵 DeepSeek 新模式</h4>
+        <div class="metric"><span class="m-label">训练成本(R1)</span><span class="m-val">~$600万*</span></div>
+        <div class="metric"><span class="m-label">使用费用</span><span class="m-val">免费</span></div>
+        <div class="metric"><span class="m-label">开源程度</span><span class="m-val">MIT开源</span></div>
+        <div class="metric"><span class="m-label">推理透明度</span><span class="m-val">完整思维链</span></div>
+        <div class="metric"><span class="m-label">芯片策略</span><span class="m-val">混合架构</span></div>
+        <div class="metric"><span class="m-label">商业模式</span><span class="m-val">好奇心驱动</span></div>
+      </div>
+      <div class="contrast-source">
+        * 卓克注：最少是600万美元，但总花费可能已经有26亿美元了。关键不在于绝对金额，而在于证明了「低成本也可以做出世界级模型」。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 3: CANVAS ANIMATION ==================== -->
+<section class="section sec-canvas" id="canvas">
+  <div class="section-header">
+    <div class="section-num">第叁章</div>
+    <h2>强化学习的魔法：从零到超越人类</h2>
+    <p>点击下方按钮，观察AI如何通过「自我对弈」完成能力跃迁</p>
+  </div>
+  <div class="section-body">
+    <div class="canvas-stage" id="canvasStage">
+      <canvas id="rlCanvas"></canvas>
+      <div class="canvas-controls">
+        <button class="ctrl-btn active" data-scene="0">🏁 起点：随机猜测</button>
+        <button class="ctrl-btn" data-scene="1">🔄 强化学习微调</button>
+        <button class="ctrl-btn" data-scene="2">🚀 推理能力涌现</button>
+        <button class="ctrl-btn" data-scene="3">🏆 超越人类专家</button>
+      </div>
+      <div class="canvas-legend" id="canvasLegend">
+        <span style="color:var(--red)">■ 错误</span>
+        <span style="color:var(--orange)">■ 部分正确</span>
+        <span style="color:var(--green)">■ 完全正确</span>
+        <span style="color:var(--blue-bright)">— 性能曲线</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 4: FLIP CARDS ==================== -->
+<section class="section sec-flip" id="flip">
+  <div class="section-header">
+    <div class="section-num">第肆章</div>
+    <h2>AI全景：突破与博弈</h2>
+    <p>翻转卡片，查看每个主题的深度解读</p>
+  </div>
+  <div class="section-body">
+    <div class="flip-grid" id="flipGrid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 5: SVG DIAGRAM ==================== -->
+<section class="section sec-canvas" id="svg-diagram">
+  <div class="section-header">
+    <div class="section-num">第伍章</div>
+    <h2>AI产业链：一场全球级别的资源重组</h2>
+    <p>从芯片到应用，从数据到能源——AI如何重塑整个科技生态</p>
+  </div>
+  <div class="section-body">
+    <div class="svg-diagram">
+      <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gChip" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4da8ff"/><stop offset="100%" stop-color="#2a6090"/></linearGradient>
+          <linearGradient id="gData" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#48c878"/><stop offset="100%" stop-color="#2a7040"/></linearGradient>
+          <linearGradient id="gModel" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a080e0"/><stop offset="100%" stop-color="#6050a0"/></linearGradient>
+          <linearGradient id="gApp" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0883e"/><stop offset="100%" stop-color="#b86028"/></linearGradient>
+          <linearGradient id="gEnergy" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0c848"/><stop offset="100%" stop-color="#a08028"/></linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <!-- Background grid -->
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1c2840" stroke-width="0.5"/>
+        </pattern>
+        <rect width="1000" height="500" fill="url(#grid)" opacity="0.5"/>
+
+        <!-- Layer 1: Chip -->
+        <rect x="50" y="60" width="200" height="380" rx="12" fill="#101624" stroke="#2a6090" stroke-width="1.5" opacity="0.9"/>
+        <text x="150" y="38" text-anchor="middle" fill="#4da8ff" font-size="14" font-weight="800">🔲 算力层</text>
+        <rect x="70" y="70" width="160" height="50" rx="8" fill="url(#gChip)" opacity="0.15"/>
+        <text x="150" y="100" text-anchor="middle" fill="#4da8ff" font-size="13" font-weight="700">英伟达 H100/B200</text>
+        <rect x="70" y="130" width="160" height="50" rx="8" fill="url(#gChip)" opacity="0.1"/>
+        <text x="150" y="160" text-anchor="middle" fill="#4da8ff" font-size="13" font-weight="700">谷歌 TPU v5</text>
+        <rect x="70" y="190" width="160" height="50" rx="8" fill="url(#gChip)" opacity="0.1"/>
+        <text x="150" y="220" text-anchor="middle" fill="#4da8ff" font-size="13" font-weight="700">AMD MI300X</text>
+        <rect x="70" y="250" width="160" height="50" rx="8" fill="url(#gChip)" opacity="0.1"/>
+        <text x="150" y="280" text-anchor="middle" fill="#4da8ff" font-size="13" font-weight="700">华为 Ascend</text>
+        <text x="150" y="340" text-anchor="middle" fill="#6688aa" font-size="11">全球投入超万亿</text>
+        <text x="150" y="360" text-anchor="middle" fill="#6688aa" font-size="11">英伟达市值 4万亿</text>
+
+        <!-- Layer 2: Data -->
+        <rect x="290" y="60" width="180" height="380" rx="12" fill="#101624" stroke="#2a7040" stroke-width="1.5" opacity="0.9"/>
+        <text x="380" y="38" text-anchor="middle" fill="#48c878" font-size="14" font-weight="800">📊 数据层</text>
+        <rect x="310" y="70" width="140" height="50" rx="8" fill="url(#gData)" opacity="0.15"/>
+        <text x="380" y="100" text-anchor="middle" fill="#48c878" font-size="13" font-weight="700">互联网文本</text>
+        <rect x="310" y="130" width="140" height="50" rx="8" fill="url(#gData)" opacity="0.1"/>
+        <text x="380" y="160" text-anchor="middle" fill="#48c878" font-size="13" font-weight="700">多模态数据</text>
+        <rect x="310" y="190" width="140" height="50" rx="8" fill="url(#gData)" opacity="0.1"/>
+        <text x="380" y="220" text-anchor="middle" fill="#48c878" font-size="13" font-weight="700">合成数据</text>
+        <text x="380" y="300" text-anchor="middle" fill="#668888" font-size="11">数据=新时代石油</text>
+        <text x="380" y="320" text-anchor="middle" fill="#668888" font-size="11">决定模型上下限</text>
+
+        <!-- Layer 3: Model -->
+        <rect x="510" y="60" width="200" height="380" rx="12" fill="#101624" stroke="#6050a0" stroke-width="1.5" opacity="0.9"/>
+        <text x="610" y="38" text-anchor="middle" fill="#a080e0" font-size="14" font-weight="800">🧠 模型层</text>
+        <rect x="530" y="70" width="160" height="50" rx="8" fill="url(#gModel)" opacity="0.15"/>
+        <text x="610" y="100" text-anchor="middle" fill="#a080e0" font-size="13" font-weight="700">GPT-5 / Claude 4</text>
+        <rect x="530" y="130" width="160" height="50" rx="8" fill="url(#gModel)" opacity="0.1"/>
+        <text x="610" y="160" text-anchor="middle" fill="#a080e0" font-size="13" font-weight="700">DeepSeek R1/V3</text>
+        <rect x="530" y="190" width="160" height="50" rx="8" fill="url(#gModel)" opacity="0.1"/>
+        <text x="610" y="220" text-anchor="middle" fill="#a080e0" font-size="13" font-weight="700">Gemini 3 / Grok5</text>
+        <text x="610" y="300" text-anchor="middle" fill="#8888aa" font-size="11">Scaling Law接近尾声</text>
+        <text x="610" y="320" text-anchor="middle" fill="#8888aa" font-size="11">下半场: 评估与定义</text>
+
+        <!-- Layer 4: Application -->
+        <rect x="750" y="60" width="200" height="380" rx="12" fill="#101624" stroke="#b86028" stroke-width="1.5" opacity="0.9"/>
+        <text x="850" y="38" text-anchor="middle" fill="#f0883e" font-size="14" font-weight="800">⚡ 应用层</text>
+        <rect x="770" y="70" width="160" height="50" rx="8" fill="url(#gApp)" opacity="0.15"/>
+        <text x="850" y="100" text-anchor="middle" fill="#f0883e" font-size="13" font-weight="700">AI搜索/ChatBot</text>
+        <rect x="770" y="130" width="160" height="50" rx="8" fill="url(#gApp)" opacity="0.1"/>
+        <text x="850" y="160" text-anchor="middle" fill="#f0883e" font-size="13" font-weight="700">AI编程 Agent</text>
+        <rect x="770" y="190" width="160" height="50" rx="8" fill="url(#gApp)" opacity="0.1"/>
+        <text x="850" y="220" text-anchor="middle" fill="#f0883e" font-size="13" font-weight="700">AI科研/医药</text>
+        <text x="850" y="300" text-anchor="middle" fill="#aa8866" font-size="11">AI原生公司崛起</text>
+        <text x="850" y="320" text-anchor="middle" fill="#aa8866" font-size="11">零中层管理</text>
+
+        <!-- Energy bar on right -->
+        <rect x="940" y="80" width="30" height="340" rx="6" fill="#101624" stroke="#a08028" stroke-width="1.5"/>
+        <rect x="943" y="280" width="24" height="137" rx="4" fill="url(#gEnergy)" opacity="0.4"/>
+        <text x="955" y="68" text-anchor="middle" fill="#f0c848" font-size="10" font-weight="700">能源</text>
+        <text x="955" y="440" text-anchor="middle" fill="#a08028" font-size="9">核能</text>
+        <text x="955" y="455" text-anchor="middle" fill="#a08028" font-size="9">供电</text>
+
+        <!-- Arrows between layers -->
+        <path d="M250 250 L290 250" stroke="#4da8ff" stroke-width="2" marker-end="url(#arrowBlue)" opacity="0.5"/>
+        <path d="M470 250 L510 250" stroke="#48c878" stroke-width="2" marker-end="url(#arrowGreen)" opacity="0.5"/>
+        <path d="M710 250 L750 250" stroke="#a080e0" stroke-width="2" marker-end="url(#arrowPurple)" opacity="0.5"/>
+
+        <defs>
+          <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4da8ff"/></marker>
+          <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#48c878"/></marker>
+          <marker id="arrowPurple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a080e0"/></marker>
+        </defs>
+      </svg>
+      <div class="svg-hint">AI产业五层架构：算力 → 数据 → 模型 → 应用，能源作为横切支撑</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 6: DECISION TREE ==================== -->
+<section class="section sec-decision" id="decision">
+  <div class="section-header">
+    <div class="section-num">第陆章</div>
+    <h2>你的职业会被AI重塑吗？</h2>
+    <p>一个交互式的职业影响探索——基于卓克对1.8亿条招聘数据的分析</p>
+  </div>
+  <div class="section-body">
+    <div class="decision-box" id="decisionBox">
+      <h4>🔍 交互决策树</h4>
+      <div class="dq" id="decisionQ">
+        你的工作主要涉及什么类型的任务？
+      </div>
+      <div class="d-options" id="decisionOptions"></div>
+      <div class="d-result" id="decisionResult"></div>
+      <button class="d-reset" id="decisionReset" onclick="resetDecision()">↺ 重新探索</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 7: COLLAPSIBLE Q&A ==================== -->
+<section class="section sec-collapse" id="collapse">
+  <div class="section-header">
+    <div class="section-num">第柒章</div>
+    <h2>卓克的深度追问</h2>
+    <p>点击展开每个问题的完整解读，直击AI领域最受关注的议题</p>
+  </div>
+  <div class="section-body">
+    <div class="collapse-list" id="collapseList">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 8: QUOTE WALL ==================== -->
+<section class="section sec-quote" id="quotes">
+  <div class="section-header">
+    <div class="section-num">第捌章</div>
+    <h2>原文摘录：从一手资料出发</h2>
+    <p>以下每一段文字都来自卓克《科技参考》原文——让数据自己说话</p>
+  </div>
+  <div class="section-body">
+    <div class="quote-wall" id="quoteWall">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CLOSING ==================== -->
+<section class="section sec-closing" id="closing">
+  <div class="section-header">
+    <div class="section-num">终章</div>
+    <h2>1000天后，我们身在何处？</h2>
+    <p>回到1000天前——2023年2月23日——GPT-3.5刚刚好用起来的那一天</p>
+  </div>
+  <div class="section-body">
+    <div class="closing-block">
+      <p class="closing-quote">
+        如果对比1000天前我对AI能力的期待，那当下AI的能力依然大幅超越了我之前的设想，这一切都让坐在桌前的我感觉有些魔幻。
+      </p>
+      <p class="closing-source">
+        —— 卓克，《因为AI，1000天后我们身边有哪些确定会发生的变化》
+      </p>
+      <p class="closing-tagline">
+        AI不是遥远的未来，它是此刻正在发生的现场。<br>
+        既不恐惧，也不盲信——理解技术本质后的从容，<br>
+        是我们面对这个时代最好的姿态。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+  <p>MKS v4 · 卓老板聊科技 | <a href="../index.html">返回科技参考4 首页</a></p>
+  <p>内容来源：卓克《科技参考》第四季 · 113篇AI与数字革命专题文章</p>
+  <p style="margin-top:8px;color:var(--text-subtle);">设计理念：冷峻科技蓝 + 暖橙人间 —— 代码的冷 vs 人类的暖</p>
+</div>
+
+<!-- ==================== PROGRESS METER ==================== -->
+<div class="progress-meter" id="progressMeter">
+  <div class="progress-ring">
+    <svg width="36" height="36" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="15" stroke="#1c2840" stroke-width="3" fill="none"/>
+      <circle cx="18" cy="18" r="15" stroke="#f0883e" stroke-width="3" fill="none"
+        stroke-dasharray="94.2" stroke-dashoffset="94.2" id="progressCircle"/>
+    </svg>
+    <span class="pct" id="progressPct">0%</span>
+  </div>
+  <span style="color:var(--text-dim)">阅读进度</span>
+</div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+// ===== HERO CANVAS: Neural Network Particle Animation =====
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [], connections = [];
+  const PARTICLE_COUNT = 100;
+
+  function resize() {
+    w = canvas.width = canvas.parentElement.offsetWidth;
+    h = canvas.height = canvas.parentElement.offsetHeight;
+  }
+
+  class Particle {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * h;
+    }
+    reset() {
+      this.x = Math.random() * w;
+      this.y = -10;
+      this.vx = (Math.random() - .5) * .6;
+      this.vy = Math.random() * .8 + .3;
+      this.r = Math.random() * 2 + 1;
+      this.alpha = Math.random() * .5 + .3;
+      this.hue = Math.random() < .3 ? 210 : (Math.random() < .5 ? 200 : 30);
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.y > h + 10 || this.x < -10 || this.x > w + 10) { this.reset(); this.y = -10; }
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = `hsla(${this.hue},60%,65%,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push(new Particle());
+  }
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          const alpha = (1 - dist/120) * .15;
+          ctx.strokeStyle = `rgba(77,168,255,${alpha})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => { p.update(); p.draw(ctx); });
+    drawConnections();
+    requestAnimationFrame(animate);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  animate();
+})();
+
+// ===== TIMELINE DATA & RENDER =====
+const timelineEvents = [
+  { date:'2024.10', title:'诺贝尔物理学奖颁给AI先驱',
+    source:'《诺奖解读：2024年的物理奖为什么颁发给了AI？》',
+    detail:'<span class="quote-mark">"</span>2024年的诺贝尔物理奖颁给了美国普林斯顿大学的约翰·霍普菲尔德和加拿大多伦多大学的杰弗里·辛顿，以表彰他们"为推动利用人工神经网络进行机器学习作出的基础性发明和发现"。这次的物理奖既让人意外，也让人觉得在情理之中。不夸张地说，这个突破很可能在最近100年都是最重要的。' },
+  { date:'2024.10', title:'诺贝尔化学奖同样花落AI',
+    source:'《诺奖解读：2024年的化学奖为什么也颁给了AI？》',
+    detail:'<span class="quote-mark">"</span>继昨天诺贝尔物理奖给了AI，今天的诺贝尔化学奖实际上也颁发给了AI。两个团队都是做蛋白质结构预测和设计的，一个是老一代算法RoseTTAFold，一个是后来居上的新算法，由谷歌旗下DeepMind研发的AlphaFold。' },
+  { date:'2025.01', title:'DeepSeek R1 横空出世',
+    source:'《DeepSeek是从GPT蒸馏得到的吗？不》',
+    detail:'<span class="quote-mark">"</span>DeepSeek在大年三十火了起来，而且一直火到了今天。它是第一个让民众普遍体验到了基于推理功能的大语言模型用起来是什么感觉。简而言之，DeepSeek不是从GPT的模型里蒸馏出来的。' },
+  { date:'2025.01', title:'R1性能大幅增长的秘密',
+    source:'《DeepSeek使用了哪些关键技术？》',
+    detail:'<span class="quote-mark">"</span>R1模型引入了不依赖监督微调的强化学习，可以让微调之后模型性能大幅增长，比如数学能力上，基础模型如果是100分，微调后能达到450分。而此前所有的微调，顶多就是让性能维持基础模型的性能，不降低就不错了。' },
+  { date:'2025.03', title:'Manus刷屏：AI Agent崭露头角',
+    source:'《Manus出现，自媒体博主最先被取代？》',
+    detail:'<span class="quote-mark">"</span>它是一个很不错的产品，在特定领域的实用性预期会很好，但和之前大火的DeepSeek比起来，并不是一个级别的。DeepSeek如果是奥运会金牌，Manus大约是全运会前三名的水平。' },
+  { date:'2025.04', title:'OpenAI o3发布：推理模型新巅峰',
+    source:'《推理模型性能巅峰：OpenAI o3解读》',
+    detail:'<span class="quote-mark">"</span>o3的发布标志着在相当广泛的领域，o3的表现比人类专家要好。不过从我和很多人的使用体验看，越是推理性能强的模型，离日常沟通交流的感觉就越远。' },
+  { date:'2025.05', title:'OpenAI改制风波',
+    source:'《OpenAI为什么又要改制？被逼的》',
+    detail:'<span class="quote-mark">"</span>这又是一次被迫调整。这次调整的背景是，规避明确的、可以预见的、巨大的法律风险，与此同时，又不得不分出更多的控制权，来换取今后总额是之前投资规模百倍以上的新投资。' },
+  { date:'2025.07', title:'AI安全：竞争对手联手署名',
+    source:'《为了AI的安全，杀红眼了也能合作》',
+    detail:'<span class="quote-mark">"</span>几方杀红了眼的竞争对手竟然联手为一篇文章署名——Meta和OpenAI，还有出走的前首席科学家伊利亚，谷歌DeepMind、Anthropic、亚马逊、图灵奖得主，全都参与了署名。思维链的可监测性是一个稍纵即逝的AI安全窗口。' },
+  { date:'2025.08', title:'GPT-5发布：幻觉大幅降低',
+    source:'《全面了解GPT-5》',
+    detail:'<span class="quote-mark">"</span>GPT-5在幻觉方面比前一代优化了非常多。5-main比4o在单句结论中出现幻觉的概率低了26%；在一段话的回复里低了44%。5-thinking比o3在单句结论中幻觉低了65%。' },
+  { date:'2025.09', title:'AI设计全新病毒：科幻成为现实',
+    source:'《AI生命体，一种全新的病毒》',
+    detail:'<span class="quote-mark">"</span>他们完全使用AI算法，设计出了上千种全新的病毒序列，目标设定为杀死特定型号的大肠杆菌。在所有生成结果中，真的找到了16种杀伤效率极高的款式。这种事情在十年前还是很多科技灾难片的背景设定，如今已经成了现实。' },
+  { date:'2025.10', title:'大语言模型已接近尾声？',
+    source:'《大语言模型已接近尾声》',
+    detail:'<span class="quote-mark">"</span>前OpenAI的首席科学家伊利亚指出，研发AI模型的人现在都在自己骗自己，最明显的表现就是基准测试的成绩直接封神，而等你实际用起来就发现也就是个"半兽人"。当前那些没有钱买计算卡的人，其实也并不用着急。' },
+];
+
+(function renderTimeline() {
+  const wrap = document.getElementById('timelineWrap');
+  timelineEvents.forEach((ev, i) => {
+    const div = document.createElement('div');
+    div.className = 'tl-item' + (i === 0 ? ' active' : '');
+    div.innerHTML = `
+      <div class="tl-date">${ev.date}</div>
+      <div class="tl-title">${ev.title}</div>
+      <div class="tl-source">📄 ${ev.source}</div>
+      <div class="tl-detail${i === 0 ? ' show' : ''}">${ev.detail}</div>
+    `;
+    div.addEventListener('click', function(e) {
+      const wasActive = this.classList.contains('active');
+      // Close all
+      wrap.querySelectorAll('.tl-item').forEach(el => {
+        el.classList.remove('active');
+        el.querySelector('.tl-detail').classList.remove('show');
+      });
+      if (!wasActive) {
+        this.classList.add('active');
+        this.querySelector('.tl-detail').classList.add('show');
+      }
+    });
+    wrap.appendChild(div);
+  });
+})();
+
+// ===== RL CANVAS ANIMATION =====
+(function(){
+  const canvas = document.getElementById('rlCanvas');
+  const ctx = canvas.getContext('2d');
+  let scene = 0;
+  let frame = 0;
+  let animId;
+
+  function resize() {
+    const parent = canvas.parentElement;
+    canvas.width = parent.clientWidth - 40;
+    canvas.height = 420;
+    if (window.innerWidth < 768) canvas.height = 280;
+    if (window.innerWidth < 480) canvas.height = 220;
+  }
+
+  const scenes = [
+    { // Random guessing
+      accuracy: [0.12,0.08,0.15,0.1,0.13,0.09,0.11,0.14,0.07,0.16,0.1,0.12,0.11,0.09,0.13],
+      curveColor: '#f06070', label: '随机猜测 — 平均正确率 ~12%'
+    },
+    { // RL fine-tuning
+      accuracy: [0.12,0.18,0.25,0.32,0.4,0.48,0.55,0.6,0.65,0.7,0.72,0.75,0.78,0.8,0.82],
+      curveColor: '#f0883e', label: '强化学习微调 — 正确率持续攀升'
+    },
+    { // Emergence
+      accuracy: [0.82,0.84,0.85,0.87,0.88,0.89,0.9,0.91,0.92,0.92,0.93,0.94,0.94,0.95,0.95],
+      curveColor: '#4dd9c0', label: '推理能力涌现 — 超越基础模型上限'
+    },
+    { // Superhuman
+      accuracy: [0.95,0.95,0.96,0.96,0.97,0.97,0.97,0.98,0.98,0.98,0.99,0.99,0.99,0.99,0.99],
+      curveColor: '#48c878', label: '超越人类专家 — 接近理论极限'
+    }
+  ];
+
+  function draw() {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const data = scenes[scene].accuracy;
+    const barW = (w - 80) / data.length;
+    const maxBarH = h - 120;
+    const barGap = 4;
+
+    // Grid lines
+    ctx.strokeStyle = '#1c2840';
+    ctx.lineWidth = 1;
+    for (let pct = 0; pct <= 1; pct += .25) {
+      const y = h - 80 - pct * maxBarH;
+      ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(w - 40, y); ctx.stroke();
+      ctx.fillStyle = '#586880';
+      ctx.font = '11px monospace';
+      ctx.fillText(Math.round(pct*100)+'%', 6, y+4);
+    }
+
+    // Animate bars
+    const animProgress = Math.min(1, frame / 60);
+    data.forEach((val, i) => {
+      const barH = val * maxBarH * animProgress;
+      const x = 44 + i * barW;
+      const y = h - 80 - barH;
+      const actualW = barW - barGap;
+
+      let color;
+      if (val < 0.3) color = '#f06070';
+      else if (val < 0.7) color = '#f0883e';
+      else if (val < 0.9) color = '#4dd9c0';
+      else color = '#48c878';
+
+      const grad = ctx.createLinearGradient(x, y, x, h-80);
+      grad.addColorStop(0, color);
+      grad.addColorStop(1, color + '44');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(x, y, actualW, barH, [3,3,0,0]) :
+        ctx.fillRect(x, y, actualW, barH);
+      ctx.fill();
+
+      // Glow on top
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, actualW, 2);
+    });
+
+    // Curve line
+    ctx.beginPath();
+    ctx.strokeStyle = scenes[scene].curveColor;
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = scenes[scene].curveColor;
+    ctx.shadowBlur = 8;
+    const curveAnim = Math.min(1, frame / 50);
+    data.forEach((val, i) => {
+      const cx = 44 + i * barW + (barW - barGap) / 2;
+      const cy = h - 80 - val * maxBarH * animProgress;
+      const endIdx = Math.floor(data.length * curveAnim);
+      if (i <= endIdx) {
+        i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+      }
+    });
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Legend
+    ctx.fillStyle = '#dde2ee';
+    ctx.font = 'bold 14px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(scenes[scene].label, w/2, h - 20);
+
+    // Iteration labels
+    ctx.fillStyle = '#586880';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    data.forEach((_, i) => {
+      const cx = 44 + i * barW + (barW - barGap) / 2;
+      ctx.fillText(i+1, cx, h - 60);
+    });
+
+    frame++;
+    if (frame < 80) {
+      animId = requestAnimationFrame(draw);
+    }
+  }
+
+  function switchScene(idx) {
+    scene = idx;
+    frame = 0;
+    if (animId) cancelAnimationFrame(animId);
+    animId = requestAnimationFrame(draw);
+    document.querySelectorAll('#canvasStage .ctrl-btn').forEach((b,i) => {
+      b.classList.toggle('active', i === idx);
+    });
+  }
+
+  document.querySelectorAll('#canvasStage .ctrl-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchScene(parseInt(btn.dataset.scene)));
+  });
+
+  resize();
+  window.addEventListener('resize', () => { resize(); frame = 0; if(animId) cancelAnimationFrame(animId); animId = requestAnimationFrame(draw); });
+  animId = requestAnimationFrame(draw);
+})();
+
+// ===== FLIP CARDS =====
+const flipCards = [
+  { icon:'🧬', title:'AI改变科研范式',
+    hint:'点击查看详情',
+    backTitle:'AI Scientist',
+    backBody:'<p>AI科学家（由Transformer作者之一Llion Jones的创业公司Sakana AI打造）可以自动找课题、自己预测、自己验证，甚至自己给自己审稿。AI在最好情况下可以写出7分水平的论文。</p><p style="margin-top:8px;"><span class="f-tag tag-break">范式转变</span><span class="f-tag tag-now">已实现</span></p>',
+    source:'《AI科学家：优化自己，发现生命》' },
+  { icon:'🎭', title:'AI诈骗在2025',
+    hint:'点击查看详情',
+    backTitle:'AI欺诈现状',
+    backBody:'<p>AI生成逼真的语音和视频，训练需要的数据更少，效果更逼真。诈骗的核心不是AI生成内容，而是引起当事人恐慌。一切个人应对技巧都是杯水车薪，主要还得靠AI监管和金融公安系统的联动。</p><p style="margin-top:8px;"><span class="f-tag tag-warn">安全威胁</span><span class="f-tag tag-now">迫切</span></p>',
+    source:'《2025年的AI诈骗到了什么地步？》' },
+  { icon:'💼', title:'职业大洗牌',
+    hint:'点击查看详情',
+    backTitle:'1.8亿招聘数据',
+    backBody:'<p>基于1.8亿条招聘记录分析：高级程序员首先被深度取代的群体。但所有和人打交道的工作，暂时都是很难被AI取代的。超过1M token长度上下文的工作也暂时安全。</p><p style="margin-top:8px;"><span class="f-tag tag-warn">影响深远</span><span class="f-tag tag-future">进行中</span></p>',
+    source:'《高级程序员首先失业》《暂时不能被AI取代的工作有什么特征？》' },
+  { icon:'⚛️', title:'AI与能源',
+    hint:'点击查看详情',
+    backTitle:'核能复兴',
+    backBody:'<p>OpenAI的CEO担任Oklo核能公司董事会主席。谷歌购买500MW核电（相当于沈阳用电的1/10）。微软重启三里岛核电站。AI对能源的疯狂需求正在改变全球能源格局。</p><p style="margin-top:8px;"><span class="f-tag tag-future">长期趋势</span><span class="f-tag tag-break">能源革命</span></p>',
+    source:'《今后AI的能源如何增长？说不准》' },
+  { icon:'🧠', title:'AGI的哲学',
+    hint:'点击查看详情',
+    backTitle:'超越大语言模型',
+    backBody:'<p>伊利亚认为，情绪不是理性的对立面，而是智能生物进化出的极为高效的"价值函数"。真正具有颠覆性的AGI算法，最初应该从哲学思考中涌现。当前大语言模型只能把知识压缩其中，等人用笊篱往出捞。</p><p style="margin-top:8px;"><span class="f-tag tag-future">未来方向</span><span class="f-tag tag-break">哲学思考</span></p>',
+    source:'《研发方向应该是："超级学习者"》《AGI实现后，人类何去何从》' },
+  { icon:'🦠', title:'AI生命体',
+    hint:'点击查看详情',
+    backTitle:'全新病毒诞生',
+    backBody:'<p>斯坦福大学完全使用AI算法设计出上千种全新病毒序列。基因大语言模型Evo-2，400亿参数，用2000张H100训练。38位顶级科学家（含24位诺奖得主）联合呼吁禁止镜像生命研究。</p><p style="margin-top:8px;"><span class="f-tag tag-warn">潘多拉魔盒</span><span class="f-tag tag-break">重大突破</span></p>',
+    source:'《AI生命体，一种全新的病毒》《镜像生命太危险，停止研究》' },
+];
+
+(function renderFlips() {
+  const grid = document.getElementById('flipGrid');
+  flipCards.forEach(card => {
+    const div = document.createElement('div');
+    div.className = 'flip-card';
+    div.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-icon">${card.icon}</div>
+          <div class="flip-title">${card.title}</div>
+          <div class="flip-hint">${card.hint}</div>
+        </div>
+        <div class="flip-back">
+          <h4>${card.backTitle}</h4>
+          ${card.backBody}
+          <p style="margin-top:8px;font-size:.7rem;color:var(--text-subtle);">📄 ${card.source}</p>
+        </div>
+      </div>
+    `;
+    div.addEventListener('click', function(e) {
+      const inner = this.querySelector('.flip-inner');
+      inner.classList.toggle('flipped');
+    });
+    grid.appendChild(div);
+  });
+})();
+
+// ===== DECISION TREE =====
+const decisionTree = {
+  start: {
+    q: '你的工作主要涉及什么类型的任务？',
+    options: [
+      { text: '💻 写代码、技术开发', next: 'code' },
+      { text: '🤝 与人沟通、协作、管理', next: 'people' },
+      { text: '📊 数据分析、研究', next: 'analysis' },
+      { text: '✍️ 内容创作、设计', next: 'creative' }
+    ]
+  },
+  code: {
+    q: '你的代码工作属于哪种类型？',
+    options: [
+      { text: '架构设计、需求理解、系统规划', next: 'code_arch', result: 'b' },
+      { text: '中高级难度代码编写、算法实现', next: 'code_warn', result: 'a' },
+      { text: '代码调试、维护、CRUD', next: 'code_crud', result: 'a' }
+    ]
+  },
+  people: {
+    q: '你与人打交道的方式是？',
+    options: [
+      { text: '深度关系、信任建立（医疗、教育、心理咨询）', result: 'c', resultId: 'c' },
+      { text: '流程化服务（客服、基础销售）', result: 'b', resultId: 'b' },
+      { text: '谈判、战略决策', result: 'c', resultId: 'c' }
+    ]
+  },
+  analysis: {
+    q: '数据分析工作的复杂程度？',
+    options: [
+      { text: '定义问题、设计分析框架', result: 'c', resultId: 'c' },
+      { text: '常规报表、可视化', result: 'b', resultId: 'b' },
+      { text: '纯数据录入、清洗', result: 'a', resultId: 'a' }
+    ]
+  },
+  creative: {
+    q: '你的创作依赖什么？',
+    options: [
+      { text: '独特审美、情感表达、个人风格', result: 'c', resultId: 'c' },
+      { text: '标准化内容产出（资讯、广告文案）', result: 'b', resultId: 'b' }
+    ]
+  }
+};
+
+const resultTexts = {
+  a: {
+    level: 'level-a',
+    title: '⚠️ 高风险：AI深度可替代',
+    body: '你的工作核心——中高级代码编写、标准化产出——正是当前AI进步最快的领域。Anthropic核心研发成员指出：<em>"当前是中高等级智力可以写出的代码，1年内就是超高智力可以写出的代码，AI也可以保质保量地完成。"</em> 建议：向"定义问题"和"理解需求"方向转型，成为AI的指挥者而非竞争者。',
+    source: '《高级程序员首先失业》《什么是暂时不能被AI取代的工作》'
+  },
+  b: {
+    level: 'level-b',
+    title: '⚡ 中等风险：人与AI协作区',
+    body: '你的工作涉及一部分AI可替代的任务，但也包含人类独有价值。卓克分析1.8亿条招聘数据后指出：<em>"真正决定是否被取代的，不是技能难度，而是任务是否可以被完整、无歧义地描述。"</em> 建议：放大你工作中"不可描述化"的部分——直觉判断、跨领域联想、情感共鸣。',
+    source: '《什么职位受AI冲击最大？1.8亿个招聘信息来说明》'
+  },
+  c: {
+    level: 'level-c',
+    title: '🛡️ 低风险：人类优势区',
+    body: '你从事的工作处于当前AI能力边界之外。卓克指出：<em>"所有和人打交道的工作，暂时都是很难被AI取代的。"</em> 但这不是永恒的护身符。建议：持续关注AI进展，用AI增强而非替代你的核心能力，保持在"人机协作"的最前沿。',
+    source: '《暂时不能被AI取代的工作有什么特征？》'
+  }
+};
+
+let decisionPath = [];
+
+function renderDecision(nodeId) {
+  const node = decisionTree[nodeId];
+  const qEl = document.getElementById('decisionQ');
+  const optEl = document.getElementById('decisionOptions');
+  const resEl = document.getElementById('decisionResult');
+  const resetEl = document.getElementById('decisionReset');
+
+  qEl.textContent = node.q;
+  optEl.innerHTML = '';
+  resEl.classList.remove('show', 'level-a', 'level-b', 'level-c');
+
+  node.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt.text;
+    btn.addEventListener('click', function() {
+      decisionPath.push({ node: nodeId, q: node.q, a: opt.text });
+      if (opt.result || opt.resultId) {
+        const rKey = opt.result || opt.resultId;
+        const r = resultTexts[rKey];
+        resEl.className = 'd-result show ' + r.level;
+        resEl.innerHTML = `<strong>${r.title}</strong><p style="margin-top:8px;">${r.body}</p><p style="margin-top:10px;font-size:.72rem;color:var(--text-subtle);">📄 ${r.source}</p>`;
+        resetEl.classList.add('show');
+        optEl.innerHTML = '';
+      } else if (opt.next) {
+        renderDecision(opt.next);
+      }
+    });
+    optEl.appendChild(btn);
+  });
+}
+
+function resetDecision() {
+  decisionPath = [];
+  document.getElementById('decisionResult').classList.remove('show', 'level-a', 'level-b', 'level-c');
+  document.getElementById('decisionReset').classList.remove('show');
+  renderDecision('start');
+}
+
+renderDecision('start');
+
+// ===== COLLAPSIBLE Q&A =====
+const collapseItems = [
+  {
+    q: 'DeepSeek开源了，动机是什么？怎么盈利？',
+    a: '<blockquote>驱动力部分说起来很好理解，就是纯粹的好奇心驱动。DeepSeek是2023年成立的，母公司幻方量化是用AI技术操作对冲基金的一家公司，他们已经和神经网络深度绑定了。</blockquote><p>卓克指出，DeepSeek的开源并非商业策略，而是源自创始团队对技术探索的纯粹热情。这种"好奇心驱动"模式颠覆了硅谷"烧钱换增长"的AI创业范式。</p>',
+    source: '《问答：DeepSeek开源了，动机是什么？怎么盈利？》'
+  },
+  {
+    q: 'AI会不会退潮？Scaling Law走到头了吗？',
+    a: '<blockquote>2025年我们还会不会经历GPT-3到GPT-4那样大幅度的性能增长？AI创业企业是不是可以从2025年开始停止更大规模的模型训练？英伟达的计算卡抢购热潮是不是已经过去了？</blockquote><p>卓克在2025年初就指出行业内部已出现重大分歧。到2025年底，伊利亚和前OpenAI科学家的判断基本验证了这一判断：预训练阶段的Scaling Law已经接近收益递减，行业重心正在转向后训练和评估。</p>',
+    source: '《重要分歧：AI会不会退潮》《大语言模型已接近尾声》'
+  },
+  {
+    q: 'AI模型国产替代，可能性高吗？',
+    a: '<blockquote>如果只限于推理领域，用华为的Ascend或者摩尔线程S系列的计算卡是可以完全胜任的，只不过能效比上会低一些。但训练几万亿参数规模的模型，国产计算卡是完全搞不定的——这样的要求，就算提给AMD去搞，也一样搞不定。</blockquote><p>卓克的分析冷静而精准：他区分了推理和训练两个场景，既不盲目乐观也不妄自菲薄。关键在于，这个差距是工程性的还是原理性的——目前看是前者，意味着可追赶。</p>',
+    source: '《问答：AI模型国产替代，可能性高吗？》'
+  },
+  {
+    q: 'AI有泡沫吗？与2000年互联网泡沫有何异同？',
+    a: '<blockquote>答案是当然会有泡沫。比如，迄今为止所有的AI硬件都是泡沫催生的。任何行业都存在泡沫。但我认为你这样的思考是没有益处的——你应该关心的是具体公司而非整个行业的笼统问题。</blockquote><p>卓克的回答体现了他一贯的实用主义风格：与其泛泛担心泡沫，不如具体分析每一个投资标的。即使是泡沫，过程中也会诞生改变世界的公司（正如互联网泡沫后的Amazon和Google）。</p>',
+    source: '《问答：AI有泡沫吗？》'
+  },
+  {
+    q: '今天的AI教育应该怎么搞？',
+    a: '<blockquote>AI界的主力军，可以说全都不是系统化培养出来的，大都是边干边学出来的。高校计算机系的教材更新以10年为单位，而AI界的主流模型、评测口径、硬件部署方式以6个月为单位变化。</blockquote><p>卓克将当前AI教育断层与100年前物理学革命类比：索末菲在1919年才将相对论和量子力学编入教材，而在此之前，新一代物理学家都是"在战场上学会开枪"的。今天我们也处于类似的历史转折点。</p>',
+    source: '《今天的AI教育应该怎么搞》'
+  },
+  {
+    q: '怎么看待"越用AI人越笨"的研究？',
+    a: '<blockquote>研究本身并没有很严重的问题，但样本数量太少，容易生成误导性结论。论文来自MIT媒体实验室，属于"人机共生"项目的一部分，当前只刊登在实验室官网和arXiv上，并没有发表在期刊上。</blockquote><p>卓克的解读一如既往地秉承科学精神——他不急于否定反常识的研究，而是审视方法论和样本量；同时他强调AI作为工具的本质：关键在于如何使用，而非工具本身决定人的智力走向。</p>',
+    source: '《怎么理解MIT的研究"越用AI人越笨"？》'
+  },
+];
+
+(function renderCollapse() {
+  const list = document.getElementById('collapseList');
+  collapseItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'collapse-item';
+    div.innerHTML = `
+      <div class="collapse-trigger">
+        <span>${item.q}</span>
+        <div class="c-icon">+</div>
+      </div>
+      <div class="collapse-content">
+        <div class="collapse-content-inner">
+          ${item.a}
+          <p style="font-size:.72rem;color:var(--text-subtle);margin-top:8px;">📄 ${item.source}</p>
+        </div>
+      </div>
+    `;
+    const trigger = div.querySelector('.collapse-trigger');
+    const content = div.querySelector('.collapse-content');
+    trigger.addEventListener('click', function() {
+      const isOpen = div.classList.contains('open');
+      // Close all others
+      list.querySelectorAll('.collapse-item.open').forEach(el => {
+        if (el !== div) {
+          el.classList.remove('open');
+          el.querySelector('.collapse-content').style.maxHeight = '0';
+        }
+      });
+      if (isOpen) {
+        div.classList.remove('open');
+        content.style.maxHeight = '0';
+      } else {
+        div.classList.add('open');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    });
+    list.appendChild(div);
+  });
+})();
+
+// ===== QUOTE WALL =====
+const quotes = [
+  { text: 'DeepSeek R1这个方法就是，在简单的奖励标准下，直接上强化学习，不要那个容易造成评判标准割裂的奖励模型了。', source: '《DeepSeek使用了哪些关键技术？》' },
+  { text: 'DeepSeek让AI的成本下降了一个数量级，所以很多事情的逻辑就变了。对小公司来说已经是逼上绝路了，钱必须花在刀刃上。', source: '《问答：AI学习圈问题集中回答》' },
+  { text: 'AI并不是一个有意识的恶魔，实验的目的就是尽一切可能让AI主动展现出欺诈行为。你在真实使用中一次都没遇到过，不是偶然。', source: '《当AI有意识地搞我们不理解的事》' },
+  { text: '真正让AI性能猛增的技术核心是互联网，而不是Transformer模型。哪怕我们先有了Transformer构架，只要互联网还没有积累起海量数据，那甭说GPT-4了，连GPT-2也没有。', source: '《让AI性能提升的关键在于互联网》' },
+  { text: '姚顺雨认为AI的发展进入了下半场，下半场的重心从上半场的"训练"转为了"评估与定义问题"。', source: '《AI的下半场：定义问题，评估性能》' },
+  { text: '从今天开始就默认，社交网络里一半以上引起人们情绪波动的发言来自于AI，而不是来自于人。这个比例今后还会逐步升高，典型值是2年后达到80%。', source: '《社交网络的一剂疫苗》' },
+  { text: 'AI原生公司极致高效——年营收10亿美元，从创办的那天起，从未融过资。排在第一位的不合理就是90%的员工都在忙活一件事：让上面的人满意。', source: '《AI原生公司：没有中层管理者》' },
+  { text: '在三个因素里（训练数据、算力、算法），不出意外的话，数据的重要性应该远远超过算力和算法。数据是新时代的石油。', source: '《数据将是新时代的石油》' },
+  { text: '四年制大学制霸高等教育的格局，可能将在未来20年内彻底改变，取而代之的将是成本更低、更容易变现的职业教育。', source: '《高考与学历将成为过去式吗？》' },
+  { text: '2025年AI现状报告：英伟达市值大约4万亿美元，基本只靠卖计算卡就卖到了4万亿美元，而且是2022年之后才突然崛起的，这实在是一个商业奇迹。', source: '《2025年AI世界发展报告》' },
+  { text: '让AI性能提升的核心在于互联网——Kevin Lu的观点是，真正让AI性能猛增的技术核心是互联网，而不是Transformer模型。', source: '《让AI性能提升的关键在于互联网》' },
+  { text: '情绪不是理性的对立面，而是智能生物体进化出来的极为高效的"价值函数"。伊利亚认为，这才是AGI方向真正的突破口。', source: '《研发方向应该是："超级学习者"》' },
+];
+
+(function renderQuotes() {
+  const wall = document.getElementById('quoteWall');
+  quotes.forEach(q => {
+    const div = document.createElement('div');
+    div.className = 'quote-card';
+    div.innerHTML = `
+      <p class="q-text">${q.text}</p>
+      <p class="q-source">${q.source}</p>
+    `;
+    wall.appendChild(div);
+  });
+})();
+
+// ===== PROGRESS METER =====
+(function(){
+  const meter = document.getElementById('progressMeter');
+  const circle = document.getElementById('progressCircle');
+  const pct = document.getElementById('progressPct');
+  const circumference = 94.2;
+
+  function update() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+    const offset = circumference * (1 - progress);
+    circle.style.strokeDashoffset = offset;
+    pct.textContent = Math.round(progress * 100) + '%';
+    meter.style.opacity = progress < .02 ? '0' : '1';
+  }
+
+  window.addEventListener('scroll', update, {passive: true});
+  update();
+})();
+
+// ===== SVG DIAGRAM INTERACTIVITY =====
+(function(){
+  const svgRects = document.querySelectorAll('.svg-diagram rect[rx]');
+  svgRects.forEach(rect => {
+    if (rect.getAttribute('rx') === '12') {
+      rect.style.cursor = 'pointer';
+      rect.addEventListener('mouseenter', function() {
+        this.setAttribute('opacity', '1');
+        this.style.filter = 'drop-shadow(0 0 10px rgba(77,168,255,.3))';
+      });
+      rect.addEventListener('mouseleave', function() {
+        this.setAttribute('opacity', '0.9');
+        this.style.filter = 'none';
+      });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
