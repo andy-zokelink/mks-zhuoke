@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科学方法解毒剂 — 当流行观念需要被祛魅</title>
+<style>
+/* ===== 科学方法解毒剂 — 设计语言 =====
+ * 本质洞察：流行观念是「毒素」——科学方法是「解毒剂」
+ * 情感基调：下次看到"惊人发现"，你不会立刻转发——你会先问三个问题
+ * 叙事锚点：解毒实验室 — 32篇文章是32支解毒剂，在深橄榄绿的冷静中逐一萃取
+ * 视觉策略：深橄榄绿(#0c1410) + 象牙白(#f5f0e8) + 危险红(#c0392b)点缀
+ */
+:root {
+  --bg: #0c1410;
+  --surface: #121c16;
+  --surface2: #18241e;
+  --surface3: #1e2c24;
+  --ivory: #f5f0e8;
+  --ivory-dim: #d8d0c0;
+  --ivory-subtle: #a09888;
+  --green: #6a9a6a;
+  --green-dim: #4a7a4a;
+  --green-bright: #8ab88a;
+  --olive: #7a8a5a;
+  --olive-dim: #5a6a3a;
+  --danger: #c0392b;
+  --danger-dim: #a03028;
+  --danger-bright: #e74c3c;
+  --amber: #c09040;
+  --amber-dim: #a07020;
+  --amber-bright: #d4a84a;
+  --text: #f0ece4;
+  --text-dim: #c0b8a8;
+  --text-subtle: #807868;
+  --border: #1a2820;
+  --border-light: #2a3828;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --radius-lg: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #2a3828; border-radius: 3px; }
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(12,20,16,.92); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+.top-nav .home-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 16px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--olive-dim), var(--olive));
+  color: #fff; font-size: 12px; font-weight: 700;
+  text-decoration: none; transition: transform .2s, box-shadow .2s;
+}
+.top-nav .home-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(122,138,90,.35);
+}
+.top-nav .breadcrumb {
+  font-size: 11px; color: var(--text-dim); letter-spacing: 0.5px;
+}
+.top-nav .breadcrumb span { color: var(--green-bright); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; position: relative;
+  overflow: hidden; padding: 80px 20px 40px;
+}
+.hero canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-bg-overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, var(--bg) 70%);
+  z-index: 1; pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; text-align: center; max-width: 860px; }
+.hero-badge {
+  display: inline-block; padding: 4px 16px; border-radius: 20px;
+  background: rgba(192,57,43,.1); border: 1px solid rgba(192,57,43,.25);
+  color: var(--danger); font-size: .78rem; font-weight: 600;
+  letter-spacing: 2px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 900; line-height: 1.25;
+  background: linear-gradient(135deg, #8ab88a, #a0c898, #d8d0c0, #c09040);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 16px;
+}
+.hero .tagline {
+  font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-dim);
+  margin-bottom: 10px; line-height: 1.8; max-width: 640px; margin-left: auto; margin-right: auto;
+}
+.hero .tagline em { color: var(--danger-bright); font-style: normal; }
+.hero .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-top: 28px; }
+.hero .hero-stat { text-align: center; }
+.hero .hero-stat .num { font-size: 2.2rem; font-weight: 900; color: var(--green-bright); line-height: 1.1; }
+.hero .hero-stat .num small { font-size: .9rem; color: var(--green); }
+.hero .hero-stat .label { font-size: .78rem; color: var(--text-dim); margin-top: 2px; }
+.hero .three-questions {
+  margin-top: 32px; display: flex; flex-direction: column; gap: 8px;
+  max-width: 500px; margin-left: auto; margin-right: auto;
+}
+.hero .three-questions .q {
+  padding: 10px 18px; background: var(--surface2); border-radius: 28px;
+  font-size: .88rem; color: var(--text-dim); border: 1px solid var(--border);
+  text-align: left; transition: all .3s;
+}
+.hero .three-questions .q:hover {
+  border-color: var(--green-dim); color: var(--ivory);
+  background: var(--surface3);
+}
+.hero .three-questions .q .q-num {
+  display: inline-flex; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--danger); color: #fff; font-size: .7rem; font-weight: 700;
+  align-items: center; justify-content: center; margin-right: 8px;
+}
+.hero .scroll-hint {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  color: var(--text-subtle); font-size: 11px; animation: bounce 2s infinite;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;
+}
+@keyframes bounce {
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(8px)}
+}
+
+/* ===== SECTION LAYOUT ===== */
+.antidote-section {
+  position: relative; padding: 80px 20px; min-height: 50vh;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.antidote-section::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
+}
+.section-header { text-align: center; margin-bottom: 50px; max-width: 700px; }
+.section-header .section-num {
+  font-size: .7rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--green); margin-bottom: 8px;
+}
+.section-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800;
+  background: linear-gradient(135deg, #f0ece4, #c0b8a8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 12px;
+}
+.section-header p {
+  color: var(--text-dim); font-size: .95rem; max-width: 560px;
+  margin: 0 auto; line-height: 1.8;
+}
+.section-content { max-width: 1000px; width: 100%; }
+
+/* Section accent overrides */
+.section-toxins .section-header h2 {
+  background-image: linear-gradient(135deg, #e74c3c, #f08070);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-method .section-header h2 {
+  background-image: linear-gradient(135deg, #6a9a6a, #a0d0a0);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-cases .section-header h2 {
+  background-image: linear-gradient(135deg, #c09040, #d4a84a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-interests .section-header h2 {
+  background-image: linear-gradient(135deg, #c0392b, #e08070);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-socratic .section-header h2 {
+  background-image: linear-gradient(135deg, #7a8a5a, #a0b878);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ===== 1. TOXIN MAP - Interactive Cards ===== */
+.toxin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.toxin-card {
+  background: var(--surface); border-radius: var(--radius); padding: 22px;
+  border: 1px solid var(--border); cursor: pointer; transition: all .3s;
+  position: relative; overflow: hidden;
+  border-left: 3px solid var(--danger-dim);
+}
+.toxin-card:hover {
+  border-color: var(--danger); transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(192,57,43,.1);
+  border-left-color: var(--danger);
+}
+.toxin-card.selected {
+  border-color: var(--danger); border-left-color: var(--danger);
+  box-shadow: 0 0 32px rgba(192,57,43,.18);
+}
+.toxin-card .toxin-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.toxin-card .toxin-name {
+  font-size: 1rem; font-weight: 800; color: var(--danger); margin-bottom: 4px;
+}
+.toxin-card .toxin-tag {
+  font-size: .7rem; color: var(--text-subtle); text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 10px;
+}
+.toxin-card .toxin-desc {
+  font-size: .82rem; color: var(--text-dim); line-height: 1.7;
+  margin-bottom: 8px;
+}
+.toxin-card .toxin-antidote {
+  display: none; margin-top: 10px; padding: 10px 14px;
+  background: rgba(106,154,106,.08); border-radius: var(--radius-xs);
+  border: 1px solid rgba(106,154,106,.2);
+  font-size: .8rem; color: var(--green-bright); line-height: 1.7;
+}
+.toxin-card.selected .toxin-antidote { display: block; animation: fadeUp .35s; }
+.toxin-card .toxin-quote {
+  font-size: .72rem; color: var(--text-subtle); font-style: italic;
+  margin-top: 6px; padding-left: 10px; border-left: 2px solid var(--border-light);
+}
+
+/* ===== 2. ANTIDOTE METHOD - Interactive Process ===== */
+.method-process { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 24px; }
+.method-stage {
+  flex: 1; min-width: 120px; max-width: 175px;
+  background: var(--surface); border-radius: var(--radius-sm);
+  padding: 14px 10px; text-align: center; cursor: pointer;
+  border: 1px solid transparent; transition: all .3s;
+  position: relative;
+}
+.method-stage:hover, .method-stage.active {
+  border-color: var(--green); background: #14201a;
+  transform: translateY(-4px); box-shadow: 0 8px 28px rgba(106,154,106,.12);
+}
+.method-stage .stage-icon { font-size: 2rem; margin-bottom: 8px; }
+.method-stage .stage-name { font-size: .82rem; font-weight: 700; color: var(--text); }
+.method-stage .stage-arrow {
+  position: absolute; right: -15px; top: 50%; transform: translateY(-50%);
+  color: var(--green-dim); font-size: 1.1rem; z-index: 2;
+}
+.method-detail {
+  margin-top: 16px; padding: 20px; background: var(--surface2);
+  border-radius: var(--radius-sm); border-left: 3px solid var(--green);
+  display: none; font-size: .88rem; line-height: 1.85; animation: fadeUp .35s;
+}
+.method-detail.show { display: block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== 3. CASE DISSECTION - Flip Cards ===== */
+.case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.case-card { perspective: 800px; height: 280px; }
+.case-inner {
+  width: 100%; height: 100%; transition: transform .6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d; cursor: pointer; position: relative;
+}
+.case-inner.flipped { transform: rotateY(180deg); }
+.case-front, .case-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius); padding: 20px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.case-front {
+  background: var(--surface); border: 1px solid var(--border);
+  text-align: center;
+}
+.case-front .case-icon { font-size: 2.8rem; margin-bottom: 10px; }
+.case-front .case-title { font-weight: 800; font-size: .95rem; color: var(--danger); }
+.case-front .case-hint {
+  font-size: .72rem; color: var(--text-subtle); margin-top: 6px;
+}
+.case-back {
+  background: var(--surface2); border: 2px solid var(--green);
+  transform: rotateY(180deg); overflow-y: auto;
+  text-align: left; justify-content: flex-start; padding: 16px;
+  font-size: .8rem; line-height: 1.75;
+}
+.case-back h4 { color: var(--green-bright); margin-bottom: 8px; font-size: .9rem; }
+.case-back .source {
+  font-size: .68rem; color: var(--text-subtle); margin-top: 8px;
+  padding-top: 8px; border-top: 1px solid var(--border);
+}
+
+/* ===== 4. INTEREST WEB - SVG ===== */
+.interest-canvas {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 28px; border: 1px solid var(--border);
+  margin: 20px 0; overflow-x: auto; text-align: center;
+}
+.interest-canvas svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+/* ===== 5. SOCRATIC PANEL ===== */
+.socratic-list { display: flex; flex-direction: column; gap: 12px; }
+.socratic-item {
+  background: var(--surface); border-radius: var(--radius-sm);
+  border: 1px solid var(--border); overflow: hidden;
+}
+.socratic-q {
+  padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: .92rem; transition: background .2s;
+}
+.socratic-q:hover { background: #1a2418; }
+.socratic-q .q-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface3); display: flex; align-items: center;
+  justify-content: center; font-size: .75rem; flex-shrink: 0;
+  transition: all .3s; color: var(--green);
+}
+.socratic-q.open .q-icon {
+  background: var(--green-dim); color: #fff; transform: rotate(45deg);
+}
+.socratic-a {
+  display: none; padding: 0 20px 18px 60px;
+  font-size: .85rem; color: var(--text-dim); line-height: 1.8;
+}
+.socratic-a.open { display: block; animation: fadeUp .3s; }
+
+/* ===== 6. DECISION SIMULATOR ===== */
+.decision-box {
+  background: var(--surface); border-radius: var(--radius); padding: 24px;
+  border: 1px solid var(--border); margin-bottom: 16px;
+}
+.decision-box h4 { color: var(--amber); margin-bottom: 12px; font-size: 1rem; }
+.decision-box .scenario {
+  padding: 14px 18px; background: var(--surface2); border-radius: var(--radius-sm);
+  font-size: .9rem; color: var(--text-dim); margin-bottom: 16px; line-height: 1.8;
+  border-left: 3px solid var(--amber-dim);
+}
+.decision-box .options { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.decision-box .options button {
+  text-align: left; padding: 12px 16px;
+  background: var(--surface2); border-radius: var(--radius-sm);
+  border: 1px solid var(--border); color: var(--text);
+  cursor: pointer; transition: all .2s; font-size: .88rem; line-height: 1.6;
+  font-family: inherit;
+}
+.decision-box .options button:hover {
+  border-color: var(--amber); background: #201c14;
+}
+.decision-box .options button.chosen-correct {
+  border-color: #4eca7a; background: rgba(78,202,122,.1); color: #4eca7a;
+}
+.decision-box .options button.chosen-wrong {
+  border-color: var(--danger); background: rgba(192,57,43,.1); color: var(--danger);
+}
+.decision-feedback {
+  margin-top: 14px; padding: 14px 18px; border-radius: var(--radius-sm);
+  display: none; font-size: .85rem; line-height: 1.8;
+  animation: fadeUp .3s;
+}
+.decision-feedback.show { display: block; }
+.decision-feedback.correct {
+  background: rgba(78,202,122,.08); border: 1px solid rgba(78,202,122,.25);
+}
+.decision-feedback.wrong {
+  background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.25);
+}
+.decision-nav { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+.decision-nav .nav-btn {
+  padding: 8px 20px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; color: var(--text-dim); cursor: pointer; font-size: .82rem;
+  transition: all .2s; font-family: inherit;
+}
+.decision-nav .nav-btn:hover { border-color: var(--amber); color: var(--amber); background: #201c14; }
+.decision-nav .scenario-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: var(--border);
+  cursor: pointer; transition: all .2s;
+}
+.decision-nav .scenario-dot.active {
+  background: var(--amber); box-shadow: 0 0 10px rgba(192,144,64,.5);
+}
+.decision-nav .scenario-dot.answered-correct { background: #4eca7a; }
+.decision-nav .scenario-dot.answered-wrong { background: var(--danger); }
+
+/* ===== KNOWLEDGE FRONTIER ===== */
+.frontier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.frontier-card {
+  background: var(--surface); border-radius: var(--radius-sm); padding: 18px;
+  border: 1px solid var(--border); border-top: 3px solid var(--olive-dim);
+  transition: all .2s;
+}
+.frontier-card:hover { border-top-color: var(--olive); transform: translateY(-2px); }
+.frontier-card .frontier-q { font-weight: 700; color: var(--olive); font-size: .9rem; margin-bottom: 8px; }
+.frontier-card .frontier-status {
+  font-size: .75rem; color: var(--text-subtle); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.frontier-card .frontier-desc { font-size: .8rem; color: var(--text-dim); line-height: 1.7; }
+
+/* ===== PROGRESS METER ===== */
+.progress-meter {
+  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  background: rgba(18,28,22,.92); border: 1px solid var(--border);
+  border-radius: 16px; padding: 12px 16px; font-size: .78rem;
+  display: flex; align-items: center; gap: 12px;
+  backdrop-filter: blur(12px); transition: opacity .5s;
+}
+.progress-meter .pm-ring {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 3px solid var(--border); position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-meter .pm-ring .pm-pct { font-weight: 900; font-size: .85rem; color: var(--green-bright); }
+.progress-meter .pm-ring svg { position: absolute; top: -3px; left: -3px; }
+.progress-meter .pm-ring svg circle {
+  fill: none; stroke: var(--green-bright); stroke-width: 3;
+  stroke-linecap: round; transition: stroke-dashoffset .6s;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center; padding: 44px 20px 30px;
+  border-top: 1px solid var(--border); color: var(--text-subtle); font-size: .8rem;
+}
+.footer a { color: var(--green-bright); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .footer-quote {
+  font-size: 1rem; color: var(--text-dim); margin-bottom: 14px;
+  font-style: italic; line-height: 1.8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .top-nav { padding: 6px 12px; }
+  .top-nav .breadcrumb { display: none; }
+  .antidote-section { padding: 48px 14px; }
+  .method-stage { min-width: 90px; max-width: 140px; padding: 10px 6px; }
+  .method-stage .stage-arrow { right: -12px; font-size: .9rem; }
+  .method-stage .stage-name { font-size: .7rem; }
+  .method-stage .stage-icon { font-size: 1.4rem; }
+  .case-card { height: 230px; }
+  .toxin-grid, .case-grid, .frontier-grid { grid-template-columns: 1fr; }
+  .progress-meter { bottom: 10px; right: 10px; padding: 8px 12px; font-size: .7rem; }
+  .interest-canvas { padding: 14px; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.6rem; letter-spacing: 1px; }
+  .hero .hero-stats { gap: 14px; }
+  .hero .hero-stat .num { font-size: 1.3rem; }
+  .method-stage .stage-arrow { display: none; }
+  .method-process { flex-direction: column; align-items: center; }
+  .method-stage { max-width: 100%; width: 100%; min-width: unset; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP NAV ===== -->
+<nav class="top-nav">
+  <a href="../index.html" class="home-link">← 课程首页</a>
+  <span class="breadcrumb">解毒实验室 · <span>32支解毒剂</span> —— 科学方法给流行观念祛魅</span>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <canvas id="antidoteCanvas"></canvas>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">⚠️ 流行观念·解毒剂</div>
+    <h1>科学方法解毒剂</h1>
+    <p class="tagline">
+      灵芝能抗癌吗？安宫牛黄丸是神药吗？酸奶是百年骗局吗？<br>
+      卓克用32篇文章做了一件事——给流行观念<em>「解毒」</em>。<br>
+      不是高高在上地批判，是一层层剥开。
+    </p>
+    <div class="three-questions">
+      <div class="q"><span class="q-num">1</span> 实验设计有没有漏洞？</div>
+      <div class="q"><span class="q-num">2</span> 统计有没有操纵？</div>
+      <div class="q"><span class="q-num">3</span> 利益冲突在哪里？</div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">32</div><div class="label">篇解毒文章</div></div>
+      <div class="hero-stat"><div class="num">20<small>+</small></div><div class="label">种流行毒素</div></div>
+      <div class="hero-stat"><div class="num">3</div><div class="label">步解毒法</div></div>
+      <div class="hero-stat"><div class="num">4</div><div class="label">个决策场景</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>↓ 进入解毒实验室</span>
+    <span style="font-size:16px">↓</span>
+  </div>
+</section>
+
+<!-- ===== SECTION 1: TOXIN MAP ===== -->
+<section class="antidote-section section-toxins" id="toxins">
+  <div class="section-header">
+    <div class="section-num">毒素图谱 · Toxin Map</div>
+    <h2>这些观念正在你的大脑里潜伏</h2>
+    <p>不是你的错。流行观念像空气中的细菌——无处不在。点击每张卡片，看卓克如何用科学方法配制解毒剂。</p>
+  </div>
+  <div class="section-content">
+    <div class="toxin-grid" id="toxinGrid"></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: ANTIDOTE METHOD ===== -->
+<section class="antidote-section section-method" id="method">
+  <div class="section-header">
+    <div class="section-num">解毒三步法 · The Antidote Method</div>
+    <h2>下次再看到「惊人发现」</h2>
+    <p>你不会立刻转发。你会先走过这三步——每一个步骤都对应一条科学方法论，每一条方法论背后都有真实的解毒案例。</p>
+  </div>
+  <div class="section-content">
+    <div class="method-process" id="methodStages">
+      <div class="method-stage active" data-stage="0">
+        <div class="stage-icon">🔍</div>
+        <div class="stage-name">追问来源</div>
+        <div class="stage-arrow">→</div>
+      </div>
+      <div class="method-stage" data-stage="1">
+        <div class="stage-icon">🔬</div>
+        <div class="stage-name">检验证据</div>
+        <div class="stage-arrow">→</div>
+      </div>
+      <div class="method-stage" data-stage="2">
+        <div class="stage-icon">💰</div>
+        <div class="stage-name">追踪利益</div>
+      </div>
+    </div>
+    <div class="method-detail show" id="methodDetail"></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: CASE DISSECTION ===== -->
+<section class="antidote-section section-cases" id="cases">
+  <div class="section-header">
+    <div class="section-num">案例拆解 · Case Dissection</div>
+    <h2>翻转卡片——看毒素如何被分解</h2>
+    <p>每个案例正面是流行观念，背面是卓克的科学拆解。翻转它，看实验漏洞、统计操纵与利益冲突如何被一层层剥开。</p>
+  </div>
+  <div class="section-content">
+    <div class="case-grid" id="caseGrid"></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 4: INTEREST WEB ===== -->
+<section class="antidote-section section-interests" id="interests">
+  <div class="section-header">
+    <div class="section-num">利益之网 · Web of Interests</div>
+    <h2>他们靠什么赚钱？</h2>
+    <p>大多数「神奇功效」背后，都有一张看不见的利益之网。这张图不是概念关系——是一张真实的资金流向地图。</p>
+  </div>
+  <div class="section-content">
+    <div class="interest-canvas" id="interestCanvas"></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: SOCRATIC CHALLENGE ===== -->
+<section class="antidote-section section-socratic" id="socratic">
+  <div class="section-header">
+    <div class="section-num">淬毒追问 · Socratic Quench</div>
+    <h2>用追问检验你的解毒能力</h2>
+    <p>一支解毒剂配好后要经过检验才能投入使用。你的批判性思维也要经过苏格拉底式追问才能内化。点击展开，面对这些挑战。</p>
+  </div>
+  <div class="section-content">
+    <div class="socratic-list" id="socraticList"></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 6: DECISION SIMULATOR ===== -->
+<section class="antidote-section" id="decision">
+  <div class="section-header">
+    <div class="section-num">实战场 · Decision Simulator</div>
+    <h2>你会转发吗？——四个真实场景</h2>
+    <p>不是选择题——是你每天在微信群、朋友圈里真实遭遇的情境。选择你的反应，看看解毒剂是否已经进入你的血液。</p>
+  </div>
+  <div class="section-content">
+    <div class="decision-box" id="decisionBox">
+      <h4 id="decisionTitle">场景加载中...</h4>
+      <div class="scenario" id="decisionScenario"></div>
+      <div class="options" id="decisionOptions"></div>
+      <div class="decision-feedback" id="decisionFeedback"></div>
+      <div class="decision-nav">
+        <button class="nav-btn" id="decisionPrev">← 上一场景</button>
+        <div id="decisionDots" style="display:flex;gap:8px;"></div>
+        <button class="nav-btn" id="decisionNext">下一场景 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: FRONTIER ===== -->
+<section class="antidote-section" id="frontier">
+  <div class="section-header">
+    <div class="section-num">未解之毒 · Frontier</div>
+    <h2>科学方法也有解不了的毒</h2>
+    <p>知道解毒剂的边界，和知道它的效力一样重要。这些是科学方法目前无法完全覆盖的领域——它们不是方法论的失败，而是提醒我们保持谦卑。</p>
+  </div>
+  <div class="section-content">
+    <div class="frontier-grid" id="frontierGrid"></div>
+  </div>
+</section>
+
+<!-- ===== PROGRESS METER ===== -->
+<div class="progress-meter" id="progressMeter">
+  <span style="color:var(--text-dim);">解毒进度</span>
+  <div class="pm-ring">
+    <span class="pm-pct" id="pmPct">0%</span>
+    <svg width="44" height="44" viewBox="0 0 44 44">
+      <circle cx="22" cy="22" r="19" stroke-dasharray="119.38" stroke-dashoffset="119.38" id="pmCircle" transform="rotate(-90 22 22)"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p class="footer-quote">"下次再看到「惊人发现」时，你不会立刻转发——你会先问：谁说的？怎么证明的？他靠什么赚钱？"</p>
+  <p>卓克·科技参考4 · 32篇文章萃取 · 科学方法解毒剂</p>
+  <p style="margin-top:8px;"><a href="../index.html">← 返回课程首页</a> · <a href="#hero">↑ 回到解毒实验室顶部</a></p>
+  <p style="margin-top:14px;font-size:.72rem;color:var(--text-subtle);">MKS v4 沉浸叙事版 — 对标科技参考4系列品质标准</p>
+</footer>
+
+<script>
+// ===== CANVAS: ANTIDOTE PARTICLES =====
+(function(){
+  const canvas = document.getElementById('antidoteCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, toxins = [], antidotes = [];
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Toxin {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * H;
+    }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = H + 10;
+      this.size = Math.random() * 2.5 + 1;
+      this.speed = Math.random() * 1 + 0.3;
+      this.opacity = Math.random() * 0.5 + 0.25;
+      this.wobble = Math.random() * 2 - 1;
+    }
+    update() {
+      this.y -= this.speed;
+      this.x += this.wobble * 0.3;
+      if (this.y < -10) this.reset();
+    }
+    draw(ctx) {
+      const alpha = this.opacity;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,80,60,${alpha})`;
+      ctx.fill();
+      if (this.size > 2) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220,80,60,${alpha * 0.12})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  class Antidote {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * H;
+    }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = -10;
+      this.size = Math.random() * 2 + 0.5;
+      this.speed = Math.random() * 1.2 + 0.3;
+      this.opacity = Math.random() * 0.6 + 0.3;
+      this.wobble = Math.random() * 1.5 - 0.75;
+    }
+    update() {
+      this.y += this.speed;
+      this.x += this.wobble * 0.3;
+      if (this.y > H + 10) this.reset();
+    }
+    draw(ctx) {
+      const alpha = this.opacity;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(106,180,120,${alpha})`;
+      ctx.fill();
+      if (this.size > 1.5) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(106,180,120,${alpha * 0.1})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  for (let i = 0; i < 50; i++) toxins.push(new Toxin());
+  for (let i = 0; i < 40; i++) antidotes.push(new Antidote());
+
+  // Neutralization sparks
+  let sparks = [];
+  function checkNeutralization() {
+    for (let i = 0; i < toxins.length; i++) {
+      for (let j = 0; j < antidotes.length; j++) {
+        const dx = toxins[i].x - antidotes[j].x;
+        const dy = toxins[i].y - antidotes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 15 && Math.random() < 0.08) {
+          sparks.push({
+            x: (toxins[i].x + antidotes[j].x) / 2,
+            y: (toxins[i].y + antidotes[j].y) / 2,
+            life: 20 + Math.random() * 20,
+            age: 0,
+            maxR: 2 + Math.random() * 4
+          });
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Background glow — subtle olive ambient
+    const grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.min(W, H) * 0.65);
+    grd.addColorStop(0, 'rgba(60,100,70,0.04)');
+    grd.addColorStop(0.5, 'rgba(30,50,35,0.02)');
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+
+    // Bottom glow (danger)
+    const grd2 = ctx.createRadialGradient(W/2, H, 0, W/2, H, Math.min(W, H) * 0.6);
+    grd2.addColorStop(0, 'rgba(192,57,43,0.05)');
+    grd2.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd2;
+    ctx.fillRect(0, 0, W, H);
+
+    toxins.forEach(t => { t.update(); t.draw(ctx); });
+    antidotes.forEach(a => { a.update(); a.draw(ctx); });
+    checkNeutralization();
+
+    // Draw neutralization sparks
+    sparks.forEach((s, i) => {
+      s.age++;
+      if (s.age > s.life) { sparks.splice(i, 1); return; }
+      const alpha = (1 - s.age / s.life);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.maxR * alpha, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,220,180,${alpha * 0.7})`;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ===== 1. TOXIN MAP DATA & RENDER =====
+(function(){
+  const toxins = [
+    {
+      icon: '🍄', name: '灵芝抗癌', tag: '保健品祛魅',
+      desc: '灵芝能抗癌吗？灵芝孢子粉是神药吗？几十年的神话，一篇篇拆解给你看。',
+      antidote: '「灵芝没有任何疗效可言…灵芝是一种蘑菇，而且是一种不太适合食用的蘑菇。」——实验水平低下，文献掺水严重。灵芝属的真菌只有在极其幼嫩时嚼得动，长成后就变成硬硬的几丁质。',
+      quote: '来源：《科技参考》112-113期「灵芝祛魅」',
+      articles: '112-113期'
+    },
+    {
+      icon: '💊', name: '安宫牛黄丸', tag: '中药祛魅',
+      desc: '一颗几十万的「救命神药」，真有那么神奇？越老越灵的观念从哪里来？',
+      antidote: '「这种『神奇的药效』，从乐观的方面看，还能再维持一代人的时间…会越来越类似于『九花玉露丸』、『天香断续膏』一样的存在。」',
+      quote: '来源：《科技参考》104期「安宫牛黄丸有多神？」',
+      articles: '104期'
+    },
+    {
+      icon: '🧪', name: '辅酶Q10', tag: '保健品祛魅',
+      desc: '近些年最受欢迎的保健品之一，曾经一度有望成为心脏药物——后来被默克放弃了。',
+      antidote: '「辅酶Q10的安全性很好，但它并不是人体必需的成分…它没有疗效可言，也几乎不会产生显著的益处…属于智商税含量非常低的保健品。」',
+      quote: '来源：《科技参考》109期「祛魅辅酶Q10」',
+      articles: '109期'
+    },
+    {
+      icon: '🐛', name: '冬虫夏草', tag: '判死刑的保健品',
+      desc: '曾经的送礼硬通货，如今在保健品市场已被「判死刑」。发生了什么？',
+      antidote: '「冬虫夏草在今天已经是一种在保健品市场被判死刑的东西了，也就是再也不可能成为保健品了。」——有毒有害物严重超标，长期得不到解决。',
+      quote: '来源：《科技参考》116期「再谈冬虫夏草」',
+      articles: '116期'
+    },
+    {
+      icon: '🐟', name: '鱼油/Omega-3', tag: '补充剂祛魅',
+      desc: 'DHA、EPA、Omega-3、鱼油、藻油…名字越花哨，离真相越远。',
+      antidote: '「鱼油是一种不精确的笼统说法…依然是缘木求鱼（爬上树去找鱼，是没用的）。」人体把ALA转化为DHA+EPA的效率在千分之几到万分之几。',
+      quote: '来源：《科技参考》181期「鱼油祛魅」',
+      articles: '181期'
+    },
+    {
+      icon: '🌿', name: '人参神话', tag: '补品祛魅',
+      desc: '人参皂苷有几十种神奇功效？抗氧化+抗炎+抗肿瘤+调节免疫…涵盖太广了吧？',
+      antidote: '「真实情况是，几十种人参皂苷的结构是高度类似的…200多个角度虽然可能很多是重合的，但你全读一遍就会觉得，哇，人参真神奇。」',
+      quote: '来源：《科技参考》65期「人参神话」',
+      articles: '65期'
+    },
+    {
+      icon: '🏥', name: '护肝保肝', tag: '伪概念拆解',
+      desc: '水飞蓟素、奶蓟草、护肝片——中国患者一年吃掉百亿，国外为什么根本没这药？',
+      antidote: '「中国患者一年吃掉百亿保肝药，然而为何国外根本没这药」——肺结核患者吃护肝处方药，反而肝损伤率更高。护肝药不护肝。',
+      quote: '来源：《科技参考》133期「压根没有保肝护肝这么一说」',
+      articles: '133期'
+    },
+    {
+      icon: '🎧', name: 'HiFi玄学', tag: '消费祛魅',
+      desc: '一万多的耳机真的比几百的好一百倍吗？发烧友的耳朵能听出差别的极限在哪？',
+      antidote: '「我为什么没有越陷越深…因为我在不断更换目标的时候，也搜罗了一些使用科学方法评估人是否能感受到音频设备提升的实验。」——双盲法给HiFi圈祛魅。',
+      quote: '来源：《科技参考》269期「双盲法给HiFi圈祛魅」',
+      articles: '269期'
+    },
+    {
+      icon: '💆', name: '美容仪智商税', tag: '消费祛魅',
+      desc: '几千到一万的家用美容仪，和美容院两万一次的项目比，效果差十倍吗？',
+      antidote: '「在有随机对照实验的所有关于美容仪和护肤品的研究论文中，至少有70%的文章是利益相关的…是利益关联的重灾区。」',
+      quote: '来源：《科技参考》130-131期「家用美容仪智商税分析」',
+      articles: '130-131期'
+    },
+    {
+      icon: '💪', name: '肌酸神话', tag: '补充剂祛魅',
+      desc: '运动补剂中的明星——补充肌酸真的有好处吗？几乎所有正常饮食的人都不缺。',
+      antidote: '「肌酸的安全性很高，即便身体不缺也硬要补充…也不会有什么危害。但你要问我有什么好处，我只能说，没有什么害处。」',
+      quote: '来源：《科技参考》3期「肌酸有什么神奇作用吗？没有」',
+      articles: '003期'
+    },
+    {
+      icon: '💰', name: '二手交易陷阱', tag: '避坑指南',
+      desc: '闲鱼上的「到手刀」、时间差骗局——骗子用的是你的认知漏洞，不是技术漏洞。',
+      antidote: '「闲鱼上不说100%吧，99%的商家并不是靠售前、售后服务盈利的，而是靠一种叫做『到手刀』的方式来盈利。」',
+      quote: '来源：《科技参考》29-31期「二手交易陷阱」三篇',
+      articles: '029-031期'
+    },
+    {
+      icon: '🍬', name: '糖与甜味剂', tag: '食品工业',
+      desc: '你以为是自己选择了口味——其实是食品工业在过去一百年里塑造了你的味蕾。',
+      antidote: '「一个人之所以认为某个食物应该是这个味道…很多时候决定因素是在他的童年、青年时期吃了那些时期的食品工业的产品，而不是取决于他的独立选择。」',
+      quote: '来源：《科技参考》202期「食品工业塑造的口味」',
+      articles: '202期'
+    }
+  ];
+
+  const grid = document.getElementById('toxinGrid');
+  grid.innerHTML = toxins.map((t, i) => `
+    <div class="toxin-card" data-idx="${i}" onclick="selectToxin(this, ${i})">
+      <div class="toxin-icon">${t.icon}</div>
+      <div class="toxin-name">${t.name}</div>
+      <div class="toxin-tag">${t.tag}</div>
+      <div class="toxin-desc">${t.desc}</div>
+      <div class="toxin-quote">${t.quote}</div>
+      <div class="toxin-antidote">💉 <strong style="color:#8ab88a;">解毒剂：</strong>${t.antidote}</div>
+    </div>
+  `).join('');
+})();
+
+function selectToxin(card, idx) {
+  const wasSelected = card.classList.contains('selected');
+  document.querySelectorAll('.toxin-card').forEach(c => c.classList.remove('selected'));
+  if (!wasSelected) card.classList.add('selected');
+}
+
+// ===== 2. ANTIDOTE METHOD =====
+(function(){
+  const stages = document.querySelectorAll('.method-stage');
+  const detail = document.getElementById('methodDetail');
+  const methodData = [
+    {
+      icon: '🔍', name: '追问来源',
+      desc: `<strong>🔍 第一步：追问来源——谁说的？</strong><br><br>
+      这条消息是谁发布的？是个人、媒体、还是品牌？<br>
+      他们有专业资质吗？在相关领域有研究背景吗？<br><br>
+      <strong style="color:#d4a84a;">实战案例：</strong>安宫牛黄丸的「神奇功效」是谁在传播？<br>
+      <em style="color:#a09888;">「那些『越老越灵』『越稀有越神奇』的观念，也会被『今天的历史学家对历史事件的分析水平远超司马迁』等等观念取代。」</em><br><br>
+      <span style="color:#8ab88a;">🔑 关键动作：</span>打开搜索引擎，搜索「发布者名字 + 争议」或「产品名 + 骗局」。信息源头的可信度一旦崩塌，整条消息就不攻自破。`
+    },
+    {
+      icon: '🔬', name: '检验证据',
+      desc: `<strong>🔬 第二步：检验证据——怎么证明的？</strong><br><br>
+      这项「研究」发表在什么期刊上？影响因子多少？<br>
+      样本量够大吗？有对照组吗？是随机双盲吗？<br>
+      统计方法有没有操纵的痕迹？结果能被独立重复吗？<br><br>
+      <strong style="color:#d4a84a;">实战案例：</strong>灵芝抗癌研究中，几百篇论文的价值如何？<br>
+      <em style="color:#a09888;">「关于灵芝的整体研究水平的低下…灵芝没有任何疗效可言。」</em><br><br>
+      <strong style="color:#d4a84a;">实战案例：</strong>美容仪研究里有多少是真的？<br>
+      <em style="color:#a09888;">「至少有70%的文章是利益相关的…是利益关联的重灾区。」</em><br><br>
+      <span style="color:#8ab88a;">🔑 关键动作：</span>看到「研究表明」四个字时，问一句「什么研究？谁做的？发表在哪？」——三连追问能筛掉90%的伪科学。`
+    },
+    {
+      icon: '💰', name: '追踪利益',
+      desc: `<strong>💰 第三步：追踪利益——他靠什么赚钱？</strong><br><br>
+      这篇文章/视频/广告的发布者，能从你的相信中获得什么？<br>
+      是卖产品？是卖课程？是卖流量？还是卖身份认同？<br><br>
+      <strong style="color:#d4a84a;">实战案例：</strong>辅酶Q10从药物变保健品的轨迹——<br>
+      <em style="color:#a09888;">「它曾经一度有望作为治疗心脏相关疾病的药物进行研发，但后来被药业巨头默克放弃了，后来的企业把它当作保健品，继续开发剩余价值。」</em><br><br>
+      <strong style="color:#d4a84a;">实战案例：</strong>中国保健品史——从3万款到不足2000款——<br>
+      <em style="color:#a09888;">「1994年的时候都还有3万款中药保健药呢，怎么到了2003年…就只剩下4600多款了？」</em>——每一款倒下的保健品背后，都曾有一条完整的利益链。<br><br>
+      <span style="color:#8ab88a;">🔑 关键动作：</span>Follow the money. 如果对方靠你的「相信」赚钱，他的「证据」就需要额外打三折。`
+    }
+  ];
+
+  stages.forEach(stage => {
+    stage.addEventListener('click', () => {
+      stages.forEach(s => s.classList.remove('active'));
+      stage.classList.add('active');
+      const idx = parseInt(stage.dataset.stage);
+      detail.innerHTML = methodData[idx].desc;
+      detail.classList.add('show');
+    });
+  });
+
+  // Initialize first detail
+  detail.innerHTML = methodData[0].desc;
+})();
+
+// ===== 3. CASE DISSECTION - FLIP CARDS =====
+(function(){
+  const cases = [
+    {
+      icon: '🍄', title: '灵芝能抗癌吗？',
+      backTitle: '拆解：灵芝祛魅',
+      backContent: '灵芝是一种蘑菇——而且是不太适合食用的蘑菇。灵芝属几乎全部真菌都不适合食用，只有在极其幼嫩时嚼得动，长大后变成硬硬的几丁质和木质素化纤维。<br><br>「关于灵芝的整体研究水平的低下…灵芝没有任何疗效可言。」<br><br>各国监管部门对灵芝的保健品审批态度一致：有效证据不足。',
+      source: '《科技参考》112-113期「灵芝祛魅」'
+    },
+    {
+      icon: '💊', title: '安宫牛黄丸是神药吗？',
+      backTitle: '拆解：一颗几十万的药丸',
+      backContent: '「这种『神奇的药效』，从乐观的方面看，还能再维持一代人的时间…会越来越类似于『九花玉露丸』、『天香断续膏』一样的存在。」<br><br>随着民众科学素养提升和药品管理标准一致化，那些「越老越灵」的观念会逐步瓦解。',
+      source: '《科技参考》104期「安宫牛黄丸有多神？」'
+    },
+    {
+      icon: '🏥', title: '护肝药真的护肝吗？',
+      backTitle: '拆解：国外根本没这药',
+      backContent: '中国患者一年吃掉百亿保肝药。然而肺结核治疗中——吃护肝处方药的患者，肝损伤率反而更高。<br><br>「为何国外根本没这药」——因为循证医学证据不支持「护肝」这个概念本身。',
+      source: '《科技参考》133期「压根没有保肝护肝这么一说」'
+    },
+    {
+      icon: '🐟', title: '鱼油是大脑黄金吗？',
+      backTitle: '拆解：缘木求鱼',
+      backContent: '「鱼油」是一种不精确的笼统说法。植物来源的ALA转化为DHA+EPA的效率仅在千分之几到万分之几之间。<br><br>Omega-3是大类总称——如果你买的保健品名字就是Omega-3，那里面的杂油是很多的。这类商品「只能说安全，谈不上任何你期待的疗效」。',
+      source: '《科技参考》181期「鱼油祛魅」'
+    },
+    {
+      icon: '🎧', title: 'HiFi耳机越贵越好吗？',
+      backTitle: '拆解：双盲法给HiFi祛魅',
+      backContent: '「我在不断更换目标的时候，也搜罗了一些使用科学方法评估人是否能感受到音频设备提升的实验，这些实验最终给我退了烧、避了坑。」<br><br>在双盲条件下，发烧友的「金耳朵」常常无法区分高端设备和普通设备。',
+      source: '《科技参考》269期「双盲法给HiFi圈祛魅」'
+    },
+    {
+      icon: '🌿', title: '人参真的有几十种功效？',
+      backTitle: '拆解：200多个角度拼凑的幻象',
+      backContent: '「几十种人参皂苷的结构是高度类似的…假如每一种都有人拿去研究，在5个角度去试，总共就是200多个角度。这200多个角度虽然可能很多是重合的，但你全读一遍就会觉得，哇，人参真神奇。」<br><br>这是统计上的「多重比较」陷阱——角度够多，总能碰到几个「显著」。',
+      source: '《科技参考》65期「人参神话」'
+    },
+    {
+      icon: '💆', title: '家用美容仪有效吗？',
+      backTitle: '拆解：70%利益相关的研究',
+      backContent: '「至少有70%的文章是利益相关的…如果你要是用常规的看学术文章的方法去看美容仪的那些研究，毫无疑问，这些美容仪和护肤品都是效果显著、证据确凿的。」<br><br>利益声明里直接写有厂商赞助，或者通讯作者本身是公司雇员或持股人。',
+      source: '《科技参考》130-131期「家用美容仪智商税分析」'
+    },
+    {
+      icon: '💪', title: '肌酸能提升运动表现吗？',
+      backTitle: '拆解：没有，但也没坏处',
+      backContent: '「只要正常饮食，人体是很难缺乏肌酸的，所以几乎所有人都不必额外补充肌酸。」<br><br>对高强度训练的运动员和老年人有一些好处，安全性很高——「真想发挥出好处，还需要额外费一些力气才行。」',
+      source: '《科技参考》003期「肌酸有什么神奇作用吗？没有」'
+    }
+  ];
+
+  document.getElementById('caseGrid').innerHTML = cases.map((c, i) => `
+    <div class="case-card" onclick="flipCase(this)">
+      <div class="case-inner">
+        <div class="case-front">
+          <div class="case-icon">${c.icon}</div>
+          <div class="case-title">${c.title}</div>
+          <div class="case-hint">👆 点击翻转看拆解</div>
+        </div>
+        <div class="case-back">
+          <h4>${c.backTitle}</h4>
+          <div>${c.backContent}</div>
+          <div class="source">📖 ${c.source}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+})();
+
+function flipCase(card) {
+  const inner = card.querySelector('.case-inner');
+  inner.classList.toggle('flipped');
+}
+
+// ===== 4. INTEREST WEB - SVG =====
+(function(){
+  const container = document.getElementById('interestCanvas');
+  const nodes = [
+    { id: 'sp', label: '保健品厂商', x: 400, y: 60, color: '#c0392b', size: 28 },
+    { id: 'me', label: '媒体/自媒体', x: 200, y: 160, color: '#c09040', size: 22 },
+    { id: 're', label: '研究者/专家', x: 600, y: 160, color: '#c09040', size: 22 },
+    { id: 'ce', label: '明星/KOL代言', x: 100, y: 310, color: '#a07020', size: 20 },
+    { id: 'pl', label: '电商平台', x: 700, y: 310, color: '#a07020', size: 20 },
+    { id: 'co', label: '消费者', x: 400, y: 420, color: '#6a9a6a', size: 32 },
+    { id: 're2', label: '监管部门', x: 400, y: 180, color: '#7a8a5a', size: 18 },
+  ];
+  const edges = [
+    { from: 'sp', to: 'me', label: '广告费', color: '#c0392b' },
+    { from: 'sp', to: 're', label: '研究赞助', color: '#e74c3c' },
+    { from: 'sp', to: 'ce', label: '代言费', color: '#c0392b' },
+    { from: 'sp', to: 'pl', label: '渠道费', color: '#a03028' },
+    { from: 'me', to: 'co', label: '内容植入', color: '#c09040' },
+    { from: 're', to: 'me', label: '专家背书', color: '#c09040' },
+    { from: 'ce', to: 'co', label: '信任转移', color: '#a07020' },
+    { from: 'pl', to: 'co', label: '销量/好评', color: '#a07020' },
+    { from: 're2', to: 'sp', label: '审批/监管', color: '#5a6a3a' },
+  ];
+
+  container.innerHTML = `
+    <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="max-width:800px;">
+      <defs>
+        <filter id="glow-red"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glow-green"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c0392b"/>
+        </marker>
+        <marker id="arrow-amber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c09040"/>
+        </marker>
+        <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#5a6a3a"/>
+        </marker>
+      </defs>
+
+      <!-- Title -->
+      <text x="400" y="22" text-anchor="middle" fill="#a09888" font-size="11" font-family="'Noto Sans SC',sans-serif" letter-spacing="3">利益之网 · 谁在靠你的「相信」赚钱？</text>
+
+      <!-- Edges -->
+      ${edges.map(e => {
+        const from = nodes.find(n => n.id === e.from);
+        const to = nodes.find(n => n.id === e.to);
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2 - 8;
+        const marker = e.color === '#c0392b' || e.color === '#e74c3c' || e.color === '#a03028' ? 'url(#arrow-red)' : e.color === '#c09040' || e.color === '#a07020' ? 'url(#arrow-amber)' : 'url(#arrow-green)';
+        return `<g>
+          <line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${e.color}" stroke-width="1.5" stroke-opacity="0.5" marker-end="${marker}"/>
+          <text x="${midX}" y="${midY}" text-anchor="middle" fill="${e.color}" font-size="9" font-family="'Noto Sans SC',sans-serif" opacity="0.8">${e.label}</text>
+        </g>`;
+      }).join('')}
+
+      <!-- Nodes -->
+      ${nodes.map(n => `
+        <g style="cursor:pointer;">
+          <circle cx="${n.x}" cy="${n.y}" r="${n.size}" fill="${n.color}" fill-opacity="0.15" stroke="${n.color}" stroke-width="2" ${n.id==='co' ? 'filter="url(#glow-green)"' : ''}/>
+          <text x="${n.x}" y="${n.y + 4}" text-anchor="middle" fill="${n.id === 'co' ? '#8ab88a' : '#d8d0c0'}" font-size="${n.id === 'co' ? '12' : '10'}" font-weight="${n.id === 'co' ? '800' : '600'}" font-family="'Noto Sans SC',sans-serif">${n.label}</text>
+        </g>
+      `).join('')}
+
+      <!-- Bottom annotation -->
+      <text x="400" y="480" text-anchor="middle" fill="#807868" font-size="9" font-family="'Noto Sans SC',sans-serif">
+        💡 跟踪金钱流向，大多数「神奇功效」的谜底就解开了
+      </text>
+    </svg>
+  `;
+})();
+
+// ===== 5. SOCRATIC PANEL =====
+(function(){
+  const items = [
+    {
+      q: '如果灵芝真的能抗癌，为什么全世界没有一个国家的药监局批准它作为抗癌药物？',
+      a: '因为证据不足。灵芝相关的研究整体水平低下——样本量小、缺乏随机双盲对照、利益关联严重。这并不意味着灵芝一定没有抗癌成分，但「没有证据证明有效」和「证明无效」之间，保健品厂商希望你混淆这两个概念。卓克在112-113期指出：<em style="color:#d4a84a;">「灵芝没有任何疗效可言。」</em>'
+    },
+    {
+      q: '「我爷爷吃了安宫牛黄丸就好了」——这种亲历者证词为什么不能作为科学证据？',
+      a: '这是典型的「轶事证据」——它缺少对照组。爷爷是不是不吃也会好？是不是同时用了其他治疗？是不是自然康复？没有对照，就没有因果。卓克在104期中讲到：<em style="color:#d4a84a;">「当我们发现绝大部分生活中最重要的思想和技术都是在最近两到三代人之内建立起来的，就会对当下的我们有更强的信心。」</em>——古人的智慧需要被验证，而不是被信仰。'
+    },
+    {
+      q: '保健品包装上写着「本品不能替代药品」——这句话意味着什么？',
+      a: '这句话是法规要求，不是谦虚。它意味着两件事：第一，这个产品没有经过药品级别的安全性和有效性验证；第二，你不能指望它治病。卓克在祛魅辅酶Q10时提到：<em style="color:#d4a84a;">「它没有疗效可言，也几乎不会产生显著的益处。」</em>但鉴于「安全性很好」「价格竞争激烈」，它属于「智商税含量非常低的保健品」——可以吃，但别期待效果。'
+    },
+    {
+      q: '科学研究说「X有效」——我怎么知道这篇研究没有被利益集团操纵？',
+      a: '看利益声明。在看学术论文时，先翻到末尾的利益冲突声明。如果写着「本研究由XX公司赞助」或作者是公司雇员/持股人——这篇研究的结论需要打折扣。卓克在分析美容仪时发现：<em style="color:#d4a84a;">「至少有70%的文章是利益相关的…如果你要是用常规的看学术文章的方法去看美容仪的那些研究，毫无疑问，这些美容仪和护肤品都是效果显著。」</em>——利益相关的研究本身不一定假，但你需要知道它不中立。'
+    },
+    {
+      q: '冬虫夏草为什么在保健品市场被「判死刑」了？',
+      a: '因为安全性问题。冬虫夏草中的砷含量长期严重超标——这是有毒有害物质。2012年国家食药监总局试点过让它成为保健品，但始终无法解决超标问题。卓克在116期中指出：<em style="color:#d4a84a;">「冬虫夏草在今天已经是一种在保健品市场被判死刑的东西了，也就是再也不可能成为保健品了。」</em>——科学监管的一个经典案例：不是靠信念，是靠检测数据。'
+    },
+    {
+      q: '我怎么知道自己有没有被「解毒」？有没有一个自测方法？',
+      a: '下次你在微信群里看到一条「惊人发现」时，问自己三个问题：<br>① 谁说的？（追问来源）<br>② 怎么证明的？（检验证据）<br>③ 他靠什么赚钱？（追踪利益）<br><br>如果你在转发之前，先完成了这三个追问——恭喜你，解毒剂已经进入你的血液。如果你还是直接转发了——没关系，知道自己为什么转发，也是一种解毒的开始。'
+    }
+  ];
+
+  document.getElementById('socraticList').innerHTML = items.map((item, i) => `
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="toggleSocratic(this)">
+        <div class="q-icon">?</div>
+        <span>${item.q}</span>
+      </div>
+      <div class="socratic-a">${item.a}</div>
+    </div>
+  `).join('');
+})();
+
+function toggleSocratic(qEl) {
+  const wasOpen = qEl.classList.contains('open');
+  qEl.classList.toggle('open');
+  const aEl = qEl.nextElementSibling;
+  aEl.classList.toggle('open');
+}
+
+// ===== 6. DECISION SIMULATOR =====
+(function(){
+  const scenarios = [
+    {
+      title: '场景一：家族群里的「抗癌神药」',
+      scenario: '你二姨在家族群里转发了一条消息：<br><br><strong>「央视都报道了！灵芝孢子粉抗癌有效率达97%！三甲医院教授推荐！点击看视频→」</strong><br><br>配图是一张央视新闻截图和一个穿白大褂的人。群里已经有三个亲戚回复「收到，转发」。',
+      options: [
+        { text: 'A. 立刻转发到自己的朋友圈，帮助更多人', correct: false },
+        { text: 'B. 点开链接看看，如果是真的就转发', correct: false },
+        { text: 'C. 先搜索「灵芝抗癌 央视」看看是不是旧谣言翻新，再看有没有利益关联', correct: true },
+        { text: 'D. 直接在群里说「这是谣言，别信」', correct: false }
+      ],
+      feedback: {
+        correct: '✅ <strong>正确！</strong>你选择了先调查。<br><br>这个消息大概率是假的——「央视报道」截图可以伪造，「三甲医院教授」可能根本不存在或已被利益集团收买。卓克花了两期节目拆解灵芝：<br><br><em style="color:#d4a84a;">「灵芝没有任何疗效可言…关于灵芝的整体研究水平的低下。」</em><br><br>不要急着在群里反驳——亲戚们需要的是一份温和的真相，不是被当众打脸。你可以私下把卓克的节目链接发给他们。',
+        wrong: '❌ <strong>注意。</strong><br><br>A和D的反应都太快了——前者助长谣言，后者容易引发对立。B看似理性，但「点开链接看」本身就给对方贡献了流量。C是唯一正确的路径：先独立搜索验证。记住卓克的方法：<em style="color:#d4a84a;">「先问：谁说的？怎么证明的？他靠什么赚钱？」</em>'
+      }
+    },
+    {
+      title: '场景二：朋友圈里的「惊人发现」',
+      scenario: '你的好友转发了一篇10w+文章：<br><br><strong>「震惊！酸奶竟是百年骗局！法国科学家临终前忏悔：我欺骗了全世界！」</strong><br><br>文章说酸奶的益生菌功效完全是捏造的，是食品工业的营销骗局。你的好友配文：「我早就觉得酸奶没用。」',
+      options: [
+        { text: 'A. 点赞，评论「终于有人说出真相了」', correct: false },
+        { text: 'B. 把文章转发到一个科普群里，问问群友怎么看', correct: false },
+        { text: 'C. 搜索原文出处——「法国科学家临终忏悔」这个叙事太像谣言模板了', correct: true },
+        { text: 'D. 不去管它，反正我不喝酸奶', correct: false }
+      ],
+      feedback: {
+        correct: '✅ <strong>正确！</strong>你识别出了谣言模板。<br><br>「临终忏悔」「欺骗全世界」这种叙事结构是经典谣言模板——和「美国宇航局隐藏的外星人真相」是同一种配方。这篇可能是对「酸奶确实没有传说中那么神奇」的事实的极端化扭曲。<br><br>卓克在多期节目中展示了类似逻辑：益生菌产品确实存在夸大宣传，但「全是骗局」本身也是一种谣言。真实世界不是黑白的——科学方法的精髓在于看清灰度。',
+        wrong: '❌ <strong>注意。</strong><br><br>A直接站队——你可能正在传播另一条谣言。B看似谨慎，但把问题抛给群友等于没做自己的功课。D是逃避——而这种逃避让你下次遇到类似消息时依然没有免疫力。识别谣言模板是一种可以训练的能力，就像卓克识别「到手刀」骗局一样——看多了，就有直觉了。'
+      }
+    },
+    {
+      title: '场景三：带货直播间的「科学背书」',
+      scenario: '你在看一个美妆博主的直播，她正在推荐一款家用射频美容仪：<br><br><strong>「我自己用了三个月，法令纹真的淡了！而且有临床实验数据！你们看这个报告，28天使肌肤胶原蛋白密度提升了35%！现在下单只要1999，原价4999！」</strong><br><br>弹幕已经在刷「已下单」。',
+      options: [
+        { text: 'A. 这么多人买肯定没错，加入购物车', correct: false },
+        { text: 'B. 觉得太贵了，等降到999再买', correct: false },
+        { text: 'C. 先查那个「临床实验」是谁做的、有没有发表在正经期刊上、作者有没有利益关联', correct: true },
+        { text: 'D. 美容仪都是智商税，不买', correct: false }
+      ],
+      feedback: {
+        correct: '✅ <strong>正确！</strong><br><br>卓克在分析家用美容仪时发现：<em style="color:#d4a84a;">「至少有70%的文章是利益相关的…如果你要是用常规的看学术文章的方法去看美容仪的那些研究，毫无疑问，这些美容仪和护肤品都是效果显著。」</em><br><br>「临床实验数据」听起来很高端——但如果是品牌自己做的、没发表、没经过同行评审——那和广告文案没有区别。而且「28天提升35%」这种精确数字往往来自小样本或选择性报告。',
+        wrong: '❌ <strong>注意。</strong><br><br>A是跟风——弹幕里的「已下单」可能是水军。B是价格思维——问题不是价格，是有没有效果。D是另一个极端——不是所有美容仪都是智商税，但大部分研究都是利益关联的。你需要学会在「全信」和「全不信」之间找到第三条路。'
+      }
+    },
+    {
+      title: '场景四：朋友圈里的「老祖宗智慧」',
+      scenario: '一个老同学发了一条朋友圈：<br><br><strong>「西医就是治标不治本。中医讲究固本培元，从根本上调理。我吃了一年护肝片，肝功能指标全部恢复正常了！老祖宗几千年传下来的智慧，不是科学能解释的。」</strong><br><br>下面有十几条评论追问「什么牌子的」。',
+      options: [
+        { text: 'A. 评论「中医黑滚开」，然后划走', correct: false },
+        { text: 'B. 评论「肝功能恢复可能是自愈的，不一定是护肝片的作用」', correct: false },
+        { text: 'C. 私信问他：有没有对比过治疗前后的其他因素？同期有没有改变饮食或运动？', correct: true },
+        { text: 'D. 截图发到网上嘲笑他', correct: false }
+      ],
+      feedback: {
+        correct: '✅ <strong>正确！</strong>你选择了用温和的追问替代对抗。<br><br>「吃了X就好了」是最常见的逻辑谬误之一——相关不等于因果。卓克在分析「护肝药」时指出：<em style="color:#d4a84a;">「中国患者一年吃掉百亿保肝药，然而为何国外根本没这药。」</em>——肺结核患者在吃护肝处方药的同时，肝损伤率反而更高。<br><br>公开反驳容易引发对立——私信追问既保持了友谊，也种下了一颗批判性思维的种子。而且你问的方式很对——不是直接否定他，而是帮他思考替代解释。',
+        wrong: '❌ <strong>注意。</strong><br><br>A和D都在制造对立。B虽然方向对，但公开泼冷水容易让朋友感到被冒犯。记住卓克的态度——不是高高在上地批判，而是一层层剥开。私信是更好的选择。而且你会发现，当对方认真思考你的问题时，他自己可能就会开始怀疑——这才是真正的「解毒」。'
+      }
+    }
+  ];
+
+  let currentIdx = 0;
+  const answers = []; // track answers
+
+  function renderScenario() {
+    const s = scenarios[currentIdx];
+    document.getElementById('decisionTitle').textContent = s.title;
+    document.getElementById('decisionScenario').innerHTML = s.scenario;
+    document.getElementById('decisionOptions').innerHTML = s.options.map((opt, i) => `
+      <button onclick="chooseDecision(${i})" id="optBtn${i}">${opt.text}</button>
+    `).join('');
+    document.getElementById('decisionFeedback').className = 'decision-feedback';
+    document.getElementById('decisionFeedback').style.display = 'none';
+
+    // Update dots
+    document.getElementById('decisionDots').innerHTML = scenarios.map((_, i) => {
+      let cls = 'scenario-dot';
+      if (i === currentIdx) cls += ' active';
+      if (answers[i] === 'correct') cls += ' answered-correct';
+      if (answers[i] === 'wrong') cls += ' answered-wrong';
+      return `<div class="${cls}" onclick="goToScenario(${i})"></div>`;
+    }).join('');
+  }
+
+  window.chooseDecision = function(optIdx) {
+    const s = scenarios[currentIdx];
+    const chosen = s.options[optIdx];
+    const fb = document.getElementById('decisionFeedback');
+
+    if (chosen.correct) {
+      answers[currentIdx] = 'correct';
+      fb.className = 'decision-feedback correct show';
+      fb.innerHTML = s.feedback.correct;
+      document.querySelectorAll('#decisionOptions button').forEach(b => {
+        if (b.textContent.startsWith(chosen.text.charAt(0) + '.')) b.classList.add('chosen-correct');
+        else b.disabled = true;
+      });
+    } else {
+      answers[currentIdx] = 'wrong';
+      fb.className = 'decision-feedback wrong show';
+      fb.innerHTML = s.feedback.wrong;
+      document.querySelectorAll('#decisionOptions button').forEach(b => {
+        if (b.textContent.startsWith(chosen.text.charAt(0) + '.')) b.classList.add('chosen-wrong');
+        else b.disabled = true;
+      });
+    }
+    renderScenario(); // refresh dots
+  };
+
+  window.goToScenario = function(idx) {
+    currentIdx = idx;
+    renderScenario();
+  };
+
+  document.getElementById('decisionPrev').addEventListener('click', () => {
+    currentIdx = (currentIdx - 1 + scenarios.length) % scenarios.length;
+    renderScenario();
+  });
+  document.getElementById('decisionNext').addEventListener('click', () => {
+    currentIdx = (currentIdx + 1) % scenarios.length;
+    renderScenario();
+  });
+
+  renderScenario();
+})();
+
+// ===== 7. FRONTIER =====
+(function(){
+  const frontiers = [
+    {
+      q: '如果科学方法这么有效，为什么伪科学还这么多？',
+      status: '⏳ 社会学难题',
+      desc: '因为人类大脑的出厂设置是「模式识别」而不是「概率计算」。我们天生更容易相信故事、轶事和情感叙事——这些恰好是伪科学的传播优势。科学方法是一种需要后天训练的反直觉工具。卓克在分析中国保健品史时展示了：即便在高压监管下，保健品依然能找到「电视购物」「专家访谈」「情感纪实节目」等新渠道——因为需求不会消失。'
+    },
+    {
+      q: '科学能解所有「毒」吗？会不会有新的「毒」产生？',
+      status: '⚠️ 持续博弈',
+      desc: '新的「毒」永远在产生。AI生成的内容、深度伪造的视频、算法推荐的茧房——这些新技术正在创造新的骗局形式。科学的回答方式不是「一次性解毒」，而是「持续更新解毒方案」。卓克在方便面历史那期中展示了：每一个技术突破背后，都既有利好也有意想不到的社会副作用。认识到这一点，本身就是对「速效解毒」的祛魅。'
+    },
+    {
+      q: '我自己也中过招——是不是说明我不够聪明？',
+      status: '🧠 认知偏误',
+      desc: '不是。最高学历的人也会中招——因为骗局利用的是认知偏误，不是智商。确认偏误、可用性启发、锚定效应——这些是每个人大脑的出厂设置。卓克在多期节目中反复强调：科学思维是反直觉的，「因为进化没有把我们设计成科学家，而是设计成幸存者。」中招不可耻，不愿意审视自己的中招才需要警惕。'
+    },
+    {
+      q: '下一代人需要什么样的解毒剂？',
+      status: '🔮 未来命题',
+      desc: '如果说这一代人的解毒剂核心是「识别利益冲突+检验实验证据」，那么下一代人的解毒剂可能需要新增一条：「识别AI生成内容」。当深度伪造能让任何人说出任何话、当AI能批量生产以假乱真的「研究论文」——信源验证将从「建议」变成「必需」。卓克在九周年致听众中说：<em style="color:#d4a84a;">「在遇到困难时，就不会寄希望于老祖宗的智慧…会脱口而出『问问AI』。」</em>——但问AI也需要自己的判断力做后盾。'
+    }
+  ];
+
+  document.getElementById('frontierGrid').innerHTML = frontiers.map(f => `
+    <div class="frontier-card">
+      <div class="frontier-q">${f.q}</div>
+      <div class="frontier-status">${f.status}</div>
+      <div class="frontier-desc">${f.desc}</div>
+    </div>
+  `).join('');
+})();
+
+// ===== PROGRESS METER =====
+(function(){
+  const meter = document.getElementById('progressMeter');
+  const pctEl = document.getElementById('pmPct');
+  const circle = document.getElementById('pmCircle');
+  const circumference = 119.38;
+
+  function updateMeter() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? Math.min(100, Math.round(scrollTop / docHeight * 100)) : 0;
+    pctEl.textContent = pct + '%';
+    const offset = circumference - (pct / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+
+    // Hide when near top
+    meter.style.opacity = scrollTop < 200 ? '0' : '1';
+  }
+
+  window.addEventListener('scroll', updateMeter, { passive: true });
+  updateMeter();
+})();
+</script>
+
+</body>
+</html>
