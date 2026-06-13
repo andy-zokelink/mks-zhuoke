@@ -590,8 +590,8 @@ h3 { font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--text); margin: 14px 0 8
 <section class="tab-section" id="tab-quiz">
 <h2>📝 题库系统</h2>
 <div class="quiz-controls">
-  <button id="randomMCQ">🎲 随机抽15道选择题</button>
-  <button id="randomSA">🎲 随机抽8道简答题</button>
+  <button id="randomMCQ">🎲 随机抽 MCQ（15 题）</button>
+  <button id="randomSA">🎲 随机抽简答（8 题）</button>
   <button id="resetQuiz">🔄 重置</button>
 </div>
 <div id="quizContainer" style="margin-top:16px"></div>
@@ -1223,23 +1223,22 @@ function renderCards(){
   document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
 }
 
-document.getElementById('prevCard').addEventListener('click', function(){
-  if(currentCardIdx > 0) currentCardIdx--;
-  var inner = document.getElementById('flipInner-' + currentCardIdx);
+// ===== Card Navigation =====
+function setCard(idx){
+  if(idx < 0 || idx >= concepts.length) return;
+  currentCardIdx = idx;
+  var inner = document.getElementById('flipInner-' + idx);
   if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
+  document.getElementById('cardIndex').textContent = (idx + 1) + '/' + concepts.length;
   localStorage.setItem(LS_CURRENT_CARD, String(currentCardIdx));
-});
-
-document.getElementById('nextCard').addEventListener('click', function(){
-  if(currentCardIdx < concepts.length - 1) currentCardIdx++;
-  var inner = document.getElementById('flipInner-' + currentCardIdx);
-  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
-  localStorage.setItem(LS_CURRENT_CARD, String(currentCardIdx));
-});
-
-document.getElementById('markLearned').addEventListener('click', function(){
+}
+function prevCard(){
+  if(currentCardIdx > 0) setCard(currentCardIdx - 1);
+}
+function nextCard(){
+  if(currentCardIdx < concepts.length - 1) setCard(currentCardIdx + 1);
+}
+function markLearned(){
   var idx = learnedCards.indexOf(currentCardIdx);
   if(idx === -1){
     learnedCards.push(currentCardIdx);
@@ -1251,7 +1250,11 @@ document.getElementById('markLearned').addEventListener('click', function(){
   if(card) card.classList.toggle('card-learned');
   updateProgress();
   showToast(idx === -1 ? '✓ 已标记为已学' : '已取消标记');
-});
+}
+
+document.getElementById('prevCard').addEventListener('click', prevCard);
+document.getElementById('nextCard').addEventListener('click', nextCard);
+document.getElementById('markLearned').addEventListener('click', markLearned);
 
 // ============================================================
 // QUIZ SYSTEM

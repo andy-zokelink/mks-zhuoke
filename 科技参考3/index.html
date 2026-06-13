@@ -572,23 +572,19 @@ function updateCardUI(){
   document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
 }
 
-document.addEventListener('click', function(e){
-  // Flip-inner event listeners are now added in renderCards()
-  // No separate btn-flip/btn-learn handling needed
-});
-
-// Card navigation buttons
-document.getElementById('prevCard').addEventListener('click', function(){
-  if(currentCardIdx > 0) currentCardIdx--;
-  var inner = document.getElementById('flipInner-'+currentCardIdx);
+// ===== Card Navigation =====
+function setCard(idx){
+  if(idx < 0 || idx >= concepts.length) return;
+  currentCardIdx = idx;
+  var inner = document.getElementById('flipInner-' + idx);
   if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
+  document.getElementById('cardIndex').textContent = (idx + 1) + '/' + concepts.length;
+}
+document.getElementById('prevCard').addEventListener('click', function(){
+  if(currentCardIdx > 0) setCard(currentCardIdx - 1);
 });
 document.getElementById('nextCard').addEventListener('click', function(){
-  if(currentCardIdx < concepts.length-1) currentCardIdx++;
-  var inner = document.getElementById('flipInner-'+currentCardIdx);
-  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
+  if(currentCardIdx < concepts.length - 1) setCard(currentCardIdx + 1);
 });
 document.getElementById('markLearnedBtn').addEventListener('click', function(){
   markLearned(currentCardIdx);

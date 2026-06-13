@@ -1,0 +1,104 @@
+digraph MedicineHealth {
+  rankdir=TB;
+  fontname="Noto Sans SC";
+  fontsize=16;
+  label="医学与健康前沿 · 概念关系图（4层架构）";
+  labelloc=t;
+  labeljust=c;
+  bgcolor="white";
+
+  // Layout settings
+  nodesep=0.65;
+  ranksep=0.8;
+  newrank=true;
+
+  // Node style defaults
+  node [fontname="Noto Sans SC" fontsize=10 shape=box style=filled margin="0.12,0.06"];
+  edge [fontname="Noto Sans SC" fontsize=9];
+
+  // ===== LAYER 1: 分子/细胞层 (Red tones) =====
+  subgraph cluster_molecular {
+    label="第一层：分子与细胞机制";
+    fontname="Noto Sans SC"; fontsize=12;
+    style="rounded,dashed"; color="#dc2626"; bgcolor="#fef2f2";
+
+    cancer [label="癌症机制\n(致癌物/突变)" fillcolor="#ef4444" fontcolor="white"];
+    prion [label="朊病毒/朊粒\n(PrP蛋白错误折叠)" fillcolor="#dc2626" fontcolor="white"];
+    epigenetics [label="表观遗传\n(基因表达调控)" fillcolor="#b91c1b" fontcolor="white"];
+    virus [label="内源性逆转录病毒\n(HERV/衰老关联)" fillcolor="#991b1b" fontcolor="white"];
+  }
+
+  // ===== LAYER 2: 器官/系统层 (Blue tones) =====
+  subgraph cluster_system {
+    label="第二层：器官与系统功能";
+    fontname="Noto Sans SC"; fontsize=12;
+    style="rounded,dashed"; color="#2563eb"; bgcolor="#eff6ff";
+
+    immune [label="免疫系统\n(先天/适应性免疫)" fillcolor="#3b82f6" fontcolor="white"];
+    nervous [label="神经系统\n(偏头痛/神经递质)" fillcolor="#2563eb" fontcolor="white"];
+    aging [label="衰老过程\n(端粒/线粒体/毒物兴奋)" fillcolor="#1d4ed8" fontcolor="white"];
+    metabolism [label="代谢与营养\n(GLP-1/二甲双胍)" fillcolor="#1e3a5f" fontcolor="white"];
+  }
+
+  // ===== LAYER 3: 临床/治疗层 (Green tones) =====
+  subgraph cluster_clinical {
+    label="第三层：临床医学与治疗";
+    fontname="Noto Sans SC"; fontsize=12;
+    style="rounded,dashed"; color="#059669"; bgcolor="#ecfdf5";
+
+    vaccine [label="疫苗技术\n(mRNA/灭活/减毒)" fillcolor="#10b981" fontcolor="white"];
+    antibiotics [label="抗生素耐药\n(超级细菌/ESKAPE)" fillcolor="#059669" fontcolor="white"];
+    drugs [label="靶向药物\n(减肥药/抗癌药)" fillcolor="#047857" fontcolor="white"];
+    cryonics [label="冷冻复活技术\n(器官保存/玻璃化)" fillcolor="#065f46" fontcolor="white"];
+  }
+
+  // ===== LAYER 4: 社会/公共卫生层 (Purple tones) =====
+  subgraph cluster_social {
+    label="第四层：公共卫生与社会认知";
+    fontname="Noto Sans SC"; fontsize=12;
+    style="rounded,dashed"; color="#7c3aed"; bgcolor="#f5f3ff";
+
+    food_safety [label="食品安全认知\n(致癌物/添加剂)" fillcolor="#8b5cf6" fontcolor="white"];
+    health_myth [label="健康误区批判\n(亚健康/排毒/晒背)" fillcolor="#7c3aed" fontcolor="white"];
+    med_system [label="医疗体系\n(韩国医生罢工/产科危机)" fillcolor="#6d28d9" fontcolor="white"];
+    ethics [label="医学伦理\n(海拉细胞/知情权)" fillcolor="#5b21b6" fontcolor="white"];
+  }
+
+  // ===== EDGES: Layer 1 → Layer 2 =====
+  cancer -> immune [label="免疫监视" color="#dc2626" fontcolor="#dc2626"];
+  prion -> nervous [label="神经退行" color="#dc2626" fontcolor="#dc2626"];
+  epigenetics -> aging [label="衰老时钟" color="#dc2626" fontcolor="#dc2626"];
+  virus -> immune [label="免疫激活" color="#dc2626" fontcolor="#dc2626"];
+  virus -> aging [label="炎症老化" color="#dc2626" fontcolor="#dc2626"];
+
+  // ===== EDGES: Layer 2 → Layer 3 =====
+  immune -> vaccine [label="免疫记忆" color="#2563eb" fontcolor="#2563eb"];
+  immune -> antibiotics [label="协同防御" color="#2563eb" fontcolor="#2563eb"];
+  nervous -> drugs [label="靶点开发" color="#2563eb" fontcolor="#2563eb"];
+  metabolism -> drugs [label="药物靶点" color="#2563eb" fontcolor="#2563eb"];
+  aging -> cryonics [label="器官保存" color="#2563eb" fontcolor="#2563eb"];
+  aging -> drugs [label="抗衰老药" color="#2563eb" fontcolor="#2563eb"];
+
+  // ===== EDGES: Layer 3 → Layer 4 =====
+  vaccine -> med_system [label="接种政策" color="#059669" fontcolor="#059669"];
+  antibiotics -> food_safety [label="饲料抗生素" color="#059669" fontcolor="#059669"];
+  drugs -> health_myth [label="减肥药滥用" color="#059669" fontcolor="#059669"];
+  drugs -> ethics [label="临床试验" color="#059669" fontcolor="#059669"];
+  cryonics -> ethics [label="技术边界" color="#059669" fontcolor="#059669"];
+
+  // ===== EDGES: Cross-layer (Layer 1 → Layer 3) =====
+  cancer -> drugs [label="抗癌靶向药" color="#b91c1b" fontcolor="#b91c1b"];
+  prion -> ethics [label="食品安全监管" color="#991b1b" fontcolor="#991b1b"];
+
+  // ===== EDGES: Cross-layer (Layer 2 → Layer 4) =====
+  nervous -> health_myth [label="偏头痛认知" color="#1d4ed8" fontcolor="#1d4ed8"];
+  metabolism -> food_safety [label="代糖安全性" color="#1e3a5f" fontcolor="#1e3a5f"];
+  aging -> health_myth [label="抗衰老骗局" color="#1d4ed8" fontcolor="#1d4ed8"];
+
+  // ===== FEEDBACK LOOPS (dashed) =====
+  health_myth -> cancer [label="行为致癌风险" style=dashed color="#7c3aed" fontcolor="#7c3aed"];
+  med_system -> vaccine [label="需求反馈" style=dashed color="#6d28d9" fontcolor="#6d28d9"];
+  ethics -> epigenetics [label="基因伦理" style=dashed color="#5b21b6" fontcolor="#5b21b6"];
+  food_safety -> metabolism [label="消费引导研究" style=dashed color="#8b5cf6" fontcolor="#8b5cf6"];
+  antibiotics -> prion [label="饲料→朊粒传播" style=dashed color="#059669" fontcolor="#059669"];
+}
