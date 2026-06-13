@@ -437,46 +437,20 @@ body {
   </div>
   <div class="chapter-body">
 
-    <!-- 免疫巡逻 SVG 交互图 -->
-    <div class="immunity-stage reveal reveal-d1">
-      <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="bgGrad1" cx="50%" cy="50%"><stop offset="0%" stop-color="#fefaf6"/><stop offset="100%" stop-color="#fdf5ed"/></radialGradient>
-          <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <rect width="800" height="320" fill="url(#bgGrad1)" rx="14"/>
-        <!-- 皮肤屏障 — 砖墙 -->
-        <rect x="20" y="20" width="760" height="50" fill="none" stroke="#c17a5c" stroke-width="2" stroke-dasharray="8,3" rx="4"/>
-        <text x="400" y="48" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#a8684d">🛡️ 皮肤 + 粘膜 — 第一道防线（物理屏障）</text>
-        <!-- 安保队员 — 巨噬细胞 -->
-        <circle cx="200" cy="160" r="30" fill="#e8c8b8" stroke="#c17a5c" stroke-width="2" opacity="0.9"><animate attributeName="cx" values="200;350;200" dur="8s" repeatCount="indefinite"/></circle>
-        <text x="200" y="164" text-anchor="middle" font-size="10" fill="#5c3a2e" font-family="sans-serif">巨噬细胞<animate attributeName="x" values="200;350;200" dur="8s" repeatCount="indefinite"/></text>
-        <!-- T细胞 -->
-        <circle cx="500" cy="120" r="22" fill="#d4c4b8" stroke="#8b5e4b" stroke-width="2" opacity="0.85"><animate attributeName="cy" values="120;200;120" dur="6s" repeatCount="indefinite"/></circle>
-        <text x="500" y="124" text-anchor="middle" font-size="9" fill="#5c3a2e" font-family="sans-serif">T细胞<animate attributeName="y" values="124;204;124" dur="6s" repeatCount="indefinite"/></text>
-        <!-- B细胞 — 抗体工厂 -->
-        <rect x="580" y="170" width="50" height="36" rx="8" fill="#f0d8c8" stroke="#c17a5c" stroke-width="2"><animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/></rect>
-        <text x="605" y="193" text-anchor="middle" font-size="9" fill="#5c3a2e" font-family="sans-serif">B细胞</text>
-        <!-- 抗体 Y 形 -->
-        <g filter="url(#glow)"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
-          <line x1="620" y1="170" x2="620" y2="140" stroke="#5a9e6f" stroke-width="2"/>
-          <line x1="608" y1="148" x2="620" y2="140" stroke="#5a9e6f" stroke-width="2"/>
-          <line x1="632" y1="148" x2="620" y2="140" stroke="#5a9e6f" stroke-width="2"/>
-        </g>
-        <!-- 入侵者 — 细菌 -->
-        <circle cx="100" cy="250" r="12" fill="#e07070" opacity="0.7"><animate attributeName="cx" values="100;300;500;700;100" dur="12s" repeatCount="indefinite"/></circle>
-        <text x="100" y="254" text-anchor="middle" font-size="8" fill="#a04040" font-family="sans-serif">病原体<animate attributeName="x" values="100;300;500;700;100" dur="12s" repeatCount="indefinite"/></text>
-        <!-- 记忆细胞 -->
-        <rect x="680" y="250" width="60" height="28" rx="14" fill="#e8f0e8" stroke="#5a9e6f" stroke-width="1.5"/>
-        <text x="710" y="268" text-anchor="middle" font-size="9" fill="#4a7e5a" font-family="sans-serif">记忆细胞</text>
-        <!-- 标注箭头 -->
-        <line x1="710" y1="250" x2="710" y2="210" stroke="#5a9e6f" stroke-width="1" stroke-dasharray="3,2"/>
-        <text x="710" y="205" text-anchor="middle" font-size="8" fill="#5a9e6f" font-family="sans-serif">"我见过他！"</text>
-      </svg>
+    <!-- 免疫系统Canvas动画 — 城墙·卫兵·病原体防御 -->
+    <div class="immunity-stage reveal reveal-d1" id="immuneStage">
+      <canvas id="immuneCanvas" style="width:100%;max-width:900px;height:auto;border-radius:12px;cursor:default;"></canvas>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:12px;">
+        <button id="immunePlayBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--terracotta);background:var(--terracotta);color:#fff;cursor:pointer;font-family:var(--font-sans);font-size:13px;transition:all .2s;">⏸ 暂停</button>
+        <button id="immuneResetBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-mid);cursor:pointer;font-family:var(--font-sans);font-size:13px;transition:all .2s;">↺ 重播</button>
+        <span style="font-family:var(--font-sans);font-size:12px;color:var(--text-dim);" id="immunePhaseLabel">阶段：巡逻中</span>
+      </div>
       <div class="legend">
-        <span><span class="dot" style="background:var(--terracotta);"></span> 安保队员</span>
-        <span><span class="dot" style="background:#e07070;"></span> 入侵病原体</span>
-        <span><span class="dot" style="background:var(--accent-green);"></span> 抗体 & 记忆</span>
+        <span><span class="dot" style="background:var(--terracotta);"></span> 巨噬细胞 (巡逻卫兵)</span>
+        <span><span class="dot" style="background:#5a8a9e;"></span> T细胞 (识别激活)</span>
+        <span><span class="dot" style="background:#f0d8c8;"></span> B细胞 (抗体工厂)</span>
+        <span><span class="dot" style="background:#e07070;"></span> 病原体 (入侵者)</span>
+        <span><span class="dot" style="background:var(--accent-green);"></span> 抗体 & 记忆细胞</span>
       </div>
     </div>
 
@@ -616,47 +590,21 @@ body {
   </div>
   <div class="chapter-body">
 
-    <!-- 免疫SVG：疫苗工作机制 -->
-    <div class="immunity-stage reveal reveal-d1">
-      <svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="vaxGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#fdf5ed"/><stop offset="100%" stop-color="#fefaf6"/>
-          </linearGradient>
-        </defs>
-        <rect width="800" height="260" fill="url(#vaxGrad)" rx="14"/>
-        <!-- 阶段1：注射 -->
-        <circle cx="100" cy="130" r="45" fill="none" stroke="#c17a5c" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <text x="100" y="120" text-anchor="middle" font-size="10" fill="#a8684d" font-family="sans-serif">① 疫苗</text>
-        <text x="100" y="135" text-anchor="middle" font-size="10" fill="#a8684d" font-family="sans-serif">（通缉令）</text>
-        <rect x="70" y="88" width="60" height="16" rx="8" fill="#e8c8b8"/>
-        <text x="100" y="100" text-anchor="middle" font-size="8" fill="#5c3a2e" font-family="sans-serif">灭活抗原</text>
-        <!-- 箭头 -->
-        <line x1="145" y1="130" x2="200" y2="130" stroke="#c17a5c" stroke-width="2" marker-end="url(#arrowTerracotta)"/>
-        <!-- 阶段2：识别 -->
-        <circle cx="280" cy="130" r="40" fill="none" stroke="#8b5e4b" stroke-width="1.5"/>
-        <text x="280" y="120" text-anchor="middle" font-size="10" fill="#5c3a2e" font-family="sans-serif">② 免疫细胞</text>
-        <text x="280" y="135" text-anchor="middle" font-size="10" fill="#5c3a2e" font-family="sans-serif">识别 & 记忆</text>
-        <!-- Y抗体 -->
-        <line x1="265" y1="105" x2="265" y2="85" stroke="#5a9e6f" stroke-width="1.5"/>
-        <line x1="258" y1="90" x2="265" y2="85" stroke="#5a9e6f" stroke-width="1.5"/>
-        <line x1="272" y1="90" x2="265" y2="85" stroke="#5a9e6f" stroke-width="1.5"/>
-        <!-- 箭头 -->
-        <line x1="320" y1="130" x2="375" y2="130" stroke="#8b5e4b" stroke-width="2"/>
-        <!-- 阶段3：保护 -->
-        <circle cx="470" cy="130" r="50" fill="none" stroke="#5a9e6f" stroke-width="2"/>
-        <text x="470" y="115" text-anchor="middle" font-size="10" fill="#4a7e5a" font-family="sans-serif">③ 真实病毒来袭</text>
-        <text x="470" y="130" text-anchor="middle" font-size="10" fill="#4a7e5a" font-family="sans-serif">→ 迅速清除</text>
-        <text x="470" y="148" text-anchor="middle" font-size="9" fill="#4a7e5a" font-family="sans-serif">（已有"案底"）</text>
-        <!-- 被阻挡的病毒 -->
-        <circle cx="590" cy="100" r="14" fill="#e07070" opacity="0.5"/>
-        <text x="590" y="103" text-anchor="middle" font-size="8" fill="#a04040">✕</text>
-        <circle cx="620" cy="160" r="12" fill="#e07070" opacity="0.4"/>
-        <text x="620" y="163" text-anchor="middle" font-size="8" fill="#a04040">✕</text>
-        <!-- 保护盾 -->
-        <path d="M670,100 Q720,80 740,130 Q720,180 670,160 Z" fill="none" stroke="#5a9e6f" stroke-width="2" opacity="0.6"/>
-        <text x="705" y="138" text-anchor="middle" font-size="11" fill="#5a9e6f" font-family="sans-serif" font-weight="700">受保护</text>
-      </svg>
+    <!-- 疫苗Canvas动画 — 消防演习两阶段 -->
+    <div class="immunity-stage reveal reveal-d1" id="vaccineStage">
+      <canvas id="vaccineCanvas" style="width:100%;max-width:900px;height:auto;border-radius:12px;cursor:default;"></canvas>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;">
+        <button id="vaxPhaseBtn" style="padding:6px 18px;border-radius:20px;border:1px solid var(--terracotta);background:var(--terracotta);color:#fff;cursor:pointer;font-family:var(--font-sans);font-size:13px;transition:all .2s;">▶ 阶段二：病毒来袭</button>
+        <button id="vaxResetBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-mid);cursor:pointer;font-family:var(--font-sans);font-size:13px;transition:all .2s;">↺ 重播</button>
+        <span style="font-family:var(--font-sans);font-size:12px;color:var(--text-dim);" id="vaxPhaseLabel">阶段一：接种疫苗 · 建立免疫记忆</span>
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:#b0a090;"></span> 灭活抗原 (通缉令)</span>
+        <span><span class="dot" style="background:#d4c4b8;"></span> 树突状细胞</span>
+        <span><span class="dot" style="background:#f0d8c8;"></span> B细胞 → 抗体</span>
+        <span><span class="dot" style="background:#e07070;"></span> 真实病毒</span>
+        <span><span class="dot" style="background:var(--accent-green);"></span> 抗体·导弹锁定</span>
+      </div>
     </div>
 
     <!-- 诊室对话 -->
@@ -1111,6 +1059,1027 @@ window.addEventListener('scroll', () => {
     requestAnimationFrame(animate);
   }
   animate();
+})();
+
+// ===== Immue System Canvas Animation — 城墙·卫兵·病原体防御 =====
+(function(){
+  const canvas = document.getElementById('immuneCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=900, H=440, paused=false, animId, time=0;
+  const phaseNames = ['巡逻中...','病原体入侵！','巨噬细胞出击','T细胞激活','B细胞产抗体','记忆形成·清除完成'];
+
+  function resize(){
+    const container = canvas.parentElement;
+    const w = Math.min(container.clientWidth-56, 900);
+    const ratio = H/W;
+    canvas.width = w;
+    canvas.height = Math.round(w * ratio);
+    W = canvas.width; H = canvas.height;
+  }
+  resize();
+  window.addEventListener('resize', ()=>{ resize(); });
+
+  // Cell types
+  const macrophages = [];
+  const tCells = [];
+  const bCells = [];
+  const pathogens = [];
+  const antibodies = [];
+  const memoryCells = [];
+  const sparks = [];
+
+  // Initialize cells
+  function initCells(){
+    macrophages.length=0; tCells.length=0; bCells.length=0;
+    pathogens.length=0; antibodies.length=0; memoryCells.length=0;
+    // Macrophages - 3 large patrolling cells, start from left, move toward breach
+    for(let i=0;i<3;i++){
+      macrophages.push({
+        x: W*0.03 + i*W*0.04, y: H*0.48 + i*H*0.12,
+        r: 24+Math.random()*10, vx:1.2+Math.random()*0.8, vy:(Math.random()-0.5)*0.2,
+        phase:Math.random()*Math.PI*2, pseudopods:[], targetPathogen:null,
+        color:'#c17a5c', label:'巨噬细胞'
+      });
+    }
+    // T-cells - 2 blue helpers
+    for(let i=0;i<2;i++){
+      tCells.push({
+        x: W*0.48 + i*W*0.12, y: H*0.38 + i*H*0.12,
+        r: 14+Math.random()*4, vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.2,
+        color:'#5a8a9e', label:'T细胞', activated:false
+      });
+    }
+    // B-cells - 2 antibody factories
+    for(let i=0;i<2;i++){
+      bCells.push({
+        x: W*0.7 + i*W*0.08, y: H*0.5 + i*H*0.15,
+        r: 16+Math.random()*4, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2,
+        color:'#c8a888', label:'B细胞', producing:false, produceTimer:0
+      });
+    }
+  }
+
+  function spawnPathogen(){
+    const gapX = W*0.07 + Math.random()*W*0.13;
+    pathogens.push({
+      x: gapX, y: H*0.1, r: 5+Math.random()*7,
+      vx: (Math.random()-0.5)*0.6, vy: 0.4+Math.random()*0.7,
+      alive: true, spikes: 5+Math.floor(Math.random()*4),
+      color: '#e04040', label:'病原体'
+    });
+  }
+
+  function spawnAntibody(x,y,target){
+    antibodies.push({
+      x:x, y:y, vx:(target.x-x)*0.04, vy:(target.y-y)*0.04,
+      target:target, life:120+Math.random()*60, age:0
+    });
+  }
+
+  // Draw brick wall (skin barrier)
+  function drawSkinWall(){
+    const wallY = H*0.04, wallH = H*0.09;
+    const brickW = W/20, brickH = wallH/2;
+    // Wall background
+    ctx.fillStyle = '#f5e6d8';
+    ctx.fillRect(0, wallY, W, wallH);
+    ctx.strokeStyle = '#c17a5c';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, wallY, W, wallH);
+
+    // Brick pattern
+    for(let row=0; row<2; row++){
+      const offset = row%2===0 ? 0 : brickW/2;
+      for(let x=-brickW/2+offset; x<W+brickW; x+=brickW){
+        const bx = x, by = wallY + row*brickH;
+        ctx.fillStyle = row===0 ? '#f2dfca' : '#ead3be';
+        ctx.fillRect(bx+2, by+2, brickW-3, brickH-3);
+        ctx.strokeStyle = '#d8bea5';
+        ctx.lineWidth = 0.5;
+        ctx.strokeRect(bx+2, by+2, brickW-3, brickH-3);
+      }
+    }
+
+    // Gap in wall (breach point) - where pathogens enter
+    const gapX = W*0.07, gapW = W*0.13;
+    ctx.fillStyle = '#fefaf6';
+    ctx.fillRect(gapX, wallY, gapW, wallH);
+    // Animated crack edges with pulsation
+    const crackPulse = 0.5 + 0.5*Math.sin(time*0.06);
+    const crackOffset = 3 + crackPulse*4;
+    ctx.strokeStyle = '#c17a5c';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();
+    ctx.moveTo(gapX, wallY);
+    ctx.lineTo(gapX-crackOffset-2, wallY-6);
+    ctx.lineTo(gapX-2, wallY+wallH+5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(gapX+gapW, wallY);
+    ctx.lineTo(gapX+gapW+crackOffset+2, wallY-6);
+    ctx.lineTo(gapX+gapW+2, wallY+wallH+5);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Small debris particles near breach
+    for(let d=0; d<3; d++){
+      const dx = gapX + Math.random()*gapW;
+      const dy = wallY+wallH + 2 + Math.random()*5;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 1.2+crackPulse, 0, Math.PI*2);
+      ctx.fillStyle = '#c17a5c';
+      ctx.globalAlpha = 0.3 + crackPulse*0.4;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    // Label
+    ctx.fillStyle = '#a8684d';
+    ctx.font = `bold ${W*0.016}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('🛡️ 皮肤屏障 — 第一道防线', W/2, wallY-8);
+
+    // Pulsing breach warning
+    const pulse = 0.5 + 0.5*Math.sin(time*0.05);
+    ctx.fillStyle = `rgba(200,60,40,${0.25+pulse*0.45})`;
+    ctx.font = `bold ${W*0.014}px "Noto Sans SC", sans-serif`;
+    ctx.fillText('⚠ 破损处', gapX+gapW/2, wallY+wallH+16);
+    // Warning glow around breach
+    ctx.beginPath();
+    ctx.arc(gapX+gapW/2, wallY+wallH/2, gapW*0.5+crackPulse*4, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255,80,40,${0.04+pulse*0.06})`;
+    ctx.fill();
+  }
+
+  // Draw macrophage with pseudopods
+  function drawMacrophage(m, t){
+    // Pseudopods
+    ctx.strokeStyle = m.color;
+    ctx.fillStyle = m.color;
+    ctx.lineWidth = 1.5;
+    const np = 6;
+    for(let i=0;i<np;i++){
+      const angle = (i/np)*Math.PI*2 + t*0.03 + m.phase;
+      const len = m.r*(0.6+0.4*Math.sin(t*0.08+i*2));
+      const sx = m.x + Math.cos(angle)*m.r*0.5;
+      const sy = m.y + Math.sin(angle)*m.r*0.5;
+      const ex = m.x + Math.cos(angle)*len;
+      const ey = m.y + Math.sin(angle)*len;
+      ctx.beginPath();
+      ctx.moveTo(sx,sy);
+      ctx.quadraticCurveTo(
+        m.x+Math.cos(angle+0.3)*len*0.7, m.y+Math.sin(angle+0.3)*len*0.7,
+        ex, ey
+      );
+      ctx.stroke();
+      // Small bulb at tip
+      ctx.beginPath();
+      ctx.arc(ex, ey, m.r*0.15, 0, Math.PI*2);
+      ctx.fill();
+    }
+    // Cell body
+    ctx.beginPath();
+    ctx.arc(m.x, m.y, m.r*0.7, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(232,200,184,0.85)';
+    ctx.fill();
+    ctx.strokeStyle = '#c17a5c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Nucleus
+    ctx.beginPath();
+    ctx.arc(m.x, m.y, m.r*0.3, 0, Math.PI*2);
+    ctx.fillStyle = '#a8684d';
+    ctx.fill();
+    // Label
+    ctx.fillStyle = '#5c3a2e';
+    ctx.font = `${W*0.013}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(m.label, m.x, m.y+m.r+14);
+  }
+
+  // Draw T-cell (blue)
+  function drawTCell(tc){
+    ctx.beginPath();
+    ctx.arc(tc.x, tc.y, tc.r, 0, Math.PI*2);
+    ctx.fillStyle = tc.activated ? 'rgba(90,138,158,0.9)' : 'rgba(165,190,200,0.8)';
+    ctx.fill();
+    ctx.strokeStyle = tc.activated ? '#3a7088' : '#5a8a9e';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Activation glow
+    if(tc.activated){
+      ctx.beginPath();
+      ctx.arc(tc.x, tc.y, tc.r*1.5, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(90,138,158,0.25)';
+      ctx.fill();
+    }
+    ctx.fillStyle = '#2a5a6e';
+    ctx.font = `${W*0.012}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(tc.label+(tc.activated?' ✓':''), tc.x, tc.y+tc.r+13);
+  }
+
+  // Draw B-cell
+  function drawBCell(bc, t){
+    ctx.beginPath();
+    ctx.arc(bc.x, bc.y, bc.r, 0, Math.PI*2);
+    ctx.fillStyle = bc.producing ? 'rgba(255,216,180,0.9)' : 'rgba(240,216,200,0.8)';
+    ctx.fill();
+    ctx.strokeStyle = bc.producing ? '#d4943a' : '#c17a5c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Antibodies coming out
+    if(bc.producing){
+      for(let i=0;i<3;i++){
+        const a = time*0.1 + i*2.1;
+        const ax = bc.x + Math.cos(a)*bc.r*1.4;
+        const ay = bc.y + Math.sin(a)*bc.r*1.4;
+        drawYAntibody(ax, ay, 6, 0.8);
+      }
+    }
+    ctx.fillStyle = '#5c3a2e';
+    ctx.font = `${W*0.012}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(bc.label, bc.x, bc.y+bc.r+13);
+  }
+
+  // Draw Y-shaped antibody
+  function drawYAntibody(x, y, size, alpha){
+    ctx.strokeStyle = `rgba(90,158,111,${alpha})`;
+    ctx.fillStyle = `rgba(90,158,111,${alpha})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x, y+size);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x-size*0.6, y-size*0.7);
+    ctx.moveTo(x, y);
+    ctx.lineTo(x+size*0.6, y-size*0.7);
+    ctx.stroke();
+    // Tips
+    ctx.beginPath();
+    ctx.arc(x-size*0.6, y-size*0.7, 2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x+size*0.6, y-size*0.7, 2, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // Draw pathogen (spiky red)
+  function drawPathogen(p){
+    if(!p.alive) return;
+    const pulse = 1+0.1*Math.sin(time*0.1);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    // Spikes
+    ctx.strokeStyle = p.color;
+    ctx.fillStyle = p.color;
+    ctx.lineWidth = 1.5;
+    for(let i=0;i<p.spikes;i++){
+      const angle = (i/p.spikes)*Math.PI*2 + time*0.02;
+      const sl = p.r*0.5*pulse;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(angle)*p.r*0.6, Math.sin(angle)*p.r*0.6);
+      ctx.lineTo(Math.cos(angle)*(p.r+sl), Math.sin(angle)*(p.r+sl));
+      ctx.stroke();
+    }
+    // Body
+    ctx.beginPath();
+    ctx.arc(0, 0, p.r*0.6*pulse, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(224,64,64,0.85)';
+    ctx.fill();
+    ctx.strokeStyle = '#a03030';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // Inner
+    ctx.beginPath();
+    ctx.arc(0, 0, p.r*0.25, 0, Math.PI*2);
+    ctx.fillStyle = '#802020';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Draw memory cell
+  function drawMemoryCell(mc){
+    ctx.beginPath();
+    ctx.roundRect(mc.x-18, mc.y-12, 36, 24, 12);
+    ctx.fillStyle = 'rgba(200,232,210,0.9)';
+    ctx.fill();
+    ctx.strokeStyle = '#5a9e6f';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#4a7e5a';
+    ctx.font = `${W*0.012}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('记忆细胞', mc.x, mc.y+4);
+    ctx.fillText('"案底已存"', mc.x, mc.y+mc.r+15);
+  }
+
+  // Trophy / spark particles
+  function drawSparks(){
+    sparks.forEach((s,i)=>{
+      s.age++;
+      if(s.age>s.life) { sparks.splice(i,1); return; }
+      const alpha = 1 - s.age/s.life;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r*alpha, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,200,100,${alpha})`;
+      ctx.fill();
+      s.x += s.vx; s.y += s.vy;
+    });
+  }
+
+  // Main draw
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Background
+    const bgGrd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)*0.7);
+    bgGrd.addColorStop(0, '#fefaf6');
+    bgGrd.addColorStop(1, '#fdf5ed');
+    ctx.fillStyle = bgGrd;
+    ctx.fillRect(0,0,W,H);
+
+    drawSkinWall();
+
+    // Determine animation phase
+    const cycleLen = 800; // frames per full cycle
+    const phaseIdx = Math.floor((time % cycleLen) / (cycleLen/6));
+    const phaseProgress = ((time % cycleLen) % (cycleLen/6)) / (cycleLen/6);
+
+    // Phase 0-1: Patrol
+    // Phase 2: Pathogens spawn
+    // Phase 3: Macrophages attack
+    // Phase 4: T-cells activate
+    // Phase 5: B-cells produce antibodies, memory forms
+
+    // Spawn pathogens in phase 2
+    if(phaseIdx===2 && pathogens.length<8 && time%15===0){
+      spawnPathogen();
+    }
+
+    // Macrophage behavior — patrol left to right, swarm toward breach when pathogens appear
+    macrophages.forEach(m=>{
+      if(phaseIdx>=2 && phaseIdx<=3){
+        // Target nearest pathogen near the breach area
+        let nearest=null, nearestDist=Infinity;
+        pathogens.forEach(p=>{ if(p.alive){ const d=Math.hypot(m.x-p.x,m.y-p.y); if(d<nearestDist){nearestDist=d; nearest=p;} } });
+        if(nearest && nearestDist<300){
+          const dx=nearest.x-m.x, dy=nearest.y-m.y;
+          m.vx=dx*0.04; m.vy=dy*0.04;
+          if(nearestDist<45){ nearest.alive=false; nearest.x=-50; sparks.push({x:m.x,y:m.y,r:2+Math.random()*3,vx:(Math.random()-0.5)*2,vy:(Math.random()-0.5)*2,life:20,age:0}); }
+        } else {
+          // Patrol toward breach area even without visible pathogen
+          const breachCX = W*0.135, breachCY = H*0.2;
+          const dx2 = breachCX - m.x, dy2 = breachCY - m.y;
+          m.vx = m.vx*0.95 + dx2*0.002;
+          m.vy = m.vy*0.95 + dy2*0.001;
+        }
+      } else {
+        // Patrol: move right, bounce at edges
+        m.vx = 1.5 + Math.sin(time*0.02+m.phase)*0.5;
+        m.vy = (Math.sin(time*0.03+m.phase+1))*0.4;
+      }
+      m.x+=m.vx; m.y+=m.vy;
+      if(m.x<m.r){ m.x=m.r; m.vx=Math.abs(m.vx); }
+      if(m.x>W*0.7) m.vx*=-1;
+      if(m.y<H*0.12||m.y>H*0.82) m.vy*=-1;
+      drawMacrophage(m, time);
+    });
+
+    // T-cell behavior
+    tCells.forEach(tc=>{
+      if(phaseIdx>=3){
+        tc.activated=true;
+      }
+      if(phaseIdx<3) tc.activated=false;
+      tc.x+=tc.vx; tc.y+=tc.vy;
+      if(tc.x<tc.r||tc.x>W-tc.r) tc.vx*=-1;
+      if(tc.y<H*0.15||tc.y>H*0.8) tc.vy*=-1;
+      drawTCell(tc);
+    });
+
+    // B-cell behavior
+    bCells.forEach(bc=>{
+      if(phaseIdx>=4){
+        bc.producing=true;
+        bc.produceTimer++;
+        if(bc.produceTimer%8===0 && pathogens.some(p=>p.alive)){
+          const tp = pathogens.find(p=>p.alive);
+          if(tp) spawnAntibody(bc.x, bc.y, tp);
+        }
+      } else {
+        bc.producing=false; bc.produceTimer=0;
+      }
+      bc.x+=bc.vx; bc.y+=bc.vy;
+      if(bc.x<bc.r||bc.x>W-bc.r) bc.vx*=-1;
+      if(bc.y<H*0.2||bc.y>H*0.8) bc.vy*=-1;
+      drawBCell(bc, time);
+    });
+
+    // Pathogens
+    pathogens.forEach((p,i)=>{
+      if(!p.alive) return;
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.y>H*0.9) p.alive=false;
+      // Wobble
+      p.vx+=(Math.random()-0.5)*0.3;
+      drawPathogen(p);
+    });
+
+    // Antibodies
+    antibodies.forEach((a,i)=>{
+      a.age++;
+      if(a.age>a.life||!a.target.alive){ antibodies.splice(i,1); return; }
+      a.x+=a.vx; a.y+=a.vy;
+      const alpha = Math.min(1, (a.life-a.age)/30);
+      drawYAntibody(a.x, a.y, 5, alpha);
+      // Hit detection
+      if(Math.hypot(a.x-a.target.x, a.y-a.target.y)<a.target.r+4){
+        a.target.alive=false; a.target.x=-50;
+        sparks.push({x:a.target.x>0?a.target.x:a.x,y:a.target.y>0?a.target.y:a.y,r:2+Math.random()*3,vx:(Math.random()-0.5)*3,vy:(Math.random()-0.5)*3,life:20,age:0});
+        antibodies.splice(i,1);
+      }
+    });
+
+    // Memory cells
+    if(phaseIdx===5){
+      if(memoryCells.length<3 && time%60===0){
+        memoryCells.push({x:W*0.75+Math.random()*W*0.15, y:H*0.7+Math.random()*H*0.15, r:18});
+      }
+    }
+    if(phaseIdx<5) memoryCells.length=0;
+    memoryCells.forEach(mc=>drawMemoryCell(mc));
+
+    // Sparks
+    drawSparks();
+
+    // Clean up dead pathogens
+    for(let i=pathogens.length-1;i>=0;i--){
+      if(!pathogens[i].alive && pathogens[i].x<-40) pathogens.splice(i,1);
+    }
+
+    // Phase label
+    ctx.fillStyle = '#a8684d';
+    ctx.font = `${W*0.018}px "Noto Serif SC", serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(phaseNames[phaseIdx]||phaseNames[0], W/2, H-8);
+
+    // Label for second line defense zone
+    ctx.strokeStyle = 'rgba(139,94,75,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([8,4]);
+    ctx.beginPath();
+    ctx.moveTo(0, H*0.38); ctx.lineTo(W, H*0.38);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(139,94,75,0.4)';
+    ctx.font = `${W*0.011}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.fillText('第二道防线：T细胞 + B细胞', W-10, H*0.37);
+  }
+
+  function animate(ts){
+    if(!paused){
+      time++;
+      draw();
+      document.getElementById('immunePhaseLabel').textContent = '阶段：'+phaseNames[Math.floor((time%800)/(800/6))];
+    }
+    animId = requestAnimationFrame(animate);
+  }
+
+  initCells();
+  animId = requestAnimationFrame(animate);
+
+  // Play/Pause
+  document.getElementById('immunePlayBtn').addEventListener('click', function(){
+    paused=!paused;
+    this.textContent = paused ? '▶ 播放' : '⏸ 暂停';
+    if(!paused && !animId) animId=requestAnimationFrame(animate);
+  });
+
+  // Reset
+  document.getElementById('immuneResetBtn').addEventListener('click', ()=>{
+    time=0; initCells();
+    document.getElementById('immunePhaseLabel').textContent = '阶段：巡逻中';
+    if(paused){ paused=false; document.getElementById('immunePlayBtn').textContent='⏸ 暂停'; }
+  });
+
+  // Intersection observer to pause when not visible
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting && !paused){
+        paused=true;
+        document.getElementById('immunePlayBtn').textContent='▶ 播放';
+      }
+    });
+  },{threshold:0.1});
+  obs.observe(canvas);
+})();
+
+// ===== Vaccine Canvas Animation — 消防演习两阶段 =====
+(function(){
+  const canvas = document.getElementById('vaccineCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=900, H=400, animId, time=0, phase=1; // phase 1=vaccination, 2=virus attack
+
+  function resize(){
+    const container = canvas.parentElement;
+    const w = Math.min(container.clientWidth-56, 900);
+    canvas.width = w;
+    canvas.height = Math.round(w*(H/W));
+    W=canvas.width; H=canvas.height;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Actors
+  let syringeX, antigens=[], dendriticCell, tCell, bCells2=[], antibodies2=[], realViruses=[], memoryBCells=[];
+
+  function initPhase1(){
+    syringeX = W*0.08;
+    antigens=[];
+    dendriticCell = {x:W*0.42, y:H*0.5, r:22, antigenOnSurface:false, loadedAntigens:[]};
+    tCell = {x:W*0.58, y:H*0.45, r:16, activated:false};
+    bCells2 = [
+      {x:W*0.52, y:H*0.68, r:15, producing:false, produceTimer:0},
+      {x:W*0.65, y:H*0.72, r:14, producing:false, produceTimer:0}
+    ];
+    antibodies2=[];
+    realViruses=[];
+    memoryBCells=[];
+    time=0;
+  }
+
+  function initPhase2(){
+    antigens=[];
+    dendriticCell.antigenOnSurface=true;
+    dendriticCell.loadedAntigens=[{x:0,y:-dendriticCell.r*0.5},{x:dendriticCell.r*0.4,y:-dendriticCell.r*0.3},{x:-dendriticCell.r*0.35,y:-dendriticCell.r*0.35}];
+    tCell.activated=true;
+    bCells2.forEach(b=>{b.producing=true;});
+    memoryBCells=[
+      {x:W*0.55, y:H*0.85, r:12},
+      {x:W*0.65, y:H*0.88, r:12}
+    ];
+    realViruses=[];
+    antibodies2=[];
+    time=0;
+  }
+
+  function spawnRealVirus(){
+    realViruses.push({
+      x: W*0.72+Math.random()*W*0.22,
+      y: H*0.05+Math.random()*H*0.06,
+      vx: (Math.random()-0.5)*1.5,
+      vy: 1+Math.random()*2,
+      r: 7+Math.random()*5,
+      spikes: 6+Math.floor(Math.random()*5),
+      alive:true
+    });
+  }
+
+  function spawnAntibody2(x,y,target){
+    antibodies2.push({
+      x:x, y:y,
+      vx:(target.x-x)*0.05, vy:(target.y-y)*0.05,
+      target:target, life:80+Math.random()*40, age:0
+    });
+  }
+
+  function drawYAb(x,y,size,alpha){
+    ctx.strokeStyle=`rgba(90,158,111,${alpha})`;
+    ctx.fillStyle=`rgba(90,158,111,${alpha})`;
+    ctx.lineWidth=1.8;
+    ctx.beginPath();
+    ctx.moveTo(x,y+size);
+    ctx.lineTo(x,y);
+    ctx.lineTo(x-size*0.6,y-size*0.7);
+    ctx.moveTo(x,y);
+    ctx.lineTo(x+size*0.6,y-size*0.7);
+    ctx.stroke();
+    ctx.beginPath(); ctx.arc(x-size*0.6,y-size*0.7,2,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+size*0.6,y-size*0.7,2,0,Math.PI*2); ctx.fill();
+  }
+
+  function drawSyringe(){
+    const sx=syringeX, sy=H*0.3;
+    // Barrel
+    ctx.fillStyle='#e0d8d0';
+    ctx.strokeStyle='#a89888';
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.roundRect(sx, sy-8, W*0.06, 16, 5);
+    ctx.fill(); ctx.stroke();
+    // Plunger
+    const plungerX = sx + W*0.06 + Math.sin(time*0.04)*W*0.015;
+    ctx.fillStyle='#c8b8a8';
+    ctx.beginPath();
+    ctx.roundRect(plungerX, sy-6, W*0.02, 12, 3);
+    ctx.fill(); ctx.stroke();
+    // Needle
+    ctx.strokeStyle='#888';
+    ctx.lineWidth=0.8;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx-W*0.04, sy);
+    ctx.stroke();
+    // Antigen particles coming out of needle
+    if(phase===1 && antigens.length<30 && time%8===0){
+      antigens.push({
+        x: sx-W*0.04, y: sy,
+        vx: -0.3-Math.random()*0.5, vy: (Math.random()-0.5)*0.5,
+        r: 2+Math.random()*2, life: 200, age:0
+      });
+    }
+    // Label
+    ctx.fillStyle='#5c3a2e';
+    ctx.font=`${W*0.013}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('💉 疫苗注射器', sx+W*0.03, sy-18);
+    ctx.fillText('(通缉令)', sx+W*0.03, sy+22);
+  }
+
+  function drawDendriticCell(){
+    const dc=dendriticCell;
+    ctx.beginPath();
+    ctx.arc(dc.x, dc.y, dc.r, 0, Math.PI*2);
+    ctx.fillStyle='rgba(210,190,170,0.85)';
+    ctx.fill();
+    ctx.strokeStyle='#8b6a50';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    // Dendrites
+    for(let i=0;i<8;i++){
+      const a=(i/8)*Math.PI*2+time*0.02;
+      ctx.beginPath();
+      ctx.moveTo(dc.x+Math.cos(a)*dc.r*0.5, dc.y+Math.sin(a)*dc.r*0.5);
+      const ex=dc.x+Math.cos(a)*(dc.r+8+3*Math.sin(time*0.05+i));
+      const ey=dc.y+Math.sin(a)*(dc.r+8+3*Math.sin(time*0.05+i));
+      ctx.lineTo(ex, ey);
+      ctx.strokeStyle='#8b6a50';
+      ctx.lineWidth=1;
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(ex,ey,2,0,Math.PI*2); ctx.fillStyle='#8b6a50'; ctx.fill();
+    }
+    // Antigens on surface
+    if(dc.antigenOnSurface){
+      dc.loadedAntigens.forEach(ag=>{
+        const ax=dc.x+ag.x, ay=dc.y+ag.y;
+        ctx.beginPath();
+        ctx.arc(ax, ay, 3, 0, Math.PI*2);
+        ctx.fillStyle='#a09080';
+        ctx.fill();
+        ctx.strokeStyle='#706050';
+        ctx.lineWidth=0.5;
+        ctx.stroke();
+      });
+    }
+    // Label
+    ctx.fillStyle='#5c3a2e';
+    ctx.font=`${W*0.012}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('树突状细胞', dc.x, dc.y+dc.r+16);
+    ctx.fillText(dc.antigenOnSurface?'抗原已展示':'吞噬抗原中...', dc.x, dc.y+dc.r+30);
+  }
+
+  function drawTCell2(){
+    const tc=tCell;
+    ctx.beginPath();
+    ctx.arc(tc.x, tc.y, tc.r, 0, Math.PI*2);
+    ctx.fillStyle=tc.activated?'rgba(90,138,158,0.9)':'rgba(165,190,200,0.7)';
+    ctx.fill();
+    ctx.strokeStyle=tc.activated?'#3a7088':'#5a8a9e';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    if(tc.activated){
+      ctx.beginPath();
+      ctx.arc(tc.x, tc.y, tc.r*1.8, 0, Math.PI*2);
+      ctx.fillStyle='rgba(90,138,158,0.15)';
+      ctx.fill();
+    }
+    ctx.fillStyle='#2a5a6e';
+    ctx.font=`${W*0.011}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('T细胞'+(tc.activated?' ✓激活':''), tc.x, tc.y+tc.r+14);
+  }
+
+  function drawBCell2(bc){
+    ctx.beginPath();
+    ctx.arc(bc.x, bc.y, bc.r, 0, Math.PI*2);
+    ctx.fillStyle=bc.producing?'rgba(255,216,180,0.9)':'rgba(230,200,180,0.7)';
+    ctx.fill();
+    ctx.strokeStyle=bc.producing?'#d4943a':'#c17a5c';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    if(bc.producing){
+      for(let i=0;i<2;i++){
+        const a=time*0.1+i*3.14;
+        drawYAb(bc.x+Math.cos(a)*bc.r*1.3, bc.y+Math.sin(a)*bc.r*1.3, 5, 0.7);
+      }
+    }
+    ctx.fillStyle='#5c3a2e';
+    ctx.font=`${W*0.01}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('B细胞', bc.x, bc.y+bc.r+12);
+  }
+
+  function drawRealVirus(v){
+    ctx.save();
+    ctx.translate(v.x, v.y);
+    ctx.strokeStyle='#e04040';
+    ctx.lineWidth=1.5;
+    for(let i=0;i<v.spikes;i++){
+      const a=(i/v.spikes)*Math.PI*2+time*0.03;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a)*v.r*0.6, Math.sin(a)*v.r*0.6);
+      ctx.lineTo(Math.cos(a)*(v.r+4), Math.sin(a)*(v.r+4));
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(0,0,v.r*0.6,0,Math.PI*2);
+    ctx.fillStyle='rgba(224,64,64,0.85)';
+    ctx.fill();
+    ctx.strokeStyle='#a03030';
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0,0,v.r*0.2,0,Math.PI*2);
+    ctx.fillStyle='#802020';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMemoryBCell(mc){
+    ctx.beginPath();
+    ctx.arc(mc.x, mc.y, mc.r, 0, Math.PI*2);
+    ctx.fillStyle='rgba(180,220,195,0.9)';
+    ctx.fill();
+    ctx.strokeStyle='#5a9e6f';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    ctx.fillStyle='#4a7e5a';
+    ctx.font=`${W*0.01}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('记忆B', mc.x, mc.y+mc.r+12);
+  }
+
+  // No-vaccine comparison panel — infection spreads rapidly
+  function drawNoVaxPanel(){
+    const px=W*0.75, py=H*0.35, pw=W*0.2, ph=H*0.5;
+    // Panel background
+    ctx.fillStyle='rgba(255,235,235,0.35)';
+    ctx.strokeStyle='#e07070';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();
+    ctx.roundRect(px, py, pw, ph, 8);
+    ctx.fill(); ctx.stroke();
+    ctx.setLineDash([]);
+    // Title
+    ctx.fillStyle='#c04040';
+    ctx.font=`bold ${W*0.014}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('⚠ 无疫苗', px+pw/2, py+22);
+    ctx.fillText('感染扩散严重', px+pw/2, py+40);
+    // Simulated severe infection — many viruses spreading
+    for(let i=0;i<8;i++){
+      const vx=px+10+(i%4)*pw*0.25;
+      const vy=py+55+(Math.floor(i/4))*25;
+      ctx.beginPath();
+      ctx.arc(vx, vy, 5, 0, Math.PI*2);
+      ctx.fillStyle='rgba(224,64,64,0.7)';
+      ctx.fill();
+      ctx.strokeStyle='#a03030';
+      ctx.lineWidth=0.8;
+      ctx.stroke();
+    }
+    // Infection spread lines
+    ctx.strokeStyle='rgba(224,64,64,0.3)';
+    ctx.lineWidth=1;
+    for(let i=0;i<3;i++){
+      const sy = py+55+i*25;
+      ctx.beginPath();
+      ctx.moveTo(px+5, sy);
+      ctx.lineTo(px+pw-5, sy+15);
+      ctx.stroke();
+    }
+    ctx.fillStyle='#a04040';
+    ctx.font=`${W*0.01}px "Noto Sans SC", sans-serif`;
+    ctx.fillText('病毒大量繁殖', px+pw/2, py+ph-30);
+    ctx.fillText('免疫系统来不及反应', px+pw/2, py+ph-15);
+  }
+
+  function drawWithVaxPanel(){
+    const px=W*0.72, py=H*0.08, pw=W*0.24, ph=H*0.25;
+    // Panel background with green tint
+    ctx.fillStyle='rgba(220,255,225,0.25)';
+    ctx.strokeStyle='#5a9e6f';
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.roundRect(px, py, pw, ph, 8);
+    ctx.fill(); ctx.stroke();
+    // Title
+    ctx.fillStyle='#4a7e5a';
+    ctx.font=`bold ${W*0.014}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('✅ 有疫苗', px+pw/2, py+20);
+    ctx.fillText('快速清除！', px+pw/2, py+38);
+    // Show antibodies neutralizing viruses
+    const abx = px+pw/2, aby = py+ph-18;
+    for(let i=-1;i<=1;i+=2){
+      // Draw mini Y antibodies
+      ctx.strokeStyle='rgba(90,158,111,0.8)';
+      ctx.lineWidth=1.5;
+      const ax = abx + i*15;
+      ctx.beginPath();
+      ctx.moveTo(ax, aby+6);
+      ctx.lineTo(ax, aby-4);
+      ctx.lineTo(ax-4, aby-9);
+      ctx.moveTo(ax, aby-4);
+      ctx.lineTo(ax+4, aby-9);
+      ctx.stroke();
+      // Target virus
+      ctx.beginPath();
+      ctx.arc(ax, aby+14, 4, 0, Math.PI*2);
+      ctx.fillStyle='rgba(224,64,64,0.4)';
+      ctx.fill();
+      ctx.strokeStyle='#c04040';
+      ctx.lineWidth=0.6;
+      ctx.stroke();
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Background
+    const bgGrd=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.7);
+    bgGrd.addColorStop(0,'#fefaf6');
+    bgGrd.addColorStop(1,'#fdf5ed');
+    ctx.fillStyle=bgGrd;
+    ctx.fillRect(0,0,W,H);
+
+    // Phase divider line
+    ctx.strokeStyle='rgba(193,122,92,0.2)';
+    ctx.lineWidth=1;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    ctx.moveTo(W*0.32, H*0.04); ctx.lineTo(W*0.32, H*0.92);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Phase labels
+    ctx.fillStyle='#a8684d';
+    ctx.font=`bold ${W*0.014}px "Noto Sans SC", sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('① 接种疫苗', W*0.16, H*0.06);
+    ctx.fillText('② 建立免疫记忆', W*0.5, H*0.06);
+    if(phase===2) ctx.fillText('③ 病毒来袭·快速清除', W*0.78, H*0.06);
+
+    // Syringe
+    drawSyringe();
+
+    // Antigens migrating
+    antigens.forEach((a,i)=>{
+      a.age++; if(a.age>a.life){antigens.splice(i,1);return;}
+      a.x+=a.vx; a.y+=a.vy;
+      if(a.x<dendriticCell.x+dendriticCell.r+5 && a.x>dendriticCell.x-dendriticCell.r-5 &&
+         a.y<dendriticCell.y+dendriticCell.r+5 && a.y>dendriticCell.y-dendriticCell.r-5){
+        if(!dendriticCell.antigenOnSurface) dendriticCell.antigenOnSurface=true;
+        dendriticCell.loadedAntigens.push({x:(Math.random()-0.5)*dendriticCell.r*0.8, y:(Math.random()-0.5)*dendriticCell.r*0.8});
+        antigens.splice(i,1);
+        return;
+      }
+      ctx.beginPath();
+      ctx.arc(a.x,a.y,a.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(160,140,120,${1-a.age/a.life})`;
+      ctx.fill();
+      ctx.strokeStyle='rgba(100,80,60,0.5)';
+      ctx.lineWidth=0.5;
+      ctx.stroke();
+    });
+
+    // Dendritic cell
+    drawDendriticCell();
+
+    // Arrow from dendritic to T-cell
+    if(dendriticCell.antigenOnSurface){
+      ctx.strokeStyle='rgba(193,122,92,0.4)';
+      ctx.lineWidth=1.5;
+      ctx.setLineDash([4,3]);
+      ctx.beginPath();
+      ctx.moveTo(dendriticCell.x+dendriticCell.r, dendriticCell.y-8);
+      ctx.lineTo(tCell.x-tCell.r, tCell.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const mx=(dendriticCell.x+dendriticCell.r+tCell.x-tCell.r)/2;
+      const my=(dendriticCell.y-8+tCell.y)/2;
+      ctx.fillStyle='rgba(193,122,92,0.5)';
+      ctx.font=`${W*0.01}px "Noto Sans SC", sans-serif`;
+      ctx.fillText('抗原呈递', mx, my-6);
+    }
+
+    // T-cell
+    drawTCell2();
+    if(tCell.activated){
+      // Arrow to B-cells
+      ctx.strokeStyle='rgba(212,148,58,0.4)';
+      ctx.lineWidth=1;
+      ctx.setLineDash([3,3]);
+      ctx.beginPath();
+      ctx.moveTo(tCell.x, tCell.y+tCell.r);
+      ctx.lineTo(bCells2[0].x, bCells2[0].y-bCells2[0].r);
+      ctx.moveTo(tCell.x+tCell.r, tCell.y);
+      ctx.lineTo(bCells2[1].x, bCells2[1].y-bCells2[1].r);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // B-cells
+    bCells2.forEach(bc=>drawBCell2(bc));
+
+    // Memory B cells
+    memoryBCells.forEach(mc=>drawMemoryBCell(mc));
+
+    // Phase 2: real viruses
+    if(phase===2){
+      if(realViruses.length<8 && time%20===0) spawnRealVirus();
+      drawNoVaxPanel();
+      drawWithVaxPanel();
+    }
+
+    realViruses.forEach((v,i)=>{
+      if(!v.alive) return;
+      v.x+=v.vx; v.y+=v.vy;
+      if(v.y>H*0.9) v.alive=false;
+      drawRealVirus(v);
+    });
+
+    // Antibodies targeting viruses
+    if(phase===2){
+      bCells2.forEach(bc=>{
+        if(bc.producing && time%6===0 && realViruses.some(v=>v.alive)){
+          const tv=realViruses.find(v=>v.alive);
+          if(tv) spawnAntibody2(bc.x, bc.y, tv);
+        }
+      });
+      memoryBCells.forEach(mc=>{
+        if(time%5===0 && realViruses.some(v=>v.alive)){
+          const tv=realViruses.find(v=>v.alive);
+          if(tv) spawnAntibody2(mc.x, mc.y, tv);
+        }
+      });
+    }
+
+    antibodies2.forEach((a,i)=>{
+      a.age++;
+      if(a.age>a.life||!a.target.alive){antibodies2.splice(i,1);return;}
+      a.x+=a.vx; a.y+=a.vy;
+      drawYAb(a.x, a.y, 4, Math.min(1,(a.life-a.age)/30));
+      if(Math.hypot(a.x-a.target.x, a.y-a.target.y)<a.target.r+4){
+        a.target.alive=false;
+        antibodies2.splice(i,1);
+      }
+    });
+
+    // Title
+    ctx.fillStyle='#5c3a2e';
+    ctx.font=`bold ${W*0.018}px "Noto Serif SC", serif`;
+    ctx.textAlign='center';
+    const titleText = phase===1 ? '疫苗：给免疫系统看一张通缉令' : '真实病毒来袭：记忆细胞迅速反击！';
+    ctx.fillText(titleText, W/2, H-8);
+
+    time++;
+  }
+
+  function animate(){
+    draw();
+    animId=requestAnimationFrame(animate);
+  }
+
+  initPhase1();
+  animId=requestAnimationFrame(animate);
+
+  // Phase toggle
+  document.getElementById('vaxPhaseBtn').addEventListener('click', function(){
+    if(phase===1){
+      phase=2;
+      initPhase2();
+      this.textContent='◀ 阶段一：接种疫苗';
+      document.getElementById('vaxPhaseLabel').textContent='阶段二：病毒来袭 · 记忆细胞快速反应';
+    } else {
+      phase=1;
+      initPhase1();
+      this.textContent='▶ 阶段二：病毒来袭';
+      document.getElementById('vaxPhaseLabel').textContent='阶段一：接种疫苗 · 建立免疫记忆';
+    }
+  });
+
+  // Reset
+  document.getElementById('vaxResetBtn').addEventListener('click', ()=>{
+    if(phase===1){ initPhase1(); }
+    else { phase=1; initPhase1(); document.getElementById('vaxPhaseBtn').textContent='▶ 阶段二：病毒来袭'; }
+    document.getElementById('vaxPhaseLabel').textContent='阶段一：接种疫苗 · 建立免疫记忆';
+  });
 })();
 
 // ===== Intersection Observer — 滚动揭示动画 =====
