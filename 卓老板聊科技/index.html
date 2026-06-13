@@ -3,38 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓老板聊科技 · 最小知识集</title>
+<title>卓老板的科学客厅 — 卓老板聊科技</title>
 <style>
 /* ============================================================
-   卓老板聊科技 · 科学客厅
-   设计理念：傍晚的书房，一盏灯，一杯茶，一位老友
-   298 篇文章，7 个专题，一个温暖的知识空间
+   卓老板的科学客厅 — 设计语言
+   设计概念：黄昏时分，一盏台灯亮起，七个房间的门半开，
+            每个门后传出隐约的科学对话声
+   情感基调：温暖、好奇 — 像走进一位老友的书房
+   视觉策略：深蓝(夜晚)+暖金(灯光) — 傍晚书房氛围
+            深蓝底色代表夜幕，暖金色代表灯光和知识
    ============================================================ */
 :root {
-  --bg: #1a1612;
-  --bg-card: #241e18;
-  --bg-card-hover: #2c251e;
-  --text: #d4cfc4;
-  --text-bright: #f0e8d8;
-  --text-dim: #8a8278;
-  --text-dim2: #5e5850;
-  --border: #2e2822;
-  --border-light: #3e3830;
-  --amber: #d4a040;
-  --amber-light: #f0d878;
-  --amber-soft: #e8c870;
+  --bg-deep: #0a0e1a;
+  --bg-room: #0f1320;
+  --bg-surface: #141a2a;
+  --bg-surface2: #1a2035;
+  --bg-door: #161c30;
+  --bg-door-open: #1a2240;
+  --lamp-gold: #e8c040;
+  --lamp-gold-dim: #6a5020;
+  --lamp-gold-bright: #f5d878;
+  --text: #c8d0e0;
+  --text-bright: #e8ecf4;
+  --text-dim: #7890a8;
+  --text-subtle: #405068;
+  --border: #1a2540;
+  --border-glow: rgba(232,192,64,0.1);
   --radius: 12px;
   --radius-lg: 18px;
-  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
-  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  --ease: 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --font-display: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", Georgia, serif;
+  --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: var(--font-body);
-  background: var(--bg);
+  background: var(--bg-deep);
   color: var(--text);
   line-height: 1.8;
   min-height: 100vh;
@@ -49,86 +55,132 @@ body {
   pointer-events: none;
   z-index: 0;
   background:
-    /* Warm lamp glow from center-top */
-    radial-gradient(ellipse 55% 45% at 50% 28%, rgba(212,160,64,0.08) 0%, transparent 55%),
-    /* Subtle color patches around the room */
-    radial-gradient(ellipse 25% 40% at 12% 55%, rgba(91,141,184,0.04) 0%, transparent 45%),
-    radial-gradient(ellipse 25% 40% at 88% 45%, rgba(196,91,91,0.03) 0%, transparent 45%),
-    radial-gradient(ellipse 30% 35% at 50% 85%, rgba(212,145,74,0.04) 0%, transparent 50%),
-    /* Vignette */
-    radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(16,12,8,0.4) 100%);
+    /* Lamp glow from upper-center-right */
+    radial-gradient(ellipse 50% 40% at 62% 24%, rgba(232,192,64,0.1) 0%, transparent 60%),
+    /* Secondary warm glow */
+    radial-gradient(ellipse 35% 30% at 55% 30%, rgba(232,192,64,0.04) 0%, transparent 50%),
+    /* Blue mood from upper left */
+    radial-gradient(ellipse 30% 35% at 18% 20%, rgba(60,80,160,0.06) 0%, transparent 50%),
+    /* Deep shadows at edges */
+    radial-gradient(ellipse 80% 80% at 50% 50%, transparent 20%, rgba(4,6,12,0.5) 100%);
 }
 
 /* ===== Dust Motes in Lamplight ===== */
 .motes {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
 }
 .mote {
-  position: absolute;
-  border-radius: 50%;
-  background: #e8c870;
+  position: absolute; border-radius: 50%; background: var(--lamp-gold);
   animation: mote-float linear infinite;
 }
 @keyframes mote-float {
   0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-  8%   { opacity: 0.7; }
-  50%  { opacity: 0.3; }
-  92%  { opacity: 0.05; }
+  8%   { opacity: 0.6; }
+  50%  { opacity: 0.2; }
+  92%  { opacity: 0.03; }
   100% { transform: translateY(-105vh) translateX(var(--x)) scale(0.3); opacity: 0; }
 }
-.m1 { left: 6%;  bottom: -8px; width: 2.5px; height: 2.5px; --x: 45px; animation-duration: 15s; animation-delay: 0s; }
-.m2 { left: 14%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -25px; animation-duration: 13s; animation-delay: 2s; }
-.m3 { left: 22%; bottom: -8px; width: 2px;   height: 2px;   --x: 55px; animation-duration: 17s; animation-delay: 1s; }
-.m4 { left: 30%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -35px; animation-duration: 14s; animation-delay: 3s; }
-.m5 { left: 38%; bottom: -8px; width: 2.5px; height: 2.5px; --x: 30px; animation-duration: 15.5s; animation-delay: 0.5s; }
-.m6 { left: 46%; bottom: -8px; width: 1px;   height: 1px;   --x: -45px; animation-duration: 12s; animation-delay: 2.5s; }
-.m7 { left: 54%; bottom: -8px; width: 2px;   height: 2px;   --x: 40px; animation-duration: 16s; animation-delay: 1.5s; }
-.m8 { left: 62%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -20px; animation-duration: 13.5s; animation-delay: 3.5s; }
-.m9 { left: 70%; bottom: -8px; width: 2px;   height: 2px;   --x: 50px; animation-duration: 14.5s; animation-delay: 0.8s; }
-.m10{ left: 78%; bottom: -8px; width: 1px;   height: 1px;   --x: -30px; animation-duration: 15.8s; animation-delay: 4s; }
-.m11{ left: 86%; bottom: -8px; width: 2.5px; height: 2.5px; --x: 35px; animation-duration: 12.5s; animation-delay: 1.2s; }
-.m12{ left: 94%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -50px; animation-duration: 16.5s; animation-delay: 2.8s; }
+.m1 { left: 8%;  bottom: -8px; width: 2.5px; height: 2.5px; --x: 40px; animation-duration: 14s; animation-delay: 0s; }
+.m2 { left: 16%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -25px; animation-duration: 12s; animation-delay: 2s; }
+.m3 { left: 24%; bottom: -8px; width: 2px;   height: 2px;   --x: 50px; animation-duration: 16s; animation-delay: 1s; }
+.m4 { left: 32%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -35px; animation-duration: 13s; animation-delay: 3s; }
+.m5 { left: 40%; bottom: -8px; width: 2.5px; height: 2.5px; --x: 30px; animation-duration: 15s; animation-delay: 0.5s; }
+.m6 { left: 48%; bottom: -8px; width: 1px;   height: 1px;   --x: -45px; animation-duration: 11s; animation-delay: 2.5s; }
+.m7 { left: 56%; bottom: -8px; width: 2px;   height: 2px;   --x: 35px; animation-duration: 15.5s; animation-delay: 1.5s; }
+.m8 { left: 64%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -20px; animation-duration: 12.5s; animation-delay: 3.5s; }
+.m9 { left: 72%; bottom: -8px; width: 2px;   height: 2px;   --x: 45px; animation-duration: 14.5s; animation-delay: 0.8s; }
+.m10{ left: 80%; bottom: -8px; width: 1px;   height: 1px;   --x: -30px; animation-duration: 16.5s; animation-delay: 4s; }
+.m11{ left: 88%; bottom: -8px; width: 2.5px; height: 2.5px; --x: 38px; animation-duration: 13.5s; animation-delay: 1.2s; }
+.m12{ left: 95%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -42px; animation-duration: 17s; animation-delay: 2.8s; }
 
-/* ===== Bookshelf edge vignette ===== */
-.bookshelf {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.15;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.3) 100%);
-}
-
-/* ===== Layout ===== */
+/* ===== Page Layout ===== */
 .page {
-  position: relative;
-  z-index: 1;
-  max-width: 1060px;
-  margin: 0 auto;
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto;
   padding: 0 24px;
 }
 
-/* ===== Header ===== */
-.header {
-  text-align: center;
-  padding: 60px 0 36px;
+/* ===== HERO — Evening Study Room ===== */
+.hero {
+  text-align: center; padding: 72px 0 48px; position: relative;
 }
+.hero-scene {
+  position: relative; width: 300px; height: 240px;
+  margin: 0 auto 32px;
+}
+/* CSS-drawn lamp */
 .lamp {
-  font-size: 4rem;
-  display: block;
-  margin-bottom: 8px;
-  animation: lamp-glow 2.5s ease-in-out infinite;
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 100px;
 }
-@keyframes lamp-glow {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(212,160,64,0.3)); }
-  50%      { filter: drop-shadow(0 0 20px rgba(212,160,64,0.6)); }
+.lamp-shade {
+  position: absolute; top: 0; left: 0; right: 0; height: 40px;
+  background: linear-gradient(180deg, #d4a040, #b88830);
+  clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 0 40px rgba(232,192,64,0.5), 0 0 80px rgba(232,192,64,0.2);
 }
-.header h1 {
+.lamp-base {
+  position: absolute; top: 65px; left: 25%; right: 25%; height: 25px;
+  background: linear-gradient(180deg, #a07020, #705010);
+  border-radius: 4px;
+}
+.lamp-pole {
+  position: absolute; top: 38px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 28px; background: #a07020;
+}
+/* Book */
+.book {
+  position: absolute; bottom: 30px; left: 30px;
+  width: 70px; height: 50px;
+}
+.book-cover {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #3a2040, #4a3050);
+  border-radius: 2px 6px 6px 2px;
+  border-right: 4px solid #5a4060;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+}
+.book-pages {
+  position: absolute; top: 3px; right: 8px; bottom: 3px; width: 6px;
+  background: #d8d0c0; border-radius: 0 1px 1px 0;
+}
+/* Tea cup */
+.tea {
+  position: absolute; bottom: 35px; right: 35px;
+  width: 40px; height: 30px;
+}
+.tea-cup {
+  position: absolute; bottom: 0; left: 5px; right: 5px; height: 22px;
+  background: linear-gradient(135deg, #e8d8c8, #d0c0b0);
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #b0a090;
+}
+.tea-handle {
+  position: absolute; bottom: 8px; right: 0; width: 10px; height: 14px;
+  border: 2px solid #d0c0b0; border-left: none; border-radius: 0 6px 6px 0;
+}
+.tea-steam {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 20px;
+  opacity: 0.3;
+  background: radial-gradient(ellipse at center, rgba(232,192,64,0.4), transparent);
+  animation: steam-rise 2s ease-in-out infinite;
+}
+@keyframes steam-rise {
+  0%,100% { transform: translateX(-50%) translateY(0); opacity: 0.2; }
+  50% { transform: translateX(-50%) translateY(-8px); opacity: 0.4; }
+}
+/* Table surface */
+.table {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 20px;
+  background: linear-gradient(180deg, #3a2a18, #2a1a0a);
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+.hero h1 {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 2.8rem);
   color: var(--text-bright);
@@ -136,37 +188,33 @@ body {
   letter-spacing: 3px;
   margin-bottom: 8px;
 }
-.header .tagline {
-  font-family: "Georgia", "Times New Roman", serif;
+.hero .tagline {
   font-style: italic;
-  color: var(--amber-soft);
-  font-size: 1.1rem;
+  color: var(--lamp-gold);
+  font-size: 1.05rem;
   opacity: 0.65;
   margin-bottom: 12px;
   letter-spacing: 1px;
+  font-family: var(--font-display);
 }
-.header .intro {
-  max-width: 560px;
+.hero .intro {
+  max-width: 580px;
   margin: 0 auto;
   color: var(--text-dim);
   font-size: 0.92rem;
   line-height: 1.9;
 }
 .divider {
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--amber), transparent);
-  margin: 24px auto;
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--lamp-gold), transparent);
+  margin: 20px auto;
   opacity: 0.5;
 }
 
-/* ===== Stats bar ===== */
+/* ===== Stats ===== */
 .stats-bar {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
-  padding: 18px 0 32px;
+  display: flex; justify-content: center; gap: 24px;
+  flex-wrap: wrap; padding: 12px 0 40px;
 }
 .stat {
   text-align: center;
@@ -174,149 +222,22 @@ body {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: var(--radius);
-  min-width: 90px;
+  min-width: 80px;
 }
 .stat-num {
-  font-family: "Georgia", "Times New Roman", serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--amber);
+  font-family: "Georgia", serif;
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--lamp-gold);
   line-height: 1.2;
 }
 .stat-label {
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  letter-spacing: 1px;
+  font-size: 0.72rem; color: var(--text-dim); letter-spacing: 1px;
 }
 
-/* ===== Room Cards Grid ===== */
-.rooms-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  padding-bottom: 48px;
-}
-@media (max-width: 800px) {
-  .rooms-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 500px) {
-  .rooms-grid { grid-template-columns: 1fr; }
-}
-
-.room-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 28px 24px 24px;
-  text-decoration: none;
-  color: inherit;
-  transition: all var(--ease);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-.room-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--room-color);
-  opacity: 0.4;
-  transition: opacity var(--ease);
-}
-.room-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-  border-color: var(--border-light);
-  background: var(--bg-card-hover);
-}
-.room-card:hover::before {
-  opacity: 1;
-}
-.room-card:hover .room-icon {
-  transform: scale(1.15);
-}
-.room-icon {
-  font-size: 2.4rem;
-  transition: transform var(--ease);
-  margin-bottom: 10px;
-  filter: grayscale(0.15);
-}
-.room-num {
-  font-size: 0.68rem;
-  color: var(--room-color);
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  opacity: 0.75;
-}
-.room-title {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  color: var(--text-bright);
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.room-subtitle {
-  font-family: "Georgia", "Times New Roman", serif;
-  font-style: italic;
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  opacity: 0.55;
-  margin-bottom: 12px;
-}
-.room-desc {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  line-height: 1.7;
-  flex: 1;
-  margin-bottom: 14px;
-}
-.room-keywords {
-  font-size: 0.7rem;
-  color: var(--text-dim2);
-  letter-spacing: 0.5px;
-  line-height: 1.6;
-  margin-bottom: 10px;
-  opacity: 0.7;
-}
-.room-corner {
-  font-size: 0.7rem;
-  color: var(--room-color);
-  opacity: 0.5;
-  letter-spacing: 0.5px;
-}
-
-/* ===== MKS Footer ===== */
-.mks-footer {
-  text-align: center;
-  padding: 48px 24px 40px;
-  border-top: 1px solid var(--border);
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  line-height: 1.9;
-}
-.mks-footer .brand {
-  color: var(--amber);
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-.mks-footer a {
-  color: var(--amber);
-  text-decoration: none;
-  transition: color var(--ease);
-}
-.mks-footer a:hover { color: var(--amber-light); }
-
-/* ===== Hidden gem: "About the host" ===== */
+/* ===== About Host ===== */
 .about-host {
-  max-width: 660px;
-  margin: 0 auto 48px;
-  padding: 28px 32px;
+  max-width: 620px; margin: 0 auto 48px;
+  padding: 24px 28px;
   background: rgba(255,255,255,0.015);
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: var(--radius-lg);
@@ -324,24 +245,243 @@ body {
 }
 .about-host .host-name {
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  color: var(--text-bright);
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-size: 1.2rem; color: var(--text-bright); font-weight: 600; margin-bottom: 6px;
 }
 .about-host p {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  line-height: 1.9;
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.9;
 }
 .about-host .signature {
-  font-family: "Georgia", "Times New Roman", serif;
-  font-style: italic;
-  color: var(--amber-soft);
-  opacity: 0.5;
-  margin-top: 8px;
-  font-size: 0.85rem;
+  font-style: italic; color: var(--lamp-gold);
+  opacity: 0.5; margin-top: 8px; font-size: 0.85rem;
 }
+
+/* ===== 七扇门 (Seven Doors) ===== */
+.doors-title {
+  text-align: center; margin-bottom: 28px;
+}
+.doors-title h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem; color: var(--text-bright);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.doors-title p {
+  font-size: 0.82rem; color: var(--text-dim);
+}
+
+.doors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  padding-bottom: 48px;
+}
+@media (max-width: 680px) {
+  .doors-grid { grid-template-columns: 1fr; }
+}
+
+/* A door */
+.door-wrapper {
+  perspective: 1200px;
+  height: 280px;
+}
+.door {
+  position: relative;
+  width: 100%; height: 100%;
+  transition: transform var(--ease);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.door.open {
+  transform: rotateY(-25deg);
+}
+
+/* Door front (closed / semi-open) */
+.door-front {
+  position: absolute; inset: 0;
+  background: var(--bg-door);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  backface-visibility: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.door-front::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
+/* Golden light peeking through */
+.door-light {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 40px;
+  background: linear-gradient(90deg, transparent, rgba(232,192,64,0.08));
+  pointer-events: none;
+  transition: opacity var(--ease);
+}
+
+/* Door frame decoration */
+.door-frame {
+  flex-shrink: 0;
+  height: 6px;
+  background: linear-gradient(90deg, transparent, var(--door-color, #e8c040), transparent);
+  opacity: 0.4;
+  transition: opacity var(--ease);
+}
+.door:hover .door-frame { opacity: 1; }
+
+.door-body {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 24px 20px 20px;
+}
+
+.door-icon {
+  font-size: 2.2rem; margin-bottom: 8px;
+  filter: grayscale(0.2);
+  transition: transform var(--ease);
+}
+.door:hover .door-icon { transform: scale(1.1); }
+
+.door-num {
+  font-size: 0.65rem; color: var(--door-color, #e8c040);
+  font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 4px; opacity: 0.7;
+}
+.door-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem; color: var(--text-bright);
+  font-weight: 700; letter-spacing: 1px;
+  margin-bottom: 3px;
+}
+.door-subtitle {
+  font-style: italic; font-size: 0.75rem; color: var(--text-dim);
+  opacity: 0.5; margin-bottom: 8px;
+}
+.door-desc {
+  font-size: 0.8rem; color: var(--text-dim); line-height: 1.6;
+  flex: 1;
+}
+.door-keywords {
+  font-size: 0.68rem; color: var(--text-subtle);
+  letter-spacing: 0.5px; line-height: 1.5;
+  margin-top: 8px; opacity: 0.6;
+}
+
+/* Podcast button */
+.podcast-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 18px;
+  background: rgba(232,192,64,0.08);
+  border: 1px solid rgba(232,192,64,0.2);
+  color: var(--lamp-gold);
+  font-size: 0.78rem; cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+  text-decoration: none;
+  font-family: inherit;
+}
+.podcast-btn:hover {
+  background: rgba(232,192,64,0.15);
+  border-color: var(--lamp-gold);
+  box-shadow: 0 0 16px rgba(232,192,64,0.15);
+}
+
+/* Open door — door swings left, revealing content */
+.door-open-reveal {
+  position: absolute; inset: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  transform: translateZ(-1px);
+  display: flex; flex-direction: column;
+  justify-content: center;
+}
+
+/* Door corner label */
+.door-corner {
+  font-size: 0.65rem;
+  color: var(--door-color, #e8c040);
+  opacity: 0.4;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+
+/* ===== Concept Galaxy ===== */
+.concept-section {
+  text-align: center; padding: 20px 0 0;
+}
+.concept-section .divider { margin: 32px auto 20px; }
+.concept-section p {
+  color: var(--text-dim); font-size: 0.82rem; margin-bottom: 16px;
+}
+.concept-section a {
+  display: inline-block; border-radius: 12px;
+  overflow: hidden; border: 1px solid var(--border);
+  transition: all var(--ease); max-width: 100%;
+}
+.concept-section a:hover {
+  border-color: rgba(232,192,64,0.3);
+  box-shadow: 0 0 30px rgba(232,192,64,0.1);
+}
+.concept-section a img {
+  display: block; width: 100%; max-width: 700px; height: auto;
+}
+.concept-section .hint {
+  font-size: 0.7rem; color: var(--text-dim); margin-top: 8px; opacity: 0.5;
+}
+
+/* ===== Podcast Section ===== */
+.podcast-section {
+  text-align: center; padding: 40px 0 20px;
+}
+.podcast-section h3 {
+  font-family: var(--font-display);
+  color: var(--text-bright); font-size: 1.1rem; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.podcast-section p {
+  font-size: 0.82rem; color: var(--text-dim); margin-bottom: 16px;
+}
+.podcast-list {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+}
+.podcast-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  font-size: 0.82rem; color: var(--text-dim);
+  transition: all 0.3s;
+}
+.podcast-item:hover {
+  background: rgba(232,192,64,0.04);
+  border-color: rgba(232,192,64,0.2);
+  color: var(--lamp-gold);
+}
+.podcast-item .pi-icon { font-size: 1.1rem; }
+.podcast-item .pi-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--door-color, #e8c040); opacity: 0.6;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center; padding: 40px 24px 36px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.78rem; line-height: 1.9;
+}
+.footer .brand {
+  color: var(--lamp-gold); font-weight: 600; letter-spacing: 1px;
+}
+.footer a {
+  color: var(--lamp-gold); text-decoration: none;
+  transition: color var(--ease);
+}
+.footer a:hover { color: var(--lamp-gold-bright); }
 </style>
 </head>
 <body>
@@ -353,154 +493,294 @@ body {
   <div class="mote m7"></div><div class="mote m8"></div><div class="mote m9"></div>
   <div class="mote m10"></div><div class="mote m11"></div><div class="mote m12"></div>
 </div>
-<div class="bookshelf"></div>
 
 <div class="page">
-  <header class="header">
-    <span class="lamp">🛋️</span>
-    <h1>卓老板聊科技</h1>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="hero-scene">
+      <!-- Lamp -->
+      <div class="lamp">
+        <div class="lamp-shade"></div>
+        <div class="lamp-pole"></div>
+        <div class="lamp-base"></div>
+      </div>
+      <!-- Book -->
+      <div class="book">
+        <div class="book-cover"></div>
+        <div class="book-pages"></div>
+      </div>
+      <!-- Tea -->
+      <div class="tea">
+        <div class="tea-steam"></div>
+        <div class="tea-handle"></div>
+        <div class="tea-cup"></div>
+      </div>
+      <!-- Table -->
+      <div class="table"></div>
+    </div>
+
+    <h1>卓老板的科学客厅</h1>
     <p class="tagline">A Science Parlor — Where Curiosity Meets Conversation</p>
     <div class="divider"></div>
     <p class="intro">
-      2016年，"得到"App上线了一档科普播客。卓克用通俗的语言、朋友的语气，
-      把黑洞、基因、疫苗、人工智能这些高深的话题，变成了客厅里的日常聊天。<br>
-      这里是全部 <strong>298</strong> 篇文章的完整知识地图——欢迎走进卓老板的科学客厅。
+      2016年，得到App上线了一档科普播客。卓克用通俗的语言、朋友的语气，<br>
+      把黑洞、基因、疫苗、AI这些高深的话题，变成了客厅里的日常聊天。<br>
+      这里是全部 <strong style="color:var(--lamp-gold);">298</strong> 篇文章的完整知识地图——<br>
+      黄昏已至，台灯亮了，七扇门半开着，欢迎进来聊聊。
     </p>
   </header>
 
+  <!-- Stats -->
   <div class="stats-bar">
-    <div class="stat">
-      <div class="stat-num">298</div>
-      <div class="stat-label">篇文章</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">7</div>
-      <div class="stat-label">个专题</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">32</div>
-      <div class="stat-label">原章节</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">2016</div>
-      <div class="stat-label">年份</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">58</div>
-      <div class="stat-label">最大专题</div>
-    </div>
+    <div class="stat"><div class="stat-num">298</div><div class="stat-label">篇文章</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">个专题</div></div>
+    <div class="stat"><div class="stat-num">32</div><div class="stat-label">原章节</div></div>
+    <div class="stat"><div class="stat-num">2016</div><div class="stat-label">年份</div></div>
+    <div class="stat"><div class="stat-num">58</div><div class="stat-label">最大专题</div></div>
   </div>
 
+  <!-- About the host -->
   <div class="about-host">
     <div class="host-name">👨‍🔬 关于卓克</div>
     <p>
-      卓克，科普作家，"得到"App早期主理人之一。《卓老板聊科技》以问答形式，
+      卓克，科普作家，得到App早期主理人之一。《卓老板聊科技》以问答形式，
       用科学思维拆解日常问题——从"红糖补血吗"到"引力波是什么"。
       他的风格既不居高临下，也不故作惊人，而是像朋友一样，把科学原理讲清楚。
     </p>
     <p class="signature">—— "科学是最好的声音"</p>
   </div>
 
-  <div class="rooms-grid">
-    
-        <a href="1-宇宙的秩序.html" class="room-card" style="--room-color: #5b8db8; --room-glow: rgba(91, 141, 184, 0.2);">
-          <div class="room-icon">🌌</div>
-          <div class="room-num">专题 1 · 45 篇</div>
-          <h3 class="room-title">宇宙的秩序</h3>
-          <p class="room-subtitle">The Cosmic Order</p>
-          <p class="room-desc">从黑洞到量子，从元素诞生到引力波——物理学与天文学揭示宇宙运行的深层法则。</p>
-          <div class="room-keywords">引力波 · 黑洞 · 量子 · 恒星演化 · 元素 · 相对论</div>
-          <div class="room-corner">🔭 天文台角</div>
-        </a>
-
-        <a href="2-生命的算法.html" class="room-card" style="--room-color: #5a9e6f; --room-glow: rgba(90, 158, 111, 0.2);">
-          <div class="room-icon">🧬</div>
-          <div class="room-num">专题 2 · 57 篇</div>
-          <h3 class="room-title">生命的算法</h3>
-          <p class="room-subtitle">The Algorithm of Life</p>
-          <p class="room-desc">从 DNA 双螺旋到神经网络，从单细胞到意识——生物学与神经科学解码生命的逻辑。</p>
-          <div class="room-keywords">基因 · 大脑 · 细胞 · 演化 · 微生物 · 神经科学</div>
-          <div class="room-corner">🔬 标本陈列柜</div>
-        </a>
-
-        <a href="3-身体的真相.html" class="room-card" style="--room-color: #c45b5b; --room-glow: rgba(196, 91, 91, 0.2);">
-          <div class="room-icon">🫀</div>
-          <div class="room-num">专题 3 · 37 篇</div>
-          <h3 class="room-title">身体的真相</h3>
-          <p class="room-subtitle">The Truth of the Body</p>
-          <p class="room-desc">癌症、免疫、疫苗、药物——用科学证据回答关于健康与疾病的关键问题。</p>
-          <div class="room-keywords">癌症 · 免疫 · 疫苗 · 抗生素 · 过敏 · 辐射</div>
-          <div class="room-corner">💊 诊疗书架</div>
-        </a>
-
-        <a href="4-餐桌上的实验室.html" class="room-card" style="--room-color: #d4914a; --room-glow: rgba(212, 145, 74, 0.2);">
-          <div class="room-icon">🍽️</div>
-          <div class="room-num">专题 4 · 22 篇</div>
-          <h3 class="room-title">餐桌上的实验室</h3>
-          <p class="room-subtitle">The Lab on Your Table</p>
-          <p class="room-desc">糖、脂肪、转基因、维生素——用科学方法审视每一口食物的真相。</p>
-          <div class="room-keywords">糖 · 脂肪 · 转基因 · 维生素 · 牛奶 · 保健品</div>
-          <div class="room-corner">🧪 厨房实验台</div>
-        </a>
-
-        <a href="5-思维的武器.html" class="room-card" style="--room-color: #8b6db0; --room-glow: rgba(139, 109, 176, 0.2);">
-          <div class="room-icon">🧠</div>
-          <div class="room-num">专题 5 · 46 篇</div>
-          <h3 class="room-title">思维的武器</h3>
-          <p class="room-subtitle">Weapons of Thought</p>
-          <p class="room-desc">概率思维、博弈论、批判性思考——锻造抵御认知偏差的理性工具。</p>
-          <div class="room-keywords">科学方法 · 概率 · 博弈 · 批判思维 · 伪科学 · 认知偏误</div>
-          <div class="room-corner">📖 书房写字桌</div>
-        </a>
-
-        <a href="6-未来的拼图.html" class="room-card" style="--room-color: #4a8a9a; --room-glow: rgba(74, 138, 154, 0.2);">
-          <div class="room-icon">🤖</div>
-          <div class="room-num">专题 6 · 33 篇</div>
-          <h3 class="room-title">未来的拼图</h3>
-          <p class="room-subtitle">Puzzle of the Future</p>
-          <p class="room-desc">人工智能、自动驾驶、虚拟货币——拼凑正在成型的明日世界图景。</p>
-          <div class="room-keywords">AI · 自动驾驶 · 比特币 · 新能源 · 量子技术 · VR</div>
-          <div class="room-corner">⚡ 未来工作坊</div>
-        </a>
-
-        <a href="7-文明的阶梯.html" class="room-card" style="--room-color: #b8955a; --room-glow: rgba(184, 149, 90, 0.2);">
-          <div class="room-icon">🏛️</div>
-          <div class="room-num">专题 7 · 58 篇</div>
-          <h3 class="room-title">文明的阶梯</h3>
-          <p class="room-subtitle">The Ladder of Civilization</p>
-          <p class="room-desc">从古代水道到登月工程，从艺术诞生到城市演化——科技与文明交织的宏大叙事。</p>
-          <div class="room-keywords">航天史 · 城市史 · 艺术 · 教育 · 科学人物 · 环保</div>
-          <div class="room-corner">🗺️ 壁炉地图桌</div>
-        </a>
+  <!-- ===== 七扇门 ===== -->
+  <div class="doors-title">
+    <h2>🚪 七扇门 — 选择一个房间</h2>
+    <p>每扇门后面，是一个关于世界的科学叙事</p>
   </div>
 
-  <!-- Concept Graph Preview -->
-  <div style="text-align:center; padding: 20px 0 0;">
+  <div class="doors-grid">
+
+    <!-- Door 1: 宇宙的秩序 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')">
+        <div class="door-front" style="--door-color:#5b8db8;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🌌</span>
+            <div class="door-num">专题 1 · 45 篇</div>
+            <h3 class="door-title">宇宙的秩序</h3>
+            <p class="door-subtitle">The Cosmic Order</p>
+            <p class="door-desc">从黑洞到量子，从元素诞生到引力波——物理学与天文学揭示宇宙运行的深层法则。</p>
+            <div class="door-keywords">引力波 · 黑洞 · 量子 · 恒星演化 · 相对论</div>
+            <a href="1-宇宙的秩序.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">🔭 天文台角</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Door 2: 生命的算法 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')" style="--door-color:#5a9e6f;">
+        <div class="door-front" style="--door-color:#5a9e6f;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🧬</span>
+            <div class="door-num">专题 2 · 57 篇</div>
+            <h3 class="door-title">生命的算法</h3>
+            <p class="door-subtitle">The Algorithm of Life</p>
+            <p class="door-desc">从DNA双螺旋到神经网络，从单细胞到意识——生物学与神经科学解码生命的逻辑。</p>
+            <div class="door-keywords">基因 · 大脑 · 细胞 · 演化 · 微生物</div>
+            <a href="2-生命的算法.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">🔬 标本陈列柜</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Door 3: 身体的真相 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')" style="--door-color:#c45b5b;">
+        <div class="door-front" style="--door-color:#c45b5b;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🫀</span>
+            <div class="door-num">专题 3 · 37 篇</div>
+            <h3 class="door-title">身体的真相</h3>
+            <p class="door-subtitle">The Truth of the Body</p>
+            <p class="door-desc">癌症、免疫、疫苗、药物——用科学证据回答关于健康与疾病的关键问题。</p>
+            <div class="door-keywords">癌症 · 免疫 · 疫苗 · 抗生素 · 过敏</div>
+            <a href="3-身体的真相.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">💊 诊疗书架</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Door 4: 餐桌上的实验室 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')" style="--door-color:#d4914a;">
+        <div class="door-front" style="--door-color:#d4914a;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🍽️</span>
+            <div class="door-num">专题 4 · 22 篇</div>
+            <h3 class="door-title">餐桌上的实验室</h3>
+            <p class="door-subtitle">The Lab on Your Table</p>
+            <p class="door-desc">糖、脂肪、转基因、维生素——用科学方法审视每一口食物的真相。</p>
+            <div class="door-keywords">糖 · 脂肪 · 转基因 · 维生素 · 保健品</div>
+            <a href="4-餐桌上的实验室.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">🧪 厨房实验台</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Door 5: 思维的武器 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')" style="--door-color:#8b6db0;">
+        <div class="door-front" style="--door-color:#8b6db0;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🧠</span>
+            <div class="door-num">专题 5 · 46 篇</div>
+            <h3 class="door-title">思维的武器</h3>
+            <p class="door-subtitle">Weapons of Thought</p>
+            <p class="door-desc">概率思维、博弈论、批判性思考——锻造抵御认知偏差的理性工具。</p>
+            <div class="door-keywords">科学方法 · 概率 · 博弈 · 批判思维 · 伪科学</div>
+            <a href="5-思维的武器.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">📖 书房写字桌</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Door 6: 未来的拼图 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')" style="--door-color:#4a8a9a;">
+        <div class="door-front" style="--door-color:#4a8a9a;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🤖</span>
+            <div class="door-num">专题 6 · 33 篇</div>
+            <h3 class="door-title">未来的拼图</h3>
+            <p class="door-subtitle">Puzzle of the Future</p>
+            <p class="door-desc">人工智能、自动驾驶、虚拟货币——拼凑正在成型的明日世界图景。</p>
+            <div class="door-keywords">AI · 自动驾驶 · 比特币 · 新能源 · VR</div>
+            <a href="6-未来的拼图.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">⚡ 未来工作坊</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Door 7: 文明的阶梯 -->
+    <div class="door-wrapper">
+      <div class="door" onclick="this.classList.toggle('open')" style="--door-color:#b8955a;">
+        <div class="door-front" style="--door-color:#b8955a;">
+          <div class="door-light"></div>
+          <div class="door-frame"></div>
+          <div class="door-body">
+            <span class="door-icon">🏛️</span>
+            <div class="door-num">专题 7 · 58 篇</div>
+            <h3 class="door-title">文明的阶梯</h3>
+            <p class="door-subtitle">The Ladder of Civilization</p>
+            <p class="door-desc">从古代水道到登月工程，从艺术诞生到城市演化——科技与文明交织的宏大叙事。</p>
+            <div class="door-keywords">航天史 · 城市史 · 艺术 · 教育 · 科学人物</div>
+            <a href="7-文明的阶梯.html" class="podcast-btn" onclick="event.stopPropagation()">🚪 进入房间</a>
+            <button class="podcast-btn" onclick="event.stopPropagation()" title="播客音频即将上线">🎧 收听播客</button>
+            <div class="door-corner">🗺️ 壁炉地图桌</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== Concept Galaxy ===== -->
+  <div class="concept-section">
     <div class="divider"></div>
-    <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:16px;">
-      🗺️ 七个专题之间的概念关联 — 298篇文章构成了这张知识星系图
-    </p>
-    <a href="concepts.svg" target="_blank" style="display:inline-block; border-radius:12px; overflow:hidden; border:1px solid var(--border); transition:all var(--ease); max-width:100%;">
-      <img src="concepts.svg" alt="知识星系图" style="display:block; width:100%; max-width:700px; height:auto;"
-           onerror="this.style.display='none'">
+    <p>🗺️ 七个专题之间的概念关联 — 298篇文章构成了这张知识星系图</p>
+    <a href="concepts.svg" target="_blank">
+      <img src="concepts.svg" alt="知识星系图"
+           onerror="this.style.display='none'; this.parentElement.querySelector('.fallback').style.display='block';">
     </a>
-    <p style="font-size:0.7rem; color:var(--text-dim); margin-top:8px; opacity:0.5;">点击查看大图</p>
+    <p class="hint">点击查看大图</p>
   </div>
 
-  <footer class="mks-footer">
+  <!-- ===== Podcast Section ===== -->
+  <div class="podcast-section">
+    <div class="divider" style="margin: 32px auto 20px;"></div>
+    <h3>🎙️ 播客节目</h3>
+    <p>原版《卓老板聊科技》播客共32个章节。专题音频整理中，敬请期待。</p>
+    <div class="podcast-list">
+      <span class="podcast-item" style="--door-color:#5b8db8;">
+        <span class="pi-icon">🌌</span> 宇宙的秩序
+        <span class="pi-dot"></span>
+      </span>
+      <span class="podcast-item" style="--door-color:#5a9e6f;">
+        <span class="pi-icon">🧬</span> 生命的算法
+        <span class="pi-dot"></span>
+      </span>
+      <span class="podcast-item" style="--door-color:#c45b5b;">
+        <span class="pi-icon">🫀</span> 身体的真相
+        <span class="pi-dot"></span>
+      </span>
+      <span class="podcast-item" style="--door-color:#d4914a;">
+        <span class="pi-icon">🍽️</span> 餐桌上的实验室
+        <span class="pi-dot"></span>
+      </span>
+      <span class="podcast-item" style="--door-color:#8b6db0;">
+        <span class="pi-icon">🧠</span> 思维的武器
+        <span class="pi-dot"></span>
+      </span>
+      <span class="podcast-item" style="--door-color:#4a8a9a;">
+        <span class="pi-icon">🤖</span> 未来的拼图
+        <span class="pi-dot"></span>
+      </span>
+      <span class="podcast-item" style="--door-color:#b8955a;">
+        <span class="pi-icon">🏛️</span> 文明的阶梯
+        <span class="pi-dot"></span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
     <p><span class="brand">卓老板聊科技 · 最小知识集（MKS）</span></p>
-    <p>基于"得到"App 2016年播客内容整理重组</p>
+    <p>基于得到App 2016年播客内容整理重组</p>
     <p>专题分类、视觉设计、知识整理由 AI 辅助完成</p>
     <p style="margin-top:8px;">
       <a href="concepts.svg" target="_blank">🗺️ 知识星系图</a> ·
       <a href="quiz.html">📝 科学素养自测</a> ·
       <a href="https://github.com/andy-zokelink/mks-zhuoke">GitHub</a>
     </p>
-    <p style="margin-top:6px; opacity:0.5;">
-      设计灵感：傍晚书房 · 一盏灯 · 一杯茶 · 一位老友
+    <p style="margin-top:6px; opacity:0.4;">
+      设计灵感：傍晚书房 · 一盏灯 · 一杯茶 · 七扇门 · 一位老友
     </p>
   </footer>
 </div>
 
+<script>
+// Door click toggle — doors swing open
+document.querySelectorAll('.door').forEach(function(door) {
+  door.addEventListener('click', function(e) {
+    // Don't toggle if clicking a button/link inside
+    if(e.target.closest('a') || e.target.closest('button')) return;
+    this.classList.toggle('open');
+  });
+});
+</script>
 </body>
 </html>

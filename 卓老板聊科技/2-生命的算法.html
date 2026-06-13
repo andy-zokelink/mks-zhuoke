@@ -2,888 +2,1379 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>生命的算法 — 卓老板聊科技 MKS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生命的算法 — 卓老板聊科技</title>
 <style>
-/* ===== 生命的算法 — 设计语言 =====
- * 本质洞察：生命是一套运行在碳基硬件上的算法——从DNA到意识，层层嵌套
- * 情感基调：惊叹 — 读着应感受到生命系统层层递进的优雅复杂度
- * 叙事锚点：DNA双螺旋递归树 — 从分子到意识，每层都是一段算法
- * 视觉策略：鼠尾草绿+暖土色 — 有机生长的质感，不同于宇宙的深邃酒红
- */
+/* ============================================================
+   生命的算法 — 设计语言
+   本质洞察：无生命的碳氢氧氮原子，怎么组装成了能思考的生物？
+            答案是：一层一层搭建起来的算法。
+   情感基调：敬畏 — 从分子机器到人类意识，读完你会对自己的
+            存在产生一种全新的敬畏
+   叙事弧线：读→思→问→用
+   视觉策略：生命绿+深灰 — 暗背景上的有机绿色，像叶绿体在
+            显微镜暗视野下的荧光
+   ============================================================ */
 :root {
-  --bg: #f7f4ed;
-  --card: #fcfaf5;
-  --accent: #4a7c59;
-  --accent2: #6b8c42;
-  --gold: #8b6914;
-  --gold-light: #d4b896;
-  --success: #3d8b5e;
-  --text: #2a241a;
-  --text-light: #5c5244;
-  --border: #d8d0c0;
-  --shadow: 0 2px 16px rgba(42,36,26,.06);
+  --bg-deep: #060c06;
+  --bg-space: #0a120a;
+  --bg-surface: #0e180e;
+  --bg-surface2: #122012;
+  --leaf-green: #4cc96e;
+  --leaf-dim: #1a4a2a;
+  --leaf-bright: #72f08a;
+  --membrane-blue: #4da6cc;
+  --membrane-dim: #1a3040;
+  --neuron-gold: #e8b840;
+  --neuron-dim: #4a3510;
+  --rna-pink: #e06080;
+  --rna-dim: #4a1525;
+  --atp-orange: #f07040;
+  --atp-dim: #5a200f;
+  --microbiome-purple: #9b6dff;
+  --microbiome-dim: #3a1a6a;
+  --text: #c8d8c8;
+  --text-bright: #e8f0e8;
+  --text-dim: #709070;
+  --text-subtle: #406040;
+  --border: #1a2a1a;
+  --border-glow: rgba(76,201,110,0.12);
   --radius: 12px;
-  --nav-bg: #1a2414;
-  --nav-text: #f7f4ed;
-  --leaf-green: #4a7c59;
-  --earth: #8b6914;
-  --cell-bg: rgba(74,124,89,.06);
+  --radius-sm: 8px;
+  --radius-lg: 20px;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Noto Serif SC', 'Source Han Serif SC', Georgia, serif;
-  background: var(--bg);
+  background: var(--bg-deep);
   color: var(--text);
-  line-height: 1.8;
-  padding-top: 56px;
-  font-size: 16px;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  line-height: 1.75;
+  overflow-x: hidden;
+  font-size: 15px;
 }
-.container { max-width: 980px; margin:0 auto; padding:0 20px; }
 
-/* Top Bar */
-.top-bar {
-  position:fixed; top:0; left:0; right:0; z-index:1000;
-  background: var(--nav-bg); color: var(--nav-text);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 24px; height:56px;
-  box-shadow:0 2px 12px rgba(0,0,0,.3);
-}
-.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; letter-spacing:.5px; }
-.top-bar .home-btn {
-  color:var(--nav-text); text-decoration:none; font-size:.85rem;
-  padding:6px 16px; border:1px solid rgba(255,255,255,.25);
-  border-radius:20px; font-family:'Noto Sans SC',sans-serif;
-  transition: all .2s;
-}
-.top-bar .home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--gold); color:var(--gold-light); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: #1a3a1a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2a5a2a; }
 
-/* Tab Bar */
-.tab-bar {
-  display:flex; flex-wrap:wrap; gap:6px; padding:14px 0;
-  position:sticky; top:56px; background:var(--bg); z-index:99;
-  border-bottom:1px solid var(--border); margin-bottom:24px;
+/* ===== TOP NAV ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(6,12,6,0.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px;
 }
-.tab-btn {
-  padding:8px 16px; border:1px solid var(--border);
-  border-radius:20px; background:var(--card); color:var(--text-light);
-  cursor:pointer; font-size:.82rem; transition:all .25s;
-  white-space:nowrap; font-family:'Noto Sans SC',sans-serif;
+.top-nav .home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--leaf-green), var(--membrane-blue));
+  color: #fff; font-size: 13px; font-weight: 700;
+  text-decoration: none; transition: transform .2s, box-shadow .2s;
 }
-.tab-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--cell-bg); }
-.tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .4s ease; }
-.tab-panel.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.top-nav .home-link:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(76,201,110,.35); }
+.top-nav .breadcrumb { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; }
 
-/* ===== HERO — DNA递归树创意图 ===== */
+/* ===== HERO — 分子自组装 Canvas ===== */
 .hero {
-  position:relative; overflow:hidden;
-  background:linear-gradient(175deg, #f7f4ed 0%, #e8e0cf 30%, #c8d5b8 55%, #4a7c59 80%, #1a2414 100%);
-  border-radius:var(--radius); margin-bottom:32px;
-  min-height:400px; display:flex; align-items:center; justify-content:center;
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+  padding: 80px 20px 40px;
 }
-.hero-svg { width:100%; max-width:900px; height:auto; display:block; margin:0 auto; }
-.hero-caption {
-  position:absolute; bottom:36px; left:0; right:0; text-align:center;
-  color:#f7f4ed; font-size:1.15rem; letter-spacing:2px;
-  font-family:'Noto Serif SC',serif; opacity:.85;
-  text-shadow:0 1px 8px rgba(0,0,0,.5);
+.hero canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-content { position: relative; z-index: 1; text-align: center; max-width: 800px; }
+.hero h1 {
+  font-size: clamp(2.2rem, 5.5vw, 3.8rem); font-weight: 900;
+  background: linear-gradient(135deg, var(--text-bright) 0%, var(--leaf-green) 35%, var(--leaf-bright) 65%, var(--membrane-blue) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 12px; line-height: 1.3;
+  letter-spacing: 2px;
+}
+.hero .subtitle {
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem); color: var(--text-dim);
+  margin-bottom: 10px; line-height: 1.6; max-width: 620px; margin-left: auto; margin-right: auto;
+}
+.hero .question {
+  font-size: clamp(1rem, 2vw, 1.35rem); color: var(--leaf-bright);
+  margin-bottom: 32px; font-style: italic; font-weight: 500;
+  font-family: "Noto Serif SC", "STSong", Georgia, serif;
+}
+.hero .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; }
+.hero .hero-stat { text-align: center; }
+.hero .hero-stat .num { font-size: 2rem; font-weight: 900; color: var(--leaf-green); }
+.hero .hero-stat .unit { font-size: 0.75rem; color: var(--membrane-blue); }
+.hero .hero-stat .label { font-size: .8rem; color: var(--text-dim); margin-top: 2px; }
+.hero .scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: var(--text-subtle); font-size: 12px; animation: bounce 2s infinite;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+/* ===== CHAPTER STYLES ===== */
+.life-section {
+  position: relative; padding: 80px 20px; min-height: 50vh;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.life-section::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--leaf-dim), transparent);
+}
+.section-inner { max-width: 1000px; width: 100%; }
+.section-header { text-align: center; margin-bottom: 48px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.section-header .section-num {
+  font-size: .7rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--leaf-dim); margin-bottom: 8px;
+}
+.section-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--text-bright), var(--leaf-green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-header p { color: var(--text-dim); font-size: .95rem; max-width: 560px; margin: 0 auto; }
+
+/* ===== 1. EXCERPT BLOCK — Pull-quote ===== */
+.excerpt-block {
+  position: relative; padding: 28px 32px; margin: 24px 0;
+  background: var(--bg-surface); border-radius: var(--radius);
+  border-left: 3px solid var(--leaf-green);
+  transition: all .3s;
+}
+.excerpt-block:hover { border-color: var(--leaf-bright); background: var(--bg-surface2); }
+.excerpt-block .excerpt-title {
+  font-size: .85rem; color: var(--leaf-green); font-weight: 600; margin-bottom: 8px;
+}
+.excerpt-block .excerpt-text {
+  font-size: .9rem; color: var(--text-dim); line-height: 1.85;
+  font-family: "Noto Serif SC", "STSong", Georgia, serif;
+}
+.excerpt-block .excerpt-text strong { color: var(--text-bright); }
+.excerpt-block::before {
+  content: '"'; position: absolute; top: 8px; left: 12px;
+  font-size: 3rem; color: var(--leaf-dim); opacity: .3;
+  font-family: Georgia, serif; line-height: 1;
 }
 
-/* Sections */
-.narrative-block {
-  background:linear-gradient(135deg, #fcfbf6, #f7f5ee);
-  border-left: 4px solid var(--accent);
-  padding: 28px 32px; margin:28px 0;
-  border-radius:0 var(--radius) var(--radius) 0;
-  box-shadow:var(--shadow);
+/* ===== 2. DNA CANVAS — Chapter 2 ===== */
+.dna-demo {
+  background: var(--bg-surface); border-radius: var(--radius);
+  padding: 28px; border: 1px solid var(--border);
+  text-align: center;
 }
-.narrative-block .lead {
-  font-size:1.2rem; color:var(--accent); font-weight:600;
-  margin-bottom:12px; line-height:1.6;
-}
-.narrative-block p {
-  color:var(--text-light); font-size:.95rem; line-height:1.9;
-  margin-bottom:8px;
+.dna-demo canvas { display: block; margin: 0 auto; border-radius: 8px; max-width: 100%; }
+.dna-demo .dna-caption {
+  margin-top: 14px; font-size: .85rem; color: var(--text-dim); min-height: 48px;
+  line-height: 1.7;
 }
 
-/* ===== 分层递进面板 — 生物学层级结构 ===== */
-.layer-stack { margin: 28px 0; }
-.layer-panel {
-  background:var(--card); border-radius:var(--radius);
-  padding: 24px; margin-bottom:12px;
-  box-shadow:var(--shadow); border:1px solid var(--border);
-  border-left-width: 4px; transition:all .3s;
-  position:relative;
+/* ===== 3. CELL ENERGY SVG — Chapter 3 ===== */
+.energy-demo {
+  background: var(--bg-surface); border-radius: var(--radius);
+  padding: 24px; border: 1px solid var(--border);
+  text-align: center; overflow: hidden;
 }
-.layer-panel:hover { transform:translateX(4px); }
-.layer-panel.molecular { border-left-color:#4a7c59; }
-.layer-panel.cellular { border-left-color:#6b8c42; }
-.layer-panel.organism { border-left-color:#8b6914; }
-.layer-panel.consciousness { border-left-color:#c47841; }
-.layer-panel h3 { font-size:1.05rem; margin-bottom:10px; font-family:'Noto Sans SC',sans-serif; }
-.layer-panel.molecular h3 { color:#4a7c59; }
-.layer-panel.cellular h3 { color:#6b8c42; }
-.layer-panel.organism h3 { color:#8b6914; }
-.layer-panel.consciousness h3 { color:#c47841; }
-.layer-panel p { font-size:.88rem; color:var(--text-light); line-height:1.7; }
-.layer-badge {
-  position:absolute; top:16px; right:20px;
-  font-size:.7rem; padding:2px 8px; border-radius:10px;
-  font-family:'Noto Sans SC',sans-serif;
-}
-.layer-badge.molecular { background:rgba(74,124,89,.1); color:#4a7c59; }
-.layer-badge.cellular { background:rgba(107,140,66,.1); color:#6b8c42; }
-.layer-badge.organism { background:rgba(139,105,20,.1); color:#8b6914; }
-.layer-badge.consciousness { background:rgba(196,120,65,.1); color:#c47841; }
+.energy-demo svg { max-width: 100%; height: auto; }
 
-/* ===== 演化历程 — 水平基因转移图 ===== */
-.evo-track {
-  display:flex; overflow-x:auto; gap:8px; padding:16px 0; margin:16px 0;
+/* ===== 4. MEMBRANE SVG — Chapter 4 ===== */
+.membrane-viz {
+  background: var(--bg-surface); border-radius: var(--radius);
+  padding: 24px; border: 1px solid var(--border);
+  text-align: center;
 }
-.evo-step {
-  flex:0 0 140px; text-align:center; padding:16px 8px;
-  background:var(--card); border-radius:var(--radius);
-  box-shadow:var(--shadow); border:1px solid var(--border);
-  position:relative;
+.membrane-viz svg { max-width: 100%; height: auto; }
+.membrane-viz .membrane-info {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px; margin-top: 16px;
 }
-.evo-step::after {
-  content:'→'; position:absolute; right:-14px; top:50%;
-  transform:translateY(-50%); color:var(--accent); font-size:1.2rem;
+.membrane-info-card {
+  background: var(--bg-surface2); border-radius: var(--radius-sm);
+  padding: 14px; text-align: left; border: 1px solid transparent;
+  transition: all .3s; cursor: pointer;
 }
-.evo-step:last-child::after { content:''; }
-.evo-step .step-time { font-size:.7rem; color:var(--accent); margin-bottom:6px; }
-.evo-step .step-icon { font-size:1.8rem; margin-bottom:6px; }
-.evo-step .step-label { font-size:.78rem; color:var(--text-light); font-weight:600; }
+.membrane-info-card:hover, .membrane-info-card.active {
+  border-color: var(--membrane-blue); box-shadow: 0 0 16px rgba(77,166,204,.12);
+}
+.membrane-info-card h4 { font-size: .85rem; color: var(--membrane-blue); margin-bottom: 4px; }
+.membrane-info-card p { font-size: .78rem; color: var(--text-dim); line-height: 1.6; }
 
-/* SVG stage */
-.svg-stage {
-  background:var(--card); border-radius:var(--radius);
-  padding:20px; margin:28px 0; box-shadow:var(--shadow);
-  border:1px solid var(--border); overflow-x:auto;
+/* ===== 5. MULTICELLULAR INTERACTIVE TIMELINE — Chapter 5 ===== */
+.evo-timeline {
+  position: relative; padding: 10px 0; margin: 24px 0;
 }
-.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
+.evo-timeline::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, var(--leaf-dim), var(--leaf-green), var(--leaf-dim), var(--membrane-blue), var(--membrane-dim));
+  transform: translateX(-50%);
+}
+.evo-event {
+  display: flex; align-items: flex-start; margin-bottom: 28px;
+  opacity: 0.4; transition: opacity .4s; cursor: pointer;
+  position: relative;
+}
+.evo-event:hover, .evo-event.active { opacity: 1; }
+.evo-event:nth-child(odd) { flex-direction: row; }
+.evo-event:nth-child(even) { flex-direction: row-reverse; }
+.evo-event .evo-card {
+  width: 44%; background: var(--bg-surface); border-radius: var(--radius);
+  padding: 18px; border: 1px solid var(--border);
+  transition: all .3s;
+}
+.evo-event:hover .evo-card { border-color: var(--leaf-green); box-shadow: 0 4px 20px rgba(76,201,110,.08); }
+.evo-event .evo-dot {
+  width: 16px; height: 16px; border-radius: 50%; background: var(--leaf-green);
+  border: 3px solid var(--bg-deep); flex-shrink: 0; z-index: 1;
+  margin: 0 20px; margin-top: 30px;
+  box-shadow: 0 0 12px rgba(76,201,110,.3);
+}
+.evo-event .evo-spacer { width: 44%; }
+.evo-card .evo-era { font-size: .7rem; color: var(--leaf-green); font-weight: 600; letter-spacing: 1px; }
+.evo-card .evo-title { font-size: 1rem; color: var(--text-bright); margin: 4px 0 8px; font-weight: 700; }
+.evo-card .evo-emoji { font-size: 1.6rem; margin-bottom: 6px; display: block; }
+.evo-card p { font-size: .82rem; color: var(--text-dim); line-height: 1.6; }
 
-/* Articles */
-.article-excerpt {
-  background:var(--card); border-radius:var(--radius); padding:18px;
-  margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border);
-  position:relative;
-}
-.article-excerpt::before { content:open-quote; font-size:3rem; color:var(--gold-light); position:absolute; top:4px; left:12px; opacity:.4; }
-.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
-.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; padding-left:20px; }
-
-/* Case compare */
-.case-compare {
-  display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;
-}
-@media (max-width:600px) { .case-compare { grid-template-columns:1fr; } }
-.case-card {
-  background:var(--card); border-radius:var(--radius);
-  padding:20px; box-shadow:var(--shadow); border:1px solid var(--border);
-}
-.case-card h4 { color:var(--accent); margin-bottom:10px; font-family:'Noto Sans SC',sans-serif; }
-.case-card p { font-size:.88rem; color:var(--text-light); line-height:1.7; }
-
-/* Socratic */
-.socratic-panel {
-  background:linear-gradient(135deg, #f7f5ee, #fcfaf5);
-  border:1px dashed var(--accent); border-radius:var(--radius);
-  padding:24px; margin:20px 0;
-}
-.socratic-panel .q-a { margin-bottom:20px; }
-.socratic-panel .question {
-  font-weight:600; color:var(--accent); margin-bottom:6px;
-  font-size:.95rem;
-}
-.socratic-panel .question::before { content:'问：'; color:var(--gold); }
-.socratic-panel .answer {
-  color:var(--text-light); font-size:.9rem; padding-left:16px;
-  border-left:2px solid var(--gold-light);
-}
-.socratic-panel .answer::before { content:'答：'; color:var(--success); font-weight:600; }
-
-/* Mindmap */
-.mindmap { margin:16px 0; }
-.mindmap .node { margin-bottom:6px; }
-.mindmap .node-header {
-  display:flex; align-items:center; gap:8px; cursor:pointer;
-  padding:10px 14px; background:var(--card); border-radius:8px;
-  border:1px solid var(--border); transition:all .2s;
-  font-family:'Noto Sans SC',sans-serif;
-}
-.mindmap .node-header:hover { border-color:var(--accent); background:var(--cell-bg); }
-.mindmap .node-header .toggle {
-  font-size:.7rem; transition:transform .3s; color:var(--accent);
-  width:16px; text-align:center;
-}
-.mindmap .node-header .toggle.open { transform:rotate(90deg); }
-.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
-.mindmap .node-body.open { display:block; }
-.mindmap .leaf {
-  padding:6px 12px; margin:4px 0; font-size:.85rem;
-  color:var(--text-light); border-left:2px solid var(--gold-light);
+@media (max-width: 700px) {
+  .evo-timeline::before { left: 24px; }
+  .evo-event, .evo-event:nth-child(even) { flex-direction: row; }
+  .evo-event .evo-card { width: calc(100% - 70px); }
+  .evo-event .evo-spacer { display: none; }
+  .evo-event .evo-dot { margin-left: 12px; margin-right: 12px; }
 }
 
-/* Boundary table */
-.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
-.boundary-table th {
-  background:var(--accent); color:#fff; padding:12px 16px;
-  text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500;
+/* ===== 6. NEURAL CANVAS — Chapter 6 ===== */
+.neural-demo {
+  background: var(--bg-surface); border-radius: var(--radius);
+  padding: 24px; border: 1px solid var(--border);
+  text-align: center;
 }
-.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
-.boundary-table tr:nth-child(even) td { background:var(--card); }
-.level-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; }
-.level-core { background:var(--accent); color:#fff; }
-.level-understand { background:var(--gold); color:#fff; }
-.level-know { background:#ddd; color:#555; }
-
-/* Quiz */
-.quiz-card {
-  background:var(--card); border-radius:var(--radius);
-  padding:20px; margin-bottom:16px; box-shadow:var(--shadow);
-  border:1px solid var(--border);
-}
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
-.q-option {
-  display:block; width:100%; text-align:left; padding:10px 16px;
-  margin:6px 0; border:1px solid var(--border); border-radius:8px;
-  background:var(--bg); cursor:pointer; transition:all .2s;
-  font-size:.88rem; font-family:inherit;
-}
-.q-option:hover { border-color:var(--accent); background:var(--cell-bg); }
-.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
-.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
-.q-option:disabled { cursor:default; }
-.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
-
-.sa-input {
-  width:100%; min-height:100px; padding:14px; font-family:inherit;
-  font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius);
-  background:var(--bg); resize:vertical;
-}
-.sa-reveal {
-  background:var(--card); padding:16px; border-radius:var(--radius);
-  margin-top:10px; display:none; border:1px dashed var(--accent);
-  font-size:.9rem; line-height:1.8;
+.neural-demo canvas { display: block; margin: 0 auto; border-radius: 8px; max-width: 100%; }
+.neural-demo .neural-caption {
+  margin-top: 14px; font-size: .85rem; color: var(--text-dim); min-height: 24px;
 }
 
-.decision-scene {
-  background:linear-gradient(135deg, #f7f5ee, #e8eae0);
-  border-radius:var(--radius); padding:24px; margin:20px 0;
-  border:1px solid var(--gold-light);
+/* ===== 7. SOCRATIC DEEP-DIVE — Chapter 7 ===== */
+.socratic-block { margin: 24px 0; }
+.socratic-item {
+  background: var(--bg-surface); border-radius: var(--radius);
+  margin-bottom: 10px; border: 1px solid var(--border); overflow: hidden;
 }
-.decision-scene h3 { color:var(--accent); margin-bottom:12px; }
-.decision-scene .scenario {
-  background:var(--card); padding:18px; border-radius:8px;
-  margin-bottom:14px; border-left:3px solid var(--accent);
+.socratic-q {
+  padding: 16px 20px; cursor: pointer; display: flex; align-items: center;
+  justify-content: space-between; font-weight: 600; font-size: .92rem;
+  color: var(--text-bright); transition: all .2s;
 }
-.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
-.decision-scene .choice-btn {
-  text-align:left; padding:10px 16px; border:1px solid var(--border);
-  border-radius:8px; background:var(--card); cursor:pointer;
-  transition:all .2s; font-family:inherit; font-size:.88rem;
+.socratic-q:hover { background: var(--bg-surface2); }
+.socratic-q .s-toggle {
+  font-size: .7rem; color: var(--neuron-gold); transition: transform .3s;
+  flex-shrink: 0; margin-left: 12px;
 }
-.decision-scene .choice-btn:hover { border-color:var(--accent); background:var(--cell-bg); }
+.socratic-item.open .socratic-q .s-toggle { transform: rotate(180deg); }
+.socratic-a {
+  max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .4s ease;
+  font-size: .85rem; color: var(--text-dim); line-height: 1.8;
+}
+.socratic-item.open .socratic-a {
+  max-height: 800px; padding: 0 20px 18px;
+}
+.socratic-a strong { color: var(--text-bright); }
 
-.score-bar { text-align:center; padding:16px; font-size:1.1rem; font-weight:600; color:var(--accent); }
-.progress-bar { width:100%; height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--accent2)); border-radius:4px; transition:width .5s ease; }
-.section-title { font-size:1.25rem; color:var(--accent); margin:32px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border); font-family:'Noto Sans SC',sans-serif; letter-spacing:1px; }
-
-/* Flip card */
-.flip-card { perspective:1000px; height:260px; margin-bottom:14px; }
-.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
-.flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back {
-  position:absolute; width:100%; height:100%;
-  backface-visibility:hidden; -webkit-backface-visibility:hidden;
-  border-radius:var(--radius); padding:24px;
-  display:flex; flex-direction:column; justify-content:center;
-  box-shadow:var(--shadow); border:1px solid var(--border);
+/* ===== 8. FLIP CARDS — Chapter 8 ===== */
+.flip-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px; margin-top: 20px;
 }
-.flip-front { background:var(--card); align-items:center; text-align:center; }
-.flip-back { background:linear-gradient(135deg,#fcfaf5,#f7f5ee); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:.85rem; }
-.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:10px 0; }
-.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
-.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
-.btn-outline:hover { background:var(--accent); color:#fff; }
-.btn-success { background:var(--success); color:#fff; }
+.flip-card { perspective: 800px; height: 240px; }
+.flip-card-inner {
+  width: 100%; height: 100%; transition: transform .6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d; cursor: pointer; position: relative;
+}
+.flip-card-inner.flipped { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius); padding: 20px;
+}
+.flip-card-front {
+  background: var(--bg-surface); border: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+}
+.flip-card-front .fc-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.flip-card-front .fc-title { font-weight: 800; font-size: .95rem; color: var(--microbiome-purple); }
+.flip-card-front .fc-hint { font-size: .72rem; color: var(--text-subtle); margin-top: 6px; }
+.flip-card-back {
+  background: var(--bg-surface2); border: 2px solid var(--microbiome-purple);
+  transform: rotateY(180deg); overflow-y: auto; padding: 16px;
+  font-size: .8rem; line-height: 1.7; color: var(--text-dim);
+}
+.flip-card-back h4 { color: var(--microbiome-purple); margin-bottom: 8px; font-size: .9rem; }
+.flip-card-back .tag {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: .62rem; font-weight: 700; margin-right: 4px; margin-bottom: 6px;
+}
+.tag-gut { background: rgba(155,109,255,.2); color: var(--microbiome-purple); }
+.tag-skin { background: rgba(77,166,204,.2); color: var(--membrane-blue); }
+.tag-brain { background: rgba(232,184,64,.2); color: var(--neuron-gold); }
 
+/* ===== OUTRO ===== */
+.outro {
+  text-align: center; padding: 80px 20px 60px; position: relative;
+  border-top: 1px solid var(--border);
+}
+.outro::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--leaf-dim), transparent);
+}
+.outro h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text-bright), var(--leaf-bright));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.outro p { font-size: 1rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 12px; line-height: 1.8; }
+.outro .quote {
+  font-size: 1.1rem; color: var(--leaf-green); font-style: italic;
+  margin-top: 24px; font-family: "Noto Serif SC", Georgia, serif;
+}
+.outro .quote .attribution { font-size: .8rem; color: var(--text-subtle); margin-top: 6px; font-style: normal; }
+
+/* ===== FOOTER ===== */
 .footer {
-  text-align:center; padding:32px 20px; margin-top:40px;
-  border-top:1px solid var(--border); color:var(--text-light);
-  font-size:.82rem;
+  text-align: center; padding: 40px 20px 32px;
+  border-top: 1px solid var(--border); color: var(--text-subtle); font-size: .8rem;
 }
-.footer a { color:var(--accent); text-decoration:none; }
+.footer a { color: var(--leaf-green); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ===== KNOWLEDGE METER ===== */
+.knowledge-meter {
+  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px 18px; font-size: .8rem;
+  display: flex; align-items: center; gap: 12px;
+  backdrop-filter: blur(12px); background: rgba(14,24,14,.9);
+  transition: opacity .5s;
+}
+.knowledge-meter .km-ring {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--border); position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.knowledge-meter .km-ring .km-pct { font-weight: 900; font-size: .9rem; color: var(--leaf-green); }
+.knowledge-meter .km-ring svg { position: absolute; top: -3px; left: -3px; }
+.knowledge-meter .km-ring svg circle {
+  fill: none; stroke: var(--leaf-green); stroke-width: 3;
+  stroke-linecap: round; transition: stroke-dashoffset .6s;
+}
+
+/* ===== KEY INSIGHT CARDS ===== */
+.insight-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px; margin-top: 20px;
+}
+.insight-card {
+  background: var(--bg-surface); border-radius: var(--radius);
+  padding: 18px; border: 1px solid var(--border);
+}
+.insight-card h4 { margin-bottom: 8px; }
+.insight-card p { font-size: .82rem; color: var(--text-dim); line-height: 1.7; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .top-nav { padding: 8px 12px; }
+  .top-nav .breadcrumb { display: none; }
+  .life-section { padding: 48px 14px; }
+  .excerpt-block { padding: 20px 18px; }
+  .flip-cards { grid-template-columns: 1fr; }
+  .flip-card { height: 200px; }
+  .knowledge-meter { bottom: 12px; right: 12px; padding: 10px 14px; font-size: .7rem; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.8rem; }
+  .hero .hero-stats { gap: 14px; }
+  .hero .hero-stat .num { font-size: 1.4rem; }
+  .insight-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
-<nav class="top-bar">
-  <span class="title">🧬 生命的算法</span>
-  <a href="index.html" class="home-btn">← 返回课程首页</a>
+<!-- ===== TOP NAV ===== -->
+<nav class="top-nav">
+  <a href="index.html" class="home-link">← 返回客厅</a>
+  <span class="breadcrumb">生命的算法 · 57篇深度文章 · 从分子自组装到人类意识</span>
 </nav>
 
-<div class="container">
-
-<!-- ===== HERO — DNA递归树 ===== -->
-<div class="hero">
-  <svg class="hero-svg" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="dnaGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#6b8c42"/><stop offset="50%" stop-color="#4a7c59"/><stop offset="100%" stop-color="#2a4a2a"/>
-      </linearGradient>
-      <radialGradient id="cellGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#fcfaf5" stop-opacity=".8"/>
-        <stop offset="100%" stop-color="#4a7c59" stop-opacity="0"/>
-      </radialGradient>
-      <filter id="softGlow"><feGaussianBlur stdDeviation="2"/></filter>
-    </defs>
-    <rect width="900" height="400" fill="none" rx="12"/>
-
-    <!-- Background organic texture -->
-    <g opacity=".1">
-      <circle cx="100" cy="80" r="60" fill="none" stroke="#4a7c59" stroke-width=".5"/>
-      <circle cx="800" cy="100" r="80" fill="none" stroke="#6b8c42" stroke-width=".5"/>
-      <circle cx="450" cy="300" r="120" fill="none" stroke="#4a7c59" stroke-width=".5"/>
-    </g>
-
-    <!-- DNA Double Helix — central motif -->
-    <g opacity=".9">
-      <!-- Strand 1 -->
-      <path d="M200,350 Q250,200 450,100 Q650,200 700,350" stroke="#4a7c59" stroke-width="3" fill="none"/>
-      <!-- Strand 2 -->
-      <path d="M200,350 Q250,500 450,200 Q650,500 700,350" stroke="#6b8c42" stroke-width="3" fill="none" opacity=".7"/>
-      <!-- Cross-links (base pairs) -->
-      <g stroke="#8b6914" stroke-width="1" opacity=".5">
-        <line x1="280" y1="280" x2="280" y2="320"/>
-        <line x1="350" y1="190" x2="350" y2="270"/>
-        <line x1="450" y1="150" x2="450" y2="210"/>
-        <line x1="550" y1="190" x2="550" y2="270"/>
-        <line x1="620" y1="280" x2="620" y2="320"/>
-      </g>
-    </g>
-
-    <!-- Branching tree — evolution radiating from DNA -->
-    <g opacity=".7">
-      <path d="M450,180 Q350,120 250,80" stroke="#4a7c59" stroke-width="1.5" fill="none"/>
-      <path d="M450,180 Q550,120 650,80" stroke="#4a7c59" stroke-width="1.5" fill="none"/>
-      <path d="M250,80 Q180,60 120,80" stroke="#6b8c42" stroke-width="1" fill="none"/>
-      <path d="M250,80 Q280,40 320,50" stroke="#6b8c42" stroke-width="1" fill="none"/>
-      <path d="M650,80 Q720,60 780,80" stroke="#6b8c42" stroke-width="1" fill="none"/>
-      <path d="M650,80 Q620,40 580,50" stroke="#6b8c42" stroke-width="1" fill="none"/>
-    </g>
-
-    <!-- Cell-like nodes -->
-    <g filter="url(#softGlow)">
-      <circle cx="120" cy="80" r="12" fill="url(#cellGlow)" opacity=".6" stroke="#4a7c59" stroke-width="1"/>
-      <circle cx="320" cy="50" r="10" fill="url(#cellGlow)" opacity=".6" stroke="#4a7c59" stroke-width="1"/>
-      <circle cx="580" cy="50" r="10" fill="url(#cellGlow)" opacity=".6" stroke="#4a7c59" stroke-width="1"/>
-      <circle cx="780" cy="80" r="12" fill="url(#cellGlow)" opacity=".6" stroke="#4a7c59" stroke-width="1"/>
-    </g>
-
-    <!-- Labels -->
-    <g font-family="'Noto Sans SC',sans-serif" font-size="9" opacity=".6">
-      <text x="200" y="370" fill="#e8e0cf">核酸</text>
-      <text x="700" y="370" fill="#e8e0cf">蛋白质</text>
-      <text x="120" y="68" fill="#e8e0cf">细胞</text>
-      <text x="310" y="35" fill="#e8e0cf">组织</text>
-      <text x="570" y="35" fill="#e8e0cf">器官</text>
-      <text x="770" y="68" fill="#e8e0cf">意识</text>
-    </g>
-
-    <!-- Title -->
-    <text x="450" y="30" fill="#f7f4ed" font-size="15" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="6" opacity=".8">生命的算法</text>
-    <text x="450" y="390" fill="#f7f4ed" font-size="11" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="3" opacity=".7">从DNA双螺旋到意识诞生，层层嵌套的生命逻辑</text>
-  </svg>
-  <div class="hero-caption">一个根本问题：无生命的分子，如何组装成能思考的生物？</div>
-</div>
-
-<!-- ===== TABS ===== -->
-<div class="tab-bar" id="tabBar">
-  <button class="tab-btn active" data-tab="tab0">🌱 起点：分子</button>
-  <button class="tab-btn" data-tab="tab1">🧬 核心概念</button>
-  <button class="tab-btn" data-tab="tab2">🗺️ 关系网络</button>
-  <button class="tab-btn" data-tab="tab3">🔬 层层追问</button>
-  <button class="tab-btn" data-tab="tab4">📜 演化历程</button>
-  <button class="tab-btn" data-tab="tab5">🧭 思维导图</button>
-  <button class="tab-btn" data-tab="tab6">⚠️ 知识边界</button>
-  <button class="tab-btn" data-tab="tab7">📝 题库系统</button>
-  <button class="tab-btn" data-tab="tab8">🎯 学以致用</button>
-</div>
-
-<!-- ===== TAB 0: 起点 ===== -->
-<div class="tab-panel active" id="tab0">
-  <div class="narrative-block">
-    <div class="lead">生命不是一团混沌——它是一套精密的算法</div>
-    <p>卓老板用了57篇文章，从分子机器讲到人类意识。这不是生物课的知识点罗列——这是一个侦探故事：<strong>无生命的碳、氢、氧、氮原子，怎么就组装成了能自我复制、能适应环境、能思考自身的生物？</strong></p>
-    <p>答案是：生命是一层一层搭建起来的。每一层都有它的"算法"——分子层面的自组装、细胞层面的信号传导、器官层面的协同、大脑层面的学习。理解生命，就是理解这种<strong>层层嵌套的算法架构</strong>。</p>
-  </div>
-
-  <div class="section-title">从文章里，听听卓老板怎么说</div>
-
-  <div class="article-excerpt">
-    <div class="excerpt-title">《大脑的进化就是一连串的意外》</div>
-    <p>大脑的进化不是"设计"出来的——是一连串意外的基因突变，碰巧让某些个体多活了一点点、多生了一点点。人类大脑今天的结构和功能，是几亿年进化试错的结果。</p>
-  </div>
-  <div class="article-excerpt">
-    <div class="excerpt-title">《解读2016年诺贝尔医学奖"细胞自噬"》</div>
-    <p>大隅良典发现了细胞自噬机制——细胞如何"吃掉"自己的损坏部分并回收利用。这不是细胞在"自残"，而是一套精密的内部质量管理系统。没有自噬，细胞就会积累垃圾、癌变。</p>
-  </div>
-  <div class="article-excerpt">
-    <div class="excerpt-title">《和微生物相处的日子》</div>
-    <p>如果把地球历史压缩到24小时，微生物在凌晨5点出现，智人在23点59分58秒出现。人体内80%的细胞不是人类细胞——是微生物。你不是"一个"生物，你是一个行走的生态系统。</p>
-  </div>
-  <div class="article-excerpt">
-    <div class="excerpt-title">《人类与抗生素的大乱斗》</div>
-    <p>1945年抗生素刚临床使用时，全年才64个处方。65年后，美国医生一年开出2.58亿个含抗生素的处方——增加了400万倍。一个人40岁前平均接受30次抗生素治疗。这是人类和细菌之间一场看不到尽头的军备竞赛。</p>
-  </div>
-  <div class="article-excerpt">
-    <div class="excerpt-title">《神经细胞的5次升级》</div>
-    <p>从最简单的神经网到人类大脑皮层，神经细胞经历了5次重大升级。每一次升级都不是"替换"——而是在旧系统上叠加新功能。你的大脑里现在还在运行着鱼类的脑干、爬行动物的基底核、哺乳动物的边缘系统。</p>
-  </div>
-  <div class="article-excerpt">
-    <div class="excerpt-title">《连环杀人案中的DNA技术》</div>
-    <p>DNA技术不仅改变了生物学——它改变了司法。从1986年第一次用DNA证据定罪，到如今能在几十年后从一根头发中锁定凶手。DNA是每个人身上携带的不可伪造的身份证明。</p>
-  </div>
-</div>
-
-<!-- ===== TAB 1: 核心概念 — 分层递进 ===== -->
-<div class="tab-panel" id="tab1">
-  <div class="section-title">十个核心概念 — 从分子到意识的四层结构</div>
-  <div class="narrative-block"><p>生命算法有四层：<strong>分子层→细胞层→个体层→意识层</strong>。每一层都有自己的核心概念。理解这四层，就理解了生命的完整架构。</p></div>
-
-  <div class="layer-stack">
-    <div class="layer-panel molecular">
-      <span class="layer-badge molecular">分子层</span>
-      <h3>① 基因表达与调控</h3>
-      <p>DNA不是一张静态的"蓝图"——它是一个动态的"程序"。同一个DNA序列在不同细胞中表达不同的基因。你的肝细胞和神经元拥有完全相同的DNA，但它们表达的基因只有约40%相同。基因调控决定了细胞"成为什么"——这个过程由转录因子、增强子、表观遗传标记共同协调。</p>
-    </div>
-    <div class="layer-panel molecular">
-      <span class="layer-badge molecular">分子层</span>
-      <h3>② 分子机器</h3>
-      <p>2016年诺贝尔化学奖。细胞里到处都是纳米尺度的机器：核糖体像3D打印机一样按RNA模板合成蛋白质，ATP合成酶像水车一样利用质子梯度制造能量货币，动力蛋白沿着微管"行走"运输货物——速度比战斗机快80%。</p>
-    </div>
-    <div class="layer-panel cellular">
-      <span class="layer-badge cellular">细胞层</span>
-      <h3>③ 细胞自噬</h3>
-      <p>2016年诺贝尔医学奖。细胞不是用完就扔——它有一套内部的回收系统。当细胞器损坏或营养匮乏时，自噬体包裹损坏部件，送到溶酶体"消化"，回收原材料。自噬失调与癌症、帕金森、衰老直接相关。</p>
-    </div>
-    <div class="layer-panel cellular">
-      <span class="layer-badge cellular">细胞层</span>
-      <h3>④ 端粒与衰老</h3>
-      <p>染色体末端的"保护帽"。细胞每分裂一次，端粒就短一截——短到极限，细胞就停止分裂（Hayflick极限）。癌细胞通过激活端粒酶来绕过这个限制，实现"永生"。端粒长度是细胞层面的"寿命倒计时器"。</p>
-    </div>
-    <div class="layer-panel cellular">
-      <span class="layer-badge cellular">细胞层</span>
-      <h3>⑤ 免疫系统</h3>
-      <p>不是一支"军队"——是一个多层防御网络。第一道：皮肤+粘膜→第二道：先天免疫（巨噬细胞、炎症反应）→第三道：适应性免疫（T细胞、B细胞、抗体）。疫苗的原理就是"训练"适应性免疫，让它记住敌人的模样而不用先打一仗。</p>
-    </div>
-    <div class="layer-panel organism">
-      <span class="layer-badge organism">个体层</span>
-      <h3>⑥ 微生物组</h3>
-      <p>人体内微生物总重0.67公斤，80%的"你的"细胞其实是微生物。它们帮你消化食物（15-25%的能量由结肠微生物提供）、训练免疫系统、甚至影响情绪。你不是"一个人"——你是一个生态系统。微生物组失调与肥胖、抑郁、自闭症相关。</p>
-    </div>
-    <div class="layer-panel organism">
-      <span class="layer-badge organism">个体层</span>
-      <h3>⑦ 自然选择</h3>
-      <p>进化的算法极其简单：变异+选择+遗传=适应。随机突变产生多样性，环境选择留下"够用的"，遗传把变化传下去。大脑进化是一连串意外——RNF213基因突变扩大了颈动脉直径，让大脑得到了足够多的血液供应，而这一切纯属偶然。</p>
-    </div>
-    <div class="layer-panel organism">
-      <span class="layer-badge organism">个体层</span>
-      <h3>⑧ 抗生素耐药性</h3>
-      <p>细菌用进化的速度回应人类的药物。抗生素杀死99.9%的细菌，但那0.1%有耐药基因的存活下来——然后在几小时内重新繁殖到原来的数量。这是人类可以亲眼目睹的"实时进化"。强的耐药菌无论有没有抗生素环境都比普通菌更有竞争力。</p>
-    </div>
-    <div class="layer-panel consciousness">
-      <span class="layer-badge consciousness">意识层</span>
-      <h3>⑨ 神经可塑性</h3>
-      <p>大脑不是硬连线——它在使用中不断重连。学习就是神经元之间建立新连接、加强常用连接、修剪不用的连接。成人大脑也能产生新神经元（在海马体）。"一万小时定律"的生物学基础就是神经可塑性。</p>
-    </div>
-    <div class="layer-panel consciousness">
-      <span class="layer-badge consciousness">意识层</span>
-      <h3>⑩ 感官构建现实</h3>
-      <p>你看到的"世界"不是世界本身——是你的大脑根据感官输入构建的模型。哺乳动物大多是色盲（只有2种视锥细胞），鸟类有4种视锥细胞能看到紫外线。不同物种"看到"的是不同版本的现实。你的现实不是唯一的现实。</p>
+<!-- ================================================================
+     HERO — Molecular self-assembly particle canvas
+     ================================================================ -->
+<section class="hero" id="hero">
+  <canvas id="molCanvas"></canvas>
+  <div class="hero-content">
+    <h1>生命的算法</h1>
+    <p class="subtitle">在碳氢氧氮原子的随机碰撞中，生命自发地搭建起一层又一层的算法——从分子机器到可以追问自身起源的大脑。</p>
+    <p class="question">无生命的原子，怎么组装成了能思考的生物？</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">38<small class="unit">亿年</small></div><div class="label">生命历史</div></div>
+      <div class="hero-stat"><div class="num">3×10<sup>9</sup></div><div class="label">碱基对/人类基因组</div></div>
+      <div class="hero-stat"><div class="num">86×10<sup>9</sup></div><div class="label">神经元/人脑</div></div>
+      <div class="hero-stat"><div class="num">39×10<sup>12</sup></div><div class="label">微生物/人体</div></div>
     </div>
   </div>
+  <div class="scroll-hint">
+    <span>↓ 开始生命旅程</span>
+  </div>
+</section>
 
-  <!-- Flip card navigation -->
-  <div class="section-title">翻转卡片 — 深入理解每个概念</div>
-  <div class="flip-card">
-    <div class="flip-inner" id="flipInner2" onclick="this.classList.toggle('flipped')">
-      <div class="flip-front"><span style="font-size:3rem;">🧬</span><h3 style="margin-top:8px;">基因表达</h3><p style="color:var(--text-light);font-size:.85rem;">点击翻转了解详情</p></div>
-      <div class="flip-back"><h4>为什么DNA不是蓝图而是程序？</h4><p>蓝图意味着"相同的图纸→相同的产品"。但你的肝细胞和神经元拥有完全相同的DNA——它们的不同在于<strong>哪些基因被打开，哪些被关闭</strong>。这就像同一段代码在不同条件下执行不同的分支。表观遗传标记（DNA甲基化、组蛋白修饰）是基因的"开关面板"——环境、饮食、压力都能改变这些开关。</p></div>
+<!-- ================================================================
+     CHAPTER 1: 起点 — 分子自组装
+     ================================================================ -->
+<section class="life-section" id="ch1" style="border-top:none;">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 01</div>
+      <h2>起点：分子自组装——生命怎么从无到有</h2>
+      <p>38亿年前的地球，只有岩石、水和简单分子。没有设计师，没有图纸——但碳、氢、氧、氮这些原子自发地组合成了能自我复制的RNA、能折叠成精密机器的蛋白质、能存储信息的DNA。</p>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">🧬 《和微生物相处的日子》</div>
+      <div class="excerpt-text">
+        如果把地球历史压缩到24小时，微生物在凌晨5点出现，智人在23点59分58秒出现。人体内80%的细胞不是人类细胞——是微生物。你不是"一个"生物，你是一个<strong>行走的生态系统</strong>。
+      </div>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">🧪 《解读2016年诺贝尔医学奖"细胞自噬"》</div>
+      <div class="excerpt-text">
+        大隅良典发现了细胞自噬机制——细胞如何"吃掉"自己的损坏部分并回收利用。这不是细胞在"自残"，而是一套<strong>精密的内部质量管理系统</strong>。没有自噬，细胞就会积累垃圾、癌变。
+      </div>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">🔬 《分子机器——2016年诺贝尔化学奖》</div>
+      <div class="excerpt-text">
+        细胞里到处都是纳米尺度的精密机器：核糖体像3D打印机一样按RNA模板合成蛋白质，ATP合成酶像水车一样利用质子梯度制造能量货币，动力蛋白沿着微管"行走"运输货物——<strong>速度比战斗机快80%</strong>。这些不是比喻，是精确的物理描述。
+      </div>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <h4 style="color:var(--leaf-green);">🔑 生命=自我复制+代谢+演化</h4>
+        <p>NASA对生命的定义性特征：能自我复制、进行新陈代谢、通过自然选择演化。一袋氨基酸放在那里不会自动变成蛋白质——但创造一个能自我复制的分子，剩下的交给几十亿年的物理和化学。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--membrane-blue);">🧪 RNA世界假说</h4>
+        <p>1986年诺奖得主吉尔伯特提出：最早的"生命"可能是RNA——它可以同时储存信息（像DNA）和催化化学反应（像蛋白质）。RNA是既能当硬盘又能当CPU的分子。今天生命用DNA存信息、蛋白质做催化——这是分工后的产物。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--rna-pink);">🔄 手性之谜</h4>
+        <p>氨基酸有左手和右手两种镜像——但地球上所有生物只用左手氨基酸。为什么？没人确切知道。可能是一开始随机的选择，然后像滚雪球一样被锁定了。如果你的氨基酸手性反转，你就不能消化地球上任何生物。</p>
+      </div>
     </div>
   </div>
-  <div class="flip-nav">
-    <button class="btn btn-outline" onclick="prevConcept2()">◀ 上一个</button>
-    <span id="conceptCounter2" style="font-size:.85rem;color:var(--text-light);">1 / 10</span>
-    <button class="btn btn-outline" onclick="nextConcept2()">下一个 ▶</button>
+</section>
+
+<!-- ================================================================
+     CHAPTER 2: 信息 — 基因的编码与表达 (Canvas animation)
+     ================================================================ -->
+<section class="life-section" id="ch2">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 02</div>
+      <h2>信息：基因的编码与表达——生命的第一语言</h2>
+      <p>DNA不是一张静态的"蓝图"，而是一个动态的"程序"。同样的基因序列，在肝细胞和神经元中表达不同的蛋白质——基因调控决定了"你是谁"的每个细节。</p>
+    </div>
+
+    <div class="dna-demo">
+      <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:14px;">🧬 动态DNA双螺旋 — 观察信息如何在分子结构中流动</p>
+      <canvas id="dnaCanvas" width="800" height="280"></canvas>
+      <div class="dna-caption" id="dnaCaption">
+        双螺旋结构：两条糖-磷酸骨架（绿线）通过碱基对（A-T, C-G）连接。这些碱基的排列顺序就是"生命的源代码"——3个连续碱基对应一个氨基酸，整个基因序列决定了蛋白质的结构和功能。
+      </div>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">🔍 《连环杀人案中的DNA技术》</div>
+      <div class="excerpt-text">
+        DNA技术不仅改变了生物学——它改变了司法。从1986年第一次用DNA证据定罪，到如今能在几十年后从一根头发中锁定凶手。<strong>DNA是每个人身上携带的不可伪造的身份证明</strong>。
+      </div>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <h4 style="color:var(--leaf-green);">📖 中心法则</h4>
+        <p>DNA → RNA → 蛋白质。信息从DNA转录成信使RNA，再翻译成蛋白质。但这不是单向的——逆转录酶能从RNA反转为DNA（HIV病毒就这样复制）。生命的"信息流"比教科书上的中心法则更复杂。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--membrane-blue);">🎛️ 表观遗传</h4>
+        <p>你的DNA序列一生不变——但基因的"开关"可以改变。DNA甲基化和组蛋白修饰就像基因的调光开关：环境、饮食、压力都能影响哪些基因被表达。同卵双胞胎的DNA完全相同，但随着年龄增长，他们的表观遗传标记越来越不同。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--rna-pink);">✂️ CRISPR</h4>
+        <p>细菌用来对抗病毒的免疫系统，被人类改造成了基因编辑工具。Cas9蛋白像一个"基因剪刀"，在guide RNA指引下精确剪切特定DNA序列。2020年诺贝尔化学奖。这项技术的潜力和伦理争议一样大。</p>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- ===== TAB 2: 概念关系网络SVG ===== -->
-<div class="tab-panel" id="tab2">
-  <div class="section-title">生命算法关系网络 — 四层结构的交织</div>
-  <div class="narrative-block"><p>这不是知识点图解——这是生命算法的调用关系图。从DNA到意识，每一个箭头都是一个"调用了下一层"的接口。</p></div>
-  <div class="svg-stage">
-    <svg viewBox="0 0 880 580" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="sd"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#2a241a" flood-opacity=".08"/></filter>
-        <marker id="ag" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a7c59"/></marker>
-        <marker id="ae" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8b6914"/></marker>
-      </defs>
-      <rect width="880" height="580" fill="#fcfaf5" rx="12"/>
+<!-- ================================================================
+     CHAPTER 3: 能量 — 细胞代谢引擎 (SVG diagram)
+     ================================================================ -->
+<section class="life-section" id="ch3">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 03</div>
+      <h2>能量：细胞的代谢引擎——你是一座发电站</h2>
+      <p>你身体的每个细胞里，都有数百个"发电厂"——线粒体。它们曾经是独立的细菌，20亿年前被祖先细胞吞入，从此共生。每一次呼吸，都是这场古老联盟的延续。</p>
+    </div>
 
-      <!-- Layer backgrounds -->
-      <rect x="30" y="30" width="820" height="110" rx="10" fill="rgba(74,124,89,.04)" stroke="#4a7c59" stroke-width=".5" stroke-dasharray="4,4"/>
-      <text x="50" y="52" fill="#4a7c59" font-size="10" font-family="'Noto Sans SC',sans-serif" opacity=".7">分子层</text>
+    <div class="energy-demo">
+      <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="mitoGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#4cc96e" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#4cc96e" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="mitoGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a3a2a"/>
+            <stop offset="100%" stop-color="#0e180e"/>
+          </linearGradient>
+          <filter id="gG"><feGaussianBlur stdDeviation="2"/></filter>
+        </defs>
+        <rect width="800" height="380" fill="#0a120a" rx="12"/>
 
-      <rect x="30" y="155" width="820" height="110" rx="10" fill="rgba(107,140,66,.04)" stroke="#6b8c42" stroke-width=".5" stroke-dasharray="4,4"/>
-      <text x="50" y="177" fill="#6b8c42" font-size="10" font-family="'Noto Sans SC',sans-serif" opacity=".7">细胞层</text>
+        <!-- Background decoration -->
+        <g opacity="0.08">
+          <circle cx="100" cy="60" r="50" fill="none" stroke="#4cc96e" stroke-width="0.5"/>
+          <circle cx="700" cy="320" r="70" fill="none" stroke="#4cc96e" stroke-width="0.5"/>
+        </g>
 
-      <rect x="30" y="280" width="820" height="110" rx="10" fill="rgba(139,105,20,.04)" stroke="#8b6914" stroke-width=".5" stroke-dasharray="4,4"/>
-      <text x="50" y="302" fill="#8b6914" font-size="10" font-family="'Noto Sans SC',sans-serif" opacity=".7">个体/种群层</text>
+        <!-- Mitochondrion -- cross-section -->
+        <g transform="translate(400,190)">
+          <!-- Outer membrane -->
+          <ellipse cx="0" cy="0" rx="260" ry="130" fill="none" stroke="#4da6cc" stroke-width="2" opacity="0.6"/>
+          <!-- Inner membrane (cristae) -->
+          <ellipse cx="0" cy="0" rx="240" ry="115" fill="none" stroke="#4cc96e" stroke-width="1.5" opacity="0.8"/>
+          <!-- Cristae folds inside -->
+          <g stroke="#4cc96e" stroke-width="1" opacity="0.4" fill="none">
+            <path d="M-180,0 Q-120,-80 -80,-10 Q-40,60 0,20 Q40,-20 80,40 Q120,100 180,-20"/>
+            <path d="M-160,20 Q-100,-60 -60,10 Q-20,80 20,0 Q60,-80 100,10 Q140,100 200,-40"/>
+            <path d="M-140,40 Q-80,-40 -40,30 Q0,100 60,-10 Q100,-120 140,0"/>
+          </g>
+          <!-- Matrix -->
+          <ellipse cx="0" cy="0" rx="230" ry="108" fill="url(#mitoGlow)" opacity="0.3"/>
 
-      <rect x="30" y="405" width="820" height="145" rx="10" fill="rgba(196,120,65,.04)" stroke="#c47841" stroke-width=".5" stroke-dasharray="4,4"/>
-      <text x="50" y="427" fill="#c47841" font-size="10" font-family="'Noto Sans SC',sans-serif" opacity=".7">意识层</text>
+          <!-- ATP synthase machines (little circles along inner membrane) -->
+          <g fill="#f07040" opacity="0.7">
+            <circle cx="-150" cy="-70" r="6" filter="url(#gG)"/>
+            <circle cx="-80" cy="-95" r="6" filter="url(#gG)"/>
+            <circle cx="0" cy="-100" r="6" filter="url(#gG)"/>
+            <circle cx="80" cy="-85" r="6" filter="url(#gG)"/>
+            <circle cx="150" cy="-60" r="6" filter="url(#gG)"/>
+            <circle cx="-150" cy="70" r="6" filter="url(#gG)"/>
+            <circle cx="-50" cy="95" r="6" filter="url(#gG)"/>
+            <circle cx="60" cy="90" r="6" filter="url(#gG)"/>
+            <circle cx="150" cy="50" r="6" filter="url(#gG)"/>
+          </g>
 
-      <!-- Nodes -->
-      <g filter="url(#sd)">
-        <!-- Molecular -->
-        <rect x="80" y="65" width="150" height="42" rx="21" fill="#4a7c59"/><text x="155" y="91" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">基因表达</text>
-        <rect x="280" y="65" width="150" height="42" rx="21" fill="#4a7c59"/><text x="355" y="91" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">分子机器</text>
+          <!-- Labels -->
+          <text x="0" y="-148" fill="#8080a0" font-size="11" text-anchor="middle">线粒体横截面</text>
+          <text x="220" y="0" fill="#4da6cc" font-size="8">外膜</text>
+          <text x="190" y="-18" fill="#4cc96e" font-size="8">内膜(嵴)</text>
+          <text x="0" y="145" fill="#f07040" font-size="8" text-anchor="middle">ATP合成酶</text>
+          <text x="-200" y="-60" fill="#f07040" font-size="8">H⁺</text>
+          <text x="200" y="50" fill="#f07040" font-size="8">H⁺</text>
+          <text x="0" y="165" fill="#8080a0" font-size="9" text-anchor="middle">1个葡萄糖分子 → 约30-32个ATP分子</text>
+        </g>
 
-        <!-- Cellular -->
-        <rect x="80" y="190" width="130" height="42" rx="21" fill="#6b8c42"/><text x="145" y="216" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">细胞自噬</text>
-        <rect x="250" y="190" width="130" height="42" rx="21" fill="#6b8c42"/><text x="315" y="216" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">端粒</text>
-        <rect x="420" y="190" width="130" height="42" rx="21" fill="#6b8c42"/><text x="485" y="216" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">免疫系统</text>
+        <!-- Left: simplified process -->
+        <g transform="translate(60,60)">
+          <rect x="0" y="0" width="130" height="35" rx="17" fill="#1a3a2a" stroke="#4cc96e" stroke-width="1"/>
+          <text x="65" y="23" fill="#4cc96e" font-size="10" text-anchor="middle">葡萄糖 C₆H₁₂O₆</text>
+          <text x="80" y="55" fill="#8080a0" font-size="9" text-anchor="middle">↓ 糖酵解</text>
+          <rect x="0" y="65" width="130" height="35" rx="17" fill="#1a3a2a" stroke="#f07040" stroke-width="1"/>
+          <text x="65" y="88" fill="#f07040" font-size="10" text-anchor="middle">丙酮酸</text>
+          <text x="80" y="115" fill="#8080a0" font-size="9" text-anchor="middle">↓ 进入线粒体</text>
+          <rect x="0" y="125" width="130" height="35" rx="17" fill="#1a3a2a" stroke="#e8b840" stroke-width="1"/>
+          <text x="65" y="148" fill="#e8b840" font-size="10" text-anchor="middle">乙酰CoA</text>
+          <text x="80" y="175" fill="#8080a0" font-size="9" text-anchor="middle">↓ 三羧酸循环</text>
+          <rect x="0" y="185" width="130" height="35" rx="17" fill="#1a3a2a" stroke="#4da6cc" stroke-width="1"/>
+          <text x="65" y="208" fill="#4da6cc" font-size="10" text-anchor="middle">NADH + FADH₂</text>
+          <text x="80" y="235" fill="#8080a0" font-size="9" text-anchor="middle">↓ 氧化磷酸化</text>
+          <rect x="0" y="245" width="130" height="35" rx="17" fill="#1a3a2a" stroke="#4cc96e" stroke-width="1.5"/>
+          <text x="65" y="268" fill="#4cc96e" font-size="10" text-anchor="middle">ATP ⚡</text>
+        </g>
 
-        <!-- Organism -->
-        <rect x="80" y="315" width="150" height="42" rx="21" fill="#8b6914"/><text x="155" y="341" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">微生物组</text>
-        <rect x="280" y="315" width="150" height="42" rx="21" fill="#8b6914"/><text x="355" y="341" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">自然选择</text>
-        <rect x="480" y="315" width="180" height="42" rx="21" fill="#8b6914"/><text x="570" y="341" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">抗生素耐药性</text>
+        <!-- Right: key facts -->
+        <g transform="translate(640,50)">
+          <text x="0" y="0" fill="#4cc96e" font-size="10" font-weight="600">关键数据</text>
+          <text x="0" y="22" fill="#8080a0" font-size="8">• 每个细胞含 100-1000 个线粒体</text>
+          <text x="0" y="40" fill="#8080a0" font-size="8">• 线粒体有自己独立的DNA</text>
+          <text x="0" y="58" fill="#8080a0" font-size="8">• 线粒体DNA仅来自母亲</text>
+          <text x="0" y="76" fill="#8080a0" font-size="8">• 人体每天产生 ≈ 自身体重</text>
+          <text x="10" y="90" fill="#8080a0" font-size="8">的ATP（约50-75kg）</text>
+          <text x="0" y="112" fill="#8080a0" font-size="8">• 线粒体功能障碍与衰老、</text>
+          <text x="10" y="126" fill="#8080a0" font-size="8">帕金森、糖尿病相关</text>
+          <text x="0" y="152" fill="#e8b840" font-size="9" font-weight="600">共生起源</text>
+          <text x="0" y="172" fill="#8080a0" font-size="8">20亿年前，一个厌氧古菌</text>
+          <text x="0" y="190" fill="#8080a0" font-size="8">吞入了一个好氧细菌——</text>
+          <text x="0" y="208" fill="#8080a0" font-size="8">这个细菌最终演变成了</text>
+          <text x="0" y="226" fill="#8080a0" font-size="8">所有真核细胞的线粒体</text>
+        </g>
+      </svg>
+    </div>
 
-        <!-- Consciousness -->
-        <rect x="150" y="455" width="170" height="42" rx="21" fill="#c47841"/><text x="235" y="481" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">神经可塑性</text>
-        <rect x="420" y="455" width="170" height="42" rx="21" fill="#c47841"/><text x="505" y="481" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">感官构建现实</text>
-      </g>
+    <div class="excerpt-block" style="margin-top:20px;">
+      <div class="excerpt-title">⚡ 《离子泵——生命的能量货币》</div>
+      <div class="excerpt-text">
+        细胞膜上的钠钾泵每秒钟泵出3个钠离子、泵入2个钾离子——<strong>以每秒100次的速度</strong>。这个看似微小的浓度差，维持了细胞的"电池电压"约-70mV。你大脑思考时消耗的能量，有三分之二用于维持离子泵运转。没有离子泵，思考就不可能发生。
+      </div>
+    </div>
+  </div>
+</section>
 
-      <!-- Connections -->
-      <path d="M155,107 Q155,150 145,190" stroke="#4a7c59" stroke-width="1.2" fill="none" marker-end="url(#ag)" opacity=".5"/>
-      <path d="M355,107 Q355,150 315,190" stroke="#4a7c59" stroke-width="1.2" fill="none" marker-end="url(#ag)" opacity=".5"/>
-      <path d="M145,232 Q220,270 155,315" stroke="#6b8c42" stroke-width="1" fill="none" marker-end="url(#ag)" opacity=".4"/>
-      <path d="M315,232 Q315,280 355,315" stroke="#6b8c42" stroke-width="1" fill="none" marker-end="url(#ag)" opacity=".4"/>
-      <path d="M485,232 Q500,280 570,315" stroke="#6b8c42" stroke-width="1" fill="none" marker-end="url(#ag)" opacity=".4"/>
-      <path d="M155,357 Q180,400 235,455" stroke="#8b6914" stroke-width="1" fill="none" marker-end="url(#ae)" opacity=".4"/>
-      <path d="M355,357 Q370,400 235,455" stroke="#8b6914" stroke-width="1" fill="none" marker-end="url(#ae)" opacity=".3"/>
-      <path d="M570,357 Q540,400 505,455" stroke="#8b6914" stroke-width="1" fill="none" marker-end="url(#ae)" opacity=".4"/>
+<!-- ================================================================
+     CHAPTER 4: 边界 — 细胞膜 (SVG diagram)
+     ================================================================ -->
+<section class="life-section" id="ch4">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 04</div>
+      <h2>边界：细胞膜与内外之分——生命的第一个"自我"</h2>
+      <p>每一个生命都需要知道"我"在哪里结束，世界从哪里开始。细胞膜就是这条边界——它不是一堵死墙，而是一个智能门禁系统，持续地筛选什么可以进、什么必须出。</p>
+    </div>
 
-      <text x="440" y="25" fill="#4a7c59" font-size="14" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">生命算法调用关系图</text>
+    <div class="membrane-viz">
+      <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="ms"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/></filter>
+        </defs>
+        <rect width="800" height="320" fill="#0a120a" rx="12"/>
+
+        <!-- Membrane bilayer -->
+        <g transform="translate(0,120)" filter="url(#ms)">
+          <!-- Upper hydrophilic heads -->
+          <g fill="#4da6cc" opacity="0.8">
+            <circle cx="40" cy="20" r="10"/><circle cx="80" cy="18" r="10"/>
+            <circle cx="120" cy="22" r="10"/><circle cx="160" cy="19" r="10"/>
+            <circle cx="200" cy="21" r="10"/><circle cx="240" cy="20" r="10"/>
+            <circle cx="280" cy="18" r="10"/><circle cx="320" cy="22" r="10"/>
+            <circle cx="360" cy="20" r="10"/><circle cx="400" cy="19" r="10"/>
+            <circle cx="440" cy="21" r="10"/><circle cx="480" cy="20" r="10"/>
+            <circle cx="520" cy="18" r="10"/><circle cx="560" cy="22" r="10"/>
+            <circle cx="600" cy="20" r="10"/><circle cx="640" cy="19" r="10"/>
+            <circle cx="680" cy="21" r="10"/><circle cx="720" cy="20" r="10"/>
+            <circle cx="760" cy="18" r="10"/>
+          </g>
+          <!-- Tail region -->
+          <rect x="0" y="30" width="800" height="40" fill="#1a2a1a" opacity="0.6"/>
+          <!-- Lower hydrophilic heads -->
+          <g fill="#4da6cc" opacity="0.8">
+            <circle cx="40" cy="70" r="10"/><circle cx="80" cy="68" r="10"/>
+            <circle cx="120" cy="72" r="10"/><circle cx="160" cy="69" r="10"/>
+            <circle cx="200" cy="71" r="10"/><circle cx="240" cy="70" r="10"/>
+            <circle cx="280" cy="68" r="10"/><circle cx="320" cy="72" r="10"/>
+            <circle cx="360" cy="70" r="10"/><circle cx="400" cy="69" r="10"/>
+            <circle cx="440" cy="71" r="10"/><circle cx="480" cy="70" r="10"/>
+            <circle cx="520" cy="68" r="10"/><circle cx="560" cy="72" r="10"/>
+            <circle cx="600" cy="70" r="10"/><circle cx="640" cy="69" r="10"/>
+            <circle cx="680" cy="71" r="10"/><circle cx="720" cy="70" r="10"/>
+            <circle cx="760" cy="68" r="10"/>
+          </g>
+
+          <!-- Channel protein -->
+          <rect x="310" y="10" width="60" height="90" rx="8" fill="#1a3040" stroke="#4da6cc" stroke-width="1.5" opacity="0.9"/>
+          <ellipse cx="340" cy="55" rx="12" ry="20" fill="#0a120a" stroke="#4cc96e" stroke-width="1"/>
+          <!-- Ion going through -->
+          <circle cx="340" cy="45" r="4" fill="#e8b840" opacity="0.8"/>
+          <circle cx="340" cy="55" r="4" fill="#e8b840" opacity="0.8"/>
+          <circle cx="340" cy="65" r="4" fill="#e8b840" opacity="0.6"/>
+
+          <!-- Receptor protein -->
+          <rect x="530" y="5" width="50" height="100" rx="6" fill="#1a202a" stroke="#e06080" stroke-width="1.5" opacity="0.9"/>
+          <circle cx="555" cy="0" r="8" fill="none" stroke="#e06080" stroke-width="1.5"/>
+          <text x="555" y="-10" fill="#e06080" font-size="7" text-anchor="middle">信号分子</text>
+
+          <!-- Transporter -->
+          <rect x="150" y="8" width="70" height="95" rx="8" fill="#1a2a2a" stroke="#f07040" stroke-width="1.5" opacity="0.9"/>
+          <rect x="160" y="18" width="50" height="20" rx="3" fill="#4a1515" stroke="#f07040" stroke-width="0.5"/>
+          <text x="185" y="32" fill="#f07040" font-size="7" text-anchor="middle">载体蛋白</text>
+        </g>
+
+        <!-- Labels -->
+        <text x="400" y="45" fill="#8080a0" font-size="13" text-anchor="middle" font-weight="600">细胞膜的"流动镶嵌模型"</text>
+        <text x="400" y="240" fill="#8080a0" font-size="9" text-anchor="middle">磷脂双分子层：亲水头(蓝)朝外 + 疏水尾(暗绿)朝内</text>
+        <text x="400" y="260" fill="#4da6cc" font-size="8" text-anchor="middle">离子通道（中）· 载体蛋白（左）· 受体（右）</text>
+        <text x="400" y="280" fill="#8080a0" font-size="8" text-anchor="middle" opacity="0.6">细胞膜 = 结构边界 + 物质运输 + 信号接收 + 细胞识别</text>
+      </svg>
+
+      <div class="membrane-info">
+        <div class="membrane-info-card active">
+          <h4>🫧 磷脂双分子层</h4>
+          <p>细胞膜的基本结构。每个磷脂分子有一个亲水头（喜欢水）和两条疏水尾（讨厌水）——在水中自发排列成双层，疏水尾藏在中间。这是物理定律直接驱动的"自组装"。</p>
+        </div>
+        <div class="membrane-info-card">
+          <h4>🚪 选择性通透</h4>
+          <p>小分子（O₂、CO₂）可以直接穿过。水分子通过水通道蛋白（aquaporin）进出。大分子和离子需要专门的转运蛋白。细胞膜不是一堵墙——是一个智能门禁系统。</p>
+        </div>
+        <div class="membrane-info-card">
+          <h4>📡 信号接收</h4>
+          <p>膜上的受体蛋白像天线一样接收外部信号（激素、神经递质）。信号分子与受体结合→触发胞内级联反应→改变细胞行为。你的每一次情绪波动，都始于某个受体被激活。</p>
+        </div>
+        <div class="membrane-info-card">
+          <h4>⚡ 膜电位</h4>
+          <p>钠钾泵维持细胞内外Na⁺和K⁺的不对称分布，形成约-70mV的膜电位。神经元利用这个"电池"产生动作电位——电信号沿轴突以每秒100米的速度传播。你读这句话时，这种电信号正在你的大脑中奔涌。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHAPTER 5: 协作 — 多细胞生命的诞生 (Interactive timeline)
+     ================================================================ -->
+<section class="life-section" id="ch5">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 05</div>
+      <h2>协作：多细胞生命的诞生——当细胞学会合作</h2>
+      <p>单细胞生命在地球上存在了25亿年后，才迈出最关键的一步：从"各自为政"升级为"协同作战"。这一步打开了复杂生命的所有可能性——从海绵到人类。</p>
+    </div>
+
+    <div class="evo-timeline">
+      <div class="evo-event active" onclick="this.classList.toggle('active')">
+        <div class="evo-card">
+          <span class="evo-emoji">🦠</span>
+          <div class="evo-era">38亿年前</div>
+          <div class="evo-title">单细胞生命</div>
+          <p>最原始的原核生物（细菌和古菌）。没有细胞核，没有细胞器——但已经有了DNA、核糖体、细胞膜这三件"生命的基本装备"。它们统治了地球20多亿年。</p>
+        </div>
+        <div class="evo-dot"></div>
+        <div class="evo-spacer"></div>
+      </div>
+      <div class="evo-event" onclick="this.classList.toggle('active')">
+        <div class="evo-spacer"></div>
+        <div class="evo-dot"></div>
+        <div class="evo-card">
+          <span class="evo-emoji">🔬</span>
+          <div class="evo-era">20亿年前</div>
+          <div class="evo-title">真核细胞登场</div>
+          <p>一个古菌吞入了一个好氧细菌（后来的线粒体）。这个内共生事件诞生了真核细胞——有细胞核、有细胞器、能进行有氧呼吸。这是生命史上最重要的"并购案"。</p>
+        </div>
+      </div>
+      <div class="evo-event" onclick="this.classList.toggle('active')">
+        <div class="evo-card">
+          <span class="evo-emoji">🧽</span>
+          <div class="evo-era">6亿年前</div>
+          <div class="evo-title">多细胞生物</div>
+          <p>细胞学会了粘在一起、分工合作。海绵代表了最原始的多细胞组织——把单个海绵细胞打散放在培养皿里，它们会重新聚集形成新的海绵。合作代码写在基因里。</p>
+        </div>
+        <div class="evo-dot"></div>
+        <div class="evo-spacer"></div>
+      </div>
+      <div class="evo-event" onclick="this.classList.toggle('active')">
+        <div class="evo-spacer"></div>
+        <div class="evo-dot"></div>
+        <div class="evo-card">
+          <span class="evo-emoji">🐟</span>
+          <div class="evo-era">5.4亿年前</div>
+          <div class="evo-title">寒武纪大爆发</div>
+          <p>在相对较短的地质时期内（约2000万年），绝大多数动物门类同时出现。三叶虫、奇虾、最早的脊椎动物——身体结构方案的大规模实验。原因可能包括氧气增加、Hox基因的演化、以及捕食者-猎物"军备竞赛"的启动。</p>
+        </div>
+      </div>
+      <div class="evo-event" onclick="this.classList.toggle('active')">
+        <div class="evo-card">
+          <span class="evo-emoji">🦎</span>
+          <div class="evo-era">3.7亿年前</div>
+          <div class="evo-title">登陆</div>
+          <p>鱼鳍变成四肢，鳃变成肺。第一条走上陆地的鱼（提塔利克鱼）是"缺环"的经典例子——它是鱼和四足动物之间的过渡形态，2004年在加拿大北极地区发现。从水到陆，这是生命史上最大胆的迁徙。</p>
+        </div>
+        <div class="evo-dot"></div>
+        <div class="evo-spacer"></div>
+      </div>
+      <div class="evo-event" onclick="this.classList.toggle('active')">
+        <div class="evo-spacer"></div>
+        <div class="evo-dot"></div>
+        <div class="evo-card">
+          <span class="evo-emoji">👤</span>
+          <div class="evo-era">30万年前</div>
+          <div class="evo-title">智人</div>
+          <p>先直立行走（约400万年前），然后大脑膨胀（约200万年前）。RNF213基因突变扩大了颈动脉直径，大脑获得足够血液供应——这纯属偶然。人类的"智能"不是被设计出来的，是一连串意外突变被自然选择筛选的结果。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">🧠 《大脑的进化就是一连串的意外》</div>
+      <div class="excerpt-text">
+        大脑的进化不是"设计"出来的——是一连串意外的基因突变，碰巧让某些个体多活了一点点、多生了一点点。人类大脑今天的结构和功能，是几亿年进化试错的结果。<strong>你的大脑里住着一整部进化史：鱼类的脑干、爬行动物的基底核、哺乳动物的边缘系统——都在里面，一层叠一层。</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHAPTER 6: 信号 — 神经系统演化 (Canvas animation)
+     ================================================================ -->
+<section class="life-section" id="ch6">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 06</div>
+      <h2>信号：神经系统的演化——从神经网到主观世界</h2>
+      <p>神经系统是生命算法中最精彩的一章。从水母的弥散神经网到人脑的860亿个神经元——每一次升级都是在旧系统上叠加新功能，就像一座从未拆除过地基的建筑。</p>
+    </div>
+
+    <div class="neural-demo">
+      <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:10px;">🧠 神经网络脉冲传导 — 信号如何在神经元之间跳跃</p>
+      <canvas id="neuralCanvas" width="800" height="300"></canvas>
+      <div class="neural-caption" id="neuralCaption">
+        动作电位沿轴突传播，在突触处释放神经递质，传递给下一个神经元——整个过程用时不超5毫秒。你的每一个想法，都是数十亿个这样的事件在瞬间的协同。
+      </div>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">📡 《神经细胞的5次升级》</div>
+      <div class="excerpt-text">
+        从最简单的神经网到人类大脑皮层，神经细胞经历了5次重大升级：弥散神经网（水母级）→ 神经节集中（蠕虫级）→ 脑干+小脑（鱼类级）→ 边缘系统（爬行动物级）→ 新皮层（哺乳动物级）。每一次升级都不是"替换"——<strong>而是在旧系统上叠加新功能</strong>。
+      </div>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <h4 style="color:var(--neuron-gold);">🔌 神经可塑性</h4>
+        <p>大脑不是硬连线——在使用中不断重连。学习就是神经元之间建立新连接、加强常用连接、修剪不用的连接。成人大脑海马体也能产生新神经元。"一万小时定律"的生物学基础就是神经可塑性：反复练习=反复重塑神经回路。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--leaf-green);">👁️ 感官构建现实</h4>
+        <p>你看到的"世界"不是世界本身——是你的大脑根据感官输入构建的模型。视杆细胞和视锥细胞将光信号转化为电信号，然后大脑"构建"出你看到的画面。30%来自眼睛输入，70%来自大脑预测和填补。不同物种"看到"的是不同版本的现实。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--rna-pink);">🪞 镜像神经元</h4>
+        <p>看到别人做动作时，你自己大脑中对应的运动神经元也会被激活——就像你在"模拟"对方的行为。这被认为是共情和模仿学习的神经基础。看到别人痛苦时你的心一紧——不是比喻，是镜像神经元在工作。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHAPTER 7: 意识 — Socratic expandable Q&A
+     ================================================================ -->
+<section class="life-section" id="ch7">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 07</div>
+      <h2>意识：大脑如何产生主观体验——最难的问题</h2>
+      <p>860亿个神经元，100万亿个突触连接。但这些物理过程怎么就产生了"我"这种主观体验？为什么红色是"红"而不是你听到的某种声音？这个"困难问题"至今没有共识——但追问本身，就是人类最独特的品质。</p>
+    </div>
+
+    <div class="socratic-block" id="socraticBlock">
+      <div class="socratic-item">
+        <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">
+          既然大脑是一连串意外的产物，我们还能信任自己的思维吗？
+          <span class="s-toggle">▼</span>
+        </div>
+        <div class="socratic-a">
+          卓克在节目中多次谈到这个观点：大脑的进化不是为了"寻找真理"——而是为了"生存"。我们的大脑擅长识别模式（即便模式不存在——这就是迷信的来源）、快速判断（即便判断有偏误——这就是认知偏误的来源）。<br><br>
+          <strong>但这不意味着我们不能信任思维</strong>——科学方法正是为了克服这些偏误而设计的。双盲实验、同行评审、可重复性——都是用来约束我们"不够可靠的直觉"的工具。大脑可能不是完美的真理机器，但它是唯一能意识到自己不完美的器官。<strong>知道自己有偏误，是克服偏误的第一步。</strong>
+        </div>
+      </div>
+      <div class="socratic-item">
+        <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">
+          为什么物理过程（神经元放电）会产生主观体验（"我"）？
+          <span class="s-toggle">▼</span>
+        </div>
+        <div class="socratic-a">
+          这是哲学家大卫·查尔默斯提出的"意识困难问题"。其他问题都是"容易问题"：神经元如何放电、视觉信号如何处理、记忆如何存储——原则上都能用物理和生物过程解释。但<strong>为什么这些物理过程会伴随"感受"？</strong>为什么不是像机器人一样在黑暗中完成所有计算？<br><br>
+          目前有几种主流假说：①整合信息理论（IIT）：意识是信息整合程度足够高的系统的涌现属性。②全局工作空间理论（GWT）：意识是多个脑区共享信息的"广播系统"。③预测加工理论：意识是大脑持续预测世界并修正预测误差的过程。<strong>没有一种是共识——但每一种都让问题更清晰了。</strong>
+        </div>
+      </div>
+      <div class="socratic-item">
+        <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">
+          如果80%的细胞是微生物，那"我"到底是谁？
+          <span class="s-toggle">▼</span>
+        </div>
+        <div class="socratic-a">
+          这是一个从生物学直通哲学的问题。从基因角度看，你的DNA是"你"——但你的生理功能依赖微生物组。肠道微生物影响你的情绪（通过肠脑轴）、体重、甚至决策。<br><br>
+          从功能角度看，"你"不是单一基因组定义的个体——<strong>"你"是一个由人类细胞和微生物细胞共同构成的共生功能体（holobiont）</strong>。这个生态系统的稳态就是健康，失调就是疾病。你的情绪、你的欲望、你"想吃甜食"的冲动——有多少来自于"你"，有多少来自于你肠道里的细菌？科学还没有最终答案。
+        </div>
+      </div>
+      <div class="socratic-item">
+        <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">
+          为什么不同动物看到的世界完全不一样？
+          <span class="s-toggle">▼</span>
+        </div>
+        <div class="socratic-a">
+          哺乳动物大多是色盲（只有2种视锥细胞，看到蓝和黄）。灵长类因为有第三种视锥细胞（红色）才能区分红绿——这可能帮助我们判断哪些水果成熟了。鸟类有4种视锥细胞，能看到紫外线——它们眼中的花朵有着我们完全无法想象的图案。<br><br>
+          更极端的是：蝙蝠用超声波"看"世界，电鱼用电场感知环境，蜜蜂能感知地球磁场。<strong>每个物种的神经系统构建了一个不完整的、物种特定的"现实模型"</strong>。没有哪个物种看到了"真正的"现实——我们只是看到了一个对我们生存有用的简化版本。你的红色，可能和别人眼中的红色完全不同——我们只是给同一种体验取了同一个名字。
+        </div>
+      </div>
+    </div>
+
+    <div class="excerpt-block" style="margin-top:20px;">
+      <div class="excerpt-title">🖼️ 《视觉的障眼法》</div>
+      <div class="excerpt-text">
+        人类视觉有一个惊人的"缺陷"：盲点。视神经穿过视网膜的位置没有感光细胞——但你的大脑会"脑补"缺失的信息，让你察觉不到。这不是bug——这是feature。大脑的视觉处理不是"拍照"，而是"构建"：<strong>30%来自眼睛输入，70%来自大脑预测和填补</strong>。你看到的从来不是"外面"，而是大脑给你播放的一部私人的VR电影。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHAPTER 8: 生态 — 微生物组 (Flip cards)
+     ================================================================ -->
+<section class="life-section" id="ch8">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">Chapter 08</div>
+      <h2>生态：微生物组与共生——你是一个行走的地球</h2>
+      <p>人体内微生物总重约0.67公斤。80%的"你的"细胞其实是微生物。你不是"一个人"——你是一个生态系统。从这里开始，生命的边界变得模糊。</p>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">🦠 《人类与抗生素的大乱斗》</div>
+      <div class="excerpt-text">
+        1945年抗生素刚临床使用时，全年才64个处方。65年后，美国医生一年开出2.58亿个含抗生素的处方——增加了400万倍。一个人40岁前平均接受30次抗生素治疗。这是人类和细菌之间一场看不到尽头的<strong>军备竞赛</strong>。
+      </div>
+    </div>
+
+    <div class="excerpt-block">
+      <div class="excerpt-title">💊 《幽门螺杆菌：胃里的老住户》</div>
+      <div class="excerpt-text">
+        1979年，两位澳大利亚医生在胃溃疡患者的胃里发现了一种S型细菌。整个医学界嘲笑他们——"胃里是无菌的"。2005年，他们获得了诺贝尔奖。幽门螺杆菌在人类胃里居住了超过5万年，<strong>通过分析不同人群胃里幽门螺杆菌的DNA差异，可以追溯人类走出非洲的迁徙路线</strong>。
+      </div>
+    </div>
+
+    <!-- Flip cards for microbiome systems -->
+    <h4 style="text-align:center;color:var(--microbiome-purple);margin:32px 0 16px;">翻转卡片 — 你身体里的生态系统</h4>
+    <div class="flip-cards">
+      <div class="flip-card">
+        <div class="flip-card-inner" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-front">
+            <div class="fc-icon">🦠</div>
+            <div class="fc-title">肠道微生物组</div>
+            <div class="fc-hint">你的第二大脑 · 点击了解</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>🦠 肠脑轴</h4>
+            <span class="tag tag-gut">核心</span>
+            <p style="margin-top:8px;">15-25%的食物能量由结肠微生物提供。肠道微生物通过迷走神经、免疫系统、代谢产物与大脑双向通信。它们影响你的情绪、食欲、甚至社会行为。微生物组失调与抑郁、焦虑、自闭症、帕金森病都有关联。</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-front">
+            <div class="fc-icon">🛡️</div>
+            <div class="fc-title">免疫系统</div>
+            <div class="fc-hint">三层防御体系 · 点击了解</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>🛡️ 先天+适应性免疫</h4>
+            <span class="tag tag-skin">第一道防线</span>
+            <span class="tag tag-brain">记忆系统</span>
+            <p style="margin-top:8px;">三层防御：皮肤粘膜（物理屏障）→ 先天免疫（巨噬细胞、炎症）→ 适应性免疫（T细胞、B细胞、抗体）。疫苗就是"训练"适应性免疫——让它先认识病原体，而不必先打一仗再记住。</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-front">
+            <div class="fc-icon">💊</div>
+            <div class="fc-title">抗生素耐药性</div>
+            <div class="fc-hint">实时进化 · 点击了解</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>💊 亲眼目睹的进化</h4>
+            <span class="tag tag-gut">进化</span>
+            <span class="tag tag-skin">公共卫生</span>
+            <p style="margin-top:8px;">细菌20分钟分裂一次——一年超26000代（相当于人类50万年）。一次抗生素杀死99.9%的细菌，0.1%耐药菌存活→几小时填满生态位。每年全球约70万人死于耐药菌，预计2050年达1000万。</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-front">
+            <div class="fc-icon">🧬</div>
+            <div class="fc-title">微生物组计划</div>
+            <div class="fc-hint">人体第二基因组 · 点击了解</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>🧬 人类微生物组计划</h4>
+            <span class="tag tag-brain">前沿</span>
+            <p style="margin-top:8px;">人类基因组计划的延伸——对人体内所有微生物基因组进行测序。我们体内微生物的基因总数是人类基因的100倍。理解"谁在那里、在做什么"将彻底重塑医学——从个性化饮食到粪菌移植治疗艰难梭菌感染。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-grid" style="margin-top:20px;">
+      <div class="insight-card">
+        <h4 style="color:var(--leaf-green);">⏳ 端粒时钟</h4>
+        <p>染色体末端的"保护帽"。细胞每分裂一次，端粒就短一截——短到极限，细胞停止分裂（Hayflick极限）。癌细胞通过激活端粒酶绕过这个限制，实现"永生"。端粒长度是细胞层面的寿命倒计时器。</p>
+      </div>
+      <div class="insight-card">
+        <h4 style="color:var(--atp-orange);">♻️ 细胞自噬</h4>
+        <p>2016年诺贝尔医学奖。细胞不是用完就扔——它有一套内部的回收系统。当细胞器损坏或营养匮乏时，自噬体包裹损坏部件，送到溶酶体"消化"，回收原材料。自噬失调与癌症、帕金森、衰老直接相关。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     OUTRO — Emotional closing
+     ================================================================ -->
+<section class="outro" id="outro">
+  <h2>你是138亿年宇宙演化的产物</h2>
+  <p>
+    构成你身体的原子，诞生于恒星的烈焰。组装这些原子的算法，在38亿年的自然选择中层层搭建。从分子自组装到DNA的精密编码，从单细胞到万亿细胞协作，从原始神经网到追问自身起源的意识——
+  </p>
+  <p>
+    你不是机器。你是宇宙花了138亿年，用恒星的遗骸、生命的算法、进化的试错，组装出来的——一个能够回头凝视宇宙自身的存在。
+  </p>
+  <p class="quote">
+    "生命不是一团混沌——它是一套精密的算法。而最惊人的是：这套算法没有设计师。"
+    <br><span class="attribution">—— 卓老板聊科技 · 生命的算法</span>
+  </p>
+  <p style="margin-top:32px;color:var(--text-subtle);">
+    57篇文章 · 从分子自组装到人类意识 · 卓老板聊科技
+  </p>
+</section>
+
+<!-- ===== KNOWLEDGE METER ===== -->
+<div class="knowledge-meter" id="knowledgeMeter">
+  <span style="color:var(--text-dim);">探索深度</span>
+  <div class="km-ring">
+    <span class="km-pct" id="kmPct">0%</span>
+    <svg width="46" height="46" viewBox="0 0 46 46">
+      <circle cx="23" cy="23" r="20" stroke-dasharray="125.66" stroke-dashoffset="125.66" id="kmCircle" transform="rotate(-90 23 23)"/>
     </svg>
   </div>
 </div>
 
-<!-- ===== TAB 3: 层层追问 ===== -->
-<div class="tab-panel" id="tab3">
-  <div class="section-title">层层追问 — 剥开生命的洋葱</div>
-  <div class="socratic-panel">
-    <div class="q-a"><div class="question">如果80%的细胞是微生物，那"我"到底是谁？</div><div class="answer">这是一个从生物学直通哲学的问题。从基因角度看，你的DNA是"你"——但你的生理功能依赖微生物组。肠道微生物影响你的情绪（通过肠脑轴）、体重、甚至决策。从功能角度看，"你"不是单一基因组定义的个体——<strong>"你"是一个由人类细胞和微生物细胞共同构成的生态系统</strong>。这个生态系统的稳态就是健康，失调就是疾病。</div></div>
-    <div class="q-a"><div class="question">细菌能在几个月内进化出耐药性——为什么人类没有进化出对所有疾病的免疫力？</div><div class="answer">关键差别在于<strong>代际时间</strong>。细菌20分钟分裂一次，人类20年繁殖一代。细菌一年可以经历超过26,000代——相当于人类50万年的进化。在人类一代人的时间里，细菌已经经历了数百万代的自然选择。此外，人类免疫系统并非没有进化——我们确实进化出了强大的适应性免疫。只是病原体的进化速度远超我们。</div></div>
-    <div class="q-a"><div class="question">如果大脑是一连串意外的产物，我们还能信任自己的思维吗？</div><div class="answer">卓克在节目中引用了这个观点：大脑的进化不是为了"寻找真理"——而是为了"生存"。我们的大脑擅长识别模式（即便模式不存在——这就是迷信的来源）、快速判断（即便判断有偏误——这就是认知偏误的来源）。<strong>但这不意味着我们不能信任思维</strong>——科学方法正是为了克服这些偏误而设计的。大脑可能不是完美的真理机器，但它是唯一能意识到自己不完美的器官。</div></div>
-  </div>
-</div>
-
-<!-- ===== TAB 4: 演化历程 ===== -->
-<div class="tab-panel" id="tab4">
-  <div class="section-title">演化历程 — 从微生物到意识的40亿年</div>
-  <div class="narrative-block"><p>如果压缩到24小时：凌晨5点微生物出现，晚上9点出现多细胞生物，23点59分58秒智人登场。以下是最关键的几个跃迁：</p></div>
-  <div class="evo-track">
-    <div class="evo-step"><div class="step-time">38亿年前</div><div class="step-icon">🦠</div><div class="step-label">生命起源</div></div>
-    <div class="evo-step"><div class="step-time">20亿年前</div><div class="step-icon">🔬</div><div class="step-label">真核细胞</div></div>
-    <div class="evo-step"><div class="step-time">6亿年前</div><div class="step-icon">🐟</div><div class="step-label">多细胞生物</div></div>
-    <div class="evo-step"><div class="step-time">3.7亿年前</div><div class="step-icon">🦎</div><div class="step-label">登陆</div></div>
-    <div class="evo-step"><div class="step-time">2亿年前</div><div class="step-icon">🧠</div><div class="step-label">哺乳动物脑</div></div>
-    <div class="evo-step"><div class="step-time">30万年前</div><div class="step-icon">👤</div><div class="step-label">智人</div></div>
-  </div>
-  <div class="case-compare">
-    <div class="case-card"><h4>🧠 大脑的五次升级</h4><p>第一次：神经网（水母级）→第二次：神经节（蠕虫级）→第三次：脑干+小脑（鱼类级）→第四次：边缘系统（爬行动物级）→第五次：新皮层（哺乳动物级）。每一次升级不是替换旧系统，而是在旧系统上叠加新功能。你的大脑里住着一整部进化史。</p></div>
-    <div class="case-card"><h4>👁️ 视觉进化的障眼法</h4><p>人类视觉有一个惊人的"缺陷"：盲点。视神经穿过视网膜的位置没有感光细胞——但你的大脑会"脑补"缺失的信息，让你察觉不到。这不是bug——这是feature。大脑的视觉处理不是"拍照"，而是"构建"：30%来自眼睛输入，70%来自大脑预测和填补。</p></div>
-  </div>
-</div>
-
-<!-- ===== TAB 5: 思维导图 ===== -->
-<div class="tab-panel" id="tab5">
-  <div class="section-title">思维导图 — 生命算法的知识架构</div>
-  <div class="mindmap" id="mindmap2">
-    <div class="node">
-      <div class="node-header" onclick="toggleNode(this)" style="background:var(--accent);color:#fff;"><span class="toggle open">▶</span> 生命的算法 — 知识体系</div>
-      <div class="node-body open">
-        <div class="node"><div class="node-header" onclick="toggleNode(this)"><span class="toggle">▶</span> 分子与基因层</div><div class="node-body">
-          <div class="leaf">DNA双螺旋结构 — 信息存储的物理介质</div><div class="leaf">基因表达调控 — 同一DNA，不同细胞不同表达</div><div class="leaf">表观遗传 — 环境因素改变基因开关</div><div class="leaf">分子机器 — 核糖体/ATP酶/动力蛋白</div><div class="leaf">CRISPR基因编辑 — 细菌免疫系统变成生物工具</div>
-        </div></div>
-        <div class="node"><div class="node-header" onclick="toggleNode(this)"><span class="toggle">▶</span> 细胞与生理层</div><div class="node-body">
-          <div class="leaf">细胞自噬 — 细胞的内部回收系统</div><div class="leaf">端粒时钟 — 染色体末端的寿命倒计时</div><div class="leaf">离子泵 — 细胞膜上的物质运输系统</div><div class="leaf">线粒体 — 细胞的能量工厂（曾经是独立细菌）</div>
-        </div></div>
-        <div class="node"><div class="node-header" onclick="toggleNode(this)"><span class="toggle">▶</span> 微生物与免疫层</div><div class="node-body">
-          <div class="leaf">微生物组 — 0.67公斤，80%的"你"的细胞</div><div class="leaf">先天免疫 — 巨噬细胞、炎症反应</div><div class="leaf">适应性免疫 — T细胞、B细胞、抗体记忆</div><div class="leaf">抗生素耐药性 — 实时进化</div><div class="leaf">疫苗原理 — 训练免疫系统的模拟演习</div>
-        </div></div>
-        <div class="node"><div class="node-header" onclick="toggleNode(this)"><span class="toggle">▶</span> 进化与行为层</div><div class="node-body">
-          <div class="leaf">自然选择 — 变异+选择+遗传</div><div class="leaf">性选择 — 孔雀尾巴为何存在</div><div class="leaf">人类直立行走 — 先直立，后大脑变大</div><div class="leaf">共情能力 — 镜像神经元的发现</div>
-        </div></div>
-        <div class="node"><div class="node-header" onclick="toggleNode(this)"><span class="toggle">▶</span> 神经与意识层</div><div class="node-body">
-          <div class="leaf">神经可塑性 — 使用中不断重连的大脑</div><div class="leaf">感官局限 — 你看到的不是世界本身</div><div class="leaf">意识难题 — 为什么物理过程产生主观体验</div><div class="leaf">语言进化 — 手势→声音→符号</div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== TAB 6: 知识边界 ===== -->
-<div class="tab-panel" id="tab6">
-  <div class="section-title">知识边界 — 这个知道就行，不用深究</div>
-  <div class="narrative-block"><p>理解生命算法需要知道什么该深挖，什么只需知道存在。</p></div>
-  <table class="boundary-table">
-    <thead><tr><th>知识条目</th><th>掌握程度</th><th>理由</th></tr></thead>
-    <tbody>
-      <tr><td>基因表达调控的基本逻辑</td><td><span class="level-tag level-core">核心掌握</span></td><td>理解生命如何从DNA"运行"</td></tr>
-      <tr><td>免疫系统的三层防御架构</td><td><span class="level-tag level-core">核心掌握</span></td><td>理解疫苗、过敏、自身免疫病的基础</td></tr>
-      <tr><td>微生物组的共生关系</td><td><span class="level-tag level-core">核心掌握</span></td><td>颠覆"细菌=敌人"的传统观念</td></tr>
-      <tr><td>自然选择的基本机制</td><td><span class="level-tag level-understand">理解即可</span></td><td>进化论的日常应用语境</td></tr>
-      <tr><td>抗生素耐药性的产生机制</td><td><span class="level-tag level-understand">理解即可</span></td><td>公共卫生决策的知识基础</td></tr>
-      <tr><td>神经可塑性的含义</td><td><span class="level-tag level-understand">理解即可</span></td><td>理解学习和习惯改变的生物学基础</td></tr>
-      <tr><td>CRISPR-Cas9的精确分子机制</td><td><span class="level-tag level-know">知道存在</span></td><td>需要分子生物学专业背景</td></tr>
-      <tr><td>端粒酶的调控通路</td><td><span class="level-tag level-know">知道存在</span></td><td>属于肿瘤生物学专业领域</td></tr>
-      <tr><td>细胞自噬的分子标记物</td><td><span class="level-tag level-know">知道存在</span></td><td>需要生化专业知识</td></tr>
-      <tr><td>离子泵的具体蛋白结构</td><td><span class="level-tag level-know">知道存在</span></td><td>属于结构生物学范畴</td></tr>
-      <tr><td>视觉通路的详细解剖</td><td><span class="level-tag level-know">知道存在</span></td><td>需要神经解剖学背景</td></tr>
-      <tr><td>DNA修复的所有已知通路</td><td><span class="level-tag level-know">知道存在</span></td><td>诺贝尔奖级别研究，仍在扩展中</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- ===== TAB 7: 题库 ===== -->
-<div class="tab-panel" id="tab7">
-  <div class="section-title">题库系统 — 20道题检验你的理解</div>
-  <div class="score-bar" id="quizScore2">已答：0 / 20</div>
-  <div class="progress-bar"><div class="progress-fill" id="quizProgress2" style="width:0%"></div></div>
-  <div id="quizContainer2"></div>
-  <button class="btn btn-outline" onclick="resetQuiz2()" style="margin-top:16px;">🔄 重新作答</button>
-
-  <div class="section-title">简答题</div>
-  <div class="quiz-card">
-    <p class="q-text">🖊️ 用你自己的话解释：为什么说"你不是一个人，而是一个生态系统"？</p>
-    <textarea class="sa-input" id="sa2_1" placeholder="写下你的理解..."></textarea>
-    <button class="btn btn-outline" onclick="showSA2(1)" style="margin-top:8px;">查看参考答案</button>
-    <div class="sa-reveal" id="saR2_1">人体内80%的细胞是微生物细胞——0.67公斤的细菌、真菌、病毒。它们不是"入侵者"——它们帮你消化食物、合成维生素、训练免疫系统、甚至通过肠脑轴影响你的情绪和决策。<strong>从功能角度看，人类和微生物组是一个共生功能体（holobiont）</strong>——两者都无法独立正常运作。"你"的健康、"你"的情绪——其实是我们这个生态系统的稳态。</div>
-  </div>
-  <div class="quiz-card">
-    <p class="q-text">🖊️ 为什么抗生素耐药性是"可以亲眼目睹的实时进化"？</p>
-    <textarea class="sa-input" id="sa2_2" placeholder="写下你的理解..."></textarea>
-    <button class="btn btn-outline" onclick="showSA2(2)" style="margin-top:8px;">查看参考答案</button>
-    <div class="sa-reveal" id="saR2_2">因为细菌的代际时间极短（20分钟一代），而人类大量使用抗生素提供了强大的选择压力。一次抗生素治疗可以杀死99.9%的细菌——但那0.1%带有耐药基因的存活下来，在几小时内繁殖回原来的数量。这就完成了一轮"自然选择"。强的耐药菌不仅对抗生素免疫——在没有抗生素的环境下也比普通菌更有竞争力。<strong>人类一年使用2.58亿个抗生素处方，就是在给细菌开设2.58亿个"进化训练营"。</strong></div>
-  </div>
-</div>
-
-<!-- ===== TAB 8: 学以致用 ===== -->
-<div class="tab-panel" id="tab8">
-  <div class="section-title">实战决策 — 把生命知识转化为行动</div>
-  <div class="decision-scene">
-    <h3>场景一：你朋友说"我要吃抗生素预防感冒"</h3>
-    <div class="scenario"><strong>情境：</strong>朋友说感冒季快到了，准备提前吃几天抗生素"预防"一下。你应该怎么回应？</div>
-    <div class="choices">
-      <button class="choice-btn" onclick="evalD2(this,'a')">A) 支持——预防总比生病好</button>
-      <button class="choice-btn" onclick="evalD2(this,'b')">B) 劝阻——感冒是病毒引起的，抗生素只对细菌有效，且滥用会筛选耐药菌</button>
-      <button class="choice-btn" onclick="evalD2(this,'c')">C) 无所谓——吃不吃都行</button>
-    </div>
-    <div id="dfb2_1" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div>
-  </div>
-  <div class="decision-scene">
-    <h3>场景二：孩子要不要"接地气"接触细菌？</h3>
-    <div class="scenario"><strong>情境：</strong>有家长认为应该让孩子在泥土里玩、甚至吃点泥巴来"锻炼免疫力"。也有家长把家里消毒得一尘不染。你的科学建议是什么？</div>
-    <div class="choices">
-      <button class="choice-btn" onclick="evalD2b(this,'a')">A) 让孩子吃泥巴——多接触细菌免疫力更强</button>
-      <button class="choice-btn" onclick="evalD2b(this,'b')">B) 完全消毒——细菌都很危险</button>
-      <button class="choice-btn" onclick="evalD2b(this,'c')">C) 正常卫生即可——免疫系统需要正常环境刺激但不能故意接触病原体</button>
-    </div>
-    <div id="dfb2_2" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div>
-  </div>
-  <div class="decision-scene">
-    <h3>场景三：收到"超级细菌"新闻后</h3>
-    <div class="scenario"><strong>情境：</strong>新闻说某国发现"对所有抗生素都耐药的超级细菌"。你朋友很恐慌，问你要不要囤积抗生素。你怎么说？</div>
-    <div class="choices">
-      <button class="choice-btn" onclick="evalD2c(this,'a')">A) 赶紧囤——有备无患</button>
-      <button class="choice-btn" onclick="evalD2c(this,'b')">B) 不要恐慌——超级细菌极其罕见，且滥用囤积的抗生素恰恰是制造更多超级细菌的原因</button>
-      <button class="choice-btn" onclick="evalD2c(this,'c')">C) 无所谓——反正有医生</button>
-    </div>
-    <div id="dfb2_3" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div>
-  </div>
-</div>
-
-<div class="footer">
-  <p>🧬 生命的算法 — 卓老板聊科技 MKS · 最小知识集</p>
-  <p style="margin-top:4px;">57篇文章 · 10个核心概念 · 基于刘雪峰最小知识集理论</p>
-  <p style="margin-top:4px;"><a href="index.html">← 返回课程首页</a></p>
-</div>
-</div>
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p><a href="index.html">← 返回卓老板的科学客厅</a></p>
+  <p style="margin-top:8px;">卓克 · 卓老板聊科技 · 生命的算法 · 57篇深度文章 · 沉浸叙事v4</p>
+</footer>
 
 <script>
-// ===== TAB SYSTEM =====
-(function() {
-  var tabs = document.querySelectorAll('#tabBar .tab-btn');
-  var panels = document.querySelectorAll('.tab-panel');
-  var saved = localStorage.getItem('mks-life-tab');
-  tabs.forEach(function(b) {
-    b.addEventListener('click', function() {
-      tabs.forEach(function(t) { t.classList.remove('active'); });
-      panels.forEach(function(p) { p.classList.remove('active'); });
-      this.classList.add('active');
-      document.getElementById(this.getAttribute('data-tab')).classList.add('active');
-      localStorage.setItem('mks-life-tab', this.getAttribute('data-tab'));
+// ============================================================
+// HERO — Molecular self-assembly particle canvas
+// ============================================================
+(function(){
+  var canvas = document.getElementById('molCanvas');
+  var ctx = canvas.getContext('2d');
+  var molecules = [];
+  var w, h;
+
+  function resize(){
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Create floating molecules (atoms and small clusters)
+  for(var i=0; i<120; i++){
+    molecules.push({
+      x: Math.random()*w, y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+      r: Math.random()*2.5+1,
+      type: Math.random()>0.6 ? 'cluster' : 'atom',
+      hue: [120, 200, 340, 40][Math.floor(Math.random()*4)],
+      phase: Math.random()*Math.PI*2
     });
-  });
-  if (saved) { var btn = document.querySelector('[data-tab="' + saved + '"]'); if (btn) btn.click(); }
+  }
+
+  // Larger "proto-life" assemblies
+  var assemblies = [];
+  for(var g=0; g<4; g++){
+    assemblies.push({
+      cx: Math.random()*w, cy: Math.random()*h,
+      r: 30+Math.random()*60,
+      rot: Math.random()*Math.PI*2,
+      speed: (Math.random()-0.5)*0.002
+    });
+  }
+
+  function draw(){
+    ctx.fillStyle = 'rgba(6,12,6,0.15)';
+    ctx.fillRect(0,0,w,h);
+
+    // Draw assemblies (faint glowing blobs)
+    for(var ai=0; ai<assemblies.length; ai++){
+      var a = assemblies[ai];
+      var grad = ctx.createRadialGradient(a.cx, a.cy, 0, a.cx, a.cy, a.r);
+      grad.addColorStop(0, 'rgba(76,201,110,0.06)');
+      grad.addColorStop(0.6, 'rgba(77,166,204,0.03)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.beginPath();
+      ctx.arc(a.cx, a.cy, a.r, 0, Math.PI*2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      a.rot += a.speed;
+    }
+
+    for(var i=0; i<molecules.length; i++){
+      var m = molecules[i];
+      m.x += m.vx;
+      m.y += m.vy;
+      if(m.x<0) m.x=w; if(m.x>w) m.x=0;
+      if(m.y<0) m.y=h; if(m.y>h) m.y=0;
+
+      var opacity = 0.5 + 0.25*Math.sin(Date.now()*0.001 + m.phase);
+
+      if(m.type==='atom'){
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r, 0, Math.PI*2);
+        ctx.fillStyle = 'hsla('+m.hue+', 60%, 55%, '+opacity+')';
+        ctx.fill();
+        // Glow
+        if(m.r>1.8){
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.r*3, 0, Math.PI*2);
+          ctx.fillStyle = 'hsla('+m.hue+', 60%, 55%, '+(opacity*0.06)+')';
+          ctx.fill();
+        }
+      } else {
+        // Small cluster: 2-3 atoms together
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r, 0, Math.PI*2);
+        ctx.fillStyle = 'hsla('+m.hue+', 50%, 50%, '+(opacity*0.8)+')';
+        ctx.fill();
+        ctx.strokeStyle = 'hsla('+m.hue+', 50%, 70%, '+opacity+')';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
 })();
 
-// ===== FLIP CARDS =====
-var concepts2 = [
-  { name: '基因表达', emoji: '🧬', detail: '<h4>为什么DNA是程序而不是蓝图？</h4><p>蓝图意味着相同的图纸产生相同的产品。但你的每个细胞都有相同的DNA——它们之所以不同，是因为<strong>不同的基因被打开或关闭</strong>。表观遗传标记就像基因的开关面板，环境、饮食、压力都能调整这些开关。</p>' },
-  { name: '分子机器', emoji: '⚙️', detail: '<h4>你体内的纳米机器人</h4><p>2016年诺贝尔化学奖。细胞里充满了纳米尺度的机器：核糖体像3D打印机一样合成蛋白质，ATP合成酶利用质子梯度制造能量，动力蛋白沿着微管"行走"——速度比战斗机快80%。这些不是比喻，是精确的物理描述。</p>' },
-  { name: '细胞自噬', emoji: '♻️', detail: '<h4>细胞的内置回收系统</h4><p>2016年诺贝尔医学奖。当细胞器损坏或营养匮乏时，自噬体将损坏部件包裹起来，送到溶酶体中分解回收。没有自噬，细胞会积累垃圾、癌变。自噬失调与帕金森、阿尔茨海默症、衰老直接相关。</p>' },
-  { name: '端粒与衰老', emoji: '⏳', detail: '<h4>染色体末端的倒计时器</h4><p>染色体末端的端粒就像鞋带末端的塑料帽——保护DNA不被磨损。细胞每分裂一次，端粒就短一截。短到极限，细胞停止分裂。癌细胞通过激活端粒酶绕过这个限制实现"永生"。</p>' },
-  { name: '免疫系统', emoji: '🛡️', detail: '<h4>三层防御体系</h4><p>第一道：皮肤和粘膜（物理屏障）。第二道：先天免疫——巨噬细胞吞噬一切可疑物。第三道：适应性免疫——T细胞和B细胞产生特异性抗体，记住敌人。疫苗就是训练第三道防线，让它先认识敌人而不必真的打一仗。</p>' },
-  { name: '微生物组', emoji: '🦠', detail: '<h4>你是一个生态系统</h4><p>80%的"你的"细胞是微生物。它们帮你消化食物、合成维生素、训练免疫系统、影响情绪。微生物组失调与肥胖、抑郁、自闭症都有关联。你不是一个人——你是一个由人类细胞和微生物共同构成的共生功能体。</p>' },
-  { name: '自然选择', emoji: '🌿', detail: '<h4>最简单的算法，最深远的效果</h4><p>变异+选择+遗传=适应。不需要设计者，不需要目标。随机突变产生多样性，环境选择留下"够用的"，遗传让变化代代相传。人类大脑是一连串意外突变的产物——不是被"设计"出来的，是被"筛选"出来的。</p>' },
-  { name: '抗生素耐药性', emoji: '💊', detail: '<h4>亲眼目睹的进化</h4><p>细菌每20分钟分裂一次，一年经历26,000+代。一次抗生素治疗杀死99.9%的细菌，但0.1%有耐药基因的活下来——几小时内重新填满生态位。人类每年2.58亿个抗生素处方，就是给细菌开设了2.58亿个"进化训练营"。</p>' },
-  { name: '神经可塑性', emoji: '🧠', detail: '<h4>不断重连的大脑</h4><p>大脑不是硬连线——使用中不断重连。学习就是建立新连接、加强常用连接、修剪不用的连接。成人大脑海马体也能产生新神经元。"一万小时定律"的生物学基础就是神经可塑性：反复练习=反复重塑神经回路。</p>' },
-  { name: '感官构建现实', emoji: '👁️', detail: '<h4>你看到的不是世界</h4><p>视杆细胞和视锥细胞将光信号转化为电信号，然后大脑"构建"出你看到的画面——30%来自眼睛输入，70%来自大脑预测和填补。哺乳动物大多是色盲，鸟能看到紫外线。<strong>不同物种生活在不同版本的"现实"中。</strong></p>' }
-];
+// ============================================================
+// CHAPTER 2 — DNA Double Helix Canvas
+// ============================================================
+(function(){
+  var canvas = document.getElementById('dnaCanvas');
+  var ctx = canvas.getContext('2d');
+  var time = 0;
 
-var ccIdx2 = 0;
-function updateConcept2() {
-  var c = concepts2[ccIdx2];
-  var fi = document.getElementById('flipInner2');
-  fi.classList.remove('flipped');
-  fi.querySelector('.flip-front').innerHTML = '<span style="font-size:3rem;">' + c.emoji + '</span><h3 style="margin-top:8px;">' + c.name + '</h3><p style="color:var(--text-light);font-size:.85rem;">点击翻转了解详情</p>';
-  fi.querySelector('.flip-back').innerHTML = c.detail;
-  document.getElementById('conceptCounter2').textContent = (ccIdx2 + 1) + ' / ' + concepts2.length;
-}
-function prevConcept2() { ccIdx2 = (ccIdx2 - 1 + concepts2.length) % concepts2.length; updateConcept2(); }
-function nextConcept2() { ccIdx2 = (ccIdx2 + 1) % concepts2.length; updateConcept2(); }
-
-// ===== MINDMAP =====
-function toggleNode(h) {
-  var t = h.querySelector('.toggle');
-  var b = h.parentElement.querySelector('.node-body');
-  if (b) { b.classList.toggle('open'); t.classList.toggle('open'); }
-}
-
-// ===== QUIZ =====
-var quiz2 = [
-  {q:'基因表达调控的关键是什么？', opts:['相同DNA在不同细胞中表达不同基因','不同细胞拥有不同DNA','DNA会随机突变','基因数量在不同细胞中不同'], ans:0, expl:'你的肝细胞和神经元拥有完全相同的DNA——它们的不同在于哪些基因被表达。基因调控决定了一个细胞成为什么类型。'},
-  {q:'2016年诺贝尔化学奖奖励了什么发现？', opts:['CRISPR基因编辑','分子机器的设计与合成','端粒酶的发现','DNA双螺旋'], ans:1, expl:'2016年诺贝尔化学奖颁给了分子机器的设计与合成——细胞中纳米尺度的机械装置，如核糖体、ATP合成酶。'},
-  {q:'细胞自噬(autophagy)的功能是什么？', opts:['细胞自杀','细胞分裂','细胞回收损坏部件并重新利用','细胞攻击外来细菌'], ans:2, expl:'细胞自噬是细胞内部的回收系统——包裹损坏的细胞器，送到溶酶体分解，回收原材料。大隅良典因发现这一机制获2016年诺贝尔医学奖。'},
-  {q:'端粒在细胞衰老中扮演什么角色？', opts:['加速细胞分裂','产生能量','修复DNA损伤','随着细胞分裂逐渐缩短，最终触发衰老'], ans:3, expl:'端粒是染色体末端的保护帽。细胞每分裂一次端粒就短一截——短到极限时细胞停止分裂，进入衰老状态。癌细胞通过端粒酶绕过这一限制。'},
-  {q:'人体免疫系统的第一道防线是什么？', opts:['皮肤和粘膜','T细胞和B细胞','抗体','骨髓'], ans:0, expl:'免疫系统有三层：第一道是物理屏障（皮肤+粘膜），第二道是先天免疫（巨噬细胞等），第三道是适应性免疫（T细胞、B细胞、抗体）。'},
-  {q:'人体内微生物的数量和人类细胞数量相比如何？', opts:['微生物极少','微生物是人体细胞数量的80%','微生物细胞数量约等于人类细胞','人体内没有微生物'], ans:1, expl:'人体约30万亿个细胞，其中约80%不是人类细胞而是微生物细胞。微生物总重约0.67公斤。'},
-  {q:'肠道微生物对人体能量供应的贡献大约是？', opts:['1-2%','50-60%','15-25%','0%'], ans:2, expl:'统计数据显示，吃进去的食物最终变成能量，有15-25%的比例是由结肠内的微生物提供给我们的。'},
-  {q:'人类微生物组计划的目的是什么？', opts:['消灭所有细菌','制造超级士兵','克隆人类','对人体内的微生物基因组进行测序'], ans:3, expl:'微生物组计划是人类基因组计划的延伸——目标是对人体内所有微生物的基因组测序，了解它们是谁、在做什么。'},
-  {q:'抗生素杀死细菌的机制不包括以下哪种？', opts:['增强免疫系统','干扰蛋白质生成','干扰细胞壁形成','干扰核酸合成'], ans:0, expl:'抗生素通过4种方式杀死细菌：干扰细胞壁形成、干扰蛋白质生成、干扰叶酸合成、干扰核酸合成。增强免疫系统不是抗生素的作用机制。'},
-  {q:'人类直立行走和大脑发育的时间顺序是什么？', opts:['大脑先变大，然后直立','先直立行走几百万年，然后大脑才发育','同时发生','没有关系'], ans:1, expl:'人类祖先约400万年前开始直立行走，而大脑容量的大幅增长发生在约200万年前。直立行走在先，大脑发育在后。'},
-  {q:'神经可塑性指的是什么？', opts:['神经元不能改变','神经是塑料做的','大脑在使用中不断重连和重组','大脑大小会变化'], ans:2, expl:'神经可塑性指大脑在使用过程中不断建立新连接、加强常用连接、修剪不用的连接。学习和记忆的生物学基础就在于此。'},
-  {q:'视锥细胞和视杆细胞的功能区别是什么？', opts:['没有区别','两者都负责颜色','视锥细胞识别明暗，视杆细胞分辨颜色','视锥细胞分辨颜色，视杆细胞识别明暗'], ans:3, expl:'视锥细胞负责分辨颜色（需要较强光线），视杆细胞负责识别有没有光（在弱光下工作）。除了灵长类外，大多数哺乳动物只有2种视锥细胞，是色盲。'},
-  {q:'幽门螺杆菌的研究证明了什么？', opts:['胃溃疡主要不是由压力而是由细菌引起的','胃里没有细菌','抗生素对胃没用','胃酸能杀死一切细菌'], ans:0, expl:'1979年两位澳大利亚医生发现胃溃疡患者胃里有一种S型细菌（后来命名为幽门螺杆菌），证明胃溃疡主要是细菌感染而非压力引起——这是一个颠覆性的发现，获得了2005年诺贝尔奖。'},
-  {q:'人类走出非洲的迁徙路径可以通过什么来追溯？', opts:['骨骼化石','胃中幽门螺杆菌的DNA','语言','天气记录'], ans:1, expl:'通过分析不同人群胃中幽门螺杆菌的DNA差异，可以映证人类走出非洲的时间和迁徙路线。细菌的进化史就是人类的迁徙史。'},
-  {q:'关于防蚊产品DEET（避蚊胺），以下哪项是正确的？', opts:['DEET有毒且危险','DEET能杀死蚊子','DEET无毒，但因属农药管理体系必须标注微毒','DEET只对儿童有效'], ans:2, expl:'DEET（避蚊胺）本身无毒，但因为它在中国属于农药管理体系，法律规定必须标注"微毒"才能销售。它不能灭蚊，只能驱蚊。'},
-  {q:'DNA技术第一次在法庭上用于定罪是哪一年？', opts:['1953年','2010年','2000年','1986年'], ans:3, expl:'1986年DNA证据首次被用于刑事定罪。DNA是每个人携带的不可伪造的身份标识——可以从几十年后的一根头发中锁定嫌疑人。'},
-  {q:'生命起源到智人出现的时间跨度，如果压缩到24小时，智人出现在什么时候？', opts:['23点59分58秒','中午12点','早上8点','午夜0点'], ans:0, expl:'如果把地球历史压缩到24小时：凌晨5点微生物出现，晚上9点多细胞生物出现，23点59分58秒智人登场。人类的历史在地球历史上只有2秒钟。'},
-  {q:'小肠绒毛的功能是什么？', opts:['分泌消化液','大幅增加食物与毛细血管的接触面积','杀死细菌','储存营养'], ans:1, expl:'小肠绒毛让小肠与食物的接触面积从T恤大小增加到网球场大小，大幅提高营养吸收效率。乳糜泻患者的小肠绒毛被免疫系统攻击消失，导致严重营养不良。'},
-  {q:'为什么人体冷冻目前不被科学界看好？', opts:['太贵了','法律不允许','至今没有出现任何成功的人体冷冻、解冻案例','违反伦理'], ans:2, expl:'世界上有3家大型人体冷冻公司，但至今没有一例成功解冻的案例。学术界对此持否定态度。冷冻相当于花30万美元买了一个昂贵的墓地。'},
-  {q:'关于"吃泥巴锻炼免疫力"的说法，科学界怎么看？', opts:['强烈推荐','只在某些文化中有效','没有证据但值得尝试','专业医生认为是畸形做法'], ans:3, expl:'虽然适度的微生物暴露对免疫发育有益，但故意让孩子吃泥巴是极端且危险的做法。专业医生认为这是畸形的育儿方式。正常的户外活动和卫生习惯足以提供免疫系统所需的环境刺激。'}
-];
-
-var qa2 = 0, qc2 = 0;
-function renderQuiz2() {
-  var c = document.getElementById('quizContainer2');
-  var h = '';
-  quiz2.forEach(function(item, idx) {
-    h += '<div class="quiz-card" id="q2' + idx + '"><div class="q-text">' + (idx+1) + '. ' + item.q + '</div>';
-    var lbs = ['A','B','C','D'];
-    item.opts.forEach(function(o, oi) { h += '<button class="q-option" id="q2' + idx + 'o' + oi + '" onclick="answerQuiz2(' + idx + ',' + oi + ')">' + lbs[oi] + '. ' + o + '</button>'; });
-    h += '<div class="q-feedback" id="q2' + idx + 'fb"></div></div>';
-  });
-  c.innerHTML = h;
-  var s = localStorage.getItem('mks-life-quiz');
-  if (s) {
-    JSON.parse(s).forEach(function(st) {
-      if (st.answered) {
-        var ob = document.getElementById('q2' + st.idx + 'o' + st.chosen);
-        if (ob) { ob.classList.add(st.correct?'correct':'wrong'); ob.disabled = true; }
-        var fb = document.getElementById('q2' + st.idx + 'fb');
-        fb.style.display = 'block'; fb.innerHTML = st.correct ? '✅ 正确！' + quiz2[st.idx].expl : '❌ 错误。' + quiz2[st.idx].expl;
-        fb.style.background = st.correct ? '#d4edda' : '#f8d7da';
-        for (var oi=0;oi<4;oi++) { var ob2 = document.getElementById('q2'+st.idx+'o'+oi); if(ob2) ob2.disabled = true; }
-      }
-    });
-    updateScore2();
+  function resizeDNA(){
+    var w = Math.min(800, canvas.parentElement.clientWidth-40);
+    canvas.width = w;
+    canvas.height = Math.max(220, w*0.35);
   }
-}
-function answerQuiz2(idx, ch) {
-  var item = quiz2[idx], correct = ch === item.ans;
-  if (correct) qc2++; qa2++;
-  var fb = document.getElementById('q2'+idx+'fb');
-  document.getElementById('q2'+idx+'o'+ch).classList.add(correct?'correct':'wrong');
-  if (!correct) document.getElementById('q2'+idx+'o'+item.ans).classList.add('correct');
-  for (var oi=0;oi<4;oi++) { var ob = document.getElementById('q2'+idx+'o'+oi); if(ob) ob.disabled = true; }
-  fb.style.display = 'block'; fb.innerHTML = correct ? '✅ 正确！' + item.expl : '❌ 错误。' + item.expl;
-  fb.style.background = correct ? '#d4edda' : '#f8d7da';
-  updateScore2(); saveQuiz2();
-}
-function updateScore2() {
-  document.getElementById('quizScore2').textContent = '已答：' + qa2 + ' / ' + quiz2.length + ' | 正确：' + qc2;
-  document.getElementById('quizProgress2').style.width = (qa2 / quiz2.length * 100) + '%';
-}
-function saveQuiz2() {
-  var st = [];
-  for (var i=0;i<quiz2.length;i++) { for (var oi=0;oi<4;oi++) { var ob = document.getElementById('q2'+i+'o'+oi); if(ob&&(ob.classList.contains('correct')||ob.classList.contains('wrong'))) { st.push({idx:i,chosen:oi,correct:oi===quiz2[i].ans,answered:true}); break; } } }
-  localStorage.setItem('mks-life-quiz', JSON.stringify(st));
-}
-function resetQuiz2() { qa2=0; qc2=0; localStorage.removeItem('mks-life-quiz'); renderQuiz2(); }
-function showSA2(idx) { var r = document.getElementById('saR2_'+idx); r.style.display = r.style.display==='block'?'none':'block'; }
+  resizeDNA();
+  window.addEventListener('resize', resizeDNA);
 
-// ===== DECISIONS =====
-function evalD2(el, ch) {
-  var fb = el.parentElement.parentElement.querySelector('[id^="dfb2"]');
-  var bts = el.parentElement.querySelectorAll('.choice-btn'); bts.forEach(function(b){b.disabled=true;});
-  if (ch==='b') { fb.innerHTML = '✅ <strong>正确！</strong>感冒由病毒引起，抗生素只对细菌有效。滥用抗生素不仅不能预防感冒，还会筛选出耐药菌——下一次当你真的需要抗生素时，它可能已经无效了。'; fb.style.background='#d4edda'; }
-  else if (ch==='a') { fb.innerHTML = '❌ 抗生素对病毒无效。感冒是病毒引起的。而且滥用抗生素是在帮细菌"训练"耐药性。'; fb.style.background='#f8d7da'; }
-  else { fb.innerHTML = '⚠️ 抗生素滥用是全球公共卫生危机。一个人40岁前平均接受过30次抗生素治疗——其中很多是不必要的。感冒时应该休息、喝水、让免疫系统自己工作。'; fb.style.background='#fff3cd'; }
-  fb.style.display = 'block';
-}
-function evalD2b(el, ch) {
-  var fb = el.parentElement.parentElement.querySelector('[id^="dfb2_2"]');
-  var bts = el.parentElement.querySelectorAll('.choice-btn'); bts.forEach(function(b){b.disabled=true;});
-  if (ch==='c') { fb.innerHTML = '✅ <strong>平衡是关键。</strong>免疫系统需要正常的环境刺激来发育——但"正常"指的是日常生活中的微生物接触（户外玩耍、与宠物互动），而不是刻意接触病原体或污物。吃泥巴有感染寄生虫和病原菌的风险。另一方面，过度消毒可能增加过敏风险（卫生假说）。正常的卫生习惯就是最好的方案。'; fb.style.background='#d4edda'; }
-  else if (ch==='a') { fb.innerHTML = '❌ 吃泥巴有真实的健康风险——寄生虫、病原菌、重金属。免疫系统需要的是正常的环境微生物接触，不是病原体。'; fb.style.background='#f8d7da'; }
-  else { fb.innerHTML = '⚠️ 完全无菌的环境反而可能有害——卫生假说认为，早期缺乏微生物接触可能导致免疫系统"无事可做"而攻击自身，增加过敏和自身免疫病风险。适度接触微生物是必要的。'; fb.style.background='#fff3cd'; }
-  fb.style.display = 'block';
-}
-function evalD2c(el, ch) {
-  var fb = el.parentElement.parentElement.querySelector('[id^="dfb2_3"]');
-  var bts = el.parentElement.querySelectorAll('.choice-btn'); bts.forEach(function(b){b.disabled=true;});
-  if (ch==='b') { fb.innerHTML = '✅ <strong>理性的回应。</strong>"超级细菌"确实令人担忧，但囤积抗生素恰恰是制造更多超级细菌的途径——不当使用和滥用是耐药性的主要驱动力。正确的做法是：①只在医生处方下使用抗生素 ②完成整个疗程不提前停药 ③支持新抗生素研发和感染控制。'; fb.style.background='#d4edda'; }
-  else if (ch==='a') { fb.innerHTML = '❌ 囤积抗生素会导致不当使用——自行判断病情、不完成疗程、使用过期药物，这些都在加速耐药菌的产生。你囤积的抗生素可能在被需要之前就已经过期。'; fb.style.background='#f8d7da'; }
-  else { fb.innerHTML = '⚠️ 抗生素耐药性是一个真实的全球健康威胁——每年全球约70万人死于耐药菌感染，预计到2050年可能达到1000万。这不意味着要恐慌囤药，而是需要理解并支持负责任的抗生素使用。'; fb.style.background='#fff3cd'; }
-  fb.style.display = 'block';
-}
+  function drawDNA(){
+    var w = canvas.width, h = canvas.height;
+    ctx.fillStyle = 'rgba(6,12,6,0.8)';
+    ctx.fillRect(0,0,w,h);
 
-document.addEventListener('DOMContentLoaded', function() {
-  renderQuiz2();
-  var s = localStorage.getItem('mks-life-quiz');
-  if (s) { JSON.parse(s).forEach(function(st) { if (st.answered) { qa2++; if (st.correct) qc2++; } }); updateScore2(); }
-});
+    var cx = w/2, cy = h/2 - 10;
+    var amplitude = 60, frequency = 0.012;
+    var strand1 = [], strand2 = [];
+
+    // Generate helix points
+    for(var x=0; x<w; x+=3){
+      var t = x - time;
+      var y1 = cy + Math.sin(t*frequency*Math.PI*2)*amplitude;
+      var y2 = cy + Math.sin((t*frequency*Math.PI*2)+Math.PI)*amplitude;
+      strand1.push({x:x, y:y1});
+      strand2.push({x:x, y:y2});
+    }
+
+    // Draw cross-links (base pairs)
+    ctx.strokeStyle = 'rgba(232,184,64,0.15)';
+    ctx.lineWidth = 0.5;
+    for(var i=10; i<strand1.length-10; i+=30){
+      ctx.beginPath();
+      ctx.moveTo(strand1[i].x, strand1[i].y);
+      ctx.lineTo(strand2[i].x, strand2[i].y);
+      ctx.stroke();
+    }
+
+    // Draw strand 1
+    ctx.strokeStyle = 'rgba(76,201,110,0.7)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(strand1[0].x, strand1[0].y);
+    for(var i=1; i<strand1.length; i++){
+      ctx.lineTo(strand1[i].x, strand1[i].y);
+    }
+    ctx.stroke();
+
+    // Draw strand 2
+    ctx.strokeStyle = 'rgba(77,166,204,0.5)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(strand2[0].x, strand2[0].y);
+    for(var i=1; i<strand2.length; i++){
+      ctx.lineTo(strand2[i].x, strand2[i].y);
+    }
+    ctx.stroke();
+
+    // Highlight base pairs sporadically
+    var bpIndex = Math.floor((time*0.3) % 100);
+    for(var i=10; i<strand1.length-10; i+=30){
+      var dist = Math.abs((i-10)/30 - bpIndex);
+      if(dist < 3){
+        ctx.strokeStyle = 'rgba(224,96,128,0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(strand1[i].x, strand1[i].y);
+        ctx.lineTo(strand2[i].x, strand2[i].y);
+        ctx.stroke();
+      }
+    }
+
+    time += 1.2;
+    requestAnimationFrame(drawDNA);
+  }
+  drawDNA();
+})();
+
+// ============================================================
+// CHAPTER 6 — Neural Network Canvas
+// ============================================================
+(function(){
+  var canvas = document.getElementById('neuralCanvas');
+  var ctx = canvas.getContext('2d');
+  var neurons = [];
+  var pulses = [];
+
+  function resizeNeural(){
+    var w = Math.min(800, canvas.parentElement.clientWidth-40);
+    canvas.width = w;
+    canvas.height = Math.max(240, w*0.35);
+  }
+  resizeNeural();
+  window.addEventListener('resize', function(){
+    resizeNeural();
+    createNeurons();
+  });
+
+  function createNeurons(){
+    neurons = [];
+    var w = canvas.width, h = canvas.height;
+    var cols = Math.floor(w/70), rows = 3;
+    for(var r=1; r<=rows; r++){
+      for(var c=0; c<cols; c++){
+        neurons.push({
+          x: 35 + c*70 + (Math.random()-0.5)*20,
+          y: h*(r/(rows+1)) + (Math.random()-0.5)*20,
+          r: 6+Math.random()*4,
+          phase: Math.random()*Math.PI*2,
+          connections: []
+        });
+      }
+    }
+    // Create connections
+    for(var i=0; i<neurons.length; i++){
+      for(var j=i+1; j<neurons.length; j++){
+        var dx = neurons[i].x - neurons[j].x;
+        var dy = neurons[i].y - neurons[j].y;
+        var dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < 110 && Math.random()>0.4){
+          neurons[i].connections.push(j);
+        }
+      }
+    }
+  }
+  createNeurons();
+
+  // Spawn pulses
+  setInterval(function(){
+    if(pulses.length<15){
+      var from = Math.floor(Math.random()*neurons.length);
+      var n = neurons[from];
+      if(n.connections.length>0){
+        var to = n.connections[Math.floor(Math.random()*n.connections.length)];
+        pulses.push({from:from, to:to, progress:0, speed:0.008+Math.random()*0.015});
+      }
+    }
+  }, 200);
+
+  function drawNeural(){
+    var w = canvas.width, h = canvas.height;
+    ctx.fillStyle = 'rgba(6,12,6,0.9)';
+    ctx.fillRect(0,0,w,h);
+
+    // Connections
+    ctx.strokeStyle = 'rgba(76,201,110,0.06)';
+    ctx.lineWidth = 0.5;
+    for(var i=0; i<neurons.length; i++){
+      for(var ci=0; ci<neurons[i].connections.length; ci++){
+        var j = neurons[i].connections[ci];
+        ctx.beginPath();
+        ctx.moveTo(neurons[i].x, neurons[i].y);
+        ctx.lineTo(neurons[j].x, neurons[j].y);
+        ctx.stroke();
+      }
+    }
+
+    // Pulses
+    for(var pi=pulses.length-1; pi>=0; pi--){
+      var p = pulses[pi];
+      p.progress += p.speed;
+      if(p.progress>=1){ pulses.splice(pi,1); continue; }
+      var fx = neurons[p.from].x + (neurons[p.to].x-neurons[p.from].x)*p.progress;
+      var fy = neurons[p.from].y + (neurons[p.to].y-neurons[p.from].y)*p.progress;
+      ctx.beginPath();
+      ctx.arc(fx, fy, 3, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(232,184,64,0.7)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(fx, fy, 8, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(232,184,64,0.1)';
+      ctx.fill();
+    }
+
+    // Neurons
+    for(var i=0; i<neurons.length; i++){
+      var n = neurons[i];
+      var pulse = 1 + 0.3*Math.sin(Date.now()*0.003 + n.phase);
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r*pulse, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(77,166,204,0.5)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r*2.5, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(77,166,204,0.06)';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(drawNeural);
+  }
+  drawNeural();
+})();
+
+// ============================================================
+// KNOWLEDGE METER — Scroll progress
+// ============================================================
+(function(){
+  var meter = document.getElementById('knowledgeMeter');
+  var pctEl = document.getElementById('kmPct');
+  var circle = document.getElementById('kmCircle');
+  var circumference = 125.66;
+
+  window.addEventListener('scroll', function(){
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = Math.min(100, Math.round((scrollTop/docHeight)*100));
+    pctEl.textContent = pct+'%';
+    circle.style.strokeDashoffset = circumference - (circumference*pct/100);
+  });
+})();
 </script>
 </body>
 </html>
