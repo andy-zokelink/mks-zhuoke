@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卓老板聊科技 · 最小知识集</title>
+<style>
+/* ============================================================
+   卓老板聊科技 · 科学客厅
+   设计理念：傍晚的书房，一盏灯，一杯茶，一位老友
+   298 篇文章，7 个专题，一个温暖的知识空间
+   ============================================================ */
+:root {
+  --bg: #1a1612;
+  --bg-card: #241e18;
+  --bg-card-hover: #2c251e;
+  --text: #d4cfc4;
+  --text-bright: #f0e8d8;
+  --text-dim: #8a8278;
+  --text-dim2: #5e5850;
+  --border: #2e2822;
+  --border-light: #3e3830;
+  --amber: #d4a040;
+  --amber-light: #f0d878;
+  --amber-soft: #e8c870;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
+  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ===== Ambient Room Glow ===== */
+.room-ambient {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* Warm lamp glow from center-top */
+    radial-gradient(ellipse 55% 45% at 50% 28%, rgba(212,160,64,0.08) 0%, transparent 55%),
+    /* Subtle color patches around the room */
+    radial-gradient(ellipse 25% 40% at 12% 55%, rgba(91,141,184,0.04) 0%, transparent 45%),
+    radial-gradient(ellipse 25% 40% at 88% 45%, rgba(196,91,91,0.03) 0%, transparent 45%),
+    radial-gradient(ellipse 30% 35% at 50% 85%, rgba(212,145,74,0.04) 0%, transparent 50%),
+    /* Vignette */
+    radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(16,12,8,0.4) 100%);
+}
+
+/* ===== Dust Motes in Lamplight ===== */
+.motes {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.mote {
+  position: absolute;
+  border-radius: 50%;
+  background: #e8c870;
+  animation: mote-float linear infinite;
+}
+@keyframes mote-float {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  8%   { opacity: 0.7; }
+  50%  { opacity: 0.3; }
+  92%  { opacity: 0.05; }
+  100% { transform: translateY(-105vh) translateX(var(--x)) scale(0.3); opacity: 0; }
+}
+.m1 { left: 6%;  bottom: -8px; width: 2.5px; height: 2.5px; --x: 45px; animation-duration: 15s; animation-delay: 0s; }
+.m2 { left: 14%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -25px; animation-duration: 13s; animation-delay: 2s; }
+.m3 { left: 22%; bottom: -8px; width: 2px;   height: 2px;   --x: 55px; animation-duration: 17s; animation-delay: 1s; }
+.m4 { left: 30%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -35px; animation-duration: 14s; animation-delay: 3s; }
+.m5 { left: 38%; bottom: -8px; width: 2.5px; height: 2.5px; --x: 30px; animation-duration: 15.5s; animation-delay: 0.5s; }
+.m6 { left: 46%; bottom: -8px; width: 1px;   height: 1px;   --x: -45px; animation-duration: 12s; animation-delay: 2.5s; }
+.m7 { left: 54%; bottom: -8px; width: 2px;   height: 2px;   --x: 40px; animation-duration: 16s; animation-delay: 1.5s; }
+.m8 { left: 62%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -20px; animation-duration: 13.5s; animation-delay: 3.5s; }
+.m9 { left: 70%; bottom: -8px; width: 2px;   height: 2px;   --x: 50px; animation-duration: 14.5s; animation-delay: 0.8s; }
+.m10{ left: 78%; bottom: -8px; width: 1px;   height: 1px;   --x: -30px; animation-duration: 15.8s; animation-delay: 4s; }
+.m11{ left: 86%; bottom: -8px; width: 2.5px; height: 2.5px; --x: 35px; animation-duration: 12.5s; animation-delay: 1.2s; }
+.m12{ left: 94%; bottom: -8px; width: 1.5px; height: 1.5px; --x: -50px; animation-duration: 16.5s; animation-delay: 2.8s; }
+
+/* ===== Bookshelf edge vignette ===== */
+.bookshelf {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.3) 100%);
+}
+
+/* ===== Layout ===== */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  padding: 60px 0 36px;
+}
+.lamp {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 8px;
+  animation: lamp-glow 2.5s ease-in-out infinite;
+}
+@keyframes lamp-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(212,160,64,0.3)); }
+  50%      { filter: drop-shadow(0 0 20px rgba(212,160,64,0.6)); }
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: var(--text-bright);
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+.header .tagline {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  color: var(--amber-soft);
+  font-size: 1.1rem;
+  opacity: 0.65;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.header .intro {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  line-height: 1.9;
+}
+.divider {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  margin: 24px auto;
+  opacity: 0.5;
+}
+
+/* ===== Stats bar ===== */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 18px 0 32px;
+}
+.stat {
+  text-align: center;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius);
+  min-width: 90px;
+}
+.stat-num {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--amber);
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* ===== Room Cards Grid ===== */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  padding-bottom: 48px;
+}
+@media (max-width: 800px) {
+  .rooms-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .rooms-grid { grid-template-columns: 1fr; }
+}
+
+.room-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--ease);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.room-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--room-color);
+  opacity: 0.4;
+  transition: opacity var(--ease);
+}
+.room-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
+}
+.room-card:hover::before {
+  opacity: 1;
+}
+.room-card:hover .room-icon {
+  transform: scale(1.15);
+}
+.room-icon {
+  font-size: 2.4rem;
+  transition: transform var(--ease);
+  margin-bottom: 10px;
+  filter: grayscale(0.15);
+}
+.room-num {
+  font-size: 0.68rem;
+  color: var(--room-color);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.75;
+}
+.room-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--text-bright);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.room-subtitle {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  opacity: 0.55;
+  margin-bottom: 12px;
+}
+.room-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: 14px;
+}
+.room-keywords {
+  font-size: 0.7rem;
+  color: var(--text-dim2);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+.room-corner {
+  font-size: 0.7rem;
+  color: var(--room-color);
+  opacity: 0.5;
+  letter-spacing: 0.5px;
+}
+
+/* ===== MKS Footer ===== */
+.mks-footer {
+  text-align: center;
+  padding: 48px 24px 40px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  line-height: 1.9;
+}
+.mks-footer .brand {
+  color: var(--amber);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.mks-footer a {
+  color: var(--amber);
+  text-decoration: none;
+  transition: color var(--ease);
+}
+.mks-footer a:hover { color: var(--amber-light); }
+
+/* ===== Hidden gem: "About the host" ===== */
+.about-host {
+  max-width: 660px;
+  margin: 0 auto 48px;
+  padding: 28px 32px;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+.about-host .host-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--text-bright);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.about-host p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.9;
+}
+.about-host .signature {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  color: var(--amber-soft);
+  opacity: 0.5;
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+</style>
+</head>
+<body>
+
+<div class="room-ambient"></div>
+<div class="motes">
+  <div class="mote m1"></div><div class="mote m2"></div><div class="mote m3"></div>
+  <div class="mote m4"></div><div class="mote m5"></div><div class="mote m6"></div>
+  <div class="mote m7"></div><div class="mote m8"></div><div class="mote m9"></div>
+  <div class="mote m10"></div><div class="mote m11"></div><div class="mote m12"></div>
+</div>
+<div class="bookshelf"></div>
+
+<div class="page">
+  <header class="header">
+    <span class="lamp">🛋️</span>
+    <h1>卓老板聊科技</h1>
+    <p class="tagline">A Science Parlor — Where Curiosity Meets Conversation</p>
+    <div class="divider"></div>
+    <p class="intro">
+      2016年，"得到"App上线了一档科普播客。卓克用通俗的语言、朋友的语气，
+      把黑洞、基因、疫苗、人工智能这些高深的话题，变成了客厅里的日常聊天。<br>
+      这里是全部 <strong>298</strong> 篇文章的完整知识地图——欢迎走进卓老板的科学客厅。
+    </p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num">298</div>
+      <div class="stat-label">篇文章</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">7</div>
+      <div class="stat-label">个专题</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">32</div>
+      <div class="stat-label">原章节</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2016</div>
+      <div class="stat-label">年份</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">58</div>
+      <div class="stat-label">最大专题</div>
+    </div>
+  </div>
+
+  <div class="about-host">
+    <div class="host-name">👨‍🔬 关于卓克</div>
+    <p>
+      卓克，科普作家，"得到"App早期主理人之一。《卓老板聊科技》以问答形式，
+      用科学思维拆解日常问题——从"红糖补血吗"到"引力波是什么"。
+      他的风格既不居高临下，也不故作惊人，而是像朋友一样，把科学原理讲清楚。
+    </p>
+    <p class="signature">—— "科学是最好的声音"</p>
+  </div>
+
+  <div class="rooms-grid">
+    
+        <a href="1-宇宙的秩序.html" class="room-card" style="--room-color: #5b8db8; --room-glow: rgba(91, 141, 184, 0.2);">
+          <div class="room-icon">🌌</div>
+          <div class="room-num">专题 1 · 45 篇</div>
+          <h3 class="room-title">宇宙的秩序</h3>
+          <p class="room-subtitle">The Cosmic Order</p>
+          <p class="room-desc">从黑洞到量子，从元素诞生到引力波——物理学与天文学揭示宇宙运行的深层法则。</p>
+          <div class="room-keywords">引力波 · 黑洞 · 量子 · 恒星演化 · 元素 · 相对论</div>
+          <div class="room-corner">🔭 天文台角</div>
+        </a>
+
+        <a href="2-生命的算法.html" class="room-card" style="--room-color: #5a9e6f; --room-glow: rgba(90, 158, 111, 0.2);">
+          <div class="room-icon">🧬</div>
+          <div class="room-num">专题 2 · 57 篇</div>
+          <h3 class="room-title">生命的算法</h3>
+          <p class="room-subtitle">The Algorithm of Life</p>
+          <p class="room-desc">从 DNA 双螺旋到神经网络，从单细胞到意识——生物学与神经科学解码生命的逻辑。</p>
+          <div class="room-keywords">基因 · 大脑 · 细胞 · 演化 · 微生物 · 神经科学</div>
+          <div class="room-corner">🔬 标本陈列柜</div>
+        </a>
+
+        <a href="3-身体的真相.html" class="room-card" style="--room-color: #c45b5b; --room-glow: rgba(196, 91, 91, 0.2);">
+          <div class="room-icon">🫀</div>
+          <div class="room-num">专题 3 · 37 篇</div>
+          <h3 class="room-title">身体的真相</h3>
+          <p class="room-subtitle">The Truth of the Body</p>
+          <p class="room-desc">癌症、免疫、疫苗、药物——用科学证据回答关于健康与疾病的关键问题。</p>
+          <div class="room-keywords">癌症 · 免疫 · 疫苗 · 抗生素 · 过敏 · 辐射</div>
+          <div class="room-corner">💊 诊疗书架</div>
+        </a>
+
+        <a href="4-餐桌上的实验室.html" class="room-card" style="--room-color: #d4914a; --room-glow: rgba(212, 145, 74, 0.2);">
+          <div class="room-icon">🍽️</div>
+          <div class="room-num">专题 4 · 22 篇</div>
+          <h3 class="room-title">餐桌上的实验室</h3>
+          <p class="room-subtitle">The Lab on Your Table</p>
+          <p class="room-desc">糖、脂肪、转基因、维生素——用科学方法审视每一口食物的真相。</p>
+          <div class="room-keywords">糖 · 脂肪 · 转基因 · 维生素 · 牛奶 · 保健品</div>
+          <div class="room-corner">🧪 厨房实验台</div>
+        </a>
+
+        <a href="5-思维的武器.html" class="room-card" style="--room-color: #8b6db0; --room-glow: rgba(139, 109, 176, 0.2);">
+          <div class="room-icon">🧠</div>
+          <div class="room-num">专题 5 · 46 篇</div>
+          <h3 class="room-title">思维的武器</h3>
+          <p class="room-subtitle">Weapons of Thought</p>
+          <p class="room-desc">概率思维、博弈论、批判性思考——锻造抵御认知偏差的理性工具。</p>
+          <div class="room-keywords">科学方法 · 概率 · 博弈 · 批判思维 · 伪科学 · 认知偏误</div>
+          <div class="room-corner">📖 书房写字桌</div>
+        </a>
+
+        <a href="6-未来的拼图.html" class="room-card" style="--room-color: #4a8a9a; --room-glow: rgba(74, 138, 154, 0.2);">
+          <div class="room-icon">🤖</div>
+          <div class="room-num">专题 6 · 33 篇</div>
+          <h3 class="room-title">未来的拼图</h3>
+          <p class="room-subtitle">Puzzle of the Future</p>
+          <p class="room-desc">人工智能、自动驾驶、虚拟货币——拼凑正在成型的明日世界图景。</p>
+          <div class="room-keywords">AI · 自动驾驶 · 比特币 · 新能源 · 量子技术 · VR</div>
+          <div class="room-corner">⚡ 未来工作坊</div>
+        </a>
+
+        <a href="7-文明的阶梯.html" class="room-card" style="--room-color: #b8955a; --room-glow: rgba(184, 149, 90, 0.2);">
+          <div class="room-icon">🏛️</div>
+          <div class="room-num">专题 7 · 58 篇</div>
+          <h3 class="room-title">文明的阶梯</h3>
+          <p class="room-subtitle">The Ladder of Civilization</p>
+          <p class="room-desc">从古代水道到登月工程，从艺术诞生到城市演化——科技与文明交织的宏大叙事。</p>
+          <div class="room-keywords">航天史 · 城市史 · 艺术 · 教育 · 科学人物 · 环保</div>
+          <div class="room-corner">🗺️ 壁炉地图桌</div>
+        </a>
+  </div>
+
+  <!-- Concept Graph Preview -->
+  <div style="text-align:center; padding: 20px 0 0;">
+    <div class="divider"></div>
+    <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:16px;">
+      🗺️ 七个专题之间的概念关联 — 298篇文章构成了这张知识星系图
+    </p>
+    <a href="concepts.svg" target="_blank" style="display:inline-block; border-radius:12px; overflow:hidden; border:1px solid var(--border); transition:all var(--ease); max-width:100%;">
+      <img src="concepts.svg" alt="知识星系图" style="display:block; width:100%; max-width:700px; height:auto;"
+           onerror="this.style.display='none'">
+    </a>
+    <p style="font-size:0.7rem; color:var(--text-dim); margin-top:8px; opacity:0.5;">点击查看大图</p>
+  </div>
+
+  <footer class="mks-footer">
+    <p><span class="brand">卓老板聊科技 · 最小知识集（MKS）</span></p>
+    <p>基于"得到"App 2016年播客内容整理重组</p>
+    <p>专题分类、视觉设计、知识整理由 AI 辅助完成</p>
+    <p style="margin-top:8px;">
+      <a href="concepts.svg" target="_blank">🗺️ 知识星系图</a> ·
+      <a href="quiz.html">📝 科学素养自测</a> ·
+      <a href="https://github.com/andy-zokelink/mks-zhuoke">GitHub</a>
+    </p>
+    <p style="margin-top:6px; opacity:0.5;">
+      设计灵感：傍晚书房 · 一盏灯 · 一杯茶 · 一位老友
+    </p>
+  </footer>
+</div>
+
+</body>
+</html>

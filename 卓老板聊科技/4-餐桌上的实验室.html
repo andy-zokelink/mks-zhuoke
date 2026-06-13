@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍽️ 餐桌上的实验室 · 卓老板聊科技 MKS</title>
+<style>
+/* ============================================================
+   卓老板聊科技 · 专题 4：餐桌上的实验室
+   设计理念：科学客厅的厨房实验台——量杯、试纸与食谱
+   ============================================================ */
+:root {
+  --bg: #1a1612;
+  --bg-card: #241e18;
+  --bg-card-hover: #2c251e;
+  --text: #d4cfc4;
+  --text-bright: #f0e8d8;
+  --text-dim: #8a8278;
+  --border: #2e2822;
+  --border-light: #3e3830;
+  --accent: #d4914a;
+  --accent-light: #f0b870;
+  --accent-glow: rgba(212,145,74,0.25);
+  --amber: #d4a040;
+  --amber-light: #f0d878;
+  --amber-glow: rgba(212,160,64,0.2);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
+  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ===== Room ambient light ===== */
+.room-glow {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 20%, rgba(212,145,74,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 50% at 15% 60%, var(--amber-glow) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 50% at 85% 40%, rgba(180,160,120,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 50% 90%, rgba(200,160,80,0.04) 0%, transparent 50%);
+}
+
+/* ===== Dust motes in lamplight ===== */
+.dust-motes {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.mote {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--amber-light);
+  animation: mote-drift linear infinite;
+  opacity: 0;
+}
+@keyframes mote-drift {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  5%   { opacity: 0.6; }
+  40%  { opacity: 0.3; }
+  90%  { opacity: 0.05; }
+  100% { transform: translateY(-100vh) translateX(var(--mx)); opacity: 0; }
+}
+.m1 { left: 5%;  bottom: -5px; width: 2px; height: 2px; --mx: 40px; animation-duration: 14s; animation-delay: 0s; }
+.m2 { left: 15%; bottom: -5px; width: 1px; height: 1px; --mx: -25px; animation-duration: 12s; animation-delay: 2s; }
+.m3 { left: 25%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 55px; animation-duration: 16s; animation-delay: 1s; }
+.m4 { left: 35%; bottom: -5px; width: 2px; height: 2px; --mx: -35px; animation-duration: 13s; animation-delay: 3s; }
+.m5 { left: 45%; bottom: -5px; width: 1px; height: 1px; --mx: 45px; animation-duration: 15s; animation-delay: 0.5s; }
+.m6 { left: 55%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: -45px; animation-duration: 11s; animation-delay: 2.5s; }
+.m7 { left: 65%; bottom: -5px; width: 2px; height: 2px; --mx: 30px; animation-duration: 14.5s; animation-delay: 1.5s; }
+.m8 { left: 75%; bottom: -5px; width: 1px; height: 1px; --mx: -20px; animation-duration: 12.5s; animation-delay: 3.5s; }
+.m9 { left: 85%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 50px; animation-duration: 15.5s; animation-delay: 0.8s; }
+.m10 { left: 92%; bottom: -5px; width: 2px; height: 2px; --mx: -30px; animation-duration: 13.5s; animation-delay: 4s; }
+
+/* ===== Top Navigation Bar ===== */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(26,22,18,0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.nav-home {
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: color var(--ease);
+  white-space: nowrap;
+}
+.nav-home:hover { color: var(--amber-light); }
+.nav-sep { color: var(--text-dim); font-size: 0.85rem; }
+.nav-title {
+  color: var(--text-bright);
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.nav-count {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  background: rgba(255,255,255,0.04);
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Topic quick-nav */
+.topic-quick-nav {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.topic-quick-nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all var(--ease);
+  white-space: nowrap;
+}
+.topic-quick-nav a:hover {
+  color: var(--text-bright);
+  border-color: var(--border-light);
+  background: rgba(255,255,255,0.03);
+}
+.topic-quick-nav a.active {
+  color: var(--accent-light);
+  border-color: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  font-weight: 600;
+}
+
+/* ===== Page Header ===== */
+.page-header {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 48px auto 32px;
+  padding: 0 20px;
+  text-align: center;
+}
+.page-header .topic-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: icon-float 3s ease-in-out infinite;
+}
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.page-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--text-bright);
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.page-header .subtitle {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  color: var(--accent-light);
+  font-size: 1.05rem;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.page-header .desc {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.header-line {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  margin: 20px auto;
+}
+
+/* ===== Main Content Layout ===== */
+.main-layout {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ===== Sidebar TOC ===== */
+.toc-sidebar {
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.toc-sidebar h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--amber);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.toc-sidebar ol {
+  list-style: none;
+  padding: 0;
+}
+.toc-sidebar li {
+  margin-bottom: 2px;
+}
+.toc-sidebar a {
+  display: block;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all var(--ease);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toc-sidebar a:hover {
+  color: var(--accent-light);
+  background: rgba(255,255,255,0.03);
+}
+
+/* ===== Article Cards ===== */
+.articles-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.art-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  transition: all var(--ease);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.art-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 20%, var(--accent) 50%, transparent 80%);
+  opacity: 0;
+  transition: opacity var(--ease);
+}
+.art-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
+}
+.art-card:hover::before { opacity: 0.6; }
+
+.art-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.art-chapter {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(255,255,255,0.04);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.art-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text-bright);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.art-body {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.art-body .art-p {
+  margin-bottom: 10px;
+}
+.art-body .art-h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--accent-light);
+  margin: 18px 0 8px;
+  font-weight: 600;
+}
+.art-body .art-h4 {
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  margin: 14px 0 6px;
+  font-weight: 600;
+}
+.art-body .art-h5 {
+  font-size: 0.88rem;
+  color: var(--amber-light);
+  margin: 10px 0 4px;
+  font-weight: 500;
+}
+.art-body strong {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+.art-body .art-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0 16px;
+}
+.art-body .art-list li {
+  padding: 4px 0 4px 24px;
+  position: relative;
+  margin-bottom: 2px;
+}
+.art-body .art-list li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+/* ===== Back to top ===== */
+.back-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 50;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--ease);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.back-top:hover {
+  color: var(--amber-light);
+  border-color: rgba(212,160,64,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* ===== Footer ===== */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 48px 20px 32px;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+.footer a {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .toc-sidebar {
+    position: static;
+    max-height: none;
+    order: -1;
+  }
+  .art-card {
+    padding: 20px;
+  }
+  .topic-quick-nav {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="room-glow"></div>
+
+<div class="dust-motes">
+  <div class="mote m1"></div>
+  <div class="mote m2"></div>
+  <div class="mote m3"></div>
+  <div class="mote m4"></div>
+  <div class="mote m5"></div>
+  <div class="mote m6"></div>
+  <div class="mote m7"></div>
+  <div class="mote m8"></div>
+  <div class="mote m9"></div>
+  <div class="mote m10"></div>
+</div>
+
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-home">🛋️ 科学客厅</a>
+    <span class="nav-sep">›</span>
+    <span class="nav-title">🍽️ 餐桌上的实验室</span>
+    <span class="nav-count">22 篇</span>
+    <div class="topic-quick-nav">
+      <a href="1-宇宙的秩序.html" class="">🌌</a>
+<a href="2-生命的算法.html" class="">🧬</a>
+<a href="3-身体的真相.html" class="">🫀</a>
+<a href="4-餐桌上的实验室.html" class="active">🍽️</a>
+<a href="5-思维的武器.html" class="">🧠</a>
+<a href="6-未来的拼图.html" class="">🤖</a>
+<a href="7-文明的阶梯.html" class="">🏛️</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <span class="topic-icon">🍽️</span>
+  <h1>餐桌上的实验室</h1>
+  <p class="subtitle">The Lab on Your Table</p>
+  <div class="header-line"></div>
+  <p class="desc">糖、脂肪、转基因、维生素——把厨房变成实验室，用科学方法审视每一口食物的真相。</p>
+</header>
+
+<div class="main-layout">
+  <aside class="toc-sidebar">
+    <h4>📋 本专题目录</h4>
+    <ol>
+      <li><a href="#art-1">中国人的饮食习惯会吃进去砒霜？</a></li>
+<li><a href="#art-2">危险的糖</a></li>
+<li><a href="#art-3">可口可乐的配方很神秘吗？</a></li>
+<li><a href="#art-4">吃燕窝对身体有益吗？</a></li>
+<li><a href="#art-5">味精、鸡精致癌吗？</a></li>
+<li><a href="#art-6">喝酒怎么有时候醉，有时候不醉呢？</a></li>
+<li><a href="#art-7">奇臭无比的黑暗料理，能吃吗？</a></li>
+<li><a href="#art-8">小麦为什么不能像大米那么煮着吃？</a></li>
+<li><a href="#art-9">就算是再牛的品酒行家，也分辨不出红酒的好坏阿</a></li>
+<li><a href="#art-10">戒掉碳水化合物可行吗？</a></li>
+<li><a href="#art-11">牛奶与乳糖不耐受</a></li>
+<li><a href="#art-12">糖会伤害身体，那代糖呢？</a></li>
+<li><a href="#art-13">红皮鸡蛋更有营养？</a></li>
+<li><a href="#art-14">红糖补血吗？</a></li>
+<li><a href="#art-15">维生素吃多了，会致癌吗？</a></li>
+<li><a href="#art-16">蜂蜜越贵越好吗？</a></li>
+<li><a href="#art-17">螺旋藻能长期食用吗？</a></li>
+<li><a href="#art-18">国内信中医的人有多少？</a></li>
+<li><a href="#art-19">所谓“辟谷”的好处</a></li>
+<li><a href="#art-20">藿香正气水能治中暑吗？</a></li>
+<li><a href="#art-21">专题丨少吃糖，更健康</a></li>
+<li><a href="#art-22">专题丨有关“营养价值”的几个问题</a></li>
+    </ol>
+  </aside>
+
+  <main class="articles-area">
+    
+    <article class="art-card" id="art-1">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">中国人的饮食习惯会吃进去砒霜？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">@tedyy：</p>
+<p class="art-p">卓老师，最近看了《BBC警告，中国人习惯煮饭的方法会吃进更多砒霜》这么一篇文章，请问大米真的富含砒霜吗？还是，这只是危言耸听，披着科学外衣的骗局呢？</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：红皮鸡蛋更有营养？”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">这个问题直接回答，并不是危言耸听，咱们的饮食习惯确实会摄入更多砷的化合物，但是还没有到达全民服毒，危害全民面临健康的地步。</p>
+
+
+<p class="art-p">BBC报道这事，具体说就是2月8号的时候BBC发了一篇文章，提醒人们改变烹调米饭的方法。文章里介绍了一个实测，对比了几种不同方式做米饭后砷含量的多少：</p>
+
+<p class="art-p">第一种是两份水一份大米，然后放在锅里闷熟；</p>
+
+<p class="art-p">第二种是5份水一份大米，米饭是在水里煮熟的，然后捞出来，有点像意大利人做米饭的方法，我看有些食堂的米饭也是这么做的，就是捞饭；</p>
+
+<p class="art-p">第三种是把米泡在水里一个晚上，第二天再用捞饭的方法做米饭。</p>
+
+<p class="art-p">假如最初生大米中的砷含量是100%的话，咱们普通焖饭的砷残留是84%，捞饭是43%，先泡过一夜再捞饭的方法是18%，而咱们中国人恰恰都是采用焖饭或者蒸饭的方式，而欧美很多国家米饭是用捞饭的方法做的，所以中国人烹调米饭的方法确实残留了更多砷。</p>
+
+<p class="art-p">而且更严重的是，中国人以米饭为主食，欧美人啊，非洲人啊，澳洲人啊，他们可不是顿顿米饭，一个礼拜可能也就吃上几次，还是捞饭，所以人家从米饭中摄入的砷含量可能比我们要低一个数量级了。</p>
+
+<p class="art-p">那我继续说两个更坏的消息，第一个是水稻这种农作物天生就是容易富集砷的化合物，同样环境下种植，比玉米和小麦中的砷含量高了10倍左右，比同样重量的蔬菜的砷高了30倍。这和它这种植物根系的结构有关系，水稻的根就是容易吸引硅和砷，硅到无所谓，砷就是有毒的东西了。</p>
+
+<p class="art-p">第二个坏消息是中国有部分地区的水源中砷含量是比较高的，比如吉林省、辽宁、内蒙，三省交界的比较大的区域，呼和浩特附近，塔里木盆地沿着一圈。还有亚洲最大的砷矿湖南石门，还有云南的砷矿，这些地方的水中砷就更高了。</p>
+
+<p class="art-p">于是四个因素，焖饭的方法+顿顿吃米饭+水稻本来就容易富集砷+有些地区水中砷含量高，如果都加在一起的话，中国人通过食物摄入的砷确实比欧美的均值高，大约比美国、加拿大、澳洲的均值高4-5倍。但是中国人就都这么吃，日本、韩国也都这么吃，所以中日韩，大家都是这么高，另外欧洲也有例外，西班牙人就吃更多的米饭。</p>
+
+<p class="art-p">但高也看跟谁比，跟欧美不吃水稻的比当然是高，关键还要看对身体有害无害。</p>
+
+<p class="art-p">世界卫生组织对无机砷的摄入量定的安全标准是每公斤体重每天不超过2微克，对女人就是0.1m克的砷，对男人就是0.15m克。</p>
+
+<p class="art-p">中国对大米中无机砷含量定的合格线是低于0.15毫克，所以对应大米就是女生每天吃进1斤3两大米，男人吃2斤大米。</p>
+
+<p class="art-p">但是大米和米饭是有差别的，看你加多少水做了，一般来说水是米质量的1.2倍。所以1斤3两大米蒸出来的饭是2斤8两，2斤大米蒸出来的饭就4斤4两了。而我们就算大肚量，每顿饭也就是半斤米饭，所以一般不会超过安全线，大部分处于安全线的一半。</p>
+
+<p class="art-p">我再解释一下这个每日摄入2微克的安全线的意义。这个量代表着，如果你每天严格的专门吃进2微克无机砷，几十年下来，不会比健康人有显著差异，因为我们身体能代谢这个量。</p>
+
+<p class="art-p">那么中国人到底吃了多少砷呢？2000年的时候曾经有个研究统计了东北地区、华北地区、陕西地区、江南地区、西南地区，这些地区人们膳食中摄入的无机砷的量，大部分是在0.1m克，少部分在0.05-0.07m克，所以你看，这和刚刚咱们估测的，大都除以安全线的一半是吻合的，尤其你习惯吃面食的话就会更低。</p>
+
+<p class="art-p">最后总结一下，虽然咱们焖饭的方式确实保留了更多砷，但即便这样也很难超标，危害健康。如果你实在太在意，只要简单的把焖饭的方式改成捞饭，就能让砷的含量再下降一半。</p>
+
+<p class="art-p">在BBC的报道中还提到了印度香米中的砷含量比其他米低，他们可能不知道，很多中国人可能会把这半句当唯一的解毒办法，最后造成印度香米的脱销，其实用捞饭的方式就比香米低。甚至什么都不改变，大概率说对身体也无害。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-2">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">危险的糖</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">每天应该吃多少“游离糖”</p>
+
+<ol class="art-list">
+<li>世界卫生组织的说法是每天游离糖的摄入不超过每日总热量的10%，建议低于5%。对应蔗糖来说，5%的建议值就是男人摄入27.5克，女人摄入22.5克。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>游离糖指的是以食物添加剂的方式吃进去的糖，比如蛋糕、饮料、巧克力这些，还有炒菜时撒的糖，沏茶时放的蜂蜜，而且也包含鲜榨果汁和各种鲜果汁中的糖。</li>
+</ol>
+
+<ol class="art-list">
+<li>鲜榨果汁中也含有超量的糖，一听可乐大小的鲜榨苹果汁含糖80克，远超22.5-27.5克的建议值。不过没有加工过的水果不会造成血糖飙升，因为未加工水果里面的糖还要经过一段时间消化才能进入体内。</li>
+</ol>
+
+<p class="art-p">甜饮料中的糖含量不是最高的</p>
+
+<ol class="art-list">
+<li>一瓶500ml的可乐，含糖53克。如果一个成年男子一天一半的水用可乐代替，他将吃进去106克游离糖。</li>
+</ol>
+
+<p class="art-p">如果市面上销售的饮料都换算成500ml容量，糖含量分别为：</p>
+
+<p class="art-p">冰糖雪梨：63克；</p>
+
+<p class="art-p">可口可乐：53克；</p>
+
+<p class="art-p">百事可乐：53克；</p>
+
+<p class="art-p">雪碧：53克；</p>
+
+<p class="art-p">酸梅汤：51克；</p>
+
+<p class="art-p">鲜橙多、水蜜桃、冰红茶，加多宝，均在45-49克之间；</p>
+
+<p class="art-p">茉莉清茶和冰绿茶最少，24克。</p>
+
+
+<p class="art-p">一瓶可乐中有7勺糖，但是因为可以溶在水中，所以喝下去不费力，如果不溶解，很难一次吃下这么多固体的蔗糖。为了保证甜度，饮料中的糖含量基本都在10%左右。</p>
+
+
+<ol class="art-list">
+<li>比饮料含糖量更高的是各种糕点，一般控制在20%，比糕点还高的是一些粉状的食物，比如豆奶粉，奶香麦片，黑芝麻糊，莲子羹，这些含糖量在50%，比粉状食物更高的还有，就是果脯，果酱，一般是60%的含糖量。</li>
+</ol>
+
+<p class="art-p">人类吃糖的历史</p>
+
+<ol class="art-list">
+<li>人类历史10万年中，只有最近1000年我们才有机会能方便地吃到游离糖。之前的9万9千年，我们的主要食物是动物、昆虫和可以随手采摘到的果实和嫩芽。而那时的果实大都略带酸涩，含糖量远没有农业出现后的水果高。</li>
+</ol>
+
+<ol class="art-list">
+<li>人类种植水果出现在6000年前，直到公元600年，才有了从甘蔗中提取蔗糖的技术，直到1700年前人类都不能随意吃到游离糖的。</li>
+</ol>
+
+<ol class="art-list">
+<li>1700年时英国每人每年消费蔗糖1.8公斤。到了1800年，因为奴隶种植的甘蔗大大增加，每人每年消费蔗糖8.1公斤。到1850年，每人每年消费16.3公斤，到了1950年，每人每年消费45.4公斤。美国今天人均年消费蔗糖也大约是50公斤，世界平均水平是25公斤。中国现在是20公斤，但是1980年中国人均是4公斤。其实各位可以算算，一年20公斤，一天就是55克糖，已经是世界卫生组织设置的上限了。</li>
+</ol>
+
+<p class="art-p">食品工业下的糖</p>
+
+<ol class="art-list">
+<li>现代食品工业使用的糖大都来自“高果糖浆”，它的成分是果糖，甜度为1.7。高果糖浆是由玉米糖制成的。玉米糖浆90%的成分是葡萄糖，葡萄糖的甜度只有0.7。工业生产中用的高果糖浆一般是42%和55%两种浓度，价格都远低于同样甜度下的蔗糖。</li>
+</ol>
+
+<ol class="art-list">
+<li>从1984年起，两家可乐公司都更改了配方，用高果糖浆代替了蔗糖，让可乐生产成本进一步降低。但那时没人知道用果糖代替蔗糖对身体更不利。</li>
+</ol>
+
+<p class="art-p">糖对健康的危害</p>
+
+<ol class="art-list">
+<li>1945年-1980年这三十五年间，美国的肥胖人群比例一直在12%-15%浮动，但1980年-2000年仅仅20年时间，肥胖人群比例猛增到35%。这个时间点和高果糖浆大量替代蔗糖的更迭期正好吻合。</li>
+</ol>
+
+<ol class="art-list">
+<li>果糖和葡萄糖的分子式都是C6H12O6，但它们的原子空间排布不同，这也导致他们在人体内吸收的过程不同。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>蔗糖可以逆浓度差吸收，运输蔗糖的转运蛋白质对胰岛素非常敏感。果糖不能逆浓度差吸收，不会大量刺激胰岛素分泌。而胰岛素的分泌会让人有饱腹感，所以高果糖浆为原料的饮料在吃饭时喝并不会增加饱腹感。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>各种糖的大量摄入会反复给胰腺增加沉重的负担，造成“胰岛素抵抗”，这种问题如果表现严重就是II型糖尿病，这也是为什么现在大量年轻人出现糖尿病的原因。</li>
+</ol>
+
+<ol class="art-list">
+<li>美国从1980年起每隔5年公布一次《居民膳食指南》，最开始的几版都推荐低脂肪低胆固醇饮食，让大家对脂肪和胆固醇留下了不好的印象，但实际上我们完全冤枉了胆固醇，也部分程度的冤枉了脂肪，其实他们两个都是为糖背了黑锅。食用越多的糖，心脏病发病率会增加，这要比食用高脂饮食更厉害。</li>
+</ol>
+
+<p class="art-p">食品行业与公共部门的博弈</p>
+
+<ol class="art-list">
+<li>各大食品企业的广告和文化植入已经让很多人形成了：年轻人该喝甜饮料，白领应该喝奶茶、卡布奇诺，老年人该喝茶的印象。而正经的健康的宣传内容远不及商业广告的力量。</li>
+</ol>
+
+<ol class="art-list">
+<li>早在2003年世界卫生组织就曾计划公布每日糖的摄入总量不能超过5%的建议，但被美国糖业协会阻挠，最终只挑了另一个风险：蛀牙，公布出来，也没有引起什么注意。</li>
+</ol>
+
+<ol class="art-list">
+<li>墨西哥从2013年起征收甜饮料税。墨西哥是一个肥胖问题非常严重的国家，最终实施时迫于压力把税率从10%降低到5%。</li>
+</ol>
+
+<ol class="art-list">
+<li>丹麦从1930年开始征收糖税，但这和糖的危害无关，仅仅为了征税；2013年丹麦改成脂肪税后很多丹麦食品企业搬家到瑞典和德国，丹麦不得不取消了脂肪税。</li>
+</ol>
+
+<ol class="art-list">
+<li>美国只有2个城市实施糖税，费城施行每1升甜饮料1美元税率，但2016年6月份迫于压力调低到0.5美元每升，加州伯克莱市0.3美元每升。纽约市还在收与不收之间斗争。英国计划在2018年开始征收糖税，现在正处于和食品企业的拉锯战中。</li>
+</ol>
+
+<p class="art-p">代糖安全吗？</p>
+
+<ol class="art-list">
+<li>糖精1950年出现，是最早的代糖，但1970年被一些大鼠实验表明会引发膀胱癌，在反复争取下，最终美国食品药品管理局决定，可以在标注“本产品含糖精，有可能对健康产生危害”的前提下继续使用。但2000年才被更多的实验证实，糖精被冤枉了，大鼠的尿液成分才是导致膀胱癌的根源。糖精彻底被冤枉了，但也再也无法翻身。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>糖精的没落也给了其他代糖机会，阿斯巴甜、木糖醇、蔗糖素、甜菊糖都是甜度好几百的代糖。</li>
+</ol>
+
+<ol class="art-list">
+<li>零度可乐中使用的阿斯巴甜是每听0.18克，比使用53克糖要少很多，阿斯巴甜也曾一度遭到很多质疑，但经过N多验证，目前所有关于阿斯巴甜的怀疑都没有成立，美国食品药品管理局和欧洲食品安全局一直认定阿斯巴甜是安全的。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-3">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">可口可乐的配方很神秘吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">Rijade：记得中学时候做过一篇英语阅读，上面说可乐是一个医生发明的，最初的目的是为了治疗咳嗽，不过那时的味道跟现在的不一样，现在的可口可乐的配方是经过改进的。可乐的配方很神秘吗？据说配方在可口可乐公司是高级机密，很值钱的样子，难怪中国曾经的非常可乐做出来的味道就是差一些。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——为什么恒星的1/4是氦？”</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-4">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">吃燕窝对身体有益吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">@youbie：</p>
+<p class="art-p">认真听了卓老板的所有中医话题的节目，很震惊！有一些问题，希望卓老板来回答：燕窝这么贵，真的能美容吗？燕窝酸是不是对宝宝的脑发育有好处？外国人吃燕窝吗？</p>
+
+<p class="art-p">卓克</p>
+<p class="art-p">燕窝其实真没那么有营养。</p>
+
+
+<p class="art-p">有位听众问我，燕窝到底对身体有没有好处？</p>
+
+<p class="art-p">我先说一个总的纲要，所有你遇到的保健品，不管是超市买的，京东上卖的，朋友送的，都要先看它有没有保健食品批准证书，简称国食健字。</p>
+
+<p class="art-p">这个国食健字的格式是G开头，代表国家食品药品监督管理局；然后四位是年代号，比如今年批的就是2017；然后再接4位，是顺序号。这个证书的有效期是5年，如果你买的保健品连这个号都没有，那就根本不是合格产品。或者这个号是G1990几开头的，都过期好久了。</p>
+
+<p class="art-p">保健品的这个号不光要有，而且还得是真的，现在随便编一个印上去的占比也不少，我们可以在食药监局的官网上查询一下，名称和证书是不是对应的。</p>
+
+<p class="art-p">如果现在真要给这个行业打分的话，满分100，肯定是不及格的，大概也就20、30分吧。因为保健品市场太乱了，从2016年7月1日起，也就是刚刚开始施行的，咱们国家新版的《保健食品注册与备案管理办法》中，第五十五条规定，保健食品的标签、说明书主要内容不得涉及疾病预防、治疗功能，并声明“本品不能代替药物”。这一招是效仿FDA（美国的食药监局）对保健品的管理办法。</p>
+
+<p class="art-p">其实，业内对FDA管理保健品的评价是，他们在保健品的监管上已经吃瘪了，他们最早的想法就是奔着扼杀保健品去的，要像药品一样管理，严格再严格，但是无奈，行业利益盘根错节，FDA愣是没管的了，最终妥协的结果就是FDA只能提出，你们卖保健品的不能有任何内容宣传这东西可以治病。其实就这一招也能大幅遏制住保健品商的忽悠了。</p>
+
+<p class="art-p">但是这事儿到了中国就变味儿了，你可能没仔细听刚刚那第55条，它说的是，保健食品的标签、说明书主要内容不得涉及疾病预防、治疗功能，哎，妙就妙在主要内容这四个字上。那我不在主要内容上涉及，我另外弄一张纸，印在包装上，印在瓶盖上，印在盒子底下，这些位置就不能算主要内容了吧，所以主要两个字加上是很有讲究的，像青海春天这样生产冬虫夏草保健品的，就可以继续堂而皇之的在非主要内容里宣传疗效，其实跟没规定也差不多。</p>
+
+<p class="art-p">这方面美国是很严格的，什么标签啊，广告啊，瓶盖啊，药片上啊，说明书里，反正是涉及这个保健品的任何地方，都不许出现任何跟疗效有关的内容，发现了就撤销保健品的批文，然后巨额罚款，这种大力惩罚的事儿FDA没少干。之所以这样做，就是因为所有保健品确实没有疗效可言，能保证安全就已经谢天谢地了，更别提疗效了。</p>
+
+<p class="art-p">所以我们第二条纲要就是，看保健品的包装、宣传资料，包括广告、说明书、标签，凡是带有任何跟疗效有关的，比如缓解高血压，降低血糖，那都可以归入骗子系列，不论这些内容出现在包装纸上，还是出现在CCTV黄金时段的晚会里。</p>
+
+<p class="art-p">但是中国还有一个更说不清道不明的存在，那就是中医的话术，比如滋阴壮阳，理气舒心，补肝护肾等等，你说这算疗效吗？这要看药监局怎么评定了。</p>
+
+<p class="art-p">说到燕窝有没有益处，咱们也得分情况，因为确实市场中绝大多数所谓的燕窝根本不是金丝燕的燕窝，而是用树脂、食用明胶做的。</p>
+
+<p class="art-p">咱们就按全部燕窝都是金丝燕的燕窝，那怎么才算有营养价值呢？</p>
+
+<p class="art-p">理性的说，所有事物，营养价值就是碳水化合物、脂肪、蛋白质、矿物质、维生素这5类物质的比例。如果都包含，各种占比还都合适，那就是好营养。除此之外并不存在任何有特别功效的营养成分了，就算有，吃到身体里也要先分解成这5种。</p>
+
+<p class="art-p">正经的燕窝是50%左右的蛋白质，30%的碳水化合物，剩下是一些水分、矿物质和一些微量元素。而且这里的蛋白质还不是优质蛋白，因为不包含人体所需的那8种氨基酸，营养不如鸡蛋或者豆腐。</p>
+
+<p class="art-p">而且更重要的是吃燕窝不是生嚼，所以别看50%的蛋白质挺高的，但水一泡发，1克燕窝泡出10克来，蛋白质含量立刻变5%，快接近牛奶了。这世上没有天然形成的神奇物质，所有稀奇古怪的东西就算没有害处，营养成分也很难比得上鸡蛋+蔬菜沙拉+面包。但价格却很可能贵上几百上千倍。这钱花出去就是把挣来的钱交税，很多时候还搭上了健康的身体。</p>
+
+<p class="art-p">像这样的保健品问题还可以延伸很多，比如人参、鹿茸、熊掌、虎骨、犀牛角、血蛤等有没有益处。直说，没什么特别的益处，但却害了很多动物的命。</p>
+
+<p class="art-p">最后一条对待保健品的纲要就是，完全可以把所有保健品，包括美国的，澳洲的，芬兰的，全世界所有的保健品都当作安慰剂对待，完全不碰，这么做几乎就是最正确的。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-5">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">味精、鸡精致癌吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">71075796：请问卓老板，民间传言味精、鸡精特别不好，致癌。这个说法有没有依据？是什么成分、多大剂量致癌？</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“物种灭绝的周期”。</p>
+
+<p class="art-p">卓克</p>
+<p class="art-p">有听众问民间言传味精、鸡精特别不好，致癌，这个说法有依据没有，是什么成分，多大剂量致癌。这个谣言有年头了，从我小时候学炒菜时妈妈就告诉我，味精要最后菜炒熟了以后放，因为大火炒菜时温度高，味精会变成其他物质，那是致癌的。其实味精是谷氨酸钠，谷氨酸是一种氨基酸，肉汤的鲜味儿就是它。它120℃受热后会形成焦谷氨酸钠，传统谣言说的致癌物就是焦谷氨酸钠，实际上FDA （美国食品药品管理局）曾经总结过9000多份关于味精和健康的论文，结论是长期服用无害，且安全。建议在120℃以下添加的原因是，焦谷氨酸钠没有鲜味儿了，而不是致癌。味精中除了有谷氨酸钠，一般也加氯化钠，比例大约是6比4或者7比3，所以做汤加味精后注意别再放那么多盐了，肯定咸，而且让我们感觉咸的不是氯离子，而是钠离子，所以谷氨酸钠一样也是咸的。</p>
+
+<p class="art-p">鸡精的成分大约是40%的谷氨酸钠，10%氯化钠，剩下的大都是香味的食品添加剂，各个厂商配料不同，所以鸡精是含有味精的成分更加不统一的作料。如果担心味精有危害，就更不应该碰鸡精了，不过现在大品牌的鸡精也都是规范生产销售，不会有问题。吃味精、鸡精最应该注意的问题是钠，吃多了会使血压升高。鸡精里还有一种添加剂也能增加鲜味儿，是核苷酸，就是把细胞中的DNA给浓缩出来。它经过消化系统后产生尿酸，痛风的人就是因为尿酸排不过来，积累在身体里。在关节缝隙，尿酸盐结晶刺激局部产生炎症反应，其实也没有细菌感染，但是免疫系统已经开始作用了。这些人就别吃鸡精了，核苷酸就是提炼的高浓度的DNA物质，会加重痛风的。</p>
+
+<p class="art-p">其实常识上也能判断，一个广泛销售了这么久的调味剂，如果是致癌的，那全世界的科学体系、法律体系也太脆弱了。这种判断思路也可以一并用在可口可乐致癌、杀精，海鲜不能和啤酒吃，微波炉做的东西致癌等。如果都这么轻易致癌，你根本不可能轻易买到啤酒、海鲜和微波炉，那都是管制物品了。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-6">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">喝酒怎么有时候醉，有时候不醉呢？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">SIP.K：听了前几期关于糖的节目，感觉受益匪浅，感谢卓老板带来关于人体代谢的知识，所以非常期望卓老板继续讲讲酒精与糖的关系，以及酒精在人体内的代谢过程，为什么有的酒喝多了也不上头，有的酒却一喝就头晕呕吐？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——维生素吃多了，会致癌吗？”</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">相同的酒，不同时候喝，造成的情况都会不同，这跟身体的含水量有关。</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-7">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">奇臭无比的黑暗料理，能吃吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">鲱鱼罐头火了</p>
+
+<ol class="art-list">
+<li>瑞典语中Sur是酸、发酵的意思，Surstormming就是我们挑战的鲱鱼罐头中的腌鲱鱼了。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>鲱鱼罐头在流水线加工灌装时就没法避免臭味，所以快递的包装就是臭的。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>因为鲱鱼罐头一直会产生气体，所以开罐子一定会喷出汁水。</li>
+</ol>
+
+<p class="art-p">瑞典人怎么吃腌鲱鱼</p>
+
+<ol class="art-list">
+<li>禁止在住宅区开启，禁止携带上飞机，建议野外开启。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>把汤汁倒掉，把鱼洗干净。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>切成小块配硬面包和酸奶油吃，或者熟土豆、洋葱、腌鲱鱼小肉块卷饼吃。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>腌鲱鱼对瑞典人也不是常规化的食物，算是标准的重口味。</li>
+</ol>
+
+<p class="art-p">北欧的黑暗料理很多</p>
+
+<ol class="art-list">
+<li>冰岛有臭鲨鱼，先风干4个月，再埋入沙子里发酵6个月后食用。</li>
+</ol>
+
+<p class="art-p">冰岛臭鲨鱼</p>
+
+
+
+<ol class="art-list">
+<li>挪威的碱鱼，把鱼浸泡在氢氧化钠溶液中7天，吃之前需要把鱼再在淡水中浸泡7天。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>爱斯基摩人腌海雀，把几百只海雀抓来直接塞进去掉内脏的海豹肚子中，封口，腐烂发酵3个月后拿出来，去掉羽毛直接吃。</li>
+</ol>
+
+<p class="art-p">北欧人为什么喜欢黑暗料理</p>
+
+<p class="art-p">北欧气温低，冬季的时候食物可以保存很久。可进入6月份后，白天最高气温也有20℃以上，这时候食物就没法保存了。又因为北欧没有农作物生长，只能以肉制品和奶制品为食，气温高的时候就得想办法保存食物，那就是发酵。</p>
+
+<p class="art-p">臭味儿食物吃起来安全吗</p>
+
+<p class="art-p">富含蛋白质的食物发酵后都会有臭味；富含淀粉的食物发酵后都会有酸味和酒味。传统臭味食物都是由厌氧菌发酵而成，只要没有致病菌参与分解就是安全的。食物中臭气来自于硫化氢、胺类气体，这类气体含量很少就可以让人闻到，但臭味食物中这类气体的量远没有达到致病的剂量，所以是安全的。</p>
+
+
+
+
+
+<p class="art-p">蛋白质分解的顺序是：蛋白质→肽链→氨基酸→小分子和胺类。</p>
+
+
+
+<p class="art-p">厌氧菌把蛋白质分解为氨基酸，实际上是为我们提前消化好了，所以这类食物更利于吸收。一些厌氧菌在分解蛋白质时还会产生B族维生素。</p>
+
+
+
+<p class="art-p">切记：不要自己发明臭味食物，过程控制出了问题容易产生致病菌。</p>
+
+<p class="art-p">动物为什么接受臭味食物</p>
+
+<ol class="art-list">
+<li>很多动物母亲照顾幼子时会吃掉孩子的粪便，以隐匿母子的踪迹。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>很多动物食用粪便是为了获取其中尚未分解的食物残渣。</li>
+</ol>
+
+<p class="art-p">嗅觉是一门科学</p>
+
+<ol class="art-list">
+<li>麝香原料是奇臭无比的，但酒精稀释400倍后却芬芳扑鼻，同样的化学物质产生完全不同的喜好判断，说明嗅觉判断不单单是一种对化学物质的判断，脑部功能也参与其中。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>嗅觉研究中发现，负责人类嗅觉功能的有300多种嗅觉细胞，而每种细胞对一种化学物质会很敏感。通过他们的组合，可以识别一万多种气味。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>最先进的嗅觉模型是用一个神经分层理论来模拟的。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>虚拟世界的感受，会不会因为嗅觉模拟的发展，而进一步取代我们精神上的需求呢？</li>
+</ol>
+
+<p class="art-p">臭味食物文化是一种小众文化</p>
+
+<p class="art-p">臭味食物文化并不是一种愚昧落后的饮食文化，而是一种小众文化，曾经保证了那个地区的人可以生生不息。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-8">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">小麦为什么不能像大米那么煮着吃？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">Apple：请问卓老师，为什么麦粒不能像米粒一样直接焖成饭，非要先磨成粉。如果把麦粒直接焖成饭会变成什么样。这个问题从小到大都没人能给我解释明白，求助卓老师。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“聊聊2016罗辑思维跨年演讲”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">有听众apple问，从小到大有个问题一直没人给解释清楚，为什么麦粒不能像米粒一样直接焖饭，非要先磨成粉，如果把麦粒直接焖饭，会变成什么样。其实我小时候也有过类似这样的问题，我当时的问题是为什么米粒不给磨碎了，像面粉一样吃，不过后来马上爸妈就告诉我了，有米粉这种东西。至于您这个问题，也有一个最简单的回答，其实也有直接用麦粒炒的饭，这种吃食在山西陕西经常可以看到。我在晋城吃过，挺好吃的。也没有什么烹调上的难度。</p>
+
+<p class="art-p">您问的，为什么后来人们没像吃米饭一样广泛的直接焖、蒸、煮，而是先磨成粉再吃呢，我觉得有两个马后炮似的原因，您听听看，有没有道理。一个是麦粒天生比大米强，大米基本都是直接蒸煮的原因是因为它做不成其他什么东西，什么意思呢？就是如果你把大米也磨成粉末，这些粉末兑了水以后和不成团，还是一团稀烂的米糊糊样子。但如果你把小麦磨成粉以后兑上水一和，马上成团，接着你做片也行，抻成条也行，发酵也可以继续保持各种形状，有形状马上就可以开发其他吃法，比如里面加馅儿，或者塞东西，反正是千奇百怪的做法任你想象。但大米粉末你完全拿它没办法。</p>
+
+<p class="art-p">那我们再来说大米粉末为什么这么无能，这和2种蛋白质有关，一种是麦谷蛋白，一种是醇溶蛋白。在大米中是不存在这两种蛋白质的，大米中的蛋白质绝大多数是可以溶于水的，占比总质量大约6%-9%之间，看不同品种了。可是小麦中是存在这2种蛋白质的，有了它们淀粉就可以黏合在一起了。当然小麦中也有很多可溶于水的蛋白质，但只要这2种蛋白质含量高了，和成形状就有希望了。而且面粉中蛋白质含量本来就普遍比大米高一些，低的7%，高的18%的样子。所以更容易和成团了。</p>
+
+<p class="art-p">也正是因为麦谷蛋白对能不能和成团，口感筋道不筋道影响最大，才造成了中国南北方米食和面食的差异，相当久一段时间里如果在南方种小麦，小麦中的麦谷蛋白含量低，所以做成的面条煮熟了特别糟，软踏踏的，口感不好，久而久之南方人也就更不爱面了，但是在长江边上的居民发明了一种碱水面解决口感不佳的问题。就是用在面粉里加碳酸钠或者碳酸钾，让pH值提升到9，这时候面条就利落多了。比如湖北人特别爱吃的热干面就是这样加工的。可能刚刚听到半截时有人就想问了，米粉呢，米粉呢，米粉呢，不也做成各种形状了吗？不知道您仔细观察过米粉没有，它们虽然有面条状的外观，但非常容易撕裂。而它们之所以能形成面条一样的外观也不是直接磨碎就能和成面团一样的东西，米磨成粉后还需要高温，然后米中的淀粉糊化后才勉强有了一点黏性，它们才抱成团的。第一个原因我们说完了，是因为麦谷蛋白有和没有导致的加工可能性上的差异。</p>
+
+<p class="art-p">咱们再说第二个原因，就是从最原始的角度，怎么吃能容易吃饱点看，假如收获了小麦的麦粒和水稻的米粒儿，然后很自然就煮着吃试试，这就出现问题了，水稻的粒外面有壳，也就是俗称的糠，吃糠咽菜的那个糠，这个糠是带芒刺的，真扎嗓子啊，就算煮也没用，所以水稻的米粒儿一定要脱壳后才能吃，不论是煮还是蒸，就很香甜可口了。小麦也有壳，但是这个壳不但芒刺，虽然也能脱，但即便不脱，也凑合煮，凑合蒸，也不难吃，但唯独有个因素，这个壳包裹后吸收不太容易，往往都拉出来了，还是成型儿的麦粒儿，跟金针菇那样see you tomorrow似的，吃同样多的麦粒和脱壳的米粒，一个营养充足，一个瘦得不行。所以为了吃完了别完整地排出体外，那就试着磨碎了吧，哎，磨碎了吃就吸收好。所以后续怎么弄成饼，弄成馕，包馅儿咱们都不提呢，就这光吸收率上，人类最早的农业和饮食常识里，就传承下来，麦粒儿要磨碎了吃的概念。这就是第二个原因。</p>
+
+<p class="art-p">这是一个历史问题，可能有很多角度，我说这两点供大家参考，这个问题就回答到这里。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-9">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">就算是再牛的品酒行家，也分辨不出红酒的好坏阿</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">索克尔事件</p>
+
+<p class="art-p">索克尔是纽约大学物理学教授，主要研究量子力学，1996年在《社会文本》杂志投稿《跨越边界：通向量子引力的超形式解释学》，这篇文章通篇把物理专业词汇和后现代主义词汇掺杂在一起，大学物理或者数学专业的本科生都能看出是一篇恶作剧，但《社会文本》的编辑没有看出来。</p>
+
+<p class="art-p">三周后索克尔在《大众语言》上发了另一篇论文，称自己之前在《社会文本》上发的那篇论文是故意胡编乱造的，目的是为了证明此类学科有没有学术标准，并对这个刊物提出了尖锐的批评和讽刺。《社会文本》杂志的主编对此事的回应相当无力。</p>
+
+
+
+<p class="art-p">中医的“望闻问切”并不准</p>
+
+<ol class="art-list">
+<li>2009年，上海中医药大学中医四诊信息综合研究实验室发了一篇论文，证明“望闻问切”诊断一致性差、准确性差。</li>
+</ol>
+
+<ol class="art-list">
+<li>参与实验的医生和研究人员均来自正规大医院和研究机构。对同一病例，同一个医生，前后两次的判读，可能完全不一样；同一病例，不同的医生，判读、诊断的一致性就更差。所以，论文得出结论：中医诊断过程中主观描述多，缺少统一标准。</li>
+</ol>
+
+
+
+<p class="art-p">被验证1000多年，中医难道无效吗？</p>
+
+<ol class="art-list">
+<li>一个合格的、能判断有效性的双盲实验，条件控制严格且复杂、耗时，不合格的双盲实验做一万次也不能证明其有效性。中医所谓的被验证了1000多年，实际上相当于做了1000多年质量极其低下的不合格验证实验。</li>
+</ol>
+
+<ol class="art-list">
+<li>张悟本、马悦凌、严新、萧宏慈等养生专家全都把自己形容成中医高手，而这类养生骗子没有一人把自己描述成受过完整现代医学教育的人，这也印证了中医系统因为没有验证环节，容易藏污纳垢。</li>
+</ol>
+
+
+
+<p class="art-p">品红酒看上去很美，实际很扯</p>
+
+<p class="art-p">海洋学家罗伯特·霍奇森退休后自己开了一家酒厂，每年参加当地的红酒比赛，偶尔获奖。但对于能不能获奖的标准，实在是摸不着头脑，于是他决定做一次内部实验。</p>
+
+<p class="art-p">霍奇森和评选委员会商定，做了一个长达8年的实验，每次比赛随机选几种酒，把它们藏在所有参赛酒中，让人品尝。霍奇森之后重点关注，看看同一种酒被品尝3次后，大家对它的评价是否一致。</p>
+
+<p class="art-p">每年只有10%的评委可以对同一种酒的3次评价都保持较好的一致性。但这10%的评委只在某一年能做到这一点，到了其他年份，也不能保持对同一种红酒的评价一致性。</p>
+
+<p class="art-p">霍奇森通过8年研究得出结论：就算是人们眼中品酒的行家，也完全没有能力分辨出葡萄酒的好坏。</p>
+
+<p class="art-p">另一个实验得出的结论是，葡萄酒的标签效应明显。顶级葡萄酒贴了餐酒的标签后，评价就从口味丰富、均衡、有回味、醇厚，变成负面的淡、轻、平平无奇。只有53%的人可以品尝出低于5英镑和高于10英镑红酒的差别，而完全不品尝、直接扔硬币的正确率是50%。</p>
+
+<p class="art-p">葡萄酒鉴定中嗅觉和味觉掺杂了太多人文、情感和后天经历的感觉，所以几乎没法标准化。</p>
+
+
+
+<p class="art-p">没验证环节就别说自己有效</p>
+
+<ol class="art-list">
+<li>普林斯顿大学经济学教授Richard E Quandt设计了一套软件，可以自动生成葡萄酒评价，每段评价看上去和评酒师通常给出的内容“一样荒唐”。</li>
+</ol>
+
+<ol class="art-list">
+<li>澳大利亚Monash大学的一位计算机专家编写了一个程序，叫“后现代文本产生器”，可以自动生成后现代主义论文，真假难辨。</li>
+</ol>
+
+<p class="art-p">发生器地址：</p>
+
+<p class="art-p">http://www.elsewhere.org/pomo/</p>
+
+<ol class="art-list">
+<li>文化、艺术、语言、历史、哲学等领域本就应该丰富多彩、百花齐放。科学家看不惯的是这些领域的人言之凿凿认为自己有效，却又没法验证，看不惯这种浮夸。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-10">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">戒掉碳水化合物可行吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">烈焰风暴：卓老板，您好，能否聊一下《谷物大脑》这本书提倡的戒碳水化合物的理论，感觉很颠覆，有点想尝试。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第17期“精准的判断，离不开精准的概率计算”。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-11">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">牛奶与乳糖不耐受</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">苏子钊：</p>
+<p class="art-p">卓老板，有本书《自下而上》说，人类体内没有乳糖酶，所以是消化不了乳糖的，喝牛奶反而会让我们消化不良。所以喝牛奶真的对我们一点用都没有吗？请卓老板解答一下，谢谢。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“暴力与流言蜚语的产生”。</p>
+
+<p class="art-p">听众苏子钊说，有本书《自下而上》提到了，人类体内没有乳糖酶，所以是消化不了乳糖的，喝牛奶反而会让我们消化不良。他就问了，喝牛奶真的对我们一点用都没有吗？</p>
+
+<p class="art-p">如果简单地回答就是，牛奶对我们的好处更多，乳糖消化不了只是副作用。</p>
+
+<p class="art-p">其实不只是中国人，世界上绝大多数人在成年后都会不同程度缺乏乳糖酶。没有这个酶，乳糖进入消化道就没法顺利分解，然后就积累在肠道里，在那里给微生物吃，微生物吃完了还会产生气体，你就会放气，肚子咕咕叫。乳糖堆积在肠道也让肠粘膜渗透出更多的水分来稀释他，水分一多也容易拉肚子，所以喝了牛奶后各种不舒服就出现了，人们管这个叫做乳糖不耐受。</p>
+
+<p class="art-p">听着这个词好像是一种病似的，其实世界上乳糖不耐受的人占比超过70% 。那70%的人都这样，还能算是一种病吗？</p>
+
+<p class="art-p">其实这70%的乳糖不耐受的人在不同人群中差异挺大的，比如东亚人种93%的人是不耐受的，其次是非洲裔美国人、非洲人和中亚人，大约80%的人乳糖不耐受。而芬兰人、瑞典人、英国人、德国人、法国北部的人，他们不耐受的比例大约在15%左右。所以你看，这差异确实很大，一个93%不耐受，一个只有15%不耐受。</p>
+
+<p class="art-p">那为什么人类会这样呢？其实不只是人类，哺乳类动物大都也是这样，只要它们成年了，就不再能很好消化乳糖了。</p>
+
+<p class="art-p">你是不是已经意识到了原因呢？没错，如果一个动物成年了还能很好的消化妈妈的奶，那新生儿的食物就多了一个竞争者，就是他的哥哥姐姐们，甚至爸爸们。</p>
+
+<p class="art-p">成年个体的食物很多，但婴儿只能靠奶水这一种食物，所以成年后如果演化出一种能力，只要抢走了弟弟妹妹们的食物，就会肚子难受的话，其实是很有利于这个物种的延续的，我们不否认有过能消化乳糖的个体，但基本上在漫长的激烈的生存斗争中都被淘汰掉了。</p>
+
+<p class="art-p">那你说为什么世界上还有30%的人能很好的消化乳糖呢？那是因为他们在后来，智人出现了人类文明之后，有了畜牧活动之后才又从完全消化不了乳糖，渐渐变成成年之后还可以消化乳糖的，因为生活在北方寒冷地区的人们，主要食物不是农作物，那里长不出什么来，只能依赖牛羊肉，和它们的奶为生。所以这时候含有乳糖的食物可就不是单一的妈妈的奶水了，还有母牛的奶水，母羊的奶水，这是这些北方人类的主要食物。这你要是都消化不好，你也会被淘汰掉的，所以渐渐的，消化乳糖的能力又被重新筛选出来了。</p>
+
+<p class="art-p">其实耐受与不耐受并不是那么非黑即白的，牛奶中乳糖含量大约每100毫升4.5克，中国居民膳食指南里推荐成年人每人每天喝300ml的牛奶呢。大部分中国人一次喝下150ml牛奶不会有什么反应，这不到7克的乳糖我们就算不耐受也一样可以消化。但如果喝多了，比如有人拿牛奶当水喝，那大概率说是要拉肚子的。</p>
+
+<p class="art-p">如果把乳糖不耐受当做原因，把牛奶定位成对身体没什么好处，那就属于异端学说了。就算我们每天喝500ml以上，产生了轻微的腹泻，但我们仍然从牛奶中获取了大量的钙，而且在所有食物中，牛奶可以算是一种质量最高的钙的来源，量大还容易吸收，人体在35岁之前多积累一些钙，对老年后预防骨折是非常有帮助。</p>
+
+<p class="art-p">而且我们对牛奶的加工手段很多，脱脂就是一个常用手段，牛奶中的脂肪其实是奶香的重要来源。但现代社会，人们大都不再需要吃脂肪了，所以还是脱脂的好，除了脱脂外，还有过滤乳糖，但这个技术并不普及，这种奶还贵，所以如果你真的是超级不耐受的人，那干脆喝酸奶，在那种奶里，微生物已经帮我们把乳糖转化成了葡萄糖和半乳糖，这些是人体可以直接吸收的，所以就算喝很多也不会出现不耐受。</p>
+
+<p class="art-p">总之，连居民膳食指南都推荐每人每天300ml牛奶，我们就不用担心牛奶的害处，不要把副作用夸大，自己吓唬自己，中国人平均每人每天摄入的牛奶其实还不到30ml呢，离喝出乳糖不耐受，拉肚子的量，平均还差10倍左右。牛奶还是优质钙的来源，不要因噎废食。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-12">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">糖会伤害身体，那代糖呢？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">十三：科普了。原来关注食品的营养成分表，看到能量和脂肪不高就比较安心，现在要重视碳水化合物这一项了。不过，想问卓老板一个问题，零度/健怡可乐真的不含糖？代糖物质有没有其他影响？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第30期“危险的糖”。</p>
+
+
+
+<p class="art-p">#新消息</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-13">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">红皮鸡蛋更有营养？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">@李雨桐：</p>
+<p class="art-p">最近家里长辈总是买红心的鸡蛋，学校食堂的鸡蛋的蛋黄是淡黄色的，长辈买的蛋黄偏橘黄色。问之，曰：“这种是农村鸡下的蛋，是吃五谷杂粮和虫子长起来的，可有营养哩！”吾不信，怕只是得了输卵管炎的鸡，营养没啥区别，所以，来找卓老板求证。谢谢。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“讨论：大脑的耗能有多少？”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">这位同学说的没错，认为红皮鸡蛋和橘色蛋黄鸡蛋更有营养是一个大误解。</p>
+
+
+<p class="art-p">听众·李雨桐·说，家里长辈偏爱红皮鸡蛋。还说鸡蛋好坏的判断有一个依据，就是蛋黄颜色的深浅程度，如果很浅就是没营养的鸡蛋。比如农村鸡下的蛋比超市里买的更黄，原因是农村的鸡吃的是五谷杂粮和虫子，更有营养。</p>
+
+<p class="art-p">·李雨桐·不相信，想求证一下。</p>
+
+<p class="art-p">其实认为红皮鸡蛋更有营养，是一个由来已久的误解。</p>
+
+<p class="art-p">首先，蛋壳的颜色是由一种叫做卟啉的物质形成的。</p>
+
+<p class="art-p">卟啉是鸟类体内血红蛋白代谢的产物，不过有些品种的鸟在体内不产生卟啉，所以它们下的蛋不是红色、褐色的。如果鸟的子宫分泌胆绿素，那下出来的蛋就是绿色的，比如像鸭蛋很多就是绿色；如果什么色素都没有，就是白皮的鸡蛋。</p>
+
+<p class="art-p">具体下出什么颜色的蛋完全是基因决定的，而且这些不同颜色的蛋的成分差异只体现在蛋壳上，即便是那种深褐色的蛋，你煮熟了以后剥开，鸡蛋也是白白的，没有一丝一毫发红发褐的迹象。</p>
+
+<p class="art-p">卟啉或者胆绿素这些东西不是人体必需的，有一种罕见病就是人体无法分解卟啉，结果在体内积累过多还会产生卟啉病。</p>
+
+<p class="art-p">这是一种比较恐怖的病，有人甚至八卦从前的吸血鬼的原形就是患了卟啉病的人，他们受到紫外线照射后，体内的细胞就开始分解，比如皮肤腐烂，鼻子耳朵牙龈腐烂。当然正常人体是不会这样的，吃了鸡蛋皮也没关系。</p>
+
+<p class="art-p">通过蛋的颜色来评价鸡蛋营养价值的高低是没有根据的，就像通过头发颜色判断一个人的财富状况一样不靠谱。但是人权有人维护，鸡权就没有那么受人尊重了，很多商家发现了消费者的这种喜好，就只培育下红皮蛋的鸡。这也是另一种盲从和歧视吧。</p>
+
+<p class="art-p">另外一个误区就是蛋黄越黄越有营养。</p>
+
+<p class="art-p">鸡蛋黄之所以黄是因为这里有叶黄素，叶黄素在鸡的体内是没法自行合成的，只能从日常食物里得到。大多数植物都有叶黄素，它属于胡萝卜素的一种。</p>
+
+<p class="art-p">可能有人听到胡萝卜素就激动了，这是好东西啊，其实胡萝卜素是一个统称，有600多个小类，这600多个小类里只有20多种对人体合成维生素A有帮助，其余600多类对人体的功能到现在还没发现什么特殊的。</p>
+
+<p class="art-p">那些更加黄的鸡蛋就是因为饲料中含有的叶黄素更多，所以沉积在鸡蛋里的也更多。</p>
+
+<p class="art-p">但往往农村自己家养的鸡产出的蛋体积更小，蛋更黄，这确实容易给人造成假象，好像是精华都沉淀下来了，浓缩了，所以更小更黄。其实这都是假象。</p>
+
+<p class="art-p">因为农村自家养的，或者所谓的那些土鸡蛋、有机鸡蛋，都是散养的鸡，没法严格控制它们吃了什么，饲料配比在每只鸡身上是参差不齐的，所以蛋的颜色大小都不一。也因为鸡可以到处跑，耗费了体能，所以下蛋频率和大小也会受影响。</p>
+
+<p class="art-p">但是不可否认的是，那些鸡的身体状况会更好一些，它们有更接近正常的生活方式，有正常的环境交流，可以四处活动。但是从鸡蛋营养成分和安全性上并没有好于那些糟了罪的，一辈子只能下蛋的鸡。</p>
+
+<p class="art-p">如果你问我，我也觉得散养的鸡下的蛋更可能是健康的蛋。</p>
+
+<p class="art-p">这就是一个矛盾了，我们如果给每种鸡都提供这样人道的条件，自然资源是不够用的，非要如此，只能让地球上一半以上人口选择回到饥饿和贫穷。</p>
+
+<p class="art-p">其他畜牧业产品也是这样，猪、牛、羊、鸡、鸭、鱼在养殖状态时的生存条件很不好，尤其像猪这样的高智商动物，当你屠宰它的同伴时，它们是知道那边发生了什么的，甚至也能意识到自己马上也会被送去杀掉，内心是恐惧的，这也是很多素食者选择全素食的原因。</p>
+
+<p class="art-p">但是他们不知道的是，因为他们选择了全素，更需要用到蛋白粉补充营养，仁慈的选择并没有减少屠宰事件。</p>
+
+<p class="art-p">这件事上我们只能妥协，直到我们可以通过转基因技术培养出纯粹繁殖蛋白质的细胞来，这些细胞没有大脑，只是一块肉。其实现在已经有过几次人造牛肉了，和牛肉成分一样，口味也一样，成本也有希望降低到比养牛更低。</p>
+
+<p class="art-p">科技也许是唯一一个可以让我们摆脱屠宰杀戮的方式。↓↓↓</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-14">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">红糖补血吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">阅尽繁华20721563：卓老板，我想问下红糖补血吗？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——数学是精英们用来秀智商用的？”</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-15">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">维生素吃多了，会致癌吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">成橙橙：卓老板，我最近想给父母买维生素来着，但是听同事说维生素不能乱补，如果不缺维生素的话补多了会致癌的，这是真的吗？所有维生素多了都会致癌吗？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“人类与抗生素的大乱斗”</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">过多维生素会不会致癌，还没有确切的证据。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-16">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">蜂蜜越贵越好吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">wangbing：能讲讲蜂蜜吗？我们家里人天天吃蜂蜜，但真不知道吃什么样的蜂蜜好，只有买贵的吃。真不知道这样的选择是否正确？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——为什么恒星的1/4是氦？”</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-17">
+      <div class="art-header">
+        <span class="art-chapter">Ch.90</span>
+        <h3 class="art-title">螺旋藻能长期食用吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">面包男孩：卓老板，被传含有人类所需所有营养物质的螺旋藻，长期吃对人有好处吗？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——《拍砖中医》这本书值得买吗？”</p>
+
+
+
+<p class="art-p">#新消息</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-18">
+      <div class="art-header">
+        <span class="art-chapter">Ch.92</span>
+        <h3 class="art-title">国内信中医的人有多少？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">泼肥：最后一句三观端正！卓老板的节目越来越棒了！另外，卓老板估计一下，在国内，相信中医理论人的比例是多大？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第11期“承认吧，就算是再牛的品酒行家，也分辨不出红酒的好坏”。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-19">
+      <div class="art-header">
+        <span class="art-chapter">Ch.92</span>
+        <h3 class="art-title">所谓“辟谷”的好处</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">lvan：</p>
+<p class="art-p">卓老板提到辟谷，十分感慨。去年以来，我的所有家人都购入了辟谷的保健品，吃一些所谓的味能量，然后通过节食，号称减肥又健康，时至今日，他们仍然深陷其中。他们相信健康可以很容易获得，不需要挥汗如雨的锻炼和合理的饮食。他们内心不安，在很多事情上都希望速成。即使同他们讲道理，他们不仅不听，还嘲笑讽刺，他们只看他们愿意看到的事实，他们也只相信他们愿意相信的宣传。真是很无力，多次劝说无效，只能看着他们走进一个个商家的陷阱。也许，这就是人的命吧。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“影响细胞寿命的端粒”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">知识这东西就得经常的核实和订正，比如辟谷这个事儿。</p>
+
+<p class="art-p">咱们来说说所谓辟谷的好处。首先我要定义一下我这期里说的辟谷是什么，就是指一周7天里有5天按正常习惯吃饭，另外两天每天只吃正常量的1/4，除此之外就没有其他内容了。</p>
+
+<p class="art-p">其实在科学研究里管这种吃法叫轻断食。我之所以把轻断食叫辟谷是因为确实有很多人认为辟谷就是少吃点。至于那种各种道家学派的各种采日月精华，又服什么所谓的丹药又冥想之类的，那是他们的辟谷，不是这篇文章的辟谷。</p>
+
+<p class="art-p">现在流行轻断食主要是受4年多前BBC拍的一部纪录片《进食，断食和长寿》引发的。其实它播出已经很久了，但最近又开始在国内传开了。</p>
+
+<p class="art-p">纪录片里列举了非常多轻断食的好处，比如说采访了一个跑马拉松比赛的老爷爷，101岁了，8个小时竟然跑完全程，没做过手术，平时也不吃药，他说自己的长寿秘诀就是吃饭量少，差不多正常人的一半。</p>
+
+<p class="art-p">纪录片还列了一个统计，30年代美国经济大萧条，生活质量大幅下降，但美国人平均寿命反而增加了6岁。这片子里还有禁食的实验，让一位主播开始3天4夜不吃东西，实验前血糖28。熟悉医学常识的知道，他这个血糖值够高的。禁食后只能喝水喝茶还有每天一袋热量是正常每天热量1/40的速溶汤。结果86小时的禁食后，他体内葡萄糖消耗光，开始消耗脂肪了，血糖变成14。然后就提议大家每几个月这么来一次。</p>
+
+<p class="art-p">轻断食的好处还有很多，但直到最近才有一个在《Cell》上发表的，是让小鼠吃低蛋白低糖的饮食，后来小鼠的胰岛β细胞出现了往干细胞那个方向回退的现象，假如说这类情况发生在人身上，也许糖尿病说不定可以通过这种方式大幅改善。不过这仅仅是小鼠体内，换到人以后的实验虽然也有，但像《Cell》这么牛的杂志是不登的，主要是研究质量和重要性还不够。也正是因为当前的研究状态，英国的国家健康服务部对轻断食的评论是，暂时还没有可验证的安全性和改善疾病的有效性。</p>
+
+<p class="art-p">那不安全性体现在哪些方面呢？</p>
+
+<p class="art-p">比如孩子、老人这么突然血糖大幅波动，不进食，有可能对身体是有害的。还有身体不适的人这么做会不会病情更严重，还有会不会引发厌食症，或者断食后那几天会不会狂吃？结果体重没减下来，身体反而更糟，因为吃起来更拼命，饿起来更极端。这些都不是什么很奇特的害处，很可能发生的，但是当前的实验里没能排出这些危害。</p>
+
+<p class="art-p">另外一点就是有效性，比如对胰岛细胞的好处，就有实验没有发现有任何效果。就算是在减轻体重上也需要长期观察，比如1年以上的实验，因为可能刚刚执行时真的减了，之后身体会作调整，可能吸收更好。</p>
+
+<p class="art-p">但我们还得看看另一个方面，就是一天三顿饭这个事儿是不是健康的准则，我感觉不是。</p>
+
+<p class="art-p">因为人类10万年历史只有在最近几十年才能保证一天三顿饭定点按时，绝大多数是一顿饱一顿饿的，所以大概率说，我们身体是可以应付随饿随吃的，而不必每天定时非得吃，尤其是不饿的时候硬吃，很多病就是这样积累的。</p>
+
+<p class="art-p">对于轻断食，或者短时间禁食，这种方法我觉得至少可以在体重超标的人身上是好处多于坏处的。但我们也要留意的是，轻断食或者辟谷已经成为一种营销标签，一种噱头，它带来的效果，普通减肥也一样可以达到，也许是因为5天吃饱2天吃少听着比较容易实现，所以才容易被人接受，也因为BBC专门做了这套的纪录片，才让这种概念突然流行开来。</p>
+
+<p class="art-p">减肥是一个长期坚持的结果，就算轻断食在开始2个月有明显效果，你也多留意在时间更久之后，松懈带来的反弹。最稳妥的来看，轻断食，或者我定义的辟谷应该只能算作一种减肥方式，在健康上的其他益处有一些迹象，但是不是如此，还需要更强的证据。当前不要给孩子、老人、病人试。</p>
+
+<p class="art-p">还有在这个噱头上继续增加了什么增强免疫力，抗癌防癌，减少细胞老化，延长寿命等等，还有采日月精华这些说法，基本就都是吹牛的部分了，不用为这些劳民伤财。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-20">
+      <div class="art-header">
+        <span class="art-chapter">Ch.92</span>
+        <h3 class="art-title">藿香正气水能治中暑吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">Taldarin：卓老板你好，我有一个疑问，按照你的分析，中暑的人喝藿香正气水应该加重症状才对，怎么还是有很多人喝完之后症状减轻呢？</p>
+
+<p class="art-p">#再问卓老板</p>
+
+<p class="art-p">Taldarin：我问这个问题不是给中医洗地，而是单纯想知道这个问题本身的答案。为什么中暑的人喝了藿香正气水之后会有症状减轻的情况？是酒精挥发降温了还是刺激性物质刺激了人体？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第11期“承认吧，就算是再牛的品酒行家，也分辨不出红酒的好坏”。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-21">
+      <div class="art-header">
+        <span class="art-chapter">Ch.102</span>
+        <h3 class="art-title">专题丨少吃糖，更健康</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">卓克</p>
+<p class="art-p">夏日炎炎，是大口喝饮料、吃冰激凌、大快朵颐各种水果、喝各种果汁的季节。所以，我必须跟你说说，危险的“糖”。</p>
+
+<ol class="art-list">
+<li>“糖”的危害。</li>
+</ol>
+
+<p class="art-p">“游离糖”消费，包括含糖饮料产品的消费，是造成全球肥胖和糖尿病患者人数上升的一项重大因素。2016年10月11日，世界卫生组织报告指出，减少含糖饮料消费量意味着总体降低“游离糖”和热量的摄入，能够改善营养，减少超重、肥胖、糖尿病和蛀牙患者人数。而且“ 从营养角度，人类饮食中并不需要添加任何糖 ”。</p>
+
+<ol class="art-list">
+<li>什么是“游离糖”？</li>
+</ol>
+
+<p class="art-p">“游离糖”是指厂商、厨师或消费者添加到食品和饮料中的单糖（如葡萄糖和果糖）与双糖（如蔗糖、麦芽糖、乳糖），以及在蜂蜜、糖浆、果汁和浓缩果汁中天然存在的糖分。</p>
+
+<p class="art-p">比如蛋糕、饮料、巧克力这些，还有炒菜时撒的糖，沏茶时放的蜂蜜，也包含鲜榨果汁和各种鲜果汁中的糖，这一点可能让很多人吓一跳，因为我们一直听到的宣传就是鲜榨果汁是健康的。</p>
+
+<ol class="art-list">
+<li>世界卫生组织推荐“游离糖”的摄入量。</li>
+</ol>
+
+<p class="art-p">世界卫生组织的建议是每天“游离糖”的摄入不超过每日总热量的10%，建议低于5%。对应蔗糖（包含红糖、黄糖、白砂糖、绵白糖、冰糖等）来说，5%的建议值就是男人每天摄入27.5克，女人摄入22.5克 。而上限是男人每天55克，女人45克。</p>
+
+<ol class="art-list">
+<li>果汁中超量的糖。</li>
+</ol>
+
+<p class="art-p">（1）市售的果汁饮料，为了口感更好，一般都会额外添加糖，而那些没有额外添加糖的“鲜果汁”，糖含量一般也在10%以上。</p>
+
+<p class="art-p">（2）“鲜榨果汁”同样存在糖超标的问题。</p>
+
+<p class="art-p">比如一个300克的苹果（人们都会挑甜的买），里面含有果糖，葡萄糖，蔗糖，加一起大约有45克，可能大家没概念，300克一个的苹果个头儿其实比较大，饭前吃一个基本就不想吃饭了。但是如果把它榨汁，能榨出225克苹果汁来，而45克的糖里有40克都溶在苹果汁里。另外，300克苹果榨出来的果汁大约是180毫升，也就是半听可乐的量。所以，一般家庭榨汁还会再加一个苹果，两个苹果榨出来的汁，喝起来才能让人感觉量足够了，但这样糖就达到80克。</p>
+
+<p class="art-p">（3） 喝果汁不如吃水果 ，因为在榨汁后，糖就被从水果中分离出来了。但是吃水果就不存在这个问题，因为伴随着糖分，纤维素也一起吃下去，糖会被缓慢分解和吸收，这种水果中的糖就不算是“游离糖”。</p>
+
+<ol class="art-list">
+<li>糖饮料中超标的糖含量。</li>
+</ol>
+
+<p class="art-p">在食品工业研发中，人们渐渐找到了对口味来说最合适的含糖量，这个数字是10%。以一瓶500毫升的普通可乐为例，含糖约53克。人们在喝咖啡的时候添加的方糖，每块儿的重量是4.5克，因此换算一下，一瓶普通可乐中就含有约12块方糖，如果不是把它们溶解在饮料中，人们很难一次吃下这么多固体的糖。但因为溶在水中，所以喝下去不费力。</p>
+
+<p class="art-p">如果市面上销售的饮料都换算成500毫升容量，糖含量分别为：</p>
+
+<p class="art-p">可口可乐：约53克；</p>
+<p class="art-p">百事可乐：约53克；</p>
+<p class="art-p">雪碧：约53克；</p>
+<p class="art-p">冰糖雪梨：约63克；</p>
+<p class="art-p">酸梅汤：约51克；</p>
+<p class="art-p">鲜橙多、水蜜桃、冰红茶、加多宝，均约在45-49克之间；</p>
+<p class="art-p">茉莉清茶和冰绿茶最少，约24克。</p>
+
+<p class="art-p">饮料瓶的背后都会印有营养成分表，其中的碳水化合物主要就是“游离糖”的含量，一般标注为100毫升的含量，比如美年达100毫升的糖含量是9.6克，因此600毫升的瓶装美年达的糖含量就是9.6×6，也就是57.6克糖。</p>
+
+<ol class="art-list">
+<li>比糖饮料含糖量更高的有哪些食物？</li>
+</ol>
+
+<p class="art-p">比糖饮料含糖量更高的是各种糕点，一般会控制在20%左右；</p>
+
+<p class="art-p">比糕点还高的是一些粉状的食物，比如豆奶粉，奶香麦片，黑芝麻糊，莲子羹，这些含糖量会达到50%；</p>
+
+<p class="art-p">比粉状食物更高的还有，就是果脯，果酱，一般是60%的含糖量。</p>
+
+<p class="art-p">比如：有的女生爱吃零食，吃一袋奥利奥喝一瓶普通可乐，看似不怎么起眼，其实已经吃下140克糖，是世界卫生组织对女性建议摄入值的6倍多。</p>
+
+<ol class="art-list">
+<li>关于“可乐”的误区与真相。</li>
+</ol>
+
+<p class="art-p">（1）误区：在可乐的问题上，有报道说可乐对牙有腐蚀作用，虽然碳酸腐蚀牙釉质这种可能性是存在的，但喝可乐的那短暂的几秒钟吞咽，碳酸水是几乎不会对牙齿有什么危害的。</p>
+
+<p class="art-p">（2）真相：可乐对牙齿的伤害，主要是源于其中添加的“糖”。人类的牙齿表面每隔10多个小时会形成一道保护膜，可以抵御细菌在牙齿表面的生长和繁殖。在喝可乐的过程中，糖分会残留在牙齿表面，所以在形成保护膜的时候，就会把糖分包裹在里面，糖在膜里面会渐渐变成酸性物质，这些酸性物质会腐蚀一些牙釉质，在牙齿表面形成一些细小的坑点，牙菌斑今后就可以更方便地附着在上面，越繁殖面积越大，深度越往里，最后形成蛀牙。</p>
+
+<ol class="art-list">
+<li>什么是“代糖”？</li>
+</ol>
+
+<p class="art-p">（1）为了满足人们对“甜”的需求，“代糖”开始被大量使用，用来替代传统的蔗糖等。代糖之所以甜，是因为能和舌头上的味蕾的甜味受体结合，把信号传给大脑，产生甜的味觉。很多代糖的甜味比蔗糖高数百倍，因此可以大幅度减少用量，达到减少热量的目的，另外还有一些代糖无法被人体吸收，直接排出体外，达到零热量。</p>
+
+<p class="art-p">（2）常用的“代糖”有阿斯巴甜、安赛蜜、蔗糖素、甜菊糖等，甜度都是蔗糖的数百倍，还有与蔗糖甜度接近的木糖醇等。</p>
+
+<p class="art-p">9．“阿斯巴甜”不安全？</p>
+
+<p class="art-p">（1）现在很多非常注重饮食的人，对“糖”的观念正在转变，尤其是爱运动、爱跑步的人很多已经不再喝普通的可乐，而是用零度可乐、健怡可乐等饮品替代，因此已经有越来越多的饮料厂商开始着力研发“低糖”和“无糖”产品，其中主要使用的三种“代糖”分别是阿斯巴甜、安赛蜜、蔗糖素。</p>
+
+<p class="art-p">（2）在诸多“代糖”中，争议最大的是“阿斯巴甜”，不过，关于阿斯巴甜的各种健康危害，目前都被美国FDA和欧洲食品安全局否认了，比如损伤大脑神经组织，让人吃完后还想补充真正的糖，这些都别信。</p>
+
+<p class="art-p">（3）欧洲食品安全局还给出了长期服用阿斯巴甜的结论，每天每公斤体重摄入40毫克是安全的，也就是说一个体重75公斤的人，一天吃3克阿斯巴甜，连续吃好几年也没有问题，而一瓶500毫升零度可乐含有0.27克阿斯巴甜，所以，应该也没谁会在一天喝10瓶以上零度可乐吧。同时，也没有必要担心其它食物中添加过多的阿斯巴甜，因为它的甜度是蔗糖的200倍，3克阿斯巴甜的甜度相当于600克蔗糖，谁也吃不了这么多。</p>
+
+<ol class="art-list">
+<li>大米和白面。</li>
+</ol>
+
+<p class="art-p">现在提倡吃糙米杂粮，原因是大米白面的淀粉含量高，煮好的米饭每100克含糖26克，按一顿饭吃3两算，是39克糖，但这和饮料、果汁、糕点中的糖不一样，因为米饭面食中的糖是“淀粉”，需要在人的消化道中慢慢分解，而且往往还不能完全分解，有一部分会被排出体外。在米饭被吃下去之后，观察血液中的血糖变化，不会像喝含糖饮料那样上涨凶猛，对胰腺没什么压力，所以正常吃大米和白面，不会像吃糖有那么大危害。这个道理与吃水果比喝鲜榨果汁更安全健康一样。</p>
+
+<p class="art-p">食用“糖”的8条建议：</p>
+
+<p class="art-p">学会看食品的营养成分表，尤其是饮料，要注意每100毫升中的碳水化合物含量，那基本就是糖。记住世界卫生组织建议值是男人每天摄入27.5克，女人摄入22.5克。</p>
+<p class="art-p">少喝糖饮料，尽可能选择无糖饮品，比如无糖苏打水、零度可乐、健怡可乐、极度可乐、零卡雪碧、以及各种无糖茶饮料，但各种矿泉水和纯净水是最佳选择。</p>
+<p class="art-p">喝果汁不如吃水果。</p>
+<p class="art-p">吃水果不要过量，根据中国居民平衡膳食宝塔，水果每天的摄入量是200-350克，也就是半斤左右。</p>
+<p class="art-p">冰激凌偶尔吃吃无妨，但不要每天吃。</p>
+<p class="art-p">酸奶与乳酸菌饮料要选“无糖”产品，否则害处大于益处。</p>
+<p class="art-p">蛋糕、糕点、甜味零食要少吃。</p>
+<p class="art-p">大米白面可以吃，但不要过量，配合丰富蔬菜、鸡蛋、肉类，均衡饮食。</p>
+
+<p class="art-p">复习小提示：</p>
+<p class="art-p">在以前的内容中，我曾详细地讲过与“糖”相关的知识，我把链接放在下面，里面有音频内容，方便的时候可以复习。</p>
+<p class="art-p">点击复习《危险的糖》</p>
+
+<p class="art-p">卓克</p>
+<p class="art-p">今天的内容，非常适合分享给你关心的家人和朋友，因为这世界上没有什么比身体健康更重要。现在各种饮料、果汁、甜品充斥在我们的菜单里，虽然美味，却可能要付出健康的代价。希望你也能保持好的饮食习惯，祝你的身体每天都健健康康的。</p>
+<p class="art-p">专栏的第二季内容正在打磨过程中，我争取早日让它和你见面。</p>
+
+<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-22">
+      <div class="art-header">
+        <span class="art-chapter">Ch.102</span>
+        <h3 class="art-title">专题丨有关“营养价值”的几个问题</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">卓克</p>
+<p class="art-p">最近陪家人去超市采购，看到了几个有意思的现象，今天，我给你说说“营养”这个话题，主要涉及到三种食材，分别是鸡蛋、蜂蜜，还有燕窝。</p>
+
+<p class="art-p">随着生活水平的提高，从能吃饱，到每天都有肉吃，再到现在的要“吃好”，人们的饮食需求在持续升级。而这个吃好不仅是要求食物要好吃，更指的是人们对于食物的“营养价值”有了更高的追求。</p>
+
+<p class="art-p">理性地说，所有食物的营养价值，其实就是里面包含的碳水化合物、脂肪、蛋白质这三大营养物质，然后就是一些微量元素（矿物质）、维生素和膳食纤维。不同食材的不同之处在于，这6类物质在比例上的差异。如果一种食物这些都包含，而且各种占比还都合适，那就是“好营养”的食物。除此之外，食物中并不存在任何有特别功效的营养成分，就算有，我们吃到身体里，这些营养成分也要先分解成以上的6种。</p>
+
+<p class="art-p">所以，你也就明白了，这就是各国的《居民膳食指南》中都推荐要多样性饮食的原因，只有多种食物的配合食用，才能为人体提供全面的营养。</p>
+
+<p class="art-p">有关鸡蛋的三件事：</p>
+
+<ol class="art-list">
+<li>不同鸡蛋的营养价值几乎是一样的。</li>
+</ol>
+
+<p class="art-p">在很多人的印象中，来自山区农村的“土鸡蛋”“柴鸡蛋”“有机鸡蛋”，相比养鸡场批量产出的鸡蛋更有营养，但实际的情况却并非如此。对鸡蛋的主要营养成分——蛋白质、脂肪、维生素及各种微量元素进行分析，不同的鸡蛋之间其实并没有明显差异。实际上，因为养鸡场的饲料相对散养鸡的食物更为营养均衡，因此养鸡场批量产出的鸡蛋在营养上的一致性更高。当然，从食用的角度分析，不同类型鸡蛋的营养价值几乎是一样的。</p>
+
+<ol class="art-list">
+<li>红皮鸡蛋更有营养吗？</li>
+</ol>
+
+<p class="art-p">通过鸡蛋的外壳颜色来评价鸡蛋营养价值的高低是没有根据的。</p>
+
+<p class="art-p">蛋壳的颜色是由一种叫做卟啉的物质形成的。卟啉是鸟类体内血红蛋白代谢的产物，不过有些品种的鸟在体内不产生卟啉，所以它们下的蛋不是红色和褐色的。而如果鸟的子宫分泌胆绿素，那下出来的蛋就是绿色的，比如鸭蛋就有很多是绿色的。如果什么色素都没有，就是白皮的蛋。实际上，鸟类具体下出什么颜色的蛋基本是由基因决定的，而且这些不同颜色的蛋的成分差异只体现在蛋壳上，剥开蛋壳，里面都是白色的。</p>
+
+<p class="art-p">对于鸡蛋来说，不同颜色的外壳与营养价值没有必然联系。很多农村自己家里养鸡的都知道，因为不能严格控制鸡都吃些什么，所以下的鸡蛋在大小和壳的颜色上都存在差异。</p>
+
+<ol class="art-list">
+<li>鸡蛋黄越黄就越有营养？</li>
+</ol>
+
+<p class="art-p">首先，从鸡蛋的营养成分和安全性上分析，蛋黄越黄不是衡量鸡蛋营养价值的指标。</p>
+<p class="art-p">其次，鸡蛋黄之所以黄，是因为蛋黄中含有叶黄素，而叶黄素在鸡的体内是无法自行合成的，只能从日常的食物中获取。所以，那些蛋黄更黄，甚至偏橘黄色的鸡蛋，只是在鸡的食物中含有更多的叶黄素而已。</p>
+<p class="art-p">最后，叶黄素属于胡萝卜素的一种，大多数植物中都有，很多“土鸡蛋”“柴鸡蛋”“有机鸡蛋”的蛋黄更黄，可能是在鸡的食物中有更多的植物比例。</p>
+
+<p class="art-p">关于蜂蜜的三件事：</p>
+
+<ol class="art-list">
+<li>蜂蜜没有特别的营养。</li>
+</ol>
+
+<p class="art-p">从各种蜂蜜的成分来看，首先，其中的糖含量占了70%-80%左右，主要是果糖和葡萄糖。其次最多的是水分，大概在20%左右。最后，剩下的那些维生素、微量元素等归拢到一起，大概能占到1%。</p>
+
+<p class="art-p">日常生活中，很多人都是早晚各一大勺蜂蜜冲水服下，假设一大勺是10克蜂蜜，其实吃下去的主要营养成分是7-8克的糖，而那些微量成分加起来也就是0.1克。所以，蜂蜜不论是什么类型，像最普通常见的桂花蜜、枣花蜜、洋槐蜜，还是少见一些的益母草蜜、黄连蜜，它们的成分都大同小异，对于健康，没有什么特殊的益处，也没有什么特殊的坏处。</p>
+
+<ol class="art-list">
+<li>蜂蜜是天然的“糖浆”。</li>
+</ol>
+
+<p class="art-p">不过，有一点我曾多次提过，在我们的日常生活中，要注意“游离糖”的摄入量，所谓“游离糖”，就是我们除了正常的三餐外，那些额外吃下去的糖，比如饮料、糕点、冰激凌，还有炒菜时放进去的糖。而蜂蜜中的果糖与葡萄糖，也位列“游离糖”范畴。</p>
+
+<p class="art-p">其实，蜂蜜是一种天然的“糖浆”。</p>
+
+<p class="art-p">对于“游离糖”的摄入量，世界卫生组织的建议是每天不超过每日总热量的10%，建议低于5%。而5%的建议值就是成年男性每天摄入27.5克，女人摄入22.5克。而上限是男人每天55克，女人45克。所以，蜂蜜不适合大量食用，依然以一大勺10克为例，三勺下去，已经超过世界卫生组织的推荐值了，而且一般人也很难在一天中不再食用其它含“游离糖”的食物。</p>
+
+<ol class="art-list">
+<li>那些更贵的蜂蜜。</li>
+</ol>
+
+<p class="art-p">很多食物，如果只考虑营养价值，其实就没有意义了。在生活中，有很多人是喜欢蜂蜜的香味的，这首先是一种口味，蜂蜜在很多文学作品中还被描绘成一种情调，在某些地区可能还是一种文化。假如你喜欢吃蜂蜜，只要根据自己的口味和消费水平选择就可以了，更贵的蜂蜜，差异主要体现在产地不同、风味不同，那些进口的，比较稀缺的蜂蜜自然会贵一些，与“营养价值”其实并没有什么关系。</p>
+
+<p class="art-p">关于燕窝的两件事：</p>
+
+<ol class="art-list">
+<li>燕窝的营养成分</li>
+</ol>
+
+<p class="art-p">正经的燕窝里，从营养成分的角度看，其中50%左右是蛋白质，30%是碳水化合物，剩下的是一些水分、矿物质和一些微量元素。不过，燕窝中含量最多的蛋白质并不是“优质蛋白”，因为里面不包含人体所必需的8种氨基酸。</p>
+
+<p class="art-p">到目前为止，人们发现的天然氨基酸有20种，我们身体中的蛋白质都由它们构成。其中的8种是人体必需从食物中才能获取的，也就是无法由我们的身体自己来合成，所以叫必需氨基酸。其它12种，人体自己可以合成或者合成一部分。因此，食物中含有8种必需氨基酸的种类和含量，是衡量蛋白质优劣的标准。</p>
+
+<p class="art-p">所以，燕窝中的蛋白质如果按营养价值来说，实际上还不如鸡蛋和豆腐。比如鸡蛋就含有8种必需氨基酸，是非常好的蛋白质来源。</p>
+
+<ol class="art-list">
+<li>燕窝并不神奇</li>
+</ol>
+
+<p class="art-p">非常重要的一点是，燕窝不是生嚼的，而是炖煮着吃，所以别看它50%的蛋白质含量挺高的，但经过水的泡发，1克燕窝就泡出10克来，蛋白质含量立刻变5%，快接近牛奶了。</p>
+
+<p class="art-p">这世上没有天然形成的神奇营养物质，所有稀奇古怪的东西就算没有害处，营养成分也很难比得上“鸡蛋+蔬菜沙拉+面包”。但价格却很可能贵上几百上千倍，很多时候还搭上了健康的身体。像这样的保健品和营养品问题还可以延伸很多，比如人参、鹿茸、熊掌、虎骨、犀牛角、血蛤、阿胶等，都没什么特别的益处，但却害了很多动物的命。</p>
+
+<p class="art-p">因此，那些凡是宣传某一种食物中含有某些微量成分，会出现意想不到的优秀的保健功能的，都是虚假宣传。</p>
+
+<p class="art-p">卓克</p>
+<p class="art-p">好，以上就是今天的内容，关于饮食方面，你可能也还有其他的疑问，其实你都可以对照以上的内容进行思考和分析。</p>
+<p class="art-p">最好的饮食方案，其实各国的营养学会几乎每年都会有指导意见，比如我国就有《中国居民平衡膳食宝塔（2016）》，你可以去搜一下看看那张图片，对比一下自己的饮食结构，只要你跟那个表格接近，其实你的饮食就挺好的。</p>
+      </div>
+    </article>
+  </main>
+</div>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+
+<footer class="footer">
+  <p>卓老板聊科技 · 最小知识集（MKS）</p>
+  <p>298 篇文章 · 7 个专题 · 32 个原章节</p>
+  <p>
+    <a href="index.html">← 返回科学客厅</a> ·
+    <a href="concepts.svg" target="_blank">🗺️ 知识星系图</a> ·
+    <a href="quiz.html">📝 科学素养自测</a>
+  </p>
+</footer>
+
+</body>
+</html>

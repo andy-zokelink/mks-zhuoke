@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科学素养自测 · 卓老板聊科技 MKS</title>
+<style>
+:root {
+  --bg: #1a1612;
+  --bg-card: #241e18;
+  --text: #d4cfc4;
+  --text-bright: #f0e8d8;
+  --text-dim: #8a8278;
+  --border: #2e2822;
+  --border-light: #3e3830;
+  --amber: #d4a040;
+  --amber-light: #f0d878;
+  --green: #5a9e6f;
+  --red: #c45b5b;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --ease: 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
+  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.room-glow {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 25%, rgba(212,160,64,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(16,12,8,0.4) 100%);
+}
+
+/* Nav */
+.nav-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(26,22,18,0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+}
+.nav-inner {
+  max-width: 800px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px;
+}
+.nav-home {
+  color: var(--amber); text-decoration: none;
+  font-weight: 700; font-size: 0.95rem;
+  letter-spacing: 0.5px; transition: color var(--ease);
+}
+.nav-home:hover { color: var(--amber-light); }
+.nav-sep { color: var(--text-dim); }
+.nav-title { color: var(--text-bright); font-weight: 600; }
+
+/* Page */
+.page {
+  position: relative; z-index: 1;
+  max-width: 800px; margin: 0 auto; padding: 0 20px 80px;
+}
+
+.header {
+  text-align: center; padding: 48px 0 32px;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 2rem; color: var(--text-bright);
+  letter-spacing: 2px; margin-bottom: 8px;
+}
+.header p {
+  color: var(--text-dim); font-size: 0.9rem;
+}
+
+/* Score */
+.score-bar {
+  display: none;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 28px;
+  margin-bottom: 32px; text-align: center;
+}
+.score-bar.show { display: block; }
+.score-num {
+  font-family: "Georgia", serif;
+  font-size: 2.5rem; font-weight: 700;
+}
+.score-excellent { color: #5a9e6f; }
+.score-good { color: #8b9e5a; }
+.score-fair { color: #d4a040; }
+.score-poor { color: #c45b5b; }
+.score-msg {
+  margin-top: 6px; color: var(--text-dim); font-size: 0.9rem;
+}
+
+/* Quiz items */
+.quiz-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px 28px 20px;
+  margin-bottom: 20px; transition: all var(--ease);
+}
+.quiz-q-num {
+  font-size: 0.7rem; color: var(--amber); font-weight: 600;
+  letter-spacing: 1.5px; margin-bottom: 8px;
+}
+.quiz-q-text {
+  font-size: 1.05rem; color: var(--text-bright);
+  font-weight: 600; margin-bottom: 18px; line-height: 1.6;
+}
+
+/* Options */
+.quiz-options {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.quiz-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; transition: all var(--ease);
+}
+.quiz-option:hover {
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(255,255,255,0.12);
+}
+.quiz-option input { display: none; }
+.opt-marker {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--text-dim); flex-shrink: 0;
+  transition: all var(--ease);
+}
+.quiz-option:hover .opt-marker {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+.quiz-option.selected .opt-marker {
+  background: var(--amber); border-color: var(--amber);
+  color: #1a1612;
+}
+.quiz-option.correct .opt-marker {
+  background: var(--green); border-color: var(--green);
+  color: #fff;
+}
+.quiz-option.wrong .opt-marker {
+  background: var(--red); border-color: var(--red);
+  color: #fff;
+}
+.opt-text {
+  font-size: 0.9rem; color: var(--text);
+}
+
+/* Feedback */
+.quiz-feedback {
+  display: none; margin-top: 14px;
+  padding: 12px 16px; border-radius: 8px;
+  font-size: 0.82rem; line-height: 1.7;
+}
+.quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+.quiz-feedback.correct-fb {
+  background: rgba(90,158,111,0.1);
+  border: 1px solid rgba(90,158,111,0.2);
+  color: #7cc48a;
+}
+.quiz-feedback.wrong-fb {
+  background: rgba(196,91,91,0.1);
+  border: 1px solid rgba(196,91,91,0.2);
+  color: #e08080;
+}
+
+/* Submit */
+.submit-area {
+  text-align: center; padding: 24px 0;
+}
+.btn-submit {
+  background: var(--amber);
+  color: #1a1612; border: none;
+  padding: 14px 40px; border-radius: 28px;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; letter-spacing: 1px;
+  transition: all var(--ease);
+  font-family: var(--font-body);
+}
+.btn-submit:hover {
+  background: var(--amber-light);
+  box-shadow: 0 4px 20px rgba(212,160,64,0.3);
+  transform: translateY(-1px);
+}
+.btn-reset {
+  background: transparent; border: 1px solid var(--border-light);
+  color: var(--text-dim); padding: 12px 32px; border-radius: 28px;
+  font-size: 0.85rem; cursor: pointer; margin-left: 12px;
+  transition: all var(--ease); font-family: var(--font-body);
+}
+.btn-reset:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text-bright);
+}
+
+.footer {
+  text-align: center; padding: 40px 0;
+  color: var(--text-dim); font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+}
+.footer a { color: var(--amber); text-decoration: none; }
+
+@media (max-width: 500px) {
+  .quiz-item { padding: 20px 16px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="room-glow"></div>
+
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-home">🛋️ 科学客厅</a>
+    <span class="nav-sep">›</span>
+    <span class="nav-title">📝 科学素养自测</span>
+  </div>
+</nav>
+
+<div class="page">
+  <header class="header">
+    <h1>📝 科学素养自测</h1>
+    <p>10 道题，来自《卓老板聊科技》核心知识点 · 看看你的科学素养水平</p>
+  </header>
+
+  <div class="score-bar" id="scoreBar">
+    <div class="score-num" id="scoreNum"></div>
+    <div class="score-msg" id="scoreMsg"></div>
+  </div>
+
+  
+        <div class="quiz-item" id="q0">
+          <div class="quiz-q-num">第 1 题</div>
+          <p class="quiz-q-text">引力波是哪一年被首次直接探测到的？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="0" data-a="0">
+              <input type="radio" name="q0" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">2014年</span>
+            </label>
+            <label class="quiz-option" data-q="0" data-a="1">
+              <input type="radio" name="q0" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">2015年</span>
+            </label>
+            <label class="quiz-option" data-q="0" data-a="2">
+              <input type="radio" name="q0" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">2016年</span>
+            </label>
+            <label class="quiz-option" data-q="0" data-a="3">
+              <input type="radio" name="q0" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">2017年</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb0">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q1">
+          <div class="quiz-q-num">第 2 题</div>
+          <p class="quiz-q-text">人类线粒体DNA的'共同祖母'（线粒体夏娃）大约生活在多少年前？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="1" data-a="0">
+              <input type="radio" name="q1" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">约6万年前</span>
+            </label>
+            <label class="quiz-option" data-q="1" data-a="1">
+              <input type="radio" name="q1" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">约15万年前</span>
+            </label>
+            <label class="quiz-option" data-q="1" data-a="2">
+              <input type="radio" name="q1" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">约50万年前</span>
+            </label>
+            <label class="quiz-option" data-q="1" data-a="3">
+              <input type="radio" name="q1" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">约100万年前</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb1">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q2">
+          <div class="quiz-q-num">第 3 题</div>
+          <p class="quiz-q-text">以下哪种糖对健康的危害最大？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="2" data-a="0">
+              <input type="radio" name="q2" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">葡萄糖</span>
+            </label>
+            <label class="quiz-option" data-q="2" data-a="1">
+              <input type="radio" name="q2" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">果糖</span>
+            </label>
+            <label class="quiz-option" data-q="2" data-a="2">
+              <input type="radio" name="q2" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">乳糖</span>
+            </label>
+            <label class="quiz-option" data-q="2" data-a="3">
+              <input type="radio" name="q2" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">麦芽糖</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb2">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q3">
+          <div class="quiz-q-num">第 4 题</div>
+          <p class="quiz-q-text">抗生素对以下哪种病原体无效？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="3" data-a="0">
+              <input type="radio" name="q3" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">细菌</span>
+            </label>
+            <label class="quiz-option" data-q="3" data-a="1">
+              <input type="radio" name="q3" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">真菌</span>
+            </label>
+            <label class="quiz-option" data-q="3" data-a="2">
+              <input type="radio" name="q3" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">病毒</span>
+            </label>
+            <label class="quiz-option" data-q="3" data-a="3">
+              <input type="radio" name="q3" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">支原体</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb3">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q4">
+          <div class="quiz-q-num">第 5 题</div>
+          <p class="quiz-q-text">以下哪个不是量子力学的核心概念？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="4" data-a="0">
+              <input type="radio" name="q4" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">波粒二象性</span>
+            </label>
+            <label class="quiz-option" data-q="4" data-a="1">
+              <input type="radio" name="q4" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">不确定性原理</span>
+            </label>
+            <label class="quiz-option" data-q="4" data-a="2">
+              <input type="radio" name="q4" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">超对称</span>
+            </label>
+            <label class="quiz-option" data-q="4" data-a="3">
+              <input type="radio" name="q4" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">量子纠缠</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb4">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q5">
+          <div class="quiz-q-num">第 6 题</div>
+          <p class="quiz-q-text">AlphaGo战胜李世石主要依赖什么技术？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="5" data-a="0">
+              <input type="radio" name="q5" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">穷举搜索</span>
+            </label>
+            <label class="quiz-option" data-q="5" data-a="1">
+              <input type="radio" name="q5" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">专家系统</span>
+            </label>
+            <label class="quiz-option" data-q="5" data-a="2">
+              <input type="radio" name="q5" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">深度强化学习</span>
+            </label>
+            <label class="quiz-option" data-q="5" data-a="3">
+              <input type="radio" name="q5" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">遗传算法</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb5">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q6">
+          <div class="quiz-q-num">第 7 题</div>
+          <p class="quiz-q-text">以下哪种说法是科学的？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="6" data-a="0">
+              <input type="radio" name="q6" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">红糖水能补血</span>
+            </label>
+            <label class="quiz-option" data-q="6" data-a="1">
+              <input type="radio" name="q6" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">维生素C预防感冒</span>
+            </label>
+            <label class="quiz-option" data-q="6" data-a="2">
+              <input type="radio" name="q6" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">多喝热水治感冒</span>
+            </label>
+            <label class="quiz-option" data-q="6" data-a="3">
+              <input type="radio" name="q6" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">上述说法都缺乏充分证据</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb6">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q7">
+          <div class="quiz-q-num">第 8 题</div>
+          <p class="quiz-q-text">人体细胞中的线粒体来自哪里？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="7" data-a="0">
+              <input type="radio" name="q7" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">细胞核</span>
+            </label>
+            <label class="quiz-option" data-q="7" data-a="1">
+              <input type="radio" name="q7" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">内质网</span>
+            </label>
+            <label class="quiz-option" data-q="7" data-a="2">
+              <input type="radio" name="q7" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">被吞噬的细菌</span>
+            </label>
+            <label class="quiz-option" data-q="7" data-a="3">
+              <input type="radio" name="q7" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">高尔基体</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb7">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q8">
+          <div class="quiz-q-num">第 9 题</div>
+          <p class="quiz-q-text">2016年诺贝尔化学奖授予了哪项技术？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="8" data-a="0">
+              <input type="radio" name="q8" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">CRISPR基因编辑</span>
+            </label>
+            <label class="quiz-option" data-q="8" data-a="1">
+              <input type="radio" name="q8" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">分子机器</span>
+            </label>
+            <label class="quiz-option" data-q="8" data-a="2">
+              <input type="radio" name="q8" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">锂离子电池</span>
+            </label>
+            <label class="quiz-option" data-q="8" data-a="3">
+              <input type="radio" name="q8" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">冷冻电镜</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb8">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+        <div class="quiz-item" id="q9">
+          <div class="quiz-q-num">第 10 题</div>
+          <p class="quiz-q-text">石墨烯产品目前（2016年）值得购买吗？</p>
+          <div class="quiz-options">
+            
+            <label class="quiz-option" data-q="9" data-a="0">
+              <input type="radio" name="q9" value="0">
+              <span class="opt-marker">A</span>
+              <span class="opt-text">值得，技术成熟</span>
+            </label>
+            <label class="quiz-option" data-q="9" data-a="1">
+              <input type="radio" name="q9" value="1">
+              <span class="opt-marker">B</span>
+              <span class="opt-text">不值得，多是噱头</span>
+            </label>
+            <label class="quiz-option" data-q="9" data-a="2">
+              <input type="radio" name="q9" value="2">
+              <span class="opt-marker">C</span>
+              <span class="opt-text">部分产品有效</span>
+            </label>
+            <label class="quiz-option" data-q="9" data-a="3">
+              <input type="radio" name="q9" value="3">
+              <span class="opt-marker">D</span>
+              <span class="opt-text">看品牌决定</span>
+            </label>
+          </div>
+          <div class="quiz-feedback" id="fb9">
+            <span class="fb-icon"></span>
+            <span class="fb-text"></span>
+          </div>
+        </div>
+
+  <div class="submit-area">
+    <button class="btn-submit" id="btnSubmit" onclick="submitQuiz()">提交答卷</button>
+    <button class="btn-reset" onclick="resetQuiz()">重新作答</button>
+  </div>
+
+  <footer class="footer">
+    <p><a href="index.html">← 返回科学客厅</a></p>
+  </footer>
+</div>
+
+<script>
+const ANSWERS = [1, 1, 1, 2, 2, 2, 3, 2, 1, 1];
+const EXPLAINS = ["2015\u5e749\u670814\u65e5\uff0cLIGO\u63a2\u6d4b\u5668\u9996\u6b21\u76f4\u63a5\u63a2\u6d4b\u5230\u5f15\u529b\u6ce2\u4fe1\u53f7GW150914\uff0c\u6765\u81ea\u4e24\u4e2a\u9ed1\u6d1e\u7684\u5408\u5e76\u30022016\u5e742\u6708\u6b63\u5f0f\u516c\u5e03\u3002", "\u7ebf\u7c92\u4f53\u590f\u5a03\u5927\u7ea6\u751f\u6d3b\u572815-20\u4e07\u5e74\u524d\u7684\u975e\u6d32\u3002\u800cY\u67d3\u8272\u4f53\u4e9a\u5f53\u5927\u7ea6\u751f\u6d3b\u57286-9\u4e07\u5e74\u524d\uff0c\u4e24\u8005\u65f6\u95f4\u5dee\u4e86\u7ea68\u4e07\u5e74\u3002", "\u679c\u7cd6\u4e3b\u8981\u5728\u809d\u810f\u4ee3\u8c22\uff0c\u8fc7\u91cf\u6444\u5165\u4f1a\u8f6c\u5316\u4e3a\u8102\u80aa\uff0c\u5bfc\u81f4\u8102\u80aa\u809d\u3001\u80f0\u5c9b\u7d20\u62b5\u6297\u548c\u75db\u98ce\u3002\u6dfb\u52a0\u7cd6\uff08\u5c24\u5176\u662f\u9ad8\u679c\u7cd6\u7389\u7c73\u7cd6\u6d46\uff09\u662f\u73b0\u4ee3\u996e\u98df\u7684\u4e3b\u8981\u5065\u5eb7\u98ce\u9669\u3002", "\u6297\u751f\u7d20\u53ea\u5bf9\u7ec6\u83cc\u6709\u6548\uff0c\u5bf9\u75c5\u6bd2\uff08\u5982\u6d41\u611f\u3001\u666e\u901a\u611f\u5192\uff09\u5b8c\u5168\u65e0\u6548\u3002\u6ee5\u7528\u6297\u751f\u7d20\u4f1a\u5bfc\u81f4\u8010\u836f\u83cc\u7684\u51fa\u73b0\uff0c\u8fd9\u662f\u5168\u7403\u516c\u5171\u536b\u751f\u7684\u91cd\u5927\u5a01\u80c1\u3002", "\u8d85\u5bf9\u79f0\u662f\u7406\u8bba\u7269\u7406\u5b66\u7684\u4e00\u4e2a\u5047\u8bf4\uff0c\u5c1a\u672a\u88ab\u5b9e\u9a8c\u8bc1\u5b9e\u3002\u6ce2\u7c92\u4e8c\u8c61\u6027\u3001\u4e0d\u786e\u5b9a\u6027\u539f\u7406\u3001\u91cf\u5b50\u7ea0\u7f20\u90fd\u662f\u91cf\u5b50\u529b\u5b66\u5df2\u786e\u8ba4\u7684\u6838\u5fc3\u6982\u5ff5\u3002", "AlphaGo\u4f7f\u7528\u6df1\u5ea6\u795e\u7ecf\u7f51\u7edc+\u8499\u7279\u5361\u6d1b\u6811\u641c\u7d22+\u5f3a\u5316\u5b66\u4e60\u3002\u5b83\u901a\u8fc7\u81ea\u6211\u5bf9\u5f08\u6570\u767e\u4e07\u76d8\u6765\u5b66\u4e60\uff0c\u800c\u975e\u4f9d\u8d56\u4eba\u7c7b\u68cb\u8c31\u6216\u7a77\u4e3e\u641c\u7d22\u3002", "\u7ea2\u7cd6\u542b\u94c1\u91cf\u6781\u4f4e\u4e0d\u80fd\u8865\u8840\uff1b\u7ef4\u751f\u7d20C\u5bf9\u611f\u5192\u7684\u9884\u9632\u6548\u679c\u8bc1\u636e\u4e0d\u8db3\uff08\u4ec5\u5bf9\u6781\u7aef\u8fd0\u52a8\u4eba\u7fa4\u53ef\u80fd\u6709\u7528\uff09\uff1b\u591a\u559d\u70ed\u6c34\u4e0d\u80fd\u6740\u6b7b\u75c5\u6bd2\u4f46\u53ef\u7f13\u89e3\u75c7\u72b6\u3002\u8fd9\u4e9b\u65e5\u5e38\u8bf4\u6cd5\u90fd\u7f3a\u4e4f\u4e25\u683c\u79d1\u5b66\u8bc1\u636e\u3002", "\u7ebf\u7c92\u4f53\u8d77\u6e90\u4e8e\u7ea615\u4ebf\u5e74\u524d\u88ab\u539f\u59cb\u771f\u6838\u7ec6\u80de\u541e\u566c\u7684\u03b1-\u53d8\u5f62\u83cc\u3002\u5b83\u4eec\u4fdd\u7559\u4e86\u81ea\u5df1\u7684DNA\uff08\u4e0e\u7ec6\u83ccDNA\u76f8\u4f3c\uff09\uff0c\u8fd9\u4e00\u7406\u8bba\u79f0\u4e3a\u5185\u5171\u751f\u5b66\u8bf4\u3002", "2016\u5e74\u8bfa\u8d1d\u5c14\u5316\u5b66\u5956\u6388\u4e88\u8ba9-\u76ae\u57c3\u5c14\u00b7\u7d22\u74e6\u65e5\u3001\u5f17\u96f7\u6cfd\u00b7\u65af\u6258\u8fbe\u7279\u548c\u4f2f\u7eb3\u5fb7\u00b7\u8d39\u6797\u52a0\uff0c\u8868\u5f70\u4ed6\u4eec\u5728\u5206\u5b50\u673a\u5668\u8bbe\u8ba1\u4e0e\u5408\u6210\u65b9\u9762\u7684\u8d21\u732e\u3002", "\u5353\u514b\u7684\u5efa\u8bae\u662f\uff1a\u51e1\u662f\u58f0\u79f0\u81ea\u5df1\u662f\u77f3\u58a8\u70ef\u4ea7\u54c1\u7684\uff0c\u73b0\u9636\u6bb5\u90fd\u4e0d\u8981\u4e70\u3002\u77f3\u58a8\u70ef\u7684\u5927\u89c4\u6a21\u751f\u4ea7\u548c\u5e94\u7528\u5728\u5f53\u65f6\u6280\u672f\u4e0a\u8fdc\u672a\u6210\u719f\uff0c\u5e02\u9762\u4e0a\u7684\u4ea7\u54c1\u57fa\u672c\u90fd\u662f\u8425\u9500\u5671\u5934\u3002"];
+
+let submitted = false;
+
+document.querySelectorAll('.quiz-option').forEach(opt => {
+  opt.addEventListener('click', function() {
+    if (submitted) return;
+    const q = parseInt(this.dataset.q);
+    const a = parseInt(this.dataset.a);
+
+    // Deselect previous
+    document.querySelectorAll(`.quiz-option[data-q="${q}"]`).forEach(o => o.classList.remove('selected'));
+    this.classList.add('selected');
+    this.querySelector('input').checked = true;
+  });
+});
+
+function submitQuiz() {
+  if (submitted) return;
+  submitted = true;
+
+  let score = 0;
+  for (let i = 0; i < ANSWERS.length; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    const fb = document.getElementById(`fb${i}`);
+    const options = document.querySelectorAll(`.quiz-option[data-q="${i}"]`);
+
+    if (selected) {
+      const userAnswer = parseInt(selected.value);
+      const isCorrect = userAnswer === ANSWERS[i];
+
+      // Highlight all options
+      options.forEach(o => {
+        const a = parseInt(o.dataset.a);
+        if (a === ANSWERS[i]) o.classList.add('correct');
+        if (a === userAnswer && !isCorrect) o.classList.add('wrong');
+      });
+
+      if (isCorrect) {
+        score++;
+        fb.className = 'quiz-feedback correct-fb show';
+        fb.querySelector('.fb-icon').textContent = '✅';
+        fb.querySelector('.fb-text').textContent = '正确！' + EXPLAINS[i];
+      } else {
+        fb.className = 'quiz-feedback wrong-fb show';
+        fb.querySelector('.fb-icon').textContent = '❌';
+        fb.querySelector('.fb-text').textContent = EXPLAINS[i];
+      }
+    } else {
+      // No answer selected
+      fb.className = 'quiz-feedback wrong-fb show';
+      fb.querySelector('.fb-icon').textContent = '⏭️';
+      fb.querySelector('.fb-text').textContent = '未作答。' + EXPLAINS[i];
+      // Highlight correct answer
+      options.forEach(o => {
+        if (parseInt(o.dataset.a) === ANSWERS[i]) o.classList.add('correct');
+      });
+    }
+  }
+
+  // Show score
+  const bar = document.getElementById('scoreBar');
+  bar.classList.add('show');
+  const num = document.getElementById('scoreNum');
+  const msg = document.getElementById('scoreMsg');
+  num.textContent = `${score} / ${ANSWERS.length}`;
+
+  let cls, message;
+  if (score >= 9) {
+    cls = 'score-excellent'; message = '🏆 科学达人！你对科学有扎实的理解，卓老板会为你骄傲。';
+  } else if (score >= 7) {
+    cls = 'score-good'; message = '👍 科学爱好者！基础知识不错，继续保持好奇心。';
+  } else if (score >= 4) {
+    cls = 'score-fair'; message = '📚 科学学徒——还有提升空间，建议多逛逛科学客厅。';
+  } else {
+    cls = 'score-poor'; message = '🌱 科学新芽——这正是开始学习的好时机！从任意专题开始探索吧。';
+  }
+  num.className = 'score-num ' + cls;
+  msg.textContent = message;
+
+  document.getElementById('btnSubmit').textContent = '✓ 已提交';
+  document.getElementById('btnSubmit').style.opacity = '0.6';
+
+  // Scroll to score
+  bar.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  submitted = false;
+  document.querySelectorAll('.quiz-option').forEach(o => {
+    o.classList.remove('selected', 'correct', 'wrong');
+    o.querySelector('input').checked = false;
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(fb => {
+    fb.className = 'quiz-feedback';
+  });
+  document.getElementById('scoreBar').classList.remove('show');
+  document.getElementById('btnSubmit').textContent = '提交答卷';
+  document.getElementById('btnSubmit').style.opacity = '1';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

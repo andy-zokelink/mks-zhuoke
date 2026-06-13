@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤖 未来的拼图 · 卓老板聊科技 MKS</title>
+<style>
+/* ============================================================
+   卓老板聊科技 · 专题 6：未来的拼图
+   设计理念：科学客厅的未来工作坊——散落的设计蓝图与原型
+   ============================================================ */
+:root {
+  --bg: #1a1612;
+  --bg-card: #241e18;
+  --bg-card-hover: #2c251e;
+  --text: #d4cfc4;
+  --text-bright: #f0e8d8;
+  --text-dim: #8a8278;
+  --border: #2e2822;
+  --border-light: #3e3830;
+  --accent: #4a8a9a;
+  --accent-light: #6ab0c0;
+  --accent-glow: rgba(74,138,154,0.25);
+  --amber: #d4a040;
+  --amber-light: #f0d878;
+  --amber-glow: rgba(212,160,64,0.2);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
+  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ===== Room ambient light ===== */
+.room-glow {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 20%, rgba(74,138,154,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 50% at 15% 60%, var(--amber-glow) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 50% at 85% 40%, rgba(180,160,120,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 50% 90%, rgba(200,160,80,0.04) 0%, transparent 50%);
+}
+
+/* ===== Dust motes in lamplight ===== */
+.dust-motes {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.mote {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--amber-light);
+  animation: mote-drift linear infinite;
+  opacity: 0;
+}
+@keyframes mote-drift {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  5%   { opacity: 0.6; }
+  40%  { opacity: 0.3; }
+  90%  { opacity: 0.05; }
+  100% { transform: translateY(-100vh) translateX(var(--mx)); opacity: 0; }
+}
+.m1 { left: 5%;  bottom: -5px; width: 2px; height: 2px; --mx: 40px; animation-duration: 14s; animation-delay: 0s; }
+.m2 { left: 15%; bottom: -5px; width: 1px; height: 1px; --mx: -25px; animation-duration: 12s; animation-delay: 2s; }
+.m3 { left: 25%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 55px; animation-duration: 16s; animation-delay: 1s; }
+.m4 { left: 35%; bottom: -5px; width: 2px; height: 2px; --mx: -35px; animation-duration: 13s; animation-delay: 3s; }
+.m5 { left: 45%; bottom: -5px; width: 1px; height: 1px; --mx: 45px; animation-duration: 15s; animation-delay: 0.5s; }
+.m6 { left: 55%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: -45px; animation-duration: 11s; animation-delay: 2.5s; }
+.m7 { left: 65%; bottom: -5px; width: 2px; height: 2px; --mx: 30px; animation-duration: 14.5s; animation-delay: 1.5s; }
+.m8 { left: 75%; bottom: -5px; width: 1px; height: 1px; --mx: -20px; animation-duration: 12.5s; animation-delay: 3.5s; }
+.m9 { left: 85%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 50px; animation-duration: 15.5s; animation-delay: 0.8s; }
+.m10 { left: 92%; bottom: -5px; width: 2px; height: 2px; --mx: -30px; animation-duration: 13.5s; animation-delay: 4s; }
+
+/* ===== Top Navigation Bar ===== */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(26,22,18,0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.nav-home {
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: color var(--ease);
+  white-space: nowrap;
+}
+.nav-home:hover { color: var(--amber-light); }
+.nav-sep { color: var(--text-dim); font-size: 0.85rem; }
+.nav-title {
+  color: var(--text-bright);
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.nav-count {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  background: rgba(255,255,255,0.04);
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Topic quick-nav */
+.topic-quick-nav {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.topic-quick-nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all var(--ease);
+  white-space: nowrap;
+}
+.topic-quick-nav a:hover {
+  color: var(--text-bright);
+  border-color: var(--border-light);
+  background: rgba(255,255,255,0.03);
+}
+.topic-quick-nav a.active {
+  color: var(--accent-light);
+  border-color: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  font-weight: 600;
+}
+
+/* ===== Page Header ===== */
+.page-header {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 48px auto 32px;
+  padding: 0 20px;
+  text-align: center;
+}
+.page-header .topic-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: icon-float 3s ease-in-out infinite;
+}
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.page-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--text-bright);
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.page-header .subtitle {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  color: var(--accent-light);
+  font-size: 1.05rem;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.page-header .desc {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.header-line {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  margin: 20px auto;
+}
+
+/* ===== Main Content Layout ===== */
+.main-layout {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ===== Sidebar TOC ===== */
+.toc-sidebar {
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.toc-sidebar h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--amber);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.toc-sidebar ol {
+  list-style: none;
+  padding: 0;
+}
+.toc-sidebar li {
+  margin-bottom: 2px;
+}
+.toc-sidebar a {
+  display: block;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all var(--ease);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toc-sidebar a:hover {
+  color: var(--accent-light);
+  background: rgba(255,255,255,0.03);
+}
+
+/* ===== Article Cards ===== */
+.articles-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.art-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  transition: all var(--ease);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.art-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 20%, var(--accent) 50%, transparent 80%);
+  opacity: 0;
+  transition: opacity var(--ease);
+}
+.art-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
+}
+.art-card:hover::before { opacity: 0.6; }
+
+.art-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.art-chapter {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(255,255,255,0.04);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.art-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text-bright);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.art-body {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.art-body .art-p {
+  margin-bottom: 10px;
+}
+.art-body .art-h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--accent-light);
+  margin: 18px 0 8px;
+  font-weight: 600;
+}
+.art-body .art-h4 {
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  margin: 14px 0 6px;
+  font-weight: 600;
+}
+.art-body .art-h5 {
+  font-size: 0.88rem;
+  color: var(--amber-light);
+  margin: 10px 0 4px;
+  font-weight: 500;
+}
+.art-body strong {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+.art-body .art-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0 16px;
+}
+.art-body .art-list li {
+  padding: 4px 0 4px 24px;
+  position: relative;
+  margin-bottom: 2px;
+}
+.art-body .art-list li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+/* ===== Back to top ===== */
+.back-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 50;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--ease);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.back-top:hover {
+  color: var(--amber-light);
+  border-color: rgba(212,160,64,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* ===== Footer ===== */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 48px 20px 32px;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+.footer a {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .toc-sidebar {
+    position: static;
+    max-height: none;
+    order: -1;
+  }
+  .art-card {
+    padding: 20px;
+  }
+  .topic-quick-nav {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="room-glow"></div>
+
+<div class="dust-motes">
+  <div class="mote m1"></div>
+  <div class="mote m2"></div>
+  <div class="mote m3"></div>
+  <div class="mote m4"></div>
+  <div class="mote m5"></div>
+  <div class="mote m6"></div>
+  <div class="mote m7"></div>
+  <div class="mote m8"></div>
+  <div class="mote m9"></div>
+  <div class="mote m10"></div>
+</div>
+
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-home">🛋️ 科学客厅</a>
+    <span class="nav-sep">›</span>
+    <span class="nav-title">🤖 未来的拼图</span>
+    <span class="nav-count">33 篇</span>
+    <div class="topic-quick-nav">
+      <a href="1-宇宙的秩序.html" class="">🌌</a>
+<a href="2-生命的算法.html" class="">🧬</a>
+<a href="3-身体的真相.html" class="">🫀</a>
+<a href="4-餐桌上的实验室.html" class="">🍽️</a>
+<a href="5-思维的武器.html" class="">🧠</a>
+<a href="6-未来的拼图.html" class="active">🤖</a>
+<a href="7-文明的阶梯.html" class="">🏛️</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <span class="topic-icon">🤖</span>
+  <h1>未来的拼图</h1>
+  <p class="subtitle">Puzzle of the Future</p>
+  <div class="header-line"></div>
+  <p class="desc">人工智能、自动驾驶、虚拟货币、量子计算——拼凑出正在成型的明日世界图景。</p>
+</header>
+
+<div class="main-layout">
+  <aside class="toc-sidebar">
+    <h4>📋 本专题目录</h4>
+    <ol>
+      <li><a href="#art-1">为什么80%的财富聚集在20%人的手中?</a></li>
+<li><a href="#art-2">货币防伪的极限——量子货币会诞生吗？</a></li>
+<li><a href="#art-3">量子卫星大揭秘</a></li>
+<li><a href="#art-4">人工智能与黎曼的较量</a></li>
+<li><a href="#art-5">海水淡化是未来趋势吗？</a></li>
+<li><a href="#art-6">AlphaGo和李世石的对决中，谁的耗能高？</a></li>
+<li><a href="#art-7">Master团灭人类围棋</a></li>
+<li><a href="#art-8">为什么三星note7会爆炸？</a></li>
+<li><a href="#art-9">人工智能技术是怎么回事？</a></li>
+<li><a href="#art-10">你怎么就敢推荐比特币？</a></li>
+<li><a href="#art-11">哪些虚拟货币值得投资？</a></li>
+<li><a href="#art-12">如何玩转搜索引擎？</a></li>
+<li><a href="#art-13">新刊：14年后虚拟、现实边界模糊</a></li>
+<li><a href="#art-14">新刊：虚拟现实的实际体验</a></li>
+<li><a href="#art-15">新能源车为什么不靠换电池来实现充电呢？</a></li>
+<li><a href="#art-16">新能源车为什么火了？</a></li>
+<li><a href="#art-17">无人驾驶汽车是更安全了，还是更危险了？</a></li>
+<li><a href="#art-18">石墨烯产品该不该买？</a></li>
+<li><a href="#art-19">聊聊华为的石墨烯电池</a></li>
+<li><a href="#art-20">该不该买电动牙刷？</a></li>
+<li><a href="#art-21">问答：一颗纽扣电池能污染600吨水？</a></li>
+<li><a href="#art-22">风力发电怎么产生电能？</a></li>
+<li><a href="#art-23">海淘奶粉安全吗？</a></li>
+<li><a href="#art-24">听《卓老板聊科技》有什么现实意义？</a></li>
+<li><a href="#art-25">有没有推荐的数学科普书？</a></li>
+<li><a href="#art-26">今后的水和能源</a></li>
+<li><a href="#art-27">福岛核电站再次泄露了吗？</a></li>
+<li><a href="#art-28">如何挑选显示器？</a></li>
+<li><a href="#art-29">如何用工具提高工作效率？</a></li>
+<li><a href="#art-30">笔记本电池怎么维护？</a></li>
+<li><a href="#art-31">怎样才能感受到奇迹？</a></li>
+<li><a href="#art-32">歪果仁会听“卓老板聊科技”吗？</a></li>
+<li><a href="#art-33">新课｜《卓克的密码学课》发刊词</a></li>
+    </ol>
+  </aside>
+
+  <main class="articles-area">
+    
+    <article class="art-card" id="art-1">
+      <div class="art-header">
+        <span class="art-chapter">Ch.74</span>
+        <h3 class="art-title">为什么80%的财富聚集在20%人的手中?</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">泊松分布下的差异</p>
+
+<ol class="art-list">
+<li>世界上最高的人2.72米，222公斤，22岁去世，他的身高是因为脑垂体肿瘤造成的。激素分泌正常的人最高的是内蒙古的鲍喜顺，2.36米，今年65岁。世界上最矮的人身高55cm，体重12公斤，2015年9月份去世，终年75岁。人类在身高上差异近5倍，体重上差异18.5倍。但这并不是很大的差异，因为它属于泊松分布。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>泊松分布的形状类似倒扣的钟，是离散数据的一种分布类型。对应泊松分布的连续类型叫正态分布，当泊松分布的样本超过15个以后可以用正态分布的计算方法对泊松分布进行估值。</li>
+</ol>
+
+<p class="art-p">幂律分布无处不在</p>
+
+<ol class="art-list">
+<li>各国GDP分布属于幂律分布，美国17.4万亿排第一，图鲁瓦3800万美元排倒数第一，差距46万倍，远远高于泊松分布下可以体现出来的差异。个人年收入与人数也是幂律分布。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>幂律分布的图形是一个Y=K*X^(-β)的图像，β大于零，有一条长长的尾巴。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>可以在莎士比亚的作品中找到词和词频之间的幂律关系，20%的词用掉了80%的篇幅。这就是经常说的2-8定律，这个定律只是近似的标示分配的不平均，而并不是定量的分析。</li>
+</ol>
+
+<p class="art-p">幂律和分形</p>
+
+<ol class="art-list">
+<li>无标度属性是幂律的重要特征，如果你用放大镜看，总是80%的财富聚集在更富有的20%人的手中。这种结构可以一直嵌套着出现。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>结构式无限嵌套的形状是分形最大的特征，分形具有分数维度，一维的分形像海岸线，二维的分形像菠萝表面，三维的分形像布满管道的球体。他们的维度分别是1＜D＜2，2＜D＜3，3＜D＜4，在真实世界中并不存在分形，这只是数学理想结构中的理论。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>幂律研究的开山之作是Bak、汤超、Wiesenfeld 做出的研究，沙堆是一个不得不提到的例子，沙堆的高度和崩塌的规模呈现幂律。而你去追究为什么会出现大的崩塌，原因只不过是一粒沙子落下了。</li>
+</ol>
+
+<p class="art-p">为什么会出现幂律</p>
+
+<ol class="art-list">
+<li>样本间相互不独立是幂律生成的重要条件。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>莎士比亚作品英文原著的分析发现存在幂律，但如果分析中文翻译版中以字为单位去研究，幂律就消失了，只有把翻译版中的词做研究单位幂律才会重新出现。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>词能出现幂律是因为有语法结构把词联系在一起，而字的联系却没有这么紧密。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>现代文学作品中以词为单位统计词频会出现幂律，以字为单位统计字频不会出现幂律，先秦文学作品中以字为单位统计字频会出现幂律，原因在于古汉语中一个字就代表一个词的现象很普遍。</li>
+</ol>
+
+<p class="art-p">如何理解幂律在生活中的规律</p>
+
+<ol class="art-list">
+<li>罐头进货，如果按每月平均数进货会经常造成积压或者不足，因为买金枪鱼罐头这件事在老小区中并不是完全独立，每个人吃罐头的概率也不稳定，所以会呈现幂律分布的特征，而平均数只能反应泊松分布的性质。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>超市中的盐和糖的需求量满足泊松分布，因为消耗它们的概率稳定，购买他们的决策几乎不受外界影响。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>互联网运营用户的关键是持续让人与人之间增加互相影响，而不是做一些非常态化的突击。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-2">
+      <div class="art-header">
+        <span class="art-chapter">Ch.75</span>
+        <h3 class="art-title">货币防伪的极限——量子货币会诞生吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">货币为什么少有大面额钞票</p>
+
+<ol class="art-list">
+<li>毒贩交易中常采用现金交易，大面额钞票方便非法买卖。举个例子，100万美元如果都用1美元钞票，重量1吨，用100美元钞票重量10公斤，用500欧元钞票重量2.2公斤。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>美国在1969年之前使用过单张500美元的钞票，当时这张1克重的纸币可以兑换404克黄金，价值兑换落差太大。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>一百美元纸币印制成本为0.64-0.96美元，如果就按印制成本是面额1%来计算，人民币如果推出500元面额纸币，造假币的人成本降低80%。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>美国人口全年使用过100美元面额钞票的只占总人口5%。为了增加犯罪门槛，各国大面额钞票都相继取消。</li>
+</ol>
+
+<p class="art-p">牛顿在铸币局都干了什么</p>
+
+<ol class="art-list">
+<li>牛顿53岁时任皇家铸币局总监，这个职位原本是一个工资高的闲职，但牛顿在这个岗位上发挥了很大作用。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>那个年代英国流通的货币是银币，银币存在磨损问题，有些磨损是正常使用造成的，有些是有人故意为之，每枚银币蹭掉一些银粉，最后聚拢起来获取利润。这样做的不光有黑作坊，连铸币局内部也用纯度低的银以次充好。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>银币不足值、造假，让全社会对英国货币失去信心，国家酝酿货币改革，皇室希望减少银币重量增加面额标注，牛顿极力反对这种坑害百姓的做法。最终皇室同意了牛顿的决策，重新铸造新版防伪银币。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>牛顿在新版银币制造中利用自己的科学分析能力，大幅改进制造过程中金属的损耗，为国家节省数千英镑，新版银币上市后牛顿被提升为皇家铸币局局长。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>货币改革后，出现了一位高调造假币的人，牛顿亲自收集整理线索，组织警方破案，最终把造假者送上法庭，判处了绞刑。</li>
+</ol>
+
+<p class="art-p">量子货币的设计思路</p>
+
+<ol class="art-list">
+<li>量子货币也叫薛定谔货币（Shrodinger’s Cash），这个词的英文和Shrodinger’s Cat 很像，又因为薛定谔是量子力学奠基人，所以就起了这个别称。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>纯正量子货币的理论基础是，微观粒子的状态不能被完全复制，这是伍特斯和祖瑞克在1982年的论文《单量子态不可克隆》里证明的。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>不能精确复制量子态的原因是因为你不知道它的状态，需要知道状态后才能复制。可状态需要测量，量子世界中任何测量的结果都包含了测量本身，无法去除。所以量子态可以作为加密手段。</li>
+</ol>
+
+<p class="art-p">量子货币遇到的困难</p>
+
+<ol class="art-list">
+<li>只能由发行货币的银行确认货币真伪，除此之外其他人如果试图确认货币中的量子态，这张钞票就会作废。而银行的工作量不能承受鉴别真伪的需求。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>银行鉴别真伪的动作也可以不用破坏货币本身的量子态，这需要银行在货币出厂前给每张货币做好量子纠缠，在银行端保留一份纠缠态。这样在验证货币真伪时，只需要改变纠缠态，然后观察待验货币状态是否改变就可以确认真伪了。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>保存量子态需要苛刻的条件，当前只能在实验室内接近绝对零度保存，而货币上的使用要求体积足够小，室温，弯折，且需要足够久的状态稳定时间，这几乎是不可能达到的要求。</li>
+</ol>
+
+<p class="art-p">改进版量子货币</p>
+
+<ol class="art-list">
+<li>改进版量子货币不需要中央银行作为唯一可以验证真伪的机构，货币只能新发，因为货币不能重复利用量子态。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>每个人都可以验证货币的真伪，但削弱了保密性，伪造者面对的不是一个理论上不可能的任务，而是面临一个很可能永远也做不完的计算题。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>伪造者面临的计算题是否足够难取决于P=PN这个猜想是否成立。</li>
+</ol>
+
+<p class="art-p">P=PN问题是什么</p>
+
+<ol class="art-list">
+<li>P是多项式polynomial的缩写，“P问题”代表如果解答一个问题所需要的时间和这个问题规模的扩大呈现多项式规律的增长，那么这个问题就是“P问题”。这样的问题是现代计算机比较好解决的。还有很多问题随着规模的增加，解答时间的增加呈现暴涨，比如N次方增长，或者N的阶乘式增长，这样的问题现代计算机无能为力，往往一个简单的问题就可以耗费天河二号计算机几亿年的运算时间。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>P=NP问题中的NP是nondeterministic polynomial 的缩写，这个问题并不是指上面说的那种复杂问题，而是指确定某个解是否正确所需的时间可以按多项式增长。如果P=NP，那么所有超级复杂的问题在理论上就有可能找到一种多项式时间增长的解法。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>如果P=NP，等号成立，量子货币中给造假者提供的计算题可能难度就不够大，他们还是有可能用算法破解，当然，如果真的找到一个时间增长呈现N的20次方这样的规律，虽然也属于多项式时间增长，但因为次幂太高，也很可能计算不出来。</li>
+</ol>
+
+<p class="art-p">新式货币中的比特币</p>
+
+<ol class="art-list">
+<li>比特币和量子货币，还有所有目前发行的货币最大的不同有两点：</li>
+</ol>
+
+<p class="art-p">1) 没有中央银行发行；</p>
+
+<p class="art-p">2) 每个使用者拥有一套全网账本。</p>
+
+
+
+<ol class="art-list">
+<li>比特币的核心价值是区块链技术，SWIFT（全球银行同业金融电讯协会）从2013年注意到比特币后，快速上马了项目，他们开发的区块链分账式技术已经完成，正在测试。一旦上线可以加速各国货币交换，减少中间环节的费用。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>高盛、花旗、德意志银行，汇丰、摩根士丹利，甚至还有中国平安，一共50家全球最大的银行都加入了一个区块链联盟，每个银行都在以比特币为原型展开深入研发。</li>
+</ol>
+
+<p class="art-p">数学和物理的重要性</p>
+
+<p class="art-p">数学和物理是现代科学的基石，科技世界所有的新闻都生长在这这两株参天大树上，当你对数学和物理方面的内容了解多了以后，就不会觉得很多黑科技是凭空生出来的。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-3">
+      <div class="art-header">
+        <span class="art-chapter">Ch.75</span>
+        <h3 class="art-title">量子卫星大揭秘</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">墨子号卫星的性质是科研</p>
+
+<p class="art-p">墨子号量子卫星的主要任务是做量子通讯的科学实验，就目前而言，量子通讯离实际应用还比较远。这项科学实验是潘建伟团队与奥地利的维也纳大学合作的，潘建伟团队有技术上的优势。</p>
+
+<p class="art-p">信号传输中的关键</p>
+
+<ol class="art-list">
+<li>传输信号采用卫星，势在必行。光量子态在光纤中最多可以传播200公里，之后衰减到无法辨识，而光量子又没法放大。地球大气层传播光信号的衰减过程主要集中在近地面20公里以内高度，如果超过20公里以上影响就很小，也就是说从地面发射信号到太空只会衰减20%。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>最终的量子卫星通讯可能是几颗卫星在天上，链接若干重要城市，然后在地面配合这些城市用光纤实现200公里内的毛细覆盖。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>潘建伟团队在2010年做过16公里的量子态传输，2012年又在青海湖做了97公里的量子态传输，这些试验都验证了天地通讯的可行性。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>墨子是近地卫星，每85分钟绕地球一圈，在信号传输过程中，卫星和地面站如何对准是难点。潘建伟团队在2013年利用高空热气球模拟了近地卫星对准的操作，使这个难点有所突破。</li>
+</ol>
+
+<p class="art-p">量子保密通讯</p>
+
+<ol class="art-list">
+<li>虽然传统加密过程不断增加破解难度，但永远无法防止别人嗅探、窃取、监听。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>量子保密手段中量子密钥分配的方法采用的是两位IBM科学家提出的BB84协议，这种加密技术可以实时监控是否有人在监听。这个功能的实现是依靠量子力学中，量子态不可克隆理论实现的。但这两位IBM两位科学家并不看好量子密钥分配方法，他们更看好量子计算。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>量子密钥分发光量子的过程在2005年以前进展很慢，最远距离10公里，潘建伟团队最先突破距离到200公里。在2012年，合肥搭建了6000平方公里网络，之后量子密钥加密技术使用在十八大和大阅兵的通讯中。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>量子密钥也有攻击方法：强光致盲，但2012年就提出了解决办法。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>通过量子纠缠做出的保密通讯叫做量子隐形传态（teleportation），这需要让成对的量子形成纠缠，并且在传输过程中保持纠缠。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>量子隐形传态并不超光速，因为它需要传统通讯方法指挥另一方如何进行信息查看。这种加密方式也可以通过协议上精巧的设计让信息的收发双方可以随时知道是否被人窃听。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>量子隐形传态中传递的是量子态，所以可以和量子计算机无缝结合。</li>
+</ol>
+
+<p class="art-p">质疑的声音</p>
+
+<ol class="art-list">
+<li>无论是采用量子密钥还是量子隐形传态，都需要传统信道，所以安全性并不比目前所用的更好。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>量子通信的信噪比低，抗干扰能力差。</li>
+</ol>
+
+<p class="art-p">量子卫星的意义</p>
+
+<p class="art-p">如果量子加密技术不断改进，量子计算机齐头并进，也许70年后看今天，就像现在看1947年晶体管发明那样。到时候，整个IT界从物理层到编码全都需要重新建立系统，这又将是一轮新的创业热潮。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-4">
+      <div class="art-header">
+        <span class="art-chapter">Ch.76</span>
+        <h3 class="art-title">人工智能与黎曼的较量</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">手稿中的突破</p>
+
+<ol class="art-list">
+<li>1925年后黎曼猜想的进展就卡在了已计算出的138个非平凡零点上，此后的发展举步维艰，这时候有人们就把关注点放在了黎曼的手稿上。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>数学家的手稿不等于草稿纸，数学家的手稿相当于物理学家的实验记录，那里记录着整个思考过程，这些内容在论文中不太可能出现。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>黎曼去世后手稿保存情况很不好，先被管家烧掉过一部分，剩下的被妻子赠送给黎曼生前好友理查德·戴德金，但几年后又因为觉得里面有一些家庭隐私，拿回了一部分。最终剩在理查德·戴德金手中的手稿被哥廷根大学图书馆保存。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>数学史学家哈根对这份手稿很感兴趣，约了西格尔一起研究，西格尔在手稿中发现了黎曼竟然在70多年前已经手工计算出了前3个非平凡零点的具体数值。而且计算方法效率超高。他整理过后形成了黎曼-西格尔公式。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>黎曼晚年生活拮据，用纸很节省，大部分手稿密密麻麻，整理起来非常费劲。</li>
+</ol>
+
+<p class="art-p">计算非平凡零点的竞赛</p>
+
+<ol class="art-list">
+<li>英国数学家哈代的学生利用西格尔公式把非平凡零点计算到1041个。人工智能之父图灵在1953年3月计算到1104个，1956年推进到2.5万个，1966年推进到350万个。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>德国数学家查吉尔和意大利数学家邦别里打赌，前3亿个零点会不会出现例外，查吉尔赌会出现例外，他们预计结果将在21世纪初揭晓。荷兰数学家赫曼在1982年就计算出前2亿个，但赫曼对赌局并不知情，所以停了下来，直到查吉尔的损友亨德里克提醒，赫曼才抱着恶作剧的心态计算出3亿700万个零点，结果查吉尔输了。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>1986年已经计算出15亿个非平凡零点，2000年Zeta Grid 分布式计算建立，专门用来跑黎曼猜想的非平凡零点的验证，到2004年验证了8500亿个。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>法国团队在随后快速超越Zeta Grid，验证了十万亿个零点，他们的算法效率是对手的450万倍，这也是人类目前对黎曼猜想验证最多的，十万位里没有一个例外，全部符合黎曼猜想。</li>
+</ol>
+
+<p class="art-p">验证零点并非计算零点</p>
+
+<ol class="art-list">
+<li>验证零点时只计算实数部分是不是等于1/2，而计算零点的任务量要大的多。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>在1982年即便是存储3亿个零点的具体数值，可能也需要几个GB的硬盘容量，而当时这个容量的磁盘成本要至少500万美元。</li>
+</ol>
+
+<p class="art-p">人工智能之父图灵之死</p>
+
+<ol class="art-list">
+<li>1951年底图灵在大街上相中了一个游手好闲的小伙子阿诺德·穆雷，双方关系逐渐深入，发生了性关系。阿诺德的性服务没有收到报酬，于是行窃图灵家，不过图灵也没和他断了关系，之后一直分分合合。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>图灵家第二次失窃，这次是阿诺德的朋友干的，图灵报警后，在审讯过程中，自己同性恋的身份也暴露了，被指控犯有严重猥亵罪。</li>
+</ol>
+
+
+<ol class="art-list">
+<li>图灵在缓刑期间必须接受化学去势疗法，也就是注射雌性激素，这导致他的精神状况出现差错，最终在1954年6月7日晚自杀。他在被捕到被判刑之间的半个月中还提交了自己关于黎曼zeta函数零点计算的论文。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-5">
+      <div class="art-header">
+        <span class="art-chapter">Ch.83</span>
+        <h3 class="art-title">海水淡化是未来趋势吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">水系统4.0的标志</p>
+
+<ol class="art-list">
+<li>中水的出现代表着水系统4.0的诞生。“中水”这个词对应的英语是再生水，它采用单独的管道运输，水质处于上水与下水之间，也就是说，它既不是能喝的自来水，也不是肮脏的污水。</li>
+</ol>
+
+<ol class="art-list">
+<li>中水可以用于绿地灌溉、洗车、洒水车、救火车、城市景观水体、高尔夫球场草坪灌溉等地方。</li>
+</ol>
+
+<ol class="art-list">
+<li>城市水系统从3.1进化到了4.0，但这个结果遭到了不少民众的反对，其中很多人都是被极端环保主义组织和反科学组织所蛊惑。</li>
+</ol>
+
+<p class="art-p">最早的海水淡化</p>
+
+<ol class="art-list">
+<li>世界上有2/3以上的城市属于沿海城市，地球上有98%的水是海水，如果能把海水淡化，那么人类水资源紧张的现状会大幅度缓解。</li>
+</ol>
+
+<ol class="art-list">
+<li>最早淡化海水的是船员，但那只是利用蒸发的原理为几个人提供饮用水。最早打算用海水给一个城市提供淡水的是1928年加勒比群岛上的荷兰殖民者。</li>
+</ol>
+
+<ol class="art-list">
+<li>荷兰人在库拉索岛上建成了一套12只锅炉与冷凝管相连的设施，为岛上1万多人提供淡水，这套设施也利用了蒸发原理。当时的情况产生一吨淡水耗能30千瓦时，比传统河流取水的方式多耗能50倍，之所以能用这么耗能的方法取水，是因为岛上产石油，燃料充足。</li>
+</ol>
+
+<p class="art-p">海水淡化是未来趋势吗？</p>
+
+<ol class="art-list">
+<li>二战后，有些用在舰艇上的淡化装置经过改造用来建造淡化工厂。</li>
+</ol>
+
+<ol class="art-list">
+<li>美国最早把淡化技术提升到国家战略层面，但1965年后发现持续十多年的研发也没降低成本，就放弃了。</li>
+</ol>
+
+<ol class="art-list">
+<li>中东石油国家缺少淡水，所以使用海水淡化的意愿高，沙特、科威特、阿联酋等国都有大量淡化工厂，因为石油太多，他们缺乏改进技术的动力。</li>
+</ol>
+
+<ol class="art-list">
+<li>以色列继承了美国的反渗透膜技术，在海水淡化方面技术领先。这种技术让产生一吨水的耗能降低到3千瓦时，每吨水成本0.5美元以下。</li>
+</ol>
+
+<ol class="art-list">
+<li>澳大利亚从2007年开始在海水淡化设置上大量投入资金，现在全国15%的淡水是海水净化得到的，由于投资巨大，澳大利亚水费也高，大约是中国的6倍。</li>
+</ol>
+
+<ol class="art-list">
+<li>中国的最大淡化工厂在天津，可以提供2亿升/天，大约能解决80万人一天的用水需求，一吨水成本10块钱，如果把利润留足，再考虑输送到北京，今后水费超20块钱一吨也是有可能的。</li>
+</ol>
+
+<p class="art-p">用水的矛盾</p>
+
+<ol class="art-list">
+<li>自来水厂能赚更多的钱依仗的是人们用更多的水，但从自然资源角度看，人们应该更节约用水才合理，所以自来水厂天生没有让人们节约用水的动力。</li>
+</ol>
+
+<ol class="art-list">
+<li>要节水只能通过外部渠道节水，首先是用水设备的生产商和行业规范，比如马桶每次用水不得超过6升，甚至只能生产喷气式马桶，每次用水1升；淋浴喷头一分钟出水不得超过10升。</li>
+</ol>
+
+<ol class="art-list">
+<li>城市规划部门应该把道路中的绿色隔离带取消，使用更节约道路面积的金属隔离护栏，绿植隔离带上植物死亡率高，浪费水。住宅小区应该先解决停车难的问题再提供草坪绿地。如果是为了增加绿化面积，应该集中找一片区域建设公园或者小森林，而不应该零星的在恶劣环境中种植树木。</li>
+</ol>
+
+<ol class="art-list">
+<li>居民用水可以采用分布式取水方式，从居住的建筑设计时就注重收集雨水的功能，减轻对自来水厂的依赖。只有这样节水效率才高，动力才足。</li>
+</ol>
+
+<p class="art-p">家用净水器</p>
+
+<ol class="art-list">
+<li>买不买净水器，城市和乡镇农村要区别对待。很多乡镇和农村水厂处理不合格，甚至没有处理厂，非常有必要安装净化设备。大城市的水处理大概率说，没问题，完全可以不安装净化器，水烧开可以解决一切担忧。</li>
+</ol>
+
+<ol class="art-list">
+<li>净化器按杂质颗粒大小分级，最低等级的可以过滤1微米以上颗粒，滤芯由活性炭和PP棉组成，400-500元价位，水经过后可以达到自来水厂出水口的合格水平。</li>
+</ol>
+
+<ol class="art-list">
+<li>采用PVDF和PVC有机材料过滤的设备可以过滤0.1微米的颗粒，800-1000元价位。最贵的是反渗透膜（RO膜），可以滤掉水中的离子，出水质量和瓶装纯净水一样，但会产生2-6倍的废水，而且出水速度慢。</li>
+</ol>
+
+<ol class="art-list">
+<li>如果净水器不按时更换滤芯，出来的水直接和污水一样。所以不少厂家把净水器价格降低，靠提高滤芯价格吸引消费者。</li>
+</ol>
+
+<ol class="art-list">
+<li>在城市中最便宜可靠的处理方法就是自来水烧开3分钟。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-6">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">AlphaGo和李世石的对决中，谁的耗能高？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">@风满发：</p>
+<p class="art-p">希望卓老板讲一下人类大脑的能耗相对于人工智能的能耗的比值，我觉得这个可能是人工智能是否能超过人类大脑的一个重要的判断条件，如果人工智能完成人类大脑能完成的复杂任务需要的能量超过一个极限阈值，就意味着人工智能永远无法战胜人类。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“讨论：大脑的耗能有多少？”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">这个问题很棒，我就来算算AlphaGo和李世石比赛时，能耗的差异。</p>
+
+
+<p class="art-p">听众·风满发·听完脑系列的节目后，想知道人类大脑的能耗相对于人工智能的能耗，比值是多少？</p>
+
+<p class="art-p">他认为这是一个重要指标，假如人工智能接替大脑完成的任务始终不超过人类大脑的多少多少倍，也许就意味着人工智能永远只能是小众。</p>
+
+<p class="art-p">这就要看怎么比较了，我觉得大家最感兴趣的可能就是AlphaGo和李世石对决中的功耗吧。</p>
+
+<p class="art-p">如果用这个比，大约就是天文数字，30万倍。</p>
+
+<p class="art-p">这方面谷歌没有给出具体答案，但是谷歌给出了一个侧面的信息，就是每场棋局要花3000美元电费。按10美分一度电算，这就是3万度的能量消耗，一盘棋按4个小时算的。</p>
+
+<p class="art-p">咱们再来算人这边的，正常成年人日均消耗2000大卡的热量，大脑要占其中的20%，这个咱们节目里反复说过，那就是167万焦耳热量。然后除以一天86400秒，算完，人脑的能耗就是19瓦，但是李世石在拼命思考，所以还得往上涨，但是大脑的总体能耗在睡眠和清醒时浮动不是很大，我们就按20瓦算。</p>
+
+<p class="art-p">计算完成，AlphaGo的能耗是李世石大脑的37万倍。</p>
+
+<p class="art-p">但是这里肯定还有其他能耗，比如这套超级计算机的水冷系统、风扇以及维护系统运行的其他部件，比如主板、存储系统、网络系统的运行，供电上的转化效率等也都在耗能，所以还有一个参考就是谷歌给出的AlphaGo的配置。</p>
+
+<p class="art-p">跟李世石大战的那个Alphago的配置是1200个核心CPU+170个GPU，我们大约就按每个CPU功耗150瓦算，每个GPU功耗200瓦算，这就是21.4万瓦。用这个数字除以人类大脑的功耗20瓦，倍数就是10700倍，虽然没有30万那么夸张，但是还是差了4个数量级的。</p>
+
+<p class="art-p">这是人类最顶尖的精英在这方面和计算机的挑战比例。</p>
+
+<p class="art-p">如果对比更一般的情况，一颗8核心16线程的CPU，肯定可以在各种棋类运动中搞定99%以上的人，而这样的CPU才150瓦，所以仅仅在棋类运动上，计算机的耗能效率可以做到只是人类大脑的7倍多。</p>
+
+<p class="art-p">当然，人类大脑还可以干更多的事情，相当多的方面计算机都没有成熟的算法，这些维度如果也一并算入，那人工智能还是完败，输得跟渣渣一样。</p>
+
+<p class="art-p">这些方面的对比就不继续了，我们倒是可以留意一下，要搞定在围棋上人类最顶尖的人物需要的耗能和搞定99%的普通人需要耗能的对比，这之间差了1400多倍。</p>
+
+<p class="art-p">也就是说我们普通人在围棋上的实力和李世石差了这么多，你也可以多少体会到职业和纯业余之间的差距了吧。术业有专攻就会造成这样大的差距。</p>
+
+<p class="art-p">我觉得研究脑科学，像围棋九段这类棋手的大脑结构是一个很好的例子，他们是如何在耗能基本不变的情况下把计算效率提升了1000多倍的？</p>
+
+<p class="art-p">这是由神经元连接结构产生的差异吗，这样的差异可以遗传吗，可以通过一种超级高效的训练方法让大脑自组织生成这样的连接吗？</p>
+
+<p class="art-p">我还忍不住想，现有的医学证据中得到的结论，除非发生了脑部疾病，比如脑膜炎，大脑的功率即便是处于深度思考，也和平常放松状态时是差不多的功耗。人们在深度思考的时候，脑部出现了怎样的变化？而这种变化竟然和功耗无关，也许这些都是脑科学家们正在研究的范畴。</p>
+
+<p class="art-p">30万倍的差距，人类大脑真实的实力。↓↓↓</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-7">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">Master团灭人类围棋</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">关于Master在弈城上下棋这件事必须得说说了，也有听众催我赶紧说。这篇内容的素材是咱们「得到」上老熟人怀沙撰写的，怀沙你不知道的话，那万维钢老师的节目音频您听过吧，还有《三体》的缩编版您听过吧，那都是他的声音。</p>
+
+<p class="art-p">怀沙帮咱们回顾了事情的前后：2016年12月29号，在弈城上出现了一个叫Master的ID，头像是弈城上几个默认的动物头像，一只小狐狸，结果到了30号的时候它已经打败了N多高手，这些高手里还有不少是职业棋手的马甲。</p>
+
+<p class="art-p">先剧透，它就是阿尔法Go的升级版，来自谷歌，这已经不是传言了，是今年3月份阿尔法Go和李世石大战时，代表阿尔法Go，替它落子的黄世杰公布的。</p>
+
+<p class="art-p">Master在29号晚上连下10场，5个是不入流的，但是还有3个四段，1个五段，1个六段。这些段都是职业段位的，有段位就有江湖，这也是棋界吸引人关注的最大的规则。就像金庸小说为什么好看，因为他规划了一个中原武林版图和等级。一般来说围棋爱好者最最顶级的程度也就是入了职业初段。所以能接连战胜4、5、6段的人可算人类精英了。谁知道30号它又来了10场，这次干趴下的都是6、7、8段的，还有一个是九段，而且还不是一般的九段，是在九段中水平顶尖的，这人就是韩国围棋第一人朴廷桓，他下的这局在中盘就大幅落败了，结果冥思苦想的时候竟然超过了读秒时间，超时输了。</p>
+
+<p class="art-p">这里补充一下，在弈城上Master跟人下的都是快棋，它有时候选择30秒，有时候选择60秒，就是每走一步的时间不能超过这个时间，像金庸小说里那种一步棋考虑几天的下法在现代商业社会已经消失了，1930年时还有，比如吴清源和人下十番棋，那整个过程需要3-4个月呢。所以弈城上下的棋和去年年初李世石下的那种还不太一样。但是论实力呢，朴廷桓相当于七龙珠里的青年时期的孙悟饭，是一个非常厉害的角色，甚至略微胜过他爸爸孙悟空。</p>
+
+<p class="art-p">第三天，也就是31号，Master又上线了，继续连胜，连胜场数到了41胜0负，这一天死在它刀下的是中国的李钦诚九段、古力九段，韩国的姜东润九段、朴永训九段，日本的井山裕太，这几个名字全都是各国最当打的主力军，全是世界冠军，战斗力爆表，全都是青年的孙悟饭这个级别的，而且所有这些人全都是中盘告负，还不是打到最后数点输的，是半截就知道无望，然后认输的。很多人这时就猜Master就是阿尔法Go，因为人类最顶尖高手中一大半已经出场了，都输了，能有这种实力的只有非人类了。</p>
+
+<p class="art-p">2016年12月31日11点半，在即将进入新年的半小时前，被认为最有希望战胜Master的中国小将，世界围棋第一人柯洁发了条微博，原文称：“新的风暴即将来袭”，柯洁说，我从3月份开始到现在研究了大半年围棋软件，无数次的理论、实践，就是想知道计算机究竟强在哪里。昨晚辗转反侧，不想竟一夜无眠。人类千年的实战演练进化，计算机却告诉我们，人类全都是错的。我觉得，甚至没有一个人沾到围棋真理的边。新的风暴即将来袭，我将尽我所有的智慧终极一战。</p>
+
+<p class="art-p">同时，来自中国的江湖威望最高的古力连发四条微博说：不管这个Master是谁，它都已经成为围棋界的“公敌”，希望明天有我们真正的勇士来终结它的连胜！”</p>
+
+<p class="art-p">似乎就是为响应中国棋手的挑战，Master在横扫了弈城围棋之后，主动来到了中国的野狐围棋平台，继续扩大战果。这次，它几乎就是冲着中国棋手来踢馆的。</p>
+
+<p class="art-p">当天，古力在微博发出悬赏，谁能斩杀Master，以10万奖金褒奖这位勇士。</p>
+
+<p class="art-p">2017年1月3日晚，被认为最有希望的柯洁出战Master，行棋至178手，柯洁中盘认输。柯洁赛后接受采访，称败得心服口服。</p>
+
+<p class="art-p">到此，江湖一片寂静，人类千年以来的围棋格局，已经完全被这个来路不明的Master打破。就在这个时候，石破天惊，棋手之中站出一人，中国围棋棋圣，最负盛名的中国棋手，65岁的聂卫平先生，决定挑战Master。</p>
+
+<p class="art-p">当年聂卫平曾经在中日最高水平的擂台赛里，在中方只剩他一个人的情况下，面对日本三位超一流选手，一个人完成了三连杀，直接击败了日方大将藤泽秀行先生，最终中国战胜了日本，聂卫平也成了全国人民的偶像。</p>
+
+<p class="art-p">聂卫平在围棋界的地位就相当于龟仙人的角色，当年也是拯救过这个世界的老英雄。现在看江湖危机，山河震动，他决定站出来，和Master一战。但英雄迟暮，估计凭他的功力，面对Master也是希望渺茫。</p>
+
+<p class="art-p">而聂卫平这次对战的人，和龙珠里另外的一个角色沙鲁也非常像。Master身上流着中日韩三国几千年来围棋名仕的血，有吴清源的血，有藤泽秀行的血，甚至也有聂卫平自己的血。因为Master的学习方法，就是把大量的名人棋谱输入电脑，加以不停的吸取和演练，它不是一个人在战斗，它是人类围棋文化的总和。</p>
+
+<p class="art-p">聂卫平先生于1月4日下午出战，开局之后，Master一度领先55目，形成巨大的优势，但聂卫平顽强追赶，一度把局面搬回，最终以7个子落败。像聂卫平这样的高手，如果落后7个子，是肯定知道的，所以可以非常确定的是，他在明知将败的情况下，战斗到了最后一刻。赛后，Master打出了几个字：谢谢聂卫平老师。这是之前所有棋手都没有的待遇。</p>
+
+<p class="art-p">聂卫平先生落败之后，江湖上还有很多高手求战，但人类的超一流选手早已全部出动，人们知道，人类是战胜不了这个Master的。</p>
+
+<p class="art-p">1月4日晚，谷歌Deepmind发出公告，宣布Master就是升级之后的阿尔法Go。同时，将战局锁定在了60胜0负上，并告知人类棋坛，阿尔法Go将休战一段时间，继续优化进步。等它再修炼出山的时候，不知道会厉害成什么样子。李世石，很可能是这个世界上，唯一一个战胜过阿尔法Go的人类棋手。</p>
+
+<p class="art-p">剧情发展到这里，头两天战败的柯洁在1月4号人生中第一次住院了，挂着吊瓶，还发了一段微博：感谢阿尔法Go最新版给我们棋界带来的震撼，作为一开始就知道真身是谁的我来讲，是多么希望网上的快棋人类能赢一盘。若不是住院，我将用上那准备了一个星期的最后一招...略有遗憾，希望这网络公测的最后一盘，古哥能发挥出人类的极限水平！</p>
+
+<p class="art-p">1月5号柯洁看上去是恢复了一些，希望像他微博说的那样，按照影视套路，主角在康复后功力会大增，然后把他想出的那一杀招使给阿尔法Go。</p>
+
+<p class="art-p">感谢怀沙帮我们整理了整个故事的脉络，我想2016年末到2017年的开年一定会是围棋史上今后几十年都让人铭记的一段时光，阿尔法Go并没有像上次那样组织活动，而是像一个围棋爱好者一样悄悄上线，杀得各路高手纷纷落马，也许人家只是想试试新版调试后的效果如何，结果这次武力值设定太高了呢？其他类型的棋，计算机已经都可以大幅超越人类了，围棋是最后一个，现在也把人类超了。对这个行业的人来说转变很大，对他们作为职业棋手的自豪感来说是一种重大的挫败。但我觉得我们不必往恐慌的地方引自己，现在人工智能领域只有深度学习的算法异军突起了，它只能解决一个类型的任务，就是类似归纳总结的任务。而推动科学进展的最重要的部分，在基础学科中，面临的都是像证明黎曼猜想，证明NP完全问题，找到一个可以描述湍流的方程这样的。我们深入了解这些部分后会发现世界之难，人类智慧之伟大，人工智能依然是人类智慧的衍生。</p>
+
+<p class="art-p">好了，这个话题就聊到这，同时也希望大家把对Master的讨论留在1917小组里。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-8">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">为什么三星note7会爆炸？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">周周：卓老板既然说到电池，那请教一下正确充电的打开方式究竟是怎么样的？我发现现在的移动设备电池越来越不经用了，不知道是不是我充电不当导致。最近三星note7频现电池爆炸门，还想问一下为什么note7的电池会这么容易爆炸呀。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“问答：一颗纽扣电池能污染600吨水？”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">有老听众周周听了一次性电池用完能不能扔后顺便问了三星note7爆炸门的事情，正好借这期答疑说一说，正好现在初步调查结果刚公布。为什么爆炸我们从两个方面聊，技术方面，我们得先储备一点电池的知识，就是手机电池，那种一个长条状，扁片状的电池，内部结构是什么样的呢，不知道您吃过肉龙没有，北方的听众有人听说过这个东西。就是一层面擀平了，然后在这层面上铺上肉馅，铺平后，再从一个角开始把这两层的材料卷起来，放笼屉蒸。手机锂电池也差不多是这样的结构，摆好一张长方形的铜箔，这上面再附着上石墨，这两层作为负极。然后在这上面铺上一层绝缘层，绝缘层一般是塑料膜之类的东西，然后再把正极的锂离子材料铺上。当然细节还有很多，比如添加电解液啊，咱们就不细说了，您就知道有3层，负极，绝缘层，正极。都铺好了以后卷起来，当然，卷也各种有要求，否则电池就是圆柱形的了。卷好了以后，外观成了薄片一样的扁扁的，再封装外壳，该连上的引脚连上，该做支撑的支撑好结构，电池就做好了。</p>
+
+<p class="art-p">三星NOTE7的电池出现了一个什么情况呢，我放了一张图，是note7事故调查结果，用X光对电池内部拍照找出的问题点。现在您打开手机屏幕看看资料中的，看不见也妨碍不大。我们看到的这3张图边缘都是从手机最薄的侧面看过去的图，电池也都是卷成卷的从侧面看过去的侧视图。有点像侧面看暖气片，每个薄片中间那个更厚一些的是绝缘层，支棱出来的薄片是一层正极，一层负极，一层正极，一层负极，这样穿插着排列的。绝缘层必须有，否则正负极接触在一起就短路了。那么这张图中右上角的就是正常情况下电池内部结构，绝缘层虽然面积比正负极都小一些，正负极在边缘都支棱出来一些，但正负极被隔开了，并不会接触在一起。您要问为什么不把绝缘层设计得面积更大，把正负极整个包裹起来呢？那是因为正负极后续还要再把引脚接出去，需要留出尺寸上的余量。好，正常的电池我们说完了。</p>
+
+<p class="art-p">[图片: 三星电池图片]</p>
+
+<p class="art-p">卓克</p>
+<p class="art-p">再看左上角和左下角的情况，这是在问题手机里拍摄到的，因为note手机背部不是像饭碗一样有个弧度吗，靠近外壳边缘的那部分正负极就被挤压了，远离外壳边缘的，顶部还有很多空间呢，不会挤到。这一挤压，支棱出来的正负极就容易搭在一起，一些看上去正常的手机，就拿这个note7来说，我告诉您怎么让它迅速爆炸，就是使劲按压背部有弧度的那部分，使劲压，就会有机会让已经有些弯折变形的正负极最终搭上线。短路后就燃烧了。</p>
+
+<p class="art-p">这就是技术方面的解读。咱们再说说三星为什么设计手机经验这么丰富，却犯了这么严重的错误。这可是它新一代的旗舰机啊。直接原因是他换了电池供应商，据小道消息说，原来的供应商是A开头的一家，后来因为有些问题换了，换成自己家三星SDI的电池了，结果这个电池在尺寸上就是有那么1mm左右的不合适，偏大。又时间紧迫要出货。结果硬往里塞，还真卡进去了，也没出什么问题，就开卖了。这肯定是公司工程设计团队的责任。压力重重的手机硬件竞争中已经让厂商喘不过气来，甚至设计阶段的可靠性都被迫做妥协。</p>
+
+<p class="art-p">手机硬件的竞争其实就是互联网生活入口的流量竞争，所以各家都拼了，早已经不是谁技术领先谁吃香的时代，是一个全方位的竞赛，连那些根本无所谓的，背部带不带弧度，机身上能不能有按键，要不要光滑手感，按键在左侧还是右侧，这些仁者见仁智者见智的审美选择都成了争抢评价标准的范畴。对厂商的压力实在很大，我从旁观者角度看，现在手机厂商的及格线是各个重要零部件都能拿到世界最好的型号，做出最新的功能。在此基础上加分项目就是很多个性化设计大大增加了实现难度，这时，往往很多个性化设计已经脱离了功能性，就是一些外观细节上的改变。虽然没用，但是实现难度大，证明了我有实力，我能做到比优秀再高10分。结果就像一个运动员时时刻刻在挑战极限，说不定哪次就骨折了。之后三星怎么处理的，这方面消息大家可以在网上查到，我就不多说了。</p>
+
+<p class="art-p">好，这个问题就回答到这。</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-9">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">人工智能技术是怎么回事？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">潘峰：卓老板，能不能讲讲香农，人工智能这么火，我们有必要从源头看看信息技术。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“发胖不一定因为又懒又馋”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">人工智能有很多分支，现在比较热门的是机器学习。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-10">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">你怎么就敢推荐比特币？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">王不为：卓老板，面临“赚了没你什么事，赔了骂你全家”的风险，你确信要推荐比特币？听众不给咨询费，你敢就这么推荐币种了？（偷笑）</p>
+
+<ol class="art-list">
+<li>肝癌诊断有一个重要的判断指标是人体内甲胎蛋白质含量的多少。这种甲胎蛋白质只在胎儿时期产生，一岁时下降到峰值的二十万分之一，大约20微克/升血浆。肝癌患者却会重新产生甲胎蛋白，血浆中含量会升到300-1000微克/升。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-11">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">哪些虚拟货币值得投资？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">ml66901982:关于虚拟货币，现在有很多。我身边有许多朋友买雷达币和珍宝币，说什么技术达到比特币而且高于比特币的水平，购买方式是直销形式的，特别是珍宝币几乎都是老年人买，希望您给讲讲。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第14期“木星到底是个什么样的星球，又是如何在保护着地球”。</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-12">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">如何玩转搜索引擎？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">我乐歌趣：请问卓老板，当我们在生活中想要去求证一些信息（如健康知识）的真伪时，如果通过网络，有什么行之有效的工具或方法吗？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——蜂蜜越贵越好吗？”</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">使用搜索引擎时，活用小符号能让你事半功倍。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-13">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">新刊：14年后虚拟、现实边界模糊</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">卓克</p>
+<p class="art-p">我关注VR设备，是想看看虚拟现实状态下的科普节目应该怎么做。</p>
+
+<p class="art-p">我觉得评价虚拟现实设备最重要的维度就是拟真程度。这是由3部分组成的，分别是传感器部分、软件部分、硬件部分。</p>
+
+<p class="art-p">咱们先说第一个传感器方面，比如Oculus Rift，最开始只用Xbox的手柄实现控制，这明显就是最低档次的VR，等2016年12月份才有了左右手持的touch，这才算达到了VR的及格线。</p>
+
+<p class="art-p">这个及格线对应一个头戴眼镜的侦测和左右手动作的侦测，它能给到的回馈就是手柄的震动。现在还有很多公司在做身体其他部位的侦测，比如腿部、躯干部位的。最复杂的方式是穿上一套有点像运动轨迹侦测的衣服，身上有好几个侦测点，挺麻烦的，但也可以简化，比如就有厂商把另外两个手持的touch绑在腿上，身体其他部位的运动通过算法来预测，这样还是可以勉强完整的把一个真人的动作实时呈现在游戏中。</p>
+
+<p class="art-p">比如两个人一起进入游戏，A在游戏中看到B做的各种动作，和B在真实世界中做出的动作基本一致。这是对人物动作的采集，但回馈部分就很少了，比如说怎么才能让玩家在游戏中感受到我是在涉水前行和普通行走呢，这阻力是完全不同的，或者开飞船的时候，游戏中实际玩家已经头下脚上了，但现实中我们是牢牢的坐在椅子上的。</p>
+
+<p class="art-p">完成这些可能需要一套机械外骨骼一样的东西，按照游戏中发生的事情给四肢和躯干一些力回馈和触觉上的回馈。或者配一个可以3轴转动的椅子等等，这些回馈上的模拟都比较难实现，比如现在有些电单车，就能通过传感器识别你踩脚蹬子时脚踏的力度，不论你是上坡还是下坡，它都能让你感觉用的力是一样大的，这样一套传感器实现的功能其实就是今后机械外骨骼中众多关节处的一个关节上的组件。</p>
+
+<p class="art-p">以现在的价格，全身7对儿，一共14个关节的外骨骼，说不定价格是Rift的七八倍，所以在我看来，为VR游戏真实感做贡献的部分中，传感器部分不会是重点，让游戏更真实都要依赖于软硬件上的提升。</p>
+
+<p class="art-p">我们再来说说软件。现在很多游戏都有一个舒适度，这个新维度的打分在从前传统游戏里从没出现过，但现在这个维度甚至可以算评价VR游戏水平占比最重要的项目。人体保持平衡是视觉，听觉与身体感受的综合能力，咱们会在节后神经系列节目里细说，这里您知道就行。</p>
+
+<p class="art-p">但是VR游戏严格来说，就算是当前设计精良的游戏，也都是一种很粗糙的对大脑的欺骗，所以脑部已经对欺骗信号做出了平衡上的调整，比如你的姿势会变，眼球活动会变，而实际上身体却没有变，所以眩晕就会出现了。远距离物体的模糊程度不对，会晕；移动物体表面的光反射太多，会晕；VR眼镜在头部扭动的时候会出现画面延迟，延迟太频繁出现，会晕。就算这些都设计很出色，不晕的人眼睛也会很快疲劳，晕的严重的真可能吐出来。</p>
+
+<p class="art-p">以现在我试玩的经验看，行走跑动的游戏都晕，驾驶类的，游戏中就是在座舱里的会稍微好一点，站着不动的，防守一拨拨进攻的，这基本不会晕。在眩晕这一项上，好游戏和差游戏现在已经存在巨大差距了。所以今后评价VR游戏好坏，晕不晕几乎占据半壁江山的评价标准。</p>
+
+<p class="art-p">软件设计还有其他方面，VR游戏的交互体验要尽量多，这样才真实，比如小机器人提给你一张软盘，你需要插进电脑运行它，这些动作如果你在传统游戏中，用键盘或者鼠标控制，那纯粹是多余的，绝对应该删掉。但VR中是很增加体验感的。</p>
+
+<p class="art-p">再比如要多给玩家一些空间里的提示，该往哪儿走，空间定位要准。而且游戏设计者要随时把用户感受放在心里，任何一种场景下，他都要知道用户眼睛里看到什么了，可以和什么互动，因为不存在屏幕边界的概念了，所以游戏中的菜单应该放在哪儿也都是传统设计不能沿用的。整个VR游戏现在的大作也都还是初级和粗糙的，程序开发，专门针对VR的图像引擎的开发之后都会大幅度提升游戏的真实感。</p>
+
+<p class="art-p">最后一项就是硬件了。刚刚说的一切能按要求的速度输出出来，底层的保障都是硬件性能。我刚刚介绍VR设备时故意没说那种移动式的，就是计算核心也都集成在头戴式眼罩里的那种。因为移动方式就注定没有办法完成超大的计算量。</p>
+
+<p class="art-p">比如以Rift来说，图形部分的运算是靠电脑的显卡完成的，最低要求是一张GTX970，这个理论计算量是2.44TFLOPS，FLOPS就是每秒浮点运算次数的意思。这个性能的卡最便宜2000块钱。两个镜片分辨率加一起是2160×1200，可能您说了，上期说不是没这么宽吗，这会儿你怎么又直接叠加了？</p>
+
+<p class="art-p">那是因为没这么宽，指的是视觉效果上的，而在计算量上每个1080的宽度都需要单独的计算，所以可以直接乘以2，当作2160的宽度，而且这只是视野范围内，在游戏进行的时候，为了保证你扭动头部的时候可以及时看到视野边界外不太远的图像，实际上显卡在渲染的时候长和宽都要多渲染出40%的量，所以最终计算范围是3024×1680，这已经是一个2K屏的分辨率了。</p>
+
+<p class="art-p">更要命的是VR眼镜要求的刷新率是90帧，也就是一秒钟要输出90幅画面，一般来说，为了保证画面流畅，电视机是29帧，游戏里达到60帧就很流畅了，但60帧给VR设备就容易晕，所以只能继续增加到90帧。这样一来每秒要渲染的像素数是4.5亿，如果再考虑到抗锯齿采样，还会翻倍。这对一个只有2.44TFLOPS运算力的显卡已经很吃力了。</p>
+
+<p class="art-p">现在VR上能用到的最好的显卡是GTX1080，算力是9TFLOPS，是最低要求的3.7倍。但这也只能保障在现有分辨率下，光影特效非常负责，抗锯齿特效开特别高时一直流畅。这样一款设计精良的游戏大约可以提供一个和真实环境80%拟真的效果。</p>
+
+<p class="art-p">想继续大幅提升逼真的效果，分辨率势必要继续提升，保守的大致计算一下，想让人眼在这么近的镜片下看不出像素的小格子效果，至少长宽上的分辨率需要都乘以3，也就是每个镜片竖着3600像素，横着3240像素。这样一个改动，运算量就提升到原来的9倍。</p>
+
+<p class="art-p">以摩尔定律的发展看，按最快每一年半性能提升一倍，也就是在满5年后，2022年市面上卖4500块钱的显卡可以提供VR眼镜足够的清晰度和拟真感觉。到时候戴上眼镜，如果买的还是优质的游戏大作，那不太留意，赛车游戏中坐在你驾驶舱旁边的导航员，你扭头一看，差不多就是一个真人的样子。</p>
+
+<p class="art-p">再往后发展呢，就是芯片的移动化，小型化。2022年装在电脑里那个提供非常接近真实感的运算能力是一个200瓦的显卡提供的，但想戴在头上能移动，随时拿出来享受，不用6-7根线和电脑插着了，那时还要求一样的拟真度，就要求一样的算力，但是功耗要缩小到从前的70分之一。那还要经历至少6次的1年半，也就是9年后，我们制造的芯片就是一个功耗和现在手机芯片差不多，但是提供的算力可供一个虚拟头戴式可移动眼镜。装一块几十克重的锂电池，续航3-4个小时不成问题，还能提供几乎和周遭环境拟真度90%以上的效果。</p>
+
+<p class="art-p">那时候的发展也许就不只是虚拟现实了，因为你已经可以带着它到处走动了，所以增强现实的功能也许更有意义。本来每个人应该用肉眼看到的东西都先用摄像头捕捉下来，再通过芯片渲染得更精致，都是帅哥美女向你走来。但是这最近也要先经历一个5年，再经历一个9年，最快是14年后达成。</p>
+
+<p class="art-p">2031年的时候，各位可以算算那时自己的年龄。当然科技发展很难预测这么远的今后，但更科幻的，什么中枢神经开个槽，脑机接口的数据线插上，直接从视神经提供图像信号，听神经提供声音信号等等，我不相信这个会实现，因为生物学方面的基础理论还没出现。现在通过头戴一个300多克的眼罩来模拟一个很棒的效果已经是成本很低的选择了。</p>
+
+<p class="art-p">当然，14年后买这个设备，用起来也根本不会像我前几天那么费劲了，肯定可以做到买到手撕开包装就能用。现状，凡是买VR设备的人肯定都是好奇心的驱使，并且会在5年后，现在这套15000块（一套还不错的VR设备的价格）的东西会完全过时。这也算一种科技体验成本吧。</p>
+
+<p class="art-p">我买VR设备的初衷，除了好奇心，我也想借体验它想想，如果全方位的提供代入式的体验做科普的话，需要准备哪些内容。做科普内容，有些部分如果能提供身临其境的方式肯定效果更好，那这种效果一定是VR设备提供的了。</p>
+
+<p class="art-p">真正身临其境的卓氏科普，期待ing~↓↓↓</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-14">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">新刊：虚拟现实的实际体验</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">卓克</p>
+<p class="art-p">从今天开始到周五，我们就开始春节体验节目了。</p>
+<p class="art-p">第一期就来讲讲VR体验。为了更完美地体验VR，我把自己和家里做了个全面的调整。</p>
+
+
+<p class="art-p">放假了，玩儿什么？</p>
+
+<p class="art-p">我看很多人准备了电影、书、游戏，这可能是还处于单身，或者结婚好多年，家里已经形成惯性，不需要操心太多。</p>
+
+<p class="art-p">VR虚拟现实是2016年最火的，所以我给自己准备了Oculus Rift，这套VR设备咱们后面就叫它Rift。</p>
+
+<p class="art-p">其实入手后我才发现，现在想体验比较上道儿的VR，门槛很高。这是一个大坑，钱上至少15000块，另外更多的投入就是时间，这不是一个买来以后调调弄弄就能搞定的，因人而异，绝大部分对电脑不熟悉的人也许买来后始终没法搞定。</p>
+
+<p class="art-p">咱们分着说一说。先说钱上为什么需要15000。</p>
+
+<p class="art-p">比如现在买Rift你必须得配一套touch的手柄，不然就有点不伦不类了。touch是什么呢？你可以理解成2个小手柄，一手一个，有专门的传感器侦测它们的位置，在游戏里也就相当于判断你手的位置。最早Rift出的时候还没有手柄，2016年12月才发布，对VR游戏来说，有这个才算及格线。</p>
+
+<p class="art-p">绝大部分游戏想体验到位都需要一对儿，所以把touch买全了就是7000块钱出头。但是钱的成本还不止于此，还需要有一台性能比较强悍的机器，比如CPU至少得1600块钱以上水平的，显卡至少得2000块钱水准的，这样一台电脑也至少6000块钱了，而且要占用4个USB3.0的接口和一个HDMI口，如果你的电脑平时已经用了3/4个了，那就很麻烦，N多线缠绕在一起，有些甚至都不得不插在前置面板上了。</p>
+
+<p class="art-p">我的电脑因为还接了两个显示器，已经没有HDMI接口可用了，只有再买其他转接头才可以。然后就是必须要翻墙才能顺利安装软件、驱动和VR的游戏，翻墙账号需要准备好，游戏也大都不便宜，也得准备个500-1000块钱购买。所以想要自己在家体验，金钱成本上启动费用就是15000元。</p>
+
+<p class="art-p">当然，市面上的VR设备价格最低只有99块钱，就是一个塑料眼罩，里面有个夹层，把手机横着塞进去就说这是虚拟现实了，这种档次的VR还不少，属于VR的泡沫，可以无视。</p>
+
+<p class="art-p">目前体验最好的只有一种，就是头戴式眼镜和一个性能强大的台式机结合的VR设备，现在市场中最出名的有2个，一个就是我开头说的Rift，另一个是HTC的Vive。</p>
+
+<p class="art-p">Vive是一出生就带左右手手柄的，价格6888，跟Rift差不多，性能参数也都差不多，区别在于它在玩耍的时候需要比较大的空间，最小要求是有一个3m×4m×2m的立体空间。在这个范围里，你走动、挥手不能磕碰到其他东西，这对很多家庭不太现实，就算房子大，但其实里面很多东西都摆好了，很难腾出这么大的空间来。也是因为这个原因我选了Rift，它只需要一个1.5m×1.5m的空间就足够了。</p>
+
+<p class="art-p">接着就是时间成本了，我遇到的麻烦比较多，首先是系统必须要求WIN10，我的电脑用WIN7那么久，要换成WIN10真是太考验决心了。另外就是翻墙软件，我当前用的付费软件竟然没法访问Oculus的官网，这步跨不过去就没法安装软件，也没法注册ID，什么都做不了，最终只能又买了一个。</p>
+
+<p class="art-p">而且上上周我还听说工信部，网信办要从2月份到明年3月份严查提供VPN服务的线路。Oculus的服务之所以访问被墙就是因为它被Facebook收购了，我们访问不了Facebook，它旗下的网站也都很难访问，在这里只能希望扎克伯格快点疏通关系，要不很可能在2017年连翻墙都翻不成，这VR就废了。</p>
+
+<p class="art-p">我们不讨论政治。翻墙搞定后再把软件都装好，顺便还得把显卡驱动升级到最新版，因为我发现NV出的一些展示VR效果的游戏需要最新版的物理特效的驱动。</p>
+
+<p class="art-p">终于顺利进入传感器调试界面，两个传感器和手上拿的touch需要匹配好位置，结果到了这一步我又遇到了困难。虽然只要求有一个1.5m×1.5m的空间，但我的小书房还是不够大，要不就是床帮子挡住，要不就是书柜挡住，耍不开。所以又要重新挪家具，重新布置桌面。把所有竖着的东西都拿走，省的我戴着头盔时看不见，横扫一大片就不好了。所有这些软件硬件环境搞定大约需要10多个小时。我花了3天时间才弄好。</p>
+
+<p class="art-p">到了这一步如果回看的话，你会发现，就算是有人真心想体验，也不心疼15000块钱，但也很可能万事俱备，软硬件设置和调试搞不定，被卡住。但好在我都弄好了，进入了游戏。</p>
+
+<p class="art-p">咱们具体说说体验，在Oculus教学体验程序里我被小震撼了一把，虽然我知道这是虚拟出来的，画面是卡通风格的，但还是有强烈身临其境的感觉。那个场景是在一个拥挤的实验室里，如果现实世界的真实度是100分，这个场景的真实度大约有70分。</p>
+
+<p class="art-p">举个例子来说，眼前有个桌子，你要俯下身凑过去看，桌子也会离你很近，细节更多一些，从不同角度看的桌子也不同。你眼中始终没有显示器的边界，这在显示器时代不可想象，因为显示器再大都是有边界的，而这个眼镜没有，不论你头部怎么动，都在游戏的场景中。</p>
+
+<p class="art-p">其实后来我才发现这个教学体验程序的设计水平已经非常好了，大部分游戏并没有这个水准。玩了1个小时后，当我摘下VR眼镜，我再看屏幕会不自觉的从各个角度看，以为角度转一下，还会看到更多内容。</p>
+
+<p class="art-p">回顾前几天，VR设备给我带来的改变挺大的，比如谁也推不动我的WIN7升WIN10，比如把伸开的床折叠起来成单人床了，这种改变甚至还包括我去买了隐形眼镜。</p>
+
+<p class="art-p">戴眼镜这么多年，我根本没动过隐形眼镜的心思，我有心理障碍，不能碰眼球。当然最后我隐形眼镜还是没戴上，我觉得在自己眼球上弄来弄去，实在接受不了。</p>
+
+<p class="art-p">那为什么要戴隐形呢？就是因为Rift是不适合戴眼镜的人玩儿的，很容易虚，不虚的时候调整眼镜，又容易把眼镜蹭花。这也是为什么我给游戏环境评70分的原因，因为我戴着现在的眼镜在游戏中差不多和现实中200度近视差不多。如果我眼睛完全不近视，对游戏环境的评分应该能有80分。</p>
+
+<p class="art-p">这次是我这么多年来第一次羡慕裸眼1.5，2.0的人，可是我又戴不上隐形，我甚至一度动了心思，要不我也做个LASIK？就是那个近视手术，原来我们详细说过这种手术的安全性，您还记得吧，但这个决定还是太大了，为了玩玩VR，操作系统换了，家具换了，还要为它动手术，这也太颠覆了吧。但是，起码过节后我会去配一个外框小一点的眼镜的，专门为了VR设备。</p>
+
+<p class="art-p">评价这套VR和现实的差距还有20分，这都差在哪儿了呢？首先是鼻梁子的位置，因为这是欧美开发的，他们面部更突出，鼻子比较大，但是咱们亚洲人戴上后，在鼻梁的位置有缝隙，往下看能看到桌子上的键盘什么的，这破坏了一些感觉。</p>
+
+<p class="art-p">还有就是视觉边界不像真实的眼睛，要窄一些，大约是真实视觉的75%区域。最后一个扣分项就是画质和分辨率，分辨率这两个眼镜每一个都是1080×1200，有人觉得两个，那不就是2160×1200了嘛，其实不是。因为双眼视觉中很多都是重叠的部分。仔细看，还可以区分出分辨率上的颗粒，感觉有点像离着2米看传统的29寸电视机似的。但这个分辨率已经是升级后的效果了，2013年Rift的开发版出来时分辨率才1280×800，看那批开发者的讨论，都说现在正式版比从前清晰太多了，所以我现在还在抱怨分辨率低是不是有点太苛求了呢？</p>
+
+<p class="art-p">后来又玩了一些游戏，只有少量游戏的画质对真实感有加分，大部分设置的很虚幻。但这些都是VR必走的发展轨迹。下期我主要聊聊VR发展过程上的预测。</p>
+
+<p class="art-p">听卓老板的音频就有种虚拟现实的感觉。↓↓↓</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-15">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">新能源车为什么不靠换电池来实现充电呢？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">鲨鱼：锂电池驱动的汽车，为什么不能靠快速更换电池组的方式实现充电？就是像加油站一样，来一个电池站。汽车到了电池站地盘升高直接换电池，这样电动车的电池寿命和充电时间的问题是不是可以解决了？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——新能源车为什么火了？”</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-16">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">新能源车为什么火了？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">洛基浣熊：卓老板，听说锂电池的能量密度比成品油低一个数量级，能解答下为什么新能源车近几年火起来了？氢燃料电池未来有可能替代锂电池么？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“我问卓老板——你怎么就敢推荐比特币？”</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-17">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">无人驾驶汽车是更安全了，还是更危险了？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">特斯拉发生自动驾驶致死案</p>
+
+<ol class="art-list">
+<li>第一起与特斯拉自动驾驶功能有关的致命交通事故被曝光。事件发生在半封闭高速道路上，驾驶员和特斯拉的自动驾驶功能没有发现一辆冲过来的拖挂车，导致发生撞击。</li>
+</ol>
+
+<ol class="art-list">
+<li>特斯拉解释，这只是一次意外。从大数据来看，传统驾驶1.5亿公里发生一次致死交通事故，特斯拉行驶2.1亿公里才出现一次，所以还是更安全的。马斯克还认为，特斯拉自动驾驶中司机应该随时准备接管车辆，一旦车辆发生交通事故，应该由司机承担全责。</li>
+</ol>
+
+<ol class="art-list">
+<li>特斯拉的传感器供应商Mobileye对此有不同解释，他们认为现在特斯拉还不具备判断能力，这不是意外，以后还会发生事故。</li>
+</ol>
+
+
+
+<p class="art-p">特斯拉事故分析</p>
+
+<ol class="art-list">
+<li>特斯拉车里一共有14个传感器，其中12个是超声波传感器，只能探测车身距离5米的障碍物，还有一个Mobileye Q3高清摄像头，和一个前格栅的毫米波雷达，雷达可以探测150米距离的前方障碍物。</li>
+</ol>
+
+<ol class="art-list">
+<li>当18轮大卡车横跨路中央时，毫米波雷达有可能因为各个方向车道都有障碍物，所以没有识别出车辆，也有可能是因为雷达的垂直扫描角度小，雷达波直接从拖挂车下面的空间穿过，最终判断为没有障碍物，造成车祸发生。</li>
+</ol>
+
+
+
+<p class="art-p">谷歌无人驾驶汽车分析</p>
+
+<ol class="art-list">
+<li>谷歌无人驾驶汽车的传感器十分昂贵，它的激光成像雷达价格高达50万人民币，能360°扫描全景。</li>
+</ol>
+
+<ol class="art-list">
+<li>谷歌无人驾驶汽车的惯性导航仪价格也为50万人民币，可以在GPS信号丢失的情况继续测算车辆位置，可以在持续20分钟无GPS信号的情况下驾驶，20分钟内积累的总位置误差不超过0.5米。</li>
+</ol>
+
+<p class="art-p">自动驾驶需要解决的N个问题</p>
+
+<p class="art-p">怎么到达目的地？</p>
+
+<p class="art-p">路径选择采用人工势场算法，把出发地和目的地设置为引力，中间的障碍物设置为斥力，算法会生成一条光滑曲线。但这个算法会遇到局部最优解问题，当障碍物和目的地距离过近时会导致车辆永远无法到达目的地，这需要对算法中的函数再改进。</p>
+
+<p class="art-p">要具有一定的鲁棒性</p>
+
+
+
+<p class="art-p">当识别交通标志、车道线、红绿灯出错或者模糊时，车辆做出的决策依然可以让车辆安全行驶。</p>
+
+<p class="art-p">图像识别技术</p>
+
+
+
+<p class="art-p">图像识别技术在自动驾驶中非常关键，它可以把车辆传感器形成的3D街景图中的静物和动物区分开，并自动识别关键物体。</p>
+
+<p class="art-p">足够多的素材</p>
+
+
+
+<p class="art-p">谷歌本身就有足够多的素材，还会发动用户在登陆账号过程中帮他们验证一些图片识别的结果，所以谷歌是对自身大数据来源利用最好的公司。</p>
+
+<p class="art-p">时间与精度的抉择</p>
+
+
+
+<p class="art-p">因为在驾驶中，对很多物体需要在短时间判断出结果，所以要牺牲一些精度。</p>
+
+<p class="art-p">驱动机的选择</p>
+
+
+
+<p class="art-p">车辆控制如果是电机驱动，将更容易和人工智能结合，如果是传统燃油车，则需要很大的工作量改装控制设备，燃油车和电动车在控制时间响应上差两个数量级。</p>
+
+<p class="art-p">谷歌的无人驾驶</p>
+
+<ol class="art-list">
+<li>目前谷歌一共有55辆无人驾驶车在进行上路测试，它们的目的是积累驾驶数据，回去喂给谷歌的数据中心，让算法学会如何驾驶汽车。机器学习的效率会比人快很多，提升的幅度也许在几十倍这个量级。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>谷歌无人驾驶汽车一共出过12次事故，其中1次是自己的全责，剩下11次都是对方车辆全责。在为期两个月的实际道路测试中，需要人为接管车辆的次数是13次，还有272次软、硬件故障。谷歌的统计是，无人驾驶车辆每9600公里出现一次交通事故，远远高于目前美国人为驾驶车辆的8万公里出现一起事故的水平，所以无人驾驶还有相当久的路要走。</li>
+</ol>
+
+
+
+<ol class="art-list">
+<li>自动驾驶方面，对比特斯拉，谷歌更先进，因为它收集和处理数据都是目的明确的人工智能应用。特斯拉收集的数据比较简陋。</li>
+</ol>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-18">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">石墨烯产品该不该买？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">柳笛禅音：不知卓老师讲过石墨烯没有？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——人类怎么不登月了？”</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">凡是声明自己是石墨烯产品的，现阶段都不要买，这些都是噱头。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-19">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">聊聊华为的石墨烯电池</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">讨论</p>
+<p class="art-p">庞志刚：卓老板谈谈华为的石墨烯锂电池吧。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“加料：今后的水和能源”。</p>
+
+
+<p class="art-p">石墨烯的话题曾经在听众答疑里详细说过。在那期节目中我们仔细介绍过目前市场中泡沫严重，过度宣传、虚假宣传盛行的情况。最近很多听众都听说华为的手机采用石墨烯电池了，想知道这是怎么个技术，你不是说都是骗子嘛，怎么华为都用上了？</p>
+
+<p class="art-p">那咱们这期就来说说华为的石墨烯电池。首先定性，华为石墨烯电池不是骗子，不是虚假宣传，他们是在日本电池大会上宣布的石墨烯电池，而且明确说明，石墨烯在电池中起到的是增强散热的作用，而不是在电池正负极里添加石墨烯，所以这个电池中的石墨烯并没有提升充放电速率，也不能提升能量密度，更没有增强导电性，它实际上还是一个锂离子电池。很多人听说的类似华为正式发布石墨烯电池，这类新闻大都是一些不懂电池的公众号和科技媒体为了蹭热点标题党的，再加上石墨烯行业本来就是虚假宣传的重灾区，所以不少人被误导了。对这件事正确的理解应该是，华为生产出一种散热增强型锂离子电池，散热是靠石墨烯层实现的。</p>
+
+<p class="art-p">为什么电池要增强散热呢？是为了手机芯片满载时增强散热吗？不是的，手机那点温度算什么，而且手机芯片满载运行时间占不到手机使用时间的百分之一，手机和其他民用的电子设备都是典型的低温下的应用，普通锂电池不需要额外改进就可以。但是有些地方的温度就是高，比如赤道附近的基站，它的备用电池的工作环境就是50℃。这个温度对普通锂电池来说是濒临崩溃的，从前只能硬着头皮上更大容量的电池来满足充放电循环次数的要求。温度对电池的影响主要是加速电解液中水的蒸发，这次华为的电池，电解液配方中完全去掉了水，配合的是石墨烯散热层，电池充放电时产生的热更容易导出去。华为给出了一组性能数据，就是在60℃下循环2000次充放电后的容量依然维持在70%，环境温度60℃下存储200天，容量损失低于13%。</p>
+
+<p class="art-p">这个数据可能不是电池行业的人不知道有多强。如果我们把一般的手机电池放在这个环境温度下，也就是60℃，其实大都是不能正常工作的。因为手机的锂电池大都是三元材料的正极，能量密度大，但不适合在高温下工作。有一种磷酸铁锂的电池可以在高温下工作，这个很少在手机电池里出现。而且磷酸铁锂电池也是一种循环次数超级多的电池，比如一个在常温下可以循环充放2500次的电池到了60℃下循环次数就会锐减到300次。而华为这个还可以维持2000次，另外高温下存储电池也会导致电解液丧失，一般的磷酸铁锂60℃下放置7个月，容量损失40%-50%不稀奇，但是华为这个只损失13%。所以这个电池在高温下的性能提升得非常猛，它除了能用在基站上，还可以在无人机，或者新能源汽车上。</p>
+
+<p class="art-p">电池行业的新闻您可能总听说，比如15秒钟充满，或者充放电次数1万次，再或者100℃下的新型电池，能量密度是之前的10倍这类新闻，每天都能在各大新闻里发现这些惊世骇俗的消息，这是真的还是假的呢？是真的，但这些都是在实验室中在一个精心制备的还没有封装好的电池上测试出的一个结果。常态化的情况下，这些性能惊世骇俗的电池一旦封装起来，一测，哎，性能还不及刚刚的五分之一呢。但为什么这些新闻那么多呢，就是因为电池的研发最终进展就是体现在这些普通人都可以理解的指标上，所以实验室给媒体发的通稿要让媒体中没有受过太多科学训练的编辑看得懂，然后也就最容易报道出来。这也导致真的强悍的可以量产的性能电池出现了，大家反而觉得，哎，不是比这个性能强10倍的早就出现了嘛，这种误解。</p>
+
+<p class="art-p">所以这期节目中你要听到的最有用的就是，电池的新闻大都只是实验室中偶然得到的样品的性能，离实际量产差着十万八千里。但是，要特别强调的是华为这个性能强悍的电池已经可以商用了，之后就会用在自家产品中。华为几十年来一直在修炼技术内功，中国太缺少这样的企业了，什么时候资本都疯了一样往华为这种调性的公司投，中国的经济崛起和文化觉醒才算到来。</p>
+
+<p class="art-p">好，这个问题就回答到这里。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-20">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">该不该买电动牙刷？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">@Mr.沉灵</p>
+<p class="art-p">卓老板，我提一个和生活联系紧密的问题，聊聊电动牙刷吧，要怎么选，谢谢。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“提前坠落的太空实验室”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">如果你不会好好刷牙，买个电动牙刷也是不错的。</p>
+
+
+<p class="art-p">沉灵问了一个我自己也遇到过的问题，就是用电动牙刷刷牙效果会不会更好？</p>
+
+<p class="art-p">简单回答，“大概率”说会更好。</p>
+
+<p class="art-p">“大概率”说的是一个统计学意义，比如100万用电动牙刷的人和100万用普通牙刷的人连刷几个月后，对比他们的效果，用电动牙刷的人的牙菌斑面积比用普通牙刷的人少20%，牙龈炎发生的概率少10%。</p>
+
+<p class="art-p">这只是从统计角度看，你要是找平时一直用电动牙刷刷牙，最后还是有龋齿的人，那也大有人在。非洲特别穷的地方，连牙膏都没有的地方，一辈子没刷过牙的人，一笑，满口整齐白牙的黑人兄弟也大有人在，所以看总体的回答就是这样。</p>
+
+<p class="art-p">那么一定要买电动牙刷吗？</p>
+
+<p class="art-p">也不一定，如果用普通牙刷，只要你掌握巴氏刷牙法，效果也能很好。这个方法我大致说一下原则，就是你刷牙时并不把重点放在牙面上，而是更多的放在牙齿根部和牙龈上，所以刷的时候，牙刷一半盖住牙齿的部分，另一半盖住牙龈的部分。清洁时，每次牙刷覆盖两颗牙齿，反复刷上4秒钟，然后换到另外两颗牙齿上，内侧和外侧都刷到。这样刷完最少也得需要3分钟了，但实际情况是很少有人能保持正确方式刷这么长时间，绝大部分人从牙刷开始到漱口都在1分钟左右。即便是这些人知道巴氏刷牙法，知道时长对效果的巨大影响，也还是如此。所以基于这种现状，电动牙刷还是值得推荐的。</p>
+
+<p class="art-p">大家都知道，人到老了就掉牙了，这和我们老了，皮肤上长老年斑不一样，它并不是一个衰老的特征，而是牙齿被细菌常年侵袭，最后保不住了才掉的。</p>
+
+<p class="art-p">具体细节是这样的，健康的牙齿是牙龈包裹住牙齿，但并不是特别严密地包裹住，而是留有一个大约1-2mm的沟槽，就是牙龈边缘那一点点肉肉。如果用很细的带着勾的探针去测，大约这个肉肉就是1-2mm，而且每个牙齿间排列紧密整齐，几乎在一个弧面上。咬合的时候上下排牙齿也都对应地咬上，这是最理想的情况。</p>
+
+<p class="art-p">但一般没有这么理想，牙齿间有缝隙，这里会塞进食物残渣，这些残渣不用我多说，您可以试试，晚饭剩在牙缝里的吃的，第二天才掏出来，您闻一闻那个味道就有体会了。残渣上面已经繁殖了大批细菌，细菌还会顺着牙面往牙龈下层繁殖。还有时因为吃硬的东西弄破了牙龈，或者什么东西扎到了牙龈下面，细菌也就开始在这里繁殖了。</p>
+
+<p class="art-p">时间一久，这颗牙齿的牙龈就受细菌感染而发炎，发炎会越来越严重，牙龈就包裹不住牙齿了，原来1-2mm深的沟可能就有6-7mm，甚至1cm那么深，就像一个大口袋一样，每次吃饭就免不了往口袋里掉点残渣，残渣在里面继续腐败，细菌还是继续往下再往下，所以凡是长期有口臭的人大都是牙龈炎导致的。</p>
+
+<p class="art-p">这些细菌都是代谢的时候分泌很多酸性物质，这些酸会逐渐侵袭牙槽骨。牙槽骨是固定牙齿的，当牙槽骨被腐蚀很深的时候，牙就渐渐固定不住了，最后就会掉下来。</p>
+
+<p class="art-p">而且牙槽骨是不能再生的，消耗一点就损失一点。</p>
+
+<p class="art-p">如果是单颗牙齿因为病变造成的一个位置的牙槽骨下降，被侵蚀出一个大坑的样子，这还可以通过植入人工骨粉修复，但如果是全口的牙槽骨都这样，植骨粉也没用了。</p>
+
+<p class="art-p">贫困地区吃饱饭都难，很难有人会维护牙齿，所以你看1949年前后，那会儿40多岁就掉牙的人很多，到了60多岁差不多就都掉没了，就是这个原因。再看一些发达地区的社会精英们，因为从小爱护牙齿，父母也有这个意识，定期看牙医，所以到了90岁，满口的牙齿都没有受到细菌侵袭。</p>
+
+<p class="art-p">保护牙齿，光靠刷牙是不能解决全部问题的，有时候还要配合牙线清理牙与牙接缝处的脏东西，而且还要半年洗一次牙。马上就要过年了，可能很多人也在想买点什么送礼，我是坚决反对送各种保健品的，要送就送实惠的，比如酱肘子，广东的香肠，好大米。但现在谁也不缺吃。所以像电动牙刷这类东西也可以当礼物，品牌嘛，其实您搜搜也能知道，一个是博朗，一个是飞利浦，价格根据自己承受能力选就可以，没有太多捡漏的空间，一分钱一分货。</p>
+
+<p class="art-p">刷牙要刷3分钟。↓↓↓</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-21">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">问答：一颗纽扣电池能污染600吨水？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">T-BAG：卓老板你好，我从小看过一些节目，关于我们用的废旧电池处理问题，当时听说一颗纽扣电池所污染的水够人喝一辈子的，现在也一直心有余悸，每每有废旧电池都会刻意分出来。然而我所在城市的垃圾桶里东西都是乱扔的，包括电池专用口，还有光盘专用口，想知道中国的垃圾处理到底是不是完全是摆个样子，以及废旧电池到底多大危害？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“我问卓老板——外国人会听‘卓老板聊科技’吗？”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">有听众T-BAG问了关于废旧电池处理的问题，他听说一颗纽扣电池污染的水够一个人喝一辈子的，现在每每有废旧电池都会刻意分出来，但是他观察城市垃圾分类几乎没法执行到位。想知道中国垃圾处理是不是只是摆个样子，废旧电池到底有多大危害。先给个结论，这种说法主要为了提升大家环境意识，但实际情况远没有这么严重。</p>
+
+<p class="art-p">因为电池的组成不同，所以污染程度和处理方法不同，最没有污染的是大家最常用的碱性电池和锌锰电池，比如5号，7号，南孚聚能环，双鹿之类的。这些电池可以直接当生活垃圾扔掉，不用专门做什么回收，因为咱们国家从2005年起禁止生产销售含汞量大于百万分之一的碱性电池、锌锰电池，所以后续厂家使用的技术都是没有汞的，在国家《废电池污染防治技术政策》中还专门规定，在缺乏有效回收技术条件时，不鼓励集中回收已经达到国家无汞要求的一次性电池。所以直接扔就好。</p>
+
+<p class="art-p">纽扣电池外形都那个样，但是类型有很多种，比如锌-氧化银、锌-空气、锂-二氧化锰、镍镉、镍氢甚至也有和5号电池那样的碳性和碱性的。我查网上说一粒纽扣电池能污染600吨水，其实应该指的是污染环境的5种重金属成分，它们是砷、铅、镉、汞和铬，这里有3种是电池生产中会用到的，就是汞、铅、镉这三种元素，所以纽扣电池里只要不含有这些，就都安全，可以当生活垃圾扔掉。</p>
+
+<p class="art-p">而汞在电池生产中基本没人用了，镉对应镍镉电池，这是一种充电电池，上世纪九十年代到本世纪初，比如CD随身听里的口香糖电池就是镍镉的，这种充电电池就对环境有害。但是因为镍镉电池有比较强的记忆效应，充放电起来麻烦，后来又出了镍氢充电电池，就是我们现在能买到的5号，7号充电电池，这些都是镍氢的，不含镉了。镍镉电池基本上从2008年后就没什么销量了，尤其是2010年后锂电池的爆发，更没有镍镉电池的份额了。所以大概率说，您买的纽扣电池也不含镉，也可以当生活垃圾处理。锌啊，锰啊，银啊的化合物对环境是安全的。</p>
+
+<p class="art-p">最后一个电池中存在，又对环境有伤害的重金属是铅，到现在还广泛用在汽车电池中，这个害处虽然大，但是因为铅酸电池回收利用价值高，所以即便是你随随便便把铅酸电池扔了，也有大批拾荒的，当宝贝一样捡回去，卖给回收的人。一颗报废的汽车铅酸电池也能卖个百八十块呢。所以这部分也不用太担心。</p>
+
+<p class="art-p">另外一个，就是那种宣传有点过于理想化，真要是能污染600吨水，那得是一种多理想的状况呢，就是把镍镉电池开盖后，找干净的饮用水，让里面的电解液和正负极充分接触水，溶解在水中，这才能污染600吨水。而实际上，镍镉电池就算我们扔也没人这样做，都是扔垃圾桶里，垃圾车装回去，弄碎，焚烧后，挤压成块，找专门的垃圾填埋场埋起来。填埋场也都是有隔离措施的。想让一个镍镉电池中的镉充分均匀的扩散到饮用水里，难度很高。</p>
+
+<p class="art-p">最后说说充电的锂电池，这些主要用在移动设备和电动汽车里，锂电池中的锂回收价值其实挺低的，基本回收不出什么活性锂了。但是正负极材料中的铜和铝是有价值的，所以还是有人专门回收这些金属。想把里面的锂回收再利用，起码现在没有特别好的办法，成本比直接买锂电原料还贵。</p>
+
+<p class="art-p">电动车用锂电池量很大，因为机动车报废有统一管理，那些锂电池虽然做车的动力来源不够资格，但是还可以做储能电站用很久很久，等储能电站也不能用了，他们仍然是集中度很高的废物，所以管理、回收都不会出太大问题，如果有人能研发出一种回收锂电池中锂的便宜方法，那也就发财了。总之，对个人来说，您用到的电池是可以当做生活垃圾处理的。不用太纠结。</p>
+
+<p class="art-p">这个问题就回答到这。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-22">
+      <div class="art-header">
+        <span class="art-chapter">Ch.91</span>
+        <h3 class="art-title">风力发电怎么产生电能？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">异乡人：卓老板，风能是怎么转化成电能的？今天出去玩儿看着那么巨大的风力发电机觉得太有意思了。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第13期“在转基因食品是不是安全这件事儿上，我们应该听谁的？”。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-23">
+      <div class="art-header">
+        <span class="art-chapter">Ch.92</span>
+        <h3 class="art-title">海淘奶粉安全吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">修令vicki：最近看了一篇文章，19款海淘奶粉抽检40%不合格，中国宝宝最好只吃中国的配方奶粉。感觉这篇文章的写作立意不客观，希望卓老板帮忙去伪求真一下。</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第19期“货币防伪的极限——量子货币会诞生吗？”。</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-24">
+      <div class="art-header">
+        <span class="art-chapter">Ch.93</span>
+        <h3 class="art-title">听《卓老板聊科技》有什么现实意义？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">自愈的亚斯伯格症患者：听了这么久，一开始希望这个栏目越来越火，也用心的向朋友推荐，无奈知识性太强，身边的朋友感兴趣，也不能给他们解决眼下的实际问题。但真心感谢卓老板，为我们大大的拓宽了知识面，而这些知识面，如果没有您，可能很多人一辈子也不会涉及，所以能不能设计一个打赏功能，虽然不多，只为表敬意。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——螺旋藻能长期食用吗？”</p>
+
+
+
+<p class="art-p">应@自愈的亚斯伯格症患者的要求，留下比特币钱包地址：</p>
+
+<p class="art-p">1HWmpGJKgegnR4JCCAWb92o8NdshWJdz1d</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-25">
+      <div class="art-header">
+        <span class="art-chapter">Ch.93</span>
+        <h3 class="art-title">有没有推荐的数学科普书？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">王芳：请问有没有讲概率论、数学定理或者计算机算法的书推荐？文风类似于你的语音，就是讲故事这种的。这次的内容非常有帮助！对于一个学生物，现在刚转行做健康大数据的人简直是雪中送炭！</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第17期“精准的判断，离不开精准的概率计算”。</p>
+
+
+
+<p class="art-p">Tips：</p>
+
+
+
+<p class="art-p">得到App已经升级，新版本订阅可以调整字体大小；为朋友开通订阅；订阅前试读，可免费浏览部分文章内容。</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-26">
+      <div class="art-header">
+        <span class="art-chapter">Ch.94</span>
+        <h3 class="art-title">今后的水和能源</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">留言</p>
+<p class="art-p">北极星：忘了是在哪看到的一句话了：从一个超市的排水系统，可以看出它的现代化程度。也不知这是否准确，不过这也确实能够解释我看到的一个现象。每次刮台风的时候，我家乡隔壁的一个镇就总是会被淹，这么多年了也不见改善。被淹的镇地势或许是要比其他地方低，但肯定不是最低的，所以还是有地方可以引导积攒的雨水的，要不然那个地方现在就应该是个小湖了，可见当初在建造排水系统的时候偷工减料了。说起水，还想多说两句。现在能想起小时候对于水龙头里居然能不停的往下哗哗出水感觉很不可思议，当时觉得自来水真的像是课本里说的那八字成语：取之不尽，用之不竭。现在想想也是真幼稚。而像小孩都会有喜欢玩水的天性，这种对水的喜爱与好奇或许是刻在我们的基因里的，而最先的文明发源地包括了尼罗河流域、两河流域，她哺育着人类祖先的生命，承载着我们的文明。</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“净化旧金山海湾”。</p>
+
+
+<p class="art-p">有听众北极星说，小时候第一次看到自来水龙头哗哗地流水，还以为这里的水是取之不尽用之不竭的。其实我们后来就说到了，还真的有可能达到取之不尽用之不竭，起码是以现在的人口来看是这样的，那就是利用海水淡化技术。</p>
+
+<p class="art-p">海水占全球水资源的98%，如果能充分利用的话，就能缓解一大部分的用水需求。如果说人类文明要延续，除了水以外，再有一个必要的就是能源。现在主要还是以化学能源为主，以太阳能为辅。今天要补充的内容就是关于能源的第三个来源，那就是热核聚变。</p>
+
+<p class="art-p">因为12月11日央视刚刚发了新闻，不知道大家关注了没有，就是在我们参加的一个国际热核聚变堆实验计划中，咱们制造出了耐高温材料，并且通过了ITER的测试认证。</p>
+
+<p class="art-p">核裂变和聚变都能产生能量，聚变支撑着太阳燃烧自己，这在曾经的节目里说过很多，我们一直梦想能模拟核聚变产生能量，它比核裂变产生能量的效率还高6倍，而且聚变用的是氢的同位素氘，没有放射性元素的污染，安全。氘的含量在地球上非常丰富，远比铀丰富的多。聚变反应每次投入的燃料几克就够了，也不用像裂变反应那样投入几十公斤的铀，让它们到达临界质量好产生链式反应。所以一切条件看上去都是聚变远比裂变美好。但这么多年阻碍了聚变反应的利用，就是温度太高这一点。发生聚变反应的时候，实际上我们就相当于要在地球上模拟出一个太阳核心的温度和压力，大约需要1亿摄氏度，现在别说1亿摄氏度了，几万摄氏度的温度也没有什么材料不直接气化的。</p>
+
+<p class="art-p">要想让这一小撮氘元素在一个地方反应，需要让它们带电，然后用磁场的方式约束着让它们悬空，这样就能和什么东西都不接触了。这几克物质就在这个反应炉的中心区域反应。这炉子得多大呢？大约是一个直径10米的球体，您想，就中间几克的物质，就需要这么大一个炉子。 但即便是这样，也依然要有一层隔热材料做反应炉，那个温度也不是轻轻松松能扛得住的。这个材料俄罗斯、日本都试过，但都坚持不了几十秒就损坏了。所以这个设计任务就交给中国了，设计出一个实物来，能扛住这种高温，以后当反应炉的炉壁。这个温度的压力用单位面积产生的功率来衡量，实验室给中国下的目标是4.7兆瓦/平方米，这个单位太大，用我们熟悉的单位核算一下就是47万千瓦的功率，这个功率和一个小型电站的输出差不多。但要求这个发电站的所有功率变成热都均匀加在一平方米的范围里，要求500秒不能因为高温融化变形。所以实际测试中国生产的材料时甚至测到了5.6兆瓦/平方米，500秒，材料依然扛得住。</p>
+
+<p class="art-p">刚刚说的这个国际热核聚变堆实验计划是一个比较封闭的组织，最早是苏联1985年还没解体的时候和美国总统会面商讨决定成立的，当时参与的只有苏联、美国、欧盟和日本，选址在法国建造实验室。但是后续因为耗资太大，美国退出了，然后印度和韩国才加进来，中国加入的比较晚，2006年才加入。</p>
+
+<p class="art-p">刚加入时，其他成员国对中国很是心有忌惮，因为中国自己也建设了自己国家的热核聚变反应堆。组织最开始限制中国籍雇员人数，就几个中国人。但是在后来十年中大家也知道，金融海啸什么的，ITER计划的钱很多都是中国出的，没中国计划就快彻底停了，所以到了今年中国籍科学家已经是仅次于欧美的国家了。实际情况是，中国确实从ITER中获得了不少关键技术，虽然赶不上ITER，但咱们自己的热核聚变反应堆的性能也差不多和ITER在同一个量级了，现在世界上采用磁约束方式的反应炉最大的10个里有3个是中国的。什么时候人类可以控制反应的强弱，而且炉子也能长年累月撑得住高温，那核聚变的反应就可以用来发电了，到时候能源供给就上了一个新台阶了。一旦水和能源都上百倍的增加，其实离人口继续暴涨也不远了。</p>
+
+<p class="art-p">好了，这部分内容就补充这么多。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-27">
+      <div class="art-header">
+        <span class="art-chapter">Ch.98</span>
+        <h3 class="art-title">福岛核电站再次泄露了吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">卓克</p>
+<p class="art-p">福岛核电站虽然没有泄露，但长远来看，造成的危害也不容小觑。</p>
+
+
+<p class="art-p">最近又有福岛核电站核泄露的消息传出来：</p>
+
+<p class="art-p">福岛核电站二号机组已经融化的核燃料泄露到金属容器之外，钢结构被烧出一个2米直径的大洞，有核泄漏的空间中辐射量超过每小时530希沃特，这是核电站发生事故以来测得的最大值，中国不要被日本政府粉饰太平……</p>
+
+<p class="art-p">希沃特是辐射剂量的一种单位，记作Sv。以前的定义是1mg的镭，包在壁厚0.5mm的铂容器中，对相距1cm处的样品在1天内所受的剂量，大约等于8.38R。现在定义是等于每kg吸收1J，相当于100rem。</p>
+
+
+<p class="art-p">这段文字还配有图片，是一个被烧穿的大坑，应该还是一些专用摄像机拍摄的，看着很让人担心。</p>
+
+<p class="art-p">最初有几个公众号和微博加V的人是有意的误导人们，让人们觉得第二次大规模的核电站事故发生了。但其实很多科普网站，比如果壳网和不少公众号就马上出来给大家澄清了，简单来说是这样的：</p>
+
+<p class="art-p">这是2011年发生的事故，当时最要紧的是疏散人口，安排难民，阻止核污染继续泄漏。所以对当时出事故的2号反应堆也只是进行了降温和封闭的防护，不让事态继续严重化。</p>
+
+<p class="art-p">具体核燃料把炉子融化到什么地步，事故核心区的核辐射到底有多强，甚至是更加细节的，融解了多少，什么地方融解了，这些就应该往后放。</p>
+
+<p class="art-p">东京电力公司对事故处理的时间表中也写了，2017年的1-2月开始调查2号反应堆的具体情况。所以这次的谣言传出正是东京电力公司把该忙的都忙活完了，开始着手调查原子炉压力容器损坏的具体细节的时候。</p>
+
+<p class="art-p">那张谣言中配的图也确实是这次调查的现场照片，是通过工作人员把一根长长的臂手从外壳上钻了个洞，然后探进去拍摄到样子，这里面确实早就被核燃料烧出一个大坑了。</p>
+
+<p class="art-p">核辐射每小时530希沃特也是当时测到的值，这个值比之前预估的要高很多，之前预估可能也就几十。</p>
+
+<p class="art-p">你如果真在那个区域里待着，那真就是几十秒就会死亡。但问题是现在所有核废料都在控制中，只是日本人终于腾出手去调查2011年的爆炸现场了而已。</p>
+
+<p class="art-p">那你说现在到底危险不危险呢？</p>
+
+<p class="art-p">是这样的，核燃料的防护有3层，最内是燃料的外壳，锆合金做的，可以承受1200℃的温度，这个早就在2011年就被烧穿了。第二层是反应堆的压力容器金属壳，谣言里说烧出2米直径的大坑，就是这个金属壳上的。所以第二层也废了，还剩一层现在还是好的，就是混凝土外壳，它的内衬是一层钢板，外壳是1米厚的混凝土，现在核燃料正在侵蚀第三层。</p>
+
+<p class="art-p">从实际现场证据看，比事故分析中估计的要严重很多。现在要想办法在烧穿第三层之前把燃料取出来，找个几千公里外的海底，隔离深埋。</p>
+
+<p class="art-p">这是最理想的结果，如果取不出来，就只能也效仿切尔诺贝利，在外面再套一层石棺封住，但这么做，福岛附近几百平方公里就要永久隔离，变成无人区了。</p>
+
+<p class="art-p">用石棺封住后，反应堆还会继续发热，会把周围的东西都融化。这种发热在30年里一直维持很高的热量。估计要等百年之后才会渐渐凉下来，到时候才能再进去人，像切尔诺贝利核电站，现在内部核反应堆依然还在缓慢流动着。</p>
+
+<p class="art-p">虽然事态挺严峻的，但是日本自从2011年事故发生后就建立了全国范围的密集的放射性污染的监控，污染范围最近几年并没有明显增加。</p>
+
+<p class="art-p">但是不能忽视的是，东京电力公司处理这次事故是非常不利的，后来几年的核扩散导致甲状腺癌高发，发病率大约是事故前的最低150倍，最高1000倍。本来这次事故在国际核事故严重程度定级中可以控制在5级的，现在变成7级了。</p>
+
+<p class="art-p">7级核事故和切尔诺贝利核事故的级别一样高了，而且有可能最终造成的长期危害还要超过切尔诺贝利。</p>
+
+<p class="art-p">日本处理这次事故实在太不果断了。所以虽然这次是有人有意造谣，想营造出又发生了一次核事故的假象。但事情的真相也比我们知道的严重的多，在事故的初步勘察中就能判断比预估的要严重的多，而且处理事故的公司非常不得力，这个已经废掉的反应堆就像一个炸弹一样在福岛潜伏着。</p>
+
+<p class="art-p">不信谣，只需了解真相。↓↓↓</p>
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-28">
+      <div class="art-header">
+        <span class="art-chapter">Ch.99</span>
+        <h3 class="art-title">如何挑选显示器？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">SKY：</p>
+<p class="art-p">图片里卓老板的显示器好奇怪，为什么那么扁？</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“「与卓老板相识的一年」征文”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">当你工作量大的时候，你就能清楚体会到注意力是一种宝贵资源，你用掉了一块就少一块。选个好的显示屏能节省很多注意力。</p>
+
+
+<p class="art-p">咱们节目是去年5月27日上线的，这也进入今年5月份了，所以一年的相伴就要结束了。上个月康康发了一篇文章，是一个征文的活动，就是想收集大家听节目一年的感受，已经发信的我已经找康康要来看了，跟我做节目一样，都是有感而发。</p>
+
+<p class="art-p">有位听众看的细致，问我那个显示器好像很奇怪，为什么那么扁？我突然觉得这是一个好话题，因为选对显示器对提高写稿效率的作用很大。那我就分享给大家，咱们一起提高一下效率。</p>
+
+<p class="art-p">丨显示器的长宽比</p>
+
+<p class="art-p">显示器之所以扁就是因为它的长宽比是21:9，而普通的显示器是16:9或者16:10的，甚至还有4:3的。拉长之后，对有一类工作效率提高非常有帮助，就是需要左右对照才能完成的工作，不用切换窗口了，因为切换窗口后注意力还要重新寻找刚才的断点，所以不光是切换动作浪费时间，重新定位也浪费时间，而且重新定位还浪费注意力资源。</p>
+
+<p class="art-p">当你工作量大的时候，你是能清楚体会到注意力是一种宝贵资源的，你用掉了一块就少一块。可能一天中清晰的时间只有10块注意力，那么在来回来去切换的过程中，以我的工作量，我觉得至少浪费掉我十分之一的注意力。</p>
+
+<p class="art-p">你看到的只有我左手边的一个显示屏，其实我右手边还有一个显示器也是21:9的，左边这个是29英寸的，右边那个是34英寸的。而且右边那个分辨率还更高，还是个曲面屏，这每个特性都有它发挥优势的地方。</p>
+
+<p class="art-p">丨显示器的像素</p>
+
+<p class="art-p">第一个是34英寸，你至少有可能把内容放得更大观看了，但这是需要特别设置一下的，一般在每个软件里有不同的快捷键，一般是ctrl+加号就是放大。虽然34英寸比29英寸的尺寸大，但默认分辨率下，同样一个字在34英寸显示器里的尺寸更小，就是因为34英寸显示器里的像素点有500万，29英寸显示器里的像素点只有276万。</p>
+
+<p class="art-p">也是因为这个因素，我不推荐小尺寸的高分辨率的屏幕，比如笔记本就是这样，很多14寸的屏，配了1920×1080的屏幕，这算一下，207万像素缩在那么小的屏幕里，字儿都小的可怜，看着非常累。</p>
+
+<p class="art-p">有一个指标可以衡量最终显示出来的字儿的大小，叫做像素的点距，也就是两个相邻像素的间距，凡是超过0.26mm的，效果都显大，这个值很少超过0.30mm，超过的显示器基本都不属于最近5年的规格了，或者是不是桌面领域应用的。</p>
+
+<p class="art-p">但这个值也很少低于0.20mm，低于这个值的用起来字非常小，所以看着费劲，但现在很多笔记本屏幕都低于这个，它们是做过调整的，就是把桌面图标、菜单字体放大，你在看网页和用word时也都放大，实际可能一个屏幕里显示的总内容也不多，只不过每个显示出来的东西都更细腻了，因为你用更多的像素描绘一个物体了嘛。</p>
+
+<p class="art-p">但真的原封不动，一点也不放大，0.20mm点距以下的显示器只会让人工作效率更低。所以很多人听说，4K显示器来了，很想试试，结果两千块钱出头买回一个4K的，这么买回去的基本都后悔了。对于4K分辨率的显示器来说，至少要有32英寸，当然40英寸就更好了。</p>
+
+<p class="art-p">丨曲面显示器</p>
+
+<p class="art-p">下面再说曲面屏，简单说就是面向我的方向，显示器有一个向内凹的弧度，这个弧度有大有小，但通常没有变态大的，所以不会感觉到任何形变，但这个弧度就又增加了工作效率，原因就是节省了我的注意力，从前显示器太长了，比如长度超过71cm，我的眼神要从左侧的文档切换到右侧文档，我脖子得跟着转。但我自从换了这个曲面屏以后，长度基本没变，但我脖子就基本没再转过了。眼神稍微一侧就能从左切换到右，效率提高的多不说，切换起来再也不累了。</p>
+
+<p class="art-p">这种感觉是非常明显的，你可别小看这种注意力的花销，用得好的话，感觉就好像所有需要用的信息都摆在你眼前刚刚好的位置，找起来再也不费劲了。所以尤其对21:9这种看上去的超宽比例，如果用曲面屏，显示出来的内容虽然还是超宽的，但是感觉并不宽，和16:9的差不多。</p>
+
+<p class="art-p">丨显示器的刷新率</p>
+
+<p class="art-p">另外一个显示器的新特性叫做144hz刷新率。我们知道，屏幕里的图像活动起来是顺畅的，是因为每秒钟显示的画面超过了30幅，电脑显示器还会设置得更高，每秒60幅，其实本来已经超越了人眼平均的视觉残留时间，所以长久以来就没突破，但后来电子游戏竞技兴起了，渐渐成了主流娱乐，甚至是体育赛事，所以追求极限成绩的需求就都出来了，刷新率高的显示器可以表现的细节就更多，一些微小操作，比如瞄准啊，就更精确。有打守望先锋的人，从普通显示器换成144hz的以后，命中率直接提升15%。</p>
+
+<p class="art-p">当然，这是游戏，我相信咱们很多人不玩游戏，但即便不玩，在办公使用中也能感到流畅度变好了，鼠标的移动，文档的拖动，窗口的缩放、拉动，原来的感觉是骑自行车走在盲道上，换了144hz刷新率后的显示器就感觉骑在了柏油路上。这虽然不一定提高效率，但好心情是一定有的。</p>
+
+<p class="art-p">丨总结</p>
+
+<p class="art-p">总结一下呢，推荐超宽比21:9的屏幕，但一定留意像素点距，不要低于0.2mm，推荐选择曲面屏和144Hz刷新率。但同时也要提前预警，因为你一旦换了这个档次的显示器，就不太可能回到从前了，对办公设备就开始挑剔了，说不定家里的和单位的显示器都会换掉。好了，这个小技巧就说这么多。对了，大家别忘了写征文，一年的收获都有什么。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-29">
+      <div class="art-header">
+        <span class="art-chapter">Ch.99</span>
+        <h3 class="art-title">如何用工具提高工作效率？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">云云云：</p>
+<p class="art-p">能提高工作效率的，除了宽屏显示器，还有别的设备吗？卓老板能再多讲一些吗？</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：如何挑选显示器？”。</p>
+
+
+<p class="art-p">之前说了一期用显示器增加工作效率的节目，很多人都要我说说还有没有其他配件可以提高效率的，那我就补充一些。</p>
+
+<p class="art-p">首先就是听到的内容，我曾经看到过很多人在写东西的时候戴着耳机听音乐，其实这是一个非常耗费注意力的习惯，也许办公室很吵，有人说话，有人打电话，你把音乐声音放大一些会压过这些干扰你的声音，但那些音乐也是同样级别的干扰。</p>
+
+<p class="art-p">一般你放的都是你喜欢的歌曲，所以每当歌曲里那些打动你的部分出现，你的情感就把思路拽走了，时不时，一个颤音，一个鼓点就夺走了你的注意力。</p>
+
+<p class="art-p">所以需要集中精力的时候去听歌，只能适得其反。这种分散注意力的还有QQ的闪动和微信的闪动，所以这些也都关闭，你可以试试，完成同样工作你会感觉轻松很多。</p>
+
+<p class="art-p">当然，我知道，有些工作虽然也在写东西，但并不需要集中什么精力，动用什么脑力，类似于体力活，类似于抄写一样的工作，那为了避免无聊，甭说听歌了，听听语音节目都没问题。</p>
+
+<p class="art-p">但假如周围总是有干扰，别人的电话中的一问一答总把你的思路拽过去怎么办呢？我告诉你，买一个主动降噪的耳机，注意，要买耳罩式的，那种入耳式的虽然也不便宜，但效果远不如耳罩式的。戴上以后基本就处在另外一个世界了，我第一次戴的时候就感觉进到了声压等级测试的屋子里，一切都静下来了，非常有利于集中精力。</p>
+
+<p class="art-p">它虽然不能完全滤掉语音，但削弱60%的效果也是有的。虽然我说音乐是有害的，但是有一类音乐我是在写稿时听的，就是你现在听到的这个背景音，是个非主流的音乐人做的，翻译过来叫做双曲螺线（Hyperbolic Spiral），专辑叫螺旋的宇宙（Spiral Universe），既没有情感表达，也没有技术展现，其实你要是有印象，他和我很早以前说的木星探测器，朱诺号靠近木星巨大磁场时，沿途录下的声音很像，差不多就是宇宙的声音。</p>
+
+<p class="art-p">这张专辑也是作者为了纪念天王星发现者赫歇尔做的，跟天文也多少有一些渊源。这类音乐就不会牵扯走你的思路，还可以完全盖住本来就已经被削弱很多的干扰，基本上我听这些音乐写稿子时，差不多就跟在宇宙里写稿子似的。</p>
+
+<p class="art-p">肯定有人问买什么耳机，主动降噪这方面只要在BOSE和索尼里选就可以了，选最新和最贵的那几款就可以，不到3000块钱，提升工作效率好几年，这种设备不像手机，掉价掉很厉害，你只要没有额外需求，基本可以一直用下去，像坐飞机，坐火车也都是防噪音利器。</p>
+
+<p class="art-p">再一个提升效率的就是输入法，我要说的是语音输入法。我举个例子，之前有一阵子，我有过一周左右严重的落枕，就是颈部肌肉严重拉伤，那次严重到头2天我连起身都难，没法保持坐姿。</p>
+
+<p class="art-p">但稿子还得交啊，怎么办，逼着我躺着用手机写稿，我下了科大讯飞的输入法，在笔记软件里就说了起来，结果那期节目写稿的速度竟然比我健健康康坐在屏幕前写出来的速度还快。</p>
+
+<p class="art-p">我那时还处于半残的状态啊，这当时给我触动非常大，后来我回复听众大段的内容时也都用语音输入了，比键盘敲出来的速度快2-3倍。</p>
+
+<p class="art-p">不过这个技巧对我也有副作用，就是后来在我好了以后又打算用语音输入的时候就发现，这稿子写出来怎么质量这么低啊，不满意，只好再查再完善。</p>
+
+<p class="art-p">后来我发现了，原因在于键盘写出的东西速度虽然比语音输入慢，但在我敲入那些字的时候，这半句要表达的意思，它前后逻辑是否通顺，是不是要在某些细节上再查查资料，补充一些数据，我后面要怎么引出下一个问题，这些思考过程也是写稿时间里一并完成的。</p>
+
+<p class="art-p">但如果我用语音输入的时候，我根本来不及考虑这些部分了，我差不多全部精力都集中在怎么把我当前这句话，一次说完整，好让程序能正确识别，别吭哧，别啰里啰嗦。</p>
+
+<p class="art-p">所以语音输入的稿子虽然快，但是有缺陷。不过我想，如果写一些早就在你脑中的短的内容，比如几百字，或者是一些不太需要强逻辑关联的内容，语音输入完全可以提高速度，并且保证质量。</p>
+
+<p class="art-p">还有能提升效率的就是SSD硬盘，而且要用那种速度比较棒的SSD，也就是采用PCIE接口的SSD硬盘，基本上软件都是秒开，程序间切换起来一点卡壳都没有。</p>
+
+<p class="art-p">这种SSD相比传统机械硬盘，在所有基本动作上完成的速度都能快几十倍到上百倍，比如一些零零散散的文件需要访问，机械硬盘的话，你得告诉机械臂这个数据在哪个扇区、哪个位置，然后读写头挪动到那里把数据读出来。这个过程需要的典型的时间就是0.3ms，但我说的那种比较牛的SSD完成这种动作典型时间是0.01ms，所以不光是人切换任务时耗费时间，电脑也是，切换带来的浪费越少，工作效率越高。</p>
+
+<p class="art-p">总结一下呢，工作时不要听音乐，看qq，看微信，使用降噪耳机，听类似背景噪音一样的音乐。在合适的场景下用语音输入，使用PCIE接口的SSD。</p>
+
+<p class="art-p">另外一个我想说的是，高效的工作方法很好找到，如果你还没找到其实主要是因为你的工作量还不够大，否则真逼到那一步，大家都在用的最高效的方法，你也一样用的很溜。这也是为什么比赛中，激烈竞争下，大家的招式都一样的原因。</p>
+
+<p class="art-p">关联音频：</p>
+<p class="art-p">问答：如何挑选显示器？</p>
+<p class="art-p">丨2017.05.08</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-30">
+      <div class="art-header">
+        <span class="art-chapter">Ch.99</span>
+        <h3 class="art-title">笔记本电池怎么维护？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">星辰：</p>
+<p class="art-p">卓老板，为什么电池买来放着，电量基本不会降低，但是放在玩具里，即便不开开关，电量还是会明显减少，明明是断路，为什么耗电呢？</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“免疫系统怎么保护我们”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">电池放不放电与用电设备有关。至于笔记本的电池保养，一直外接电源没问题，注意每周用一次电池里的电，用到20%再充满就可以了。</p>
+
+
+<p class="art-p">听众星辰问，为什么电池买来放着，电量基本不会降低，但是放在玩具里，即便不开开关，电量还是会明显减少，明明是断路，为什么耗电呢？</p>
+
+<p class="art-p">这个问题其实还要看具体电路的设计。但我大概猜是这样的，一盒电池买回来，都是套着塑料皮绝缘的，比如碱性电池买回来一直没动过，5年以后容量可能还能维持90%以上。但如果放在设备里，即便总开关关上了，但是有些设备是有两套电路的，一套主电路实现主要功能，一套待机电路实现辅助功能，待机电路的功耗可能非常非常低，典型的工作电流也许只有几微安，但长期处于待机也会耗费不少电量。</p>
+
+<p class="art-p">不过这个问题，我想到另一个可能对很多人都有用的问题，那就是笔记本的电池该不该一直插在电脑上，然后用外接供电运行。我想大家一定见过微信文章或者其他媒体说过，电池一直插在笔记本上，一直充电对电池不好，会减少寿命。</p>
+
+<p class="art-p">那咱们先说结论，一直外接供电保持笔记本自己的电池满电，对电池有一定的伤害，但伤害不大，为了减小这种伤害，建议每周用一次电池本身的电，用到20%左右再把外接供电插上继续正常用就行，只要每周来一次，就能把伤害降到最低。</p>
+
+<p class="art-p">下面咱们说说为什么要这么做，一直插着外界供电，笔记本本身的电池一直100%满电，这确实是有一点伤害，原因是锂电池在满电时电压是4.2v，如果一直维持这个较高的电压，正负极都会发生一些微弱的反应，在电极的表面形成一层钝化膜，电压越高，生成钝化膜的速度越快，时间越久膜就越厚。</p>
+
+<p class="art-p">锂电池是这样的：放电的时候，正极的锂离子会钻到由石墨组成的负极里，负极的显微结构就是一个个小房子，锂离子钻进去后就是放电了；充电的时候，就是让外界的电压把锂离子驱赶回正极。当钝化膜厚了以后，很多房间的入口就被挡住了，所以锂离子在充放电时可用的房间少了，从宏观上看就是电池容量就下降了。</p>
+
+<p class="art-p">一般来说用在笔记本上的锂电池寿命是500-800次循环，这并不是说到了501次电池就没法用了。这个寿命通常以充放电容量低于出厂容量80%为界限，如果容量低于80%了，就当是寿命到期了，这主要是因为从100%降低到80%的过程比较慢，比如说需要800次才行。但是从80%降低到60%，可能100多次就到了，因为后期降得快，所以就以80%为界限。那为什么一周放一次电就好多了呢，就是因为你只要在钝化膜还没封死之前让锂离子完整进出一次，大部分小房间门口的钝化膜就都没法形成。</p>
+
+<p class="art-p">对电池容量的维护还有一些方法，比如刚刚说的就属于不要长时间维持满电，这个长时间指的是，比如3个月以上。</p>
+
+<p class="art-p">但和长时间满电存放比起来，长时间空电存放的坏处更大。比如说某次笔记本用电池，把电池用到底，都自动关机了，其实这时候电池的负极中并不是没有锂离子了。实际可能还有很多，但是在当初设计锂电池的时候就发现如果把残留的锂离子放的精光，容量损失的就会很快，也许只有几十次，电池容量就跌到80%出厂容量以下了。</p>
+
+<p class="art-p">后来的试验中找到了电池放电量的最佳点，就是单节电池放电到2.9V是最低的，不能再放了。有些厂商为了稳妥还会把3.0V、3.1V作为放电截止点。所以当你的笔记本没电自动关机时，电池电压大约经历了从满电的4.2V到没电的3.0V。这时对电池还是安全的，不过锂电池还存在自放电的情况，所以3.0V的电池如果就那么放着3个月，也许就会跌到2.7V或者更低，这时如果从显微结构看，附近的小房子有不少都塌方了。所以空电放久了以后再重新充满也许容量会降得很厉害。所以电池厂出厂的电池大约都维持20%-30%的容量，这样长期存放影响最小。</p>
+
+<p class="art-p">另一个对寿命影响大的是存放温度，如果1年都不用，可以放在冰箱上层，第二年拿出来容量几乎不变。最惨烈的环境就是50℃高温，空电存放，放3个月，很可能容量一下就剩65%了。所以你可以看看家里有没有锂电池正长期被太阳晒着呢，容量损失还是好事，更多是因为黑色的外观阳光一晒，温度到了60多度，产生一些化学反应还有气体产生，电池就鼓起来了，这都有爆炸的危险。</p>
+
+<p class="art-p">所以最后总结一下，笔记本电池为了用着方便，突然断电也能保留现场，一直外接电源没问题，注意每周用一次电池里的电，用到20%再充满就可以。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-31">
+      <div class="art-header">
+        <span class="art-chapter">Ch.101</span>
+        <h3 class="art-title">怎样才能感受到奇迹？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">#我问卓老板</p>
+
+<p class="art-p">唐门大师姐：地球是时间和空间最伟大的作品，有着太多的奇迹，这些奇迹不管我们知道或不知道，不管我们礼赞或者无视，它们一直都在那里。真正决定每个人面对这些奇迹的态度，真正决定每个人在这些奇迹中的状态，真正决定这些的是知识！知识为我们搭建高度，打开角度，而传播知识的人就是帮我们鉴证奇迹的人，帮助我们对平凡的事物惊艳它们的如此不凡，对不可思议的现象感叹并大呼原来如此！</p>
+
+<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》-“中秋礼物——你不了解的月亮”</p>
+
+
+      </div>
+    </article>
+
+    <article class="art-card" id="art-32">
+      <div class="art-header">
+        <span class="art-chapter">Ch.101</span>
+        <h3 class="art-title">歪果仁会听“卓老板聊科技”吗？</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">我问卓老板</p>
+<p class="art-p">Azzinoth:特别好奇一件事，“卓老板聊科技”如果有个英文版，外国人会听么？</p>
+
+<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“发胖不一定因为又懒又馋”。</p>
+
+
+<p class="art-p">卓克</p>
+<p class="art-p">在国外有多类似的科普节目，英语世界中的精英们也更愿意花时间做科普，这期就举个例子。</p>
+      </div>
+    </article>
+
+    <article class="art-card" id="art-33">
+      <div class="art-header">
+        <span class="art-chapter">Ch.899</span>
+        <h3 class="art-title">新课｜《卓克的密码学课》发刊词</h3>
+      </div>
+      <div class="art-body">
+        <p class="art-p">你好，我是卓克。</p>
+
+
+<p class="art-p">筹备了这么久，新课《卓克的密码学课》终于和大家见面了。</p>
+
+<p class="art-p">在这门课里，我会给你梳理密码学五千年的发展史，详细拆解各种加密法的原理与破解之法，也提醒你保护好自己的钱包和隐私。</p>
+
+<p class="art-p">专门给咱们课程的老用户，准备了一张20元的优惠券，感谢你的支持。</p>
+
+<p class="art-p">点击下面的图片，就能直接减价购买。</p>
+
+<p class="art-p">1</p>
+
+<p class="art-p">提到密码学，估计你会想到手机密码、微信密码、银行卡密码，更深一层可能还会想到自己的隐私和财产安全。这些我都会在课程里讲到，但这都不是我要讲这门课最重要的原因。</p>
+
+<p class="art-p">你之所以需要了解密码学，是因为它的发展历程，折射出了人类的一种现实处境——</p>
+
+<p class="art-p">很多复杂事情，不存在所谓的终极解决方案。</p>
+
+<p class="art-p">过往的知识，都告诉我们要一劳永逸的彻底解决问题。但这是不可能的。你的敌人，永远不会睡着。即便你现在占尽优势，他们也不会认输，而是会暗中进化，直到变强的那一天再来击败你。</p>
+
+<p class="art-p">密码学数千年的发展史，加密与解密双方一次次的对立搏杀，就是这样一场旷日持久，没有终点的智力追逐。</p>
+
+<p class="art-p">没有永远的胜者，也不存在终极解决方案，这似乎就是密码学，乃至整个人类无法逃避的宿命。</p>
+
+<p class="art-p">在加密与解密的千年对抗中，无数天才投入其中。了解它，就如同置身一场顶尖的智力追逐赛。数千年来，人类最顶尖的头脑如何相互提防、彼此碰撞，又如何在击败眼前的敌人之后，被身后的对手击倒……</p>
+
+<p class="art-p">这些，你一定要知道；</p>
+
+<p class="art-p">这些，我都会让你知道。</p>
+
+<p class="art-p">2</p>
+
+<p class="art-p">纵观密码学的发展史，加密和解密到底有多少种？真的数不清。课程里，我会为你梳理出密码学演化过程中最重要的七个世代。</p>
+
+<p class="art-p">从第一代的隐藏法，第二代的移位法和替代法，到第三代的维尼吉亚加密法，第四代的恩尼格玛机，再到第五代的魔王加密系统，第六代的RSA加密系统，以及第七代的量子加密；从手工加密，到机械加密，再到计算机加密——</p>
+
+<p class="art-p">密码学五千年的发展历程，我会带你完整的走一遍。每种加密法的工作原理，以及对应的破解方式，我都会一一为你拆解。</p>
+
+<p class="art-p">在这七个世代中，加密与解密双方的力量此消彼长：在某些年代，任何加密法都有破解之术；而在另外的年代，有的加密法却牢不可破。</p>
+
+<p class="art-p">这七代加密与解密的对抗战争，就是这门课的主线剧情。我可以提前给你透露：最终的胜负关系是，加密vs解密，7胜5负。但别忘了，这场对抗战还将永远持续下去。</p>
+
+<p class="art-p">置身这场顶级的智力追逐赛，体验最高级的智力碰撞，你一定不虚此行。即便是下次看到相关电影，都能比周围的人更“懂行”。</p>
+
+<p class="art-p">3</p>
+
+<p class="art-p">当然，你将收获的远不止这些。</p>
+
+<p class="art-p">除了加密法和解密法持续了数千年的碰撞外，这门课还包含了大量令人感慨的故事。</p>
+
+<p class="art-p">成功破译了古埃及象形文字的密码学家托马斯·杨和商博良；因为破译德军的恩尼格玛机，而帮助盟军扭转战局的图灵；还有，被密码学改变命运的玛丽一世……</p>
+
+<p class="art-p">但更多的，你会了解到密码学家的集体无奈。因为《保密法》和战争的需要，很多密码学家的研究成果被长期掩盖。如果当初有功劳，就会出现一大批被埋没的功臣；如果因为保密法的限制而不能申请专利，就会错过几亿美元……</p>
+
+<p class="art-p">所以，密码学发展史上的“冤案”格外多。</p>
+
+<p class="art-p">当看到这些故事的时候，你会怎么评价他们的成就？又会怎么看待自己的人生价值呢？这也是这门课要带给你的思考。</p>
+
+<p class="art-p">4</p>
+
+<p class="art-p">相信我，你将收获的还不止这些。</p>
+
+<p class="art-p">穿越密码学发展的千年迷雾，除了了解加密与解密的对抗原理，我还会把它带入到你的日常生活。</p>
+
+<p class="art-p">至少以下三条，是你听完课就能明白的：</p>
+
+<p class="art-p">第一：补强安全意识，保护好钱包</p>
+
+<p class="art-p">像WiFi密码为什么会被盗？被别人蹭网后，自己的隐私还安全吗？银行密码、手机解锁密码为什么只有4-6位，会不会不安全……</p>
+
+<p class="art-p">这些问题，我都会在课里举例细说。你会知道怎样让密码更安全、如何弥补操作上的漏洞，从而有效保护自己的钱包。</p>
+
+<p class="art-p">第二：了解虚拟货币和区块链的价值核心，防止陷入泡沫</p>
+
+<p class="art-p">我在课程里，会专门给你讲讲近几年大热的比特币和区块链中的密码学，带你了解它们的技术细节和背后的核心价值。这些稳固的知识，会帮你更理智的评估其中泡沫的比例。</p>
+
+<p class="art-p">第三：体会数学是所有工程类学科的理论来源</p>
+
+<p class="art-p">密码学的每次突破，都源于数学的发展。其实不只是密码学，整个工程类学科都是如此。听完这门课之后，你会清晰的感受到，数学是工程技术的最大推动力，从而对数学研究多一分敬畏。</p>
+
+<p class="art-p">5</p>
+
+<p class="art-p">我是卓克，诚意邀请你加入我的密码学课。</p>
+
+<p class="art-p">我愿做一个真诚的领路人，带你进入密码学世界，领略人类智力的顶级大战。</p>
+
+<p class="art-p">跟你一起感慨那些故事，钻研那些技术细节，也提醒你如何保护自己的钱包和隐私。</p>
+      </div>
+    </article>
+  </main>
+</div>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+
+<footer class="footer">
+  <p>卓老板聊科技 · 最小知识集（MKS）</p>
+  <p>298 篇文章 · 7 个专题 · 32 个原章节</p>
+  <p>
+    <a href="index.html">← 返回科学客厅</a> ·
+    <a href="concepts.svg" target="_blank">🗺️ 知识星系图</a> ·
+    <a href="quiz.html">📝 科学素养自测</a>
+  </p>
+</footer>
+
+</body>
+</html>
