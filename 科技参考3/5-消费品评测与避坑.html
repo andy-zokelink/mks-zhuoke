@@ -3,52 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>消费品评测与避坑 — 消费者特工训练营</title>
+<title>消费品评测 · 消费者特工训练营</title>
 <style>
 /* ============================================================
    CONSUMER AGENT TRAINING CAMP — 消费者特工训练营
-   卓克的参数思维：撕开营销包装，把产品拆回参数。
-   这不是产品目录，这是训练营——走出去后看任何广告都能自动跑参数检查。
+   核心隐喻：你不是在逛商场，你是在执行侦察任务。
+   每一件商品都是敌方伪装——你的武器是参数思维。
    ============================================================ */
 
 /* ===== Foundations ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #06080f;
-  --bg-surface: #0c0f1a;
-  --bg-elevated: #111422;
-  --bg-hover: #181b2e;
-  --text: #b8bccc;
-  --text-bright: #e4e2f0;
-  --text-dim: #6a6e82;
-  --text-faint: #3a3d52;
-  --border: rgba(120,124,150,0.10);
-  --border-active: rgba(120,124,150,0.18);
-  --orange: #f59e0b;
-  --orange-bright: #fbbf24;
-  --orange-glow: rgba(245,158,11,0.20);
+  --bg-deep: #07080f;
+  --bg-surface: rgba(14,15,30,0.88);
+  --bg-elevated: rgba(20,22,44,0.92);
+  --text: #b8b8cc;
+  --text-bright: #e4e0f0;
+  --text-dim: #6c6c88;
+  --text-subtle: #3c3c54;
+  --border: rgba(140,140,180,0.08);
+  --border-active: rgba(245,158,11,0.25);
+  --amber: #f59e0b;
+  --amber-glow: rgba(245,158,11,0.22);
+  --amber-bright: #fbbf24;
   --red: #f87171;
-  --red-glow: rgba(248,113,113,0.22);
+  --red-glow: rgba(248,113,113,0.20);
   --green: #4ade80;
   --green-glow: rgba(74,222,128,0.18);
   --teal: #2dd4bf;
-  --teal-glow: rgba(45,212,191,0.18);
+  --teal-glow: rgba(45,212,191,0.20);
   --blue: #60a5fa;
   --blue-glow: rgba(96,165,250,0.18);
   --purple: #a78bfa;
   --purple-glow: rgba(167,139,250,0.18);
   --pink: #f472b6;
   --radius: 14px;
-  --radius-sm: 8px;
+  --radius-sm: 9px;
+  --radius-xs: 6px;
   --ease: 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out: 0.32s cubic-bezier(0, 0, 0.2, 1);
-  --ease-spring: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 body {
   font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  background: var(--bg-deep);
   color: var(--text);
   line-height: 1.75;
   min-height: 100vh;
@@ -56,845 +55,888 @@ body {
   overflow-x: hidden;
 }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #222640; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #323660; }
-
-/* ===== SCANLINE OVERLAY ===== */
-body::after {
-  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  pointer-events: none; z-index: 9999; opacity: 0.4;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a58; }
 
 /* ===== TOP NAV ===== */
 .top-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-  background: rgba(6,8,15,0.92); backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(7,8,15,.92); backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
 }
 .home-link {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 15px; border-radius: 20px;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 14px; border-radius: 20px;
   background: linear-gradient(135deg, #d97706, #f59e0b);
-  color: #06080f; font-size: 12px; font-weight: 700;
-  text-decoration: none; transition: all var(--ease-out); white-space: nowrap;
-  flex-shrink: 0;
+  color: #07080f; font-size: 12px; font-weight: 700;
+  text-decoration: none; transition: all var(--ease-out);
+  white-space: nowrap; flex-shrink: 0;
 }
 .home-link:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(245,158,11,.35); }
-.nav-title { font-size: 12px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.breadcrumb { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
 .nav-sections { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 .nav-sections button {
   background: none; border: 1px solid var(--border); color: var(--text-dim);
-  padding: 4px 10px; border-radius: 12px; font-size: 11px; cursor: pointer;
+  padding: 3px 9px; border-radius: 12px; font-size: 10px; cursor: pointer;
   transition: all var(--ease-out); white-space: nowrap; font-family: inherit;
 }
 .nav-sections button:hover, .nav-sections button.active {
-  border-color: var(--orange); color: var(--orange); background: rgba(245,158,11,.08);
+  border-color: var(--amber); color: var(--amber); background: rgba(245,158,11,.08);
 }
 
 /* ===== HERO ===== */
 .hero {
   min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; position: relative; overflow: hidden; padding: 80px 20px 50px;
+  justify-content: center; position: relative; overflow: hidden;
+  padding: 80px 20px 50px;
 }
 .hero-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
 .hero-content { position: relative; z-index: 1; text-align: center; max-width: 800px; }
-.hero-classification {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 4px 16px; border-radius: 3px;
-  background: rgba(0,0,0,0.5); border: 1px solid rgba(245,158,11,0.3);
-  font-family: 'Courier New', monospace; font-size: 11px; color: var(--orange);
-  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;
+.hero-badge {
+  display: inline-block; padding: 5px 20px; border-radius: 20px;
+  background: rgba(245,158,11,.10); border: 1px solid rgba(245,158,11,.22);
+  font-size: .75rem; color: var(--amber); letter-spacing: 3px;
+  margin-bottom: 22px; text-transform: uppercase;
 }
-.hero-classification .cls-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); animation: clsPulse 1.5s infinite; }
-@keyframes clsPulse { 0%,100%{opacity:1;box-shadow:0 0 4px var(--orange)} 50%{opacity:0.3;box-shadow:0 0 1px var(--orange)} }
 .hero h1 {
-  font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.2;
-  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 30%, #f87171 60%, #f59e0b 100%);
-  background-size: 200% 100%;
+  font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 900;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24, #f87171);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text; margin-bottom: 16px;
-  animation: titleShimmer 3s infinite linear;
+  background-clip: text; margin-bottom: 14px; line-height: 1.25;
 }
-@keyframes titleShimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
-.hero h1 .icon { -webkit-text-fill-color: initial; font-size: 0.65em; }
-.hero .tagline {
-  font-size: clamp(.95rem, 1.6vw, 1.15rem); color: var(--text-dim);
-  margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.7;
+.hero .subtitle {
+  font-size: clamp(.9rem, 1.6vw, 1.1rem); color: var(--text-dim);
+  margin-bottom: 36px; max-width: 540px; margin-left: auto; margin-right: auto;
+  line-height: 1.7;
 }
-.hero .tagline strong { color: var(--orange-bright); font-weight: 800; }
+.mission-brief {
+  display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 20px;
+}
+.mission-stat { text-align: center; }
+.mission-stat .num { font-size: 1.8rem; font-weight: 900; color: var(--amber); line-height: 1; }
+.mission-stat .num.special { background: linear-gradient(135deg, var(--amber), var(--amber-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.mission-stat .label { font-size: .72rem; color: var(--text-dim); margin-top: 4px; }
 
-/* Hero Mantra */
-.hero-mantra {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  flex-wrap: wrap; margin-bottom: 28px;
-}
-.hero-mantra .step {
-  background: var(--bg-elevated); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px 18px; text-align: center;
-  backdrop-filter: blur(8px); transition: all var(--ease);
-  position: relative; min-width: 130px;
-}
-.hero-mantra .step:hover { border-color: var(--orange); transform: translateY(-2px); }
-.hero-mantra .step .sn { font-size: .65rem; letter-spacing: 3px; color: var(--orange); margin-bottom: 5px; font-weight: 700; }
-.hero-mantra .step .st { font-size: .88rem; font-weight: 700; color: var(--text-bright); }
-.hero-mantra .arrow { font-size: 1.5rem; color: var(--text-faint); font-weight: 200; }
-.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
-.hero-stat { text-align: center; }
-.hero-stat .num { font-size: 2rem; font-weight: 900; color: var(--orange); font-family: 'Courier New', monospace; }
-.hero-stat .label { font-size: .75rem; color: var(--text-dim); }
-
-.scroll-indicator {
+.scroll-hint {
   position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  color: var(--text-faint); font-size: 11px; z-index: 2; animation: bob 2.4s ease-in-out infinite;
+  color: var(--text-subtle); font-size: 10px; display: flex;
+  flex-direction: column; align-items: center; gap: 3px;
+  animation: bounce 2.2s infinite; z-index: 2; cursor: pointer;
 }
-@keyframes bob { 0%,100%{opacity:0.5;transform:translateX(-50%) translateY(0)} 50%{opacity:1;transform:translateX(-50%) translateY(7px)} }
+@keyframes bounce {
+  0%,100%{transform:translateX(-50%) translateY(0);opacity:.5}
+  50%{transform:translateX(-50%) translateY(8px);opacity:1}
+}
 
-/* ===== SECTION FRAMING ===== */
+/* ===== SECTION COMMON ===== */
 .section {
-  position: relative; padding: 80px 20px 90px;
+  position: relative; padding: 80px 20px;
   display: flex; flex-direction: column; align-items: center;
 }
-.section::before {
-  content: ''; position: absolute; top: 0; left: 5%; right: 5%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(245,158,11,0.22), transparent);
+.section-divider {
+  width: 120px; height: 2px; margin: 0 auto;
+  background: linear-gradient(90deg, transparent, rgba(245,158,11,.35), transparent);
 }
-.section-header { text-align: center; margin-bottom: 50px; max-width: 680px; }
+.section-header { text-align: center; margin-bottom: 48px; max-width: 660px; }
 .section-num {
-  font-size: .68rem; letter-spacing: 4px; text-transform: uppercase;
-  color: var(--orange); margin-bottom: 10px; font-family: 'Courier New', monospace;
+  font-size: .7rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 8px; font-weight: 700;
 }
 .section-header h2 {
-  font-size: clamp(1.3rem, 2.8vw, 2rem); font-weight: 800; margin-bottom: 10px;
-  background: linear-gradient(135deg, #e4e2f0, var(--text-dim));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem); font-weight: 800;
+  background: linear-gradient(135deg, #ece8f2, var(--text-dim));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 10px;
 }
-.section-header p { color: var(--text-dim); font-size: .92rem; max-width: 540px; margin: 0 auto; line-height: 1.7; }
-.section-content { max-width: 1100px; width: 100%; }
+.section-header p { color: var(--text-dim); font-size: .9rem; max-width: 520px; margin: 0 auto; line-height: 1.65; }
+.section-content { max-width: 1080px; width: 100%; position: relative; }
 
-.s1 .section-header h2 { background-image: linear-gradient(135deg, #f87171, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.s2 .section-header h2 { background-image: linear-gradient(135deg, #2dd4bf, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+/* Section accent colors */
+.s1 .section-num { color: var(--red); }
+.s1 .section-header h2 { background-image: linear-gradient(135deg, #f87171, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s2 .section-num { color: var(--blue); }
+.s2 .section-header h2 { background-image: linear-gradient(135deg, #60a5fa, #2dd4bf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s3 .section-num { color: var(--purple); }
 .s3 .section-header h2 { background-image: linear-gradient(135deg, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.s4 .section-header h2 { background-image: linear-gradient(135deg, #fbbf24, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.s5 .section-header h2 { background-image: linear-gradient(135deg, #60a5fa, #2dd4bf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s4 .section-num { color: var(--teal); }
+.s4 .section-header h2 { background-image: linear-gradient(135deg, #2dd4bf, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s5 .section-num { color: var(--green); }
+.s5 .section-header h2 { background-image: linear-gradient(135deg, #4ade80, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s6 .section-num { color: var(--amber); }
 .s6 .section-header h2 { background-image: linear-gradient(135deg, #f59e0b, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-/* ================================================================
-   S1: AD vs TRUTH — 营销话术 vs 工程真相 (巨幅左右对比)
-   ================================================================ */
-.ad-truth-stage {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: var(--radius);
-  overflow: hidden; border: 1px solid var(--border); background: var(--bg-surface);
-  position: relative; min-height: 460px;
+/* ===== S1: MARKETING vs TRUTH ===== */
+.truth-theater {
+  display: flex; gap: 2px; min-height: 520px; position: relative;
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 60px rgba(0,0,0,.4);
 }
-.ad-truth-stage::after {
-  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
-  background: linear-gradient(180deg, var(--orange), transparent 40%, transparent 60%, var(--orange));
-  z-index: 2; transform: translateX(-50%);
+@media (max-width: 768px) { .truth-theater { flex-direction: column; min-height: auto; } }
+
+.truth-pane {
+  flex: 1; padding: 36px 28px; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center;
+  min-height: 360px;
 }
-.ad-truth-stage .vs-badge {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  width: 48px; height: 48px; border-radius: 50%; background: var(--bg);
-  border: 2px solid var(--orange); z-index: 3;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 14px; color: var(--orange);
-  box-shadow: 0 0 24px rgba(245,158,11,0.3);
+.truth-pane.marketing {
+  background: linear-gradient(160deg, #1a1020, #1a0a14);
+  border-right: 1px solid rgba(248,113,113,.18);
+}
+.truth-pane.engineering {
+  background: linear-gradient(160deg, #0a1a14, #0a1420);
 }
 
-.ad-side {
-  padding: 36px 28px; position: relative; overflow: hidden;
-  background: linear-gradient(160deg, rgba(248,113,113,0.04), rgba(245,158,11,0.03));
+.pane-label {
+  position: absolute; top: 16px; font-size: .68rem; letter-spacing: 3px;
+  text-transform: uppercase; font-weight: 700;
 }
-.ad-side::before {
-  content: '📢 营销话术'; position: absolute; top: 14px; left: 16px;
-  font-size: .65rem; letter-spacing: 2px; color: var(--red);
-  font-weight: 700; text-transform: uppercase;
-}
-.ad-side .ad-claim {
-  font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 800; color: #e8e4f4;
-  margin: 28px 0 16px; line-height: 1.5; position: relative;
-}
-.ad-side .ad-claim .highlight { color: var(--red); text-decoration: underline; text-decoration-color: rgba(248,113,113,0.3); }
-.ad-side .ad-buzzwords {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
-}
-.ad-side .ad-buzzwords span {
-  padding: 5px 12px; border-radius: 14px; font-size: .72rem;
-  border: 1px dashed rgba(248,113,113,0.25); color: var(--red); opacity: 0.7;
-  animation: buzzGlitch 3s infinite;
-}
-@keyframes buzzGlitch {
-  0%,95%,100%{transform:translate(0,0);opacity:0.7}
-  95.5%{transform:translate(-2px,1px);opacity:1}
-  96%{transform:translate(2px,-1px);opacity:0.8}
-}
-.ad-side .ad-small { font-size: .7rem; color: var(--text-faint); margin-top: 10px; font-style: italic; }
+.marketing .pane-label { left: 24px; color: var(--red); }
+.engineering .pane-label { right: 24px; color: var(--green); }
 
-.truth-side {
-  padding: 36px 28px; position: relative; overflow: hidden;
-  background: linear-gradient(200deg, rgba(74,222,128,0.04), rgba(45,212,191,0.03));
+.pane-headline {
+  font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; line-height: 1.4;
 }
-.truth-side::before {
-  content: '🔧 工程真相'; position: absolute; top: 14px; right: 16px;
-  font-size: .65rem; letter-spacing: 2px; color: var(--green);
-  font-weight: 700; text-transform: uppercase;
-}
-.truth-side .truth-header {
-  font-size: 1.1rem; font-weight: 800; color: var(--text-bright); margin: 28px 0 14px;
-}
-.truth-side .truth-params { display: flex; flex-direction: column; gap: 10px; }
-.truth-side .tp-row {
-  display: flex; align-items: baseline; gap: 10px; padding: 8px 12px;
-  background: rgba(74,222,128,0.04); border-radius: 6px; border-left: 3px solid var(--green);
-  font-size: .84rem;
-}
-.truth-side .tp-row .tp-name { color: var(--text-dim); min-width: 80px; font-size: .76rem; }
-.truth-side .tp-row .tp-real { color: var(--green); font-weight: 700; }
-.truth-side .tp-row .tp-fake { color: var(--red); text-decoration: line-through; opacity: 0.5; font-size: .76rem; margin-left: auto; }
-.truth-verdict {
-  margin-top: 16px; padding: 12px 16px; border-radius: 8px;
-  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.12);
-  font-size: .82rem; color: var(--text-dim); line-height: 1.7;
-}
-.truth-verdict strong { color: var(--orange); }
+.marketing .pane-headline { color: #fbbf24; }
+.engineering .pane-headline { color: var(--green); }
 
-.at-selector {
-  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 24px;
+.pane-claims { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.claim-item {
+  display: flex; align-items: flex-start; gap: 8px; font-size: .84rem;
+  padding: 8px 12px; border-radius: var(--radius-xs);
+  transition: all var(--ease-out);
 }
-.at-selector button {
-  padding: 8px 16px; border-radius: 20px; font-size: .82rem; cursor: pointer;
-  background: var(--bg-elevated); border: 1px solid var(--border);
-  color: var(--text-dim); transition: all var(--ease-out); font-family: inherit;
-  display: flex; align-items: center; gap: 6px;
+.marketing .claim-item {
+  background: rgba(248,113,113,.06); color: #fca5a5;
+  border-left: 2px solid rgba(248,113,113,.3);
 }
-.at-selector button:hover { border-color: var(--border-active); color: var(--text-bright); }
-.at-selector button.active {
-  border-color: var(--orange); color: var(--orange); background: rgba(245,158,11,0.08);
-  box-shadow: 0 0 12px rgba(245,158,11,0.1);
+.engineering .claim-item {
+  background: rgba(74,222,128,.06); color: #86efac;
+  border-left: 2px solid rgba(74,222,128,.3);
+}
+.claim-icon { font-size: .9rem; flex-shrink: 0; margin-top: 1px; }
+
+.pane-verdict {
+  font-size: .8rem; line-height: 1.65; padding: 14px 16px;
+  border-radius: var(--radius-sm); margin-top: auto;
+}
+.marketing .pane-verdict {
+  background: rgba(248,113,113,.08); color: #fca5a5;
+  border: 1px dashed rgba(248,113,113,.18);
+}
+.engineering .pane-verdict {
+  background: rgba(74,222,128,.06); color: #bbf7d0;
+  border: 1px solid rgba(74,222,128,.15);
+}
+.param-highlight { font-weight: 800; color: var(--green); }
+
+/* Shatter overlay */
+.shatter-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 5; opacity: 0;
+  transition: opacity .3s;
+}
+.shatter-overlay.cracked {
+  opacity: 1;
+  background:
+    linear-gradient(135deg, transparent 30%, rgba(255,255,255,.08) 30.5%, transparent 31%),
+    linear-gradient(225deg, transparent 45%, rgba(255,255,255,.06) 45.5%, transparent 46%),
+    linear-gradient(315deg, transparent 55%, rgba(255,255,255,.07) 55.5%, transparent 56%),
+    linear-gradient(45deg, transparent 68%, rgba(255,255,255,.05) 68.5%, transparent 69%);
+  animation: crackSpread .7s ease-out;
+}
+@keyframes crackSpread {
+  0% { opacity: 0; }
+  35% { opacity: 1; }
+  100% { opacity: .45; }
 }
 
-@keyframes shatterIn {
-  0%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);opacity:0;transform:scale(0.95)}
-  40%{clip-path:polygon(8% 2%,92% -4%,104% 94%,-2% 104%);opacity:1;transform:scale(1)}
-  100%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);opacity:1;transform:scale(1)}
-}
-.ad-truth-stage.shattering .truth-side { animation: shatterIn 0.7s var(--ease-spring); }
-
-@media (max-width: 768px) {
-  .ad-truth-stage { grid-template-columns: 1fr; }
-  .ad-truth-stage::after { left: 0; right: 0; top: 50%; bottom: auto; width: 100%; height: 2px; transform: none; }
-  .ad-truth-stage .vs-badge { top: auto; transform: translate(-50%, -50%); }
-  .ad-side, .truth-side { padding: 24px 18px; }
-}
-
-/* ================================================================
-   S2: COST CROSS-SECTION — 成本剖面图 (X-Ray Cutaway)
-   ================================================================ */
-.xray-gallery { display: flex; flex-direction: column; gap: 50px; }
-.xray-item {
-  position: relative; background: var(--bg-surface); border-radius: var(--radius);
-  border: 1px solid var(--border); overflow: hidden;
-}
-.xray-item .xray-header {
-  display: flex; align-items: center; gap: 14px; padding: 22px 24px;
-  border-bottom: 1px solid var(--border);
-}
-.xray-item .xray-icon { font-size: 2.6rem; flex-shrink: 0; }
-.xray-item .xray-info { flex: 1; }
-.xray-item .xray-name { font-size: 1.15rem; font-weight: 800; color: var(--text-bright); margin-bottom: 4px; }
-.xray-item .xray-claim { font-size: .78rem; color: var(--red); }
-.xray-item .xray-price { font-size: 1.1rem; font-weight: 900; color: var(--orange); text-align: right; }
-.xray-body { padding: 0; position: relative; }
-.xray-cut {
-  display: grid; grid-template-columns: 1fr 1fr; min-height: 220px;
-}
-@media (max-width: 640px) { .xray-cut { grid-template-columns: 1fr; } }
-.xray-cut .xray-visual {
-  position: relative; display: flex; align-items: center; justify-content: center;
-  padding: 30px; overflow: hidden;
-  background: radial-gradient(ellipse at center, rgba(96,165,250,0.06) 0%, transparent 70%);
-}
-.xray-cut .xray-visual .xray-outline {
-  width: 140px; height: 180px; border: 2px dashed rgba(96,165,250,0.3); border-radius: 16px;
-  position: relative; display: flex; align-items: center; justify-content: center;
-}
-.xray-cut .xray-visual .xray-outline .xray-inner {
-  width: 100px; height: 130px; border: 1.5px dashed rgba(96,165,250,0.2); border-radius: 10px;
-  display: flex; align-items: center; justify-content: center; font-size: 3rem;
-}
-.xray-scanline {
-  position: absolute; top: 0; left: 10%; right: 10%; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(96,165,250,0.6), transparent);
-  animation: scanDown 3s ease-in-out infinite; pointer-events: none;
+.scan-line {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(96,165,250,.45), transparent);
+  animation: scanDown 4s ease-in-out infinite; pointer-events: none; z-index: 3;
 }
 @keyframes scanDown {
-  0%{top:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0}
+  0% { top: -2px; opacity: 1; }
+  85% { top: calc(100% + 2px); opacity: 0; }
+  100% { top: calc(100% + 2px); opacity: 0; }
 }
 
-.xray-cut .xray-breakdown { padding: 24px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
-.xray-breakdown .xb-row { display: flex; align-items: center; gap: 10px; font-size: .82rem; }
-.xray-breakdown .xb-label { min-width: 80px; color: var(--text-dim); font-size: .76rem; }
-.xray-breakdown .xb-bar-wrap { flex: 1; height: 20px; background: var(--bg); border-radius: 4px; overflow: hidden; position: relative; }
-.xray-breakdown .xb-bar {
-  height: 100%; border-radius: 4px; transition: width 1.2s var(--ease);
-  position: relative; display: flex; align-items: center; padding-left: 8px;
-  font-size: .7rem; font-weight: 700; color: rgba(255,255,255,0.8);
+.truth-nav {
+  display: flex; gap: 6px; justify-content: center; margin-top: 16px; flex-wrap: wrap; align-items: center;
 }
-.xray-breakdown .xb-bar.material { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-.xray-breakdown .xb-bar.marketing { background: linear-gradient(90deg, #ef4444, #f87171); }
-.xray-breakdown .xb-bar.rd { background: linear-gradient(90deg, #10b981, #4ade80); }
-.xray-breakdown .xb-bar.profit { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-.xray-breakdown .xb-pct { font-size: .76rem; font-weight: 700; min-width: 40px; text-align: right; }
-.xray-breakdown .xb-pct.mat { color: var(--blue); }
-.xray-breakdown .xb-pct.mkt { color: var(--red); }
-.xray-breakdown .xb-pct.rd { color: var(--green); }
-.xray-breakdown .xb-pct.prf { color: var(--orange-bright); }
+.truth-dot {
+  width: 32px; height: 3px; border-radius: 2px; background: var(--border);
+  cursor: pointer; transition: all var(--ease-out); border: none;
+}
+.truth-dot.active { background: var(--amber); width: 48px; }
+.truth-counter { font-size: .7rem; color: var(--text-dim); margin-left: 10px; }
 
-.xray-insight {
-  padding: 18px 24px; margin: 0 24px 24px; border-radius: 10px;
-  background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.1);
-  font-size: .82rem; color: var(--text-dim); line-height: 1.7;
+/* ===== S2: COST X-RAY ===== */
+.xray-stage { display: flex; gap: 20px; flex-wrap: wrap; }
+.xray-viewport {
+  flex: 1; min-width: 300px; position: relative;
+  background: #080c18; border-radius: var(--radius);
+  border: 2px solid var(--border); overflow: hidden;
+  min-height: 420px; display: flex; align-items: center; justify-content: center;
 }
-.xray-insight strong { color: var(--orange); }
-.xray-cost-total {
-  display: flex; align-items: center; gap: 8px; padding: 12px 24px 18px;
-  font-size: .84rem; color: var(--text-bright);
-}
-.xray-cost-total .material-cost { color: var(--green); font-weight: 800; }
-.xray-cost-total .premium-mult { color: var(--red); font-weight: 800; }
-
-/* ================================================================
-   S3: IQ TAX GAUNTLET — 智商税闯关 (带进度条和生命系统的检测游戏)
-   ================================================================ */
-.gauntlet-container {
-  background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border);
-  padding: 28px; position: relative; overflow: hidden;
-}
-.gauntlet-progress {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 28px;
-}
-.gauntlet-progress .gp-track { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
-.gauntlet-progress .gp-fill {
-  height: 100%; background: linear-gradient(90deg, #7c3aed, #a78bfa, #f472b6);
-  border-radius: 4px; transition: width 0.5s var(--ease); width: 0%;
-}
-.gauntlet-progress .gp-level {
-  font-size: .72rem; color: var(--purple); font-weight: 700; white-space: nowrap;
-  font-family: 'Courier New', monospace;
-}
-.gauntlet-lives {
-  display: flex; align-items: center; gap: 4px; margin-bottom: 20px;
-  justify-content: center; font-size: .78rem; color: var(--text-dim);
-}
-.gauntlet-lives .heart { font-size: 1.2rem; transition: all var(--ease); }
-.gauntlet-lives .heart.lost { opacity: 0.2; filter: grayscale(1); }
-
-.gauntlet-level { text-align: center; margin-bottom: 20px; }
-.gauntlet-level .gl-badge {
-  display: inline-block; padding: 4px 16px; border-radius: 14px;
-  background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2);
-  font-size: .7rem; color: var(--purple); letter-spacing: 2px; margin-bottom: 12px;
-}
-.gauntlet-level .gl-title { font-size: 1.1rem; font-weight: 800; color: var(--text-bright); margin-bottom: 10px; }
-.gauntlet-level .gl-ad {
-  font-size: .9rem; color: var(--text-dim); padding: 14px 20px;
-  background: var(--bg-elevated); border-radius: 10px;
-  border: 1px dashed var(--border); display: inline-block; max-width: 620px;
-  line-height: 1.6; position: relative;
-}
-.gauntlet-level .gl-ad::before {
-  content: '"'; position: absolute; top: -8px; left: 12px;
-  font-size: 2rem; color: var(--red); opacity: 0.3; font-family: serif;
-}
-
-.gauntlet-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-@media (max-width: 540px) { .gauntlet-choices { grid-template-columns: 1fr; } }
-.gauntlet-choices button {
-  padding: 16px 18px; border-radius: 10px; cursor: pointer;
-  border: 2px solid var(--border); background: var(--bg-elevated);
-  color: var(--text); font-size: .85rem; text-align: left;
-  transition: all var(--ease-out); font-family: inherit;
-  position: relative; overflow: hidden;
-}
-.gauntlet-choices button:hover { border-color: var(--purple); background: rgba(167,139,250,0.06); }
-.gauntlet-choices button.correct { border-color: var(--green); background: rgba(74,222,128,0.08); animation: correctPulse 0.6s; }
-.gauntlet-choices button.wrong { border-color: var(--red); background: rgba(248,113,113,0.08); animation: shake 0.5s; }
-@keyframes correctPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-
-.gauntlet-feedback {
-  text-align: center; padding: 16px; border-radius: 10px;
-  background: var(--bg-elevated); border: 1px solid var(--border);
-  min-height: 56px; display: flex; align-items: center; justify-content: center;
-  font-size: .85rem; margin-bottom: 14px; transition: all var(--ease-out); line-height: 1.6;
-}
-.gauntlet-feedback.correct-fb { border-color: var(--green); color: var(--green); background: rgba(74,222,128,0.06); }
-.gauntlet-feedback.wrong-fb { border-color: var(--red); color: var(--red); background: rgba(248,113,113,0.06); }
-
-.gauntlet-score {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  font-size: .82rem; color: var(--text-dim);
-}
-.gauntlet-score .gs-num { font-weight: 900; font-size: 1.2rem; color: var(--purple); font-family: 'Courier New', monospace; }
-.gauntlet-next {
-  display: block; margin: 14px auto 0; padding: 10px 28px; border-radius: 22px;
-  background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff;
-  border: none; cursor: pointer; font-family: inherit; font-size: .84rem; font-weight: 700;
-  transition: all var(--ease-out);
-}
-.gauntlet-next:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(167,139,250,0.3); }
-
-.gauntlet-rank { text-align: center; padding: 20px; }
-.gauntlet-rank .gr-badge { font-size: 3rem; margin-bottom: 12px; animation: rankBounce 1s var(--ease-spring); }
-@keyframes rankBounce { 0%{transform:scale(0.5);opacity:0} 100%{transform:scale(1);opacity:1} }
-.gauntlet-rank .gr-rank { font-size: 1.4rem; font-weight: 900; color: var(--purple); margin-bottom: 8px; }
-.gauntlet-rank .gr-msg { font-size: .88rem; color: var(--text-dim); margin-bottom: 16px; line-height: 1.6; }
-.gauntlet-retry {
-  padding: 8px 24px; border-radius: 20px; background: var(--bg-elevated); color: var(--purple);
-  border: 1px solid var(--purple); cursor: pointer; font-family: inherit; font-size: .82rem;
-  transition: all var(--ease-out);
-}
-.gauntlet-retry:hover { background: rgba(167,139,250,0.1); }
-
-/* ================================================================
-   S4: THREE-STEP METHOD — 参数思维三步法 (三栏流程)
-   ================================================================ */
-.method-flow {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
-  border-radius: var(--radius); overflow: hidden;
-  border: 1px solid var(--border); background: var(--bg-surface);
-}
-@media (max-width: 900px) { .method-flow { grid-template-columns: 1fr; } }
-.method-step {
-  padding: 32px 24px; position: relative; border-right: 1px solid var(--border);
+.xray-silhouette {
+  position: relative; width: 220px; height: 280px;
+  display: flex; align-items: center; justify-content: center;
   transition: all var(--ease);
 }
-.method-step:last-child { border-right: none; }
-@media (max-width: 900px) { .method-step { border-right: none; border-bottom: 1px solid var(--border); } }
-.method-step .ms-num {
-  font-size: 3rem; font-weight: 900; color: var(--text-faint); opacity: 0.15;
-  position: absolute; top: 12px; right: 18px; line-height: 1;
+.xray-silhouette .product-icon {
+  font-size: 5rem; position: relative; z-index: 2;
+  filter: brightness(0.5); transition: all .8s;
 }
-.method-step .ms-icon { font-size: 2rem; margin-bottom: 12px; }
-.method-step .ms-label {
-  font-size: .68rem; letter-spacing: 3px; color: var(--orange); margin-bottom: 8px;
-  font-weight: 700; text-transform: uppercase;
-}
-.method-step .ms-title { font-size: 1.05rem; font-weight: 800; color: var(--text-bright); margin-bottom: 10px; }
-.method-step .ms-desc { font-size: .82rem; color: var(--text-dim); line-height: 1.65; margin-bottom: 14px; }
-
-.ms-finder { display: flex; flex-direction: column; gap: 8px; }
-.ms-finder input {
-  width: 100%; padding: 10px 14px; border-radius: 8px;
-  background: var(--bg); border: 1px solid var(--border); color: var(--text-bright);
-  font-size: .84rem; font-family: inherit; outline: none;
-  transition: border-color var(--ease-out);
-}
-.ms-finder input:focus { border-color: var(--orange); }
-.ms-finder .ms-suggestions { display: flex; flex-wrap: wrap; gap: 4px; }
-.ms-finder .ms-suggestions button {
-  padding: 4px 10px; border-radius: 12px; font-size: .7rem;
-  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15);
-  color: var(--orange); cursor: pointer; font-family: inherit; transition: all var(--ease-out);
-}
-.ms-finder .ms-suggestions button:hover { background: rgba(245,158,11,0.15); }
-
-.ms-gauge { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.ms-gauge .ms-gauge-ring {
-  width: 100px; height: 100px; border-radius: 50%;
-  border: 6px solid var(--border); position: relative;
-  display: flex; align-items: center; justify-content: center;
-}
-.ms-gauge .ms-gauge-ring::after {
-  content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px;
-  border-radius: 50%; border: 6px solid transparent;
-  border-top-color: var(--teal); border-right-color: var(--teal);
-  transform: rotate(-30deg);
-}
-.ms-gauge .ms-gauge-val { font-size: 1.3rem; font-weight: 900; color: var(--teal); font-family: 'Courier New', monospace; }
-.ms-gauge .ms-gauge-label { font-size: .72rem; color: var(--text-dim); text-align: center; }
-
-.ms-calc { display: flex; flex-direction: column; gap: 8px; }
-.ms-calc .ms-calc-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px; background: var(--bg); border-radius: 8px; font-size: .82rem;
-}
-.ms-calc .ms-calc-row .ms-cr-label { color: var(--text-dim); }
-.ms-calc .ms-calc-row .ms-cr-val { font-weight: 700; }
-.ms-calc .ms-calc-row .ms-cr-val.bad { color: var(--red); }
-.ms-calc .ms-calc-result {
-  padding: 12px; border-radius: 8px; background: rgba(248,113,113,0.08);
-  border: 1px solid rgba(248,113,113,0.15); text-align: center;
-  font-size: .82rem; color: var(--red); font-weight: 700;
+.xray-silhouette.scanned .product-icon {
+  filter: brightness(1) drop-shadow(0 0 20px rgba(96,165,250,.5));
 }
 
-/* ================================================================
-   S5: SCENE MAP — 避坑场景地图 (按通勤/居家/数码/健康场景)
-   ================================================================ */
-.scene-map { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 700px) { .scene-map { grid-template-columns: 1fr; } }
-.scene-zone {
-  border-radius: var(--radius); border: 1px solid var(--border);
-  background: var(--bg-surface); overflow: hidden;
-  cursor: pointer; transition: all var(--ease-out);
+.xray-beam {
+  position: absolute; left: 0; right: 0; height: 3px; z-index: 4;
+  background: linear-gradient(90deg, transparent, #60a5fa, rgba(96,165,250,.6), #60a5fa, transparent);
+  box-shadow: 0 0 30px rgba(96,165,250,.5), 0 0 80px rgba(96,165,250,.2);
+  pointer-events: none;
+  animation: xrayScan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
-.scene-zone:hover { border-color: var(--border-active); box-shadow: 0 4px 24px rgba(0,0,0,.3); }
-.scene-zone .sz-header {
-  padding: 18px 20px; display: flex; align-items: center; gap: 12px;
-  border-bottom: 1px solid var(--border);
+@keyframes xrayScan {
+  0% { top: 10%; opacity: 0; }
+  5% { opacity: 1; }
+  90% { top: 90%; opacity: 1; }
+  100% { top: 90%; opacity: 0; }
 }
-.scene-zone .sz-icon { font-size: 2rem; }
-.scene-zone .sz-title { font-size: 1rem; font-weight: 800; color: var(--text-bright); }
-.scene-zone .sz-sub { font-size: .72rem; color: var(--text-dim); }
-.scene-zone .sz-hotspots {
-  padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
-  max-height: 0; overflow: hidden; transition: max-height 0.5s var(--ease), padding 0.5s;
-}
-.scene-zone.expanded .sz-hotspots { max-height: 500px; padding: 14px 20px; }
-.scene-zone .sz-hotspot {
-  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-  background: var(--bg-elevated); border-radius: 8px; border-left: 3px solid transparent;
-  transition: all var(--ease-out); font-size: .82rem;
-}
-.scene-zone.commute .sz-hotspot { border-left-color: var(--blue); }
-.scene-zone.home .sz-hotspot { border-left-color: var(--teal); }
-.scene-zone.digital .sz-hotspot { border-left-color: var(--purple); }
-.scene-zone.health .sz-hotspot { border-left-color: var(--green); }
-.sz-hotspot .szh-icon { font-size: 1.2rem; flex-shrink: 0; }
-.sz-hotspot .szh-info { flex: 1; }
-.sz-hotspot .szh-product { font-weight: 700; color: var(--text-bright); font-size: .84rem; }
-.sz-hotspot .szh-tip { font-size: .74rem; color: var(--text-dim); }
-.sz-hotspot .szh-risk { font-size: .68rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
-.sz-hotspot .szh-risk.high { background: rgba(248,113,113,0.15); color: var(--red); }
-.sz-hotspot .szh-risk.medium { background: rgba(251,191,36,0.12); color: var(--orange-bright); }
-.sz-hotspot .szh-risk.low { background: rgba(74,222,128,0.12); color: var(--green); }
 
-/* ================================================================
-   S6: MISSION DOSSIER — 任务档案 (时间线风格，非卡片罗列)
-   ================================================================ */
-.dossier-container { max-width: 800px; margin: 0 auto; }
-.dossier-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; justify-content: center; }
-.dossier-filters button {
-  padding: 5px 14px; border-radius: 14px; font-size: .72rem; cursor: pointer;
-  border: 1px solid var(--border); color: var(--text-dim); background: transparent;
-  transition: all var(--ease-out); font-family: inherit;
+.xray-callout {
+  position: absolute; z-index: 5; pointer-events: none;
+  opacity: 0; transition: opacity .5s;
 }
-.dossier-filters button:hover, .dossier-filters button.active {
-  border-color: var(--orange); color: var(--orange); background: rgba(245,158,11,0.06);
-}
-.dossier-timeline { position: relative; padding-left: 28px; }
-.dossier-timeline::before {
-  content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
-  width: 1px; background: linear-gradient(180deg, var(--orange), var(--border), transparent);
-}
-.dossier-entry {
-  position: relative; padding: 14px 0 14px 20px; cursor: pointer;
-  border-bottom: 1px solid rgba(120,124,150,0.05); transition: all var(--ease-out);
-}
-.dossier-entry::before {
-  content: ''; position: absolute; left: -22px; top: 20px;
+.xray-callout.visible { opacity: 1; }
+.xray-callout .callout-dot {
   width: 8px; height: 8px; border-radius: 50%;
-  background: var(--text-faint); border: 2px solid var(--bg);
+  background: var(--blue); box-shadow: 0 0 12px var(--blue-glow);
+  margin: 0 auto 3px;
+}
+.xray-callout .callout-label {
+  text-align: center; white-space: nowrap;
+  background: rgba(8,12,24,.92); padding: 3px 8px; border-radius: 8px;
+  border: 1px solid rgba(96,165,250,.25); color: var(--blue);
+  font-weight: 700; font-size: .68rem;
+}
+
+.xray-readout {
+  flex: 0 0 320px; display: flex; flex-direction: column; gap: 14px;
+}
+@media (max-width: 768px) { .xray-readout { flex: 1 1 100%; } }
+.xray-readout .readout-header {
+  font-size: .75rem; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.xray-readout .readout-header .blink-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+  animation: blink 1s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+.readout-product { font-size: 1.1rem; font-weight: 800; color: var(--text-bright); }
+.readout-claim { font-size: .78rem; color: var(--red); margin-bottom: 8px; }
+
+.readout-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  border-radius: var(--radius-xs); background: var(--bg-surface);
+  border: 1px solid var(--border); font-size: .8rem;
+}
+.readout-item .ri-bar {
+  height: 6px; border-radius: 3px; transition: width 1s var(--ease); flex-shrink: 0;
+}
+.readout-item .ri-bar.material { background: var(--blue); }
+.readout-item .ri-bar.marketing { background: var(--red); }
+.readout-item .ri-bar.rd { background: var(--green); }
+.readout-item .ri-bar.profit { background: var(--amber); }
+.readout-item .ri-label { flex: 1; color: var(--text-dim); font-size: .74rem; }
+.readout-item .ri-pct { font-weight: 700; font-size: .8rem; min-width: 40px; text-align: right; }
+.readout-item .ri-pct.mat { color: var(--blue); }
+.readout-item .ri-pct.mkt { color: var(--red); }
+.readout-item .ri-pct.rd { color: var(--green); }
+.readout-item .ri-pct.prf { color: var(--amber); }
+
+.readout-insight {
+  font-size: .76rem; line-height: 1.6; padding: 12px;
+  border-radius: var(--radius-sm); background: rgba(96,165,250,.05);
+  border-left: 3px solid var(--blue); color: var(--text-dim);
+  margin-top: auto;
+}
+.readout-insight strong { color: var(--amber); }
+
+.xray-products { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.xray-prod-btn {
+  padding: 6px 14px; border-radius: 16px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim); cursor: pointer;
+  font-family: inherit; font-size: .74rem; transition: all var(--ease-out);
+}
+.xray-prod-btn:hover, .xray-prod-btn.active {
+  border-color: var(--blue); color: var(--blue); background: rgba(96,165,250,.06);
+}
+
+/* ===== S3: IQ TAX CHALLENGE ===== */
+.challenge-container {
+  background: var(--bg-surface); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 30px; position: relative; overflow: hidden;
+}
+.challenge-container::before {
+  content: ''; position: absolute; top: -50%; right: -50%; width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(167,139,250,.04), transparent 70%); pointer-events: none;
+}
+
+.level-track {
+  display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 28px;
+}
+.level-node {
+  display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;
+}
+.level-node .ln-circle {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 800;
+  border: 3px solid var(--border); background: var(--bg-elevated);
+  color: var(--text-dim); transition: all var(--ease);
+}
+.level-node.completed .ln-circle {
+  border-color: var(--green); color: var(--green);
+  box-shadow: 0 0 18px rgba(74,222,128,.25);
+}
+.level-node.active .ln-circle {
+  border-color: var(--purple); color: var(--purple);
+  box-shadow: 0 0 22px rgba(167,139,250,.3); animation: levelPulse 2s infinite;
+}
+@keyframes levelPulse { 0%,100%{box-shadow:0 0 22px rgba(167,139,250,.3)} 50%{box-shadow:0 0 36px rgba(167,139,250,.5)} }
+.level-node.locked .ln-circle {
+  border-color: var(--border); color: var(--text-subtle); opacity: .5;
+}
+.level-node .ln-name { font-size: .7rem; margin-top: 6px; font-weight: 700; color: var(--text-dim); }
+.level-node.active .ln-name { color: var(--purple); }
+.level-node.completed .ln-name { color: var(--green); }
+.level-bridge {
+  width: 50px; height: 2px; background: var(--border); margin: 0 6px; margin-bottom: 24px;
+  transition: background .5s;
+}
+.level-bridge.done { background: var(--green); }
+
+.challenge-progress {
+  height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 24px; overflow: hidden;
+}
+.challenge-progress .cp-fill {
+  height: 100%; background: linear-gradient(90deg, var(--purple), var(--pink));
+  transition: width .5s var(--ease); border-radius: 2px;
+}
+.cp-label { font-size: .7rem; color: var(--text-dim); text-align: right; margin-top: 4px; }
+
+.challenge-question { text-align: center; margin-bottom: 20px; }
+.challenge-question .cq-badge {
+  display: inline-block; padding: 3px 14px; border-radius: 14px;
+  background: rgba(167,139,250,.10); border: 1px solid rgba(167,139,250,.2);
+  font-size: .7rem; color: var(--purple); margin-bottom: 12px; letter-spacing: 1px;
+}
+.challenge-question .cq-title { font-size: 1rem; font-weight: 800; color: var(--text-bright); margin-bottom: 8px; }
+.challenge-question .cq-adcopy {
+  font-size: .84rem; color: var(--text-dim); padding: 12px 18px;
+  background: var(--bg-elevated); border-radius: var(--radius-sm);
+  border: 1px dashed var(--border); display: inline-block; max-width: 560px;
+  line-height: 1.55;
+}
+
+.challenge-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+@media (max-width: 500px) { .challenge-options { grid-template-columns: 1fr; } }
+.challenge-opt {
+  padding: 14px 18px; border-radius: var(--radius-sm); cursor: pointer;
+  border: 2px solid var(--border); background: var(--bg-elevated);
+  transition: all var(--ease-out); text-align: left; font-family: inherit;
+  color: var(--text); font-size: .82rem; line-height: 1.5;
+}
+.challenge-opt:hover { border-color: var(--purple); background: rgba(167,139,250,.05); }
+.challenge-opt.correct { border-color: var(--green); background: rgba(74,222,128,.08); animation: pulse .5s; }
+.challenge-opt.wrong { border-color: var(--red); background: rgba(248,113,113,.08); }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+
+.challenge-feedback {
+  text-align: center; padding: 14px 18px; border-radius: var(--radius-sm);
+  min-height: 50px; display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; line-height: 1.6; transition: all var(--ease-out);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+}
+.challenge-feedback.correct-fb { border-color: var(--green); color: var(--green); }
+.challenge-feedback.wrong-fb { border-color: var(--red); color: var(--red); }
+
+.challenge-score-display {
+  display: flex; align-items: center; justify-content: space-between; margin-top: 14px;
+  font-size: .78rem; color: var(--text-dim);
+}
+.challenge-score-display .score-val { font-weight: 900; font-size: 1.1rem; color: var(--purple); }
+.challenge-next {
+  display: block; margin: 14px auto 0; padding: 8px 28px; border-radius: 20px;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff;
+  border: none; cursor: pointer; font-family: inherit; font-size: .82rem;
   transition: all var(--ease-out);
 }
-.dossier-entry:hover { background: rgba(245,158,11,0.02); }
-.dossier-entry:hover::before { background: var(--orange); box-shadow: 0 0 8px rgba(245,158,11,.3); }
-.dossier-entry .de-id { font-size: .62rem; color: var(--orange); font-weight: 700; letter-spacing: 1px; margin-bottom: 3px; font-family: 'Courier New', monospace; }
-.dossier-entry .de-title { font-weight: 700; font-size: .9rem; color: var(--text-bright); margin-bottom: 4px; line-height: 1.4; }
-.dossier-entry .de-preview { font-size: .76rem; color: var(--text-dim); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.dossier-entry .de-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-.dossier-entry .de-tags span { font-size: .62rem; padding: 2px 7px; border-radius: 8px; background: rgba(245,158,11,0.06); color: var(--orange); border: 1px solid rgba(245,158,11,0.1); }
-.dossier-empty { text-align: center; color: var(--text-faint); padding: 40px; font-size: .88rem; }
+.challenge-next:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(167,139,250,.3); }
 
-/* ===== AGENT METER ===== */
-.agent-meter {
-  position: fixed; bottom: 18px; right: 18px; z-index: 999;
-  background: rgba(12,15,26,0.94); border: 1px solid var(--border);
-  border-radius: 16px; padding: 10px 14px; font-size: .72rem;
+/* ===== S4: PARAMETER BOOTCAMP ===== */
+.bootcamp-steps {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px;
+}
+@media (max-width: 768px) { .bootcamp-steps { grid-template-columns: 1fr; } }
+
+.bootcamp-tab {
+  padding: 22px 18px; border-radius: var(--radius); cursor: pointer;
+  background: var(--bg-surface); border: 2px solid var(--border);
+  text-align: center; transition: all var(--ease-out);
+}
+.bootcamp-tab:hover { border-color: var(--teal); }
+.bootcamp-tab.active { border-color: var(--teal); background: rgba(45,212,191,.06); box-shadow: 0 0 30px rgba(45,212,191,.08); }
+.bootcamp-tab.completed { border-color: var(--green); }
+.bootcamp-tab .bt-num { font-size: .65rem; letter-spacing: 2px; color: var(--teal); margin-bottom: 6px; font-weight: 700; }
+.bootcamp-tab .bt-title { font-weight: 800; font-size: .9rem; color: var(--text-bright); margin-bottom: 4px; }
+.bootcamp-tab .bt-desc { font-size: .7rem; color: var(--text-dim); line-height: 1.4; }
+.bootcamp-tab .bt-check { display: none; color: var(--green); font-size: .9rem; margin-top: 6px; }
+.bootcamp-tab.completed .bt-check { display: block; }
+
+.bootcamp-workspace {
+  background: var(--bg-surface); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 28px; min-height: 320px;
+  position: relative;
+}
+
+/* Step 1: param sort */
+.ph-product-pick { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.ph-pick-btn {
+  padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim); cursor: pointer;
+  font-family: inherit; font-size: .8rem; transition: all var(--ease-out);
+}
+.ph-pick-btn:hover, .ph-pick-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(45,212,191,.06); }
+
+.params-to-sort { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.param-token {
+  padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--bg-elevated); font-size: .78rem; cursor: pointer;
+  transition: all var(--ease-out); user-select: none; color: var(--text-dim);
+}
+.param-token:hover { border-color: var(--teal); }
+.param-token.selected-core { border-color: var(--green); background: rgba(74,222,128,.08); color: var(--green); }
+.param-token.selected-noise { border-color: var(--red); background: rgba(248,113,113,.08); color: var(--red); }
+
+.sort-bins { display: flex; gap: 14px; margin-top: 16px; }
+@media (max-width: 500px) { .sort-bins { flex-direction: column; } }
+.sort-bin {
+  flex: 1; min-height: 100px; padding: 12px; border-radius: var(--radius-sm);
+  border: 2px dashed var(--border); text-align: center; transition: all var(--ease-out);
+}
+.sort-bin.core-bin { border-color: rgba(74,222,128,.2); }
+.sort-bin.noise-bin { border-color: rgba(248,113,113,.2); }
+.sort-bin.highlight { border-color: var(--teal); background: rgba(45,212,191,.04); }
+.sort-bin .bin-label { font-size: .7rem; letter-spacing: 1px; margin-bottom: 8px; font-weight: 700; }
+.sort-bin .bin-label.core { color: var(--green); }
+.sort-bin .bin-label.noise { color: var(--red); }
+
+.sort-result {
+  font-size: .82rem; line-height: 1.65; padding: 14px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border); margin-top: 16px; display: none;
+}
+.sort-result.show { display: block; }
+.sort-result .sr-score { font-weight: 800; font-size: .9rem; color: var(--teal); }
+
+/* Step 2: standards */
+.standards-ref { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.standard-card {
+  background: var(--bg-elevated); border-radius: var(--radius-sm); padding: 16px;
+  border: 1px solid var(--border); text-align: center; transition: all var(--ease-out);
+}
+.standard-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.standard-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+.standard-card .sc-product { font-size: .84rem; font-weight: 800; color: var(--text-bright); margin-bottom: 4px; }
+.standard-card .sc-standard { font-size: .72rem; color: var(--teal); margin-bottom: 6px; }
+.standard-card .sc-tip { font-size: .68rem; color: var(--text-dim); line-height: 1.4; }
+
+/* Step 3: calculator */
+.premium-calc { max-width: 500px; margin: 0 auto; text-align: center; }
+.premium-calc .calc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+@media (max-width: 500px) { .premium-calc .calc-row { flex-direction: column; align-items: stretch; } }
+.calc-row label { font-size: .8rem; color: var(--text-dim); min-width: 90px; text-align: right; }
+@media (max-width: 500px) { .calc-row label { text-align: left; } }
+.calc-row input {
+  flex: 1; padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-bright); font-size: .9rem; font-family: inherit;
+}
+.calc-row input:focus { outline: none; border-color: var(--teal); }
+.calc-result {
+  padding: 18px; border-radius: var(--radius-sm); margin-top: 16px;
+  background: var(--bg-elevated); border: 1px solid var(--border); display: none;
+}
+.calc-result.show { display: block; }
+.calc-result .cr-material { font-size: .9rem; color: var(--blue); }
+.calc-result .cr-premium { font-size: 1.3rem; font-weight: 900; color: var(--red); margin: 8px 0; }
+.calc-result .cr-advice { font-size: .78rem; color: var(--text-dim); line-height: 1.6; }
+
+/* ===== S5: PITFALL MAP ===== */
+.pitfall-map {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative;
+}
+@media (max-width: 600px) { .pitfall-map { grid-template-columns: 1fr; } }
+.pitfall-map::before {
+  content: ''; position: absolute; top: 50%; left: 50%; width: 70px; height: 70px;
+  transform: translate(-50%,-50%); border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,158,11,.15), transparent 70%);
+  z-index: 0; pointer-events: none;
+}
+.pitfall-map::after {
+  content: '⚡'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-size: 1.8rem; z-index: 0; pointer-events: none;
+}
+
+.pitfall-zone {
+  position: relative; z-index: 1; padding: 24px; border-radius: var(--radius);
+  border: 1px solid var(--border); cursor: pointer; transition: all var(--ease-out);
+  background: var(--bg-surface); overflow: hidden;
+}
+.pitfall-zone:hover, .pitfall-zone.expanded { border-color: var(--amber); box-shadow: 0 8px 30px rgba(0,0,0,.35); transform: translateY(-2px); }
+.pitfall-zone.expanded { background: var(--bg-elevated); }
+.pitfall-zone .pz-icon { font-size: 2rem; margin-bottom: 8px; }
+.pitfall-zone .pz-name { font-size: 1rem; font-weight: 800; color: var(--text-bright); margin-bottom: 4px; }
+.pitfall-zone .pz-warning { font-size: .68rem; color: var(--red); letter-spacing: 1px; margin-bottom: 8px; }
+.pitfall-zone .pz-traps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.pz-traps .pz-trap {
+  font-size: .7rem; padding: 3px 10px; border-radius: 12px;
+  background: rgba(248,113,113,.08); color: var(--red);
+  border: 1px solid rgba(248,113,113,.15);
+}
+.pitfall-zone .pz-detail {
+  display: none; font-size: .78rem; color: var(--text-dim); line-height: 1.65;
+  padding-top: 12px; border-top: 1px solid var(--border); margin-top: 12px;
+}
+.pitfall-zone.expanded .pz-detail { display: block; }
+
+/* ===== S6: ARTICLE TIMELINE ===== */
+.article-search { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.article-search input {
+  flex: 1; min-width: 200px; padding: 10px 16px; border-radius: 22px;
+  background: var(--bg-surface); border: 1px solid var(--border);
+  color: var(--text-bright); font-size: .84rem; font-family: inherit;
+}
+.article-search input:focus { outline: none; border-color: var(--amber); }
+.article-search input::placeholder { color: var(--text-subtle); }
+
+.article-filters { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 18px; }
+.article-filters button {
+  padding: 5px 12px; border-radius: 14px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim); font-size: .7rem;
+  cursor: pointer; transition: all var(--ease-out); font-family: inherit;
+}
+.article-filters button:hover, .article-filters button.active {
+  border-color: var(--amber); color: var(--amber); background: rgba(245,158,11,.07);
+}
+
+.article-timeline { position: relative; padding-left: 24px; }
+.article-timeline::before {
+  content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(180deg, var(--amber), var(--border), var(--amber));
+}
+.timeline-item {
+  position: relative; margin-bottom: 10px; padding: 10px 14px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: all var(--ease-out); border: 1px solid transparent;
+  background: transparent;
+}
+.timeline-item:hover, .timeline-item.expanded {
+  background: var(--bg-surface); border-color: var(--border);
+}
+.timeline-item::before {
+  content: ''; position: absolute; left: -20px; top: 16px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--amber); box-shadow: 0 0 8px var(--amber-glow);
+}
+.timeline-item.consumer-hero::before { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+.timeline-item .ti-id { font-size: .62rem; color: var(--amber); font-weight: 700; letter-spacing: 1px; }
+.timeline-item .ti-title { font-size: .82rem; font-weight: 700; color: var(--text-bright); margin: 2px 0; }
+.timeline-item .ti-meta { font-size: .66rem; color: var(--text-dim); display: flex; gap: 8px; flex-wrap: wrap; }
+.timeline-item .ti-preview {
+  display: none; font-size: .74rem; color: var(--text-dim); line-height: 1.55;
+  margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+}
+.timeline-item.expanded .ti-preview { display: block; }
+.timeline-item .ti-consumer-badge {
+  display: inline-block; padding: 1px 6px; border-radius: 8px;
+  background: rgba(74,222,128,.10); color: var(--green);
+  font-size: .6rem; font-weight: 700;
+}
+.article-count { text-align: center; font-size: .72rem; color: var(--text-dim); margin-top: 14px; }
+
+/* ===== KNOWLEDGE METER ===== */
+.kmeter {
+  position: fixed; bottom: 16px; right: 16px; z-index: 999;
+  background: rgba(14,15,30,.94); border: 1px solid var(--border);
+  border-radius: 14px; padding: 10px 14px; font-size: .7rem;
   display: flex; align-items: center; gap: 8px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  transition: opacity 0.5s;
+  transition: opacity .5s;
 }
-.agent-meter .am-badge {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 3px solid var(--border); display: flex; align-items: center; justify-content: center;
-  font-size: .7rem; font-weight: 900; color: var(--orange); transition: all 0.6s;
+.kmeter .km-ring {
+  width: 32px; height: 32px; border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--border); transition: border-color .6s;
 }
-.agent-meter .am-badge.active { border-color: var(--orange); box-shadow: 0 0 14px rgba(245,158,11,.25); }
+.kmeter .km-ring.active { border-color: var(--amber); box-shadow: 0 0 14px var(--amber-glow); }
+.kmeter .km-pct { font-weight: 900; font-size: .7rem; color: var(--amber); }
 
 /* ===== FOOTER ===== */
 .footer {
-  text-align: center; padding: 44px 20px 30px;
-  border-top: 1px solid var(--border); color: var(--text-faint); font-size: .76rem;
+  text-align: center; padding: 44px 20px 28px;
+  border-top: 1px solid var(--border); color: var(--text-subtle); font-size: .74rem;
 }
-.footer a { color: var(--orange); text-decoration: none; }
+.footer a { color: var(--amber); text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
-.footer .footer-nav { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+.footer .footer-nav { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
 .footer .footer-nav a {
-  padding: 5px 12px; border-radius: 12px; border: 1px solid var(--border);
-  font-size: .73rem; transition: all var(--ease-out); color: var(--text-dim);
+  padding: 4px 12px; border-radius: 12px; border: 1px solid var(--border);
+  font-size: .7rem; transition: all var(--ease-out); color: var(--text-dim);
 }
-.footer .footer-nav a:hover { border-color: var(--orange); background: rgba(245,158,11,.06); text-decoration: none; color: var(--orange); }
-
-/* ===== REVEAL ===== */
-.reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s var(--ease); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.footer .footer-nav a:hover { border-color: var(--amber); background: rgba(245,158,11,.06); text-decoration: none; color: var(--amber); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .top-nav { padding: 8px 12px; }
-  .nav-title { display: none; }
+  .top-nav { padding: 6px 10px; gap: 6px; }
+  .breadcrumb { display: none; }
   .nav-sections { display: none; }
-  .section { padding: 50px 14px 60px; }
+  .section { padding: 50px 14px; }
   .hero h1 { font-size: 1.5rem; }
-  .hero-stats { gap: 14px; }
-  .hero-stat .num { font-size: 1.3rem; }
-  .hero-mantra { gap: 5px; }
-  .hero-mantra .step { padding: 10px 12px; min-width: 90px; }
-  .hero-mantra .step .st { font-size: .74rem; }
-  .hero-mantra .arrow { font-size: 1rem; }
-  .xray-cut { grid-template-columns: 1fr; }
-  .xray-item .xray-header { flex-direction: column; text-align: center; }
-  .xray-item .xray-price { text-align: center; }
-  .dossier-timeline { padding-left: 20px; }
-  .dossier-entry { padding-left: 16px; }
-  .dossier-entry::before { left: -18px; }
-  .agent-meter { bottom: 10px; right: 10px; padding: 8px 10px; font-size: .68rem; }
+  .mission-brief { gap: 14px; }
+  .mission-stat .num { font-size: 1.3rem; }
+  .truth-theater { flex-direction: column; }
+  .truth-pane { min-height: 240px; padding: 24px 18px; }
+  .xray-stage { flex-direction: column; }
+  .xray-readout { flex: 1; }
+  .bootcamp-steps { grid-template-columns: 1fr; }
+  .challenge-options { grid-template-columns: 1fr; }
+  .pitfall-map { grid-template-columns: 1fr; }
+  .kmeter { bottom: 8px; right: 8px; padding: 8px 10px; font-size: .64rem; }
 }
+
 @media (max-width: 480px) {
   .hero h1 { font-size: 1.3rem; }
-  .hero .tagline { font-size: .85rem; }
-  .hero-stats { gap: 8px; }
-  .hero-stat .num { font-size: 1.1rem; }
-  .ad-side .ad-claim { font-size: 1rem; }
+  .hero .subtitle { font-size: .82rem; }
+  .section-header h2 { font-size: 1.1rem; }
+  .truth-pane { padding: 20px 14px; min-height: 200px; }
+  .pane-headline { font-size: .9rem; }
+  .bootcamp-tab { padding: 16px 12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ============ TOP NAV ============ -->
+<!-- TOP NAV -->
 <nav class="top-nav">
   <a href="index.html" class="home-link">◂ 科技分光镜</a>
-  <span class="nav-title">消费者特工训练营</span>
+  <span class="breadcrumb">消费品评测 · 特工训练营</span>
   <div class="nav-sections">
-    <button onclick="scrollToSection('s1')" class="active">营销vs真相</button>
-    <button onclick="scrollToSection('s2')">成本剖面</button>
+    <button onclick="scrollToSection('s1')">营销VS真相</button>
+    <button onclick="scrollToSection('s2')">成本X光机</button>
     <button onclick="scrollToSection('s3')">智商税闯关</button>
-    <button onclick="scrollToSection('s4')">三步法</button>
-    <button onclick="scrollToSection('s5')">场景地图</button>
-    <button onclick="scrollToSection('s6')">任务档案</button>
+    <button onclick="scrollToSection('s4')">参数训练营</button>
+    <button onclick="scrollToSection('s5')">避坑地图</button>
+    <button onclick="scrollToSection('s6')">文章档案</button>
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
+<!-- HERO -->
 <section class="hero" id="hero">
   <canvas class="hero-canvas" id="heroCanvas"></canvas>
   <div class="hero-content">
-    <div class="hero-classification">
-      <span class="cls-dot"></span> CLASSIFIED: CONSUMER AGENT TRAINING
-    </div>
-    <h1>消费者特工训练营<span class="icon">🕵️</span></h1>
-    <p class="tagline">
-      卓克的参数思维实战训练——<strong>撕开营销包装，把产品拆回参数。</strong><br>
-      这不是产品目录，这是训练营。走出去后，看任何广告都能自动跑参数检查。
+    <div class="hero-badge">🕵️ AGENT TRAINING CAMP</div>
+    <h1>消费者特工训练营</h1>
+    <p class="subtitle">
+      你不是在逛商场，你是在执行侦察任务。<br>
+      每一件商品都是敌方伪装——你的武器是<strong>参数思维</strong>。
     </p>
-    <div class="hero-mantra">
-      <div class="step"><div class="sn">STEP 1</div><div class="st">找核心参数</div></div>
-      <div class="arrow">→</div>
-      <div class="step"><div class="sn">STEP 2</div><div class="st">查行业标准</div></div>
-      <div class="arrow">→</div>
-      <div class="step"><div class="sn">STEP 3</div><div class="st">算溢价倍数</div></div>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="num">47</div><div class="label">训练任务</div></div>
-      <div class="hero-stat"><div class="num">15+</div><div class="label">覆盖品类</div></div>
-      <div class="hero-stat"><div class="num">∞</div><div class="label">智商税已标注</div></div>
-      <div class="hero-stat"><div class="num">¥0</div><div class="label">广告费收入</div></div>
+    <div class="mission-brief">
+      <div class="mission-stat"><div class="num">47</div><div class="label">情报档案</div></div>
+      <div class="mission-stat"><div class="num special">5</div><div class="label">训练关卡</div></div>
+      <div class="mission-stat"><div class="num">8</div><div class="label">智商税题库</div></div>
+      <div class="mission-stat"><div class="num">∞</div><div class="label">避坑收获</div></div>
     </div>
   </div>
-  <div class="scroll-indicator"><span>进入训练营</span><span>⌄</span></div>
+  <div class="scroll-hint" onclick="scrollToSection('s1')"><span>开始训练</span><span style="font-size:14px">⌄</span></div>
 </section>
 
-<!-- ============ S1: 营销话术 vs 工程真相 ============ -->
+<!-- S1: MARKETING vs TRUTH -->
+<div class="section-divider"></div>
 <section class="section s1" id="s1">
   <div class="section-header">
-    <div class="section-num">Phase 01</div>
+    <div class="section-num">Mission 01 · 识破伪装</div>
     <h2>营销话术 vs 工程真相</h2>
-    <p>左边是广告想让你相信的，右边是工程师看到的参数。选择品类，看营销包装如何被工程数据撕碎。</p>
+    <p>左边是广告想让你相信的。右边是工程师看到的。点下方圆点切换案例——每个案例都是一次「拆穿」。</p>
   </div>
   <div class="section-content">
-    <div class="at-selector" id="atSelector">
-      <button class="active" data-idx="0">🧥 羽绒服</button>
-      <button data-idx="1">🚗 电动汽车</button>
-      <button data-idx="2">🔋 石墨烯电池</button>
-      <button data-idx="3">💊 碳水阻断剂</button>
-      <button data-idx="4">📡 隔空充电</button>
-      <button data-idx="5">🥤 品牌净水器</button>
+    <div class="truth-theater" id="truthTheater">
+      <div class="truth-pane marketing" id="paneMarketing">
+        <div class="shatter-overlay" id="shatterOverlay"></div>
+        <div class="pane-label">📢 广告话术</div>
+        <div class="pane-headline" id="mktHeadline"></div>
+        <div class="pane-claims" id="mktClaims"></div>
+        <div class="pane-verdict" id="mktVerdict"></div>
+      </div>
+      <div class="truth-pane engineering" id="paneEngineering">
+        <div class="scan-line"></div>
+        <div class="pane-label">🔧 工程真相</div>
+        <div class="pane-headline" id="engHeadline"></div>
+        <div class="pane-claims" id="engClaims"></div>
+        <div class="pane-verdict" id="engVerdict"></div>
+      </div>
     </div>
-    <div class="ad-truth-stage" id="adTruthStage">
-      <div class="ad-side" id="adSide"></div>
-      <div class="vs-badge">VS</div>
-      <div class="truth-side" id="truthSide"></div>
-    </div>
+    <div class="truth-nav" id="truthNav"></div>
   </div>
 </section>
 
-<!-- ============ S2: 成本剖面图 ============ -->
+<!-- S2: COST X-RAY -->
+<div class="section-divider"></div>
 <section class="section s2" id="s2">
   <div class="section-header">
-    <div class="section-num">Phase 02</div>
-    <h2>成本剖面图：X光透视成本结构</h2>
-    <p>每件产品被「切开」——核心物料、研发分摊、营销费用、渠道加价，一目了然。你的钱花在了哪里？</p>
+    <div class="section-num">Mission 02 · 透视扫描</div>
+    <h2>成本 X 光机</h2>
+    <p>X射线扫过产品外壳——你看的不是广告图，是物料成本、研发分摊、营销费用、渠道利润的<strong>真实分布</strong>。</p>
   </div>
   <div class="section-content">
-    <div class="xray-gallery" id="xrayGallery"></div>
+    <div class="xray-stage">
+      <div class="xray-viewport" id="xrayViewport">
+        <div class="xray-beam" id="xrayBeam"></div>
+        <div class="xray-silhouette" id="xraySilhouette">
+          <div class="product-icon" id="xrayIcon">🧥</div>
+        </div>
+        <div class="xray-callout" id="co1" style="top:12%;left:18%;"><div class="callout-dot"></div><div class="callout-label" id="co1Label"></div></div>
+        <div class="xray-callout" id="co2" style="top:28%;right:15%;"><div class="callout-dot"></div><div class="callout-label" id="co2Label"></div></div>
+        <div class="xray-callout" id="co3" style="top:50%;left:10%;"><div class="callout-dot"></div><div class="callout-label" id="co3Label"></div></div>
+        <div class="xray-callout" id="co4" style="top:62%;right:20%;"><div class="callout-dot"></div><div class="callout-label" id="co4Label"></div></div>
+        <div class="xray-callout" id="co5" style="bottom:12%;left:30%;"><div class="callout-dot"></div><div class="callout-label" id="co5Label"></div></div>
+      </div>
+      <div class="xray-readout" id="xrayReadout">
+        <div class="readout-header"><span class="blink-dot"></span> 扫描分析报告</div>
+        <div class="readout-product" id="readoutProduct"></div>
+        <div class="readout-claim" id="readoutClaim"></div>
+        <div id="readoutItems"></div>
+        <div class="readout-insight" id="readoutInsight"></div>
+      </div>
+    </div>
+    <div class="xray-products" id="xrayProducts"></div>
   </div>
 </section>
 
-<!-- ============ S3: 智商税闯关 ============ -->
+<!-- S3: IQ TAX CHALLENGE -->
+<div class="section-divider"></div>
 <section class="section s3" id="s3">
   <div class="section-header">
-    <div class="section-num">Phase 03</div>
-    <h2>智商税闯关：你能通关吗？</h2>
-    <p>8道关卡，每道题是一段真实广告语的改编版。3条命——被营销话术击中就扣一条。全部通关，你就是反营销特工。</p>
+    <div class="section-num">Mission 03 · 反诈测试</div>
+    <h2>智商税闯关</h2>
+    <p>3个等级，8道关卡。通过学徒级解锁猎手级，通过猎手级解锁大师级。看看你的「反营销」段位。</p>
   </div>
   <div class="section-content">
-    <div class="gauntlet-container" id="gauntletBox">
-      <div class="gauntlet-progress">
-        <div class="gp-track"><div class="gp-fill" id="gpFill"></div></div>
-        <span class="gp-level" id="gpLevel">LEVEL 1/8</span>
+    <div class="challenge-container" id="challengeBox">
+      <div class="level-track" id="levelTrack">
+        <div class="level-node" id="level1Node"><div class="ln-circle">1</div><div class="ln-name">学徒</div></div>
+        <div class="level-bridge" id="bridge1"></div>
+        <div class="level-node" id="level2Node"><div class="ln-circle">2</div><div class="ln-name">猎手</div></div>
+        <div class="level-bridge" id="bridge2"></div>
+        <div class="level-node" id="level3Node"><div class="ln-circle">3</div><div class="ln-name">大师</div></div>
       </div>
-      <div class="gauntlet-lives" id="gauntletLives">
-        <span>❤️</span><span class="heart" id="h1">❤️</span><span class="heart" id="h2">❤️</span><span class="heart" id="h3">❤️</span>
+      <div class="challenge-progress"><div class="cp-fill" id="cpFill" style="width:0%"></div></div>
+      <div class="cp-label" id="cpLabel">总进度 0/8 · 学徒级</div>
+      <div class="challenge-question">
+        <div class="cq-badge" id="cqBadge">学徒级 · 第 1 题</div>
+        <div class="cq-title" id="cqTitle"></div>
+        <div class="cq-adcopy" id="cqAdcopy"></div>
       </div>
-      <div class="gauntlet-level">
-        <div class="gl-badge" id="glBadge">第 1 关</div>
-        <div class="gl-title" id="glTitle"></div>
-        <div class="gl-ad" id="glAd"></div>
+      <div class="challenge-options" id="cqOptions"></div>
+      <div class="challenge-feedback" id="cqFeedback">👆 点击选项，做出你的判断</div>
+      <div class="challenge-score-display">
+        <span>🎯 得分</span><span class="score-val" id="cqScore">0</span><span>/ <span id="cqTotal">8</span></span>
       </div>
-      <div class="gauntlet-choices" id="glChoices"></div>
-      <div class="gauntlet-feedback" id="glFeedback">👆 选择你的判断——这是在训练你的直觉</div>
-      <div class="gauntlet-score">
-        <span>🏆 总分：</span><span class="gs-num" id="glScore">0</span><span>/8</span>
-      </div>
-      <button class="gauntlet-next" id="glNext" style="display:none" onclick="gauntletNext()">征服下一关 →</button>
+      <button class="challenge-next" id="cqNext" style="display:none" onclick="nextChallengeQuestion()">下一题 →</button>
     </div>
   </div>
 </section>
 
-<!-- ============ S4: 参数思维三步法 ============ -->
+<!-- S4: PARAMETER BOOTCAMP -->
+<div class="section-divider"></div>
 <section class="section s4" id="s4">
   <div class="section-header">
-    <div class="section-num">Core Training</div>
-    <h2>参数思维三步法：任何产品的通用拆解框架</h2>
-    <p>这不是针对某个品类的技巧——这是你面对任何产品都能运行的思考程序。三步走，永不踩坑。</p>
+    <div class="section-num">Mission 04 · 核心技能</div>
+    <h2>参数思维训练营</h2>
+    <p>卓克的参数思维3步法——不是记忆每类产品的参数，而是学会<strong>任何消费品</strong>都能自己拆解的方法。</p>
   </div>
   <div class="section-content">
-    <div class="method-flow">
-      <div class="method-step">
-        <div class="ms-num">01</div>
-        <div class="ms-icon">🔍</div>
-        <div class="ms-label">Step 1</div>
-        <div class="ms-title">找出核心参数</div>
-        <div class="ms-desc">
-          每个产品品类有<strong>不超过3个</strong>真正决定性能的参数。广告会给你20个卖点，但只有2-3个值得看。
-        </div>
-        <div class="ms-finder">
-          <input type="text" id="msInput" placeholder="输入产品名，如：扫地机器人" oninput="suggestParams(this.value)">
-          <div class="ms-suggestions" id="msSuggestions">
-            <button onclick="showParamResult('羽绒服')">羽绒服</button>
-            <button onclick="showParamResult('电动车')">电动车</button>
-            <button onclick="showParamResult('空调')">空调</button>
-            <button onclick="showParamResult('净水器')">净水器</button>
-            <button onclick="showParamResult('充电宝')">充电宝</button>
-            <button onclick="showParamResult('扫地机')">扫地机器人</button>
-          </div>
-          <div id="msResult" style="font-size:.78rem;color:var(--text-dim);margin-top:8px"></div>
-        </div>
+    <div class="bootcamp-steps">
+      <div class="bootcamp-tab active" id="bt1" onclick="switchBootcamp(1)">
+        <div class="bt-num">STEP 1</div><div class="bt-title">🔍 找核心参数</div>
+        <div class="bt-desc">区分「工程指标」和「营销噪音」</div><div class="bt-check">✅</div>
       </div>
-      <div class="method-step">
-        <div class="ms-num">02</div>
-        <div class="ms-icon">📊</div>
-        <div class="ms-label">Step 2</div>
-        <div class="ms-title">查行业标准</div>
-        <div class="ms-desc">
-          找到核心参数后，查<strong>行业标准、评测数据和用户实测</strong>。不要把广告中的「实验室数据」当真。
-        </div>
-        <div class="ms-gauge">
-          <div class="ms-gauge-ring">
-            <span class="ms-gauge-val" id="msGaugeVal">--</span>
-          </div>
-          <div class="ms-gauge-label" id="msGaugeLabel">选择一个产品<br>查看行业标准对标</div>
-        </div>
+      <div class="bootcamp-tab" id="bt2" onclick="switchBootcamp(2)">
+        <div class="bt-num">STEP 2</div><div class="bt-title">📋 查行业标准</div>
+        <div class="bt-desc">知道去哪里找基准数据</div><div class="bt-check">✅</div>
       </div>
-      <div class="method-step">
-        <div class="ms-num">03</div>
-        <div class="ms-icon">🧮</div>
-        <div class="ms-label">Step 3</div>
-        <div class="ms-title">算出溢价倍数</div>
-        <div class="ms-desc">
-          用<strong>物料成本 × 合理倍率</strong>估算合理价格，超过倍率的都是品牌税/智商税。
-        </div>
-        <div class="ms-calc" id="msCalc">
-          <div class="ms-calc-row"><span class="ms-cr-label">物料成本</span><span class="ms-cr-val">--</span></div>
-          <div class="ms-calc-row"><span class="ms-cr-label">合理倍率</span><span class="ms-cr-val">2.0-3.0×</span></div>
-          <div class="ms-calc-row"><span class="ms-cr-label">合理价格</span><span class="ms-cr-val">--</span></div>
-          <div class="ms-calc-row"><span class="ms-cr-label">实际售价</span><span class="ms-cr-val">--</span></div>
-          <div class="ms-calc-result" id="msCalcResult">👆 选择一个产品开始计算</div>
-        </div>
+      <div class="bootcamp-tab" id="bt3" onclick="switchBootcamp(3)">
+        <div class="bt-num">STEP 3</div><div class="bt-title">🧮 算溢价倍数</div>
+        <div class="bt-desc">品牌溢价 ÷ 物料成本 = 智商税指数</div><div class="bt-check">✅</div>
       </div>
     </div>
+    <div class="bootcamp-workspace" id="bootcampWorkspace"></div>
   </div>
 </section>
 
-<!-- ============ S5: 避坑场景地图 ============ -->
+<!-- S5: PITFALL MAP -->
+<div class="section-divider"></div>
 <section class="section s5" id="s5">
   <div class="section-header">
-    <div class="section-num">Field Guide</div>
-    <h2>避坑场景地图：按生活场景快速索引</h2>
-    <p>不需要记住所有品类——打开地图，找到你当前场景。每个热点都标注了风险等级和避坑策略。</p>
+    <div class="section-num">Mission 05 · 战场地图</div>
+    <h2>避坑地图</h2>
+    <p>不按产品品类分类——按你的<strong>生活场景</strong>组织。点击每个区域，查看该场景下最常见的智商税陷阱。</p>
   </div>
-  <div class="section-content">
-    <div class="scene-map" id="sceneMap"></div>
-  </div>
+  <div class="section-content"><div class="pitfall-map" id="pitfallMap"></div></div>
 </section>
 
-<!-- ============ S6: 任务档案 ============ -->
+<!-- S6: ARTICLE ARCHIVE -->
+<div class="section-divider"></div>
 <section class="section s6" id="s6">
   <div class="section-header">
-    <div class="section-num">Mission Archive</div>
-    <h2>任务档案：47次深度拆解</h2>
-    <p>按标签筛选训练任务。每一条都是一次参数思维的实战应用。</p>
+    <div class="section-num">Mission 06 · 情报档案</div>
+    <h2>47篇深度评测档案</h2>
+    <p>按场景筛选，搜索关键词。每一条都是一次侦察任务的完整记录。</p>
   </div>
   <div class="section-content">
-    <div class="dossier-container">
-      <div class="dossier-filters" id="dossierFilters">
-        <button class="active" data-tag="all">全部(47)</button>
-        <button data-tag="消费评测">🛒 消费评测</button>
-        <button data-tag="汽车">🚗 汽车</button>
-        <button data-tag="能源">⚡ 能源</button>
-        <button data-tag="数码">📱 数码</button>
-        <button data-tag="家居">🏠 家居</button>
-        <button data-tag="健康">💊 健康</button>
-        <button data-tag="食品">🍽️ 食品</button>
-        <button data-tag="科技">🔬 科技</button>
-        <button data-tag="方法论">🧠 方法论</button>
-      </div>
-      <div class="dossier-timeline" id="dossierTimeline"></div>
+    <div class="article-search">
+      <input type="text" id="articleSearchInput" placeholder="🔍 搜索文章标题、关键词..." oninput="filterArticles()">
     </div>
+    <div class="article-filters" id="articleFilters">
+      <button class="active" data-scenario="all">全部(47)</button>
+      <button data-scenario="通勤出行">🚗 通勤出行</button>
+      <button data-scenario="数码电子">📱 数码电子</button>
+      <button data-scenario="居家生活">🏠 居家生活</button>
+      <button data-scenario="健康养生">💊 健康养生</button>
+      <button data-scenario="能源科技">⚡ 能源科技</button>
+      <button data-scenario="思维方法">🧠 思维方法</button>
+    </div>
+    <div class="article-timeline" id="articleTimeline"></div>
+    <div class="article-count" id="articleCount"></div>
   </div>
 </section>
 
-<!-- AGENT METER -->
-<div class="agent-meter" id="agentMeter">
-  <div class="am-badge" id="amBadge">0%</div>
-  <span>特工训练进度</span>
+<!-- KNOWLEDGE METER -->
+<div class="kmeter" id="kmeter">
+  <div class="km-ring" id="kmRing"><span class="km-pct" id="kmPct">0%</span></div>
+  <span>训练进度</span>
 </div>
 
 <!-- FOOTER -->
@@ -908,705 +950,724 @@ body::after {
     <a href="6-人类演化与文明进程.html">人类演化</a>
     <a href="7-科学方法与认知论.html">科学方法</a>
   </div>
-  <p>科技参考3 · 卓克 · 消费者特工训练营</p>
-  <p style="margin-top:3px">训练结束，你将获得永久被动技能：看任何广告自动运行参数检查</p>
+  <p>科技参考3 · MKS知识主板 · 消费者特工训练营</p>
+  <p style="margin-top:4px">卓克方法论：参数思维 — 撕开营销包装，把产品拆回参数</p>
 </footer>
 
 <script>
 // ================================================================
-// ARTICLE DATA (47 articles — used in S6 dossier)
+// ARTICLE DATA
 // ================================================================
 const ARTICLES = [
-  {id:"007",title:"星链计划3：究竟会不会成功？",preview:"分析了星链计划的三大优势——传输延迟小、覆盖全球、成本优势，以及它面临的四大缺陷。从工程角度评估星链的商业可行性。",tags:["科技","能源"],consumer:false},
-  {id:"014",title:"问答：韩国流感疫苗事件的真相",preview:"解答流感疫苗安全性的核心问题。为什么跨国并购需要多国审批？商业习惯法的演化逻辑。",tags:["健康"],consumer:false},
-  {id:"021",title:"芯片：苹果公司为什么要给Mac换\"芯\"？",preview:"苹果自研Apple Silicon的背后逻辑——不仅是性能提升，更是掌控供应链和产品节奏。从x86到ARM的架构变迁，对消费者的实际影响。",tags:["数码","科技","消费评测"],consumer:true},
-  {id:"029",title:"工程师思维：如何寻找地外生命？(上)",preview:"金星磷化氢事件引发的地外生命探索专题。基于现有技术手段的严肃科学推演，而非科幻想象。",tags:["科技"],consumer:false},
-  {id:"037",title:"电动汽车：\"换电\"的方案可行吗？",preview:"工信部并行支持充电和换电两种模式。换电方案的核心矛盾——标准化难度、电池所有权、成本分摊。从工程角度分析换电是否走得通。",tags:["汽车","能源","消费评测"],consumer:true},
-  {id:"038",title:"问答：怎样挑选羽绒服才不花冤枉钱？",preview:"买羽绒服不花冤枉钱的方法：找行业内的衡量参数。三个核心参数——含绒量、充绒量、蓬松度。学会看参数标签而不是品牌广告。",tags:["家居","消费评测"],consumer:true},
-  {id:"039",title:"人造肉：重塑世界",preview:"Beyond Meat等植物肉的技术原理和商业模式。人造肉的营养设计、环境影响和成本结构分析。",tags:["食品","科技","消费评测"],consumer:true},
-  {id:"040",title:"新发现：女猎人比例不低意味着什么？",preview:"考古发现：狩猎采集年代女性猎人比例可达40%。这个发现如何挑战「男主外女主内」的固有认知。",tags:["其他"],consumer:false},
-  {id:"052",title:"核聚变：中国的\"人造太阳\"是怎么回事？",preview:"解读中国环流器二号M装置首次放电的科学意义。托卡马克装置的工程原理，以及核聚变发电的时间表预测。",tags:["能源","科技"],consumer:false},
-  {id:"057",title:"石墨烯电池：典型的忽悠",preview:"石墨烯获诺贝尔奖后，市场上涌现大量「石墨烯」产品——发热腰带、口罩、电池。但真正的石墨烯电池是什么？为什么市面上都是智商税？",tags:["能源","数码","消费评测"],consumer:true},
-  {id:"060",title:"氢燃料电池（上）：表面上的优势",preview:"氢燃料电池的三大优势——副产品只有水、能量密度高、加氢快。但这些优势为什么在现实中难以兑现？",tags:["汽车","能源","消费评测"],consumer:true},
-  {id:"061",title:"氢燃料电池（下）：襁褓难离",preview:"氢燃料的制备成本、存储难度（700个大气压）、运输安全。各个环节的技术瓶颈让氢燃料电池短期内难以商业化。",tags:["汽车","能源","消费评测"],consumer:true},
-  {id:"068",title:"问答：给两岁的孩子学英语，是拔苗助长吗？",preview:"语言学习的关键期在2-3岁。为什么「长大了再学」的想法是错误的？神经科学视角解析早期语言教育。",tags:["方法论"],consumer:false},
-  {id:"069",title:"肉链3：人类吃不上肉的历史",preview:"人类驯化动物的历史——山羊、绵羊、猪、牛在12000-5000年前被驯化的历程和技术逻辑。",tags:["食品"],consumer:false},
-  {id:"070",title:"肉链4：\"残忍\"的养殖与宰杀",preview:"现代养殖业的效率逻辑——为什么动物在性成熟时被宰杀利润最大？饲料转化率的工程计算。",tags:["食品"],consumer:false},
-  {id:"074",title:"问答：冬天很容易感冒，怎么办？",preview:"人造肉的营养价值分析。从营养工程角度看Beyond Meat的配方设计逻辑。",tags:["健康","食品","消费评测"],consumer:true},
-  {id:"075",title:"现代灭菌工艺：罐头最多能保存多久？",preview:"罐头的真实保质期远超过标注的3年。现代灭菌工艺的原理——为什么罐头放20年也不会坏？",tags:["家居","食品","消费评测"],consumer:true},
-  {id:"087",title:"神经生物学研究：有条件的母爱",preview:"从神经生物学角度分析母爱的物质基础。催产素、多巴胺等神经递质如何调控亲子行为。",tags:["健康"],consumer:false},
-  {id:"099",title:"隔空充电的一盆冷水",preview:"隔空充电技术广告宣称「数米半径内5瓦功率」。从电磁波衰减公式计算：这个广告在技术上是否靠谱？",tags:["数码","科技","消费评测"],consumer:true},
-  {id:"105",title:"品质生活：关于去甲醛、冥想、白头发和秃顶的问答",preview:"甲醛检测为什么个人几乎无法做到？央视检测结果的启示。科学视角解析日常生活中的品质问题。",tags:["家居","健康","消费评测"],consumer:true},
-  {id:"107",title:"技术辨析：关于人体冷冻、转基因和钟表误差的问答",preview:"为什么地铁已经自动驾驶而高铁没有？地铁自动驾驶的技术现状和高铁面临的调度复杂度。",tags:["科技"],consumer:false},
-  {id:"123",title:"问答：米饭中的砷能抗癌吗？生物能降解塑料吗？",preview:"大米中微量砷残留是否对抗癌有积极作用？砒霜治疗白血病的关键——修正p53蛋白的错误折叠。",tags:["健康","科技"],consumer:false},
-  {id:"129",title:"问答：为什么风投会投一些不靠谱的项目？",preview:"从飞行汽车、Clubhouse到贾跃亭造车——为什么风投会在明显不靠谱的项目上投钱？风险投资的底层逻辑。",tags:["方法论"],consumer:false},
-  {id:"131",title:"测试：电动汽车续航里程的虚标",preview:"电动车冬天续航腰斩的真相。NEDC、WLTP、EPA三种续航测试标准的差异。为什么宣传续航和实际续航差距巨大？",tags:["汽车","能源","消费评测"],consumer:true},
-  {id:"134",title:"学术期刊历史3：重建秩序",preview:"二战后学术界的格式规范崇拜。为什么80%的科研人员产出边际价值极低？学术泡沫的形成与破灭。",tags:["方法论"],consumer:false},
-  {id:"165",title:"问答：为什么自动驾驶没有捷径可走？",preview:"苹果、华为、小米造车的前景分析。为什么自动驾驶不能走捷径？FSD选装到底值不值得花钱？",tags:["汽车","科技","消费评测"],consumer:true},
-  {id:"169",title:"马斯克与火箭2：被迫造火箭，因为更便宜",preview:"SpaceX的创业故事：从火星绿洲计划到自研火箭。为什么买俄罗斯火箭比自造更贵？",tags:["科技"],consumer:false},
-  {id:"170",title:"马斯克与火箭3：造火箭的几种技术门派",preview:"火箭发动机的技术路线——燃气发生器循环、分级燃烧循环、全流量分级燃烧。SpaceX的默林引擎设计选择。",tags:["科技"],consumer:false},
-  {id:"178",title:"奇亚币：硬盘挖虚拟币是怎么回事？",preview:"2021年硬件全线缺货的罪魁祸首——从CPU到显卡到硬盘。奇亚币的「空间证明」机制如何消耗存储资源。",tags:["数码","能源","消费评测"],consumer:true},
-  {id:"190",title:"虚拟币：能源消耗上，比特币≈英国",preview:"中科院研究：比特币挖矿的年碳排放量相当于一个中等国家。在碳中和目标下，哪些虚拟币注定走向没落？",tags:["能源","科技","消费评测"],consumer:true},
-  {id:"204",title:"位置记忆法：怎么提升记忆力？",preview:"《科学进展》论文验证：位置记忆法（记忆宫殿）是提升记忆力的有效工具。把你需要记住的东西「摆放」在虚构空间里。",tags:["方法论"],consumer:false},
-  {id:"209",title:"鸿蒙1：不同时代的操作系统",preview:"华为鸿蒙2.0发布的背景。从AOSP到自研内核——不同时代的操作系统概念有什么不同？鸿蒙的来龙去脉。",tags:["数码","科技","消费评测"],consumer:true},
-  {id:"210",title:"鸿蒙2：谷歌的生态系统",preview:"MIUI、Flyme、ColorOS——这些是操作系统还是用户界面？谷歌GMS生态的绑定力与鸿蒙的突破策略。",tags:["数码","科技","消费评测"],consumer:true},
-  {id:"215",title:"厨师有可能被科技替代吗？",preview:"西班牙海鲜饭机器人的技术演示。烹饪自动化面临的核心工程挑战——不是翻炒，而是食材状态的实时感知。",tags:["科技","家居","消费评测"],consumer:true},
-  {id:"221",title:"新冠：关于病毒和疫苗的最新进展",preview:"Delta变种使群体免疫的希望几乎消失。英国款、南非款、印度款变种的传播力和疫苗有效性数据。",tags:["健康"],consumer:false},
-  {id:"225",title:"NVIDIA计划收购ARM+特斯拉自动驾驶",preview:"NVIDIA收购ARM的审批进展和特斯拉自动驾驶FSD选装的真实价值分析。",tags:["汽车","科技","数码","消费评测"],consumer:true},
-  {id:"226",title:"中国发现\"龙人\"，怎么理解？",preview:"《创新》期刊封面报道：中国发现智人新分支「龙人」。如何理解这个发现与人类非洲单一起源学说的关系？",tags:["其他"],consumer:false},
-  {id:"232",title:"比特币危机：矿难真的来了",preview:"中国对虚拟币挖矿的严厉监管。在碳中和承诺下，比特币矿业面临的生存危机和行业洗牌。",tags:["能源","科技","消费评测"],consumer:true},
-  {id:"244",title:"碳中和4：中国的第二步怎么走？",preview:"中国碳中和的四个环节——淘汰、替换、回收、节能。钢材回收、汽车报废、建筑节能的工程数据。",tags:["能源","家居","消费评测"],consumer:true},
-  {id:"254",title:"误区：空调与电扇的典型使用错误",preview:"欧洲空调安装率不到5%的原因。空调和电扇的正确使用方法——很多人以为的「省电技巧」其实是错误的。",tags:["家居","消费评测"],consumer:true},
-  {id:"269",title:"新冠病毒：德尔塔 & 拉姆达的危害",preview:"Delta变种的传染力数据和拉姆达变种的威胁评估。为什么群体免疫的希望越来越渺茫？",tags:["健康"],consumer:false},
-  {id:"273",title:"问答：特斯拉AI日有什么亮点？",preview:"特斯拉AI日的真正看点：不是自动驾驶新技术，而是一个车企部署超级算力。这改变了超级计算机市场的格局。",tags:["汽车","科技","消费评测"],consumer:true},
-  {id:"277",title:"碳水阻断剂：真的能减肥吗？",preview:"白芸豆提取物/酵素类碳水阻断剂的广告铺天盖地。从α-淀粉酶抑制剂的生物化学原理出发，分析它是否能真正阻断碳水吸收。",tags:["健康","消费评测"],consumer:true},
-  {id:"280",title:"问答（下）：如何养老？",preview:"养老问题最迟要在变老前30年动手解决。从人口寿命预期和养老金结构角度分析养老规划的核心逻辑。",tags:["方法论"],consumer:false},
-  {id:"282",title:"解读：如何理解《个人信息保护法》？",preview:"从外卖骑手困在算法里到大数据杀熟——个人信息保护法如何改变互联网公司的商业模式？",tags:["数码","科技","消费评测"],consumer:true},
-  {id:"284",title:"网络游戏：如何防止未成年人沉迷？",preview:"国家新闻出版署的防沉迷新规：每周五六日晚8-9点仅1小时。对游戏产业和未成年人保护的实质影响。",tags:["数码"],consumer:false},
-  {id:"287",title:"材料：可穿戴设备的另一个发展方向",preview:"可穿戴设备的两大方向——生物信号监测和柔性电子。介绍一种新型可穿戴材料，不依赖电池就能实现交互。",tags:["数码","科技","消费评测"],consumer:true}
+  {id:"007",title:"星链计划3：究竟会不会成功？",preview:"分析了星链计划的三大优势——传输延迟小、覆盖全球、成本优势，以及它面临的四大缺陷。从工程角度评估星链的商业可行性。",scenario:"能源科技",consumer:false},
+  {id:"014",title:"问答：韩国流感疫苗事件的真相",preview:"解答流感疫苗安全性的核心问题。为什么跨国并购需要多国审批？商业习惯法的演化逻辑。",scenario:"健康养生",consumer:false},
+  {id:"021",title:"芯片：苹果公司为什么要给Mac换\"芯\"？",preview:"苹果自研Apple Silicon的背后逻辑——不仅是性能提升，更是掌控供应链和产品节奏。从x86到ARM的架构变迁，对消费者的实际影响。",scenario:"数码电子",consumer:true},
+  {id:"029",title:"工程师思维：如何寻找地外生命？(上)",preview:"金星磷化氢事件引发的地外生命探索专题。基于现有技术手段的严肃科学推演，而非科幻想象。",scenario:"能源科技",consumer:false},
+  {id:"037",title:"电动汽车：\"换电\"的方案可行吗？",preview:"工信部并行支持充电和换电两种模式。换电方案的核心矛盾——标准化难度、电池所有权、成本分摊。从工程角度分析换电是否走得通。",scenario:"通勤出行",consumer:true},
+  {id:"038",title:"问答：怎样挑选羽绒服才不花冤枉钱？",preview:"买羽绒服不花冤枉钱的方法：找行业内的衡量参数。三个核心参数——含绒量、充绒量、蓬松度。学会看参数标签而不是品牌广告。",scenario:"居家生活",consumer:true},
+  {id:"039",title:"人造肉：重塑世界",preview:"Beyond Meat等植物肉的技术原理和商业模式。人造肉的营养设计、环境影响和成本结构分析。",scenario:"健康养生",consumer:true},
+  {id:"040",title:"新发现：女猎人比例不低意味着什么？",preview:"考古发现：狩猎采集年代女性猎人比例可达40%。这个发现如何挑战「男主外女主内」的固有认知。",scenario:"思维方法",consumer:false},
+  {id:"052",title:"核聚变：中国的\"人造太阳\"是怎么回事？",preview:"解读中国环流器二号M装置首次放电的科学意义。托卡马克装置的工程原理，以及核聚变发电的时间表预测。",scenario:"能源科技",consumer:false},
+  {id:"057",title:"石墨烯电池：典型的忽悠",preview:"石墨烯获诺贝尔奖后，市场上涌现大量「石墨烯」产品——发热腰带、口罩、电池。但真正的石墨烯电池是什么？为什么市面上都是智商税？",scenario:"数码电子",consumer:true},
+  {id:"060",title:"氢燃料电池（上）：表面上的优势",preview:"氢燃料电池的三大优势——副产品只有水、能量密度高、加氢快。但这些优势为什么在现实中难以兑现？",scenario:"通勤出行",consumer:true},
+  {id:"061",title:"氢燃料电池（下）：襁褓难离",preview:"氢燃料的制备成本、存储难度（700个大气压）、运输安全。各个环节的技术瓶颈让氢燃料电池短期内难以商业化。",scenario:"通勤出行",consumer:true},
+  {id:"068",title:"问答：给两岁的孩子学英语，是拔苗助长吗？",preview:"语言学习的关键期在2-3岁。为什么「长大了再学」的想法是错误的？神经科学视角解析早期语言教育。",scenario:"思维方法",consumer:false},
+  {id:"069",title:"肉链3：人类吃不上肉的历史",preview:"人类驯化动物的历史——山羊、绵羊、猪、牛在12000-5000年前被驯化的历程和技术逻辑。",scenario:"健康养生",consumer:false},
+  {id:"070",title:"肉链4：\"残忍\"的养殖与宰杀",preview:"现代养殖业的效率逻辑——为什么动物在性成熟时被宰杀利润最大？饲料转化率的工程计算。",scenario:"健康养生",consumer:false},
+  {id:"074",title:"问答：冬天很容易感冒，怎么办？",preview:"人造肉的营养价值分析。从营养工程角度看Beyond Meat的配方设计逻辑。",scenario:"健康养生",consumer:true},
+  {id:"075",title:"现代灭菌工艺：罐头最多能保存多久？",preview:"罐头的真实保质期远超过标注的3年。现代灭菌工艺的原理——为什么罐头放20年也不会坏？",scenario:"居家生活",consumer:true},
+  {id:"087",title:"神经生物学研究：有条件的母爱",preview:"从神经生物学角度分析母爱的物质基础。催产素、多巴胺等神经递质如何调控亲子行为。",scenario:"思维方法",consumer:false},
+  {id:"099",title:"隔空充电的一盆冷水",preview:"隔空充电技术广告宣称「数米半径内5瓦功率」。从电磁波衰减公式计算：这个广告在技术上是否靠谱？",scenario:"数码电子",consumer:true},
+  {id:"105",title:"品质生活：关于去甲醛、冥想、白头发和秃顶的问答",preview:"甲醛检测为什么个人几乎无法做到？央视检测结果的启示。科学视角解析日常生活中的品质问题。",scenario:"居家生活",consumer:true},
+  {id:"107",title:"技术辨析：关于人体冷冻、转基因和钟表误差的问答",preview:"为什么地铁已经自动驾驶而高铁没有？地铁自动驾驶的技术现状和高铁面临的调度复杂度。",scenario:"能源科技",consumer:false},
+  {id:"123",title:"问答：米饭中的砷能抗癌吗？生物能降解塑料吗？",preview:"大米中微量砷残留是否对抗癌有积极作用？砒霜治疗白血病的关键——修正p53蛋白的错误折叠。",scenario:"健康养生",consumer:false},
+  {id:"129",title:"问答：为什么风投会投一些不靠谱的项目？",preview:"从飞行汽车、Clubhouse到贾跃亭造车——为什么风投会在明显不靠谱的项目上投钱？风险投资的底层逻辑。",scenario:"思维方法",consumer:false},
+  {id:"131",title:"测试：电动汽车续航里程的虚标",preview:"电动车冬天续航腰斩的真相。NEDC、WLTP、EPA三种续航测试标准的差异。为什么宣传续航和实际续航差距巨大？",scenario:"通勤出行",consumer:true},
+  {id:"134",title:"学术期刊历史3：重建秩序",preview:"二战后学术界的格式规范崇拜。为什么80%的科研人员产出边际价值极低？学术泡沫的形成与破灭。",scenario:"思维方法",consumer:false},
+  {id:"165",title:"问答：为什么自动驾驶没有捷径可走？",preview:"苹果、华为、小米造车的前景分析。为什么自动驾驶不能走捷径？FSD选装到底值不值得花钱？",scenario:"通勤出行",consumer:true},
+  {id:"169",title:"马斯克与火箭2：被迫造火箭，因为更便宜",preview:"SpaceX的创业故事：从火星绿洲计划到自研火箭。为什么买俄罗斯火箭比自造更贵？",scenario:"能源科技",consumer:false},
+  {id:"170",title:"马斯克与火箭3：造火箭的几种技术门派",preview:"火箭发动机的技术路线——燃气发生器循环、分级燃烧循环、全流量分级燃烧。SpaceX的默林引擎设计选择。",scenario:"能源科技",consumer:false},
+  {id:"178",title:"奇亚币：硬盘挖虚拟币是怎么回事？",preview:"2021年硬件全线缺货的罪魁祸首——从CPU到显卡到硬盘。奇亚币的「空间证明」机制如何消耗存储资源。",scenario:"数码电子",consumer:true},
+  {id:"190",title:"虚拟币：能源消耗上，比特币≈英国",preview:"中科院研究：比特币挖矿的年碳排放量相当于一个中等国家。在碳中和目标下，哪些虚拟币注定走向没落？",scenario:"能源科技",consumer:true},
+  {id:"204",title:"位置记忆法：怎么提升记忆力？",preview:"《科学进展》论文验证：位置记忆法（记忆宫殿）是提升记忆力的有效工具。把你需要记住的东西「摆放」在虚构空间里。",scenario:"思维方法",consumer:false},
+  {id:"209",title:"鸿蒙1：不同时代的操作系统",preview:"华为鸿蒙2.0发布的背景。从AOSP到自研内核——不同时代的操作系统概念有什么不同？鸿蒙的来龙去脉。",scenario:"数码电子",consumer:true},
+  {id:"210",title:"鸿蒙2：谷歌的生态系统",preview:"MIUI、Flyme、ColorOS——这些是操作系统还是用户界面？谷歌GMS生态的绑定力与鸿蒙的突破策略。",scenario:"数码电子",consumer:true},
+  {id:"215",title:"厨师有可能被科技替代吗？",preview:"西班牙海鲜饭机器人的技术演示。烹饪自动化面临的核心工程挑战——不是翻炒，而是食材状态的实时感知。",scenario:"居家生活",consumer:true},
+  {id:"221",title:"新冠：关于病毒和疫苗的最新进展",preview:"Delta变种使群体免疫的希望几乎消失。英国款、南非款、印度款变种的传播力和疫苗有效性数据。",scenario:"健康养生",consumer:false},
+  {id:"225",title:"NVIDIA计划收购ARM+特斯拉自动驾驶",preview:"NVIDIA收购ARM的审批进展和特斯拉自动驾驶FSD选装的真实价值分析。",scenario:"通勤出行",consumer:true},
+  {id:"226",title:"中国发现\"龙人\"，怎么理解？",preview:"《创新》期刊封面报道：中国发现智人新分支「龙人」。如何理解这个发现与人类非洲单一起源学说的关系？",scenario:"思维方法",consumer:false},
+  {id:"232",title:"比特币危机：矿难真的来了",preview:"中国对虚拟币挖矿的严厉监管。在碳中和承诺下，比特币矿业面临的生存危机和行业洗牌。",scenario:"能源科技",consumer:true},
+  {id:"244",title:"碳中和4：中国的第二步怎么走？",preview:"中国碳中和的四个环节——淘汰、替换、回收、节能。钢材回收、汽车报废、建筑节能的工程数据。",scenario:"能源科技",consumer:true},
+  {id:"254",title:"误区：空调与电扇的典型使用错误",preview:"欧洲空调安装率不到5%的原因。空调和电扇的正确使用方法——很多人以为的「省电技巧」其实是错误的。",scenario:"居家生活",consumer:true},
+  {id:"269",title:"新冠病毒：德尔塔 & 拉姆达的危害",preview:"Delta变种的传染力数据和拉姆达变种的威胁评估。为什么群体免疫的希望越来越渺茫？",scenario:"健康养生",consumer:false},
+  {id:"273",title:"问答：特斯拉AI日有什么亮点？",preview:"特斯拉AI日的真正看点：不是自动驾驶新技术，而是一个车企部署超级算力。这改变了超级计算机市场的格局。",scenario:"通勤出行",consumer:true},
+  {id:"277",title:"碳水阻断剂：真的能减肥吗？",preview:"白芸豆提取物/酵素类碳水阻断剂的广告铺天盖地。从α-淀粉酶抑制剂的生物化学原理出发，分析它是否能真正阻断碳水吸收。",scenario:"健康养生",consumer:true},
+  {id:"280",title:"问答（下）：如何养老？",preview:"养老问题最迟要在变老前30年动手解决。从人口寿命预期和养老金结构角度分析养老规划的核心逻辑。",scenario:"思维方法",consumer:false},
+  {id:"282",title:"解读：如何理解《个人信息保护法》？",preview:"从外卖骑手困在算法里到大数据杀熟——个人信息保护法如何改变互联网公司的商业模式？",scenario:"数码电子",consumer:true},
+  {id:"284",title:"网络游戏：如何防止未成年人沉迷？",preview:"国家新闻出版署的防沉迷新规：每周五六日晚8-9点仅1小时。对游戏产业和未成年人保护的实质影响。",scenario:"数码电子",consumer:false},
+  {id:"287",title:"材料：可穿戴设备的另一个发展方向",preview:"可穿戴设备的两大方向——生物信号监测和柔性电子。介绍一种新型可穿戴材料，不依赖电池就能实现交互。",scenario:"数码电子",consumer:true}
 ];
 
 // ================================================================
-// S1: AD VS TRUTH DATA
+// S1: MARKETING vs TRUTH DATA
 // ================================================================
-const AD_TRUTH_DATA = [
+const TRUTH_CASES = [
   {
-    product:'品牌羽绒服（¥2000）',
-    ad:{claim:'「加拿大鹅同级鹅绒，-30℃极寒保暖，进口面料防风防水」',buzzwords:['进口鹅绒','极寒保暖','防风防水','大牌同款'],small:'*广告未标注含绒量、充绒量、蓬松度'},
-    truth:{header:'核心参数只有三个：',params:[
-      {name:'含绒量',real:'≥90%为优',fake:'"羽绒服"标签可能仅50%'},
-      {name:'充绒量',real:'短款100-150g / 长款200-300g',fake:'"加厚""超暖"等模糊描述'},
-      {name:'蓬松度',real:'FP 700+（高品质）',fake:'"进口鹅绒"≠高蓬松度'},
-      {name:'面料',real:'看DWR防泼水处理等级',fake:'"防风防水"往往不透气'},
-    ],verdict:'<strong>避坑：</strong>翻吊牌找三个数字——含绒量、充绒量、蓬松度。三个参数齐全的才是正经羽绒服。含绒量低于80%不买，充绒量不标注不买。'}
+    product: '石墨烯充电宝',
+    mktHeadline: '「诺贝尔奖材料，充电快3倍」',
+    mktClaims: ['石墨烯获诺贝尔物理学奖的尖端材料','充电速度提升300%，续航翻倍','新一代电池技术革命，改写充电体验'],
+    mktVerdict: '这是典型的「诺贝尔奖光环」营销——用真科学词汇包装假产品性能。',
+    engHeadline: '石墨烯只是导电添加剂，含量<0.01%',
+    engClaims: ['石墨烯在电池中仅作为微量导电浆料添加剂','材料成本增加不到1元，售价加价100-500元','电池能量密度提升靠正负极材料和电解质——不是添加剂'],
+    engVerdict: '核心参数：<span class="param-highlight">电池能量密度(Wh/kg)</span>、<span class="param-highlight">循环寿命(次)</span>、<span class="param-highlight">电芯品牌</span>。石墨烯标签=溢价信号。'
   },
   {
-    product:'电动车（某品牌旗舰）',
-    ad:{claim:'「新一代电池技术，NEDC综合续航1000km，智能温控系统」',buzzwords:['1000km续航','智能温控','新一代电池','超级快充'],small:'*未标明NEDC测试标准与实际续航的差距'},
-    truth:{header:'续航≠标称值，关键看：',params:[
-      {name:'测试标准',real:'WLTP / EPA（较严）',fake:'NEDC虚高20-30%'},
-      {name:'电池能量密度',real:'180+ Wh/kg',fake:'"长续航版"无技术指标'},
-      {name:'热管理系统',real:'液冷+热泵空调',fake:'"智能温控"可能是风冷'},
-      {name:'充电功率',real:'峰值≥150kW',fake:'"快充"可能仅60kW'},
-    ],verdict:'<strong>避坑：</strong>问销售三个问题：用的是NEDC还是WLTP？电池能量密度多少？有没有热泵？答不上来就别买。冬天续航=NEDC标称值×0.5。'}
+    product: '碳水阻断剂',
+    mktHeadline: '「日本研发，阻断碳水吸收，随便吃不发胖」',
+    mktClaims: ['澳洲白芸豆酵素精华，天然安全','餐前两粒阻断90%碳水吸收','日本实验室研发，科学验证有效'],
+    mktVerdict: '用「日本研发」「澳洲原料」制造权威感，回避了最关键的生化学问题。',
+    engHeadline: '胃酸会让α-淀粉酶抑制剂失活——到肠道前已经无效',
+    engClaims: ['α-淀粉酶抑制剂在pH 6.9中性环境有效——胃酸pH≈1.5-3.5','蛋白质结构在胃酸中变性失活','即使残存活性，最多减少<5%碳水吸收——一口米饭补回来'],
+    engVerdict: '这是生物化学事实：<span class="param-highlight">pH稳定性</span>、<span class="param-highlight">蛋白质变性</span>。唯一有效的减肥参数是<span class="param-highlight">热量缺口</span>。'
   },
   {
-    product:'石墨烯充电宝（¥299）',
-    ad:{claim:'「诺贝尔奖获奖材料石墨烯，充电快3倍，续航翻倍，20000mAh超大容量」',buzzwords:['诺贝尔奖','石墨烯','快3倍','续航翻倍'],small:'*石墨烯在电池中仅作为微量导电添加剂（<0.01%）'},
-    truth:{header:'石墨烯≠性能翻倍：',params:[
-      {name:'石墨烯含量',real:'<0.01%（仅导电添加剂）',fake:'"石墨烯电池"主材仍是锂'},
-      {name:'实际成分',real:'普通锂离子电池',fake:'"诺贝尔奖材料"暗示颠覆'},
-      {name:'性能提升',real:'内阻略降（<5%）',fake:'"充电快3倍"'},
-      {name:'价格溢价',real:'石墨烯材料成本<1元',fake:'加价100-200元'},
-    ],verdict:'<strong>避坑：</strong>石墨烯只是导电浆料添加剂，不能改变电池化学体系。同规格不打「石墨烯」标签的充电宝卖99元——你多付的200元买了一个标签。'}
+    product: '隔空充电器',
+    mktHeadline: '「5W隔空充电，数米半径内自由充电」',
+    mktClaims: ['隔空充电技术，像WiFi一样方便','数米半径内5瓦功率稳定传输','告别充电线，进入无线自由时代'],
+    mktVerdict: '利用「像WiFi一样」的类比让人忽视物理定律——电磁波自由空间衰减是距离的平方。',
+    engHeadline: '电磁波按距离平方衰减——1米外接收功率<2%',
+    engClaims: ['发射端5W → 1米外接收功率≈0.1W（效率<2%）','电磁波自由空间衰减公式：P_rec ∝ P_tx / d²','2.4GHz/5.8GHz下衍射和吸收进一步降低效率'],
+    engVerdict: '物理定律无法违抗。<span class="param-highlight">自由空间路径损耗(dB)</span>、<span class="param-highlight">SAR安全限值</span>。隔空充电只适合<1mW的微型传感器。'
   },
   {
-    product:'碳水阻断剂（¥198/瓶）',
-    ad:{claim:'「澳洲白芸豆酵素精华，日本实验室研发，餐前两粒阻断90%碳水吸收，随便吃不长胖」',buzzwords:['白芸豆酵素','日本研发','阻断90%碳水','随便吃不胖'],small:'*α-淀粉酶抑制剂在胃酸(pH 1.5-3.5)中会变性失活'},
-    truth:{header:'生物化学事实：',params:[
-      {name:'有效成分',real:'白芸豆提取物(α-AI)',fake:'"天然酵素"是同一东西'},
-      {name:'作用环境',real:'仅在pH 6.9有效（肠道）',fake:'胃酸(pH 1.5)中已失活'},
-      {name:'实际效果',real:'减少<5%碳水吸收',fake:'"阻断90%"是编造的'},
-      {name:'代偿',real:'多吃一口饭就抵消',fake:'"随便吃不发胖"'},
-    ],verdict:'<strong>避坑：</strong>α-淀粉酶抑制剂是蛋白质，口服会被消化系统分解。即使残存活性到肠道，也最多减少不到5%碳水吸收。198元不如买体脂秤——至少那个数据是真的。'}
+    product: 'FSD自动驾驶',
+    mktHeadline: '「选装FSD，未来可实现完全自动驾驶」',
+    mktClaims: ['一次性付费64000元，终身享受自动驾驶','OTA持续升级，越用越聪明','硬件已预埋，只等软件激活'],
+    mktVerdict: '「期货消费」的典型——花今天的钱买明天可能实现的功能。',
+    engHeadline: '今天的FSD仍是L2+辅助驾驶——你买的是期货',
+    engClaims: ['FSD目前是L2+级别辅助驾驶，不是L3/L4自动驾驶','法规、保险、基础设施都未就绪——完全自动驾驶还需5-10年','OTA升级不受你控制——什么时候实现没有保证'],
+    engVerdict: '关键问题：<span class="param-highlight">你的换车周期</span> vs <span class="param-highlight">完全自动驾驶时间表</span>。换车<5年，FSD投入产出比极低。'
   },
   {
-    product:'隔空充电器（¥399）',
-    ad:{claim:'「5W隔空充电，数米半径内自由充电，告别充电线束缚」',buzzwords:['隔空充电','5W功率','数米半径','无线自由'],small:'*电磁波在自由空间按距离平方衰减——物理定律无法违抗'},
-    truth:{header:'物理定律：自由空间衰减',params:[
-      {name:'发射功率',real:'5W（发射端）',fake:'暗示接收端也是5W'},
-      {name:'1米外接收',real:'<0.1W（衰减>98%）',fake:'"数米半径"省略了衰减'},
-      {name:'充电时间',real:'充手机需50+小时',fake:'"告别充电线"但没告别等待'},
-      {name:'适用场景',real:'仅微瓦级传感器',fake:'暗示可充手机'},
-    ],verdict:'<strong>避坑：</strong>电磁波自由空间衰减是距离平方——这不是技术问题，是物理定律。1米外接收功率剩1-5%。这项技术只适合功耗<1mW的微型传感器。手机隔空充=营销概念。'}
+    product: '品牌净水器',
+    mktHeadline: '「5级RO反渗透，进口膜，母婴级过滤」',
+    mktClaims: ['进口RO反渗透膜，过滤精度0.0001微米','5级过滤系统，母婴级安全标准','智能提醒换芯，APP远程监控'],
+    mktVerdict: '「母婴级」不是国家标准——是营销发明的词。核心部件RO膜全球主要供应商就那几家。',
+    engHeadline: '不同品牌RO膜可能同一家供应商——比较三个参数足够',
+    engClaims: ['全球主流RO膜：陶氏、海德能、东丽——不同品牌可能用同一家','脱盐率、额定净水量、滤芯更换成本——这才是硬指标','「母婴级」「进口膜」都是模糊营销词汇，无标准定义'],
+    engVerdict: '只比较三个参数：<span class="param-highlight">脱盐率(%)</span>、<span class="param-highlight">额定净水量(L)</span>、<span class="param-highlight">年均滤芯成本(元)</span>。品牌最不重要。'
   },
   {
-    product:'品牌RO净水器（¥3999）',
-    ad:{claim:'「5级RO反渗透，进口膜元件，智能TDS检测，保留矿物质」',buzzwords:['5级过滤','进口膜','智能检测','保留矿物质'],small:'*主流RO膜来自陶氏、海德能、东丽——不同品牌可能用同一家膜'},
-    truth:{header:'净水器只看三个参数：',params:[
-      {name:'RO膜品牌',real:'陶氏/海德能/东丽',fake:'"进口膜"不说是谁'},
-      {name:'脱盐率',real:'≥97%（关键指标）',fake:'"5级过滤"不给出具体数据'},
-      {name:'额定净水量',real:'≥4000L（看寿命）',fake:'"大通量"不标注具体值'},
-      {name:'滤芯年成本',real:'RO膜300-500元/2-3年',fake:'"智能提醒"可能提前催换'},
-    ],verdict:'<strong>避坑：</strong>RO膜是净水器的核心——而全球主流RO膜就那几家。3999元和999元的净水器，RO膜可能一模一样。只看三个参数：脱盐率、额定净水量、滤芯更换成本。品牌最不重要。'}
+    product: 'AI学习机',
+    mktHeadline: '「AI精准学，自适应学习路径，成绩提升30%」',
+    mktClaims: ['AI算法精准诊断知识薄弱点','自适应学习路径，千人千面','名校教研团队联合研发，提分效果显著'],
+    mktVerdict: '「AI精准学」的本质是题库标签系统+错误统计——不是AI，是数据分析。',
+    engHeadline: '「AI精准学」 = 题库标签系统 + 错题重推规则',
+    engClaims: ['不是AI理解你的学习——是预设的知识点标签匹配','自适应路径 = 错题重推规则（if错A→推送类似题B）','「提分30%」无对照组、无发表研究——不具统计学意义'],
+    engVerdict: '核心参数：<span class="param-highlight">题库质量(数量+解析)</span>、<span class="param-highlight">屏幕素质(护眼)</span>、<span class="param-highlight">家长管控能力</span>。不为「AI」标签支付溢价。'
   }
 ];
 
 // ================================================================
-// S2: XRAY COST DATA
+// S2: COST X-RAY DATA
 // ================================================================
 const XRAY_DATA = [
   {
-    icon:'🧥', name:'品牌羽绒服', claim:'广告称「加拿大鹅同级」', price:'¥2,000',
-    costs:[
-      {label:'羽绒填充(90%鹅绒)',pct:28,cls:'material'},
-      {label:'面料+辅料+拉链',pct:12,cls:'material'},
-      {label:'设计+加工',pct:10,cls:'rd'},
-      {label:'品牌营销+代言',pct:35,cls:'marketing'},
-      {label:'渠道+经销商利润',pct:15,cls:'profit'},
+    icon:'🧥', name:'品牌羽绒服（¥2000）', claim:'📢 广告称「加拿大鹅同级」',
+    cost:[
+      {label:'羽绒填充', pct:28, cls:'material'},{label:'面料+辅料', pct:12, cls:'material'},
+      {label:'加工费', pct:10, cls:'rd'},{label:'品牌溢价', pct:35, cls:'marketing'},{label:'渠道利润', pct:15, cls:'profit'},
     ],
-    materialCost:'¥800',premium:'2.5×',
-    insight:'物料成本约800元，其中羽绒560元。找到含绒量90%+、充绒量200g+、蓬松度FP700+的产品——不看logo，<strong>800元就能买到同品质。</strong>品牌溢价+渠道加价吃掉了你1240元。'
+    callouts: ['羽绒填充 28%','面料辅料 12%','加工费 10%','品牌溢价 35%','渠道利润 15%'],
+    insight:'一件2000元的品牌羽绒服，羽绒成本约560元，总物料约1000元。其余1000元是品牌和渠道加价。<br><br><strong>卓克观点：</strong>找到含绒量90%+、充绒量200g+、蓬松度FP700+的产品，不看logo，800元就能买到同品质。'
   },
   {
-    icon:'🔋', name:'石墨烯充电宝', claim:'广告称「诺贝尔奖技术，充电快3倍」', price:'¥299',
-    costs:[
-      {label:'电芯(18650×4)',pct:35,cls:'material'},
-      {label:'外壳+PCB电路板',pct:10,cls:'material'},
-      {label:'组装+测试',pct:5,cls:'rd'},
-      {label:'"石墨烯"概念营销',pct:30,cls:'marketing'},
-      {label:'渠道+平台扣点',pct:20,cls:'profit'},
+    icon:'🔋', name:'石墨烯充电宝（¥299）', claim:'📢 广告称「诺贝尔奖技术，快3倍」',
+    cost:[
+      {label:'电芯(18650×4)', pct:35, cls:'material'},{label:'外壳+PCB', pct:10, cls:'material'},
+      {label:'组装成本', pct:5, cls:'rd'},{label:'"石墨烯"营销', pct:30, cls:'marketing'},{label:'渠道利润', pct:20, cls:'profit'},
     ],
-    materialCost:'¥135',premium:'2.2×',
-    insight:'物料成本约135元。「石墨烯」只是导电浆料里的微量添加剂（不足0.01%），物料增加不到1元。同规格不打石墨烯标签的充电宝卖99元。<strong>199元买了一个标签。</strong>'
+    callouts: ['电芯 35%','外壳+PCB 10%','组装 5%','"石墨烯"标签 30%','渠道 20%'],
+    insight:'物料成本约135元。所谓「石墨烯」只是导电浆料加了微量石墨烯粉末（<0.01%），材料增加不到1元。<br><br><strong>卓克观点：</strong>同电芯不打石墨烯标签的充电宝卖99元。199元买了一个标签。'
   },
   {
-    icon:'🚗', name:'某品牌FSD选装', claim:'广告称「未来可实现完全自动驾驶」', price:'¥64,000',
-    costs:[
-      {label:'传感器硬件+芯片',pct:18,cls:'material'},
-      {label:'软件研发分摊',pct:25,cls:'rd'},
-      {label:'OTA升级储备',pct:12,cls:'rd'},
-      {label:'"期货"未来溢价',pct:25,cls:'marketing'},
-      {label:'厂商利润',pct:20,cls:'profit'},
+    icon:'🚗', name:'某品牌FSD选装包（¥64,000）', claim:'📢 广告称「未来可实现完全自动驾驶」',
+    cost:[
+      {label:'传感器硬件', pct:18, cls:'material'},{label:'软件研发分摊', pct:25, cls:'rd'},
+      {label:'OTA升级储备', pct:12, cls:'rd'},{label:'"期货"溢价', pct:25, cls:'marketing'},{label:'利润', pct:20, cls:'profit'},
     ],
-    materialCost:'¥11,500',premium:'5.6×',
-    insight:'硬件成本约11500元。关键问题：今天是L2+辅助驾驶，不是L4/L5自动驾驶。FSD是<strong>典型的「期货消费」</strong>——花今天的钱买明天可能实现的功能。换车周期<5年的用户，FSD投入产出比极低。'
+    callouts: ['传感器硬件 18%','软件研发 37%','"期货"溢价 25%','利润 20%',''],
+    insight:'64000元选装，硬件成本约11500元。注意——这是为「未来功能」付费。<br><br><strong>卓克观点：</strong>FSD是典型的「期货消费」。换车周期<5年，FSD投入产出比极低。'
   },
   {
-    icon:'💊', name:'碳水阻断剂', claim:'广告称「日本研发，阻断90%碳水」', price:'¥198',
-    costs:[
-      {label:'白芸豆提取物',pct:8,cls:'material'},
-      {label:'胶囊壳+辅料',pct:7,cls:'material'},
-      {label:'生产灌装',pct:10,cls:'rd'},
-      {label:'营销推广+KOL',pct:50,cls:'marketing'},
-      {label:'渠道+平台扣点',pct:25,cls:'profit'},
+    icon:'💊', name:'碳水阻断剂（¥198/瓶）', claim:'📢 广告称「日本研发，阻断碳水吸收」',
+    cost:[
+      {label:'白芸豆提取物', pct:8, cls:'material'},{label:'胶囊+辅料', pct:7, cls:'material'},
+      {label:'生产灌装', pct:10, cls:'rd'},{label:'营销推广', pct:50, cls:'marketing'},{label:'渠道利润', pct:25, cls:'profit'},
     ],
-    materialCost:'¥30',premium:'6.6×',
-    insight:'有效成分成本约16元，总物料不到30元。营销费用占了50%——<strong>你在为广告买单，不是为产品买单。</strong>胃酸会让α-淀粉酶抑制剂失活，这产品在到达肠道前就已无效。'
+    callouts: ['提取物 8%','胶囊辅料 7%','生产 10%','营销 50%','渠道 25%'],
+    insight:'有效成分成本约16元，总物料不到30元。营销费用占了一半。<br><br><strong>卓克观点：</strong>胃酸让α-淀粉酶抑制剂失活，这产品到达肠道前已无效。198元不如买体脂秤。'
   },
   {
-    icon:'📡', name:'隔空充电器', claim:'广告称「5W隔空充，数米半径」', price:'¥399',
-    costs:[
-      {label:'天线阵列+射频芯片',pct:27,cls:'material'},
-      {label:'外壳+电源适配器',pct:8,cls:'material'},
-      {label:'研发分摊',pct:20,cls:'rd'},
-      {label:'"未来感"概念溢价',pct:25,cls:'marketing'},
-      {label:'渠道利润',pct:20,cls:'profit'},
+    icon:'💧', name:'品牌RO净水器（¥3999）', claim:'📢 广告称「5级RO反渗透，进口膜」',
+    cost:[
+      {label:'RO膜组件', pct:15, cls:'material'},{label:'泵+管路+外壳', pct:12, cls:'material'},
+      {label:'组装检测', pct:8, cls:'rd'},{label:'品牌溢价', pct:40, cls:'marketing'},{label:'渠道利润', pct:25, cls:'profit'},
     ],
-    materialCost:'¥140',premium:'2.9×',
-    insight:'硬件成本约140元。核心问题不在成本——是<strong>物理定律不允许。</strong>电磁波按距离平方衰减，1米外接收功率只剩1-5%。充一部手机需要50+小时。这不是产品不好，是物理学说了算。'
-  },
-  {
-    icon:'🥤', name:'品牌RO净水器', claim:'广告称「5级RO反渗透，进口膜」', price:'¥3,999',
-    costs:[
-      {label:'RO膜组件',pct:15,cls:'material'},
-      {label:'泵+管路+外壳',pct:12,cls:'material'},
-      {label:'组装+水检',pct:8,cls:'rd'},
-      {label:'品牌溢价+广告',pct:40,cls:'marketing'},
-      {label:'渠道+安装商利润',pct:25,cls:'profit'},
-    ],
-    materialCost:'¥1,080',premium:'3.7×',
-    insight:'核心部件RO膜成本约600元。主流RO膜来自陶氏、海德能、东丽——<strong>不同品牌净水器可能用同一家膜。</strong>999元和3999元的净水器，RO膜可能一模一样。比较脱盐率、额定净水量、滤芯年成本即可。'
+    callouts: ['RO膜 15%','泵+外壳 12%','组装 8%','品牌溢价 40%','渠道 25%'],
+    insight:'RO膜成本约600元。全球主流RO膜来自陶氏、海德能、东丽。<br><br><strong>卓克观点：</strong>不同品牌膜可能是同一家供应商。只比较：脱盐率、额定净水量、滤芯更换成本。'
   }
 ];
 
 // ================================================================
-// S3: GAUNTLET QUIZ DATA
+// S3: IQ TAX CHALLENGE DATA (3 levels × 8 questions)
 // ================================================================
-const GAUNTLET_QUESTIONS = [
-  {
-    title:'以下哪个广告词最可能是智商税？',
-    ad:'"本产品采用诺贝尔奖获奖材料石墨烯，充电速度提升300%，续航翻倍"',
-    opts:[
-      {text:'A. 可能是真的——石墨烯确实获得了诺贝尔奖',correct:false},
-      {text:'B. 智商税——石墨烯只是导电添加剂，不可能「翻倍」',correct:true},
-      {text:'C. 看品牌——大品牌不会骗人',correct:false},
-      {text:'D. 看价格——贵的应该靠谱一些',correct:false},
-    ],
-    fb_correct:'✅ 正确！石墨烯在电池中只能作为微量导电添加剂（<0.01%），改变不了电池的化学体系。电池能量密度提升靠正负极材料和电解质——不是添加剂。"充电提升300%"违背电化学基本原理。',
-    fb_wrong:'❌ 这是典型的「诺贝尔奖光环」营销套路。石墨烯确实是诺贝尔奖材料，但在电池中只能作为微量导电添加剂（<0.01%），不可能让续航翻倍。'
-  },
-  {
-    title:'电动车宣传「NEDC续航1000公里」，你应该问什么？',
-    ad:'"本车采用新一代电池技术，NEDC综合续航里程达1000公里"',
-    opts:[
-      {text:'A. 太厉害了，直接下单',correct:false},
-      {text:'B. NEDC是什么标准？WLTP续航是多少？',correct:true},
-      {text:'C. 电池是什么品牌的？',correct:false},
-      {text:'D. 有没有快充功能？',correct:false},
-    ],
-    fb_correct:'✅ 正确！NEDC是欧洲2000年代的测试循环，比真实路况理想得多。WLTP（2017年）和EPA（美国）更接近真实。冬天低温续航再打5折。NEDC 1000km ≈ 冬天高速实际约350-450km。',
-    fb_wrong:'❌ NEDC续航标称值普遍虚高20-30%，冬季低温再减40-50%。"1000公里"在冬天高速场景可能只剩400公里。关键是问清楚测试标准——WLTP或EPA比NEDC可靠得多。'
-  },
-  {
-    title:'「AI降噪耳机，降噪能力超越同类50%」——怎么评估？',
-    ad:'"搭载自研AI降噪芯片，智能识别环境噪音，降噪能力超越同类产品50%"',
-    opts:[
-      {text:'A. AI降噪肯定比普通降噪好',correct:false},
-      {text:'B. 「超越50%」无基准——看降噪深度(dB)数值',correct:true},
-      {text:'C. 自研芯片代表技术实力强',correct:false},
-      {text:'D. 贵的就是好的',correct:false},
-    ],
-    fb_correct:'✅ 正确！降噪耳机的核心参数是降噪深度(dB)和降噪带宽(Hz)。「AI降噪」只是软件层面的自适应调整——根据环境切换降噪模式，不提升硬件降噪上限。"超越50%"是典型无基准营销。',
-    fb_wrong:'❌ 降噪耳机真正重要的参数是：降噪深度（dB，一般35-45dB为佳）和降噪频宽（Hz）。「AI降噪」只是自适应切换降噪等级，"超越50%"没有跟谁比、什么条件比——典型的无基准营销。'
-  },
-  {
-    title:'「白芸豆碳水阻断剂，阻断90%碳水」——你怎么看？',
-    ad:'"澳洲白芸豆酵素精华，日本实验室研发，餐前两粒阻断90%碳水吸收，随便吃不长胖"',
-    opts:[
-      {text:'A. 酵素是天然成分，安全有效',correct:false},
-      {text:'B. 胃酸会让α-淀粉酶抑制剂失活，根本到不了肠道',correct:true},
-      {text:'C. 日本研发比较严谨，可以相信',correct:false},
-      {text:'D. 很多人都在吃，应该有用',correct:false},
-    ],
-    fb_correct:'✅ 正确！α-淀粉酶抑制剂（α-AI）在pH=6.9的中性环境有效，但胃酸pH≈1.5-3.5，会使其蛋白质结构变性失活。即使部分存活到达小肠，也只能抑制不到5%的淀粉消化——一口米饭就补回来了。',
-    fb_wrong:'❌ 关键科学事实：α-淀粉酶抑制剂是一种蛋白质，在胃酸(pH 1.5-3.5)中会变性失活。即使残存活性，也最多减少不到5%碳水吸收。而且它是蛋白质，口服会被消化系统分解。"阻断90%碳水"纯属编造。'
-  },
-  {
-    title:'空调「一晚低至1度电」——这个数据可信吗？',
-    ad:'"新一代全直流变频技术，ECO节能模式，一晚低至1度电"',
-    opts:[
-      {text:'A. 完全可信，大品牌有保障',correct:false},
-      {text:'B. 在极严苛实验室条件下可能，实际家用不可能',correct:true},
-      {text:'C. 变频空调确实很省电',correct:false},
-      {text:'D. 1度电差不多够用一晚了',correct:false},
-    ],
-    fb_correct:'✅ 正确！「一晚1度电」在特定实验室条件（室外29℃、设定26℃、房间8m²密闭）下测得。实际1.5匹空调一晚实际耗电3-8度。这个数字不是假的，但条件苛刻到不具参考价值。看能效比(EER/COP)才是正解。',
-    fb_wrong:'❌ 这个数据来自特定实验室条件——室外29℃恒温、房间仅8m²、完全密闭无热源。现实条件完全不同。1.5匹空调实际一晚（8小时）通常耗电3-8度。看空调省电要看能效比(EER/COP)。'
-  },
-  {
-    title:'充电宝「20000mAh，可为iPhone充电8次」——哪里有问题？',
-    ad:'"20000mAh超大容量充电宝，可为iPhone充电8次，仅售69元"',
-    opts:[
-      {text:'A. 20000mAh是电芯3.7V下的容量，不是5V输出容量',correct:true},
-      {text:'B. 69元太便宜了，肯定是假的',correct:false},
-      {text:'C. iPhone不需要这么大容量',correct:false},
-      {text:'D. 充电宝都是这样的，没什么问题',correct:false},
-    ],
-    fb_correct:'✅ 正确！20000mAh是电芯在3.7V下的容量=74Wh。升压到5V输出（效率约90%），实际约13300mAh。再经充电线和手机转换效率（约85%），实际充入iPhone约11300mAh≈3.6次，远不到8次。还是「参数单位」的问题。',
-    fb_wrong:'❌ 20000mAh是电芯3.7V下的标称值。升压到5V USB输出时（考虑90%效率），实际约13300mAh。再经充电线和手机转换损耗，实际给iPhone充入的电量可能只有标称的50%。"充电8次"需要看「额定容量」而非「电芯容量」。'
-  },
-  {
-    title:'扫地机器人「5000Pa飓风级吸力」——该信吗？',
-    ad:'"新一代激光导航扫地机器人，5000Pa飓风级吸力，深层清洁地毯"',
-    opts:[
-      {text:'A. 5000Pa确实很厉害，吸尘器也才这个水平',correct:false},
-      {text:'B. 吸力数值和实际清洁效果不是线性关系——还要看滚刷、风道',correct:true},
-      {text:'C. 只要激光导航就不会有问题',correct:false},
-      {text:'D. 大吸力就是好，参数不会骗人',correct:false},
-    ],
-    fb_correct:'✅ 正确！5000Pa是风机出口静压，不代表实际清洁能力。扫地机器人的清洁效率由四个因素共同决定：吸力(Pa)、滚刷设计、风道密封性、过滤系统。吸力数值每年都在涨，但密封不好等于漏气。这是「看一个参数不够」的典型案例。',
-    fb_wrong:'❌ 5000Pa是风机出口的静态压力——在封闭管道中测量。实际扫地时，吸口与地面有间隙，真实有效吸力远低于这个值。清洁效果主要取决于：滚刷设计、风道密封性、过滤效率。吸力数值每年都在涨（军备竞赛），但清洁效果提升微乎其微。'
-  },
-  {
-    title:'折叠屏「30万次折叠无忧，每天折100次可用8年」——怎么看？',
-    ad:'"UTG超薄玻璃，通过30万次折叠测试，每天折100次可用8年"',
-    opts:[
-      {text:'A. 30万次确实够用了，可以放心购买',correct:false},
-      {text:'B. 实验室条件和真实使用环境不同——温度、湿度、灰尘都会加速老化',correct:true},
-      {text:'C. 8年足够用了，到时候也该换手机了',correct:false},
-      {text:'D. 只要不摔就不会有问题',correct:false},
-    ],
-    fb_correct:'✅ 正确！30万次在恒温恒湿无尘实验室测得。真实使用中：夏天口袋40-50℃、冬天-10℃、灰尘颗粒进入铰链——这些都会加速UTG玻璃疲劳和铰链磨损。很多用户6-12个月后出现折痕加深、屏幕裂纹。实验室数字≠实际寿命。',
-    fb_wrong:'❌ 实验室的30万次测试条件：恒温20-25℃、恒湿40-60%、无尘环境、匀速折叠。真实使用条件完全不同——口袋里40℃+、汗液盐分侵蚀、灰尘进入铰链槽、非匀速开合。这些因素让实际寿命大幅缩短。很多折叠屏用户在一年内就遇到了折痕和屏幕问题。'
-  }
+const CHALLENGE_LEVELS = [
+  { name:'学徒', threshold:2, questions:[
+    {title:'以下哪个广告词最可能是智商税？',adcopy:'"本产品采用诺贝尔奖获奖材料石墨烯，充电速度提升300%，续航翻倍"',options:[
+      {text:'A. 可能是真的——石墨烯确实获得了诺贝尔奖',correct:false},{text:'B. 智商税——石墨烯只是导电添加剂，不可能「翻倍」',correct:true},{text:'C. 看品牌——大品牌不会骗人',correct:false},{text:'D. 看价格——贵的应该靠谱一些',correct:false}],
+      feedback:{correct:'✅ 正确！石墨烯在电池中只能作为微量导电添加剂（<0.01%），根本改变不了电池的化学体系。"充电提升300%"违背电化学基本原理。',wrong:'❌ 这是典型的「诺贝尔奖光环」营销套路。石墨烯确实是诺贝尔奖材料，但在电池中只能作为微量导电添加剂，不可能让续航翻倍。'}},
+    {title:'电动车宣传「续航1000公里」，你应该问什么问题？',adcopy:'"本车采用新一代电池技术，NEDC综合续航里程达1000公里"',options:[
+      {text:'A. 太厉害了，就买这台',correct:false},{text:'B. NEDC是什么标准？WLTP续航是多少？',correct:true},{text:'C. 电池是什么品牌的？',correct:false},{text:'D. 有没有快充功能？',correct:false}],
+      feedback:{correct:'✅ 正确！NEDC标准虚高20-30%，冬天低温再减40-50%。NEDC 1000km ≈ 冬天高速实际约350-450km。',wrong:'❌ NEDC续航标称值普遍虚高20-30%，冬季低温再减40-50%。关键是问清楚测试标准——WLTP或EPA比NEDC可靠得多。'}},
+    {title:'「白芸豆碳水阻断剂，阻断碳水吸收」——你怎么看？',adcopy:'"澳洲白芸豆酵素精华，日本实验室研发，餐前两粒阻断90%碳水吸收"',options:[
+      {text:'A. 酵素是天然成分，安全有效',correct:false},{text:'B. 胃酸会让α-淀粉酶抑制剂失活，根本到不了肠道',correct:true},{text:'C. 日本研发比较严谨，可以相信',correct:false},{text:'D. 很多人都在吃，应该有用',correct:false}],
+      feedback:{correct:'✅ 正确！α-淀粉酶抑制剂在胃酸(pH 1.5-3.5)中会变性失活。即使残存活性，最多减少<5%碳水吸收。这是生物化学。',wrong:'❌ α-淀粉酶抑制剂是一种蛋白质，在胃酸中会变性失活。能阻断90%碳水纯属编造。唯一有效的减肥参数是热量缺口。'}}
+  ]},
+  { name:'猎手', threshold:5, questions:[
+    {title:'空调广告「一晚低至1度电」，这个数据可信吗？',adcopy:'"新一代全直流变频技术，ECO节能模式，一晚低至1度电"',options:[
+      {text:'A. 完全可信，大品牌有保障',correct:false},{text:'B. 在极严苛的实验室条件下可能，实际家用不可能',correct:true},{text:'C. 变频空调确实省电，应该差不多',correct:false},{text:'D. 1度电差不多够一晚了',correct:false}],
+      feedback:{correct:'✅ 正确！「一晚1度电」是在室外29℃恒温、房间8m²密闭的实验室条件下测得。1.5匹空调实际一晚耗电3-8度。',wrong:'❌ 这个数据来自特定实验室条件。1.5匹空调实际一晚（8小时）耗电3-8度。看省电要看能效比(EER/COP)，不是广告数字。'}},
+    {title:'充电宝「20000mAh可为iPhone充电8次」——哪里有问题？',adcopy:'"20000mAh超大容量充电宝，可为iPhone充电8次，仅售69元"',options:[
+      {text:'A. 20000mAh是电芯电压(3.7V)下的容量，不是5V输出容量',correct:true},{text:'B. 69元太便宜了，肯定是假货',correct:false},{text:'C. iPhone不需要这么大容量',correct:false},{text:'D. 充电宝都是这样标的，没什么问题',correct:false}],
+      feedback:{correct:'✅ 正确！20000mAh是3.7V电芯容量=74Wh。升压5V输出(效率90%)实际≈13300mAh。经过线损+充电效率，实际充入约11300mAh≈3.6次，不是8次。',wrong:'❌ 20000mAh是电芯在3.7V下的标称值。实际给手机充电要经过升压、线损、充电效率三重损耗，最终可用容量只有标称的50-60%。'}},
+    {title:'扫地机器人宣称「5000Pa超大吸力」，这个参数该信吗？',adcopy:'"新一代激光导航扫地机器人，5000Pa飓风级吸力，深层清洁地毯"',options:[
+      {text:'A. 5000Pa确实很厉害，吸尘器也才这个水平',correct:false},{text:'B. 吸力数值和清洁效果不是线性关系——还要看滚刷和风道设计',correct:true},{text:'C. 只要是激光导航就不会有问题',correct:false},{text:'D. 大吸力就是好，参数不会骗人',correct:false}],
+      feedback:{correct:'✅ 正确！5000Pa是风机出口静压。清洁效果取决于：吸力、滚刷设计、风道密封性、过滤系统。吸力大但密封不好=漏气。',wrong:'❌ 5000Pa是风机出口的静态压力。实际扫地时吸口与地面有间隙，有效吸力远低于这个值。清洁效果由滚刷设计和风道密封性共同决定。'}}
+  ]},
+  { name:'大师', threshold:7, questions:[
+    {title:'折叠屏手机「30万次折叠无忧」，你应该怎么看？',adcopy:'"UTG超薄玻璃，通过30万次折叠测试，每天折100次可用8年"',options:[
+      {text:'A. 30万次确实够用了，可以放心购买',correct:false},{text:'B. 实验室恒温恒湿无尘 vs 真实使用环境不同，实际寿命大幅缩水',correct:true},{text:'C. 8年足够用了，到时候也该换手机了',correct:false},{text:'D. 只要不摔就不会有问题',correct:false}],
+      feedback:{correct:'✅ 正确！实验室：恒温20-25℃、恒湿40-60%、无尘。真实：口袋40℃+、汗液盐分、灰尘进入铰链——这些大幅缩短实际寿命。很多用户6-12个月就出问题。',wrong:'❌ 实验室30万次测试条件与真实使用完全不同。「实验室数字≠实际寿命」是一个通用准则——适用于所有产品。'}},
+    {title:'骨传导耳机宣传「不伤听力」——这个说法科学吗？',adcopy:'"骨传导技术，声音通过骨骼传递，不经过耳膜，完全保护听力"',options:[
+      {text:'A. 骨传导绕过了耳膜，确实不会伤听力',correct:false},{text:'B. 听力损伤的关键是耳蜗毛细胞——无论什么传导方式，音量过大都会损伤',correct:true},{text:'C. 骨传导是医疗级技术，应该安全',correct:false},{text:'D. 只要不入耳就不会损伤听力',correct:false}],
+      feedback:{correct:'✅ 正确！听力损伤的根本原因是耳蜗毛细胞的不可逆损伤——无论声音通过空气传导还是骨传导。关键是音量(dB)和时长，不是传导方式。超过85dB长时间暴露就会损伤。',wrong:'❌ 骨传导仍需耳蜗毛细胞将振动转化为神经信号。音量超过85dB、长时间暴露——无论什么传导方式都会损伤听力。"不伤听力"是偷换概念。'}}
+  ]}
 ];
 
 // ================================================================
-// S5: SCENE MAP DATA
+// S5: PITFALL MAP DATA
 // ================================================================
-const SCENE_DATA = [
-  {
-    zone:'commute', icon:'🚗', title:'通勤出行', sub:'汽车·电动车·出行装备',
-    hotspots:[
-      {icon:'🔋',product:'电动汽车选购',tip:'看WLTP续航非NEDC；问电池能量密度；确认热泵空调',risk:'high',riskLabel:'高风险'},
-      {icon:'⚡',product:'氢燃料电池车',tip:'全链路效率<35%，乘用纯电已胜出。氢能真实场景在重卡',risk:'high',riskLabel:'高风险'},
-      {icon:'🧠',product:'FSD/自动驾驶选装',tip:'期货消费——今天付钱买明天的功能。换车<5年不建议选装',risk:'high',riskLabel:'高风险'},
-      {icon:'🔌',product:'充电桩安装',tip:'确认小区电容余量；7kW家用桩足够日常，不需要11kW',risk:'medium',riskLabel:'中风险'},
-    ]
-  },
-  {
-    zone:'home', icon:'🏠', title:'居家生活', sub:'家电·净水·家居产品',
-    hotspots:[
-      {icon:'🌬️',product:'空调选购',tip:'看制冷量(kW)和能效比(EER)；夏天空调+电扇低速=省电',risk:'medium',riskLabel:'中风险'},
-      {icon:'💧',product:'RO净水器',tip:'只看脱盐率、额定净水量、滤芯年成本。品牌最不重要',risk:'high',riskLabel:'高风险'},
-      {icon:'🧹',product:'扫地机器人',tip:'吸力数值≠清洁效果。看滚刷设计、风道密封性、过滤系统',risk:'medium',riskLabel:'中风险'},
-      {icon:'🧥',product:'羽绒服',tip:'翻吊牌找三个数：含绒量≥90%、充绒量、蓬松度FP700+',risk:'medium',riskLabel:'中风险'},
-      {icon:'🔇',product:'降噪耳机',tip:'看降噪深度(dB)和频宽(Hz)，不是「AI降噪」标签',risk:'medium',riskLabel:'中风险'},
-    ]
-  },
-  {
-    zone:'digital', icon:'📱', title:'数码产品', sub:'手机·充电宝·可穿戴',
-    hotspots:[
-      {icon:'🔋',product:'充电宝',tip:'看「额定容量」非「电芯容量」；不要为「石墨烯」标签付溢价',risk:'high',riskLabel:'高风险'},
-      {icon:'📡',product:'隔空充电器',tip:'物理定律限定——1米外接收功率<5%，目前仅适合微瓦级传感器',risk:'high',riskLabel:'高风险'},
-      {icon:'⌚',product:'可穿戴设备',tip:'心率看PPG通道数，GPS看双频(L1+L5)。底层传感器数据决定一切',risk:'medium',riskLabel:'中风险'},
-      {icon:'📱',product:'折叠屏手机',tip:'30万次折叠=实验室数据。真实环境：温度+湿度+灰尘大幅缩短寿命',risk:'high',riskLabel:'高风险'},
-    ]
-  },
-  {
-    zone:'health', icon:'💊', title:'健康消费', sub:'减肥·保健·食品',
-    hotspots:[
-      {icon:'💊',product:'碳水阻断剂',tip:'α-淀粉酶抑制剂在胃酸中失活。减少<5%碳水吸收=一口饭',risk:'high',riskLabel:'高风险'},
-      {icon:'🥤',product:'代餐产品',tip:'短期可用，不可长期。热量缺口是唯一有效的减肥参数',risk:'medium',riskLabel:'中风险'},
-      {icon:'🥫',product:'罐头食品',tip:'保质期远超标注——现代灭菌工艺保证20年不变质。不必追求「最新日期」',risk:'low',riskLabel:'低风险'},
-      {icon:'🧬',product:'甲醛检测',tip:'个人几乎无法做到准确检测。央视检测结果可参考，家用检测仪误差极大',risk:'medium',riskLabel:'中风险'},
-    ]
-  }
+const PITFALL_ZONES = [
+  {icon:'🚗',name:'通勤出行',warning:'高发智商税区域',traps:['FSD期货','续航虚标','氢燃料概念','换电站噱头'],
+   tips:['电动车：不看NEDC看WLTP/EPA，冬天续航打5折是正常','FSD选装：换车周期<5年不买，搞清楚SAE自动驾驶等级','氢燃料乘用车：全链路效率<35%，纯电路线已胜出','充电宝：看「额定容量」不是「电芯容量」，实际可用约60%'],
+   articles:['037','131','165','060','061','225','273']},
+  {icon:'📱',name:'数码电子',warning:'营销概念重灾区',traps:['石墨烯标签','AI降噪','隔空充电','折叠屏寿命'],
+   tips:['石墨烯产品：99%蹭诺贝尔奖热度，作为添加剂不改变根本性能','降噪耳机：看降噪深度(dB)和频宽(Hz)，「AI降噪」只是自适应切换','隔空充电：电磁波衰减是距离平方——物理定律不能违抗','折叠屏：实验室30万次≠实际寿命，灰尘和温度是最大杀手'],
+   articles:['057','099','178','209','210','282','287']},
+  {icon:'🏠',name:'居家生活',warning:'日常陷阱最多',traps:['品牌溢价','参数虚标','虚假省电','甲醛骗局'],
+   tips:['羽绒服：翻吊牌找含绒量/充绒量/蓬松度，三个数字齐全才买','空调：看能效比(EER/COP)不是看匹数，空调+电扇低速更省电','净水器：不同品牌RO膜可能同厂，只比较脱盐率+额定净水量+换芯成本','罐头：灭菌工艺让罐头可保存20年+，保质期标注偏保守'],
+   articles:['038','075','105','215','244','254']},
+  {icon:'💊',name:'健康养生',warning:'最贵的是伪科学',traps:['碳水阻断','酵素减肥','石墨烯理疗','保健品话术'],
+   tips:['碳水阻断剂：胃酸让α-淀粉酶抑制剂失活——这是生物化学','减肥产品：唯一有效的参数是热量缺口（每天-300~500kcal）','可穿戴设备：传感器精度决定一切——看PPG通道数和GPS频段','保健品：任何不提供具体成分含量的宣传都是营销话术'],
+   articles:['074','087','123','221','269','277']}
 ];
 
 // ================================================================
-// S4: THREE-STEP PARAM DATA
+// INIT: S1 — Truth Theater
 // ================================================================
-const PARAM_3STEP = {
-  '羽绒服':{core:['含绒量','充绒量','蓬松度'],standard:'含绒量≥90%, 充绒量短款100-150g, FP700+',gauge:'行业标准: 80-90%',materialCost:'200-560元',reasonablePrice:'600-1000元',typicalPrice:'1500-3000元',premiumMsg:'品牌溢价1.5-5×！找到三个参数齐全的无品牌产品，价格可控制在800元以内。'},
-  '电动车':{core:['WLTP续航','电池能量密度','热管理系统'],standard:'WLTP≥350km, 能量密度≥160Wh/kg, 热泵+液冷',gauge:'行业标准: WLTP 300-700km',materialCost:'电池包4-8万元',reasonablePrice:'10-20万',typicalPrice:'15-40万',premiumMsg:'看三电参数（电池/电机/电控），不要被智能座舱分心。15-20万区间是性价比最优。'},
-  '空调':{core:['制冷量(kW)','能效比(EER/COP)','循环风量'],standard:'1.5匹≈3.5kW, EER≥3.6(一级), 循环风量≥600m³/h',gauge:'行业标准: 一级能效EER≥3.6',materialCost:'800-1500元',reasonablePrice:'2000-3500元',typicalPrice:'2500-6000元',premiumMsg:'看能效比不看匹数。夏天空调+电扇低速=体感温度低2-3℃=省电30%。'},
-  '净水器':{core:['脱盐率','额定净水量','滤芯年成本'],standard:'RO脱盐率≥97%, 额定净水量≥4000L, 滤芯年成本<300元',gauge:'行业标准: 脱盐率≥97%',materialCost:'RO膜400-600元',reasonablePrice:'800-1500元',typicalPrice:'2000-5000元',premiumMsg:'主流RO膜就三家——陶氏/海德能/东丽。不同品牌净水器可能用同一家膜！只比较脱盐率、额定净水量和滤芯更换成本。'},
-  '充电宝':{core:['额定容量(5V)','电芯类型','快充协议'],standard:'额定容量≈标称×0.6, 21700圆柱电池, PD 18W+',gauge:'行业标准: 额定容量≈电芯容量×60%',materialCost:'电芯40-80元',reasonablePrice:'60-120元',typicalPrice:'69-299元',premiumMsg:'看「额定容量」而非「电芯容量」。不要为「石墨烯」标签付溢价——同规格不打石墨烯标签的产品便宜40-60%。'},
-  '扫地机':{core:['吸力(Pa)','滚刷设计','风道密封性'],standard:'吸力2500Pa+, 浮动滚刷+边刷, 密封风道',gauge:'行业标准: 吸力1500-5000Pa',materialCost:'400-800元',reasonablePrice:'1000-2500元',typicalPrice:'1500-5000元',premiumMsg:'吸力数值每年涨但清洁效果提升微乎其微——吸力军备竞赛。真正决定清洁效果的是滚刷设计、风道密封和过滤系统。'}
-};
+(function initTruthTheater(){
+  let currentCase = 0, autoTimer;
+  const nav = document.getElementById('truthNav');
 
-// ================================================================
-// INIT: S1 — AD VS TRUTH
-// ================================================================
-(function initS1(){
-  const btns = document.querySelectorAll('#atSelector button');
-  const adSide = document.getElementById('adSide');
-  const truthSide = document.getElementById('truthSide');
-  const stage = document.getElementById('adTruthStage');
-
-  function renderAdTruth(idx){
-    const d = AD_TRUTH_DATA[idx];
-    let adH = `<div class="ad-claim">${d.ad.claim}</div>`;
-    adH += `<div class="ad-buzzwords">${d.ad.buzzwords.map(w=>`<span>${w}</span>`).join('')}</div>`;
-    adH += `<div class="ad-small">${d.ad.small}</div>`;
-    adSide.innerHTML = adH;
-
-    let thH = `<div class="truth-header">${d.truth.header}</div><div class="truth-params">`;
-    d.truth.params.forEach(p=>{
-      thH += `<div class="tp-row"><span class="tp-name">${p.name}</span><span class="tp-real">✅ ${p.real}</span><span class="tp-fake">❌ ${p.fake}</span></div>`;
-    });
-    thH += `</div><div class="truth-verdict">${d.truth.verdict}</div>`;
-    truthSide.innerHTML = thH;
-
-    // Trigger shatter animation
-    stage.classList.remove('shattering');
-    void stage.offsetWidth;
-    stage.classList.add('shattering');
-  }
-
-  btns.forEach((btn,i)=>{btn.addEventListener('click',function(){btns.forEach(b=>b.classList.remove('active'));this.classList.add('active');renderAdTruth(i);});});
-  renderAdTruth(0);
-})();
-
-// ================================================================
-// INIT: S2 — XRAY CROSS-SECTION
-// ================================================================
-(function initS2(){
-  const gallery = document.getElementById('xrayGallery');
-  let html = '';
-  XRAY_DATA.forEach((item) => {
-    html += `<div class="xray-item reveal">`;
-    html += `<div class="xray-header"><div class="xray-icon">${item.icon}</div><div class="xray-info"><div class="xray-name">${item.name}</div><div class="xray-claim">📢 ${item.claim}</div></div><div class="xray-price">${item.price}</div></div>`;
-    html += `<div class="xray-body"><div class="xray-cut">`;
-    html += `<div class="xray-visual"><div class="xray-scanline"></div><div class="xray-outline"><div class="xray-inner">${item.icon}</div></div></div>`;
-    html += `<div class="xray-breakdown">`;
-    item.costs.forEach(c => {
-      html += `<div class="xb-row"><span class="xb-label">${c.label}</span><div class="xb-bar-wrap"><div class="xb-bar ${c.cls}" style="width:0%" data-width="${c.pct}%">${c.pct}%</div></div><span class="xb-pct ${c.cls}">${c.pct}%</span></div>`;
-    });
-    html += `</div></div>`;
-    html += `<div class="xray-cost-total">💰 物料成本 <span class="material-cost">${item.materialCost}</span> → 溢价 <span class="premium-mult">${item.premium}</span></div>`;
-    html += `<div class="xray-insight">🔬 <strong>卓克拆解：</strong>${item.insight}</div>`;
-    html += `</div></div>`;
+  let dotsHtml = '';
+  TRUTH_CASES.forEach((c,i) => {
+    dotsHtml += `<button class="truth-dot${i===0?' active':''}" onclick="switchTruthCase(${i})" title="${c.product}"></button>`;
   });
-  gallery.innerHTML = html;
+  dotsHtml += `<span class="truth-counter" id="truthCounter">1/${TRUTH_CASES.length}</span>`;
+  nav.innerHTML = dotsHtml;
 
-  function animateBars(){
-    document.querySelectorAll('.xray-item').forEach(item => {
-      const rect = item.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 100 && rect.bottom > 0) {
-        item.querySelectorAll('.xb-bar').forEach(bar => { bar.style.width = bar.dataset.width; });
-        item.classList.add('visible');
-      }
-    });
-  }
-  window.addEventListener('scroll', animateBars);
-  setTimeout(animateBars, 300);
+  window.switchTruthCase = function(idx) {
+    clearTimeout(autoTimer);
+    currentCase = idx;
+    const c = TRUTH_CASES[idx];
+    document.querySelectorAll('.truth-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+    document.getElementById('truthCounter').textContent = `${idx+1}/${TRUTH_CASES.length}`;
+
+    const overlay = document.getElementById('shatterOverlay');
+    overlay.classList.remove('cracked');
+    void overlay.offsetWidth;
+    overlay.classList.add('cracked');
+    setTimeout(() => overlay.classList.remove('cracked'), 750);
+
+    document.getElementById('mktHeadline').textContent = c.mktHeadline;
+    document.getElementById('mktClaims').innerHTML = c.mktClaims.map(cl => `<div class="claim-item"><span class="claim-icon">📢</span>${cl}</div>`).join('');
+    document.getElementById('mktVerdict').innerHTML = c.mktVerdict;
+    document.getElementById('engHeadline').textContent = c.engHeadline;
+    document.getElementById('engClaims').innerHTML = c.engClaims.map(cl => `<div class="claim-item"><span class="claim-icon">🔧</span>${cl}</div>`).join('');
+    document.getElementById('engVerdict').innerHTML = c.engVerdict;
+
+    autoTimer = setTimeout(() => {
+      const next = (currentCase + 1) % TRUTH_CASES.length;
+      switchTruthCase(next);
+    }, 9000);
+  };
+
+  switchTruthCase(0);
 })();
 
 // ================================================================
-// INIT: S3 — GAUNTLET (智商税闯关)
+// INIT: S2 — Cost X-Ray Machine
 // ================================================================
-window.gauntlet = {current:0, score:0, lives:3, total:GAUNTLET_QUESTIONS.length, answered:false};
+(function initXray(){
+  let currentXray = 0, xrayTimer;
 
-function renderGauntlet(){
-  const g = window.gauntlet; g.answered = false;
-  const q = GAUNTLET_QUESTIONS[g.current];
-  document.getElementById('glBadge').textContent = `第 ${g.current+1} 关`;
-  document.getElementById('glTitle').textContent = q.title;
-  document.getElementById('glAd').textContent = `💬 "${q.ad}"`;
-  document.getElementById('glFeedback').textContent = '👆 选择你的判断——这是在训练你的直觉';
-  document.getElementById('glFeedback').className = 'gauntlet-feedback';
-  document.getElementById('glNext').style.display = 'none';
-  document.getElementById('gpFill').style.width = ((g.current)/g.total*100)+'%';
-  document.getElementById('gpLevel').textContent = `LEVEL ${g.current+1}/${g.total}`;
-  ['h1','h2','h3'].forEach((id,i)=>{ document.getElementById(id).classList.toggle('lost', i >= g.lives); });
+  function updateXray(idx) {
+    clearTimeout(xrayTimer);
+    currentXray = idx;
+    const d = XRAY_DATA[idx];
+    const silhouette = document.getElementById('xraySilhouette');
+    silhouette.classList.remove('scanned');
+    document.getElementById('xrayIcon').textContent = d.icon;
+    void silhouette.offsetWidth;
+    silhouette.classList.add('scanned');
 
-  let cH = '';
-  q.opts.forEach((o,i)=>{ cH += `<button onclick="window.gauntletAnswer(${i})" id="gOpt${i}">${o.text}</button>`; });
-  document.getElementById('glChoices').innerHTML = cH;
-}
+    for (let i = 1; i <= 5; i++) {
+      const co = document.getElementById('co' + i);
+      const col = document.getElementById('co' + i + 'Label');
+      if (d.callouts[i-1]) {
+        col.textContent = d.callouts[i-1];
+        co.classList.remove('visible');
+        setTimeout(() => co.classList.add('visible'), 300 + i * 180);
+      } else {
+        co.classList.remove('visible');
+      }
+    }
 
-window.gauntletAnswer = function(idx){
-  const g = window.gauntlet;
-  if (g.answered || g.lives <= 0) return;
-  g.answered = true;
-  const q = GAUNTLET_QUESTIONS[g.current];
-  const opt = q.opts[idx];
-  const fb = document.getElementById('glFeedback');
-  q.opts.forEach((o,i)=>{const b=document.getElementById('gOpt'+i);if(o.correct)b.classList.add('correct');});
-  if (opt.correct) {
-    g.score++;
-    document.getElementById('gOpt'+idx).classList.add('correct');
-    fb.textContent = q.fb_correct;
-    fb.className = 'gauntlet-feedback correct-fb';
-  } else {
-    g.lives--;
-    document.getElementById('gOpt'+idx).classList.add('wrong');
-    q.opts.forEach((o,i)=>{if(o.correct)document.getElementById('gOpt'+i).classList.add('correct');});
-    fb.textContent = q.fb_wrong;
-    fb.className = 'gauntlet-feedback wrong-fb';
-    ['h1','h2','h3'].forEach((id,i)=>{document.getElementById(id).classList.toggle('lost', i>=g.lives);});
-  }
-  document.getElementById('glScore').textContent = g.score;
-  document.getElementById('gpFill').style.width = ((g.current+1)/g.total*100)+'%';
-
-  if (g.lives <= 0) {
-    document.getElementById('glNext').style.display = 'block';
-    document.getElementById('glNext').textContent = '💀 重新训练';
-    document.getElementById('glNext').onclick = function(){ g.current=0;g.score=0;g.lives=3;renderGauntlet();document.getElementById('glScore').textContent='0';document.getElementById('glNext').onclick=gauntletNext;};
-    fb.textContent = '💀 你被营销话术击倒了。记住教训，重新开始训练。';
-    fb.className = 'gauntlet-feedback wrong-fb';
-  } else {
-    document.getElementById('glNext').style.display = 'block';
-    document.getElementById('glNext').textContent = g.current < g.total-1 ? '征服下一关 →' : '查看最终评级 →';
-  }
-};
-
-window.gauntletNext = function(){
-  const g = window.gauntlet;
-  if (g.current < g.total-1) {
-    g.current++;
-    renderGauntlet();
-  } else {
-    const pct = Math.round(g.score/g.total*100);
-    let rank, msg;
-    if (pct >= 87) { rank='🏆 反营销大师特工'; msg='广告话术对你几乎无效。你已掌握参数思维的核心——任何产品在你眼里都是一组参数，不是一组形容词。走出去，你是消费者的最后防线。'; }
-    else if (pct >= 62) { rank='🎯 高级消费者特工'; msg='你能识别大多数营销套路，但偶尔会被精心包装的话术迷惑。继续强化「找核心参数」的肌肉记忆。'; }
-    else if (pct >= 37) { rank='📚 特工学员'; msg='基础不错，但还需要更多实战训练。建议重新浏览成本剖面图和参数三步法，把「看参数不看广告」内化成条件反射。'; }
-    else { rank='🐣 新兵入伍'; msg='欢迎加入训练营！你刚刚开始建立参数思维。不要气馁——每次消费都是一次训练机会。先从上方的「营销vs真相」开始复习。'; }
-
-    document.getElementById('glBadge').textContent = '训练完成';
-    document.getElementById('glTitle').textContent = rank;
-    document.getElementById('glAd').textContent = msg;
-    document.getElementById('glChoices').innerHTML = '';
-    document.getElementById('glFeedback').textContent = '🎯 记住：任何不提供具体数值的广告词，都是营销话术。';
-    document.getElementById('glFeedback').className = 'gauntlet-feedback correct-fb';
-    document.getElementById('glNext').style.display = 'block';
-    document.getElementById('glNext').textContent = '重新训练 🔄';
-    document.getElementById('glNext').onclick = function(){g.current=0;g.score=0;g.lives=3;renderGauntlet();document.getElementById('glScore').textContent='0';document.getElementById('glNext').onclick=gauntletNext;};
-    document.getElementById('gpFill').style.width = '100%';
-  }
-};
-
-renderGauntlet();
-
-// ================================================================
-// INIT: S4 — THREE-STEP METHOD
-// ================================================================
-function suggestParams(val){ /* placeholder for future autocomplete */ }
-function showParamResult(product){
-  const d = PARAM_3STEP[product];
-  if (!d) return;
-  document.getElementById('msInput').value = product;
-
-  document.getElementById('msResult').innerHTML = `<span style="color:var(--orange)">核心参数：</span>${d.core.join('、')}<br><span style="color:var(--text-dim);font-size:.72rem">${d.standard}</span>`;
-  document.getElementById('msGaugeVal').textContent = d.gauge.split(':')[0] || '✓';
-  document.getElementById('msGaugeLabel').textContent = d.gauge;
-
-  const calcDiv = document.getElementById('msCalc');
-  calcDiv.innerHTML = `
-    <div class="ms-calc-row"><span class="ms-cr-label">物料成本</span><span class="ms-cr-val">${d.materialCost}</span></div>
-    <div class="ms-calc-row"><span class="ms-cr-label">合理倍率</span><span class="ms-cr-val">2.0-3.0×</span></div>
-    <div class="ms-calc-row"><span class="ms-cr-label">合理价格</span><span class="ms-cr-val" style="color:var(--green)">${d.reasonablePrice}</span></div>
-    <div class="ms-calc-row"><span class="ms-cr-label">市场典型价</span><span class="ms-cr-val bad">${d.typicalPrice}</span></div>
-    <div class="ms-calc-result">⚠️ ${d.premiumMsg}</div>
-  `;
-}
-
-// ================================================================
-// INIT: S5 — SCENE MAP
-// ================================================================
-(function initS5(){
-  const map = document.getElementById('sceneMap');
-  let html = '';
-  SCENE_DATA.forEach((zone, i) => {
-    html += `<div class="scene-zone ${zone.zone}" id="zone${i}" onclick="document.getElementById('zone${i}').classList.toggle('expanded')">`;
-    html += `<div class="sz-header"><div class="sz-icon">${zone.icon}</div><div><div class="sz-title">${zone.title}</div><div class="sz-sub">${zone.sub} · ${zone.hotspots.length}个风险点</div></div></div>`;
-    html += `<div class="sz-hotspots">`;
-    zone.hotspots.forEach(h => {
-      html += `<div class="sz-hotspot"><span class="szh-icon">${h.icon}</span><div class="szh-info"><div class="szh-product">${h.product}</div><div class="szh-tip">${h.tip}</div></div><span class="szh-risk ${h.risk}">${h.riskLabel}</span></div>`;
+    document.getElementById('readoutProduct').textContent = d.name;
+    document.getElementById('readoutClaim').textContent = d.claim;
+    let itemsHtml = '';
+    d.cost.forEach(s => {
+      const icls = {material:'mat', marketing:'mkt', rd:'rd', profit:'prf'}[s.cls] || 'mat';
+      itemsHtml += `<div class="readout-item">
+        <div class="ri-bar ${s.cls}" style="width:${Math.max(s.pct*1.5, 20)}px;min-width:${s.pct}px;"></div>
+        <span class="ri-label">${s.label}</span>
+        <span class="ri-pct ${icls}">${s.pct}%</span></div>`;
     });
-    html += `</div></div>`;
+    document.getElementById('readoutItems').innerHTML = itemsHtml;
+    document.getElementById('readoutInsight').innerHTML = d.insight;
+    document.querySelectorAll('.xray-prod-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+
+    xrayTimer = setTimeout(() => {
+      const next = (currentXray + 1) % XRAY_DATA.length;
+      updateXray(next);
+    }, 12000);
+  }
+
+  const btnsHtml = XRAY_DATA.map((d,i) =>
+    `<button class="xray-prod-btn${i===0?' active':''}" onclick="window.switchXray(${i})">${d.icon} ${d.name.split('（')[0]}</button>`
+  ).join('');
+  document.getElementById('xrayProducts').innerHTML = btnsHtml;
+  window.switchXray = updateXray;
+  updateXray(0);
+})();
+
+// ================================================================
+// INIT: S3 — IQ Tax Challenge (Level Mode)
+// ================================================================
+(function initChallenge(){
+  let allQuestions = [];
+  CHALLENGE_LEVELS.forEach((level, li) => {
+    level.questions.forEach((q, qi) => {
+      allQuestions.push({...q, level:li, levelName:level.name, qi});
+    });
+  });
+
+  window.cqCurrent = 0;
+  window.cqScore = 0;
+  window.cqAnswered = false;
+  window.cqUnlockedLevel = 0;
+  document.getElementById('cqTotal').textContent = allQuestions.length;
+
+  function updateLevelDisplay() {
+    const l1 = document.getElementById('level1Node'), l2 = document.getElementById('level2Node'), l3 = document.getElementById('level3Node');
+    const b1 = document.getElementById('bridge1'), b2 = document.getElementById('bridge2');
+    [l1,l2,l3].forEach(l => l.className = 'level-node');
+    b1.className = 'level-bridge'; b2.className = 'level-bridge';
+
+    const q = allQuestions[window.cqCurrent];
+    if (window.cqUnlockedLevel >= 1) { l1.classList.add('completed'); b1.classList.add('done'); }
+    if (window.cqUnlockedLevel >= 2) { l2.classList.add('completed'); b2.classList.add('done'); }
+    if (q.level === 0) l1.classList.add('active');
+    else if (q.level === 1 && window.cqUnlockedLevel >= 1) l2.classList.add('active');
+    else if (q.level === 2 && window.cqUnlockedLevel >= 2) l3.classList.add('active');
+    else if (q.level === 1 && window.cqUnlockedLevel < 1) l2.classList.add('locked');
+    else if (q.level === 2 && window.cqUnlockedLevel < 2) l3.classList.add('locked');
+
+    const pct = Math.round((window.cqCurrent / allQuestions.length) * 100);
+    document.getElementById('cpFill').style.width = pct + '%';
+    const currentLevelName = CHALLENGE_LEVELS[Math.min(q.level, Math.max(0, window.cqUnlockedLevel))].name;
+    document.getElementById('cpLabel').textContent = `总进度 ${window.cqCurrent}/${allQuestions.length} · ${currentLevelName}级`;
+  }
+
+  window.renderChallengeQuestion = function() {
+    window.cqAnswered = false;
+    updateLevelDisplay();
+    const q = allQuestions[window.cqCurrent];
+    document.getElementById('cqBadge').textContent = `${q.levelName}级 · 第 ${q.qi+1} 题`;
+    document.getElementById('cqTitle').textContent = q.title;
+    document.getElementById('cqAdcopy').textContent = `💬 "${q.adcopy}"`;
+    const fb = document.getElementById('cqFeedback'); fb.textContent = '👆 点击选项，做出你的判断'; fb.className = 'challenge-feedback';
+    document.getElementById('cqNext').style.display = 'none';
+    let oH = '';
+    q.options.forEach((o,i) => { oH += `<button class="challenge-opt" onclick="answerChallenge(${i})" id="cqOpt${i}">${o.text}</button>`; });
+    document.getElementById('cqOptions').innerHTML = oH;
+  };
+
+  window.answerChallenge = function(idx) {
+    if (window.cqAnswered) return;
+    window.cqAnswered = true;
+    const q = allQuestions[window.cqCurrent], opt = q.options[idx], fb = document.getElementById('cqFeedback');
+    q.options.forEach((o,i) => { const b = document.getElementById('cqOpt'+i); if (o.correct) b.classList.add('correct'); });
+    if (opt.correct) {
+      window.cqScore++;
+      document.getElementById('cqOpt'+idx).classList.add('correct');
+      fb.textContent = q.feedback.correct; fb.className = 'challenge-feedback correct-fb';
+    } else {
+      document.getElementById('cqOpt'+idx).classList.add('wrong');
+      fb.textContent = q.feedback.wrong; fb.className = 'challenge-feedback wrong-fb';
+    }
+    document.getElementById('cqScore').textContent = window.cqScore;
+    document.getElementById('cqNext').style.display = 'block';
+
+    // Check level unlocks
+    CHALLENGE_LEVELS.forEach((lvl, li) => {
+      if (window.cqScore >= lvl.threshold) window.cqUnlockedLevel = Math.max(window.cqUnlockedLevel, li);
+    });
+    updateLevelDisplay();
+
+    if (window.cqCurrent >= allQuestions.length - 1) {
+      document.getElementById('cqNext').textContent = '查看成绩 →';
+    } else {
+      document.getElementById('cqNext').textContent = '下一题 →';
+    }
+  };
+
+  window.nextChallengeQuestion = function() {
+    if (window.cqCurrent < allQuestions.length - 1) {
+      window.cqCurrent++;
+      window.renderChallengeQuestion();
+    } else {
+      const pct = Math.round(window.cqScore / allQuestions.length * 100);
+      let rank = '', badge = '';
+      if (pct >= 80) { rank = '🏆 大师级 · 反营销专家'; badge = '🛡️'; }
+      else if (pct >= 50) { rank = '👍 猎手级 · 基本免疫'; badge = '🔍'; }
+      else { rank = '📚 学徒级 · 继续修炼'; badge = '📖'; }
+      document.getElementById('cqBadge').textContent = '训练完成';
+      document.getElementById('cqTitle').innerHTML = `${badge} 你的段位：${rank}`;
+      document.getElementById('cqAdcopy').textContent = `最终得分：${window.cqScore}/${allQuestions.length}（${pct}%）`;
+      document.getElementById('cqOptions').innerHTML = '';
+      document.getElementById('cqFeedback').textContent = '🎯 核心心法：任何不提供具体数值的广告词，都是营销话术。走出去以后，自动在脑子里跑参数检查。';
+      document.getElementById('cqFeedback').className = 'challenge-feedback correct-fb';
+      document.getElementById('cqNext').textContent = '重新训练 🔄';
+      document.getElementById('cqNext').onclick = function() {
+        window.cqCurrent = 0; window.cqScore = 0; window.cqUnlockedLevel = 0;
+        document.getElementById('cqScore').textContent = '0';
+        window.renderChallengeQuestion();
+        document.getElementById('cqNext').onclick = window.nextChallengeQuestion;
+        document.getElementById('cqNext').textContent = '下一题 →';
+      };
+    }
+  };
+
+  window.renderChallengeQuestion();
+})();
+
+// ================================================================
+// INIT: S4 — Parameter Thinking Bootcamp
+// ================================================================
+let bootcampStep = 1;
+let bootcampCompleted = new Set();
+
+const BOOTCAMP_PRODUCTS = {
+  'ev': {
+    name: '电动汽车',
+    params: [
+      {name:'续航里程(NEDC)', core:false},{name:'电池能量密度(Wh/kg)', core:true},
+      {name:'「智能座舱」', core:false},{name:'热管理系统类型', core:true},
+      {name:'充电峰值功率(kW)', core:true},{name:'车身颜色选项', core:false},
+      {name:'WLTP/EPA续航', core:true},{name:'「豪华内饰」', core:false},
+    ],
+    answer: '核心参数是电池能量密度、热管理系统、充电功率、WLTP/EPA续航。NEDC续航、智能座舱、颜色和内饰都是营销噪音。记住：先看三电（电池/电机/电控）再看舒适配置。'
+  },
+  'headphone': {
+    name: '降噪耳机',
+    params: [
+      {name:'降噪深度(dB)', core:true},{name:'「AI降噪」标签', core:false},
+      {name:'降噪频宽(Hz)', core:true},{name:'通透模式延迟(ms)', core:true},
+      {name:'「自研芯片」', core:false},{name:'蓝牙版本', core:false},
+      {name:'佩戴舒适度', core:true},{name:'「大师调音」', core:false},
+    ],
+    answer: '核心参数：降噪深度(dB)、降噪频宽(Hz)、通透模式延迟。AI降噪和自研芯片只是软件层面的自适应切换，不提升硬件上限。大师调音是主观感受——看频响曲线才是工程语言。'
+  },
+  'robot': {
+    name: '扫地机器人',
+    params: [
+      {name:'吸力(Pa)', core:false},{name:'滚刷设计/转速', core:true},
+      {name:'风道密封性', core:true},{name:'「激光导航」标签', core:false},
+      {name:'过滤系统效率', core:true},{name:'避障方案(结构光/视觉)', core:true},
+      {name:'「APP远程控制」', core:false},{name:'电池容量', core:false},
+    ],
+    answer: '核心参数：滚刷设计（能否搅起灰尘）、风道密封性、过滤效率、避障方案。吸力数值每年军备竞赛但清洁效果提升微乎其微——因为密封不好等于漏气。激光导航已是标配不是卖点。'
+  }
+};
+
+function switchBootcamp(step) {
+  bootcampStep = step;
+  document.querySelectorAll('.bootcamp-tab').forEach((t,i) => {
+    t.classList.toggle('active', i+1 === step);
+    if (bootcampCompleted.has(i+1)) t.classList.add('completed');
+  });
+  renderBootcampStep(step);
+}
+
+function renderBootcampStep(step) {
+  const ws = document.getElementById('bootcampWorkspace');
+  if (step === 1) {
+    ws.innerHTML = `<div style="text-align:center;"><p style="font-size:.82rem;color:var(--text-dim);margin-bottom:12px;">选择一个产品，点击参数将其归入「核心指标」或「营销噪音」——训练识别关键参数的能力。</p>
+      <div class="ph-product-pick" style="justify-content:center;" id="phProductPick">
+        <button class="ph-pick-btn active" onclick="loadParamGame('ev',this)">🚗 电动汽车</button>
+        <button class="ph-pick-btn" onclick="loadParamGame('headphone',this)">🎧 降噪耳机</button>
+        <button class="ph-pick-btn" onclick="loadParamGame('robot',this)">🤖 扫地机器人</button>
+      </div>
+      <div class="params-to-sort" id="paramsToSort" style="justify-content:center;"></div>
+      <div class="sort-bins">
+        <div class="sort-bin core-bin" id="coreBin"><div class="bin-label core">✅ 核心指标</div><div id="coreBinContent" style="display:flex;flex-wrap:wrap;gap:6px;"></div></div>
+        <div class="sort-bin noise-bin" id="noiseBin"><div class="bin-label noise">❌ 营销噪音</div><div id="noiseBinContent" style="display:flex;flex-wrap:wrap;gap:6px;"></div></div>
+      </div>
+      <div class="sort-result" id="sortResult"></div></div>`;
+    loadParamGame('ev', document.querySelector('.ph-pick-btn'));
+  } else if (step === 2) {
+    ws.innerHTML = `<div class="standards-ref">
+      <div class="standard-card"><div class="sc-icon">🧥</div><div class="sc-product">羽绒服</div><div class="sc-standard">GB/T 14272-2021</div><div class="sc-tip">含绒量≥90%、充绒量100-300g<br>蓬松度FP 700+</div></div>
+      <div class="standard-card"><div class="sc-icon">🚗</div><div class="sc-product">电动汽车</div><div class="sc-standard">WLTP / EPA</div><div class="sc-tip">不看NEDC看WLTP或EPA<br>电池能量密度≥160Wh/kg</div></div>
+      <div class="standard-card"><div class="sc-icon">🌬️</div><div class="sc-product">空调</div><div class="sc-standard">GB 21455-2019</div><div class="sc-tip">能效比EER≥3.6为一级<br>国家能效标识网查询</div></div>
+      <div class="standard-card"><div class="sc-icon">💧</div><div class="sc-product">净水器</div><div class="sc-standard">GB 34914-2021</div><div class="sc-tip">脱盐率≥95%<br>额定净水量≥2000L</div></div>
+      <div class="standard-card"><div class="sc-icon">🔋</div><div class="sc-product">充电宝</div><div class="sc-standard">GB/T 35590-2017</div><div class="sc-tip">额定容量≠电芯容量<br>5V额定约为标称60%</div></div>
+      <div class="standard-card"><div class="sc-icon">🎧</div><div class="sc-product">降噪耳机</div><div class="sc-standard">无强制国标</div><div class="sc-tip">比较降噪深度(dB)和频宽(Hz)<br>参考RTINGS等独立测评</div></div>
+    </div><p style="text-align:center;margin-top:18px;font-size:.78rem;color:var(--text-dim);">💡 <strong>关键原则：</strong>每个品类都有对应的国家标准(GB)或国际标准。在搜索引擎输入「产品名 + 国家标准」——这比看广告更可靠。</p>`;
+  } else {
+    ws.innerHTML = `<div class="premium-calc">
+      <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:16px;">输入产品售价和估算的物料成本，计算<span style="color:var(--amber);">智商税指数</span>（品牌溢价倍数）。</p>
+      <div class="calc-row"><label>💰 产品售价</label><input type="number" id="calcPrice" placeholder="例如：2000" oninput="calcPremium()"><span style="font-size:.8rem;color:var(--text-dim);">元</span></div>
+      <div class="calc-row"><label>🔧 估算物料成本</label><input type="number" id="calcMaterial" placeholder="例如：800" oninput="calcPremium()"><span style="font-size:.8rem;color:var(--text-dim);">元</span></div>
+      <p style="font-size:.68rem;color:var(--text-subtle);">参考：羽绒服物料≈售价40-60%，电子产品≈30-50%，保健品≈10-20%。</p>
+      <div class="calc-result" id="calcResult"></div></div>`;
+  }
+}
+
+function loadParamGame(key, btn) {
+  document.querySelectorAll('.ph-pick-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const data = BOOTCAMP_PRODUCTS[key], container = document.getElementById('paramsToSort');
+  const coreBin = document.getElementById('coreBinContent'), noiseBin = document.getElementById('noiseBinContent');
+  const sortResult = document.getElementById('sortResult');
+  const shuffled = [...data.params].sort(() => Math.random() - 0.5);
+
+  container.innerHTML = shuffled.map((p,i) =>
+    `<span class="param-token" id="token-${i}" data-core="${p.core}">${p.name}</span>`
+  ).join('');
+  coreBin.innerHTML = ''; noiseBin.innerHTML = ''; sortResult.classList.remove('show');
+
+  container.querySelectorAll('.param-token').forEach(token => {
+    token.addEventListener('click', function() {
+      const isCore = this.dataset.core === 'true';
+      if (this.classList.contains('selected-core')) {
+        this.classList.remove('selected-core'); this.classList.add('selected-noise'); noiseBin.appendChild(this);
+      } else if (this.classList.contains('selected-noise')) {
+        this.classList.remove('selected-noise'); coreBin.appendChild(this);
+      } else if (isCore) {
+        this.classList.add('selected-core'); coreBin.appendChild(this);
+      } else {
+        this.classList.add('selected-noise'); noiseBin.appendChild(this);
+      }
+      checkParamSorting(key);
+    });
+  });
+}
+
+function checkParamSorting(key) {
+  const data = BOOTCAMP_PRODUCTS[key];
+  const coreBin = document.getElementById('coreBinContent'), noiseBin = document.getElementById('noiseBinContent');
+  const sortResult = document.getElementById('sortResult');
+  let correct = 0, total = data.params.length;
+
+  document.querySelectorAll('.param-token').forEach(token => {
+    const param = data.params.find(p => p.name === token.textContent);
+    if (!param) return;
+    const inCore = coreBin.contains(token), inNoise = noiseBin.contains(token);
+    if ((param.core && inCore) || (!param.core && inNoise)) correct++;
+  });
+
+  if (correct === total) {
+    sortResult.innerHTML = `<div class="sr-score">✅ 完美！${correct}/${total} 全部正确</div><p style="margin-top:6px;">${data.answer}</p>`;
+    sortResult.classList.add('show');
+    bootcampCompleted.add(1);
+    document.getElementById('bt1').classList.add('completed');
+    document.getElementById('bt1').querySelector('.bt-check').style.display = 'block';
+  } else if (correct >= total - 2) {
+    sortResult.innerHTML = `<div class="sr-score">👍 不错！${correct}/${total} 正确</div><p style="margin-top:6px;color:var(--text-dim);">还有${total-correct}个参数需要调整——再试试！</p>`;
+    sortResult.classList.add('show');
+  }
+}
+
+function calcPremium() {
+  const price = parseFloat(document.getElementById('calcPrice')?.value) || 0;
+  const material = parseFloat(document.getElementById('calcMaterial')?.value) || 0;
+  const result = document.getElementById('calcResult');
+  if (!price || !material || material >= price) { result.classList.remove('show'); return; }
+  const premium = price - material, ratio = (price / material).toFixed(1);
+  let advice = ratio > 3 ? '⚠️ 智商税严重——品牌+渠道吃掉了超过2/3的售价。寻找物料成本占比更高的替代品。'
+    : ratio > 2 ? '⚡ 溢价偏高——在可接受范围边缘。看看能否找到同物料参数、不同品牌的产品。'
+    : '✅ 溢价合理——品牌和渠道的加价在市场正常范围。';
+  result.innerHTML = `<div class="cr-material">物料成本占比：${Math.round(material/price*100)}%</div><div class="cr-premium">智商税指数：${ratio}倍</div><div class="cr-advice">${advice}</div>`;
+  result.classList.add('show');
+  bootcampCompleted.add(3);
+  document.getElementById('bt3').classList.add('completed');
+  document.getElementById('bt3').querySelector('.bt-check').style.display = 'block';
+}
+
+renderBootcampStep(1);
+
+// ================================================================
+// INIT: S5 — Pitfall Map
+// ================================================================
+(function initPitfallMap(){
+  const map = document.getElementById('pitfallMap');
+  let html = '';
+  PITFALL_ZONES.forEach(zone => {
+    html += `<div class="pitfall-zone" onclick="this.classList.toggle('expanded')">
+      <div class="pz-icon">${zone.icon}</div><div class="pz-name">${zone.name}</div>
+      <div class="pz-warning">⚠ ${zone.warning}</div>
+      <div class="pz-traps">${zone.traps.map(t => `<span class="pz-trap">${t}</span>`).join('')}</div>
+      <div class="pz-detail">
+        ${zone.tips.map(t => `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;"><span style="color:var(--amber);flex-shrink:0;margin-top:2px;">▸</span>${t}</div>`).join('')}
+        <div style="margin-top:10px;font-size:.7rem;color:var(--amber);">📎 相关文章：#${zone.articles.join(' #')}</div>
+      </div></div>`;
   });
   map.innerHTML = html;
-  setTimeout(() => { document.getElementById('zone0').classList.add('expanded'); }, 200);
 })();
 
 // ================================================================
-// INIT: S6 — DOSSIER TIMELINE
+// INIT: S6 — Article Timeline
 // ================================================================
-(function initS6(){
-  const timeline = document.getElementById('dossierTimeline');
-  const filterBtns = document.querySelectorAll('#dossierFilters button');
+let currentScenario = 'all', searchQuery = '';
 
-  function renderDossier(tag){
-    const filtered = tag === 'all' ? ARTICLES : ARTICLES.filter(a => a.tags.includes(tag));
-    if (filtered.length === 0) {
-      timeline.innerHTML = '<div class="dossier-empty">📭 这个标签下暂无训练任务</div>';
-      return;
-    }
-    let html = '';
-    filtered.forEach(a => {
-      html += `<div class="dossier-entry"><div class="de-id">MISSION #${a.id}</div><div class="de-title">${a.title}</div><div class="de-preview">${a.preview}</div><div class="de-tags">${a.tags.map(t=>`<span>${t}</span>`).join('')}</div></div>`;
-    });
-    timeline.innerHTML = html;
-  }
+function filterArticles() {
+  searchQuery = document.getElementById('articleSearchInput').value.toLowerCase().trim();
+  renderArticles();
+}
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', function(){
-      filterBtns.forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      renderDossier(this.dataset.tag);
-    });
+function renderArticles() {
+  const container = document.getElementById('articleTimeline'), countEl = document.getElementById('articleCount');
+  let filtered = ARTICLES;
+  if (currentScenario !== 'all') filtered = ARTICLES.filter(a => a.scenario === currentScenario);
+  if (searchQuery) filtered = filtered.filter(a => a.title.toLowerCase().includes(searchQuery) || a.preview.toLowerCase().includes(searchQuery) || a.id.includes(searchQuery));
+
+  let html = '';
+  filtered.forEach(a => {
+    html += `<div class="timeline-item${a.consumer?' consumer-hero':''}" onclick="this.classList.toggle('expanded')">
+      <div class="ti-id">#${a.id} ${a.consumer ? '<span class="ti-consumer-badge">评测</span>' : ''}</div>
+      <div class="ti-title">${a.title}</div>
+      <div class="ti-meta"><span>📍 ${a.scenario}</span></div>
+      <div class="ti-preview">${a.preview}</div></div>`;
   });
-  renderDossier('all');
-})();
+  container.innerHTML = html || '<div style="text-align:center;padding:40px;color:var(--text-dim);">🔍 没有匹配的文章，试试其他关键词或场景</div>';
+  countEl.textContent = `显示 ${filtered.length} / ${ARTICLES.length} 篇文章`;
+}
 
-// ================================================================
-// UTILITY: Scroll, Nav, Agent Meter, Hero Canvas
-// ================================================================
-function scrollToSection(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-
-const sectionIds = ['s1','s2','s3','s4','s5','s6'];
-const navBtns = document.querySelectorAll('.nav-sections button');
-window.addEventListener('scroll', ()=>{
-  const sy = window.scrollY + 100;
-  let ai = 0;
-  sectionIds.forEach((id,i)=>{const el=document.getElementById(id);if(el&&el.offsetTop<=sy)ai=i;});
-  navBtns.forEach((b,i)=>{b.classList.toggle('active',i===ai);});
-  const docH = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = docH>0?Math.min(100,Math.round(sy/docH*100)):0;
-  document.getElementById('amBadge').textContent = pct+'%';
-  document.getElementById('amBadge').classList.toggle('active', pct>50);
-
-  document.querySelectorAll('.reveal').forEach(el=>{
-    if(el.getBoundingClientRect().top < window.innerHeight-80) el.classList.add('visible');
+document.querySelectorAll('#articleFilters button').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('#articleFilters button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentScenario = this.dataset.scenario;
+    renderArticles();
   });
 });
+renderArticles();
 
 // ================================================================
-// HERO CANVAS — Radar Scope + Crosshairs + Particle Field
+// HERO CANVAS — X-Ray Scanner
 // ================================================================
 (function(){
-  const canvas = document.getElementById('heroCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [];
-
-  function resize(){w=canvas.width=canvas.offsetWidth;h=canvas.height=canvas.offsetHeight;}
+  const canvas = document.getElementById('heroCanvas'); if (!canvas) return;
+  const ctx = canvas.getContext('2d'); let w, h, particles = [];
+  function resize() { w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; }
   resize(); window.addEventListener('resize', resize);
 
-  for (let i=0;i<60;i++){
-    particles.push({
-      x:Math.random()*w, y:Math.random()*h,
-      vx:(Math.random()-0.5)*0.35, vy:(Math.random()-0.5)*0.35,
-      size:Math.random()*2+0.6, alpha:Math.random()*0.4+0.1,
-      pulse:Math.random()*Math.PI*2,
-      color:['#f59e0b','#fbbf24','#f87171','#4ade80','#60a5fa'][Math.floor(Math.random()*5)]
-    });
+  for (let i = 0; i < 90; i++) {
+    particles.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.35,vy:(Math.random()-0.5)*0.35,size:Math.random()*2+.6,alpha:Math.random()*.5+.15,pulse:Math.random()*Math.PI*2,color:['#f59e0b','#fbbf24','#f87171','#4ade80','#60a5fa','#a78bfa'][Math.floor(Math.random()*6)]});
   }
+  let scanAngle = 0;
 
-  let scanAngle = 0, crosshairPhase = 0;
-
-  function draw(t){
-    ctx.clearRect(0,0,w,h);
-    const cx=w/2, cy=h/2-30;
-    scanAngle += 0.012;
-    crosshairPhase += 0.015;
-
-    // Radar rings
-    for (let r=40;r<Math.min(w,h)*0.45;r+=45){
-      const alpha = 0.04 * (1 - r/(Math.min(w,h)*0.45));
-      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  function draw(t) {
+    ctx.clearRect(0,0,w,h); scanAngle += 0.006;
+    const cx = w/2, cy = h/2 - 30, ringR = Math.min(w,h) * 0.32;
+    for (let r = ringR-30; r <= ringR+30; r += 3) {
+      const alpha = 0.025 * (1 - Math.abs(r-ringR)/30);
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
       ctx.strokeStyle = `rgba(245,158,11,${alpha})`; ctx.lineWidth = 0.8; ctx.stroke();
     }
+    ctx.save(); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,ringR,scanAngle-.12,scanAngle+.12); ctx.closePath();
+    const grad = ctx.createRadialGradient(cx,cy,ringR*.4,cx,cy,ringR);
+    grad.addColorStop(0,'rgba(245,158,11,0)'); grad.addColorStop(0.7,'rgba(245,158,11,.06)'); grad.addColorStop(1,'rgba(245,158,11,.14)');
+    ctx.fillStyle = grad; ctx.fill(); ctx.restore();
 
-    // Scanning beam
-    ctx.save();
-    ctx.beginPath(); ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,Math.min(w,h)*0.44,scanAngle-0.08,scanAngle+0.08);
-    ctx.closePath();
-    const grad = ctx.createRadialGradient(cx,cy,Math.min(w,h)*0.1,cx,cy,Math.min(w,h)*0.44);
-    grad.addColorStop(0,'rgba(245,158,11,0)');
-    grad.addColorStop(0.7,'rgba(245,158,11,0.04)');
-    grad.addColorStop(1,'rgba(245,158,11,0.12)');
-    ctx.fillStyle = grad; ctx.fill();
-    ctx.restore();
+    const sx = cx-22, sy = cy-32;
+    ctx.fillStyle = 'rgba(245,158,11,.04)'; ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(sx,sy,44,66,6); else ctx.rect(sx,sy,44,66);
+    ctx.fill(); ctx.strokeStyle = 'rgba(245,158,11,.2)'; ctx.lineWidth = 1.2; ctx.stroke();
+    for (let i=0;i<7;i++) {
+      const ly = sy + (Math.sin(t*.0004+i)*.5+.5)*66;
+      ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx+44,ly);
+      ctx.strokeStyle = `rgba(96,165,250,${.04+Math.sin(t*.002+i)*.02})`; ctx.lineWidth = .6; ctx.stroke();
+    }
 
-    // Crosshairs
-    const chLen = 30 + Math.sin(crosshairPhase)*8;
-    ctx.strokeStyle = 'rgba(245,158,11,0.2)'; ctx.lineWidth = 0.8;
-    ctx.beginPath(); ctx.moveTo(cx-chLen,cy); ctx.lineTo(cx-10,cy); ctx.moveTo(cx+10,cy); ctx.lineTo(cx+chLen,cy); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx,cy-chLen); ctx.lineTo(cx,cy-10); ctx.moveTo(cx,cy+10); ctx.lineTo(cx,cy+chLen); ctx.stroke();
-    ctx.beginPath(); ctx.arc(cx,cy,6,0,Math.PI*2); ctx.strokeStyle='rgba(245,158,11,0.4)'; ctx.stroke();
-    ctx.beginPath(); ctx.arc(cx,cy,2,0,Math.PI*2); ctx.fillStyle='rgba(245,158,11,0.6)'; ctx.fill();
-
-    // Target corners
-    const tcSize = 12;
-    [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sy])=>{
-      const tx=cx+sx*60, ty=cy+sy*60;
-      ctx.strokeStyle='rgba(245,158,11,0.25)'; ctx.lineWidth=1;
-      ctx.beginPath(); ctx.moveTo(tx-sx*tcSize,ty); ctx.lineTo(tx-sx*4,ty); ctx.moveTo(tx,ty-sy*tcSize); ctx.lineTo(tx,ty-sy*4); ctx.stroke();
-    });
-
-    // Particles
-    particles.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy; p.pulse+=0.015;
-      if(p.x<-10)p.x=w+10; if(p.x>w+10)p.x=-10; if(p.y<-10)p.y=h+10; if(p.y>h+10)p.y=-10;
-      const alpha = p.alpha+Math.sin(p.pulse)*0.1;
-      let r=255,g=255,b=255;
-      if(p.color==='#f59e0b'){r=245;g=158;b=11;}
-      else if(p.color==='#fbbf24'){r=251;g=191;b=36;}
-      else if(p.color==='#f87171'){r=248;g=113;b=113;}
-      else if(p.color==='#4ade80'){r=74;g=222;b=128;}
-      else if(p.color==='#60a5fa'){r=96;g=165;b=250;}
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.pulse += .015;
+      if (p.x<-10) p.x=w+10; if (p.x>w+10) p.x=-10; if (p.y<-10) p.y=h+10; if (p.y>h+10) p.y=-10;
+      const alpha = p.alpha + Math.sin(p.pulse)*.12;
+      let r,g,b;
+      if (p.color.startsWith('#')) { r=parseInt(p.color.slice(1,3),16); g=parseInt(p.color.slice(3,5),16); b=parseInt(p.color.slice(5,7),16); }
       ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-      ctx.fillStyle = `rgba(${r},${g},${b},${Math.max(0.05,alpha)})`; ctx.fill();
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.size*2.2,0,Math.PI*2);
-      ctx.fillStyle = `rgba(${r},${g},${b},${Math.max(0.01,alpha*0.25)})`; ctx.fill();
+      ctx.fillStyle = `rgba(${r},${g},${b},${Math.max(.08,alpha)})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.size*3,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${Math.max(.01,alpha*.25)})`; ctx.fill();
     });
-
-    // Grid
-    ctx.strokeStyle='rgba(120,124,150,0.03)'; ctx.lineWidth=0.4;
-    for(let x=50;x<w;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
-    for(let y=50;y<h;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
-
+    ctx.strokeStyle = 'rgba(140,140,180,.025)'; ctx.lineWidth = .4;
+    for (let x=80;x<w;x+=80) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+    for (let y=80;y<h;y+=80) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
     requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
 })();
+
+// ================================================================
+// UTILITY: Scroll + Knowledge Meter + Nav
+// ================================================================
+function scrollToSection(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+const sectionIds = ['s1','s2','s3','s4','s5','s6'];
+const navBtns = document.querySelectorAll('.nav-sections button');
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY + 140; let activeIdx = 0;
+  sectionIds.forEach((id,i) => { const el = document.getElementById(id); if (el && el.offsetTop <= sy) activeIdx = i; });
+  navBtns.forEach((b,i) => b.classList.toggle('active', i === activeIdx));
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docH > 0 ? Math.min(100, Math.round(sy / docH * 100)) : 0;
+  document.getElementById('kmPct').textContent = pct + '%';
+  document.getElementById('kmRing').classList.toggle('active', pct > 50);
+});
 </script>
 </body>
 </html>

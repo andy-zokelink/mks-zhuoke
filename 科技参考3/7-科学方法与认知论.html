@@ -9,14 +9,13 @@
    COGNITIVE ARMORY — 认知武器库
    科技参考3 收束篇 · 第7光谱带（紫罗兰）
    母隐喻：一场思维演习——用科学方法拆穿一个被精心制造的谎言
-   叙事弧线：诱饵(红酒有益健康) → 解构 → 揭示 → 武装
+   叙事弧线：诱饵(红酒有益健康) → 逐层拆解 → 真相揭示 → 认知武装
    ============================================================ */
 
 /* ===== Foundations ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* 第7光谱带 — 紫罗兰主色调，呼应 index.html --s7 */
   --bg-deep: #06050f;
   --bg-surface: #0b0a1a;
   --bg-card: rgba(14,12,32,0.75);
@@ -149,14 +148,30 @@ body {
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ===== Hero — Act I: The Seduction ===== */
+/* ===== Act Marker ===== */
+.act-marker {
+  text-align: center; padding: 60px 20px 20px;
+  position: relative; z-index: 1;
+}
+.act-marker .act-num {
+  font-family: var(--font-heading);
+  font-size: 5rem; font-weight: 900;
+  background: linear-gradient(180deg, var(--violet-bright), var(--violet-dim));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1; opacity: 0.3; margin-bottom: -20px;
+}
+.act-marker .act-label {
+  font-size: .75rem; letter-spacing: 4px;
+  color: var(--violet-dim); text-transform: uppercase;
+}
+
+/* ===== ACT I: Hero ===== */
 .hero {
   position: relative; z-index: 1;
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 100px 20px 60px; text-align: center;
 }
-.hero canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 .hero .act-badge {
   display: inline-block; padding: 5px 16px; border-radius: 20px;
   border: 1px solid var(--rose-dim); color: var(--rose);
@@ -210,33 +225,20 @@ body {
   50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
 }
 
-/* ===== Act Marker ===== */
-.act-marker {
-  text-align: center; padding: 40px 20px 20px;
-  position: relative; z-index: 1;
+/* ===== Narrative Flow Arrow ===== */
+.narrative-connector {
+  text-align: center; padding: 20px; position: relative; z-index: 1;
+  color: var(--violet-dim); font-size: .85rem;
+  letter-spacing: 1px;
 }
-.act-marker .act-num {
-  font-family: var(--font-heading);
-  font-size: 5rem; font-weight: 900;
-  background: linear-gradient(180deg, var(--violet-bright), var(--violet-dim));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1; opacity: 0.3;
-  margin-bottom: -20px;
-}
-.act-marker .act-label {
-  font-size: .75rem; letter-spacing: 4px;
-  color: var(--violet-dim); text-transform: uppercase;
-}
+.narrative-connector .nc-arrow { font-size: 1.5rem; display: block; opacity: 0.5; }
 
 /* ===== Cognitive Bias Flip Cards ===== */
 .bias-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px; margin-top: 24px;
 }
-.bias-card {
-  perspective: 1000px; height: 280px; cursor: pointer;
-}
+.bias-card { perspective: 1000px; height: 280px; cursor: pointer; }
 .bias-inner {
   position: relative; width: 100%; height: 100%;
   transition: transform .6s cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -273,13 +275,18 @@ body {
   border-left: 2px solid var(--teal-dim);
 }
 
-/* ===== Maze (Interactive 1) ===== */
+/* ===== Maze (Interactive 1 - Upgraded Branching) ===== */
 .maze-container {
   max-width: 720px; margin: 0 auto;
   background: rgba(14,12,32,0.5); border-radius: var(--radius-lg);
   border: 1px solid var(--border-glow); padding: 36px 28px;
-  min-height: 400px; display: flex; flex-direction: column;
-  transition: all var(--ease);
+  min-height: 420px; display: flex; flex-direction: column;
+  transition: all var(--ease); position: relative; overflow: hidden;
+}
+.maze-container::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--violet), var(--rose), var(--violet), transparent);
+  opacity: 0.6;
 }
 .maze-header {
   display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
@@ -335,14 +342,27 @@ body {
 .maze-feedback.wrong { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.18); color: var(--red); }
 .maze-feedback.correct { background: rgba(79,209,197,0.06); border: 1px solid rgba(79,209,197,0.18); color: var(--teal); }
 .maze-feedback .fb-lesson { font-weight: 700; margin-bottom: 6px; }
-.maze-cta {
-  margin-top: 18px; padding: 10px 24px; border-radius: 20px;
-  border: 1px solid var(--violet-dim); background: rgba(155,89,182,0.08);
-  color: var(--violet-bright); cursor: pointer; font-size: .84rem; font-weight: 600;
-  transition: all var(--ease-out); display: none; align-self: flex-start;
+.maze-navigate {
+  margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap;
 }
-.maze-cta.show { display: inline-block; }
-.maze-cta:hover { background: rgba(155,89,182,0.18); }
+.maze-retry-btn {
+  padding: 10px 24px; border-radius: 20px;
+  border: 1px solid var(--red-dim);
+  background: rgba(248,113,113,0.08);
+  color: var(--red); cursor: pointer; font-size: .84rem; font-weight: 600;
+  transition: all var(--ease-out); display: none;
+}
+.maze-retry-btn.show { display: inline-block; }
+.maze-retry-btn:hover { background: rgba(248,113,113,0.16); }
+.maze-next-btn {
+  padding: 10px 24px; border-radius: 20px;
+  border: 1px solid var(--violet-dim);
+  background: rgba(155,89,182,0.08);
+  color: var(--violet-bright); cursor: pointer; font-size: .84rem; font-weight: 600;
+  transition: all var(--ease-out); display: none;
+}
+.maze-next-btn.show { display: inline-block; }
+.maze-next-btn:hover { background: rgba(155,89,182,0.18); }
 .maze-progress {
   display: flex; gap: 8px; margin-top: 24px; align-self: center;
 }
@@ -432,6 +452,16 @@ body {
   color: var(--red); font-weight: 600;
 }
 .review-flag.flagged::before { content: '⚠️ '; }
+.review-flag.correct-flag {
+  border-color: var(--teal); background: rgba(79,209,197,0.1);
+  color: var(--teal); font-weight: 600;
+}
+.review-flag.correct-flag::before { content: '✅ '; }
+.review-flag.wrong-flag {
+  border-color: var(--amber-dim); background: rgba(251,146,60,0.1);
+  color: var(--amber); font-weight: 600;
+}
+.review-flag.wrong-flag::before { content: '❌ '; }
 .review-result {
   display: none; padding: 24px 32px;
   border-top: 1px solid var(--border);
@@ -484,8 +514,7 @@ body {
   border: 1px solid var(--border);
   background: rgba(14,12,32,0.4);
   cursor: pointer; transition: all var(--ease-out);
-  margin-bottom: 4px;
-  text-align: left;
+  margin-bottom: 4px; text-align: left;
 }
 .fp-layer:hover { background: rgba(20,18,44,0.7); border-color: var(--border-glow); }
 .fp-layer.expanded { border-color: var(--violet); background: rgba(155,89,182,0.06); }
@@ -659,9 +688,10 @@ body {
   </div>
 </nav>
 
-<!-- ====== ACT I: 诱饵 ====== -->
+<!-- =============================================================== -->
+<!-- ACT I: THE SEDUCTION — 红酒有益心脏？                              -->
+<!-- =============================================================== -->
 <section class="hero" id="act1">
-  <canvas id="heroCanvas"></canvas>
   <div class="act-badge">ACT I · 诱饵</div>
   <h1>红酒有益心脏？</h1>
   <p class="subtitle">
@@ -681,23 +711,29 @@ body {
     让我们走进这条结论的背面，看看在「科学」的名义下，<br>一个漂亮的故事是如何组装起来的。
   </div>
   <div class="scroll-hint">
-    <span>开始拆解</span>
+    <span>向下滚动，开始拆解</span>
     <span>↓</span>
   </div>
 </section>
 
-<!-- ====== ACT II: 解构 ====== -->
+<!-- =============================================================== -->
+<!-- ACT II: LAYER-BY-LAYER DECONSTRUCTION                             -->
+<!-- =============================================================== -->
 <div class="act-marker" id="act2">
   <div class="act-num">II</div>
   <div class="act-label">逐层拆解</div>
 </div>
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  每一层剥开「红酒有益健康」的一个支撑支柱
+</div>
 
-<!-- Layer 1: 确认偏误 -->
+<!-- ===== LAYER 1: Cognitive Biases ===== -->
 <section class="section reveal">
   <div class="section-label">第一层 · 认知陷阱</div>
   <h2 class="section-title">确认偏误：你希望它是真的</h2>
   <p class="section-subtitle">
-    在考察任何证据之前，先问自己：我是不是<strong style="color:var(--rose)">希望</strong>这个结论成立？如果是，你就处于认知风险之中。
+    在考察任何证据之前，先问自己：我是不是<strong style="color:var(--rose)">希望</strong>这个结论成立？<br>如果是，你就处于认知风险之中。大脑不是一个中立的处理器——它是一个为你辩护的律师。
   </p>
   <div class="section-divider"></div>
 
@@ -713,7 +749,7 @@ body {
         <div class="bias-back">
           <div class="bb-label">Cognitive Bias #1</div>
           <div class="bb-title">确认偏误</div>
-          <div class="bb-desc">人天生倾向于寻找、记忆和相信<strong>支持自己已有观点</strong>的信息，同时忽略或贬低相反证据。大脑不是中立的处理器——它是一个为你辩护的律师。</div>
+          <div class="bb-desc">人天生倾向于寻找、记忆和相信<strong>支持自己已有观点</strong>的信息，同时忽略或贬低相反证据。你想相信红酒有益——所以你只记住了肯定它的研究。</div>
           <div class="bb-fix">🔧 对抗方法：主动寻找反证。问自己「什么证据能推翻我的信念？」——而不是「什么证据支持它？」</div>
         </div>
       </div>
@@ -730,8 +766,8 @@ body {
         <div class="bias-back" style="border-top-color:var(--amber);">
           <div class="bb-label" style="color:var(--amber-dim);">Cognitive Bias #2</div>
           <div class="bb-title" style="color:var(--amber);">幸存者偏差</div>
-          <div class="bb-desc">我们只看到「成功」的案例。已发表的论文是学术界的幸存者——<strong>阴性结果被埋在了抽屉里</strong>。你看到的永远是阳性结果的那一面。</div>
-          <div class="bb-fix">🔧 对抗方法：问「有多少研究发现了相反结果？」如果答案是你不知道——那你什么都不知道。</div>
+          <div class="bb-desc">我们只看到「成功」的案例。已发表的论文是学术界的幸存者——<strong>阴性结果被埋在了抽屉里</strong>。你看到的永远是阳性结果的那一面。那10项没发现红酒有益的研究呢？它们没发表。</div>
+          <div class="bb-fix">🔧 对抗方法：问「有多少研究发现了相反结果？」如果答案是「你不知道」——那你什么都不知道。</div>
         </div>
       </div>
     </div>
@@ -747,7 +783,7 @@ body {
         <div class="bias-back" style="border-top-color:var(--teal);">
           <div class="bb-label" style="color:var(--teal-dim);">Cognitive Bias #3</div>
           <div class="bb-title" style="color:var(--teal);">因果倒置</div>
-          <div class="bb-desc">观察到A和B相关，就断言A导致B。但可能B导致A，或者C同时导致A和B。<strong>喝红酒的人心脏好</strong>——也可能是心脏好的人更愿意社交喝酒，或者他们恰好更富有。</div>
+          <div class="bb-desc">观察到A和B相关，就断言A导致B。但可能B导致A，或C同时导致A和B。<strong>喝红酒的人心脏好</strong>——也可能心脏好的人更富有、更有健康意识、更能适度社交饮酒。</div>
           <div class="bb-fix">🔧 对抗方法：问「有没有第三种因素可以同时解释两者？」财富、教育、健康意识——都是常见的混杂变量。</div>
         </div>
       </div>
@@ -755,12 +791,18 @@ body {
   </div>
 </section>
 
-<!-- Layer 2: 认知谬误迷宫 -->
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  知道了偏误还不够——现在进入一个真实的思维迷宫，亲身体验这些陷阱
+</div>
+
+<!-- ===== LAYER 2: Cognitive Maze (Upgraded Branching) ===== -->
 <section class="section reveal" id="maze-section">
   <div class="section-label">第二层 · 思维演习</div>
   <h2 class="section-title">认知谬误迷宫</h2>
   <p class="section-subtitle">
-    你即将进入一个真实的思维迷宫。每一个分叉路口，你都需要做出选择——不是选择"正确答案"，而是<strong style="color:var(--violet-bright)">使用科学思维</strong>做出判断。走错了？没关系，迷宫会告诉你为什么。
+    你即将进入一个真实的思维迷宫。每一个分叉路口，你都需要做出选择——不是选"正确答案"，而是<strong style="color:var(--violet-bright)">使用科学思维</strong>做出判断。选错了？迷宫会告诉你为什么你被骗了，然后让你重试。<br>
+    <span style="color:var(--gold);font-size:.85rem;">✦ 走完全部5关，才算真正掌握了第一层武器。</span>
   </p>
   <div class="section-divider"></div>
 
@@ -769,306 +811,314 @@ body {
   </div>
 </section>
 
-<!-- Layer 3: p值操纵 SVG -->
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  认知偏误只是第一关。真正的炼金术在统计学的暗房里——
+</div>
+
+<!-- ===== LAYER 3: p-hacking Decision Tree SVG ===== -->
 <section class="section reveal">
   <div class="section-label">第三层 · 统计学暗房</div>
   <h2 class="section-title">p值操纵：把噪声变成「显著」</h2>
   <p class="section-subtitle">
-    p &lt; 0.05 是科学出版的黄金门票。但获得这张票的路径，远比教科书上写的要<strong style="color:var(--rose)">丰富</strong>得多。
+    p &lt; 0.05 是科学出版的黄金门票。但获得这张票的路径，远比教科书上写的要<strong style="color:var(--rose)">丰富</strong>得多——这张决策树展示了研究者可以选择的每一条岔路。
   </p>
   <div class="section-divider"></div>
 
   <div class="diagram-container">
-    <svg viewBox="0 0 760 520" width="760" height="520" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 760 540" width="760" height="540" xmlns="http://www.w3.org/2000/svg" style="background:rgba(6,5,15,0.3);border-radius:12px;">
       <defs>
-        <linearGradient id="pGradRoot" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9b59b6"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
-        <linearGradient id="pGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#b84a4a"/></linearGradient>
-        <linearGradient id="pGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#c06a20"/></linearGradient>
-        <linearGradient id="pGrad3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#a07830"/></linearGradient>
-        <linearGradient id="pGrad4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4fd1c5"/><stop offset="100%" stop-color="#2a8078"/></linearGradient>
-        <linearGradient id="pGrad5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#6a4aaa"/></linearGradient>
-        <filter id="pGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="pRoot" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9b59b6"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
+        <linearGradient id="p1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#b84a4a"/></linearGradient>
+        <linearGradient id="p2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#c06a20"/></linearGradient>
+        <linearGradient id="p3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#a07830"/></linearGradient>
+        <linearGradient id="p4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4fd1c5"/><stop offset="100%" stop-color="#2a8078"/></linearGradient>
+        <linearGradient id="p5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#6a4aaa"/></linearGradient>
+        <filter id="pGlow2"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="arrowDown" markerWidth="6" markerHeight="5" refX="3" refY="5" orient="auto">
+          <polygon points="0 0, 3 5, 6 0" fill="rgba(160,155,200,0.35)"/>
+        </marker>
       </defs>
 
-      <!-- Background grid -->
-      <rect x="0" y="0" width="760" height="520" fill="none" stroke="rgba(160,155,200,0.04)" stroke-width="1"/>
-      <line x1="0" y1="260" x2="760" y2="260" stroke="rgba(160,155,200,0.04)" stroke-width="1"/>
+      <!-- Background -->
+      <rect x="0" y="0" width="760" height="540" fill="none"/>
 
-      <!-- Root node -->
-      <rect x="260" y="16" width="240" height="44" rx="22" fill="url(#pGradRoot)" filter="url(#pGlow)"/>
-      <text x="380" y="44" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="sans-serif">想要 p &lt; 0.05？</text>
+      <!-- Root -->
+      <rect x="245" y="14" width="270" height="44" rx="22" fill="url(#pRoot)" filter="url(#pGlow2)"/>
+      <text x="380" y="42" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="sans-serif">你的实验没达到 p &lt; 0.05？</text>
 
       <!-- Branch lines from root -->
-      <line x1="310" y1="60" x2="140" y2="120" stroke="rgba(160,155,200,0.25)" stroke-width="1.5"/>
-      <line x1="340" y1="60" x2="280" y2="120" stroke="rgba(160,155,200,0.25)" stroke-width="1.5"/>
-      <line x1="380" y1="60" x2="380" y2="120" stroke="rgba(160,155,200,0.25)" stroke-width="1.5"/>
-      <line x1="420" y1="60" x2="480" y2="120" stroke="rgba(160,155,200,0.25)" stroke-width="1.5"/>
-      <line x1="450" y1="60" x2="620" y2="120" stroke="rgba(160,155,200,0.25)" stroke-width="1.5"/>
+      <line x1="300" y1="58" x2="130" y2="118" stroke="rgba(160,155,200,0.22)" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+      <line x1="330" y1="58" x2="270" y2="118" stroke="rgba(160,155,200,0.22)" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+      <line x1="370" y1="58" x2="370" y2="118" stroke="rgba(160,155,200,0.22)" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+      <line x1="410" y1="58" x2="470" y2="118" stroke="rgba(160,155,200,0.22)" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+      <line x1="440" y1="58" x2="610" y2="118" stroke="rgba(160,155,200,0.22)" stroke-width="1.5" marker-end="url(#arrowDown)"/>
 
-      <!-- Node 1: 多重比较 -->
-      <rect x="30" y="120" width="210" height="50" rx="10" fill="url(#pGrad1)" opacity="0.9"/>
-      <text x="135" y="140" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="sans-serif">手法① 多重比较</text>
-      <text x="135" y="157" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="sans-serif">测20个指标，只报告显著的</text>
+      <!-- Node 1: Multiple Comparisons -->
+      <rect x="25" y="120" width="210" height="52" rx="10" fill="url(#p1)" opacity="0.9"/>
+      <text x="130" y="141" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="sans-serif">手法① 多重比较</text>
+      <text x="130" y="158" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="sans-serif">测20种食物，只报告红酒显著</text>
 
-      <!-- Node 2: 选择性报告 -->
-      <rect x="170" y="195" width="210" height="50" rx="10" fill="url(#pGrad2)" opacity="0.9"/>
-      <text x="275" y="215" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="sans-serif">手法② 选择性报告</text>
-      <text x="275" y="232" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="sans-serif">阴性结果扔进抽屉不发表</text>
+      <!-- Node 2: Selective Reporting -->
+      <rect x="165" y="200" width="210" height="52" rx="10" fill="url(#p2)" opacity="0.9"/>
+      <text x="270" y="221" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="sans-serif">手法② 选择性报告</text>
+      <text x="270" y="238" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="sans-serif">阴性结果锁进抽屉永不发表</text>
 
-      <!-- Node 3: 数据疏浚 -->
-      <rect x="275" y="120" width="210" height="50" rx="10" fill="url(#pGrad3)" opacity="0.9"/>
-      <text x="380" y="140" text-anchor="middle" fill="#1a1a2e" font-size="12" font-weight="700" font-family="sans-serif">手法③ 数据疏浚</text>
-      <text x="380" y="157" text-anchor="middle" fill="rgba(0,0,0,0.6)" font-size="10" font-family="sans-serif">在海量数据中捞「显著」关联</text>
+      <!-- Node 3: Data Dredging -->
+      <rect x="265" y="120" width="210" height="52" rx="10" fill="url(#p3)" opacity="0.9"/>
+      <text x="370" y="141" text-anchor="middle" fill="#1a1020" font-size="11" font-weight="700" font-family="sans-serif">手法③ 数据疏浚</text>
+      <text x="370" y="158" text-anchor="middle" fill="rgba(0,0,0,0.55)" font-size="9" font-family="sans-serif">在海量数据中打捞任何 p&lt;0.05</text>
 
-      <!-- Node 4: 后设假设 -->
-      <rect x="390" y="195" width="210" height="50" rx="10" fill="url(#pGrad4)" opacity="0.9"/>
-      <text x="495" y="215" text-anchor="middle" fill="#1a1a2e" font-size="12" font-weight="700" font-family="sans-serif">手法④ 后设假设</text>
-      <text x="495" y="232" text-anchor="middle" fill="rgba(0,0,0,0.6)" font-size="10" font-family="sans-serif">看到结果后才编造「原本的假说」</text>
+      <!-- Node 4: HARKing -->
+      <rect x="385" y="200" width="210" height="52" rx="10" fill="url(#p4)" opacity="0.9"/>
+      <text x="490" y="221" text-anchor="middle" fill="#1a1020" font-size="11" font-weight="700" font-family="sans-serif">手法④ 后设假设 (HARKing)</text>
+      <text x="490" y="238" text-anchor="middle" fill="rgba(0,0,0,0.55)" font-size="9" font-family="sans-serif">看到结果后「发明」原本的假说</text>
 
-      <!-- Node 5: 小样本夸大 -->
-      <rect x="530" y="120" width="210" height="50" rx="10" fill="url(#pGrad5)" opacity="0.9"/>
-      <text x="635" y="140" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="sans-serif">手法⑤ 小样本夸大效应</text>
-      <text x="635" y="157" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="sans-serif">n=24也能「显著」？效应量膨胀</text>
+      <!-- Node 5: Small Sample -->
+      <rect x="530" y="120" width="210" height="52" rx="10" fill="url(#p5)" opacity="0.9"/>
+      <text x="635" y="141" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="sans-serif">手法⑤ 小样本效应膨胀</text>
+      <text x="635" y="158" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="sans-serif">n=24，效应量被严重高估</text>
 
-      <!-- Connection lines to leaves -->
-      <line x1="135" y1="170" x2="135" y2="270" stroke="rgba(248,113,113,0.2)" stroke-width="1"/>
-      <line x1="275" y1="170" x2="275" y2="270" stroke="rgba(251,146,60,0.2)" stroke-width="1"/>
-      <line x1="275" y1="245" x2="275" y2="270" stroke="rgba(251,146,60,0.2)" stroke-width="1"/>
-      <line x1="380" y1="170" x2="380" y2="270" stroke="rgba(251,191,36,0.2)" stroke-width="1"/>
-      <line x1="495" y1="245" x2="495" y2="270" stroke="rgba(79,209,197,0.2)" stroke-width="1"/>
-      <line x1="635" y1="170" x2="635" y2="270" stroke="rgba(167,139,250,0.2)" stroke-width="1"/>
+      <!-- Down arrows to evidence cards -->
+      <line x1="130" y1="172" x2="130" y2="275" stroke="rgba(248,113,113,0.15)" stroke-width="1" marker-end="url(#arrowDown)"/>
+      <line x1="270" y1="172" x2="270" y2="275" stroke="rgba(251,146,60,0.15)" stroke-width="1" marker-end="url(#arrowDown)"/>
+      <line x1="370" y1="172" x2="370" y2="275" stroke="rgba(251,191,36,0.15)" stroke-width="1" marker-end="url(#arrowDown)"/>
+      <line x1="490" y1="252" x2="490" y2="275" stroke="rgba(79,209,197,0.15)" stroke-width="1" marker-end="url(#arrowDown)"/>
+      <line x1="635" y1="172" x2="635" y2="275" stroke="rgba(167,139,250,0.15)" stroke-width="1" marker-end="url(#arrowDown)"/>
 
-      <!-- Leaf details -->
-      <rect x="40" y="272" width="190" height="60" rx="8" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.15)" stroke-width="1"/>
-      <text x="135" y="292" text-anchor="middle" fill="#f87171" font-size="9" font-weight="700" font-family="sans-serif">💀 真实案例</text>
-      <text x="135" y="310" text-anchor="middle" fill="rgba(248,113,113,0.7)" font-size="9" font-family="sans-serif">20种食物测试，只报告红酒</text>
-      <text x="135" y="324" text-anchor="middle" fill="rgba(248,113,113,0.5)" font-size="8" font-family="sans-serif">Bonferroni校正后全不显著</text>
+      <!-- Evidence cards row 1 -->
+      <rect x="25" y="278" width="210" height="68" rx="8" fill="rgba(248,113,113,0.05)" stroke="rgba(248,113,113,0.14)" stroke-width="1"/>
+      <text x="130" y="298" text-anchor="middle" fill="#f87171" font-size="9" font-weight="700" font-family="sans-serif">💀 红酒研究的20个变量</text>
+      <text x="130" y="314" text-anchor="middle" fill="rgba(248,113,113,0.65)" font-size="9" font-family="sans-serif">测试了20种食物对心脏的影响</text>
+      <text x="130" y="330" text-anchor="middle" fill="rgba(248,113,113,0.45)" font-size="8" font-family="sans-serif">仅红酒"显著"。Bonferroni校正后归零</text>
 
-      <rect x="180" y="272" width="190" height="60" rx="8" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.15)" stroke-width="1"/>
-      <text x="275" y="292" text-anchor="middle" fill="#fb923c" font-size="9" font-weight="700" font-family="sans-serif">💀 真实案例</text>
-      <text x="275" y="310" text-anchor="middle" fill="rgba(251,146,60,0.7)" font-size="9" font-family="sans-serif">抗抑郁药试验：阴性结果不发表</text>
-      <text x="275" y="324" text-anchor="middle" fill="rgba(251,146,60,0.5)" font-size="8" font-family="sans-serif">已发表文献夸大疗效32%</text>
+      <rect x="165" y="278" width="210" height="68" rx="8" fill="rgba(251,146,60,0.05)" stroke="rgba(251,146,60,0.14)" stroke-width="1"/>
+      <text x="270" y="298" text-anchor="middle" fill="#fb923c" font-size="9" font-weight="700" font-family="sans-serif">💀 抗抑郁药的抽屉问题</text>
+      <text x="270" y="314" text-anchor="middle" fill="rgba(251,146,60,0.65)" font-size="9" font-family="sans-serif">已发表文献夸大疗效 32%</text>
+      <text x="270" y="330" text-anchor="middle" fill="rgba(251,146,60,0.45)" font-size="8" font-family="sans-serif">Turner et al., NEJM 2008</text>
 
-      <rect x="285" y="272" width="190" height="60" rx="8" fill="rgba(251,191,36,0.06)" stroke="rgba(251,191,36,0.15)" stroke-width="1"/>
-      <text x="380" y="292" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700" font-family="sans-serif">💀 真实案例</text>
-      <text x="380" y="310" text-anchor="middle" fill="rgba(251,191,36,0.7)" font-size="9" font-family="sans-serif">"吃巧克力能减肥"——John Bohannon</text>
-      <text x="380" y="324" text-anchor="middle" fill="rgba(251,191,36,0.5)" font-size="8" font-family="sans-serif">仅18人，测18个指标，媒体疯传</text>
+      <rect x="270" y="278" width="210" height="68" rx="8" fill="rgba(251,191,36,0.05)" stroke="rgba(251,191,36,0.14)" stroke-width="1"/>
+      <text x="375" y="298" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700" font-family="sans-serif">💀 巧克力减肥骗局</text>
+      <text x="375" y="314" text-anchor="middle" fill="rgba(251,191,36,0.65)" font-size="9" font-family="sans-serif">John Bohannon 的钓鱼实验</text>
+      <text x="375" y="330" text-anchor="middle" fill="rgba(251,191,36,0.45)" font-size="8" font-family="sans-serif">n=18，测18个指标，全球媒体疯转</text>
 
-      <rect x="400" y="272" width="190" height="60" rx="8" fill="rgba(79,209,197,0.06)" stroke="rgba(79,209,197,0.15)" stroke-width="1"/>
-      <text x="495" y="292" text-anchor="middle" fill="#4fd1c5" font-size="9" font-weight="700" font-family="sans-serif">💀 真实案例</text>
-      <text x="495" y="310" text-anchor="middle" fill="rgba(79,209,197,0.7)" font-size="9" font-family="sans-serif">Daryl Bem: 「预知未来」实验</text>
-      <text x="495" y="324" text-anchor="middle" fill="rgba(79,209,197,0.5)" font-size="8" font-family="sans-serif">后设假设 + 选择性报告 = p&lt;0.05</text>
+      <!-- Evidence cards row 2 -->
+      <rect x="385" y="278" width="210" height="68" rx="8" fill="rgba(79,209,197,0.05)" stroke="rgba(79,209,197,0.14)" stroke-width="1"/>
+      <text x="490" y="298" text-anchor="middle" fill="#4fd1c5" font-size="9" font-weight="700" font-family="sans-serif">💀 Bem的预知未来</text>
+      <text x="490" y="314" text-anchor="middle" fill="rgba(79,209,197,0.65)" font-size="9" font-family="sans-serif">声称人类能预知随机事件</text>
+      <text x="490" y="330" text-anchor="middle" fill="rgba(79,209,197,0.45)" font-size="8" font-family="sans-serif">后设假设+选择性报告=完美p值</text>
 
-      <rect x="540" y="272" width="190" height="60" rx="8" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.15)" stroke-width="1"/>
-      <text x="635" y="292" text-anchor="middle" fill="#a78bfa" font-size="9" font-weight="700" font-family="sans-serif">💀 真实案例</text>
-      <text x="635" y="310" text-anchor="middle" fill="rgba(167,139,250,0.7)" font-size="9" font-family="sans-serif">社会启动效应：「老年词汇使人走慢」</text>
-      <text x="635" y="324" text-anchor="middle" fill="rgba(167,139,250,0.5)" font-size="8" font-family="sans-serif">小样本夸大，复现实验全部失败</text>
+      <rect x="530" y="278" width="210" height="68" rx="8" fill="rgba(167,139,250,0.05)" stroke="rgba(167,139,250,0.14)" stroke-width="1"/>
+      <text x="635" y="298" text-anchor="middle" fill="#a78bfa" font-size="9" font-weight="700" font-family="sans-serif">💀 社会启动效应</text>
+      <text x="635" y="314" text-anchor="middle" fill="rgba(167,139,250,0.65)" font-size="9" font-family="sans-serif">"想到老年词汇就走路变慢"</text>
+      <text x="635" y="330" text-anchor="middle" fill="rgba(167,139,250,0.45)" font-size="8" font-family="sans-serif">复现实验全部失败，领域崩塌</text>
 
-      <!-- Bottom line -->
-      <rect x="20" y="352" width="720" height="60" rx="10" fill="rgba(155,89,182,0.06)" stroke="rgba(155,89,182,0.12)" stroke-width="1"/>
-      <text x="380" y="378" text-anchor="middle" fill="#b87fd4" font-size="12" font-weight="700" font-family="sans-serif">🔑 核心机制：研究者自由度(Researcher Degrees of Freedom)</text>
-      <text x="380" y="398" text-anchor="middle" fill="rgba(184,127,212,0.6)" font-size="10" font-family="sans-serif">数据收集、分析、报告过程中的每一个选择点，都是一次「微调」p值的机会</text>
+      <!-- Bottom synthesis -->
+      <rect x="20" y="368" width="720" height="62" rx="10" fill="rgba(155,89,182,0.06)" stroke="rgba(155,89,182,0.12)" stroke-width="1"/>
+      <text x="380" y="392" text-anchor="middle" fill="#b87fd4" font-size="12" font-weight="700" font-family="sans-serif">🔑 核心机制：研究者自由度 (Researcher Degrees of Freedom)</text>
+      <text x="380" y="412" text-anchor="middle" fill="rgba(184,127,212,0.55)" font-size="10" font-family="sans-serif">在数据收集、分析和报告的每一步，研究者都有数十个自由选择——每个选择都是"微调"p值的机会</text>
 
-      <!-- Cross-connection: all paths lead to same bottom -->
-      <line x1="135" y1="332" x2="380" y2="352" stroke="rgba(155,89,182,0.1)" stroke-width="1"/>
-      <line x1="275" y1="332" x2="380" y2="352" stroke="rgba(155,89,182,0.1)" stroke-width="1"/>
-      <line x1="380" y1="332" x2="380" y2="352" stroke="rgba(155,89,182,0.1)" stroke-width="1"/>
-      <line x1="495" y1="332" x2="380" y2="352" stroke="rgba(155,89,182,0.1)" stroke-width="1"/>
-      <line x1="635" y1="332" x2="380" y2="352" stroke="rgba(155,89,182,0.1)" stroke-width="1"/>
+      <!-- Cross-connect -->
+      <line x1="130" y1="346" x2="380" y2="368" stroke="rgba(155,89,182,0.08)" stroke-width="1"/>
+      <line x1="270" y1="346" x2="380" y2="368" stroke="rgba(155,89,182,0.08)" stroke-width="1"/>
+      <line x1="375" y1="346" x2="380" y2="368" stroke="rgba(155,89,182,0.08)" stroke-width="1"/>
+      <line x1="490" y1="346" x2="380" y2="368" stroke="rgba(155,89,182,0.08)" stroke-width="1"/>
+      <line x1="635" y1="346" x2="380" y2="368" stroke="rgba(155,89,182,0.08)" stroke-width="1"/>
 
-      <!-- Title -->
-      <text x="380" y="480" text-anchor="middle" fill="rgba(184,127,212,0.4)" font-size="11" font-family="sans-serif" font-style="italic">▸ 图：p值操纵的五种经典手法及其真实案例 ◂</text>
+      <!-- Side annotation -->
+      <text x="380" y="460" text-anchor="middle" fill="rgba(184,127,212,0.35)" font-size="10" font-family="sans-serif" font-style="italic">▸ 图：一条通往p&lt;0.05的决策树——每条分支都对应一个真实案例 ◂</text>
+
+      <!-- Corner decoration -->
+      <text x="745" y="530" text-anchor="end" fill="rgba(155,89,182,0.15)" font-size="9" font-family="monospace">RDF · Gelman & Loken 2013</text>
     </svg>
   </div>
 </section>
 
-<!-- Layer 4: 可复现性危机 -->
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  就算一篇论文通过了所有关卡——它真的能被别人重复出来吗？
+</div>
+
+<!-- ===== LAYER 4: Replicability Crisis Data Visualization ===== -->
 <section class="section reveal">
   <div class="section-label">第四层 · 地基裂缝</div>
   <h2 class="section-title">可复现性危机：多少「科学结论」经得起重做？</h2>
   <p class="section-subtitle">
-    2015年，《科学》杂志发表了一项里程碑式的研究：100项心理学实验，只有<strong style="color:var(--red)">39%</strong>能被独立复现。这不是心理学独有的问题。
+    2015年，《科学》杂志发表了一项里程碑式的研究：100项心理学实验，只有<strong style="color:var(--red)">39%</strong>能被独立复现。这不是心理学独有的问题——它横跨肿瘤学、经济学、社会心理学……几乎每一个学科。
   </p>
   <div class="section-divider"></div>
 
   <div class="diagram-container">
-    <svg viewBox="0 0 680 420" width="680" height="420" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 700 440" width="700" height="440" xmlns="http://www.w3.org/2000/svg" style="background:rgba(6,5,15,0.3);border-radius:12px;">
       <defs>
-        <linearGradient id="repGrad1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
-        <linearGradient id="repGrad2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient>
-        <linearGradient id="repGrad3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4fd1c5"/><stop offset="100%" stop-color="#2ecc71"/></linearGradient>
-        <linearGradient id="repGrad4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#6c5ce7"/></linearGradient>
-        <filter id="repShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.3"/></filter>
+        <linearGradient id="repRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#b84a4a"/></linearGradient>
+        <linearGradient id="repOrange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#c05a18"/></linearGradient>
+        <linearGradient id="repTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4fd1c5"/><stop offset="100%" stop-color="#2a8078"/></linearGradient>
+        <linearGradient id="repPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#6a4aaa"/></linearGradient>
+        <filter id="barShadow"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.35"/></filter>
       </defs>
 
-      <!-- Background -->
-      <rect x="0" y="0" width="680" height="420" fill="none"/>
-
       <!-- Title -->
-      <text x="340" y="32" text-anchor="middle" fill="#b87fd4" font-size="14" font-weight="700" font-family="sans-serif">各领域独立复现成功率对比</text>
+      <text x="350" y="30" text-anchor="middle" fill="#b87fd4" font-size="15" font-weight="700" font-family="sans-serif">独立复现成功率 · 各领域对比</text>
 
       <!-- Axes -->
-      <line x1="120" y1="60" x2="120" y2="340" stroke="rgba(160,155,200,0.2)" stroke-width="1"/>
-      <line x1="120" y1="340" x2="660" y2="340" stroke="rgba(160,155,200,0.2)" stroke-width="1"/>
+      <line x1="100" y1="58" x2="100" y2="360" stroke="rgba(160,155,200,0.2)" stroke-width="1.5"/>
+      <line x1="100" y1="360" x2="660" y2="360" stroke="rgba(160,155,200,0.2)" stroke-width="1.5"/>
 
-      <!-- Gridlines -->
-      <line x1="120" y1="284" x2="660" y2="284" stroke="rgba(160,155,200,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
-      <line x1="120" y1="228" x2="660" y2="228" stroke="rgba(160,155,200,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
-      <line x1="120" y1="172" x2="660" y2="172" stroke="rgba(160,155,200,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
-      <line x1="120" y1="116" x2="660" y2="116" stroke="rgba(160,155,200,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
+      <!-- Y Grid -->
+      <line x1="100" y1="302" x2="660" y2="302" stroke="rgba(160,155,200,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+      <line x1="100" y1="244" x2="660" y2="244" stroke="rgba(160,155,200,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+      <line x1="100" y1="186" x2="660" y2="186" stroke="rgba(160,155,200,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+      <line x1="100" y1="128" x2="660" y2="128" stroke="rgba(160,155,200,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
 
-      <!-- Y-axis labels -->
-      <text x="110" y="344" text-anchor="end" fill="var(--text-subtle)" font-size="11" font-family="sans-serif">0%</text>
-      <text x="110" y="288" text-anchor="end" fill="var(--text-subtle)" font-size="11" font-family="sans-serif">25%</text>
-      <text x="110" y="232" text-anchor="end" fill="var(--text-subtle)" font-size="11" font-family="sans-serif">50%</text>
-      <text x="110" y="176" text-anchor="end" fill="var(--text-subtle)" font-size="11" font-family="sans-serif">75%</text>
-      <text x="110" y="120" text-anchor="end" fill="var(--text-subtle)" font-size="11" font-family="sans-serif">100%</text>
+      <!-- Y Labels -->
+      <text x="90" y="364" text-anchor="end" fill="var(--text-subtle)" font-size="10" font-family="sans-serif">0%</text>
+      <text x="90" y="306" text-anchor="end" fill="var(--text-subtle)" font-size="10" font-family="sans-serif">25%</text>
+      <text x="90" y="248" text-anchor="end" fill="var(--text-subtle)" font-size="10" font-family="sans-serif">50%</text>
+      <text x="90" y="190" text-anchor="end" fill="var(--text-subtle)" font-size="10" font-family="sans-serif">75%</text>
+      <text x="90" y="132" text-anchor="end" fill="var(--text-subtle)" font-size="10" font-family="sans-serif">100%</text>
 
-      <!-- Bar 1: 肿瘤学 11% -->
-      <rect x="140" y="295" width="100" height="45" rx="4" fill="url(#repGrad1)" filter="url(#repShadow)"/>
-      <text x="190" y="280" text-anchor="middle" fill="#f87171" font-size="20" font-weight="900" font-family="sans-serif">11%</text>
-      <text x="190" y="360" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">肿瘤学</text>
-      <text x="190" y="376" text-anchor="middle" fill="var(--text-subtle)" font-size="9" font-family="sans-serif">Amgen, 2012</text>
+      <!-- 50% benchmark -->
+      <line x1="100" y1="244" x2="660" y2="244" stroke="rgba(248,113,113,0.25)" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="665" y="248" fill="rgba(248,113,113,0.4)" font-size="9" font-family="sans-serif">50%</text>
 
-      <!-- Bar 2: 心理学 39% -->
-      <rect x="270" y="207" width="100" height="133" rx="4" fill="url(#repGrad2)" filter="url(#repShadow)"/>
-      <text x="320" y="192" text-anchor="middle" fill="#fb923c" font-size="20" font-weight="900" font-family="sans-serif">39%</text>
-      <text x="320" y="360" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">心理学</text>
-      <text x="320" y="376" text-anchor="middle" fill="var(--text-subtle)" font-size="9" font-family="sans-serif">Open Science, 2015</text>
+      <!-- Bar: Oncology 11% -->
+      <rect x="120" y="325" width="110" height="35" rx="4" fill="url(#repRed)" filter="url(#barShadow)"/>
+      <text x="175" y="316" text-anchor="middle" fill="#f87171" font-size="18" font-weight="900" font-family="sans-serif">11%</text>
+      <text x="175" y="385" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">肿瘤学</text>
+      <text x="175" y="400" text-anchor="middle" fill="var(--text-subtle)" font-size="8" font-family="sans-serif">Amgen 2012</text>
 
-      <!-- Bar 3: 经济学 61% -->
-      <rect x="400" y="156" width="100" height="184" rx="4" fill="url(#repGrad3)" filter="url(#repShadow)"/>
-      <text x="450" y="141" text-anchor="middle" fill="#4fd1c5" font-size="20" font-weight="900" font-family="sans-serif">61%</text>
-      <text x="450" y="360" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">经济学</text>
-      <text x="450" y="376" text-anchor="middle" fill="var(--text-subtle)" font-size="9" font-family="sans-serif">Camerer, 2016</text>
+      <!-- Bar: Social Psychology 25% -->
+      <rect x="245" y="288" width="110" height="72" rx="4" fill="url(#repPurple)" filter="url(#barShadow)"/>
+      <text x="300" y="278" text-anchor="middle" fill="#a78bfa" font-size="18" font-weight="900" font-family="sans-serif">25%</text>
+      <text x="300" y="385" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">社会心理学</text>
+      <text x="300" y="400" text-anchor="middle" fill="var(--text-subtle)" font-size="8" font-family="sans-serif">RPP 2015</text>
 
-      <!-- Bar 4: 社会心理学 25% -->
-      <rect x="530" y="253" width="100" height="87" rx="4" fill="url(#repGrad4)" filter="url(#repShadow)"/>
-      <text x="580" y="238" text-anchor="middle" fill="#a78bfa" font-size="20" font-weight="900" font-family="sans-serif">25%</text>
-      <text x="580" y="360" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">社会心理学</text>
-      <text x="580" y="376" text-anchor="middle" fill="var(--text-subtle)" font-size="9" font-family="sans-serif">RPP子集, 2015</text>
+      <!-- Bar: Psychology 39% -->
+      <rect x="370" y="243" width="110" height="117" rx="4" fill="url(#repOrange)" filter="url(#barShadow)"/>
+      <text x="425" y="234" text-anchor="middle" fill="#fb923c" font-size="18" font-weight="900" font-family="sans-serif">39%</text>
+      <text x="425" y="385" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">心理学</text>
+      <text x="425" y="400" text-anchor="middle" fill="var(--text-subtle)" font-size="8" font-family="sans-serif">Open Science 2015</text>
 
-      <!-- 50% benchmark line -->
-      <line x1="120" y1="228" x2="660" y2="228" stroke="rgba(248,113,113,0.3)" stroke-width="1.5" stroke-dasharray="6,3"/>
-      <text x="665" y="232" fill="rgba(248,113,113,0.5)" font-size="9" font-family="sans-serif">50%</text>
+      <!-- Bar: Economics 61% -->
+      <rect x="495" y="169" width="110" height="191" rx="4" fill="url(#repTeal)" filter="url(#barShadow)"/>
+      <text x="550" y="160" text-anchor="middle" fill="#4fd1c5" font-size="18" font-weight="900" font-family="sans-serif">61%</text>
+      <text x="550" y="385" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-family="sans-serif">经济学</text>
+      <text x="550" y="400" text-anchor="middle" fill="var(--text-subtle)" font-size="8" font-family="sans-serif">Camerer 2016</text>
 
-      <!-- Footnote -->
-      <text x="340" y="410" text-anchor="middle" fill="rgba(184,127,212,0.35)" font-size="10" font-family="sans-serif" font-style="italic">▸ 即便是「顶尖期刊」的研究，复制成功率也不足一半。这不是例外，而是系统性危机。◂</text>
+      <!-- "Failing zone" label -->
+      <text x="350" y="430" text-anchor="middle" fill="rgba(184,127,212,0.3)" font-size="10" font-family="sans-serif" font-style="italic">▸ 即便是「顶尖期刊」的研究，多数领域的复现成功率不足一半。这不是例外，而是系统性危机。◂</text>
     </svg>
   </div>
 </section>
 
-<!-- Science Paths Comparison SVG -->
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  教科书上说的「假说→实验→结论」是一条直线。现实远非如此——
+</div>
+
+<!-- ===== LAYER 5: Science Paths Comparison ===== -->
 <section class="section reveal">
   <div class="section-label">第五层 · 教科书的谎言</div>
   <h2 class="section-title">科学发现的真实路径 vs 教科书路径</h2>
   <p class="section-subtitle">
-    教科书告诉你科学是线性的：假说→实验→结论。但真实的科学发现之路，<strong style="color:var(--amber)">满是被抹去的脚印</strong>。
+    教科书告诉你科学是线性的：假说→实验→结论。但真实的科学发现之路，<strong style="color:var(--amber)">满是被抹去的脚印</strong>。每一篇「干净」论文背后都有一部被精心删减的混乱历史。
   </p>
   <div class="section-divider"></div>
 
   <div class="diagram-container">
-    <svg viewBox="0 0 720 380" width="720" height="380" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 720 400" width="720" height="400" xmlns="http://www.w3.org/2000/svg" style="background:rgba(6,5,15,0.3);border-radius:12px;">
       <defs>
-        <marker id="arrowTeal" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#4fd1c5"/>
-        </marker>
-        <marker id="arrowRose" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#f472b6"/>
-        </marker>
-        <marker id="arrowGold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#f0c060"/>
-        </marker>
-        <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#f87171"/>
-        </marker>
-        <filter id="pathGlow"><feGaussianBlur stdDeviation="2"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="arrTeal" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4fd1c5"/></marker>
+        <marker id="arrRose" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#f472b6"/></marker>
+        <marker id="arrAmber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#fb923c"/></marker>
       </defs>
 
       <!-- Divider -->
-      <line x1="0" y1="160" x2="720" y2="160" stroke="rgba(160,155,200,0.1)" stroke-width="1" stroke-dasharray="8,4"/>
+      <line x1="0" y1="155" x2="720" y2="155" stroke="rgba(160,155,200,0.08)" stroke-width="1" stroke-dasharray="8,4"/>
 
-      <!-- TOP: 教科书路径 -->
-      <text x="360" y="24" text-anchor="middle" fill="#4fd1c5" font-size="14" font-weight="700" font-family="sans-serif">📖 教科书路径（虚构的干净故事）</text>
+      <!-- TOP: TEXTBOOK PATH -->
+      <text x="360" y="22" text-anchor="middle" fill="#4fd1c5" font-size="14" font-weight="700" font-family="sans-serif">📖 教科书路径</text>
+      <text x="360" y="38" text-anchor="middle" fill="rgba(79,209,197,0.3)" font-size="9" font-family="sans-serif">简洁、优雅、完全虚构</text>
 
-      <!-- Straight path -->
-      <rect x="50" y="48" width="100" height="42" rx="8" fill="rgba(79,209,197,0.1)" stroke="rgba(79,209,197,0.3)" stroke-width="1.5"/>
-      <text x="100" y="75" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="600" font-family="sans-serif">提出假说</text>
+      <rect x="36" y="52" width="100" height="40" rx="10" fill="rgba(79,209,197,0.1)" stroke="rgba(79,209,197,0.35)" stroke-width="1.5"/>
+      <text x="86" y="77" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="600" font-family="sans-serif">提出假说</text>
+      <line x1="136" y1="72" x2="220" y2="72" stroke="#4fd1c5" stroke-width="2" marker-end="url(#arrTeal)"/>
 
-      <line x1="150" y1="69" x2="238" y2="69" stroke="#4fd1c5" stroke-width="2" marker-end="url(#arrowTeal)"/>
+      <rect x="224" y="52" width="100" height="40" rx="10" fill="rgba(79,209,197,0.1)" stroke="rgba(79,209,197,0.35)" stroke-width="1.5"/>
+      <text x="274" y="77" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="600" font-family="sans-serif">设计实验</text>
+      <line x1="324" y1="72" x2="408" y2="72" stroke="#4fd1c5" stroke-width="2" marker-end="url(#arrTeal)"/>
 
-      <rect x="242" y="48" width="100" height="42" rx="8" fill="rgba(79,209,197,0.1)" stroke="rgba(79,209,197,0.3)" stroke-width="1.5"/>
-      <text x="292" y="75" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="600" font-family="sans-serif">设计实验</text>
+      <rect x="412" y="52" width="100" height="40" rx="10" fill="rgba(79,209,197,0.1)" stroke="rgba(79,209,197,0.35)" stroke-width="1.5"/>
+      <text x="462" y="77" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="600" font-family="sans-serif">收集数据</text>
+      <line x1="512" y1="72" x2="580" y2="72" stroke="#4fd1c5" stroke-width="2" marker-end="url(#arrTeal)"/>
 
-      <line x1="342" y1="69" x2="430" y2="69" stroke="#4fd1c5" stroke-width="2" marker-end="url(#arrowTeal)"/>
+      <rect x="584" y="52" width="100" height="40" rx="10" fill="rgba(79,209,197,0.2)" stroke="#4fd1c5" stroke-width="2"/>
+      <text x="634" y="77" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="700" font-family="sans-serif">✓ 发表结论</text>
 
-      <rect x="434" y="48" width="100" height="42" rx="8" fill="rgba(79,209,197,0.1)" stroke="rgba(79,209,197,0.3)" stroke-width="1.5"/>
-      <text x="484" y="75" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="600" font-family="sans-serif">收集数据</text>
+      <!-- BOTTOM: REAL PATH -->
+      <text x="360" y="178" text-anchor="middle" fill="#f472b6" font-size="14" font-weight="700" font-family="sans-serif">🔬 真实路径</text>
+      <text x="360" y="194" text-anchor="middle" fill="rgba(244,114,182,0.3)" font-size="9" font-family="sans-serif">混乱、曲折、被精心删减</text>
 
-      <line x1="534" y1="69" x2="608" y2="69" stroke="#4fd1c5" stroke-width="2" marker-end="url(#arrowTeal)"/>
+      <!-- Messy real path -->
+      <rect x="14" y="212" width="88" height="36" rx="8" fill="rgba(244,114,182,0.08)" stroke="rgba(244,114,182,0.25)" stroke-width="1"/>
+      <text x="58" y="235" text-anchor="middle" fill="#f472b6" font-size="10" font-family="sans-serif">模糊直觉</text>
 
-      <rect x="612" y="48" width="90" height="42" rx="8" fill="rgba(79,209,197,0.15)" stroke="#4fd1c5" stroke-width="2"/>
-      <text x="657" y="75" text-anchor="middle" fill="#4fd1c5" font-size="12" font-weight="700" font-family="sans-serif">✓ 结论</text>
+      <path d="M102 225 L130 216 L142 216" stroke="#f472b6" stroke-width="1.5" fill="none" marker-end="url(#arrRose)"/>
 
-      <!-- Sub-label -->
-      <text x="360" y="118" text-anchor="middle" fill="rgba(79,209,197,0.4)" font-size="10" font-family="sans-serif">简洁、优雅、完全虚假</text>
+      <rect x="148" y="208" width="88" height="36" rx="8" fill="rgba(244,114,182,0.08)" stroke="rgba(244,114,182,0.25)" stroke-width="1"/>
+      <text x="192" y="231" text-anchor="middle" fill="#f472b6" font-size="10" font-family="sans-serif">预实验失败</text>
 
-      <!-- BOTTOM: 真实路径 -->
-      <text x="360" y="180" text-anchor="middle" fill="#f472b6" font-size="14" font-weight="700" font-family="sans-serif">🔬 真实路径（被抹去的脚印）</text>
+      <path d="M236 220 L264 244 L280 244" stroke="#f472b6" stroke-width="1.5" fill="none" marker-end="url(#arrRose)"/>
 
-      <!-- Messy path - boxes and zigzag arrows -->
-      <rect x="20" y="200" width="80" height="36" rx="8" fill="rgba(244,114,182,0.08)" stroke="rgba(244,114,182,0.3)" stroke-width="1"/>
-      <text x="60" y="223" text-anchor="middle" fill="#f472b6" font-size="10" font-family="sans-serif">模糊想法</text>
+      <rect x="286" y="236" width="90" height="36" rx="8" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.25)" stroke-width="1"/>
+      <text x="331" y="259" text-anchor="middle" fill="#fb923c" font-size="10" font-family="sans-serif">p-hacking</text>
 
-      <!-- Zigzag -->
-      <path d="M100 218 L130 200 L140 200" stroke="#f472b6" stroke-width="1.5" fill="none" marker-end="url(#arrowRose)"/>
+      <path d="M376 254 L376 280 L400 280" stroke="#f87171" stroke-width="1.5" fill="none" marker-end="url(#arrAmber)"/>
 
-      <rect x="144" y="192" width="80" height="36" rx="8" fill="rgba(244,114,182,0.08)" stroke="rgba(244,114,182,0.3)" stroke-width="1"/>
-      <text x="184" y="215" text-anchor="middle" fill="#f472b6" font-size="10" font-family="sans-serif">预实验失败</text>
+      <rect x="406" y="268" width="80" height="36" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.25)" stroke-width="1"/>
+      <text x="446" y="291" text-anchor="middle" fill="#f87171" font-size="10" font-family="sans-serif">遭拒稿</text>
 
-      <path d="M224 200 L250 240 L280 240" stroke="#f472b6" stroke-width="1.5" fill="none" marker-end="url(#arrowRose)"/>
+      <path d="M486 286 L486 208 L520 208" stroke="#fb923c" stroke-width="1.5" fill="none" marker-end="url(#arrAmber)"/>
 
-      <rect x="284" y="230" width="90" height="36" rx="8" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.3)" stroke-width="1"/>
-      <text x="329" y="253" text-anchor="middle" fill="#fb923c" font-size="10" font-family="sans-serif">p-hacking</text>
+      <rect x="526" y="200" width="90" height="36" rx="8" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.25)" stroke-width="1"/>
+      <text x="571" y="223" text-anchor="middle" fill="#fb923c" font-size="10" font-family="sans-serif">改投低分刊</text>
 
-      <path d="M374 248 L374 280 L400 280" stroke="#f87171" stroke-width="1.5" fill="none" marker-end="url(#arrowRed)"/>
+      <path d="M616 218 L648 266 L662 266" stroke="#f0c060" stroke-width="2" fill="none" marker-end="url(#arrTeal)"/>
 
-      <rect x="404" y="268" width="80" height="36" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.3)" stroke-width="1"/>
-      <text x="444" y="291" text-anchor="middle" fill="#f87171" font-size="10" font-family="sans-serif">拒稿</text>
+      <rect x="666" y="250" width="42" height="36" rx="8" fill="rgba(240,192,96,0.14)" stroke="#f0c060" stroke-width="1.5"/>
+      <text x="687" y="273" text-anchor="middle" fill="#f0c060" font-size="10" font-family="sans-serif">发表!</text>
 
-      <path d="M484 286 L484 200 L520 200" stroke="#f87171" stroke-width="1.5" fill="none" marker-end="url(#arrowRed)"/>
+      <!-- What was erased -->
+      <text x="58" y="330" fill="rgba(244,114,182,0.4)" font-size="9" font-family="sans-serif">"我们按标准方法分析" — 实际换了3次统计方法</text>
+      <text x="58" y="346" fill="rgba(248,113,113,0.4)" font-size="9" font-family="sans-serif">"样本量根据功效分析确定" — 实际：做到p&lt;0.05就停下</text>
+      <text x="58" y="362" fill="rgba(251,146,60,0.4)" font-size="9" font-family="sans-serif">"所有测量变量均已报告" — 实际：20个变量只报告了2个</text>
+      <text x="58" y="378" fill="rgba(155,89,182,0.3)" font-size="9" font-family="sans-serif">"利益冲突：无" — 实际：可可制品工业协会全额资助</text>
 
-      <rect x="524" y="192" width="90" height="36" rx="8" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.3)" stroke-width="1"/>
-      <text x="569" y="215" text-anchor="middle" fill="#fb923c" font-size="10" font-family="sans-serif">改投低分期刊</text>
-
-      <path d="M614 210 L640 250 L660 250" stroke="#f0c060" stroke-width="1.5" fill="none" marker-end="url(#arrowGold)"/>
-
-      <rect x="664" y="236" width="42" height="36" rx="8" fill="rgba(240,192,96,0.12)" stroke="#f0c060" stroke-width="1.5"/>
-      <text x="685" y="259" text-anchor="middle" fill="#f0c060" font-size="10" font-family="sans-serif">发表!</text>
-
-      <!-- Scattered annotations at bottom -->
-      <text x="60" y="320" fill="rgba(244,114,182,0.5)" font-size="9" font-family="sans-serif">"我们按标准方法分析"→实际换了3次统计方法</text>
-      <text x="60" y="336" fill="rgba(248,113,113,0.5)" font-size="9" font-family="sans-serif">"样本量根据功效分析确定"→实际:做到p&lt;0.05就停下</text>
-      <text x="60" y="352" fill="rgba(251,146,60,0.5)" font-size="9" font-family="sans-serif">"所有测量变量均已报告"→实际:20个变量中只报告了2个</text>
-
-      <!-- Bottom note -->
-      <text x="360" y="375" text-anchor="middle" fill="rgba(184,127,212,0.3)" font-size="9" font-family="sans-serif" font-style="italic">▸ 每一篇"干净"论文的背后，都有一部被精心删减的混乱历史 ◂</text>
+      <text x="360" y="396" text-anchor="middle" fill="rgba(184,127,212,0.25)" font-size="9" font-family="sans-serif" font-style="italic">▸ 每一篇"干净"论文的背后，都有一部被精心删减的混乱历史 ◂</text>
     </svg>
   </div>
 </section>
 
-<!-- ====== ACT III: 揭示 ====== -->
+
+<!-- =============================================================== -->
+<!-- ACT III: THE REVELATION                                          -->
+<!-- =============================================================== -->
 <div class="act-marker" id="act3">
   <div class="act-num">III</div>
   <div class="act-label">真相揭示</div>
 </div>
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  现在你已经知道结论是怎么被制造的了。接下来——你来当审稿人。
+</div>
 
-<!-- 同行评议模拟 -->
+<!-- ===== Peer Review Simulator ===== -->
 <section class="section reveal">
   <div class="section-label">互动模拟 · 审稿人模式</div>
   <h2 class="section-title">同行评议模拟：你来审查这篇论文</h2>
   <p class="section-subtitle">
-    你是一本期刊的审稿人。你收到了一篇论文的摘要和方法部分。请仔细阅读，<strong style="color:var(--red)">找出其中存在的科学问题</strong>。
+    你是一本医学期刊的审稿人。下面是一篇投稿论文的摘要和方法部分。请仔细阅读，<strong style="color:var(--red)">找出其中存在的科学方法论问题</strong>。点击你认为有问题的项进行标记，然后提交评审意见。
   </p>
   <div class="section-divider"></div>
 
@@ -1076,132 +1126,188 @@ body {
     <div class="review-paper">
       <div class="paper-journal">Journal of Nutritional Sciences · 投稿编号 JNS-2024-0873</div>
       <div class="paper-title">「可可黄酮提取物对中老年认知功能改善的临床研究」</div>
-      <div class="paper-authors">作者：Chen, W., et al. | 资助：可可制品工业协会（未声明）</div>
+      <div class="paper-authors">作者：Chen, W., et al. (通讯作者未注明ORCID) | 资助：可可制品工业协会（未在正文声明）</div>
       <div class="paper-abstract">
-        <strong style="color:var(--violet-bright)">摘要：</strong>本研究探讨了可可黄酮提取物对50-70岁成年人认知功能的改善效果。24名受试者（平均年龄61.2岁）接受为期8周的可可提取物干预。通过8项认知测试评估效果。结果显示，在<strong>第3项测试（词语回忆）</strong>和<strong>第7项测试（数字符号替换）</strong>中，干预组的改善达到统计显著水平（p&lt;0.05），提示可可黄酮可能有认知保护作用。
+        <strong style="color:var(--violet-bright)">摘要：</strong>本研究探讨了可可黄酮提取物对50-70岁成年人认知功能的改善效果。24名受试者（平均年龄61.2岁）接受为期8周的可可提取物干预，采用非随机分组。通过8项认知测试评估效果。结果显示，在<strong style="color:var(--amber)">第3项测试（词语回忆）</strong>和<strong style="color:var(--amber)">第7项测试（数字符号替换）</strong>中，干预组的改善达到统计显著水平（均为p&lt;0.05，未校正），提示可可黄酮可能具有认知保护作用。本研究可可提取物由可可制品工业协会下属实验室提供。
       </div>
       <div class="paper-methods">
-        <span class="method-label">方法要点：</span>
-        • 样本量：n=24（干预组12人，对照组12人）<br>
-        • 非盲法：受试者知道自己服用的是可可产品<br>
-        • 8项认知测试，未提多重比较校正<br>
-        • 仅报告2项显著结果，其余6项未达统计显著<br>
-        • 药物公司资助，但未在利益冲突部分说明<br>
-        • 退出者4人未纳入分析（未做意向性分析）
+        <span class="method-label">方法摘要：</span>
+        • 样本量：n=24（干预组12人，对照组12人），未提供功效分析依据<br>
+        • 非盲法设计：受试者知道自己服用的是可可制品<br>
+        • 共施测8项认知测试，文中仅报告了达到显著的2项<br>
+        • 未提及多重比较校正（如Bonferroni或FDR）<br>
+        • 统计方法部分描述：「使用了多种统计方法进行分析」——未具体说明<br>
+        • 4名退出者被排除在最终分析之外（未做意向性分析 ITT）<br>
+        • 资助来源：致谢部分提到可可制品工业协会提供材料，但「利益冲突声明」写为「无」
       </div>
     </div>
 
     <div class="review-flags" id="reviewFlags">
-      <div class="flag-instruction">🔍 <strong>点击标记你发现的问题</strong>（提示：至少存在5个方法论缺陷）：</div>
+      <div class="flag-instruction">🔍 <strong>点击标记你发现的问题</strong>（提示：至少存在 <span style="color:var(--red)">6个明确的方法论缺陷</span>，还有2个是干扰项）：</div>
       <button class="review-flag" data-flag="sample" onclick="toggleFlag(this)">样本量过小 (n=24)</button>
-      <button class="review-flag" data-flag="blind" onclick="toggleFlag(this)">未使用盲法</button>
+      <button class="review-flag" data-flag="blind" onclick="toggleFlag(this)">未使用盲法设计</button>
       <button class="review-flag" data-flag="multiple" onclick="toggleFlag(this)">多重比较未校正</button>
       <button class="review-flag" data-flag="selective" onclick="toggleFlag(this)">选择性报告结果</button>
       <button class="review-flag" data-flag="conflict" onclick="toggleFlag(this)">未声明利益冲突</button>
-      <button class="review-flag" data-flag="itt" onclick="toggleFlag(this)">退出者未纳入分析</button>
-      <button class="review-flag" data-flag="fake1" onclick="toggleFlag(this)">统计软件版本未说明</button>
-      <button class="review-flag" data-flag="fake2" onclick="toggleFlag(this)">参考文献格式不一致</button>
+      <button class="review-flag" data-flag="itt" onclick="toggleFlag(this)">退出者未纳入ITT分析</button>
+      <button class="review-flag" data-flag="vague" onclick="toggleFlag(this)">统计方法描述模糊</button>
+      <button class="review-flag" data-flag="fake1" onclick="toggleFlag(this)">未说明统计软件版本号</button>
+      <button class="review-flag" data-flag="fake2" onclick="toggleFlag(this)">参考文献格式不规范</button>
+      <button class="review-flag" data-flag="fake3" onclick="toggleFlag(this)">英文摘要存在语法错误</button>
+      <div style="width:100%;text-align:center;margin-top:16px;">
+        <button id="reviewSubmitBtn" onclick="submitReview()" style="padding:12px 32px;border-radius:20px;border:1px solid var(--violet-dim);background:rgba(155,89,182,0.12);color:var(--violet-bright);cursor:pointer;font-size:.9rem;font-weight:700;">📤 提交评审意见</button>
+      </div>
     </div>
 
     <div class="review-result" id="reviewResult">
       <div class="rr-score" id="rrScore"></div>
       <div class="rr-grade" id="rrGrade"></div>
       <div class="rr-detail" id="rrDetail"></div>
-      <button class="review-retry show" onclick="resetReview()">🔄 重新审查</button>
     </div>
   </div>
 </section>
 
-<!-- 3D Evidence Pyramid SVG -->
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  所以——什么样的证据最可信？让我们登上证据金字塔——
+</div>
+
+<!-- ===== 3D Evidence Pyramid SVG ===== -->
 <section class="section reveal">
-  <div class="section-label">核心图表</div>
-  <h2 class="section-title">证据金字塔：什么样的研究最可信？</h2>
+  <div class="section-label">核心图表 · 证据金字塔</div>
+  <h2 class="section-title">什么样的研究最可信？</h2>
   <p class="section-subtitle">
-    不是所有「科学研究」都同等可信。从塔尖到塔基，证据质量<strong style="color:var(--gold)">逐级递减</strong>。
+    不是所有「科学研究」都同等可信。从塔尖到塔基，证据质量<strong style="color:var(--gold)">逐级递减</strong>。知道了这一点，你就不会再被「研究表明……"的标题吓住。
   </p>
   <div class="section-divider"></div>
 
   <div class="diagram-container">
-    <svg viewBox="0 0 700 520" width="700" height="520" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 700 540" width="700" height="540" xmlns="http://www.w3.org/2000/svg" style="background:rgba(6,5,15,0.3);border-radius:12px;">
       <defs>
-        <linearGradient id="pyramidSide" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#3a2860"/><stop offset="100%" stop-color="#5a4090"/>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(5,5,20,0.01)"/><stop offset="100%" stop-color="rgba(5,5,20,0.35)"/>
         </linearGradient>
-        <linearGradient id="pyramidTop" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="layer1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(40,28,60,0.5)"/><stop offset="100%" stop-color="rgba(30,20,50,0.7)"/>
+        </linearGradient>
+        <linearGradient id="layer2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(50,36,72,0.55)"/><stop offset="100%" stop-color="rgba(38,26,60,0.72)"/>
+        </linearGradient>
+        <linearGradient id="layer3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(62,44,86,0.6)"/><stop offset="100%" stop-color="rgba(48,32,70,0.75)"/>
+        </linearGradient>
+        <linearGradient id="layer4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(74,52,100,0.65)"/><stop offset="100%" stop-color="rgba(58,38,80,0.78)"/>
+        </linearGradient>
+        <linearGradient id="layer5" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(88,60,116,0.7)"/><stop offset="100%" stop-color="rgba(68,44,94,0.82)"/>
+        </linearGradient>
+        <linearGradient id="layer6" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(105,72,138,0.78)"/><stop offset="100%" stop-color="rgba(80,52,110,0.88)"/>
+        </linearGradient>
+        <linearGradient id="layer7" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#f8d888"/><stop offset="100%" stop-color="#c09040"/>
         </linearGradient>
-        <linearGradient id="pyramidLayer" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="rgba(155,89,182,0.2)"/><stop offset="100%" stop-color="rgba(155,89,182,0.05)"/>
+        <linearGradient id="sideGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(40,30,70,0.3)"/><stop offset="100%" stop-color="rgba(20,15,45,0.5)"/>
         </linearGradient>
-        <filter id="pyrShadow"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/></filter>
-        <filter id="pyrGlow"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="pyrGlow2"><feGaussianBlur stdDeviation="4"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="pyrShadow2"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity="0.4"/></filter>
       </defs>
 
-      <!-- Title -->
-      <text x="350" y="28" text-anchor="middle" fill="#b87fd4" font-size="15" font-weight="700" font-family="sans-serif">证据金字塔 · The Evidence Pyramid</text>
+      <!-- Sky/ground -->
+      <rect x="0" y="0" width="700" height="540" fill="url(#skyGrad)"/>
+      
+      <!-- Ground line -->
+      <line x1="30" y1="470" x2="670" y2="470" stroke="rgba(160,155,200,0.06)" stroke-width="1"/>
 
-      <!-- 3D Pyramid — isometric-style stacked layers -->
-      <!-- Bottom layer (L1: Expert Opinion) -->
-      <polygon points="90,440 350,480 610,440 350,400" fill="rgba(40,30,60,0.6)" stroke="rgba(160,155,200,0.15)" stroke-width="1"/>
-      <text x="350" y="430" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10" font-family="sans-serif">专家意见 / 社论 / 体外实验</text>
+      <!-- STACKED 3D PYRAMID (isometric pseudo-3D) -->
+      <!-- Each layer is a trapezoid: left side shorter, top narrower -->
+      
+      <!-- Layer 1: Expert Opinion / In Vitro (base) -->
+      <polygon points="60,460 340,488 680,460 340,436" fill="rgba(35,22,55,0.6)" stroke="rgba(160,155,200,0.08)" stroke-width="1"/>
+      <!-- Top surface -->
+      <polygon points="120,436 340,454 600,436 340,422" fill="rgba(40,28,62,0.65)" stroke="rgba(160,155,200,0.1)" stroke-width="1"/>
+      <text x="340" y="450" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="9" font-family="sans-serif">专家意见 / 社论 / 体外实验 / 动物实验</text>
 
-      <!-- L2: Case Reports -->
-      <polygon points="115,395 350,432 585,395 350,358" fill="rgba(50,36,72,0.65)" stroke="rgba(160,155,200,0.15)" stroke-width="1"/>
-      <text x="350" y="388" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="10" font-family="sans-serif">病例报告 / 病例系列</text>
+      <!-- Layer 2: Case Reports -->
+      <polygon points="120,418 340,436 600,418 340,400" fill="rgba(45,32,68,0.62)" stroke="rgba(160,155,200,0.09)" stroke-width="1"/>
+      <polygon points="155,400 340,414 565,400 340,388" fill="rgba(50,36,74,0.68)" stroke="rgba(160,155,200,0.11)" stroke-width="1"/>
+      <text x="340" y="410" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="9" font-family="sans-serif">病例报告 / 病例系列研究</text>
 
-      <!-- L3: Case-Control -->
-      <polygon points="140,350 350,384 560,350 350,316" fill="rgba(60,42,84,0.7)" stroke="rgba(160,155,200,0.15)" stroke-width="1"/>
-      <text x="350" y="343" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="sans-serif">病例对照研究</text>
+      <!-- Layer 3: Case-Control -->
+      <polygon points="155,384 340,400 565,384 340,370" fill="rgba(55,40,80,0.65)" stroke="rgba(160,155,200,0.1)" stroke-width="1"/>
+      <polygon points="185,370 340,384 535,370 340,358" fill="rgba(62,45,88,0.7)" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
+      <text x="340" y="380" text-anchor="middle" fill="rgba(255,255,255,0.36)" font-size="9" font-family="sans-serif">病例对照研究</text>
 
-      <!-- L4: Cohort -->
-      <polygon points="165,305 350,336 535,305 350,274" fill="rgba(70,48,96,0.75)" stroke="rgba(160,155,200,0.15)" stroke-width="1"/>
-      <text x="350" y="298" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="10" font-family="sans-serif">队列研究</text>
+      <!-- Layer 4: Cohort Studies -->
+      <polygon points="185,354 340,370 535,354 340,340" fill="rgba(66,48,94,0.68)" stroke="rgba(160,155,200,0.11)" stroke-width="1"/>
+      <polygon points="210,340 340,354 510,340 340,328" fill="rgba(74,54,102,0.73)" stroke="rgba(160,155,200,0.13)" stroke-width="1"/>
+      <text x="340" y="350" text-anchor="middle" fill="rgba(255,255,255,0.42)" font-size="10" font-family="sans-serif" font-weight="600">队列研究</text>
 
-      <!-- L5: RCT -->
-      <polygon points="190,260 350,288 510,260 350,232" fill="rgba(80,54,110,0.8)" stroke="rgba(160,155,200,0.18)" stroke-width="1"/>
-      <text x="350" y="253" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="11" font-family="sans-serif" font-weight="600">随机对照试验 (RCT)</text>
+      <!-- Layer 5: RCT -->
+      <polygon points="210,324 340,340 510,324 340,310" fill="rgba(78,56,110,0.72)" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
+      <polygon points="235,310 340,324 485,310 340,298" fill="rgba(88,64,120,0.78)" stroke="rgba(170,160,210,0.14)" stroke-width="1"/>
+      <text x="340" y="320" text-anchor="middle" fill="rgba(255,255,255,0.52)" font-size="11" font-family="sans-serif" font-weight="700">随机对照试验 (RCT)</text>
 
-      <!-- L6: Systematic Review -->
-      <polygon points="215,215 350,240 485,215 350,190" fill="rgba(100,68,138,0.85)" stroke="rgba(180,170,220,0.2)" stroke-width="1"/>
-      <text x="350" y="208" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="11" font-family="sans-serif" font-weight="600">系统综述</text>
+      <!-- Layer 6: Systematic Reviews -->
+      <polygon points="235,294 340,310 485,294 340,280" fill="rgba(98,72,134,0.78)" stroke="rgba(170,160,210,0.13)" stroke-width="1"/>
+      <polygon points="260,280 340,294 460,280 340,268" fill="rgba(110,80,148,0.85)" stroke="rgba(180,170,220,0.16)" stroke-width="1"/>
+      <text x="340" y="290" text-anchor="middle" fill="rgba(255,255,255,0.62)" font-size="11" font-family="sans-serif" font-weight="700">系统综述</text>
 
-      <!-- L7: Meta-Analysis (top) -->
-      <polygon points="240,170 350,192 460,170 350,148" fill="url(#pyramidTop)" filter="url(#pyrGlow)" stroke="#f0c060" stroke-width="1.5"/>
-      <text x="350" y="175" text-anchor="middle" fill="#1a1020" font-size="12" font-family="sans-serif" font-weight="900">荟萃分析</text>
+      <!-- Layer 7: Meta-Analysis (top / gold) -->
+      <polygon points="260,264 340,280 460,264 340,250" fill="rgba(130,95,165,0.85)" stroke="rgba(190,180,225,0.15)" stroke-width="1"/>
+      <polygon points="285,250 340,264 435,250 340,238" fill="url(#layer7)" stroke="#f0c060" stroke-width="1.5" filter="url(#pyrGlow2)"/>
+      <text x="340" y="258" text-anchor="middle" fill="#1a1020" font-size="12" font-family="sans-serif" font-weight="900">荟萃分析 · Meta-Analysis</text>
 
-      <!-- Side panels -->
-      <line x1="90" y1="440" x2="115" y2="395" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="115" y1="395" x2="140" y2="350" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="140" y1="350" x2="165" y2="305" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="165" y1="305" x2="190" y2="260" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="190" y1="260" x2="215" y2="215" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="215" y1="215" x2="240" y2="170" stroke="rgba(160,155,200,0.15)" stroke-width="1"/>
+      <!-- Left ridge line (3D effect) -->
+      <polyline points="60,460 120,436 155,400 185,370 210,340 235,310 260,280 285,250" 
+                fill="none" stroke="rgba(80,60,120,0.15)" stroke-width="1"/>
+      <!-- Right ridge line -->
+      <polyline points="680,460 600,436 565,400 535,370 510,340 485,310 460,280 435,250" 
+                fill="none" stroke="rgba(80,60,120,0.12)" stroke-width="1"/>
 
-      <line x1="610" y1="440" x2="585" y2="395" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="585" y1="395" x2="560" y2="350" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="560" y1="350" x2="535" y2="305" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="535" y1="305" x2="510" y2="260" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="510" y1="260" x2="485" y2="215" stroke="rgba(160,155,200,0.12)" stroke-width="1"/>
-      <line x1="485" y1="215" x2="460" y2="170" stroke="rgba(160,155,200,0.15)" stroke-width="1"/>
+      <!-- Quality annotations on left -->
+      <text x="38" y="444" fill="rgba(248,113,113,0.5)" font-size="8" font-family="sans-serif">弱</text>
+      <text x="38" y="248" fill="rgba(79,209,197,0.5)" font-size="8" font-family="sans-serif">强</text>
+      <line x1="48" y1="440" x2="48" y2="255" stroke="rgba(160,155,200,0.1)" stroke-width="1"/>
+      <!-- Arrowheads -->
+      <polygon points="45,435 48,425 51,435" fill="rgba(248,113,113,0.3)"/>
+      <polygon points="45,260 48,270 51,260" fill="rgba(79,209,197,0.3)"/>
 
-      <!-- Confidence annotation -->
-      <text x="350" y="500" text-anchor="middle" fill="rgba(184,127,212,0.35)" font-size="10" font-family="sans-serif" font-style="italic">▸ 越靠近塔尖，因果推断的可信度越高；但越靠近塔尖，实施难度（成本/伦理）也越大 ◂</text>
+      <!-- Side note -->
+      <text x="645" y="280" text-anchor="start" fill="rgba(184,127,212,0.3)" font-size="8" font-family="sans-serif">
+        <tspan x="645" dy="0">因果推断</tspan>
+        <tspan x="645" dy="12">强度递增</tspan>
+        <tspan x="645" dy="12" fill="rgba(79,209,197,0.25)">→</tspan>
+      </text>
+
+      <!-- Footnote -->
+      <text x="340" y="508" text-anchor="middle" fill="rgba(184,127,212,0.28)" font-size="9" font-family="sans-serif" font-style="italic">▸ 越靠近塔尖，因果推断的可信度越高。但越靠近塔尖，实施难度（成本/伦理/时间）也越大 ◂</text>
+      <text x="340" y="528" text-anchor="middle" fill="rgba(155,89,182,0.18)" font-size="8" font-family="sans-serif">「红酒有益心脏」的研究只是第四层——一项队列研究。远不足以确定因果关系。</text>
     </svg>
   </div>
 </section>
 
-<!-- ====== ACT IV: 武库 ====== -->
+
+<!-- =============================================================== -->
+<!-- ACT IV: COGNITIVE ARMAMENT                                        -->
+<!-- =============================================================== -->
 <div class="act-marker" id="act4">
   <div class="act-num">IV</div>
   <div class="act-label">认知武器</div>
 </div>
+<div class="narrative-connector">
+  <span class="nc-arrow">▼</span>
+  你已经拆解了一个谎言。现在——装备你自己的思维工具。
+</div>
 
-<!-- 第一性原理拆解器 -->
+<!-- ===== First Principles Deconstructor ===== -->
 <section class="section reveal">
   <div class="section-label">互动工具 · 思维体操</div>
   <h2 class="section-title">第一性原理拆解器</h2>
   <p class="section-subtitle">
-    选一个日常物品，从整机逐层拆解到物理定律。这是<strong style="color:var(--violet-bright)">埃隆·马斯克所说</strong>的核心创新方法论。
+    选一个日常物品，从整机逐层拆解到物理定律。这是<strong style="color:var(--violet-bright)">埃隆·马斯克</strong>所说的核心创新方法论——<br>不类比、不模仿，回到最基本的真理重新推理。
   </p>
   <div class="section-divider"></div>
 
@@ -1216,12 +1322,12 @@ body {
   </div>
 </section>
 
-<!-- 方法论武器墙 -->
+<!-- ===== Methodology Weapon Wall ===== -->
 <section class="section reveal">
   <div class="section-label">你的武器</div>
   <h2 class="section-title">方法论武器墙</h2>
   <p class="section-subtitle">
-    走出这篇页面时，你手里不只有「红酒骗局」这一个故事——你握着一套可以<strong style="color:var(--gold)">重复使用的认知工具</strong>。
+    走出这篇页面时，你手里不只有「红酒骗局」这一个故事——你握着一套可以<strong style="color:var(--gold)">重复使用的认知工具</strong>。这就是科学方法论——不是知识，是武器。
   </p>
   <div class="section-divider"></div>
 
@@ -1234,7 +1340,7 @@ body {
     <div class="weapon-tag">
       <div class="wt-icon">🧪</div>
       <div class="wt-name">证伪原则</div>
-      <div class="wt-desc">不证伪的「理论」不是科学</div>
+      <div class="wt-desc">不可证伪的"理论"不是科学</div>
     </div>
     <div class="weapon-tag">
       <div class="wt-icon">📐</div>
@@ -1244,47 +1350,65 @@ body {
     <div class="weapon-tag">
       <div class="wt-icon">🔢</div>
       <div class="wt-name">效应量思维</div>
-      <div class="wt-desc">p<0.05不是终点，问「效果多大」</div>
+      <div class="wt-desc">p&lt;0.05不是终点，问"效果多大"</div>
     </div>
     <div class="weapon-tag">
       <div class="wt-icon">🧩</div>
       <div class="wt-name">偏误识别</div>
-      <div class="wt-desc">确认偏误、幸存者偏差、因果倒置</div>
+      <div class="wt-desc">确认偏误·幸存者偏差·因果倒置</div>
     </div>
     <div class="weapon-tag">
       <div class="wt-icon">🔗</div>
       <div class="wt-name">相关≠因果</div>
-      <div class="wt-desc">永远追问混杂变量</div>
+      <div class="wt-desc">永远追问隐藏的混杂变量</div>
     </div>
     <div class="weapon-tag">
       <div class="wt-icon">🔬</div>
       <div class="wt-name">证据等级</div>
-      <div class="wt-desc">RCT > 队列 > 病例对照 > 专家意见</div>
+      <div class="wt-desc">RCT > 队列 > 病例对照 > 专家</div>
     </div>
     <div class="weapon-tag">
       <div class="wt-icon">🔄</div>
       <div class="wt-name">复现检验</div>
       <div class="wt-desc">一项研究 = 一个数据点</div>
     </div>
+    <div class="weapon-tag">
+      <div class="wt-icon">🎯</div>
+      <div class="wt-name">第一性原理</div>
+      <div class="wt-desc">拆解到物理定律再重建</div>
+    </div>
+    <div class="weapon-tag">
+      <div class="wt-icon">⚖️</div>
+      <div class="wt-name">同行评议</div>
+      <div class="wt-desc">检查方法而非相信结论</div>
+    </div>
   </div>
 </section>
 
-<!-- ====== 收束 ====== -->
+<!-- =============================================================== -->
+<!-- CODA: THE FAREWELL                                               -->
+<!-- =============================================================== -->
 <section class="closing reveal">
   <div class="closing-badge">收束 · CODA</div>
   <h2>你不需要「相信」科学</h2>
   <p class="closing-text">
     红酒有益心脏？也许是，也许不是。<strong>但重点不在于这个具体的结论</strong>——<br>
     重点在于：当你下一次看到「研究表明……」的标题时，你不再是一个被动的信息接收者。<br><br>
-    你会问：<em>这是什么类型的研究？</em>谁资助的？样本量多大？有没有其他独立研究复现了这个结果？<br>
-    有没有人做了相反的实验但没发表？p值是多重比较中筛出来的吗？<br><br>
+    你会问：<em>这是什么类型的研究？</em>谁资助的？样本量多大？<br>
+    有没有其他独立研究复现了这个结果？对面有没有没发表的阴性实验？<br>
+    p值是不是多重比较中筛出来的？利益冲突声明了吗？<br><br>
     这些问题，就是你手中的<strong>认知武器</strong>。<br><br>
     科学不是一堆固定不变的结论。科学是一套<em>方法论</em>——<br>
-    当你掌握了这套方法，<strong>你就不再需要「相信」科学。你自己就有能力判断。</strong>
+    当你掌握了这套方法，<strong>你就不再需要「相信」科学。你自己就有能力判断。</strong><br><br>
+    <span style="font-size:.85rem;color:var(--text-subtle);">
+      走出这扇门，前面6个窗口的科技内容在等着你。但现在，你有了不同的眼睛。
+    </span>
   </p>
 </section>
 
-<!-- ====== Articles ====== -->
+<!-- =============================================================== -->
+<!-- ARTICLES                                                          -->
+<!-- =============================================================== -->
 <section class="section reveal" id="articles">
   <div class="section-label">延伸阅读</div>
   <h2 class="section-title">相关文章索引</h2>
@@ -1292,17 +1416,14 @@ body {
   <div class="section-divider"></div>
 
   <div class="article-clusters" id="articleClusters">
-    <!-- Cluster: 学术秩序与规范 -->
     <div>
       <div class="cluster-title"><span class="ct-icon">🏛️</span> 学术秩序与规范</div>
       <div class="articles-grid" id="cluster-norms"></div>
     </div>
-    <!-- Cluster: 科学思维与认知 -->
     <div>
       <div class="cluster-title"><span class="ct-icon">🧠</span> 科学思维与认知偏误</div>
       <div class="articles-grid" id="cluster-cognition"></div>
     </div>
-    <!-- Cluster: 方法论与推理 -->
     <div>
       <div class="cluster-title"><span class="ct-icon">🔬</span> 方法论与科学推理</div>
       <div class="articles-grid" id="cluster-method"></div>
@@ -1317,256 +1438,251 @@ body {
   <p style="margin-top:12px;"><a href="index.html">← 返回科技分光镜首页</a></p>
 </footer>
 
+
 <script>
-/* ============================================================
-   HERO CANVAS — 紫罗兰神经网络粒子动画
-   ============================================================ */
+/* ================================================================
+   JAVASCRIPT — 认知武器库全部交互逻辑
+   ================================================================ */
+
+// ===== Scroll Reveal =====
 (function() {
-  const canvas = document.getElementById('heroCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [], links = [];
-  const PC = 80, MAX_DIST = 120;
-
-  function resize() {
-    w = canvas.width = canvas.offsetWidth;
-    h = canvas.height = canvas.offsetHeight;
-  }
-  resize();
-  window.addEventListener('resize', () => { resize(); initParticles(); });
-
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < PC; i++) {
-      particles.push({
-        x: Math.random() * w, y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.55,
-        vy: (Math.random() - 0.5) * 0.55,
-        r: Math.random() * 1.8 + 0.5,
-        hue: Math.random() > 0.7 ? 275 : (Math.random() > 0.5 ? 300 : 42),
-        alpha: Math.random() * 0.5 + 0.2
-      });
-    }
-  }
-  initParticles();
-
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
-    links = [];
-
-    for (let p of particles) {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${p.hue}, 55%, 65%, ${p.alpha})`;
-      ctx.fill();
-
-      for (let q of particles) {
-        if (p === q) continue;
-        const dx = p.x - q.x, dy = p.y - q.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MAX_DIST) links.push({ p, q, dist });
-      }
-    }
-
-    for (let l of links) {
-      const alpha = (1 - l.dist / MAX_DIST) * 0.18;
-      ctx.beginPath();
-      ctx.moveTo(l.p.x, l.p.y);
-      ctx.lineTo(l.q.x, l.q.y);
-      ctx.strokeStyle = `rgba(160,140,210,${alpha})`;
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-    }
-
-    requestAnimationFrame(draw);
-  }
-  draw();
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
 })();
 
-/* ============================================================
-   COGNITIVE MAZE — 分支路径，选错后展示谬误原理并重选
-   ============================================================ */
-const mazeSteps = [
-  {
-    icon: '🔍', stepLabel: '第一关 · 本能反应',
-    question: '你读到一篇报道：「喝红酒的人心脏病发病率更低」',
-    context: '这篇报道来自一家葡萄酒行业协会的官网。他们已经连续5年资助这项研究了。你的第一反应是——',
-    choices: [
-      { text: '既然有研究支持，红酒对心脏肯定有好处', correct: false,
-        lesson: '<span class="fb-lesson">❌ 确认偏误 (Confirmation Bias)</span>你因为"希望红酒有益健康"而选择相信这个结论。但行业协会资助的研究存在明确的利益冲突——研究设计、数据解读都可能偏向资助方。<br><br><strong style="color:var(--gold)">真实案例：</strong>制糖业在1960年代资助哈佛研究者，将心脏病的罪魁祸首从糖转移到脂肪——这个叙事影响了全球营养政策50年。<br><br>记住：<strong>看谁出钱做的研究</strong>，这是评估证据的第一步。' },
-      { text: '看看这个研究的原始论文再说——是什么类型的研究？', correct: true,
-        lesson: '<span class="fb-lesson">✅ 正确！</span>在采纳任何科学结论之前，先追溯原始研究。关键问题：是RCT吗？样本量多大？谁是资助方？有没有其他独立研究复现了这个结果？<strong>不读原始论文，不妄下结论。</strong>' }
-    ]
-  },
-  {
-    icon: '⚖️', stepLabel: '第二关 · 因果判断',
-    question: '你找到了原始论文——这只是一项观察性队列研究，没有随机分组',
-    context: '研究追踪了12,000人、14年的饮酒习惯和健康状况。喝红酒的人群收入更高、运动更多、吸烟更少。研究标题却写成了"红酒降低心脏病风险"。你判断——',
-    choices: [
-      { text: '相关不等于因果！这是"健康用户偏误"——喝红酒的人本来就活得更健康', correct: true,
-        lesson: '<span class="fb-lesson">✅ 一针见血！</span>这就是典型的<strong>因果倒置</strong>。队列研究可以建立相关性假说，但永远不能单独证明因果关系。<br><br>要确认因果，必须做RCT——你能随机分配一群人每天喝红酒、另一群人喝葡萄汁，追踪20年吗？实际上，2014年的孟德尔随机化研究（利用基因变异模拟随机分组）发现：<strong>任何剂量的酒精都增加心血管疾病风险</strong>。' },
-      { text: '样本量这么大（n=12,000），观察时间这么久（14年），结论应该可信', correct: false,
-        lesson: '<span class="fb-lesson">❌ 样本量大 ≠ 没有混杂偏误</span>"健康用户偏误"(Healthy User Bias)是流行病学中最著名的陷阱之一。<br><br><strong style="color:var(--gold)">关键数据：</strong>大量研究发现，适度饮酒者的健康状况好于完全不饮酒者——但这很可能是因为很多"不饮酒者"是因病戒酒的前酗酒者（"病退者偏误"）。一项2016年的研究将前酗酒者从对照组移除后，"适度饮酒有益"的神话<strong>彻底消失</strong>。' }
-    ]
-  },
-  {
-    icon: '🎲', stepLabel: '第三关 · 统计学陷阱',
-    question: '你继续深入调查，发现同一组研究者还测试了20种食物和心脏病的关系',
-    context: '他们只报告了"红酒显著降低风险"这一项阳性发现。另外19种食物的结果呢？论文里没有提及。这是——',
-    choices: [
-      { text: '正常的科研实践——只报告有意义的发现，节省篇幅', correct: false,
-        lesson: '<span class="fb-lesson">❌ 大错特错！</span>这正是<strong>p值操纵</strong>的核心手段——多重比较问题(Multiple Comparisons)。<br><br>如果你测试20种食物，即使没有一种真正有效，也平均会有1种因随机波动表现出"统计显著"（p&lt;0.05 = 每20次出现1次假阳性）。<strong>只挑显著的结果报告，就是把噪声当作信号</strong>。<br><br><strong style="color:var(--gold)">记住：</strong>如果一项研究测试了多个假设但只报告了显著的，那么那些"显著"几乎肯定不显著——除非他们做了多重比较校正（如Bonferroni校正）。' },
-      { text: '这是选择性报告！多重比较不做校正，统计学意义大打折扣', correct: true,
-        lesson: '<span class="fb-lesson">✅ 完全正确！</span>这就是<strong>"数据疏浚"(Data Dredging)</strong>——在海量分析中寻找任何看起来"显著"的结果，然后假装这是你一开始就想检验的假说。<br><br>真正的科学应该：<strong>①预先注册分析方案 ②明确主要结局指标 ③对多重比较做校正</strong>。如果没做这些，p值基本上就是一张废纸。' }
-    ]
-  },
-  {
-    icon: '🏆', stepLabel: '最终关 · 综合判断',
-    question: '综合所有信息，你对"红酒有益心脏"这个结论的判断是——',
-    context: '你已经知道：①这是行业协会资助的观察性研究 ②存在健康用户偏误和因果倒置 ③可能存在多重比较和选择性报告 ④没有独立RCT证实 ⑤酒精本身是I类致癌物。',
-    choices: [
-      { text: '这个结论不可靠——目前的证据强度不足以支持"红酒有益健康"的说法', correct: true,
-        lesson: '<span class="fb-lesson">🎉 你出师了！</span>你成功运用了多层科学思维工具：<br>• 利益冲突识别 ✓<br>• 研究类型评估 ✓<br>• 混杂偏误分析 ✓<br>• 统计方法审查 ✓<br>• 独立复现需求 ✓<br><br>这就是你的<strong style="color:var(--gold)">认知武器</strong>。下次看到任何"研究表明……"，你都可以用这套方法论拆解它。' },
-      { text: '虽然有各种方法论问题，但"适度饮酒"的文化传统延续千年，总有道理', correct: false,
-        lesson: '<span class="fb-lesson">❌ 诉诸传统谬误 (Appeal to Tradition)</span>一个做法存在了很久，不等于它是对的。<br><br>人类也放了上千年的血来治病，用过砒霜当补药。传统不是证据。当传统和科学证据冲突时——<strong>科学不保证正确，但科学是唯一能够自我纠错的知识体系</strong>。<br><br><strong style="color:var(--gold)">回到武器库：</strong>问自己要证据，而不是要传统。如果千年传统真的有效，应该能找到RCT或孟德尔随机化的高质量证据——但你没有找到，这就说明了问题。' }
-    ]
-  }
-];
-
-let mazeStep = 0;
-let mazeErrors = 0;
-let mazeDots = [];
-
-function initMaze() {
-  mazeStep = 0;
-  mazeErrors = 0;
-  mazeDots = new Array(mazeSteps.length).fill('pending');
-  renderMazeStep();
-}
-
-function renderMazeStep() {
-  const step = mazeSteps[mazeStep];
-  const container = document.getElementById('mazeContainer');
-  const isLast = mazeStep === mazeSteps.length - 1;
-
-  let html = '<div class="maze-header">';
-  html += `<div class="maze-icon">${step.icon}</div>`;
-  html += `<div class="maze-step-label">${step.stepLabel}</div>`;
-  html += '</div>';
-  html += `<div class="maze-question">${step.question}</div>`;
-  html += `<div class="maze-context">${step.context}</div>`;
-  html += '<div class="maze-choices" id="mazeChoices">';
-  step.choices.forEach((c, i) => {
-    html += `<button class="maze-choice" data-idx="${i}">${c.text}</button>`;
-  });
-  html += '</div>';
-  html += '<div class="maze-feedback" id="mazeFeedback"></div>';
-  html += '<button class="maze-cta" id="mazeCTA"></button>';
-  html += '<div class="maze-progress" id="mazeProgress">';
-  mazeDots.forEach((status, i) => {
-    let cls = 'maze-dot';
-    if (i === mazeStep && status === 'pending') cls += ' current';
-    else if (status === 'correct') cls += ' done';
-    else if (status === 'wrong') cls += ' failed';
-    html += `<div class="${cls}"></div>`;
-  });
-  html += '</div>';
-
-  container.innerHTML = html;
-
-  // Bind choice clicks
-  document.querySelectorAll('.maze-choice').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const idx = parseInt(this.dataset.idx);
-      makeMazeChoice(idx);
-    });
-  });
-}
-
-function makeMazeChoice(idx) {
-  const step = mazeSteps[mazeStep];
-  const choice = step.choices[idx];
-  const fb = document.getElementById('mazeFeedback');
-  const cta = document.getElementById('mazeCTA');
-  const choices = document.querySelectorAll('.maze-choice');
-
-  // Disable all choices
-  choices.forEach(c => c.style.pointerEvents = 'none');
-
-  if (choice.correct) {
-    // Correct
-    choices[idx].classList.add('correct-flash');
-    mazeDots[mazeStep] = 'correct';
-    fb.className = 'maze-feedback correct show';
-    fb.innerHTML = choice.lesson;
-
-    if (mazeStep < mazeSteps.length - 1) {
-      cta.className = 'maze-cta show';
-      cta.textContent = '→ 进入下一关';
-      cta.onclick = () => {
-        mazeStep++;
-        renderMazeStep();
-      };
-    } else {
-      // Victory
-      showMazeVictory();
+/* ================================================================
+   INTERACTIVE 1: COGNITIVE FALLACY MAZE (Upgraded Branching)
+   ================================================================ */
+const Maze = {
+  container: document.getElementById('mazeContainer'),
+  
+  // 5-stage branching maze
+  stages: [
+    {
+      id: 1,
+      icon: '🧭',
+      label: '第一关 · 相关与因果',
+      question: '一项大规模观察性研究发现：每天喝两杯咖啡的人，心血管疾病发病率比不喝咖啡的人低30%。一位记者据此写了一篇标题：「咖啡降低心脏病风险30%！」——这个标题的问题在于：',
+      context: '你是一名科学编辑。你需要判断这个报道标题是否存在逻辑问题。',
+      choices: [
+        { text: 'A. 把「相关」当成了「因果」——喝咖啡的人可能恰好更富裕、更健康', correct: true,
+          correctMsg: '正确！观察性研究只能发现关联，不能确定因果。喝咖啡的人可能本就拥有更好的医疗条件、更高的健康意识，或者更多闲暇时间——这些才是降低心脏病风险的真正原因。',
+          lesson: '「相关 ≠ 因果」是科学思维的第一课。任何观察性研究的结论在被RCT验证之前，都只是假说。' },
+        { text: 'B. 30%这个数字太夸张了，肯定是编的', correct: false,
+          wrongMsg: '注意——你在没有证据的情况下直接质疑数据本身。这是一种「动机性推理」：因为不喜欢结论，所以质疑数据。更好的做法是：先假定数据真实，然后问「这个数据到底能证明什么」。',
+          lesson: '不要因为不喜欢结论就质疑数据。先接受数据，再审视诠释。' },
+        { text: 'C. 只有喝咖啡的人被调查了，样本有偏', correct: false,
+          wrongMsg: '你说对了一部分——样本选择确实可能有偏。但研究中比较了喝咖啡和不喝咖啡的两组人，所以两组都被调查了。真正的问题是：即使两组的发病率有差异，这个差异也不一定是咖啡「导致」的。',
+          lesson: '你的直觉方向正确，但打击点偏了。核心问题不是「有没有对照组」，而是「相关能不能推出因果」。' }
+      ]
+    },
+    {
+      id: 2,
+      icon: '📊',
+      label: '第二关 · p值的幻觉',
+      question: '一项实验比较了新药和安慰剂的效果。研究者做了10种不同的统计分析后，发现有1种方法给出了p=0.03的结果。论文中只报告了这一种方法，并写道「新药显著有效(p<0.05)」。你的判断是：',
+      context: '你是期刊的统计审稿人。这篇论文摆在你面前。',
+      choices: [
+        { text: 'A. p<0.05就是显著的，其他9种方法可能有问题', correct: false,
+          wrongMsg: '这正是「确认偏误」在统计层面的表现——你只看到了你想要的结果。如果10种方法中只有1种显著，其他9种都不显著，那么最合理的解释是：新药可能根本没有效果，显著的这一次是纯粹的随机波动。',
+          lesson: '多重比较不做校正，就等于在买彩票——你测得越多，越容易"中奖"。' },
+        { text: 'B. 这是「多重比较」问题——做10次测试，碰巧有一次p<0.05的概率是1-(0.95^10)≈40%', correct: true,
+          correctMsg: '精确！当进行10次独立检验时，至少有一次p<0.05的纯粹随机概率约为1-(0.95)^10 ≈ 40%。这远远高于公认的5%显著性阈值。研究者必须使用Bonferroni校正或其他多重比较校正方法。',
+          lesson: 'p<0.05不是一面金牌，它的含义是「在零假设为真时，观察到该结果或更极端结果的概率」。当你做了很多次测试，这个概率就不再是5%了。' },
+        { text: 'C. 应该相信这个结果，因为至少有一种方法证明了效果', correct: false,
+          wrongMsg: '这种想法相当于——你在10个不同的靶子上各射了一箭，只有一箭命中，然后你说"看，我的射术很准"。如果新药真的有效，大多数分析方法都应该检测到——而不只是1/10。',
+          lesson: '科学不是「找到支持我的证据」。科学是「用最严格的方法试图推翻我的假说，如果推翻不了，才暂时接受它」。' }
+      ]
+    },
+    {
+      id: 3,
+      icon: '📰',
+      label: '第三关 · 媒体放大效应',
+      question: '一篇发表在影响因子1.2的期刊上的小样本研究(n=30)发现「每天吃黑巧克力可以改善记忆力」。三个月后，你看到某健康公众号推送了这篇文章，标题变成了「科学实锤！黑巧克力是大脑超级食物」。中间发生了什么？',
+      context: '你追踪了这个新闻的传播链条，发现每一步都在放大效应的确定性。',
+      choices: [
+        { text: 'A. 论文本身就有问题，不该发表', correct: false,
+          wrongMsg: '论文本身可能没有造假——它诚实地报告了一个小样本的初步发现。问题不在于论文本身（小样本探索性研究也有其价值），而在于传播链条中的层层放大。一篇提出「可能关联」的论文，被扭曲成了「实锤」。',
+          lesson: '不要怪罪最初的论文——要怪罪那些为了流量把「可能」变成「确定」的传播者。' },
+        { text: 'B. 传播链：论文(可能) → 大学新闻稿(暗示) → 大众媒体(确定) → 公众号(实锤)', correct: true,
+          correctMsg: '你精准地描述了「科学新闻的传话游戏」。每一步都在增加确定性：论文写"association"（关联）→ 新闻稿写"linked to"（与...有关）→ 大众媒体写"boosts"（提升）→ 营销号写"实锤！超级食物！"。每一步都是流量的需要，而非准确性的需要。',
+          lesson: '永远追溯原始论文，不要相信二传手的标题。在PubMed或Google Scholar上找到论文原文，看摘要和方法，而不是看新闻。' },
+        { text: 'C. 反正吃巧克力没坏处，相信也无妨', correct: false,
+          wrongMsg: '啊——这是最危险的谬误之一：「无害谬误」。问题不在于"吃巧克力是否无害"，而在于（1）这三十个人可能获得了不存在的安慰，于是不再寻找真正有效的方法；（2）这种思维习惯会让你在下一个真正有害的"科学结论"面前毫无防备。',
+          lesson: '「无害所以无妨」是一种懒人思维。科学素养的核心不是「选择相信什么」，而是「对所有声称保持同等的质疑」。' }
+      ]
+    },
+    {
+      id: 4,
+      icon: '💰',
+      label: '第四关 · 利益冲突',
+      question: '一项关于含糖饮料对儿童注意力影响的研究发现：「没有显著证据表明含糖饮料影响儿童注意力」。该研究由一家大型饮料公司的研究基金资助。你对这个结论的态度是：',
+      context: '论文的方法看起来很规范：双盲、RCT、大样本。但资助方是饮料公司。',
+      choices: [
+        { text: 'A. 只要是RCT，谁资助的不重要', correct: false,
+          wrongMsg: '这是一个合理的想法——但现实是，资助来源系统地影响研究结论。2022年的一项荟萃分析发现：由食品行业资助的营养学研究，得出有利结论的概率是非行业资助研究的4-8倍。不是因为他们造假——而是因为研究设计中的无数个微妙选择（对照组的选择、测量指标的选择、分析方法的选择……）。',
+          lesson: '利益冲突不意味着结论一定错。但它意味着你需要更加仔细地审查方法论——而不是只看结论。' },
+        { text: 'B. 研究结果是无效的——饮料公司资助的科学不可信', correct: false,
+          wrongMsg: '这是从一个极端跳到了另一个极端。全盘否定行业资助的研究也是不科学的——有些行业资助的研究方法论非常严谨。正确的态度是：把利益冲突当作一个「信号」——它提示你需要额外审查方法细节，但不能作为直接否定结论的理由。',
+          lesson: '批判性思维不是「一刀切地否定」，而是「根据信息来源调整审查力度」。' },
+        { text: 'C. 利益冲突是一个警示信号——我需要仔细检查他们的研究设计、对照组选择和统计分析', correct: true,
+          correctMsg: '这是成熟的科学态度。利益冲突是一个红色标记，不是自动否决。正确的做法是：仔细检查研究设计——对照组是否合理？所有预设指标是否都报告了？统计方法是否提前注册过？这些才是判断研究质量的真正标准。',
+          lesson: '科学素养不是学会「信谁不信谁」——而是学会「不管信不信，都先看方法论」。' }
+      ]
+    },
+    {
+      id: 5,
+      icon: '🔮',
+      label: '终极关卡 · 奥卡姆剃刀',
+      question: '你的朋友告诉你：他做了一个梦，梦见自己中了大奖，第二天真的在彩票上中了500元。他坚信自己拥有某种"预知能力"。你如何用科学思维回应他？',
+      context: '这是一个典型的「超自然vs科学解释」场景。你需要用最少的不必要假设来解释这个现象。',
+      choices: [
+        { text: 'A. 可能性很小不等于不可能——也许他真的有特异功能', correct: false,
+          wrongMsg: '这句话本身没有逻辑错误——可能性很小的确不等于不可能。但问题在于，你为了解释一个500元的小奖，引入了「预知能力」这个天大的假设。这就违反了——',
+          lesson: '奥卡姆剃刀：「如无必要，勿增实体」。500元可以用「巧合」解释，不需要在宇宙中引入一种新的物理定律。' },
+        { text: 'B. 需要更多数据——让他连续预测10次，看准确性', correct: false,
+          wrongMsg: '这个想法很好——你已经在用科学方法思考了！但这不是这个问题最核心的教训。即使他同意做10次实验，最核心的方法论原则仍然是：在引入「超自然能力」这个假设之前，先用最少的假设（巧合、选择性记忆、确认偏误）来解释。',
+          lesson: '你的实验设计是正确的，但别忘了奥卡姆剃刀：在无数个"我没做梦也没中奖"的夜晚被他选择性遗忘了。' },
+        { text: 'C. 这个现象完全可以用「巧合」+「选择性记忆」解释——他可能做过100次梦，只记住了中奖的那一次', correct: true,
+          correctMsg: '这就是奥卡姆剃刀的威力。不需要假设任何新的物理定律或超自然力量——一个人一生中可能做过几千个梦，偶尔有一个梦的内容碰巧与后来的事件吻合，这是概率的必然。而他只记住了这一次——这是选择性记忆。',
+          lesson: '奥卡姆剃刀是科学方法论中最锋利的刀子：如果你能用现有的、被充分验证的自然规律解释一个现象，就不要发明新的"理论"。一个500元的小奖，不需要整个宇宙为你重新编写物理定律。' }
+      ]
     }
-  } else {
-    // Wrong
-    choices[idx].classList.add('wrong-flash');
-    mazeErrors++;
-    fb.className = 'maze-feedback wrong show';
-    fb.innerHTML = choice.lesson;
-
-    cta.className = 'maze-cta show';
-    cta.textContent = '🔄 重新选择';
-    cta.onclick = () => {
-      renderMazeStep();
-    };
-  }
-
-  // Update progress dots
-  renderProgressDots();
-}
-
-function renderProgressDots() {
-  const dots = document.querySelectorAll('.maze-dot');
-  dots.forEach((dot, i) => {
-    dot.className = 'maze-dot';
-    if (i === mazeStep && mazeDots[i] === 'pending') dot.className += ' current';
-    else if (mazeDots[i] === 'correct') dot.className += ' done';
-    else if (mazeDots[i] === 'wrong') dot.className += ' failed';
-  });
-}
-
-function showMazeVictory() {
-  const container = document.getElementById('mazeContainer');
-  container.innerHTML = `
-    <div class="maze-victory">
-      <div class="mv-icon">🏆</div>
-      <div class="mv-title">恭喜！你走出了认知谬误迷宫</div>
-      <div class="mv-summary">
-        你成功识别了<strong style="color:var(--teal)">确认偏误 → 因果倒置 → p值操纵 → 诉诸传统</strong>四个关键认知陷阱。
-        你犯了 <strong style="color:var(--red)">${mazeErrors}</strong> 次错误——每一次错误都让你更了解自己的认知弱点。
-        <br><br>下次看到"研究表明……"的新闻时，你不再是一个被动的信息接收者——<strong style="color:var(--gold)">你是一个拿着认知武器的科学消费者。</strong>
+  ],
+  
+  currentStage: 0,
+  stageHistory: [], // Array of {stageIndex, attempts, failed}
+  
+  init() {
+    this.renderStage(0);
+  },
+  
+  renderStage(stageIndex) {
+    this.currentStage = stageIndex;
+    const s = this.stages[stageIndex];
+    const total = this.stages.length;
+    const dots = Array.from({length: total}, (_, i) => {
+      let cls = 'maze-dot';
+      if (i < stageIndex) cls += ' done';
+      if (i === stageIndex) cls += ' current';
+      return `<span class="${cls}"></span>`;
+    }).join('');
+    
+    this.container.innerHTML = `
+      <div class="maze-header">
+        <div class="maze-icon">${s.icon}</div>
+        <div class="maze-step-label">${s.label}  ·  ${stageIndex + 1}/${total}</div>
       </div>
-      <button class="maze-cta show" onclick="initMaze()" style="margin:0 auto;">🔄 重新走一遍迷宫</button>
-    </div>
-  `;
-}
+      <div class="maze-question">${s.question}</div>
+      <div class="maze-context">${s.context}</div>
+      <div class="maze-choices" id="mazeChoices">
+        ${s.choices.map((c, ci) => `
+          <button class="maze-choice" data-idx="${ci}" onclick="Maze.select(${ci})">${c.text}</button>
+        `).join('')}
+      </div>
+      <div class="maze-feedback" id="mazeFeedback"></div>
+      <div class="maze-navigate" id="mazeNavigate">
+        <button class="maze-retry-btn" id="mazeRetry" onclick="Maze.retry()">↩ 重新选择</button>
+        <button class="maze-next-btn" id="mazeNext" onclick="Maze.next()">继续下一关 →</button>
+      </div>
+      <div class="maze-progress">${dots}</div>
+    `;
+  },
+  
+  select(idx) {
+    const s = this.stages[this.currentStage];
+    const choice = s.choices[idx];
+    const fb = document.getElementById('mazeFeedback');
+    const choices = document.querySelectorAll('#mazeChoices .maze-choice');
+    const retryBtn = document.getElementById('mazeRetry');
+    const nextBtn = document.getElementById('mazeNext');
+    
+    // Disable all choices
+    choices.forEach(c => c.style.pointerEvents = 'none');
+    
+    if (choice.correct) {
+      // Highlight correct
+      choices[idx].classList.add('correct-flash');
+      // Dim others
+      choices.forEach((c, ci) => { if (ci !== idx) c.style.opacity = '0.4'; });
+      
+      fb.className = 'maze-feedback correct show';
+      fb.innerHTML = `
+        <div class="fb-lesson">✓ 正确！${choice.correctMsg}</div>
+        <div style="margin-top:8px;color:var(--teal-dim);">💡 ${choice.lesson}</div>
+      `;
+      nextBtn.classList.add('show');
+      
+      // Track success
+      this.stageHistory.push({stage: this.currentStage, attempts: 1, passed: true});
+    } else {
+      // Flash wrong
+      choices[idx].classList.add('wrong-flash');
+      
+      fb.className = 'maze-feedback wrong show';
+      fb.innerHTML = `
+        <div class="fb-lesson">✗ 这个选择暴露了一个认知陷阱</div>
+        <div>${choice.wrongMsg}</div>
+        <div style="margin-top:8px;color:var(--amber-dim);">💡 ${choice.lesson}</div>
+      `;
+      retryBtn.classList.add('show');
+      
+      // Track attempt
+      const hist = this.stageHistory.find(h => h.stage === this.currentStage);
+      if (hist) { hist.attempts++; } else { this.stageHistory.push({stage: this.currentStage, attempts: 1, passed: false}); }
+    }
+  },
+  
+  retry() {
+    // Reset current stage
+    this.renderStage(this.currentStage);
+  },
+  
+  next() {
+    if (this.currentStage + 1 >= this.stages.length) {
+      // Victory!
+      this.showVictory();
+    } else {
+      this.renderStage(this.currentStage + 1);
+    }
+  },
+  
+  showVictory() {
+    const totalAttempts = this.stageHistory.reduce((sum, h) => sum + h.attempts, 0);
+    const totalStages = this.stages.length;
+    const perfect = totalAttempts === totalStages;
+    
+    let icon, title, summary;
+    if (perfect) {
+      icon = '🏆'; title = '完美通关！认知大师';
+      summary = `你一次性通过了全部${totalStages}关，没有触发任何认知陷阱。你对科学思维核心概念的理解已经达到了非常扎实的水平。`;
+    } else {
+      icon = '🔑'; title = '恭喜通关！';
+      summary = `你用了${totalAttempts}次尝试通过了全部${totalStages}关。每一次"错误"都是一种学习——知道为什么被骗，比知道正确答案更有价值。这就是科学思维的核心：不是不犯错，而是从错误中提炼方法。`;
+    }
+    
+    this.container.innerHTML = `
+      <div class="maze-victory">
+        <div class="mv-icon">${icon}</div>
+        <div class="mv-title">${title}</div>
+        <div class="mv-summary">${summary}</div>
+        <div class="mv-summary" style="color:var(--gold);margin-top:8px;">现在你有了一双不同的眼睛。<br>继续向下，还有更多武器等着你。</div>
+      </div>
+    `;
+  }
+};
 
-// Initialize maze on load
-initMaze();
+// Init maze
+document.addEventListener('DOMContentLoaded', () => { if (Maze.container) Maze.init(); });
 
-/* ============================================================
-   PEER REVIEW SIMULATOR — 标记论文缺陷，获得审稿评分
-   ============================================================ */
-const REAL_FLAGS = ['sample', 'blind', 'multiple', 'selective', 'conflict', 'itt'];
-const FAKE_FLAGS = ['fake1', 'fake2'];
+/* ================================================================
+   INTERACTIVE 2: PEER REVIEW SIMULATOR
+   ================================================================ */
+const REAL_ISSUES = new Set(['sample', 'blind', 'multiple', 'selective', 'conflict', 'itt', 'vague']);
+const FAKE_ISSUES = new Set(['fake1', 'fake2', 'fake3']);
 let flagged = new Set();
 
 function toggleFlag(btn) {
@@ -1578,120 +1694,135 @@ function toggleFlag(btn) {
     flagged.add(flag);
     btn.classList.add('flagged');
   }
-  checkReview();
 }
 
-function checkReview() {
-  const resultDiv = document.getElementById('reviewResult');
-  const scoreEl = document.getElementById('rrScore');
-  const gradeEl = document.getElementById('rrGrade');
-  const detailEl = document.getElementById('rrDetail');
-
-  if (flagged.size === 0) {
-    resultDiv.classList.remove('show');
-    return;
-  }
-
-  resultDiv.classList.add('show');
-
-  let found = 0, missed = 0, falsePositives = 0;
-  const foundList = [], missedList = [], fpList = [];
-
-  REAL_FLAGS.forEach(f => {
-    if (flagged.has(f)) { found++; foundList.push(getFlagName(f)); }
-    else { missed++; missedList.push(getFlagName(f)); }
+function submitReview() {
+  const found = new Set([...flagged].filter(f => REAL_ISSUES.has(f)));
+  const missed = new Set([...REAL_ISSUES].filter(f => !flagged.has(f)));
+  const falsePos = new Set([...flagged].filter(f => FAKE_ISSUES.has(f)));
+  
+  const score = found.size - falsePos.size;
+  const maxScore = REAL_ISSUES.size;
+  const ratio = score / maxScore;
+  
+  // Flag all correct and incorrect
+  document.querySelectorAll('.review-flag').forEach(btn => {
+    const f = btn.dataset.flag;
+    if (REAL_ISSUES.has(f)) {
+      btn.classList.add('correct-flag');
+      if (!flagged.has(f)) btn.style.opacity = '0.5';
+    }
+    if (FAKE_ISSUES.has(f) && flagged.has(f)) {
+      btn.classList.add('wrong-flag');
+    }
   });
-  FAKE_FLAGS.forEach(f => {
-    if (flagged.has(f)) { falsePositives++; fpList.push(getFlagName(f)); }
-  });
-
-  const score = Math.max(0, found - falsePositives);
-  let grade, color;
-  if (found >= 5 && falsePositives === 0) { grade = '🏅 优秀审稿人'; color = 'var(--gold-bright)'; }
-  else if (found >= 3 && falsePositives <= 1) { grade = '✅ 合格审稿人'; color = 'var(--teal)'; }
-  else { grade = '⚠️ 需要更多训练'; color = 'var(--amber)'; }
-
-  scoreEl.textContent = `发现 ${found}/6 个真实缺陷`;
-  scoreEl.style.color = color;
-  gradeEl.textContent = grade;
-  gradeEl.style.color = color;
-
-  let html = '';
-  if (foundList.length) html += `<span class="found">✅ 正确识别 (${found})：</span>${foundList.join('、')}<br>`;
-  if (missedList.length) html += `<span class="missed">❌ 遗漏 (${missed})：</span>${missedList.join('、')}<br>`;
-  if (fpList.length) html += `<span style="color:var(--amber)">⚠️ 误报 (${falsePositives})：</span>${fpList.join('、')}——这些不是方法论缺陷<br>`;
-
-  if (found >= 5 && falsePositives === 0) {
-    html += '<br><span class="found">🎉 完美！你发现了论文中的所有方法论缺陷。这篇论文应该被拒稿。</span>';
-  } else if (missed > 0) {
-    html += '<br><span class="missed">回顾你遗漏的缺陷——这些都是真实影响研究有效性的问题。</span>';
+  
+  // Build result
+  const gradeColors = {
+    high: '#4fd1c5', mid: '#fb923c', low: '#f87171'
+  };
+  let gradeColor, gradeText, detailHTML;
+  
+  if (ratio >= 0.85) {
+    gradeColor = gradeColors.high; gradeText = '🔬 优秀的审稿人！';
+    detailHTML = `你发现了论文中的大多数关键问题。`;
+  } else if (ratio >= 0.5) {
+    gradeColor = gradeColors.mid; gradeText = '📋 合格的审稿人';
+    detailHTML = `你发现了一些问题，但还有改进空间。`;
+  } else {
+    gradeColor = gradeColors.low; gradeText = '⚠️ 需要更多训练';
+    detailHTML = `这篇论文的许多方法论缺陷逃过了你的眼睛。`;
   }
-
-  detailEl.innerHTML = html;
+  
+  if (found.size > 0) {
+    detailHTML += `<br><br><span class="found">✅ 你正确标记了 ${found.size} 个问题：${[...found].map(f => {
+      const map = {sample:'样本量过小',blind:'未使用盲法',multiple:'多重比较未校正',selective:'选择性报告',conflict:'未声明利益冲突',itt:'退出者未纳入分析',vague:'统计方法描述模糊'};
+      return map[f] || f;
+    }).join('、')}</span>`;
+  }
+  if (missed.size > 0) {
+    detailHTML += `<br><br><span class="missed">⚠️ 你漏掉了 ${missed.size} 个问题：${[...missed].map(f => {
+      const map = {sample:'样本量过小',blind:'未使用盲法',multiple:'多重比较未校正',selective:'选择性报告',conflict:'未声明利益冲突',itt:'退出者未纳入分析',vague:'统计方法描述模糊'};
+      return map[f] || f;
+    }).join('、')}</span>`;
+  }
+  if (falsePos.size > 0) {
+    detailHTML += `<br><br><span style="color:var(--amber)">⚠️ 你误判了 ${falsePos.size} 个干扰项：${[...falsePos].map(f => {
+      const map = {fake1:'统计软件版本',fake2:'参考文献格式',fake3:'语法错误'};
+      return map[f] || f;
+    }).join('、')}。这些虽然不理想，但不是方法论层面的严重缺陷。</span>`;
+  }
+  
+  detailHTML += `<br><br><span style="color:var(--violet-bright);font-weight:700;">📝 完整评审意见：这篇论文存在严重的方法论缺陷——小样本(n=24)、非盲法设计、多重比较未校正、选择性报告、利益冲突未声明、退出者未做ITT分析、统计方法描述模糊。综合评估：<span style="color:var(--red)">建议拒稿(Reject)</span>，建议作者重新设计研究并预注册。</span>`;
+  
+  const resDiv = document.getElementById('reviewResult');
+  resDiv.innerHTML = `
+    <div class="rr-score" style="color:${gradeColor}">${score}/${maxScore}</div>
+    <div class="rr-grade" style="color:${gradeColor}">${gradeText}</div>
+    <div class="rr-detail">${detailHTML}</div>
+    <button class="review-retry show" onclick="resetReview()">🔄 重新审查</button>
+  `;
+  resDiv.classList.add('show');
 }
 
 function resetReview() {
   flagged.clear();
-  document.querySelectorAll('.review-flag').forEach(b => b.classList.remove('flagged'));
+  document.querySelectorAll('.review-flag').forEach(btn => {
+    btn.classList.remove('flagged', 'correct-flag', 'wrong-flag');
+    btn.style.opacity = '1';
+  });
   document.getElementById('reviewResult').classList.remove('show');
+  document.getElementById('reviewResult').innerHTML = '';
+  const submitBtn = document.getElementById('reviewSubmitBtn');
+  if (submitBtn) submitBtn.style.display = '';
 }
 
-function getFlagName(f) {
-  const map = {
-    sample: '样本量过小',
-    blind: '未使用盲法',
-    multiple: '多重比较未校正',
-    selective: '选择性报告',
-    conflict: '未声明利益冲突',
-    itt: '退出者未纳入分析',
-    fake1: '统计软件版本',
-    fake2: '参考文献格式'
-  };
-  return map[f] || f;
-}
-
-/* ============================================================
-   FIRST PRINCIPLES DECONSTRUCTOR — 逐层拆解到物理定律
-   ============================================================ */
-const FP_DATA = {
+/* ================================================================
+   INTERACTIVE 3: FIRST PRINCIPLES DECONSTRUCTOR
+   ================================================================ */
+const FPData = {
   phone: {
     name: '智能手机',
     layers: [
-      { name: '整机', brief: 'iPhone / Android 设备', detail: '一台现代智能手机包含约<strong>2000+个独立零部件</strong>，整合了计算、通信、传感、显示、能源五大系统。屏幕、电池、主板、摄像头模组、外壳——每一个子系统都可以独立拆解。' },
-      { name: '核心组件', brief: 'SoC芯片、电池、屏幕、天线', detail: '<strong>SoC (片上系统)：</strong>集成CPU/GPU/神经引擎/ISP/5G基带，晶体管数量超过<strong>150亿个</strong>。<br><strong>锂电池：</strong>锂离子在正负极之间往复运动储存/释放能量。<br><strong>OLED屏幕：</strong>有机发光二极管，每个像素独立发光。' },
-      { name: '材料', brief: '硅、锂、稀土、玻璃、铝', detail: '<strong>芯片基底：</strong>高纯度单晶硅（99.9999999%，即"9个9"）。<br><strong>电池正极：</strong>钴酸锂/磷酸铁锂。<br><strong>屏幕：</strong>铟锡氧化物(ITO)透明导电膜 + 有机发光材料。<br><strong>振动马达：</strong>钕铁硼永磁体（稀土）。' },
-      { name: '原子/分子', brief: 'Si, LiCoO₂, Al₂O₃, SiO₂', detail: '<strong>硅原子 (Si)：</strong>原子序数14，半导体性质源于其4个价电子形成共价键。掺杂磷(5价)或硼(3价)可改变其导电性。<br><strong>锂 (Li)：</strong>最轻的金属，原子序数3，电化学电位极低（-3.04V），是电池的理想材料。' },
-      { name: '物理定律', brief: '量子力学、电磁学、热力学', detail: '<strong>晶体管工作原理：</strong>量子隧穿效应 → 场效应 → 半导体能带理论（量子力学）。<br><strong>无线通信：</strong>麦克斯韦方程组 → 电磁波传播。<br><strong>电池：</strong>电化学电势 + 热力学第二定律（熵增限制能量转换效率）。<br><strong>触摸屏：</strong>电容变化 → 库仑定律。<br><strong>散热：</strong>热传导方程 + 黑体辐射。' }
+      { level: '整机层', brief: 'iPhone 15 Pro — 一个能打电话、上网、拍照、导航的设备', detail: '<strong>整机价值：</strong>一台现代智能手机集成了超过20种传感器、一个超级计算机级别的处理器和一套精密的光学系统。但它不是魔法——它是由以下子系统组成的。' },
+      { level: '子系统层', brief: '处理器(A17 Pro)、OLED屏幕、锂离子电池、摄像头模组、5G基带', detail: '<strong>A17 Pro 芯片</strong>包含190亿个晶体管，<strong>OLED屏幕</strong>由数百万个独立发光的有机发光二极管组成，<strong>锂离子电池</strong>储存约12.7Wh的能量，<strong>摄像头</strong>是一个微型光学系统。每个子系统都可以继续拆解。' },
+      { level: '组件层', brief: '晶体管、电容、电感、光学镜片、锂电池电芯', detail: '<strong>晶体管：</strong>硅基半导体开关，14nm工艺意味着电子只需要穿越几十个硅原子的距离。<strong>锂离子电池：</strong>锂离子在石墨阳极和钴酸锂阴极之间来回移动。<strong>OLED像素：</strong>有机分子在电场下发光的量子现象。' },
+      { level: '材料层', brief: '硅(Si)、锂(Li)、钴(Co)、碳(C)、铝(Al)、稀土元素', detail: '<strong>硅：</strong>地壳中第二丰富的元素，但芯片级单晶硅的纯度需要达到99.999999999%（11个9）。<strong>锂：</strong>最轻的金属，第3号元素。<strong>钴：</strong>电池阴极的关键材料，大部分来自刚果民主共和国。' },
+      { level: '物理定律层', brief: '量子力学(半导体)、电磁学(无线通信)、光学(镜头)、热力学(散热)', detail: '<strong>晶体管工作原理 → 量子力学</strong>（能带理论、隧道效应）<br><strong>无线通信 → 麦克斯韦方程组</strong>（电磁波传播）<br><strong>触摸屏 → 静电学</strong>（电容变化检测）<br><strong>GPS定位 → 广义相对论 + 狭义相对论</strong>（卫星时间校正）<br><strong>锂离子电池 → 电化学 + 热力学</strong>（吉布斯自由能）' },
+      { level: '第一性原理起点', brief: '薛定谔方程 · 麦克斯韦方程 · 爱因斯坦场方程 · 热力学定律', detail: '<strong>这就是第一性原理的终点。</strong>从这里开始，没有任何类比和假设——你站在了物理定律的基石上。如果你从这里重新推理，你就可以重新发明一切。这就是埃隆·马斯克所说的「从第一性原理思考」。' }
     ]
   },
   coffee: {
     name: '一杯咖啡',
     layers: [
-      { name: '成品', brief: '一杯热美式/拿铁', detail: '这杯咖啡是<strong>2000+种化合物</strong>的复杂溶液——远超过葡萄酒的复杂度。烘焙过程触发了梅纳反应、焦糖化反应和斯特雷克降解，产生了今天咖啡风味的绝大部分分子。' },
-      { name: '原料与加工', brief: '咖啡豆、水、热、压力', detail: '<strong>生豆：</strong>咖啡樱桃的种子，含绿原酸、葫芦巴碱、咖啡因。<br><strong>烘焙：</strong>160-220°C加热引发数百种化学反应，生成吡嗪类（坚果香）、呋喃类（焦糖香）、硫化物（烘烤香）。<br><strong>萃取：</strong>热水/高压通过咖啡粉床，溶解可溶性化合物。' },
-      { name: '关键分子', brief: '咖啡因、绿原酸、葫芦巴碱', detail: '<strong>咖啡因 (C₈H₁₀N₄O₂)：</strong>甲基黄嘌呤类生物碱，腺苷受体拮抗剂——它阻断"疲劳信号"但并非真正提供能量。<br><strong>绿原酸：</strong>多酚类抗氧化物，在烘焙中分解产生奎宁酸和咖啡酸。<br><strong>葫芦巴碱：</strong>在烘焙中分解产生烟酸（维生素B3）。' },
-      { name: '化学键与反应', brief: '梅纳反应、共价键断裂', detail: '<strong>梅纳反应：</strong>还原糖 + 氨基酸 → 加热 → 类黑精 + 数百种香气分子。这是咖啡风味的核心来源，温度每升高10°C，反应速率翻倍。<br><strong>萃取动力学：</strong>分子从固体（咖啡粉）扩散到液体（水）中——遵循菲克扩散定律。' },
-      { name: '物理定律', brief: '热力学、扩散定律、流体力学', detail: '<strong>热传导：</strong>傅里叶定律——热量从烘焙机传递到豆子内部。<br><strong>扩散：</strong>菲克定律——咖啡化合物从高浓度（粉）向低浓度（水）迁移。<br><strong>流体力学：</strong>意式浓缩中，9个大气压推动水通过粉饼——达西定律描述多孔介质中的流动。<br><strong>热力学：</strong>美拉德反应是放热的；焦糖化是吸热的——两个反应在不同温度窗口竞争。' }
+      { level: '整杯层', brief: '一杯热气腾腾的手冲咖啡——香气、味道、温度、咖啡因', detail: '<strong>你感知到的：</strong>温度约70°C的褐色水溶液，散发约800种挥发性芳香化合物，含有约100mg咖啡因。这是世界上最复杂的饮品之一——但让我们拆开它。' },
+      { level: '组分层', brief: '水(H₂O)、咖啡因(C₈H₁₀N₄O₂)、绿原酸、脂类、碳水化合物、矿物质', detail: '<strong>咖啡因：</strong>一种黄嘌呤生物碱，腺苷受体拮抗剂——它阻止了让你感到困倦的腺苷与受体结合。<strong>绿原酸：</strong>主要的抗氧化物质。<strong>美拉德反应产物：</strong>烘培中糖和氨基酸反应产生的数百种风味分子。' },
+      { level: '原料层', brief: '阿拉比卡咖啡豆（烘焙过的咖啡樱桃种子）', detail: '<strong>咖啡豆</strong>是咖啡樱桃的种子。从种植到杯中经历了：种植(3-5年) → 采摘 → 处理(水洗/日晒) → 烘焙(180-230°C) → 研磨 → 萃取。<strong>烘焙</strong>是化学变化最剧烈的一步——发生焦糖化反应和美拉德反应。' },
+      { level: '材料层', brief: '纤维素(细胞壁)、水、咖啡因晶体、有机酸', detail: '<strong>纤维素：</strong>植物细胞壁的主要成分，β-葡萄糖聚合物。<strong>咖啡因晶体：</strong>白色针状晶体，熔点238°C。<strong>绿原酸：</strong>奎宁酸与咖啡酸的酯化物——这就是咖啡苦味的主要来源。' },
+      { level: '物理定律层', brief: '热力学(萃取)、流体力学(水流)、有机化学(风味)、生物化学(咖啡因代谢)', detail: '<strong>萃取 → 菲克扩散定律</strong>（溶质从高浓度向低浓度扩散）<br><strong>热水流过咖啡粉 → 达西定律</strong>（流体在多孔介质中的流动）<br><strong>风味感知 → 锁钥模型</strong>（分子与嗅觉受体的特异性结合）<br><strong>咖啡因作用 → 受体竞争性抑制</strong>（咖啡因与腺苷竞争A1受体）' },
+      { level: '第一性原理起点', brief: '扩散方程 · 化学键理论 · 受体动力学 · 热力学第二定律', detail: '<strong>萃取的科学本质：</strong>在热力学驱动下，咖啡中的可溶性分子根据菲克定律从固相(咖啡粉)扩散到液相(水)。每一种风味分子的扩散速率取决于其分子量、极性和浓度梯度。理解了这个，你就可以精确控制每一杯咖啡的风味。' }
     ]
   },
   car: {
     name: '电动汽车',
     layers: [
-      { name: '整车', brief: 'Tesla / 电动整车', detail: '一辆现代电动汽车由<strong>约25,000个零部件</strong>组成。与传统汽车最大的区别：动力系统从内燃机（约2000个运动零件）变成了电机+电池（约20个运动零件）。复杂度从机械领域转移到了电子和软件领域。' },
-      { name: '核心系统', brief: '电池包、电机、电控、车架', detail: '<strong>电池包：</strong>7000+颗18650/21700/4680锂电池，串联升压、并联扩容。<br><strong>永磁同步电机：</strong>定子绕组通电产生旋转磁场 → 转子上的永磁体跟随旋转。<br><strong>逆变器：</strong>将电池的直流电转换为电机需要的三相交流电——核心器件是IGBT/SiC MOSFET功率半导体。' },
-      { name: '关键材料', brief: '锂、钴、镍、钕、碳化硅', detail: '<strong>正极材料：</strong>NCM(镍钴锰)/LFP(磷酸铁锂)——决定电池的能量密度和安全性。<br><strong>负极：</strong>石墨（层状结构可嵌入锂离子）。<br><strong>永磁体：</strong>钕铁硼(NdFeB)——已知最强的永磁材料，含稀土元素钕和镝。<br><strong>SiC功率芯片：</strong>碳化硅的禁带宽度是硅的3倍，在高压高温下效率远超硅。' },
-      { name: '电化学与磁学', brief: '锂离子嵌入、电磁感应', detail: '<strong>锂电池原理：</strong>充电时Li⁺从正极脱嵌→穿过电解液→嵌入石墨负极层间。放电时反向。这不是化学键的断裂/生成（不同于普通电池），而是<strong>拓扑化学反应</strong>——锂离子在晶格间隙中进出，不破坏主体结构。<br><strong>电机原理：</strong>法拉第电磁感应——导体在磁场中运动产生电动势；反过来，通电导体在磁场中受到洛伦兹力。' },
-      { name: '物理定律', brief: '电磁学、量子力学、热力学', detail: '<strong>法拉第定律：</strong>变化的磁场产生电场（电机/发电机的基础）。<br><strong>洛伦兹力：</strong>F=qv×B——带电粒子在磁场中的受力（电机扭矩的来源）。<br><strong>量子力学：</strong>锂原子的电子排布 1s²2s¹ → 最外层单个电子极易失去（Li→Li⁺+e⁻），这就是锂的高电化学活性。<br><strong>热力学：</strong>电池充放电是吉布斯自由能变化 ΔG=-nFE，能量转换效率受卡诺极限限制（但锂电池不涉及热循环，效率可超90%）。<br><strong>能带理论：</strong>SiC的宽禁带(3.3eV vs 硅的1.1eV)使其在高温(>200°C)下仍保持半导体特性。' }
+      { level: '整车层', brief: '一台特斯拉Model 3——从0加速到100km/h约6秒,续航约500km', detail: '<strong>整车参数：</strong>重约1.8吨，电池容量约60kWh。它没有内燃机，没有油箱，没有变速箱（实际上有单速减速器）。它的核心系统远比燃油车简单——但电池是关键。' },
+      { level: '子系统层', brief: '电池包、电机(永磁同步)、电控(逆变器)、热管理系统、底盘', detail: '<strong>电池包：</strong>由数千个18650/21700锂离子电芯组成，总电压约350V。<strong>电机：</strong>永磁同步电机，峰值功率约200kW，效率>95%。<strong>逆变器：</strong>将电池的直流电转换为驱动电机的三相交流电。' },
+      { level: '组件层', brief: '锂离子电芯、IGBT功率模块、永磁体(钕铁硼)、铜线圈', detail: '<strong>锂离子电芯：</strong>每个18650电池包含：石墨阳极 + 锂金属氧化物阴极 + 有机电解液 + 隔离膜。<strong>IGBT：</strong>绝缘栅双极晶体管，每秒开关数万次。<strong>永磁体：</strong>钕铁硼(NdFeB)，磁能积是普通铁氧体的10倍以上。' },
+      { level: '材料层', brief: '锂、钴、镍、石墨、铜、钕、镝、硅钢', detail: '<strong>电池级锂：</strong>碳酸锂或氢氧化锂，来自盐湖卤水或锂辉石矿。<strong>钴：</strong>稳定阴极结构，但价格昂贵且供应链存在争议。<strong>钕和镝：</strong>稀土元素，永磁体的核心，主要产自中国。' },
+      { level: '物理定律层', brief: '电化学(电池)、电磁学(电机)、电力电子(逆变器)、热力学(散热)', detail: '<strong>锂离子移动 → 电化学势 + 能斯特方程</strong>（电池电压的本源）<br><strong>电机转动 → 洛伦兹力 F=qv×B</strong>（电流在磁场中受力）<br><strong>能量回收 → 法拉第电磁感应定律</strong>（动能→电能）<br><strong>IGBT开关 → 固态物理/能带理论</strong>（半导体功率器件）' },
+      { level: '第一性原理起点', brief: '电化学方程 · 麦克斯韦方程 · 固态物理 · 热力学定律', detail: '<strong>电动汽车的本质：</strong>化学能（电池）→ 电能（逆变器）→ 电磁能（电机）→ 动能（车轮）。这就是第一性原理——没有魔法，每一步都由物理定律严格约束。如果你理解了这些，你就理解了为什么电池能量密度是电动汽车的核心瓶颈。' }
     ]
   },
   led: {
     name: 'LED灯泡',
     layers: [
-      { name: '整灯', brief: '一个10W的家用LED灯泡', detail: '外表看起来像传统灯泡，但内部是<strong>完全不同的物理原理</strong>在工作。它没有灯丝会烧断，发光效率是白炽灯的<strong>5-8倍</strong>，理论寿命可达50,000小时。' },
-      { name: '核心组件', brief: 'LED芯片、荧光粉、驱动电路、散热体', detail: '<strong>LED芯片：</strong>氮化镓(GaN)半导体PN结，通电后电子与空穴复合释放光子。<br><strong>荧光粉：</strong>钇铝石榴石(YAG:Ce³⁺)，被蓝光激发后发出黄光——黄光+剩余蓝光=白光。<br><strong>驱动电路：</strong>将220V交流电转换为LED需要的低压直流恒流。<br><strong>散热片：</strong>铝合金鳍片——LED虽然比白炽灯冷，但芯片自身仍产生废热需要散出。' },
-      { name: '关键材料', brief: 'GaN、YAG:Ce、蓝宝石衬底', detail: '<strong>氮化镓(GaN)：</strong>III-V族直接带隙半导体，禁带宽度3.4eV，发蓝光（波长~450nm）。发明者赤崎勇、天野浩、中村修二获2014年诺贝尔物理学奖。<br><strong>YAG:Ce³⁺荧光粉：</strong>钇铝石榴石晶体中掺入铈离子(Ce³⁺)作为发光中心——蓝光光子被Ce³⁺吸收后，以更长的波长（黄光）重新发射。' },
-      { name: '量子物理', brief: '电子-空穴复合、光子发射', detail: '<strong>发光原理：</strong>在PN结的耗尽区，注入的电子从导带落到价带与空穴复合，释放的能量以光子形式发射。光子能量E=hv≈禁带宽度——所以GaN(3.4eV)发射蓝光，GaAs(1.4eV)发射红外。<br><strong>斯托克斯位移：</strong>荧光粉吸收高能蓝光(450nm)→发射低能黄光(550-600nm)，能量差以热的形式损失。这就是LED产热的原因之一。' },
-      { name: '物理定律', brief: '量子电动力学、固体物理、热力学', detail: '<strong>量子力学（核心）：</strong>能带理论 → 直接带隙 vs 间接带隙（GaN是直接带隙→发光效率远高于硅的间接带隙）。<br><strong>泡利不相容原理：</strong>电子分居不同能级，导带和价带之间有禁带——这是半导体存在的根本原因。<br><strong>量子效率：</strong>并非每个注入电子都产生光子——缺陷（位错、杂质）充当非辐射复合中心，将能量以热的形式浪费。<br><strong>热力学：</strong>LED效率极限 ~ 取决于荧光粉的斯托克斯损失 + 非辐射复合 + 光提取效率。目前最先进的LED整体效率约40-50%。' }
+      { level: '整灯层', brief: '一只10W LED灯泡——亮度相当于60W白炽灯,寿命25000小时', detail: '<strong>革命性：</strong>从电能到光能的转换效率超过40%，而白炽灯只有约2.5%（其余97.5%是热量）。LED是怎么做到的？让我们拆开它。' },
+      { level: '子系统层', brief: 'LED芯片、荧光粉涂层、驱动电路(AC-DC转换)、散热器', detail: '<strong>LED芯片：</strong>一个微小的半导体PN结。注意——单颗LED芯片发蓝光！<strong>荧光粉：</strong>钇铝石榴石(YAG:Ce)，将部分蓝光转换成黄光。<strong>蓝光+黄光 = 你看到的白光。</strong>' },
+      { level: '组件层', brief: 'PN结半导体(InGaN)、YAG:Ce荧光粉、电解电容、铝散热片', detail: '<strong>InGaN量子阱：</strong>氮化铟镓——电子从导带跃迁到价带释放光子（蓝光，约450nm）。<strong>荧光粉：</strong>铈掺杂的钇铝石榴石——吸收蓝光后发出宽带黄光（中心约550nm）。<strong>驱动电路：</strong>将220V交流电转换为LED需要的低压直流电。' },
+      { level: '材料层', brief: '镓(Ga)、铟(In)、氮(N)、钇(Y)、铝(Al)、铈(Ce)、铜、金', detail: '<strong>镓和铟：</strong>稀有金属，InGaN在蓝宝石衬底上外延生长。<strong>铈：</strong>稀土元素，荧光粉的激活剂——只有3价铈离子的5d→4f跃迁能高效发出黄光。<strong>蓝宝石衬底：</strong>Al₂O₃单晶，透明且与GaN晶格匹配。' },
+      { level: '物理定律层', brief: '量子力学(发光)、固态物理(半导体)、光学(荧光转换)', detail: '<strong>电子-空穴复合 → 量子力学/能带理论</strong>（光子能量的本源：E=hc/λ）<br><strong>荧光转换 → 斯托克斯位移</strong>（荧光粉将高能蓝光转换为低能黄光）<br><strong>光提取 → 斯涅尔定律</strong>（光从高折射率GaN出射到空气的全反射问题）<br><strong>显色指数 → 光谱功率分布 + 人眼三刺激值</strong>' },
+      { level: '第一性原理起点', brief: '薛定谔方程 · 能带理论 · 量子电动力学(QED) · 热力学', detail: '<strong>LED发光的终极本质：</strong>量子电动力学（QED）——电子从高能态跃迁到低能态的量子过程，释放一个光子。2014年诺贝尔物理学奖授予了发明蓝色LED的三位日本科学家（赤崎勇、天野浩、中村修二）——因为蓝光LED使得白光LED成为可能，彻底改变了照明技术。' }
     ]
   }
 };
@@ -1699,117 +1830,74 @@ const FP_DATA = {
 function selectFPObject(obj, btn) {
   document.querySelectorAll('.fp-object-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderFPLayers(obj);
-}
-
-function renderFPLayers(obj) {
-  const data = FP_DATA[obj];
+  
+  const data = FPData[obj];
   const container = document.getElementById('fpLayers');
-  let html = '';
-  data.layers.forEach((layer, i) => {
-    html += `
-      <div class="fp-layer" data-idx="${i}" onclick="toggleFPLayer(this, ${i}, '${obj}')">
-        <div class="fp-num">${i+1}</div>
-        <div class="fp-level-name">${layer.name}</div>
-        <div class="fp-level-brief">${layer.brief}</div>
-        <div class="fp-expand-icon">▾</div>
-      </div>
-      <div class="fp-detail" id="fpDetail-${i}">${layer.detail}</div>
-    `;
-  });
-  container.innerHTML = html;
+  
+  container.innerHTML = data.layers.map((l, i) => `
+    <div class="fp-layer" onclick="toggleFPLayer(this)" data-idx="${i}">
+      <div class="fp-num">${i + 1}</div>
+      <div class="fp-level-name">${l.level}</div>
+      <div class="fp-level-brief">${l.brief}</div>
+      <div class="fp-expand-icon">▾</div>
+    </div>
+    <div class="fp-detail" id="fpDetail${i}">${l.detail}</div>
+  `).join('');
 }
 
-function toggleFPLayer(el, idx, obj) {
-  const detail = document.getElementById('fpDetail-' + idx);
-  if (detail.classList.contains('show')) {
-    detail.classList.remove('show');
-    el.classList.remove('expanded');
-  } else {
+function toggleFPLayer(layer) {
+  const idx = layer.dataset.idx;
+  const detail = document.getElementById('fpDetail' + idx);
+  const isOpen = detail.classList.contains('show');
+  
+  // Close all
+  document.querySelectorAll('.fp-detail').forEach(d => d.classList.remove('show'));
+  document.querySelectorAll('.fp-layer').forEach(l => l.classList.remove('expanded'));
+  
+  if (!isOpen) {
     detail.classList.add('show');
-    el.classList.add('expanded');
+    layer.classList.add('expanded');
   }
 }
 
-// Init first principles with default object
-renderFPLayers('phone');
-
-/* ============================================================
-   ARTICLE DATA & RENDERING
-   ============================================================ */
-const ARTICLES = [
-  { num: '001', title: '5G：真正要走的路还很长', summary: '5G的带宽上限由光纤和数据中心决定；毫米波覆盖需要5倍基站；应用场景仍有限。', cluster: 'norms' },
-  { num: '018', title: '核能4：核电站是怎么建设的？', summary: '从选址到并网，核电站的建设流程与技术挑战。', cluster: 'method' },
-  { num: '023', title: '为什么诺贝尔奖得主还要论文造假？(上)', summary: '学术激励机制的扭曲：发表数量>质量，突破性发现>扎实复现。', cluster: 'norms' },
-  { num: '024', title: '为什么诺贝尔奖得主还要论文造假？(中)', summary: '科学界的"赢家通吃"效应——顶级期刊的版面稀缺性催生了造假动机。', cluster: 'norms' },
-  { num: '026', title: '问答：哪些书能帮我们真正学好数学？', summary: '数学思维的培养路径：证明、抽象、建模。', cluster: 'method' },
-  { num: '053', title: '科技创新从何而来，又为何消失(上)', summary: '创新需要制度、资金、自由探索的文化——三缺一不可。', cluster: 'method' },
-  { num: '062', title: '问答：新冠病毒突变，传播力增强70%？', summary: '如何评估"传播力增强70%"这个数字的可靠性——样本、模型、置信区间。', cluster: 'cognition' },
-  { num: '097', title: '反馈：建立负反馈，警惕正反馈', summary: '为什么负反馈系统稳定、正反馈系统失控——从生理学到社会机制。', cluster: 'cognition' },
-  { num: '110', title: '科学思维：破除迷信与科学荐书问答', summary: '科学思维不是知识，是一套可训练的方法论。', cluster: 'cognition' },
-  { num: '206', title: '如何对抗算法？', summary: '面对推荐算法的认知操纵，普通人能做的几件事。', cluster: 'cognition' },
-  { num: '264', title: '共识：关于咖啡的好与坏', summary: '咖啡的健康效应——从队列研究、孟德尔随机化到RCT的证据全景。', cluster: 'method' },
-  { num: '271', title: '时间晶体：热力学第二定律被挑战了？', summary: '时间晶体的发现——在时间维度上周期性重复的量子系统。', cluster: 'method' },
-  { num: '276', title: '气候变化：IPCC第六次报告', summary: '科学共识的形成机制——IPCC如何整合数千篇论文的结论。', cluster: 'method' },
-  { num: '278', title: '精神控制：到底是怎么实现的？', summary: '从脑机接口到经颅磁刺激——"精神控制"的科学事实与科幻想象。', cluster: 'method' },
-  { num: '295', title: '学术秩序：偷论文也能算偷吗？', summary: '学术抄袭的边界模糊地带——剽窃、重复发表、自我抄袭。', cluster: 'norms' },
-  { num: '301', title: '脑机接口4：算法与算力的较量', summary: '脑机接口的核心瓶颈不在电极，而在解码算法的效率。', cluster: 'method' }
-];
-
-function renderArticles() {
-  const clusters = {
-    norms: document.getElementById('cluster-norms'),
-    cognition: document.getElementById('cluster-cognition'),
-    method: document.getElementById('cluster-method')
-  };
-
-  const clusterGroups = { norms: [], cognition: [], method: [] };
-  ARTICLES.forEach(a => {
-    if (clusterGroups[a.cluster]) clusterGroups[a.cluster].push(a);
-  });
-
-  for (const [key, el] of Object.entries(clusters)) {
-    if (!el) continue;
-    const articles = clusterGroups[key];
-    el.innerHTML = articles.map(a => `
-      <div class="article-card">
-        <div class="ac-num">No. ${a.num}</div>
-        <h4>${a.title}</h4>
-        <div class="ac-snippet">${a.summary}</div>
-      </div>
-    `).join('');
-  }
-}
-
-renderArticles();
-
-/* ============================================================
-   INTERSECTION OBSERVER — scroll reveal
-   ============================================================ */
-(function() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-})();
-
-/* ============================================================
-   SMOOTH SCROLL for nav links
-   ============================================================ */
-document.querySelectorAll('.nav-sections a[href^="#"]').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
+// Init FP with default object
+document.addEventListener('DOMContentLoaded', () => {
+  const fpContainer = document.getElementById('fpContainer');
+  if (fpContainer) selectFPObject('phone', document.querySelector('.fp-object-btn.active'));
 });
+
+/* ================================================================
+   ARTICLE DATA LOADING
+   ================================================================ */
+const ArticleAssignments = {
+  norms: [2, 3, 8, 9, 13, 14, 21, 22, 32, 33, 34],
+  cognition: [5, 6, 12, 15, 18, 19, 22, 23, 24, 28, 30, 31],
+  method: [0, 1, 4, 7, 10, 11, 16, 17, 20, 25, 26, 27, 29],
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const resp = await fetch('topic_data/7-科学方法与认知论.json');
+    const articles = await resp.json();
+    populateCluster('cluster-norms', ArticleAssignments.norms.map(i => articles[i]));
+    populateCluster('cluster-cognition', ArticleAssignments.cognition.map(i => articles[i]));
+    populateCluster('cluster-method', ArticleAssignments.method.map(i => articles[i]));
+  } catch(e) {
+    console.warn('Could not load article data:', e);
+  }
+});
+
+function populateCluster(containerId, articles) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = articles.filter(a => a).map((a, i) => `
+    <div class="article-card">
+      <div class="ac-num">${a.id || a.title?.split('|')[0]?.trim() || (i + 1)}</div>
+      <h4>${a.title || 'Untitled'}</h4>
+      <div class="ac-snippet">${(a.snippet || a.content || '').slice(0, 120)}</div>
+    </div>
+  `).join('');
+}
 </script>
 
 </body>
