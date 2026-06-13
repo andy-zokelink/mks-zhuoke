@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科学方法与认知论 — 科技参考3 MKS</title>
+<style>
+:root {
+  --bg: #fafbfc; --card-bg: #ffffff; --accent: #F59E0B; --accent-dark: #D97706;
+  --accent-light: #FEF3C7; --text: #1f2937; --text-light: #6b7280;
+  --text-lighter: #9ca3af; --border: #e5e7eb; --border-light: #f3f4f6;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.10); --radius: 12px; --radius-sm: 8px;
+  --transition: 0.2s ease; --blue: #3B82F6; --green: #10B981; --red: #EF4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Serif SC","Source Han Serif SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
+a{color:var(--accent-dark);text-decoration:none;transition:color var(--transition)}
+a:hover{color:var(--accent)}
+
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top-nav .home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:var(--accent);color:#fff;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:all var(--transition)}
+.top-nav .home-btn:hover{background:var(--accent-dark);color:#fff}
+.top-nav .breadcrumb{font-size:13px;color:var(--text-light)}
+
+.container{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+
+.topic-header{text-align:center;padding:30px 16px 24px}
+.topic-header .topic-icon{font-size:44px;margin-bottom:8px}
+.topic-header h2{font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:900;margin-bottom:4px}
+.topic-header .topic-subtitle{font-size:.95rem;color:var(--accent-dark);font-weight:500;margin-bottom:8px}
+.topic-header .topic-desc{font-size:.88rem;color:var(--text-light);max-width:680px;margin:0 auto;line-height:1.7}
+
+.stats-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+.stat-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:24px;font-size:.82rem;color:var(--text-light)}
+.stat-badge .num{font-weight:700;color:var(--accent-dark);font-size:1rem}
+
+.section-title{font-size:1.25rem;font-weight:700;color:var(--text);margin:32px 0 16px;padding-bottom:8px;border-bottom:3px solid var(--accent);display:inline-block}
+
+.tab-nav{display:flex;flex-wrap:wrap;gap:4px;margin:24px 0 16px;border-bottom:2px solid var(--border);overflow-x:auto}
+.tab-btn{padding:8px 12px;font-size:.8rem;border:none;background:none;color:var(--text-light);cursor:pointer;border-radius:8px 8px 0 0;transition:all var(--transition);white-space:nowrap;font-weight:500}
+.tab-btn:hover{color:var(--accent-dark);background:var(--accent-light)}
+.tab-btn.active{color:#fff;background:var(--accent);font-weight:700}
+.tab-content>div{display:none}
+.tab-content>div.active{display:block}
+
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px}
+.concept-card{background:var(--card-bg);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);border:1px solid var(--border-light);padding:16px 20px;transition:all var(--transition)}
+.concept-card:hover{box-shadow:var(--shadow);border-color:var(--accent)}
+.concept-card .concept-num{display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;background:var(--accent);color:#fff;border-radius:50%;font-size:.8rem;font-weight:700;margin-bottom:8px}
+.concept-card h5{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.concept-card p{font-size:.82rem;color:var(--text-light);line-height:1.6}
+
+.articles-list{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.article-card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border-light);padding:20px 24px;transition:all var(--transition);border-left:4px solid transparent}
+.article-card:hover{box-shadow:var(--shadow);border-left-color:var(--accent)}
+.article-card .art-num{display:inline-block;font-size:.7rem;color:var(--text-lighter);background:var(--border-light);padding:2px 8px;border-radius:10px;margin-bottom:6px;font-family:monospace}
+.article-card h4{font-size:1rem;font-weight:700;margin-bottom:6px;line-height:1.4}
+.article-card .art-summary{font-size:.85rem;color:var(--text-light);line-height:1.65;margin-bottom:8px}
+.article-card .art-insights{display:flex;flex-wrap:wrap;gap:6px}
+.insight-tag{font-size:.75rem;color:var(--accent-dark);background:var(--accent-light);padding:2px 10px;border-radius:12px}
+
+.flip-card{perspective:1000px;height:clamp(220px,40vw,280px);margin-bottom:14px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;padding:clamp(16px,3vw,24px)}
+.flip-front{background:var(--card-bg);border:2px solid var(--accent-light);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.flip-front .fc-icon{font-size:36px;margin-bottom:10px}
+.flip-front h4{font-size:1.15rem;color:var(--accent-dark)}
+.flip-back{background:var(--card-bg);border:2px solid var(--accent);transform:rotateY(180deg);overflow-y:auto;font-size:.88rem;line-height:1.7}
+.flip-back .fb-label{font-size:.75rem;color:var(--accent-dark);font-weight:700;margin-bottom:6px;letter-spacing:.05em}
+.flip-back .fb-def{margin-bottom:10px;color:var(--text)}
+.flip-back .fb-analogy{padding:8px 12px;background:var(--accent-light);border-radius:6px;margin-bottom:8px;font-style:italic;color:var(--text-light)}
+.flip-back .fb-example{font-size:.82rem;color:var(--text-light);margin-bottom:6px}
+.flip-back .fb-anti{font-size:.82rem;color:var(--red)}
+.card-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0}
+.card-nav button{padding:6px 18px;border:1px solid var(--border);background:var(--card-bg);border-radius:20px;cursor:pointer;font-size:.85rem;transition:all var(--transition)}
+.card-nav button:hover{background:var(--accent-light);border-color:var(--accent)}
+.card-nav .card-counter{font-size:.9rem;font-weight:600;color:var(--accent-dark)}
+.mark-learned{display:block;margin:8px auto;padding:8px 24px;background:var(--accent);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:.85rem;font-weight:600;transition:all var(--transition)}
+.mark-learned:hover{background:var(--accent-dark)}
+.mark-learned.learned{background:var(--green)}
+.progress-bar{width:100%;height:8px;background:var(--border-light);border-radius:4px;margin:12px 0 24px;overflow:hidden}
+.progress-bar .progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s ease}
+
+.quiz-controls{display:flex;gap:12px;margin:16px 0;flex-wrap:wrap}
+.quiz-controls button{padding:8px 20px;border:none;border-radius:20px;cursor:pointer;font-size:.9rem;font-weight:600;transition:all var(--transition)}
+.btn-start{background:var(--accent);color:#fff}
+.btn-start:hover{background:var(--accent-dark)}
+.btn-reset{background:var(--border-light);color:var(--text-light)}
+.btn-reset:hover{background:var(--border)}
+.mcq-question{background:var(--card-bg);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);padding:16px 20px;margin-bottom:14px;border-left:3px solid var(--accent)}
+.mcq-question .q-title{font-weight:700;font-size:.95rem;margin-bottom:10px}
+.quiz-option{display:block;width:100%;text-align:left;padding:10px 16px;margin:4px 0;border:1px solid var(--border);border-radius:8px;background:var(--card-bg);cursor:pointer;font-size:.88rem;transition:all var(--transition)}
+.quiz-option:hover{background:var(--accent-light)}
+.quiz-option.selected{border-color:var(--accent);background:var(--accent-light)}
+.quiz-option.correct{border-color:var(--green);background:#D1FAE5;color:#065F46}
+.quiz-option.wrong{border-color:var(--red);background:#FEE2E2;color:#991B1B}
+.quiz-option:disabled{cursor:default}
+.saq-question{background:var(--card-bg);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);padding:16px 20px;margin-bottom:14px;border-left:3px solid var(--blue)}
+.saq-question .q-title{font-weight:700;font-size:.95rem;margin-bottom:8px}
+.saq-question textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:.88rem;resize:vertical;font-family:inherit}
+.saq-answer{display:none;margin-top:10px;padding:12px 16px;background:var(--accent-light);border-radius:8px;font-size:.85rem;line-height:1.7}
+.saq-answer.show{display:block}
+.toggle-answer{margin-top:8px;padding:6px 14px;font-size:.8rem;border:1px solid var(--accent);color:var(--accent-dark);background:none;border-radius:16px;cursor:pointer;transition:all var(--transition)}
+.toggle-answer:hover{background:var(--accent-light)}
+
+.exam-timer{text-align:center;font-size:2rem;font-weight:900;color:var(--accent-dark);margin:12px 0}
+.exam-result{display:none;text-align:center;padding:24px;background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);margin:16px 0}
+.exam-result.show{display:block}
+.exam-result .score{font-size:2.5rem;font-weight:900}
+.exam-result .score.pass{color:var(--green)}
+.exam-result .score.fail{color:var(--red)}
+
+.review-filters{display:flex;gap:10px;margin:12px 0 16px;flex-wrap:wrap}
+.review-filters button{padding:6px 16px;border:1px solid var(--border);border-radius:16px;background:var(--card-bg);cursor:pointer;font-size:.82rem;transition:all var(--transition)}
+.review-filters button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.review-item{background:var(--card-bg);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);padding:14px 18px;margin-bottom:10px;border-left:3px solid var(--red)}
+.review-item.correct-item{border-left-color:var(--green)}
+
+.mindmap-container{width:100%;overflow-x:auto;margin:16px 0;padding:16px;background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.mindmap-container svg{max-width:100%;height:auto;display:block;margin:0 auto}
+
+.svg-container{width:100%;overflow-x:auto;margin:16px 0;padding:16px;background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.svg-container svg{max-width:100%;height:auto;display:block;margin:0 auto}
+
+.deep-q{background:var(--card-bg);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);margin-bottom:12px;border:1px solid var(--border-light);overflow:hidden}
+.deep-q .dq-header{padding:14px 20px;cursor:pointer;font-weight:700;font-size:.95rem;display:flex;justify-content:space-between;align-items:center;transition:all var(--transition)}
+.deep-q .dq-header:hover{background:var(--accent-light)}
+.deep-q .dq-arrow{transition:transform .3s;font-size:.8rem;color:var(--accent)}
+.deep-q.open .dq-arrow{transform:rotate(180deg)}
+.deep-q .dq-body{display:none;padding:0 20px 16px;font-size:.88rem;line-height:1.8;color:var(--text-light)}
+.deep-q.open .dq-body{display:block}
+
+.case-study{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 24px;margin-bottom:16px;border-top:4px solid var(--accent)}
+.case-study h4{font-size:1.05rem;margin-bottom:10px}
+.case-study .case-content{font-size:.88rem;line-height:1.8;color:var(--text-light)}
+
+.decision{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 24px;margin-bottom:16px;border-left:4px solid var(--accent)}
+.decision h4{font-size:1.05rem;margin-bottom:10px;color:var(--accent-dark)}
+.decision .scenario{font-size:.88rem;line-height:1.8;margin-bottom:12px;color:var(--text)}
+.decision .choice-btn{display:inline-block;margin:6px 8px 6px 0;padding:8px 16px;border:1px solid var(--border);border-radius:20px;background:var(--card-bg);cursor:pointer;font-size:.82rem;transition:all var(--transition)}
+.decision .choice-btn:hover{background:var(--accent-light);border-color:var(--accent)}
+.decision .choice-btn.selected-choice{background:var(--accent);color:#fff;border-color:var(--accent)}
+.decision .feedback{display:none;margin-top:12px;padding:12px 16px;border-radius:8px;font-size:.85rem;line-height:1.7;background:var(--accent-light)}
+.decision .feedback.show{display:block}
+
+.footer{text-align:center;padding:32px 20px 16px;color:var(--text-lighter);font-size:.72rem;border-top:1px solid var(--border-light);margin-top:48px}
+.footer a{color:var(--accent-dark)}
+
+@media(max-width:768px){
+.container{padding:16px 12px 40px}
+.top-nav{padding:8px 12px;gap:10px}
+.concepts-grid{grid-template-columns:1fr}
+.tab-btn{padding:6px 9px;font-size:.72rem}
+.article-card{padding:16px}
+}
+@media(max-width:480px){
+.concepts-grid{grid-template-columns:1fr}
+.flip-card{height:clamp(200px,60vw,250px)}
+.tab-nav{gap:2px}
+.tab-btn{padding:5px 7px;font-size:.66rem}
+}
+	/* Overview tab extras */
+	.goal-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.9rem;line-height:1.8}
+	.mks-list{list-style:none;padding:0;margin:8px 0}
+	.mks-list li{padding:8px 14px;margin:4px 0;background:var(--card-bg);border-radius:8px;border-left:3px solid var(--accent);font-size:.85rem}
+	.mks-list li strong{color:var(--accent-dark)}
+	.boundary-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.82rem}
+	.boundary-table th{background:var(--accent);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+	.boundary-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+	.boundary-table tr:nth-child(even){background:var(--border-light)}
+	.path-steps{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+	.path-step{flex:1;min-width:120px;background:var(--card-bg);border-radius:10px;padding:14px;text-align:center;border:2px solid var(--border);position:relative;font-size:.82rem}
+	.path-step.current{border-color:var(--accent);background:var(--accent-light)}
+	.path-step.done{border-color:var(--green);opacity:.7}
+	.path-step .step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;margin-bottom:6px}
+	.path-step.done .step-num{background:var(--green)}
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <a href="index.html" class="home-btn">← 科技参考3 主板</a>
+  <span class="breadcrumb">科学方法与认知论 · 34 篇文章 · MKS 交互学习</span>
+</div>
+
+<div class="container">
+
+<div class="topic-header">
+  <div class="topic-icon">📐</div>
+  <h2>科学方法与认知论</h2>
+  <p class="topic-subtitle">批判性思维、统计素养与知识生产机制</p>
+  <p class="topic-desc">统计学如何识破假唱？同行评议为何失效？什么才是可靠的知识？34篇文章聚焦科学方法论本身——我们如何知道我们知道的东西？知识与认知的边界在哪里？</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-badge"><span class="num">34</span> 篇文章</div>
+  <div class="stat-badge">📅 2023-2024</div>
+  <div class="stat-badge">🎯 MKS 最小知识集</div>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="overview">知识集总览</button>
+  <button class="tab-btn" data-tab="cards">知识卡片</button>
+  <button class="tab-btn" data-tab="quiz">题库系统</button>
+  <button class="tab-btn" data-tab="exam">考试模式</button>
+  <button class="tab-btn" data-tab="review">复习模式</button>
+  <button class="tab-btn" data-tab="mindmap">思维导图</button>
+  <button class="tab-btn" data-tab="deep">深度追问</button>
+  <button class="tab-btn" data-tab="cases">案例分析</button>
+  <button class="tab-btn" data-tab="decision">实战决策</button>
+</div>
+
+<div class="tab-content">
+
+<!-- Tab 0: 知识集总览 -->
+<div id="tab-overview" class="active">
+<div class="section-title">概念关系图</div>
+<div class="svg-container">
+<svg width="567pt" height="837pt"
+ viewBox="0.00 0.00 567.00 836.76" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 832.76)">
+<title>ScienceConcepts</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-832.76 563,-832.76 563,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_legend</title>
+<polygon fill="#fafbfc" stroke="#e5e7eb" points="8,-749.76 8,-820.76 338,-820.76 338,-749.76 8,-749.76"/>
+<text text-anchor="middle" x="173" y="-808.76" font-family="Noto Sans SC" font-size="10.00">图例</text>
+</g>
+
+<g id="node1" class="node">
+<title>L1</title>
+<polygon fill="#fef3c7" stroke="#f59e0b" points="329.5,-793.76 258.5,-793.76 258.5,-757.76 329.5,-757.76 329.5,-793.76"/>
+<text text-anchor="middle" x="294" y="-773.56" font-family="Noto Sans SC" font-size="9.00">知识生产机制</text>
+</g>
+
+<g id="node2" class="node">
+<title>L2</title>
+<polygon fill="#dbeafe" stroke="#3b82f6" points="240,-793.76 178,-793.76 178,-757.76 240,-757.76 240,-793.76"/>
+<text text-anchor="middle" x="209" y="-773.56" font-family="Noto Sans SC" font-size="9.00">科学方法论</text>
+</g>
+
+<g id="node3" class="node">
+<title>L3</title>
+<polygon fill="#d1fae5" stroke="#10b981" points="160,-793.76 106,-793.76 106,-757.76 160,-757.76 160,-793.76"/>
+<text text-anchor="middle" x="133" y="-773.56" font-family="Noto Sans SC" font-size="9.00">认知科学</text>
+</g>
+
+<g id="node4" class="node">
+<title>L4</title>
+<polygon fill="#fee2e2" stroke="#ef4444" points="87.5,-793.76 16.5,-793.76 16.5,-757.76 87.5,-757.76 87.5,-793.76"/>
+<text text-anchor="middle" x="52" y="-773.56" font-family="Noto Sans SC" font-size="9.00">失败与伪科学</text>
+</g>
+
+<g id="node5" class="node">
+<title>sciMethod</title>
+<polygon fill="#fef3c7" stroke="#f59e0b" stroke-width="2" points="454.14,-775.76 427.57,-803.28 374.43,-803.28 347.86,-775.76 374.43,-748.24 427.57,-748.24 454.14,-775.76"/>
+<text text-anchor="middle" x="401" y="-779.16" font-family="Noto Sans SC" font-size="12.00">科学方法</text>
+<text text-anchor="middle" x="401" y="-766.16" font-family="Noto Sans SC" font-size="12.00">与认知论</text>
+</g>
+
+<g id="node6" class="node">
+<title>peerReview</title>
+<polygon fill="#fef3c7" stroke="#f59e0b" points="321.5,-702 256.5,-702 256.5,-666 321.5,-666 321.5,-702"/>
+<text text-anchor="middle" x="289" y="-681.5" font-family="Noto Sans SC" font-size="10.00">同行评议制</text>
+</g>
+
+<g id="edge1" class="edge">
+<title>sciMethod&#45;&gt;peerReview</title>
+<path fill="none" stroke="#f59e0b" stroke-width="1.5" d="M371.57,-751.18C355.24,-738.08 334.97,-721.84 318.61,-708.73"/>
+<polygon fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5" points="320.44,-705.71 310.45,-702.19 316.06,-711.17 320.44,-705.71"/>
+<text text-anchor="middle" x="368" y="-722.8" font-family="Noto Sans SC" font-size="9.00">知识守门人</text>
+</g>
+
+<g id="node10" class="node">
+<title>statistics</title>
+<polygon fill="#dbeafe" stroke="#3b82f6" points="256.5,-200 191.5,-200 191.5,-164 256.5,-164 256.5,-200"/>
+<text text-anchor="middle" x="224" y="-185" font-family="Noto Sans SC" font-size="10.00">统计学思维</text>
+<text text-anchor="middle" x="224" y="-174" font-family="Noto Sans SC" font-size="10.00">(假唱检测)</text>
+</g>
+
+<g id="edge2" class="edge">
+<title>sciMethod&#45;&gt;statistics</title>
+<path fill="none" stroke="#3b82f6" d="M365.14,-757.52C357.58,-754.16 349.59,-750.81 342,-748 248.23,-713.26 126,-785 126,-685 126,-685 126,-685 126,-263 126,-232.15 155.49,-211.08 182.12,-198.33"/>
+<polygon fill="#3b82f6" stroke="#3b82f6" points="183.69,-201.47 191.37,-194.17 180.81,-195.08 183.69,-201.47"/>
+<text text-anchor="middle" x="144.5" y="-476.8" font-family="Noto Sans SC" font-size="9.00">核心工具</text>
+</g>
+
+<g id="node11" class="node">
+<title>criticalThinking</title>
+<polygon fill="#dbeafe" stroke="#3b82f6" points="399.5,-364 334.5,-364 334.5,-328 399.5,-328 399.5,-364"/>
+<text text-anchor="middle" x="367" y="-343.5" font-family="Noto Sans SC" font-size="10.00">批判性思维</text>
+</g>
+
+<g id="edge3" class="edge">
+<title>sciMethod&#45;&gt;criticalThinking</title>
+<path fill="none" stroke="#3b82f6" d="M418.89,-748.1C428.74,-730.86 439,-707.51 439,-685 439,-685 439,-685 439,-437 439,-411.41 437.52,-402.34 422,-382 418.12,-376.92 413.28,-372.38 408.09,-368.39"/>
+<polygon fill="#3b82f6" stroke="#3b82f6" points="409.94,-365.41 399.74,-362.57 405.94,-371.16 409.94,-365.41"/>
+<text text-anchor="middle" x="457.5" y="-558.8" font-family="Noto Sans SC" font-size="9.00">底层能力</text>
+</g>
+
+<g id="node14" class="node">
+<title>consciousness</title>
+<polygon fill="#d1fae5" stroke="#10b981" points="559,-702 467,-702 467,-666 559,-666 559,-702"/>
+<text text-anchor="middle" x="513" y="-687" font-family="Noto Sans SC" font-size="10.00">意识</text>
+<text text-anchor="middle" x="513" y="-676" font-family="Noto Sans SC" font-size="10.00">(自由能最低原理)</text>
+</g>
+
+<g id="edge4" class="edge">
+<title>sciMethod&#45;&gt;consciousness</title>
+<path fill="none" stroke="#10b981" d="M430.43,-751.18C446.76,-738.08 467.03,-721.84 483.39,-708.73"/>
+<polygon fill="#10b981" stroke="#10b981" points="485.94,-711.17 491.55,-702.19 481.56,-705.71 485.94,-711.17"/>
+<text text-anchor="middle" x="486.5" y="-722.8" font-family="Noto Sans SC" font-size="9.00">探索边界</text>
+</g>
+
+<g id="node7" class="node">
+<title>openReview</title>
+<polygon fill="#fef3c7" stroke="#f59e0b" points="215,-620 159,-620 159,-584 215,-584 215,-620"/>
+<text text-anchor="middle" x="187" y="-605" font-family="Noto Sans SC" font-size="10.00">公开匿名</text>
+<text text-anchor="middle" x="187" y="-594" font-family="Noto Sans SC" font-size="10.00">评议制</text>
+</g>
+
+<g id="edge6" class="edge">
+<title>peerReview&#45;&gt;openReview</title>
+<path fill="none" stroke="#f59e0b" d="M256.37,-674.52C240.53,-669.07 222.13,-660.59 209,-648 203.69,-642.91 199.48,-636.26 196.23,-629.65"/>
+<polygon fill="#f59e0b" stroke="#f59e0b" points="199.31,-627.96 192.14,-620.16 192.89,-630.73 199.31,-627.96"/>
+<text text-anchor="middle" x="223" y="-640.8" font-family="Noto Sans SC" font-size="9.00">演进为</text>
+</g>
+
+<g id="node8" class="node">
+<title>academicBiz</title>
+<polygon fill="#fef3c7" stroke="#f59e0b" points="411,-620 355,-620 355,-584 411,-584 411,-620"/>
+<text text-anchor="middle" x="383" y="-605" font-family="Noto Sans SC" font-size="10.00">学术论文</text>
+<text text-anchor="middle" x="383" y="-594" font-family="Noto Sans SC" font-size="10.00">商业模式</text>
+</g>
+
+<g id="edge5" class="edge">
+<title>peerReview&#45;&gt;academicBiz</title>
+<path fill="none" stroke="#fef3c7" d="M306.83,-665.97C315.99,-657.4 327.42,-646.95 338,-638 342.55,-634.15 347.45,-630.18 352.28,-626.35"/>
+<polygon fill="#fef3c7" stroke="#fef3c7" points="354.56,-629.01 360.28,-620.09 350.25,-623.5 354.56,-629.01"/>
+<text text-anchor="middle" x="356.5" y="-640.8" font-family="Noto Sans SC" font-size="9.00">异化产物</text>
+</g>
+
+<g id="node12" class="node">
+<title>reproducibility</title>
+<polygon fill="#dbeafe" stroke="#3b82f6" points="256,-538 200,-538 200,-502 256,-502 256,-538"/>
+<text text-anchor="middle" x="228" y="-517.5" font-family="Noto Sans SC" font-size="10.00">可复现性</text>
+</g>
+
+<g id="edge7" class="edge">
+<title>peerReview&#45;&gt;reproducibility</title>
+<path fill="none" stroke="#3b82f6" d="M282.45,-665.9C277.61,-653.23 270.87,-635.55 265,-620 255.79,-595.59 245.39,-567.75 237.97,-547.82"/>
+<polygon fill="#3b82f6" stroke="#3b82f6" points="241.15,-546.33 234.38,-538.18 234.59,-548.77 241.15,-546.33"/>
+<text text-anchor="middle" x="274.5" y="-599.8" font-family="Noto Sans SC" font-size="9.00">保障</text>
+</g>
+
+<g id="edge18" class="edge">
+<title>openReview&#45;&gt;reproducibility</title>
+<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M195.9,-583.64C201.36,-572.98 208.46,-559.12 214.6,-547.15"/>
+<polygon fill="#059669" stroke="#059669" points="217.82,-548.55 219.26,-538.05 211.59,-545.35 217.82,-548.55"/>
+<text text-anchor="middle" x="219.5" y="-558.8" font-family="Noto Sans SC" font-size="9.00">加强</text>
+</g>
+
+<g id="node9" class="node">
+<title>dataQuality</title>
+<polygon fill="#fef3c7" stroke="#f59e0b" points="410.5,-702 339.5,-702 339.5,-666 410.5,-666 410.5,-702"/>
+<text text-anchor="middle" x="375" y="-687" font-family="Noto Sans SC" font-size="10.00">高质量数据</text>
+<text text-anchor="middle" x="375" y="-676" font-family="Noto Sans SC" font-size="10.00">(数据=黄金)</text>
+</g>
+
+<g id="edge15" class="edge">
+<title>dataQuality&#45;&gt;academicBiz</title>
+<path fill="none" stroke="#fef3c7" d="M376.74,-665.64C377.77,-655.3 379.11,-641.94 380.28,-630.22"/>
+<polygon fill="#fef3c7" stroke="#fef3c7" points="383.78,-630.35 381.29,-620.05 376.82,-629.65 383.78,-630.35"/>
+<text text-anchor="middle" x="394" y="-640.8" font-family="Noto Sans SC" font-size="9.00">被低估</text>
+</g>
+
+<g id="node13" class="node">
+<title>evidenceHierarchy</title>
+<polygon fill="#dbeafe" stroke="#3b82f6" points="268,-36 212,-36 212,0 268,0 268,-36"/>
+<text text-anchor="middle" x="240" y="-15.5" font-family="Noto Sans SC" font-size="10.00">证据等级</text>
+</g>
+
+<g id="edge8" class="edge">
+<title>statistics&#45;&gt;evidenceHierarchy</title>
+<path fill="none" stroke="#3b82f6" d="M225.46,-163.82C227.16,-144.07 230.1,-110.68 233,-82 234.19,-70.22 235.62,-57.21 236.87,-46.09"/>
+<polygon fill="#3b82f6" stroke="#3b82f6" points="240.35,-46.43 238.01,-36.1 233.4,-45.64 240.35,-46.43"/>
+<text text-anchor="middle" x="242.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">建立</text>
+</g>
+
+<g id="node16" class="node">
+<title>memoryBias</title>
+<polygon fill="#d1fae5" stroke="#10b981" points="324.5,-118 261.5,-118 261.5,-82 324.5,-82 324.5,-118"/>
+<text text-anchor="middle" x="293" y="-103" font-family="Noto Sans SC" font-size="10.00">记忆偏差</text>
+<text text-anchor="middle" x="293" y="-92" font-family="Noto Sans SC" font-size="10.00">(濒死回忆)</text>
+</g>
+
+<g id="edge10" class="edge">
+<title>statistics&#45;&gt;memoryBias</title>
+<path fill="none" stroke="#10b981" d="M238.97,-163.64C248.53,-152.56 261.07,-138.02 271.67,-125.74"/>
+<polygon fill="#10b981" stroke="#10b981" points="274.41,-127.91 278.29,-118.05 269.11,-123.34 274.41,-127.91"/>
+<text text-anchor="middle" x="272.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">纠正</text>
+</g>
+
+<g id="node17" class="node">
+<title>roomTempSC</title>
+<polygon fill="#fee2e2" stroke="#ef4444" points="217,-456 155,-456 155,-420 217,-420 217,-456"/>
+<text text-anchor="middle" x="186" y="-441" font-family="Noto Sans SC" font-size="10.00">室温超导</text>
+<text text-anchor="middle" x="186" y="-430" font-family="Noto Sans SC" font-size="10.00">LK&#45;99乌龙</text>
+</g>
+
+<g id="edge9" class="edge">
+<title>statistics&#45;&gt;roomTempSC</title>
+<path fill="none" stroke="#ef4444" d="M221.41,-200.32C214.92,-243.7 197.93,-357.27 190.08,-409.72"/>
+<polygon fill="#ef4444" stroke="#ef4444" points="186.57,-409.53 188.55,-419.94 193.49,-410.57 186.57,-409.53"/>
+<text text-anchor="middle" x="216.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">识破</text>
+</g>
+
+<g id="node19" class="node">
+<title>alienHoax</title>
+<polygon fill="#fee2e2" stroke="#ef4444" points="307,-282 251,-282 251,-246 307,-246 307,-282"/>
+<text text-anchor="middle" x="279" y="-267" font-family="Noto Sans SC" font-size="10.00">外星人</text>
+<text text-anchor="middle" x="279" y="-256" font-family="Noto Sans SC" font-size="10.00">遗骸骗局</text>
+</g>
+
+<g id="edge11" class="edge">
+<title>criticalThinking&#45;&gt;alienHoax</title>
+<path fill="none" stroke="#ef4444" d="M347.91,-327.64C335.48,-316.35 319.11,-301.46 305.44,-289.04"/>
+<polygon fill="#ef4444" stroke="#ef4444" points="307.51,-286.19 297.76,-282.05 302.8,-291.37 307.51,-286.19"/>
+<text text-anchor="middle" x="338.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">揭露</text>
+</g>
+
+<g id="node20" class="node">
+<title>diamondMyth</title>
+<polygon fill="#fee2e2" stroke="#ef4444" points="395,-282 339,-282 339,-246 395,-246 395,-282"/>
+<text text-anchor="middle" x="367" y="-267" font-family="Noto Sans SC" font-size="10.00">钻石营销</text>
+<text text-anchor="middle" x="367" y="-256" font-family="Noto Sans SC" font-size="10.00">噱头</text>
+</g>
+
+<g id="edge12" class="edge">
+<title>criticalThinking&#45;&gt;diamondMyth</title>
+<path fill="none" stroke="#ef4444" d="M367,-327.64C367,-317.3 367,-303.94 367,-292.22"/>
+<polygon fill="#ef4444" stroke="#ef4444" points="370.5,-292.05 367,-282.05 363.5,-292.05 370.5,-292.05"/>
+<text text-anchor="middle" x="376.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">解构</text>
+</g>
+
+<g id="edge14" class="edge">
+<title>reproducibility&#45;&gt;roomTempSC</title>
+<path fill="none" stroke="#ef4444" d="M201.06,-501.71C195.42,-496.72 190.21,-490.76 187,-484 184.44,-478.62 183.32,-472.45 183.01,-466.44"/>
+<polygon fill="#ef4444" stroke="#ef4444" points="186.51,-466.06 183.17,-456 179.51,-465.94 186.51,-466.06"/>
+<text text-anchor="middle" x="205.5" y="-476.8" font-family="Noto Sans SC" font-size="9.00">验证失败</text>
+</g>
+
+<g id="node18" class="node">
+<title>iterFail</title>
+<polygon fill="#fee2e2" stroke="#ef4444" points="318.5,-456 235.5,-456 235.5,-420 318.5,-420 318.5,-456"/>
+<text text-anchor="middle" x="277" y="-441" font-family="Noto Sans SC" font-size="10.00">ITER</text>
+<text text-anchor="middle" x="277" y="-430" font-family="Noto Sans SC" font-size="10.00">(最大烂尾工程)</text>
+</g>
+
+<g id="edge13" class="edge">
+<title>reproducibility&#45;&gt;iterFail</title>
+<path fill="none" stroke="#ef4444" d="M233.86,-501.72C237.14,-493.08 241.65,-482.65 247,-474 249.01,-470.75 251.32,-467.49 253.74,-464.34"/>
+<polygon fill="#ef4444" stroke="#ef4444" points="256.67,-466.29 260.3,-456.34 251.25,-461.85 256.67,-466.29"/>
+<text text-anchor="middle" x="265.5" y="-476.8" font-family="Noto Sans SC" font-size="9.00">预警失败</text>
+</g>
+
+<g id="edge16" class="edge">
+<title>consciousness&#45;&gt;memoryBias</title>
+<path fill="none" stroke="#10b981" d="M509.28,-665.93C506.08,-649.79 502,-624.87 502,-603 502,-603 502,-603 502,-181 502,-145.56 395.85,-120 334.85,-108.24"/>
+<polygon fill="#10b981" stroke="#10b981" points="335.22,-104.75 324.74,-106.34 333.92,-111.63 335.22,-104.75"/>
+<text text-anchor="middle" x="520.5" y="-389.8" font-family="Noto Sans SC" font-size="9.00">解释机制</text>
+</g>
+
+<g id="node15" class="node">
+<title>spatialCognition</title>
+<polygon fill="#d1fae5" stroke="#10b981" points="411,-456 337,-456 337,-420 411,-420 411,-456"/>
+<text text-anchor="middle" x="374" y="-441" font-family="Noto Sans SC" font-size="10.00">方位感</text>
+<text text-anchor="middle" x="374" y="-430" font-family="Noto Sans SC" font-size="10.00">(练习vs遗传)</text>
+</g>
+
+<g id="edge17" class="edge">
+<title>spatialCognition&#45;&gt;criticalThinking</title>
+<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M372.65,-419.65C371.65,-406.82 370.28,-389.11 369.13,-374.38"/>
+<polygon fill="#059669" stroke="#059669" points="372.61,-374 368.35,-364.3 365.63,-374.54 372.61,-374"/>
+<text text-anchor="middle" x="395" y="-389.8" font-family="Noto Sans SC" font-size="9.00">训练可塑性</text>
+</g>
+
+<g id="edge22" class="edge">
+<title>memoryBias&#45;&gt;evidenceHierarchy</title>
+<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M281.5,-81.64C274.3,-70.77 264.89,-56.57 256.85,-44.44"/>
+<polygon fill="#059669" stroke="#059669" points="259.74,-42.45 251.3,-36.05 253.9,-46.32 259.74,-42.45"/>
+<text text-anchor="middle" x="293" y="-56.8" font-family="Noto Sans SC" font-size="9.00">说明必要性</text>
+</g>
+
+<g id="edge19" class="edge">
+<title>roomTempSC&#45;&gt;criticalThinking</title>
+<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M217.12,-421.53C247.05,-406.64 292.5,-384.04 325.51,-367.63"/>
+<polygon fill="#059669" stroke="#059669" points="327.07,-370.77 334.46,-363.18 323.95,-364.5 327.07,-370.77"/>
+<text text-anchor="middle" x="311.5" y="-394.8" font-family="Noto Sans SC" font-size="9.00">反面教材</text>
+<text text-anchor="middle" x="311.5" y="-384.8" font-family="Noto Sans SC" font-size="9.00">教育公众</text>
+</g>
+
+<g id="edge20" class="edge">
+<title>iterFail&#45;&gt;peerReview</title>
+<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M281.09,-456.35C282.24,-461.95 283.36,-468.21 284,-474 291.21,-538.93 290.76,-615.88 289.85,-655.84"/>
+<polygon fill="#059669" stroke="#059669" points="286.35,-655.78 289.59,-665.87 293.35,-655.96 286.35,-655.78"/>
+<text text-anchor="middle" x="308.5" y="-558.8" font-family="Noto Sans SC" font-size="9.00">暴露缺陷</text>
+</g>
+
+<g id="edge21" class="edge">
+<title>alienHoax&#45;&gt;statistics</title>
+<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M267.07,-245.64C259.59,-234.77 249.83,-220.57 241.49,-208.44"/>
+<polygon fill="#059669" stroke="#059669" points="244.27,-206.31 235.72,-200.05 238.5,-210.27 244.27,-206.31"/>
+<text text-anchor="middle" x="282.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">需要验证工具</text>
+</g>
+</g>
+</svg>
+</div>
+
+<div class="section-title">创意图：知识漏斗</div>
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="auto">
+  <defs>
+    <linearGradient id="funnelGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FEF3C7"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="#FAFBFC"/>
+  <!-- Funnel shape -->
+  <polygon points="100,40 700,40 580,440 220,440" fill="none" stroke="#D97706" stroke-width="3"/>
+  <!-- Layers -->
+  <line x1="100" y1="120" x2="700" y2="120" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="160" y1="220" x2="640" y2="220" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="200" y1="340" x2="600" y2="340" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4,4"/>
+  <!-- Labels -->
+  <text x="400" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#D97706" font-family="sans-serif">原始观察与数据</text>
+  <text x="400" y="110" text-anchor="middle" font-size="10" fill="#92400E" font-family="sans-serif">现象·实验·感官经验</text>
+  <text x="400" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#D97706" font-family="sans-serif">方法论筛选层</text>
+  <text x="400" y="210" text-anchor="middle" font-size="10" fill="#92400E" font-family="sans-serif">统计学检验·批判性思维·可复现性</text>
+  <text x="400" y="310" text-anchor="middle" font-size="15" font-weight="700" fill="#D97706" font-family="sans-serif">制度性验证层</text>
+  <text x="400" y="330" text-anchor="middle" font-size="10" fill="#92400E" font-family="sans-serif">同行评议·公开匿名评议·证据等级</text>
+  <text x="400" y="410" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="sans-serif">可靠知识</text>
+  <text x="400" y="430" text-anchor="middle" font-size="10" fill="#FEF3C7" font-family="sans-serif">被验证的理论·共识认知·工程应用</text>
+  <!-- Side annotations -->
+  <text x="720" y="155" font-size="11" fill="#EF4444" font-family="sans-serif">← LK-99被滤除</text>
+  <line x1="640" y1="150" x2="710" y2="150" stroke="#EF4444" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="720" y="270" font-size="11" fill="#EF4444" font-family="sans-serif">← 学术造假被识破</text>
+  <line x1="600" y1="265" x2="710" y2="265" stroke="#EF4444" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="60" y="155" font-size="11" fill="#10B981" font-family="sans-serif" text-anchor="end">同行评议→</text>
+  <line x1="110" y1="150" x2="70" y2="150" stroke="#10B981" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="60" y="270" font-size="11" fill="#3B82F6" font-family="sans-serif" text-anchor="end">统计学检测→</text>
+  <line x1="150" y1="265" x2="70" y2="265" stroke="#3B82F6" stroke-width="1" stroke-dasharray="2,2"/>
+  <!-- Legend -->
+  <rect x="610" y="445" width="175" height="48" rx="6" fill="white" stroke="#E5E7EB"/>
+  <rect x="618" y="453" width="10" height="10" rx="2" fill="#10B981"/>
+  <text x="634" y="462" font-size="8" fill="#6B7280" font-family="sans-serif">通过验证</text>
+  <rect x="690" y="453" width="10" height="10" rx="2" fill="#EF4444"/>
+  <text x="706" y="462" font-size="8" fill="#6B7280" font-family="sans-serif">被滤除/驳斥</text>
+  <rect x="618" y="471" width="10" height="10" rx="2" fill="#3B82F6"/>
+  <text x="634" y="480" font-size="8" fill="#6B7280" font-family="sans-serif">方法论验证</text>
+</svg>
+</div>
+
+<div class="section-title">核心概念</div>
+<div class="concepts-grid">
+  <div class="concept-card"><div class="concept-num">1</div><h5>奇迹年的科技见证</h5><p>2023年被卓克称为科技奇迹年——AI突破、空间望远镜、核聚变进展</p></div>
+  <div class="concept-card"><div class="concept-num">2</div><h5>ITER：人类最大实验即将烂尾</h5><p>国际热核聚变实验堆的成本失控与延期，揭示大科学项目的管理困境</p></div>
+  <div class="concept-card"><div class="concept-num">3</div><h5>LK-99：室温超导事件</h5><p>韩国团队室温超导宣称→全球复现失败→科学自纠错机制的典型案例</p></div>
+  <div class="concept-card"><div class="concept-num">4</div><h5>统计学与假唱检测</h5><p>用统计学方法分析五月天演唱会音频，识别假唱的科学手段</p></div>
+  <div class="concept-card"><div class="concept-num">5</div><h5>同行评议制的兴衰</h5><p>二战后的制度化、当前的失效和公开匿名评议的新方向</p></div>
+  <div class="concept-card"><div class="concept-num">6</div><h5>学术论文商业模式</h5><p>期刊订阅费+版面费的双重收费与开放获取运动的博弈</p></div>
+  <div class="concept-card"><div class="concept-num">7</div><h5>高质量数据堪比黄金</h5><p>AI时代训练数据的稀缺性——弱智吧数据的意外价值</p></div>
+  <div class="concept-card"><div class="concept-num">8</div><h5>意识与自由能最低原理</h5><p>神经科学的前沿理论：意识是大脑维持自由能最低状态的过程</p></div>
+  <div class="concept-card"><div class="concept-num">9</div><h5>方位感：练习vs遗传</h5><p>大规模研究推翻方位感遗传决定论，证明空间认知可塑性</p></div>
+  <div class="concept-card"><div class="concept-num">10</div><h5>外星球生命可能性</h5><p>从水熊虫到辐射抗性，什么样的地球生命可以在太空中生存</p></div>
+  <div class="concept-card"><div class="concept-num">11</div><h5>濒死回忆与记忆偏差</h5><p>科学解读濒死体验：大脑缺氧+记忆重构≠灵魂出窍</p></div>
+  <div class="concept-card"><div class="concept-num">12</div><h5>传统软件的终结</h5><p>AI如何从根本上改变软件开发范式——从编写到生成</p></div>
+</div>
+</div>
+
+<!-- Tab 1: 知识卡片 -->
+<div id="tab-cards">
+<div class="section-title">知识卡片 · 翻转学习</div>
+<p style="color:var(--text-light);font-size:.85rem;margin-bottom:12px">点击卡片翻转查看定义与解析</p>
+<div class="flip-card">
+  <div class="flip-inner" id="card-inner">
+    <div class="flip-front">
+      <div class="fc-icon" id="card-front-icon">🔍</div>
+      <h4 id="card-front-title">同行评议制</h4>
+      <p style="font-size:.8rem;color:var(--text-lighter);margin-top:8px">点击翻转查看详情</p>
+    </div>
+    <div class="flip-back">
+      <div class="fb-label">定义</div>
+      <div class="fb-def" id="card-back-def"></div>
+      <div class="fb-label">类比</div>
+      <div class="fb-analogy" id="card-back-analogy"></div>
+      <div class="fb-label">示例</div>
+      <div class="fb-example" id="card-back-example"></div>
+      <div class="fb-label">不是</div>
+      <div class="fb-anti" id="card-back-anti"></div>
+    </div>
+  </div>
+</div>
+<div class="card-nav">
+  <button id="card-prev">← 上一张</button>
+  <span class="card-counter" id="card-counter">1/8</span>
+  <button id="card-next">下一张 →</button>
+</div>
+<button class="mark-learned" id="mark-learned-btn">标记已学</button>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<p style="text-align:center;font-size:.8rem;color:var(--text-lighter)">学习进度：<span id="progress-text">0% (0/8)</span></p>
+</div>
+
+<!-- Tab 2: 题库系统 -->
+<div id="tab-quiz">
+<div class="section-title">题库系统</div>
+<div class="quiz-controls" id="quiz-start-btns">
+  <button class="btn-start" id="btn-start-quiz">🎲 随机抽题练习</button>
+  <button class="btn-reset" id="btn-reset-quiz">重置</button>
+</div>
+<div id="staticQuiz" style="display:none"></div>
+</div>
+
+<!-- Tab 3: 考试模式 -->
+<div id="tab-exam">
+<div class="section-title">考试模式</div>
+<div id="exam-content" data-init="0">
+  <p style="color:var(--text-light);margin-bottom:12px">计时15分钟，随机抽取10道选择题+2道简答题。提交后自动评分。</p>
+  <div class="exam-timer" id="exam-timer">15:00</div>
+  <button class="btn-start" id="btn-start-exam">开始考试</button>
+  <div id="exam-questions" style="display:none"></div>
+  <div style="margin-top:16px;text-align:center">
+    <button class="btn-start" id="btn-submit-exam" style="display:none">提交答卷</button>
+    <button class="btn-reset" id="btn-restart-exam" style="display:none">重新开始</button>
+  </div>
+  <div class="exam-result" id="exam-result">
+    <div class="score" id="exam-score"></div>
+    <p style="margin-top:8px;color:var(--text-light)" id="exam-feedback"></p>
+  </div>
+</div>
+</div>
+
+<!-- Tab 4: 复习模式 -->
+<div id="tab-review">
+<div class="section-title">复习模式 · 错题回顾</div>
+<div class="review-filters">
+  <button id="review-all" class="active">全部记录</button>
+  <button id="review-wrong">仅看错题</button>
+  <button id="review-export" style="margin-left:auto">导出数据</button>
+</div>
+<div id="review-list"></div>
+</div>
+
+<!-- Tab 5: 思维导图 -->
+<div id="tab-mindmap">
+<div class="section-title">思维导图：科学方法与认知论</div>
+<div class="mindmap-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="100%" height="auto">
+  <defs>
+    <radialGradient id="sciRoot"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#D97706"/></radialGradient>
+  </defs>
+  <rect width="1000" height="700" fill="#FAFBFC"/>
+  <!-- Root -->
+  <circle cx="500" cy="60" r="45" fill="url(#sciRoot)" stroke="#B45309" stroke-width="3"/>
+  <text x="500" y="54" text-anchor="middle" font-size="12" fill="#fff" font-weight="900">科学方法</text>
+  <text x="500" y="72" text-anchor="middle" font-size="12" fill="#fff" font-weight="900">与认知论</text>
+
+  <!-- Branch 1: 知识生产 -->
+  <path d="M470,95 C350,160 280,220 200,280" fill="none" stroke="#F59E0B" stroke-width="3"/>
+  <circle cx="200" cy="280" r="30" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <text x="200" y="276" text-anchor="middle" font-size="10" fill="#D97706" font-weight="700">知识生产机制</text>
+  <path d="M180,300 C140,340 100,380 80,420" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+  <rect x="10" y="405" width="100" height="30" rx="14" fill="#FEF3C7" stroke="#F59E0B"/>
+  <text x="60" y="425" text-anchor="middle" font-size="8" fill="#92400E">同行评议制</text>
+  <path d="M220,300 C260,350 290,390 310,430" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+  <rect x="250" y="415" width="110" height="30" rx="14" fill="#FEF3C7" stroke="#F59E0B"/>
+  <text x="305" y="435" text-anchor="middle" font-size="8" fill="#92400E">公开匿名评议</text>
+
+  <!-- Branch 2: 方法论 -->
+  <path d="M540,95 C650,160 720,220 800,280" fill="none" stroke="#3B82F6" stroke-width="3"/>
+  <circle cx="800" cy="280" r="30" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+  <text x="800" y="276" text-anchor="middle" font-size="10" fill="#1E40AF" font-weight="700">方法论工具</text>
+  <path d="M780,300 C750,350 730,400 710,440" fill="none" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="640" y="425" width="110" height="30" rx="14" fill="#DBEAFE" stroke="#3B82F6"/>
+  <text x="695" y="445" text-anchor="middle" font-size="8" fill="#1E40AF">统计学思维</text>
+  <path d="M820,300 C850,350 870,400 880,440" fill="none" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="820" y="425" width="110" height="30" rx="14" fill="#DBEAFE" stroke="#3B82F6"/>
+  <text x="875" y="445" text-anchor="middle" font-size="8" fill="#1E40AF">批判性思维</text>
+
+  <!-- Branch 3: 认知科学 -->
+  <path d="M500,105 C500,170 500,230 500,290" fill="none" stroke="#10B981" stroke-width="3"/>
+  <circle cx="500" cy="290" r="30" fill="#D1FAE5" stroke="#10B981" stroke-width="2"/>
+  <text x="500" y="286" text-anchor="middle" font-size="10" fill="#065F46" font-weight="700">认知科学</text>
+  <path d="M470,310 C440,360 400,400 370,450" fill="none" stroke="#10B981" stroke-width="1.5"/>
+  <rect x="300" y="435" width="100" height="30" rx="14" fill="#D1FAE5" stroke="#10B981"/>
+  <text x="350" y="455" text-anchor="middle" font-size="8" fill="#065F46">意识研究</text>
+  <path d="M530,310 C560,360 600,400 630,450" fill="none" stroke="#10B981" stroke-width="1.5"/>
+  <rect x="590" y="435" width="100" height="30" rx="14" fill="#D1FAE5" stroke="#10B981"/>
+  <text x="640" y="455" text-anchor="middle" font-size="8" fill="#065F46">记忆偏差</text>
+
+  <!-- Branch 4: 典型失败 -->
+  <path d="M460,100 C350,180 280,260 200,340" fill="none" stroke="#EF4444" stroke-width="3" stroke-dasharray="6,3"/>
+  <circle cx="200" cy="340" r="30" fill="#FEE2E2" stroke="#EF4444" stroke-width="2"/>
+  <text x="200" y="336" text-anchor="middle" font-size="10" fill="#991B1B" font-weight="700">典型案例</text>
+  <path d="M180,360 C150,420 120,480 100,530" fill="none" stroke="#EF4444" stroke-width="1.5"/>
+  <rect x="30" y="515" width="100" height="30" rx="14" fill="#FEE2E2" stroke="#EF4444"/>
+  <text x="80" y="535" text-anchor="middle" font-size="8" fill="#991B1B">LK-99乌龙</text>
+  <path d="M220,360 C260,420 290,480 310,530" fill="none" stroke="#EF4444" stroke-width="1.5"/>
+  <rect x="260" y="515" width="100" height="30" rx="14" fill="#FEE2E2" stroke="#EF4444"/>
+  <text x="310" y="535" text-anchor="middle" font-size="8" fill="#991B1B">ITER烂尾</text>
+
+  <!-- Legend -->
+  <rect x="10" y="10" width="180" height="72" rx="8" fill="white" stroke="#E5E7EB"/>
+  <circle cx="25" cy="28" r="5" fill="#F59E0B"/><text x="36" y="32" font-size="8" fill="#6B7280">知识生产</text>
+  <circle cx="25" cy="46" r="5" fill="#3B82F6"/><text x="36" y="50" font-size="8" fill="#6B7280">方法论</text>
+  <circle cx="110" cy="28" r="5" fill="#10B981"/><text x="121" y="32" font-size="8" fill="#6B7280">认知科学</text>
+  <circle cx="110" cy="46" r="5" fill="#EF4444"/><text x="121" y="50" font-size="8" fill="#6B7280">失败案例</text>
+</svg>
+</div>
+</div>
+
+<!-- Tab 6: 深度追问 -->
+<div id="tab-deep">
+<div class="section-title">深度追问 · 跨文章综合</div>
+<div class="deep-q">
+  <div class="dq-header"><span>1. 从室温超导事件看科学自纠错机制如何运作？</span><span class="dq-arrow">▼</span></div>
+  <div class="dq-body"><p>LK-99事件完美展示了科学自纠错的全流程：(1)<strong>初始声称</strong>——韩国团队在arXiv发布预印本，声称合成室温超导材料，绕过传统同行评议；(2)<strong>全球复现</strong>——世界各地实验室在数天内蜂拥复现实验(因为LK-99宣称的合成方法极为简单)；(3)<strong>快速证伪</strong>——多数实验室未能复现超导性，部分发现其磁性来源于杂质相而非超导；(4)<strong>社群裁决</strong>——科学共同体通过社交媒体、预印本评论和正式论文一致认定LK-99非超导体。整个过程仅用了约2个月——比传统同行评议更快、更透明。这揭示了预印本+开放科学模式在自纠错速度上的优势，但也暴露了媒体炒作的问题(大量非专业媒体在初始阶段就大肆报道"室温超导突破")。</p></div>
+</div>
+<div class="deep-q">
+  <div class="dq-header"><span>2. 同行评议制的衰落是否意味着科学权威的终结？</span><span class="dq-arrow">▼</span></div>
+  <div class="dq-body"><p>同行评议制的衰落并不意味着科学权威的终结，而是科学验证体系正在经历一次结构性的范式转移：(1)<strong>传统评议的失效</strong>——审稿人偏见、人情稿、竞争性阻挠、审稿疲劳(无偿劳动导致审稿质量下降)等问题日益严重；(2)<strong>替代机制兴起</strong>——预印本(arXiv, bioRxiv)、公开匿名评议(PubPeer)、注册报告(Registered Reports)、开放同行评议(审稿意见公开)等新模式正在填补传统评议的空白；(3)<strong>权威去中心化</strong>——科学权威正从"期刊品牌"(Nature/Science/Cell)向"可复现性+数据开放+方法透明"转移。这实际上是科学方法的强化——从依赖权威证言回归到依赖公开验证和证据本身。真正值得担忧的不是权威的消散，而是信息过载让公众更难区分经过验证的知识和未经证实的声称。</p></div>
+</div>
+<div class="deep-q">
+  <div class="dq-header"><span>3. 统计学思维如何帮助我们识别日常生活中的误导信息？</span><span class="dq-arrow">▼</span></div>
+  <div class="dq-body"><p>统计学思维的核心武器：(1)<strong>区分相关与因果</strong>——"吃巧克力的人更长寿"可能是富人既吃巧克力又有更好的医疗条件(混淆变量)，而非巧克力延寿；(2)<strong>警惕个案论证</strong>——"我爷爷抽了一辈子烟活了90岁"对"吸烟致癌"的反驳是典型统计谬误，个案不能否定大样本统计规律；(3)<strong>理解回归均值</strong>——"吃了这个药，烧退了"可能只是回归均值(发烧自然会退到平均数)，而非药物效果；(4)<strong>贝叶斯更新</strong>——不是"这个特效药100%有效"(先验过强)，而是"在没有更好证据前，先保持合理的怀疑并以新证据逐步调整信念"。五月天假唱风波就是统计学应用的教科书案例：通过分析多场演唱会音频中特定音符的音准稳定性(人类歌手不可能每场完全相同)，以统计显著性的方式证明了预录音频的存在。</p></div>
+</div>
+<div class="deep-q">
+  <div class="dq-header"><span>4. 意识研究与科学方法的边界在哪里？</span><span class="dq-arrow">▼</span></div>
+  <div class="dq-body"><p>意识研究触及了科学方法的基本边界：(1)<strong>第一人称vs第三人称</strong>——科学方法要求第三人称可观测数据，但意识本质上是第一人称体验(qualia)。神经元放电可以被测量，但"看到红色的感觉"本身只能被体验而不能被观察；(2)<strong>自由能最低原理</strong>——Karl Friston提出意识可能源于大脑持续追求自由能(预测误差)最小化的过程，将意识重构为可计算的物理过程。这虽然巧妙，但仍未解决"为什么物理过程会产生主观体验"的"困难问题"(hard problem)；(3)<strong>可证伪性挑战</strong>——意识理论(整合信息理论IIT、全局工作空间理论GWT、高阶思维理论HOT)之间的竞争难以通过判决性实验解决，因为不同理论对"什么是意识"的定义本身就不同；(4)<strong>科学边界</strong>——意识研究展示了科学方法的适用范围：科学可以解释意识的神经相关物(NCC)和功能机制，但"为什么存在主观体验"可能属于哲学/形而上学的范畴。承认这一边界不是科学的失败，而是科学严谨性的体现。</p></div>
+</div>
+</div>
+
+<!-- Tab 7: 案例分析 -->
+<div id="tab-cases">
+<div class="section-title">案例分析</div>
+<div class="case-study">
+  <h4>案例1：LK-99室温超导事件——科学传播与自纠错</h4>
+  <div class="case-content">
+    <p><strong>事件：</strong>2023年7月底，韩国量子能源研究中心在arXiv发布两篇预印本，声称合成了一种名为LK-99的室温常压超导材料。消息迅速破圈，引发了全球范围的媒体狂热和实验室复现竞赛。</p>
+    <p><strong>时间线：</strong>7月22日预印本发布→7月25日破圈到中文社交网络→8月上旬全球数十个实验室宣布开始复现→8月中旬多组报告未能复现超导性→8月底科学共识形成：LK-99并非超导体，其电磁特性来源于Cu2S杂质相的一阶相变。</p>
+    <p><strong>MKS分析：</strong>该事件体现了(1)预印本模式绕过传统同行评议的加速效应——但也带来了信息质量风险；(2)开放科学(Open Science)的自纠错速度——全球实验室自发复现，形成了一个分布式的同行评议；(3)科学传播的放大效应——社交媒体将尚未验证的初步结果放大为"突破性发现"，而后续的证伪报道却难以获得同等关注度(信息不对称)。</p>
+  </div>
+</div>
+<div class="case-study">
+  <h4>案例2：五月天假唱风波——统计学在娱乐产业的科学应用</h4>
+  <div class="case-content">
+    <p><strong>事件：</strong>2023年底，网友用音频分析软件对五月天多场演唱会录音进行音准分析，发现同一首歌在不同场次的音高波动几乎完全一致——这用统计学证明了预录音频(假唱/垫唱)的存在。</p>
+    <p><strong>分析方法：</strong>(1)提取同一首歌多场演出的音频；(2)测量每个音符的音高偏差(cent)；(3)统计各场次间的相关性——人类歌手不可能在多次演出中以完全相同的方式"唱不准"(连音准偏差都完全一致)；(4)文化部《营业性演出管理条例实施细则》第二十八条明确禁止假唱。</p>
+    <p><strong>MKS分析：</strong>这个案例完美展示了统计学思维如何应用于日常生活——不需要成为音频工程专家，只需要理解"独立随机事件不可能完全相同"这一统计直觉，就能把握事件的核心逻辑。同时也体现了证据等级——音频分析比"观众感觉"或"歌手声誉"提供了更高等级的证据。</p>
+  </div>
+</div>
+</div>
+
+<!-- Tab 8: 实战决策 -->
+<div id="tab-decision">
+<div class="section-title">实战决策 · 模拟场景</div>
+<div class="decision">
+  <h4>场景1：你要发表一篇颠覆性但有争议的论文</h4>
+  <p class="scenario">你是顶级期刊主编。收到一篇论文声称发现了推翻现有范式的新现象，数据看起来合理但审稿人给出了截然相反的意见(一个说"突破性"，一个说"方法论有缺陷")。你的决策？</p>
+  <button class="choice-btn" data-choice="A">A. 发表并附上审稿意见供读者判断</button>
+  <button class="choice-btn" data-choice="B">B. 拒绝(等更多验证)</button>
+  <button class="choice-btn" data-choice="C">C. 要求作者提供补充实验再审议</button>
+  <button class="choice-btn" data-choice="D">D. 推荐作者先发预印本收集社群反馈</button>
+  <div class="feedback" id="fb-1">
+    <p><strong>A：</strong>最大限度促进科学讨论，但风险是如果后来被证明错误，期刊声誉受损。历史上一些重大发现最初都面临强烈反对(如板块构造论)。</p>
+    <p><strong>B：</strong>保守选择。但可能扼杀真正的突破——普朗克曾说"科学进步是伴随着每一个葬礼发生的"。</p>
+    <p><strong>C：</strong>标准的同行评议操作。但可能被批评为"扼杀创新"——真正颠覆性的发现往往难以在短时间内提供"标准"的补充实验。</p>
+    <p><strong>D(推荐)：</strong>结合了预印本的开放性优势和传统期刊的审慎态度。创新之处在于将"是否应发表"转化为"如何让科学社群更早参与评估"，体现了新时代科学验证的去中心化趋势。</p>
+  </div>
+</div>
+<div class="decision">
+  <h4>场景2：科技记者报道"科学突破"前的验证清单</h4>
+  <p class="scenario">你是科技记者，收到一个"科学家发现永动机/室温超导/抗癌神药"的新闻线索。截稿时间还有3小时。你的验证流程？</p>
+  <button class="choice-btn" data-choice="E">A. 先发布快讯获取流量，声明"尚待验证"</button>
+  <button class="choice-btn" data-choice="F">B. 放弃报道(风险太高)</button>
+  <button class="choice-btn" data-choice="G">C. 快速查证：找独立专家评论+检查预印本+查团队历史</button>
+  <button class="choice-btn" data-choice="H">D. 报道"争议"本身：一方声称突破，一方质疑</button>
+  <div class="feedback" id="fb-2">
+    <p><strong>A：</strong>这是LK-99事件中多数媒体的做法——先发快讯获取流量，结果放大了一个未经验证的声称。危害：公众记住"突破"而非"证伪"。</p>
+    <p><strong>B：</strong>安全但过于保守。好记者应该能区分"不可靠"和"不确定"——后者值得报道但要加上适当的置信度说明。</p>
+    <p><strong>C(推荐)：</strong>负责任的做法。(1)独立专家评论——快速联系2-3名不相关领域的专家评估声称的合理性；(2)检查预印本/论文是否已发布——同行评议前 vs 评议后；(3)查团队历史——是否有造假/夸大前科；(4)评估"过于惊人"程度——Sagan标准：非常声称需要非常证据。</p>
+    <p><strong>D：</strong>"平衡报道"的陷阱——给予两个"对等"的声音平台，即使一方有压倒性证据。这制造了"科学家还在争论"的假象，例如气候变化报道中的"假平衡"问题。</p>
+  </div>
+</div>
+</div>
+
+</div><!-- /tab-content -->
+
+<footer class="footer">
+  <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS 交互学习系统</p>
+</footer>
+
+</div>
+
+<script>
+(function() {
+  var TOPIC_KEY = "mks_science";
+
+  // ===== Tab Switching =====
+  var tabBtns = document.querySelectorAll(".tab-btn");
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var target = this.getAttribute("data-tab");
+      tabBtns.forEach(function(b) { b.classList.remove("active"); });
+      this.classList.add("active");
+      document.querySelectorAll(".tab-content > div").forEach(function(p) { p.classList.remove("active"); });
+      var el = document.getElementById("tab-" + target);
+      if (el) el.classList.add("active");
+      window.location.hash = target;
+      if (target === "exam") initExam();
+    });
+  });
+
+  function restoreTab() {
+    var hash = window.location.hash.replace("#", "");
+    if (hash) {
+      var btn = document.querySelector(".tab-btn[data-tab='" + hash + "']");
+      if (btn) btn.click();
+    }
+  }
+  restoreTab();
+  window.addEventListener("hashchange", restoreTab);
+
+  // ===== Knowledge Cards =====
+  var concepts = [
+    {name:"同行评议制",icon:"🔍",definition:"学术论文发表前由同领域专家匿名评审的质量控制机制。起源于17世纪，二战后制度化，是科学知识生产的核心守门机制。",analogy:"同行评议好比小区业主委员会审批装修方案——不是每家主人都懂建筑，但懂的人替大家把关。问题是审稿人可能是你的竞争对手，也可能是你的好友。",example:"2023年室温超导LK-99事件——韩国团队在arXiv发预印本绕过了传统评议。全球实验室蜂拥复现，绝大多数未能复现。同行评议在此事件中「缺席」了。",anti:"同行评议不是完美的真相检验器——它只能过滤掉明显错误，无法防止造假(如日本STAP细胞丑闻)。但它仍是目前「最不坏」的学术筛选制度。"},
+    {name:"统计学思维",icon:"📊",definition:"用概率和不确定性框架理解世界的认知方式。核心概念包括显著性检验(p值)、效应量、置信区间、贝叶斯更新。教会我们不要把相关当因果，不要把个案当规律。",analogy:"统计学思维就像一副「降噪耳机」——世界充满了随机噪音，统计学帮你滤掉噪音、听到真正的信号。普通人没有这副耳机时，会把每一次随机波动当作趋势或奇迹。",example:"五月天假唱风波——网友用音频软件分析多场演唱会同一首歌的音准波动。人类歌手不可能每次「唱不准」的方式都一样——音准偏差的统计一致性证明了预录音频的存在。",anti:"统计学不能证明因果关系——只能揭示相关性。p<0.05也不意味着结论一定正确(约1/20的假阳性率)。数据挖掘(p-hacking)可以「制造」统计显著的结果。"},
+    {name:"批判性思维",icon:"🧠",definition:"对信息进行主动、持续的理性评估的能力。包括识别逻辑谬误、评估证据质量、区分事实与观点、识别认知偏见、追问信息来源的可靠性。",analogy:"批判性思维就像给大脑装了一个杀毒软件——不是所有进入脑海的信息都是无害的，有些是「思想病毒」。你需要在接收信息时运行扫描，而不是全盘接受。",example:"墨西哥外星人遗骸事件(2023) —— 有人声称在墨西哥国会展示了外星人遗骸。批判性思维者会问：为何证据是在国会而非科学期刊发布？展示者是否有造假前科？为何不是由独立实验室分析DNA？",anti:"批判性思维不是「什么都不信」的虚无主义——它是在证据基础上进行校准的信任，而非全盘否定。也不是杠精——批判性思维要求对自己的信念同样持有批判态度。"},
+    {name:"可复现性",icon:"🔄",definition:"科学研究的核心原则：其他研究者使用相同方法和数据应能获得相同结果。可复现性是区分科学发现与偶然结果或造假的关键标准。",analogy:"可复现性就像菜谱——一个好的菜谱应该让任何人按照相同步骤都能做出相似味道的菜。如果一个菜谱只有原作者能做出来，那它不是菜谱，是魔术。",example:"心理学「可复现性危机」——2015年《科学》发表大规模复现研究，100项心理学研究中只有36%能复现出统计学显著结果。这直接推动了预注册(preregistration)和注册报告(Registered Reports)的普及。",anti:"复现失败不一定意味着原始研究是错的——可能是方法细节差异、样本特征不同或效应本身随时间变化。但无法复现确实降低了该发现的置信度。"},
+    {name:"自由能原理",icon:"⚡",definition:"神经科学家Karl Friston提出的统一脑理论：所有生物系统都倾向于维持「自由能」(预测误差)最低的状态。意识可以被理解为大脑不断生成预测并与感官输入比较、最小化预测误差的过程。",analogy:"自由能原理好比恒温器——设定目标温度(预测)，持续感知实际温度(感官输入)，当两者有差距时启动加热或制冷(行动)来缩小差距。大脑做的也是同样的预测-比较-修正循环，只不过复杂度高出无数个数量级。",example:"你为什么看到模糊的背影就「认出」是朋友——大脑用先验预测「填充」了感官信息的不确定性，然后将预测与实际感官输入比较。如果匹配，你「看到」了朋友；如果不匹配，你更新预测。这个过程就是自由能最小化。",anti:"自由能原理不是意识是什么的完整答案——它解释了大脑的信息处理机制，但尚未解决「困难问题」：为什么物理过程会产生主观体验(qualia)。"},
+    {name:"证据等级",icon:"📋",definition:"循证实践中对证据质量的分类体系。从高到低：系统综述/荟萃分析 > 随机对照试验 > 队列研究 > 病例对照研究 > 病例系列 > 专家意见。证据等级越高，结论越可靠。",analogy:"证据等级就像法院的证据规则——目击证人的证词(相当于专家意见)不如DNA检测(相当于随机对照试验)可靠。好的决策需要知道你在证据金字塔的哪一层。",example:"新冠疫情早期，很多治疗方案基于专家意见(低等级证据)被推荐。随着RECOVERY试验等大规模RCT(高等级证据)的结果公布，一些推荐被推翻(如羟氯喹被证明无效)。",anti:"证据等级不是绝对的——在某些领域(如罕见病)，无法进行大规模RCT，病例系列就是最高可用证据。证据等级帮助你校准置信度，而不是让你忽视低等级证据。"},
+    {name:"公开匿名评议",icon:"👁️",definition:"传统同行评议的演化形式：审稿意见与论文一同公开(审稿人可选择匿名或署名)，使评议过程透明化。代表平台包括PubPeer、F1000Research等。",analogy:"公开匿名评议就像餐厅的公开评价系统——传统同行评议是后厨秘密试吃，公开评议是所有人吃完饭都能在大众点评写评价，厨师还能回复解释。好坏一目了然。",example:"PubPeer上的公开评议多次揭露了学术不端——2022年斯坦福大学校长Tessier-Lavigne的论文图片操纵问题就是在PubPeer上被发现的，最终导致其辞职。",anti:"公开评议可能导致「审稿人不敢批评大佬」的寒蝉效应——如果审稿意见公开且署名，年轻学者可能不敢批评领域权威。匿名+公开的混合模式是折中方案。"},
+    {name:"数据质量",icon:"💎",definition:"在AI/ML语境中，高质量训练数据的重要性远超模型架构。数据标注的准确性、多样性、无偏性决定了模型能力的上限。「垃圾进，垃圾出」原则。",analogy:"数据质量就像食材——米其林大厨(好模型)用烂食材也做不出好菜，而一般厨艺(普通模型)用顶级食材反而能做出不错的料理。AI时代的「黄金」不是算法而是高质量标注数据。",example:"中文AI社区发现「弱智吧」(百度贴吧)的数据对训练语言模型意外地有价值——因为弱智吧的问题虽荒谬但语法正确、逻辑清晰且需要常识推理(如「为了更文雅，拉面改名方便面」)。这种精心构建的荒谬文本反而成了优质的推理训练数据。",anti:"数据质量不是越多越好——大规模低质量数据(如未过滤的网络文本)会引入偏见和噪声。GPT-3的部分失败案例(如种族偏见输出)正是训练数据质量问题的反映。"},
+  ];
+
+  var currentCard = 0;
+  var learnedCards = JSON.parse(localStorage.getItem(TOPIC_KEY + "_learned") || "[]");
+
+  function setCard(idx) {
+    if (idx < 0) idx = concepts.length - 1;
+    if (idx >= concepts.length) idx = 0;
+    currentCard = idx;
+    var c = concepts[idx];
+    document.getElementById("card-front-title").textContent = c.name;
+    document.getElementById("card-front-icon").textContent = c.icon;
+    document.getElementById("card-back-def").textContent = c.definition;
+    document.getElementById("card-back-analogy").textContent = c.analogy;
+    document.getElementById("card-back-example").textContent = c.example;
+    document.getElementById("card-back-anti").textContent = c.anti;
+    document.getElementById("card-counter").textContent = (idx+1) + "/" + concepts.length;
+    document.getElementById("card-inner").classList.remove("flipped");
+    var markBtn = document.getElementById("mark-learned-btn");
+    if (learnedCards.indexOf(idx) >= 0) {
+      markBtn.textContent = "已学";
+      markBtn.classList.add("learned");
+    } else {
+      markBtn.textContent = "标记已学";
+      markBtn.classList.remove("learned");
+    }
+    updateProgress();
+  }
+
+  function updateProgress() {
+    var pct = Math.round(learnedCards.length / concepts.length * 100);
+    document.getElementById("progress-fill").style.width = pct + "%";
+    document.getElementById("progress-text").textContent = pct + "% (" + learnedCards.length + "/" + concepts.length + ")";
+  }
+
+  document.getElementById("card-inner").addEventListener("click", function() {
+    this.classList.toggle("flipped");
+  });
+  document.getElementById("card-prev").addEventListener("click", function() { setCard(currentCard - 1); });
+  document.getElementById("card-next").addEventListener("click", function() { setCard(currentCard + 1); });
+  document.getElementById("mark-learned-btn").addEventListener("click", function() {
+    var pos = learnedCards.indexOf(currentCard);
+    if (pos >= 0) { learnedCards.splice(pos, 1); }
+    else { learnedCards.push(currentCard); }
+    localStorage.setItem(TOPIC_KEY + "_learned", JSON.stringify(learnedCards));
+    setCard(currentCard);
+  });
+  setCard(0);
+
+  // ===== Quiz System =====
+  var mcqData = [
+    {q:"同行评议制在二战后制度化的主要原因是?",options:["技术进步","学术圈外人大量涌入","政府强制要求","期刊商业竞争"],answer:1},
+    {q:"LK-99最终被科学共识认定为什么?",options:["室温超导体","半导体材料","非超导体(杂质相磁性)","高温超导体"],answer:2},
+    {q:"统计学检测被应用于什么娱乐事件?",options:["五月天假唱","明星假球","综艺假票","比赛假赛"],answer:0},
+    {q:"ITER面临的核心问题是什么?",options:["技术原理错误","成本失控和严重延期","科学家集体抵制","材料不可得"],answer:1},
+    {q:"可复现性危机主要爆发在哪一学科?",options:["物理学","化学","心理学","生物学"],answer:2},
+    {q:"自由能原理的提出者是谁?",options:["弗洛伊德","荣格","Karl Friston","丹尼尔·丹尼特"],answer:2},
+    {q:"证据等级中最高的证据类型是?",options:["专家意见","病例对照研究","随机对照试验","系统综述/荟萃分析"],answer:3},
+    {q:"墨西哥外星人遗骸事件的发布场合是?",options:["科学期刊","国会听证会","大学讲座","NASA发布会"],answer:1},
+    {q:"公开匿名评议平台PubPeer揭露了什么事件?",options:["LK-99超导","斯坦福校长论文造假","ITER烂尾","新冠疫苗副作用"],answer:1},
+    {q:"弱智吧数据对AI训练的价值在于?",options:["数据量大","语法正确+需要常识推理","内容搞笑","用户活跃度高"],answer:1},
+    {q:"传统软件终结指的是什么趋势?",options:["软件不再需要","AI从编写代码到生成软件","开源取代商业软件","云服务替代本地软件"],answer:1},
+    {q:"濒死回忆的最合理解释是什么?",options:["灵魂出窍","大脑缺氧+记忆重构","超自然现象","前世记忆"],answer:1},
+    {q:"丘成桐对中国数学的评价引发争议的原因?",options:["说中国数学世界第一","说中国数学不及美国40年代","否定中国所有数学家","赞扬中国教育体系"],answer:0},
+    {q:"2015年心理学复现研究显示多少研究可复现?",options:["约90%","约70%","约50%","约36%"],answer:3},
+    {q:"高质量数据的比喻是?",options:["数据=石油","数据=黄金","数据=空气","数据=水"],answer:0},
+  ];
+
+  var saqData = [
+    {q:"同行评议制有哪些主要局限性?",a:"(1)审稿人偏见——竞争关系导致不公正评审、人情稿;(2)审稿疲劳——无偿劳动导致审稿质量下降、周期过长(数月到数年);(3)无法防造假——审稿人只能评估方法论和逻辑，无法检测精心设计的数据造假(如STAP细胞事件);(4)保守倾向——创新性过高的工作容易被审稿人拒绝;(5)偏倚——支持正面结果(Null results难以发表)。这些局限性催生了预印本、公开评议、注册报告等替代机制。"},
+    {q:"为什么统计学思维对普通人很重要?",a:"统计学思维帮助我们在信息过载时代做出更好的判断:(1)区分相关与因果——冰淇淋销量和溺水人数相关(共同原因:夏天)，非因果;(2)警惕个案论证——「我认识的人打了疫苗还感染了」不能否定疫苗的整体有效性;(3)理解回归均值——极端表现之后倾向于回到平均水平，不要把回归当疗效;(4)识别幸存者偏差——比尔盖茨大学辍学成功不等于辍学能成功;(5)贝叶斯更新——用新证据不断调整信念，而非二元的是/否判断。"},
+    {q:"室温超导LK-99事件给我们什么启示?",a:"(1)预印本文化的两面性——加速了科学传播但也放大了未经验证的声称;(2)复现是科学的自纠错核心——全球实验室自发复现形成了一个分布式同行评议网络，比传统评议更高效;(3)媒体的科学素养——多数媒体报道了「突破」但未同等报道「证伪」;(4)开放科学的力量——数据和方法的公开使得独立验证成为可能，这是传统封闭出版模式无法实现的;(5)公众教育——事件后公众对常温超导的理解反而提高了，这是一个「认知升级」的意外正面效应。"},
+    {q:"什么是公开匿名评议制?如何改进传统同行评议?",a:"公开匿名评议是传统匿名同行评议的演化形式。核心特征:(1)评议意见与论文一同公开——任何人都可以阅读审稿意见;(2)审稿人可选择匿名或署名——平衡了诚实批评和学术自由;(3)持续评议——发表后仍可接受评议(PubPeer模式)，而非发表前一次性审查。改进之处:(a)透明度——评议过程从黑箱变为可审计;(b)速度——分布式评议比等2-3个审稿人快得多;(c)质量——公开的评议更有质量动机(审稿人声誉);(d)问责——审稿人不能随意给出不公正意见。代表平台:F1000Research(发表后公开评议)、eLife(公开审稿意见)、PubPeer(发表后评论)。"},
+    {q:"意识的自由能最低原理是什么?",a:"Karl Friston提出的理论框架:所有生物系统都自发倾向于维持自由能(变分自由能，近似于预测误差)最低的状态。对意识而言:(1)大脑是一个预测引擎——不断生成关于世界的预测(生成模型);(2)感官输入与预测比较——预测误差=自由能;(3)最小化自由能有两种方式——更新预测(感知)或改变世界以符合预测(行动);(4)意识体验可以被理解为大脑在多个层级(从感觉输入到抽象概念)同时进行预测-比较-更新的过程。这不是意识的完整解释(仍无法说明为什么物理过程产生主观体验)，但提供了一个可计算的、符合物理规律的框架。"},
+    {q:"为什么高质量数据堪比黄金?",a:"在AI/ML时代，数据质量是模型能力的根本约束:(1)模型架构趋同——Transformer等架构已公开，差异在于训练数据的质和量;(2)互联网数据枯竭——公开文本数据已被基本耗尽，新增高质量数据极为稀缺;(3)合成数据的局限——用AI生成的数据训练AI会导致模型崩溃(Model Collapse);(4)标注成本——高质量的标注需要领域专家(如医学影像需要医生标注)，每张图的标注成本可达数百美元;(5)弱智吧案例——中文AI社区发现百度贴吧弱智吧的数据包含大量语法正确但需要常识推理的文本，比普通网络文本更有训练价值——质量>数量。"},
+    {q:"濒死回忆为什么不可信?",a:"科学解释:(1)大脑缺氧——当心脏骤停、脑血流减少时，大脑皮层抑制解除，产生视觉/听觉幻觉(隧道、亮光、逝去的亲人);(2)记忆重构——濒死经历后的回忆不是录像回放，而是大脑在恢复过程中重新构建的叙事，会混合真实记忆、文化期望和想象;(3)文化差异——不同文化背景的人经历不同内容的濒死体验(基督教文化看到耶稣，印度教看到阎王使者)，说明这是文化构建而非客观现象;(4)时间感知扭曲——濒死状态下大脑的时间感知异常，短暂的电生理活动可能被体验为漫长的「人生回顾」;(5)并非100%——很多心脏骤停后复苏的人没有报告任何体验，如果濒死体验是灵魂出窍的客观证据，应该所有人都有。科学并不否认这些体验的真实性(作为主观体验)，但否认它们指向超自然原因。"},
+    {q:"科学方法如何应用于社会研究?",a:"(1)自然实验——利用政策变化的准随机性来评估因果关系(如延迟退休对就业的影响);(2)断点回归——以政策阈值为断点，比较阈值两侧群体的差异(如高考分数线附近的学生的不同命运);(3)双重差分——比较政策实施前后的处理组和对照组的差异(如全民基本收入试点);(4)随机对照试验——在可以伦理操作的情况下随机分配处理(如教育干预措施);(5)大规模数据——利用行政数据(社保、税务、医疗)进行观察性研究。挑战:社会研究中的变量难以控制、伦理限制随机化、因果推断比实验室科学更困难。但科学方法(系统观察→假设→验证→修正)的基本框架完全适用。"},
+  ];
+
+  var currentQuizMCQ = [];
+  var currentQuizSAQ = [];
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function startQuiz() {
+    document.getElementById("quiz-start-btns").style.display = "none";
+    var quizDiv = document.getElementById("staticQuiz");
+    quizDiv.style.display = "block";
+    currentQuizMCQ = shuffle(mcqData).slice(0, 10);
+    currentQuizSAQ = shuffle(saqData).slice(0, 3);
+
+    var html = '<div style="margin-bottom:20px"><strong style="color:var(--accent-dark)">选择题 (' + currentQuizMCQ.length + ' 题)</strong></div>';
+    currentQuizMCQ.forEach(function(q, qi) {
+      html += '<div class="mcq-question"><div class="q-title">' + (qi+1) + ". " + q.q + '</div>';
+      q.options.forEach(function(opt, oi) {
+        html += '<button class="quiz-option" data-mcq="' + qi + '" data-opt="' + oi + '">' + String.fromCharCode(65+oi) + ". " + opt + '</button>';
+      });
+      html += "</div>";
+    });
+
+    html += '<div style="margin:24px 0 12px"><strong style="color:var(--blue)">简答题 (' + currentQuizSAQ.length + ' 题)</strong></div>';
+    currentQuizSAQ.forEach(function(q, qi) {
+      html += '<div class="saq-question"><div class="q-title">' + (currentQuizMCQ.length+qi+1) + ". " + q.q + '</div>';
+      html += '<textarea placeholder="输入你的答案..."></textarea>';
+      html += '<button class="toggle-answer" data-saq="' + qi + '">显示参考答案</button>';
+      html += '<div class="saq-answer" id="saq-answer-' + qi + '">' + q.a + "</div></div>";
+    });
+
+    quizDiv.innerHTML = html;
+
+    quizDiv.querySelectorAll(".quiz-option").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var mcqIdx = parseInt(this.getAttribute("data-mcq"));
+        var optIdx = parseInt(this.getAttribute("data-opt"));
+        var q = currentQuizMCQ[mcqIdx];
+        var siblings = this.parentElement.querySelectorAll(".quiz-option");
+        if (this.classList.contains("selected") || this.classList.contains("correct") || this.classList.contains("wrong")) return;
+        siblings.forEach(function(s) { s.classList.remove("selected"); s.disabled = true; });
+        this.classList.add("selected");
+        if (optIdx === q.answer) {
+          this.classList.add("correct");
+        } else {
+          this.classList.add("wrong");
+          siblings[q.answer].classList.add("correct");
+        }
+        saveQuizResult(q.q, optIdx === q.answer);
+      });
+    });
+
+    quizDiv.querySelectorAll(".toggle-answer").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var saqIdx = this.getAttribute("data-saq");
+        var ans = document.getElementById("saq-answer-" + saqIdx);
+        ans.classList.toggle("show");
+        this.textContent = ans.classList.contains("show") ? "隐藏参考答案" : "显示参考答案";
+      });
+    });
+    window.scrollTo({top: quizDiv.offsetTop - 100, behavior: "smooth"});
+  }
+
+  function resetQuiz() {
+    document.getElementById("quiz-start-btns").style.display = "flex";
+    var quizDiv = document.getElementById("staticQuiz");
+    quizDiv.style.display = "none";
+    quizDiv.innerHTML = "";
+    currentQuizMCQ = [];
+    currentQuizSAQ = [];
+  }
+
+  function saveQuizResult(question, correct) {
+    var results = JSON.parse(localStorage.getItem(TOPIC_KEY + "_quiz_results") || "[]");
+    results.push({q: question, correct: correct, time: new Date().toISOString()});
+    if (results.length > 100) results = results.slice(-100);
+    localStorage.setItem(TOPIC_KEY + "_quiz_results", JSON.stringify(results));
+  }
+
+  document.getElementById("btn-start-quiz").addEventListener("click", startQuiz);
+  document.getElementById("btn-reset-quiz").addEventListener("click", resetQuiz);
+
+  // ===== Exam Mode =====
+  var examTimer = null;
+  var examTimeLeft = 900;
+  var examInitDone = false;
+
+  function initExam() {
+    if (examInitDone) return;
+    examInitDone = true;
+    document.getElementById("btn-start-exam").addEventListener("click", startExam);
+    document.getElementById("btn-submit-exam").addEventListener("click", submitExam);
+    document.getElementById("btn-restart-exam").addEventListener("click", restartExam);
+  }
+
+  function startExam() {
+    document.getElementById("btn-start-exam").style.display = "none";
+    document.getElementById("exam-questions").style.display = "block";
+    document.getElementById("btn-submit-exam").style.display = "inline-block";
+    document.getElementById("exam-result").classList.remove("show");
+    document.getElementById("exam-timer").style.display = "block";
+    document.getElementById("exam-timer").style.color = "var(--accent-dark)";
+    examTimeLeft = 900;
+    updateExamTimer();
+    if (examTimer) clearInterval(examTimer);
+    examTimer = setInterval(function() {
+      examTimeLeft--;
+      updateExamTimer();
+      if (examTimeLeft <= 0) { submitExam(); }
+    }, 1000);
+
+    var examMCQ = shuffle(mcqData).slice(0, 10);
+    var examSAQ = shuffle(saqData).slice(0, 2);
+    var html = '<div style="margin-bottom:16px"><strong style="color:var(--accent-dark)">选择题 (10题)</strong></div>';
+    examMCQ.forEach(function(q, qi) {
+      html += '<div class="mcq-question"><div class="q-title">' + (qi+1) + ". " + q.q + '</div>';
+      q.options.forEach(function(opt, oi) {
+        html += '<button class="quiz-option" data-exam-mcq="' + qi + '" data-opt="' + oi + '">' + String.fromCharCode(65+oi) + ". " + opt + '</button>';
+      });
+      html += "</div>";
+    });
+    html += '<div style="margin-top:20px"><strong style="color:var(--blue)">简答题 (2题)</strong></div>';
+    examSAQ.forEach(function(q, qi) {
+      html += '<div class="saq-question"><div class="q-title">' + (11+qi) + ". " + q.q + '</div>';
+      html += '<textarea placeholder="输入你的答案..."></textarea></div>';
+    });
+    document.getElementById("exam-questions").innerHTML = html;
+    document.getElementById("exam-questions").setAttribute("data-mcq-answers", JSON.stringify(examMCQ.map(function(q){ return q.answer; })));
+
+    document.querySelectorAll("[data-exam-mcq]").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var siblings = this.parentElement.querySelectorAll(".quiz-option");
+        siblings.forEach(function(s) { s.classList.remove("selected"); });
+        this.classList.add("selected");
+      });
+    });
+  }
+
+  function updateExamTimer() {
+    var m = Math.floor(examTimeLeft / 60);
+    var s = examTimeLeft % 60;
+    document.getElementById("exam-timer").textContent = m + ":" + (s < 10 ? "0" : "") + s;
+    if (examTimeLeft <= 60) document.getElementById("exam-timer").style.color = "var(--red)";
+  }
+
+  function submitExam() {
+    if (examTimer) { clearInterval(examTimer); examTimer = null; }
+    var answers = JSON.parse(document.getElementById("exam-questions").getAttribute("data-mcq-answers") || "[]");
+    var correct = 0;
+    document.querySelectorAll("[data-exam-mcq].selected").forEach(function(btn) {
+      var qi = parseInt(btn.getAttribute("data-exam-mcq"));
+      var oi = parseInt(btn.getAttribute("data-opt"));
+      if (answers[qi] === oi) { correct++; btn.classList.add("correct"); }
+      else { btn.classList.add("wrong"); }
+    });
+    document.querySelectorAll("[data-exam-mcq]").forEach(function(btn) {
+      btn.disabled = true;
+    });
+    var score = Math.round(correct / 10 * 100);
+    var el = document.getElementById("exam-result");
+    el.classList.add("show");
+    var scoreEl = document.getElementById("exam-score");
+    scoreEl.textContent = score + "% (" + correct + "/10)";
+    scoreEl.className = "score " + (score >= 60 ? "pass" : "fail");
+    document.getElementById("exam-feedback").textContent = score >= 80 ? "优秀！你对科学方法与认知论有深入理解。" : score >= 60 ? "及格。还有提升空间，建议回顾知识卡片和错题。" : "需要加强学习。科学方法论是认知世界的底层思维工具。";
+    document.getElementById("btn-submit-exam").style.display = "none";
+    document.getElementById("exam-questions").style.display = "none";
+    document.getElementById("exam-timer").style.display = "none";
+    document.getElementById("btn-restart-exam").style.display = "inline-block";
+    var results = JSON.parse(localStorage.getItem(TOPIC_KEY + "_exam_results") || "[]");
+    results.push({score: score, time: new Date().toISOString()});
+    localStorage.setItem(TOPIC_KEY + "_exam_results", JSON.stringify(results));
+  }
+
+  function restartExam() {
+    document.getElementById("btn-start-exam").style.display = "inline-block";
+    document.getElementById("exam-questions").style.display = "none";
+    document.getElementById("exam-questions").innerHTML = "";
+    document.getElementById("btn-submit-exam").style.display = "none";
+    document.getElementById("btn-restart-exam").style.display = "none";
+    document.getElementById("exam-result").classList.remove("show");
+    document.getElementById("exam-timer").style.display = "block";
+    document.getElementById("exam-timer").textContent = "15:00";
+    document.getElementById("exam-timer").style.color = "var(--accent-dark)";
+  }
+
+  // ===== Review Mode =====
+  function loadReview(filter) {
+    var quizResults = JSON.parse(localStorage.getItem(TOPIC_KEY + "_quiz_results") || "[]");
+    var examResults = JSON.parse(localStorage.getItem(TOPIC_KEY + "_exam_results") || "[]");
+    var items = [];
+    quizResults.forEach(function(r) {
+      items.push({type: "quiz", q: r.q, correct: r.correct, time: r.time});
+    });
+    examResults.forEach(function(r) {
+      items.push({type: "exam", q: "综合考试", correct: r.score >= 60, time: r.time, detail: "得分: " + r.score + "%"});
+    });
+    if (filter === "wrong") items = items.filter(function(i) { return !i.correct; });
+    if (items.length === 0) {
+      document.getElementById("review-list").innerHTML = '<p style="color:var(--text-lighter);text-align:center;padding:20px">暂无复习记录。完成一些练习题后再来吧！</p>';
+      return;
+    }
+    var html = "";
+    items.reverse().forEach(function(item) {
+      var cls = item.correct ? "correct-item" : "";
+      html += '<div class="review-item ' + cls + '"><div style="display:flex;justify-content:space-between;align-items:center">';
+      html += "<span><strong>" + (item.type === "quiz" ? "练习题" : "考试") + "</strong>: " + item.q.substring(0, 60) + (item.q.length > 60 ? "..." : "") + "</span>";
+      html += '<span style="font-size:.78rem;color:var(--text-lighter)">' + (item.correct ? "正确" : "错误") + "</span></div>";
+      if (item.detail) html += '<div style="font-size:.82rem;color:var(--text-light);margin-top:4px">' + item.detail + "</div>";
+      html += '<div style="font-size:.7rem;color:var(--text-lighter);margin-top:2px">' + new Date(item.time).toLocaleString() + "</div></div>";
+    });
+    document.getElementById("review-list").innerHTML = html;
+  }
+
+  document.getElementById("review-all").addEventListener("click", function() {
+    document.querySelectorAll(".review-filters button").forEach(function(b) { b.classList.remove("active"); });
+    this.classList.add("active");
+    loadReview("all");
+  });
+  document.getElementById("review-wrong").addEventListener("click", function() {
+    document.querySelectorAll(".review-filters button").forEach(function(b) { b.classList.remove("active"); });
+    this.classList.add("active");
+    loadReview("wrong");
+  });
+  document.getElementById("review-export").addEventListener("click", function() {
+    var quizResults = JSON.parse(localStorage.getItem(TOPIC_KEY + "_quiz_results") || "[]");
+    var examResults = JSON.parse(localStorage.getItem(TOPIC_KEY + "_exam_results") || "[]");
+    var data = {topic: TOPIC_KEY, quiz: quizResults, exams: examResults};
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = TOPIC_KEY + "_review.json"; a.click();
+    URL.revokeObjectURL(url);
+  });
+  loadReview("all");
+
+  // ===== Deep Questions =====
+  document.querySelectorAll(".deep-q .dq-header").forEach(function(header) {
+    header.addEventListener("click", function() {
+      this.parentElement.classList.toggle("open");
+    });
+  });
+
+  // ===== Decision Scenarios =====
+  document.querySelectorAll(".decision .choice-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var parent = this.parentElement;
+      parent.querySelectorAll(".choice-btn").forEach(function(b) { b.classList.remove("selected-choice"); });
+      this.classList.add("selected-choice");
+      var fb = parent.querySelector(".feedback");
+      if (fb) fb.classList.add("show");
+    });
+  });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
