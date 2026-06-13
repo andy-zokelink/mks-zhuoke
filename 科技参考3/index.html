@@ -3,45 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克·科技参考3 — 前沿观测台</title>
+<title>卓克·科技参考3 — 科技分光镜</title>
 <style>
+/* ============================================================
+   SPECTROSCOPE THEME — 科技分光镜
+   母隐喻：分光镜将白光分解为七色光谱，揭示物质的化学组成
+   科技参考3将混沌的科技信息分解为七个领域，揭示技术变革的底层逻辑
+   ============================================================ */
+
 /* ===== Foundations ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Observatory palette — light, warm, amber accent */
-  --bg: #fafbfc;
-  --bg-card: #ffffff;
-  --bg-card-hover: #fffbeb;
-  --text: #1f2937;
-  --text-bright: #111827;
-  --text-dim: #6b7280;
-  --border: #e5e7eb;
-  --border-light: #f3f4f6;
-  --amber: #F59E0B;
-  --amber-light: #FCD34D;
-  --amber-dark: #D97706;
-  --amber-glow: rgba(245,158,11,0.2);
-  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
-  --radius: 10px;
-  --radius-lg: 16px;
-  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Cosmic lab palette */
+  --bg-deep: #060618;
+  --bg-card: rgba(16,16,42,0.75);
+  --bg-card-hover: rgba(22,22,56,0.85);
+  --text: #c8c4d8;
+  --text-bright: #f0ecf8;
+  --text-dim: #7a7898;
+  --border: rgba(255,255,255,0.07);
+  --border-glow: rgba(255,255,255,0.12);
+  --light-source: #f5d078;
+  --light-warm: #e8c456;
+  --light-deep: #b8962c;
+  --light-glow: rgba(245,208,120,0.18);
+  --radius: 12px;
+  --radius-lg: 18px;
+  --ease: 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: 0.35s cubic-bezier(0, 0, 0.2, 1);
 
-  /* Seven observation window colors */
-  --w1: #dc2626; --w1-glow: rgba(220,38,38,0.15);
-  --w2: #1d4ed8; --w2-glow: rgba(29,78,216,0.15);
-  --w3: #059669; --w3-glow: rgba(5,150,105,0.15);
-  --w4: #ea580c; --w4-glow: rgba(234,88,12,0.15);
-  --w5: #7c3aed; --w5-glow: rgba(124,58,237,0.15);
-  --w6: #b91c1c; --w6-glow: rgba(185,28,28,0.15);
-  --w7: #0891b2; --w7-glow: rgba(8,145,178,0.15);
+  /* Seven spectral bands — true spectrum order (red → violet) */
+  --s1: #ff6b6b; --s1g: rgba(255,107,107,0.18);
+  --s2: #f39c12; --s2g: rgba(243,156,18,0.18);
+  --s3: #2ecc71; --s3g: rgba(46,204,113,0.18);
+  --s4: #1abc9c; --s4g: rgba(26,188,156,0.18);
+  --s5: #3498db; --s5g: rgba(52,152,219,0.18);
+  --s6: #6c5ce7; --s6g: rgba(108,92,231,0.18);
+  --s7: #9b59b6; --s7g: rgba(155,89,182,0.18);
+
+  /* MKS compatibility — keep these for preserved section */
+  --amber: #f5d078;
+  --amber-light: #f8e4a0;
+  --amber-dark: #b8962c;
+  --amber-glow: rgba(245,208,120,0.2);
+  --bg: #060618;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  --w1: #ff6b6b; --w1-glow: rgba(255,107,107,0.2);
+  --w2: #f39c12; --w2-glow: rgba(243,156,18,0.2);
+  --w3: #2ecc71; --w3-glow: rgba(46,204,113,0.2);
+  --w4: #1abc9c; --w4-glow: rgba(26,188,156,0.2);
+  --w5: #3498db; --w5-glow: rgba(52,152,219,0.2);
+  --w6: #6c5ce7; --w6-glow: rgba(108,92,231,0.2);
+  --w7: #9b59b6; --w7-glow: rgba(155,89,182,0.2);
 }
 
 body {
   font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "SimSun", serif;
-  background: var(--bg);
+  background: var(--bg-deep);
   color: var(--text);
   line-height: 1.8;
   min-height: 100vh;
@@ -50,60 +71,92 @@ body {
   padding-bottom: 64px;
 }
 
-/* ===== Observatory Ambient ===== */
-.observatory-ambient {
+/* ===== Cosmic Ambient ===== */
+.cosmic-ambient {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 50% 40% at 50% 20%, rgba(245,158,11,0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 50% at 20% 50%, rgba(220,38,38,0.02) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 50% at 80% 50%, rgba(8,145,178,0.02) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 30% at 50% 90%, rgba(245,158,11,0.03) 0%, transparent 50%);
+    /* Central light source — where the prism sits */
+    radial-gradient(ellipse 50% 30% at 50% 28%, rgba(245,208,120,0.06) 0%, transparent 60%),
+    /* Warm glow bleeding to edges */
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,208,120,0.02) 0%, transparent 50%),
+    /* Spectral scatter — red/right */
+    radial-gradient(ellipse 20% 40% at 80% 35%, rgba(255,107,107,0.03) 0%, transparent 50%),
+    /* Spectral scatter — violet/left */
+    radial-gradient(ellipse 20% 40% at 20% 35%, rgba(155,89,182,0.03) 0%, transparent 50%),
+    /* Deep void at edges */
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(6,6,24,0.8) 100%);
 }
 
-/* ===== Floating Signal Dots ===== */
-.signals {
+/* ===== Starfield Particles ===== */
+.starfield {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
 }
-.signal {
+.star {
   position: absolute;
   border-radius: 50%;
-  animation: signal-pulse linear infinite;
+  background: var(--light-source);
+  animation: star-drift linear infinite;
   opacity: 0;
 }
-@keyframes signal-pulse {
-  0%   { opacity: 0; }
-  15%  { opacity: 0.8; }
-  70%  { opacity: 0.2; }
-  100% { opacity: 0; }
+@keyframes star-drift {
+  0%   { opacity: 0; transform: translateY(0) translateX(0); }
+  10%  { opacity: 0.7; }
+  40%  { opacity: 0.3; }
+  70%  { opacity: 0.05; }
+  100% { opacity: 0; transform: translateY(-120px) translateX(15px); }
 }
-.signal.s1  { left: 10%; top: 15%; width: 4px; height: 4px; background: var(--amber); animation-duration: 6s; animation-delay: 0s; }
-.signal.s2  { left: 25%; top: 22%; width: 3px; height: 3px; background: var(--w1); animation-duration: 5s; animation-delay: 1.2s; }
-.signal.s3  { left: 40%; top: 10%; width: 5px; height: 5px; background: var(--amber-light); animation-duration: 7s; animation-delay: 0.6s; }
-.signal.s4  { left: 55%; top: 18%; width: 3px; height: 3px; background: var(--w3); animation-duration: 5.5s; animation-delay: 2s; }
-.signal.s5  { left: 70%; top: 12%; width: 4px; height: 4px; background: var(--amber); animation-duration: 6.5s; animation-delay: 1.5s; }
-.signal.s6  { left: 85%; top: 25%; width: 3px; height: 3px; background: var(--w5); animation-duration: 5.8s; animation-delay: 0.3s; }
-.signal.s7  { left: 15%; top: 35%; width: 4px; height: 4px; background: var(--w7); animation-duration: 7.2s; animation-delay: 2.5s; }
-.signal.s8  { left: 50%; top: 8%; width: 3px; height: 3px; background: var(--amber-dark); animation-duration: 5.2s; animation-delay: 3s; }
-.signal.s9  { left: 65%; top: 30%; width: 4px; height: 4px; background: var(--w2); animation-duration: 6.8s; animation-delay: 0.9s; }
-.signal.s10 { left: 35%; top: 5%; width: 3px; height: 3px; background: var(--w4); animation-duration: 5.4s; animation-delay: 1.8s; }
-.signal.s11 { left: 80%; top: 8%; width: 5px; height: 5px; background: var(--amber); animation-duration: 7.5s; animation-delay: 3.2s; }
-.signal.s12 { left: 20%; top: 28%; width: 3px; height: 3px; background: var(--w6); animation-duration: 5.9s; animation-delay: 2.2s; }
+.star:nth-child(1)  { left: 5%;  top: 80%; width: 2px; height: 2px; animation-duration: 14s; animation-delay: 0s; }
+.star:nth-child(2)  { left: 12%; top: 65%; width: 1px; height: 1px; animation-duration: 18s; animation-delay: 2s; }
+.star:nth-child(3)  { left: 20%; top: 90%; width: 2px; height: 2px; animation-duration: 12s; animation-delay: 5s; }
+.star:nth-child(4)  { left: 28%; top: 75%; width: 1px; height: 1px; animation-duration: 20s; animation-delay: 1s; }
+.star:nth-child(5)  { left: 35%; top: 85%; width: 2px; height: 2px; animation-duration: 16s; animation-delay: 3s; }
+.star:nth-child(6)  { left: 42%; top: 70%; width: 1px; height: 1px; animation-duration: 22s; animation-delay: 7s; }
+.star:nth-child(7)  { left: 50%; top: 95%; width: 2px; height: 2px; animation-duration: 15s; animation-delay: 4s; }
+.star:nth-child(8)  { left: 58%; top: 60%; width: 1px; height: 1px; animation-duration: 19s; animation-delay: 6s; }
+.star:nth-child(9)  { left: 65%; top: 88%; width: 2px; height: 2px; animation-duration: 13s; animation-delay: 8s; }
+.star:nth-child(10) { left: 72%; top: 72%; width: 1px; height: 1px; animation-duration: 21s; animation-delay: 2.5s; }
+.star:nth-child(11) { left: 80%; top: 82%; width: 2px; height: 2px; animation-duration: 17s; animation-delay: 5.5s; }
+.star:nth-child(12) { left: 88%; top: 68%; width: 1px; height: 1px; animation-duration: 23s; animation-delay: 1.5s; }
+.star:nth-child(13) { left: 94%; top: 78%; width: 2px; height: 2px; animation-duration: 15s; animation-delay: 9s; }
+.star:nth-child(14) { left: 15%; top: 55%; width: 1px; height: 1px; animation-duration: 25s; animation-delay: 3.5s; }
+.star:nth-child(15) { left: 75%; top: 50%; width: 2px; height: 2px; animation-duration: 18s; animation-delay: 6.5s; }
+
+/* Spectral dust — colored particles */
+.spec-dust {
+  position: absolute;
+  border-radius: 50%;
+  animation: dust-float linear infinite;
+  opacity: 0;
+}
+@keyframes dust-float {
+  0%   { opacity: 0; transform: translateY(0) scale(1); }
+  20%  { opacity: 0.6; }
+  50%  { opacity: 0.2; transform: translateY(-60px) scale(0.6); }
+  100% { opacity: 0; transform: translateY(-100px) scale(0.3); }
+}
+.sd1  { left: 54%; top: 48%; width: 3px; height: 3px; background: var(--s1); animation-duration: 5s; animation-delay: 0s; }
+.sd2  { left: 58%; top: 50%; width: 2px; height: 2px; background: var(--s2); animation-duration: 6s; animation-delay: 1s; }
+.sd3  { left: 50%; top: 46%; width: 3px; height: 3px; background: var(--s3); animation-duration: 5.5s; animation-delay: 2s; }
+.sd4  { left: 46%; top: 52%; width: 2px; height: 2px; background: var(--s4); animation-duration: 6.5s; animation-delay: 0.5s; }
+.sd5  { left: 42%; top: 48%; width: 3px; height: 3px; background: var(--s5); animation-duration: 4.5s; animation-delay: 1.5s; }
+.sd6  { left: 38%; top: 50%; width: 2px; height: 2px; background: var(--s6); animation-duration: 5.8s; animation-delay: 2.5s; }
+.sd7  { left: 62%; top: 46%; width: 3px; height: 3px; background: var(--s7); animation-duration: 5.2s; animation-delay: 0.8s; }
 
 /* ===== Navigation ===== */
 .nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(250,251,252,0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(6,6,24,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   padding: 0 28px;
 }
@@ -113,29 +166,30 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  height: 50px;
+  gap: 36px;
+  height: 52px;
 }
 .nav-inner a {
   color: var(--text-dim);
   text-decoration: none;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   transition: color var(--ease);
   position: relative;
   padding: 4px 0;
   cursor: pointer;
 }
-.nav-inner a:hover { color: var(--amber-dark); }
+.nav-inner a:hover { color: var(--light-source); }
 .nav-inner a::after {
   content: '';
   position: absolute;
   bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 0; height: 2px;
-  background: var(--amber);
+  width: 0; height: 1.5px;
+  background: var(--light-source);
   border-radius: 1px;
   transition: width var(--ease);
+  box-shadow: 0 0 6px var(--light-glow);
 }
 .nav-inner a:hover::after { width: 100%; }
 
@@ -145,125 +199,138 @@ body {
   z-index: 1;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 64px 28px 0;
+  padding: 48px 28px 0;
 }
 
 /* ===== Hero ===== */
 .hero {
   text-align: center;
-  padding: 10px 0 0;
+  padding: 20px 0 0;
   position: relative;
 }
-.hero .obs-crown {
+/* Crown glow above the prism */
+.hero .source-glow {
   position: absolute;
-  top: -60px;
+  top: -80px;
   left: 50%;
   transform: translateX(-50%);
-  width: 320px;
-  height: 120px;
-  background: radial-gradient(ellipse 60% 70% at 50% 100%, rgba(245,158,11,0.08), transparent 70%);
+  width: 400px;
+  height: 160px;
+  background: radial-gradient(ellipse 50% 80% at 50% 100%, rgba(245,208,120,0.1), transparent 70%);
   pointer-events: none;
 }
 .hero .eyebrow {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 5px;
+  letter-spacing: 6px;
   color: var(--text-dim);
-  margin-bottom: 14px;
-  position: relative;
+  margin-bottom: 16px;
   display: inline-block;
+  position: relative;
 }
 .hero .eyebrow::before,
 .hero .eyebrow::after {
-  content: "◇";
+  content: "◆";
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.4rem;
-  color: var(--amber-dark);
+  font-size: 0.35rem;
+  color: var(--light-source);
   opacity: 0.5;
 }
-.hero .eyebrow::before { left: -24px; }
-.hero .eyebrow::after  { right: -24px; }
+.hero .eyebrow::before { left: -26px; }
+.hero .eyebrow::after  { right: -26px; }
 .hero h1 {
-  font-size: 3.2rem;
+  font-size: 3.4rem;
   font-weight: 900;
-  letter-spacing: 3px;
-  line-height: 1.3;
-  margin-bottom: 12px;
-  background: linear-gradient(180deg, #f59e0b 0%, #d97706 45%, #92400e 100%);
+  letter-spacing: 4px;
+  line-height: 1.25;
+  margin-bottom: 14px;
+  background: linear-gradient(180deg, #f8e8c0 0%, #e8c456 35%, #b8962c 70%, #8a6c20 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 12px rgba(245,158,11,0.25));
+  filter: drop-shadow(0 2px 16px rgba(245,208,120,0.3));
 }
 .hero h1 .dot {
-  -webkit-text-fill-color: #F59E0B;
+  -webkit-text-fill-color: #f5d078;
   display: inline-block;
   animation: spark-pulse 2.4s ease-in-out infinite;
 }
 @keyframes spark-pulse {
   0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-  40% { transform: translateY(-5px) scale(1.15); opacity: 0.6; }
-  70% { transform: translateY(-2px) scale(1.05); opacity: 0.85; }
+  35% { transform: translateY(-6px) scale(1.18); opacity: 0.55; }
+  65% { transform: translateY(-2px) scale(1.06); opacity: 0.8; }
 }
 .hero .tagline {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-dim);
   letter-spacing: 2px;
   margin-bottom: 6px;
   font-weight: 500;
 }
 .hero .sub-tagline {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-dim);
   letter-spacing: 0.5px;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-/* ===== Observatory SVG ===== */
-.obs-svg-wrap {
+/* ===== Prism SVG ===== */
+.prism-wrap {
   display: flex;
   justify-content: center;
-  margin: 28px auto 0;
-  max-width: 700px;
+  margin: 20px auto 8px;
+  max-width: 800px;
   position: relative;
 }
-.obs-svg-wrap::after {
+.prism-wrap::after {
   content: "";
   position: absolute;
-  bottom: -20px;
+  bottom: -30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 500px;
-  height: 60px;
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(245,158,11,0.06), transparent 70%);
+  width: 600px;
+  height: 80px;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(245,208,120,0.08), transparent 70%);
   pointer-events: none;
 }
-.obs-svg {
+.prism-svg {
   width: 100%;
   height: auto;
-  max-height: 230px;
+  max-height: 280px;
 }
 
-/* Scan beam animations */
-.beam-1 { animation: sweep1 4s ease-in-out infinite; transform-origin: 400px 195px; }
-.beam-2 { animation: sweep2 5s ease-in-out infinite; transform-origin: 400px 195px; }
-.beam-3 { animation: sweep3 4.5s ease-in-out infinite; transform-origin: 400px 195px; }
-@keyframes sweep1 { 0%,100%{opacity:0.15;transform:rotate(0deg)} 50%{opacity:0.35;transform:rotate(3deg)} }
-@keyframes sweep2 { 0%,100%{opacity:0.1;transform:rotate(-2deg)} 50%{opacity:0.3;transform:rotate(0deg)} }
-@keyframes sweep3 { 0%,100%{opacity:0.1;transform:rotate(2deg)} 50%{opacity:0.25;transform:rotate(-1deg)} }
+/* Beam pulse animations */
+.beam-r { animation: beamPulse1 5s ease-in-out infinite; }
+.beam-o { animation: beamPulse2 5.5s ease-in-out infinite; }
+.beam-g { animation: beamPulse3 4.8s ease-in-out infinite; }
+.beam-t { animation: beamPulse4 5.2s ease-in-out infinite; }
+.beam-b { animation: beamPulse5 4.5s ease-in-out infinite; }
+.beam-i { animation: beamPulse6 5.8s ease-in-out infinite; }
+.beam-v { animation: beamPulse7 4.2s ease-in-out infinite; }
+@keyframes beamPulse1 { 0%,100%{opacity:0.75} 50%{opacity:1} }
+@keyframes beamPulse2 { 0%,100%{opacity:0.7} 50%{opacity:0.95} }
+@keyframes beamPulse3 { 0%,100%{opacity:0.8} 50%{opacity:1} }
+@keyframes beamPulse4 { 0%,100%{opacity:0.7} 50%{opacity:0.95} }
+@keyframes beamPulse5 { 0%,100%{opacity:0.75} 50%{opacity:1} }
+@keyframes beamPulse6 { 0%,100%{opacity:0.7} 50%{opacity:0.9} }
+@keyframes beamPulse7 { 0%,100%{opacity:0.8} 50%{opacity:1} }
+
+/* Prism shimmer */
+.prism-body { animation: prismShimmer 6s ease-in-out infinite; }
+@keyframes prismShimmer { 0%,100%{opacity:0.85} 50%{opacity:0.95} }
 
 /* ===== Intro ===== */
 .intro {
   max-width: 720px;
-  margin: 44px auto 0;
+  margin: 40px auto 0;
   text-align: center;
 }
 .intro p {
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   color: var(--text-dim);
-  line-height: 2;
+  line-height: 2.1;
   margin-bottom: 10px;
 }
 .intro p:last-child { margin-bottom: 0; }
@@ -275,9 +342,9 @@ body {
 .intro strong::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: 2px;
-  height: 4px;
-  background: rgba(245,158,11,0.18);
+  left: 0; right: 0; bottom: 1px;
+  height: 5px;
+  background: rgba(245,208,120,0.14);
   border-radius: 2px;
   z-index: -1;
 }
@@ -286,56 +353,58 @@ body {
 .stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   max-width: 780px;
-  margin: 40px auto 0;
+  margin: 44px auto 0;
 }
 .stat {
   text-align: center;
-  padding: 14px 20px;
-  min-width: 80px;
-  border-radius: 8px;
+  padding: 18px 24px;
+  min-width: 90px;
+  border-radius: 10px;
   background: var(--bg-card);
   box-shadow: var(--shadow);
   transition: all var(--ease);
   border: 1px solid var(--border);
   position: relative;
+  backdrop-filter: blur(8px);
 }
 .stat::after {
   content: "";
   position: absolute;
   top: 0; left: 20%; right: 20%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(245,158,11,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(245,208,120,0.25), transparent);
   opacity: 0;
   transition: opacity var(--ease);
 }
-.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--amber); }
+.stat:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: rgba(245,208,120,0.25); }
 .stat:hover::after { opacity: 1; }
 .stat .num {
   display: block;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 900;
-  color: var(--amber-dark);
+  color: var(--light-source);
   line-height: 1.2;
   letter-spacing: 1px;
+  font-family: "Georgia", "Times New Roman", serif;
 }
 .stat .lbl {
   display: block;
   font-size: 0.72rem;
   color: var(--text-dim);
-  margin-top: 3px;
+  margin-top: 4px;
   letter-spacing: 0.5px;
 }
 
 /* ===== Section Header ===== */
 .section-head {
   text-align: center;
-  margin: 70px 0 36px;
+  margin: 80px 0 40px;
 }
 .section-head h2 {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: var(--text-bright);
   letter-spacing: 3px;
@@ -347,19 +416,43 @@ body {
   content: "";
   position: absolute;
   top: 50%;
-  width: 28px;
+  width: 32px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--amber-dark));
 }
-.section-head h2::before { right: calc(100% + 16px); background: linear-gradient(90deg, var(--amber-dark), transparent); }
-.section-head h2::after  { left: calc(100% + 16px); background: linear-gradient(90deg, transparent, var(--amber-dark)); }
+.section-head h2::before {
+  right: calc(100% + 18px);
+  background: linear-gradient(90deg, transparent, var(--light-source));
+}
+.section-head h2::after {
+  left: calc(100% + 18px);
+  background: linear-gradient(90deg, var(--light-source), transparent);
+}
 .section-head .sub {
   font-size: 0.85rem;
   color: var(--text-dim);
-  margin-top: 10px;
+  margin-top: 12px;
   letter-spacing: 0.5px;
-  opacity: 0.75;
+  opacity: 0.7;
 }
+
+/* ===== Spectral Bar ===== */
+.spectral-bar {
+  display: flex;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  opacity: 0.7;
+}
+.spectral-bar span { flex: 1; }
+.spectral-bar span:nth-child(1) { background: var(--s1); }
+.spectral-bar span:nth-child(2) { background: var(--s2); }
+.spectral-bar span:nth-child(3) { background: var(--s3); }
+.spectral-bar span:nth-child(4) { background: var(--s4); }
+.spectral-bar span:nth-child(5) { background: var(--s5); }
+.spectral-bar span:nth-child(6) { background: var(--s6); }
+.spectral-bar span:nth-child(7) { background: var(--s7); }
 
 /* ===== Window Cards Grid ===== */
 .window-grid {
@@ -380,11 +473,12 @@ body {
   transition: all var(--ease);
   position: relative;
   box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
 }
 .window:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--amber);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  border-color: rgba(255,255,255,0.15);
   background: var(--bg-card-hover);
 }
 .window::before {
@@ -396,20 +490,20 @@ body {
   z-index: 2;
 }
 .window:hover::before { height: 6px; }
-.window.w1::before { background: var(--w1); }
-.window.w2::before { background: var(--w2); }
-.window.w3::before { background: var(--w3); }
-.window.w4::before { background: var(--w4); }
-.window.w5::before { background: var(--w5); }
-.window.w6::before { background: var(--w6); }
-.window.w7::before { background: var(--w7); }
-.window:hover.w1::before { box-shadow: 0 2px 20px var(--w1-glow); }
-.window:hover.w2::before { box-shadow: 0 2px 20px var(--w2-glow); }
-.window:hover.w3::before { box-shadow: 0 2px 20px var(--w3-glow); }
-.window:hover.w4::before { box-shadow: 0 2px 20px var(--w4-glow); }
-.window:hover.w5::before { box-shadow: 0 2px 20px var(--w5-glow); }
-.window:hover.w6::before { box-shadow: 0 2px 20px var(--w6-glow); }
-.window:hover.w7::before { box-shadow: 0 2px 20px var(--w7-glow); }
+.window.w1::before { background: var(--s1); }
+.window.w2::before { background: var(--s2); }
+.window.w3::before { background: var(--s3); }
+.window.w4::before { background: var(--s4); }
+.window.w5::before { background: var(--s5); }
+.window.w6::before { background: var(--s6); }
+.window.w7::before { background: var(--s7); }
+.window:hover.w1::before { box-shadow: 0 2px 24px var(--s1g); }
+.window:hover.w2::before { box-shadow: 0 2px 24px var(--s2g); }
+.window:hover.w3::before { box-shadow: 0 2px 24px var(--s3g); }
+.window:hover.w4::before { box-shadow: 0 2px 24px var(--s4g); }
+.window:hover.w5::before { box-shadow: 0 2px 24px var(--s5g); }
+.window:hover.w6::before { box-shadow: 0 2px 24px var(--s6g); }
+.window:hover.w7::before { box-shadow: 0 2px 24px var(--s7g); }
 
 .window .win-glow {
   position: absolute;
@@ -422,37 +516,37 @@ body {
   pointer-events: none;
   z-index: 0;
 }
-.window.w1 .win-glow { background: radial-gradient(ellipse, rgba(220,38,38,0.08), transparent 70%); }
-.window.w2 .win-glow { background: radial-gradient(ellipse, rgba(29,78,216,0.08), transparent 70%); }
-.window.w3 .win-glow { background: radial-gradient(ellipse, rgba(5,150,105,0.08), transparent 70%); }
-.window.w4 .win-glow { background: radial-gradient(ellipse, rgba(234,88,12,0.08), transparent 70%); }
-.window.w5 .win-glow { background: radial-gradient(ellipse, rgba(124,58,237,0.08), transparent 70%); }
-.window.w6 .win-glow { background: radial-gradient(ellipse, rgba(185,28,28,0.08), transparent 70%); }
-.window.w7 .win-glow { background: radial-gradient(ellipse, rgba(8,145,178,0.08), transparent 70%); }
+.window.w1 .win-glow { background: radial-gradient(ellipse, rgba(255,107,107,0.1), transparent 70%); }
+.window.w2 .win-glow { background: radial-gradient(ellipse, rgba(243,156,18,0.1), transparent 70%); }
+.window.w3 .win-glow { background: radial-gradient(ellipse, rgba(46,204,113,0.1), transparent 70%); }
+.window.w4 .win-glow { background: radial-gradient(ellipse, rgba(26,188,156,0.1), transparent 70%); }
+.window.w5 .win-glow { background: radial-gradient(ellipse, rgba(52,152,219,0.1), transparent 70%); }
+.window.w6 .win-glow { background: radial-gradient(ellipse, rgba(108,92,231,0.1), transparent 70%); }
+.window.w7 .win-glow { background: radial-gradient(ellipse, rgba(155,89,182,0.1), transparent 70%); }
 .window:hover .win-glow { opacity: 1; }
 
 .window-num {
   position: absolute;
   top: 14px; right: 18px;
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 900;
   line-height: 1;
-  opacity: 0.04;
+  opacity: 0.03;
   pointer-events: none;
   transition: opacity var(--ease);
   font-family: "Georgia", "Times New Roman", serif;
 }
 .window:hover .window-num { opacity: 0.08; }
-.window.w1 .window-num, .window:hover.w1 .window-num { color: var(--w1); }
-.window.w2 .window-num, .window:hover.w2 .window-num { color: var(--w2); }
-.window.w3 .window-num, .window:hover.w3 .window-num { color: var(--w3); }
-.window.w4 .window-num, .window:hover.w4 .window-num { color: var(--w4); }
-.window.w5 .window-num, .window:hover.w5 .window-num { color: var(--w5); }
-.window.w6 .window-num, .window:hover.w6 .window-num { color: var(--w6); }
-.window.w7 .window-num, .window:hover.w7 .window-num { color: var(--w7); }
+.window.w1 .window-num, .window:hover.w1 .window-num { color: var(--s1); }
+.window.w2 .window-num, .window:hover.w2 .window-num { color: var(--s2); }
+.window.w3 .window-num, .window:hover.w3 .window-num { color: var(--s3); }
+.window.w4 .window-num, .window:hover.w4 .window-num { color: var(--s4); }
+.window.w5 .window-num, .window:hover.w5 .window-num { color: var(--s5); }
+.window.w6 .window-num, .window:hover.w6 .window-num { color: var(--s6); }
+.window.w7 .window-num, .window:hover.w7 .window-num { color: var(--s7); }
 
 .window-body {
-  padding: 24px 24px 20px;
+  padding: 26px 24px 22px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -461,25 +555,25 @@ body {
 }
 
 .window-icon {
-  width: 46px; height: 46px;
+  width: 48px; height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  margin-bottom: 14px;
-  background: rgba(245,158,11,0.04);
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  background: rgba(245,208,120,0.04);
   border: 1px solid var(--border);
   transition: all var(--ease);
   position: relative;
 }
-.window.w1:hover .window-icon { border-color: rgba(220,38,38,0.25); box-shadow: 0 0 0 3px rgba(220,38,38,0.06); }
-.window.w2:hover .window-icon { border-color: rgba(29,78,216,0.25); box-shadow: 0 0 0 3px rgba(29,78,216,0.06); }
-.window.w3:hover .window-icon { border-color: rgba(5,150,105,0.25); box-shadow: 0 0 0 3px rgba(5,150,105,0.06); }
-.window.w4:hover .window-icon { border-color: rgba(234,88,12,0.25); box-shadow: 0 0 0 3px rgba(234,88,12,0.06); }
-.window.w5:hover .window-icon { border-color: rgba(124,58,237,0.25); box-shadow: 0 0 0 3px rgba(124,58,237,0.06); }
-.window.w6:hover .window-icon { border-color: rgba(185,28,28,0.25); box-shadow: 0 0 0 3px rgba(185,28,28,0.06); }
-.window.w7:hover .window-icon { border-color: rgba(8,145,178,0.25); box-shadow: 0 0 0 3px rgba(8,145,178,0.06); }
+.window.w1:hover .window-icon { border-color: rgba(255,107,107,0.3); box-shadow: 0 0 0 4px rgba(255,107,107,0.06); }
+.window.w2:hover .window-icon { border-color: rgba(243,156,18,0.3); box-shadow: 0 0 0 4px rgba(243,156,18,0.06); }
+.window.w3:hover .window-icon { border-color: rgba(46,204,113,0.3); box-shadow: 0 0 0 4px rgba(46,204,113,0.06); }
+.window.w4:hover .window-icon { border-color: rgba(26,188,156,0.3); box-shadow: 0 0 0 4px rgba(26,188,156,0.06); }
+.window.w5:hover .window-icon { border-color: rgba(52,152,219,0.3); box-shadow: 0 0 0 4px rgba(52,152,219,0.06); }
+.window.w6:hover .window-icon { border-color: rgba(108,92,231,0.3); box-shadow: 0 0 0 4px rgba(108,92,231,0.06); }
+.window.w7:hover .window-icon { border-color: rgba(155,89,182,0.3); box-shadow: 0 0 0 4px rgba(155,89,182,0.06); }
 
 .window h3 {
   font-size: 1.05rem;
@@ -490,7 +584,7 @@ body {
   line-height: 1.4;
 }
 .window .desc {
-  font-size: 0.84rem;
+  font-size: 0.83rem;
   color: var(--text-dim);
   line-height: 1.7;
   margin-bottom: 16px;
@@ -500,53 +594,54 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--text-dim);
   border-top: 1px solid var(--border);
-  padding-top: 12px;
+  padding-top: 14px;
 }
 .window-meta .badge {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   padding: 3px 10px;
   border-radius: 10px;
   font-weight: 600;
   letter-spacing: 0.3px;
 }
-.window.w1 .badge { background: rgba(220,38,38,0.06); color: var(--w1); }
-.window.w2 .badge { background: rgba(29,78,216,0.06); color: var(--w2); }
-.window.w3 .badge { background: rgba(5,150,105,0.06); color: var(--w3); }
-.window.w4 .badge { background: rgba(234,88,12,0.06); color: var(--w4); }
-.window.w5 .badge { background: rgba(124,58,237,0.06); color: var(--w5); }
-.window.w6 .badge { background: rgba(185,28,28,0.06); color: var(--w6); }
-.window.w7 .badge { background: rgba(8,145,178,0.06); color: var(--w7); }
+.window.w1 .badge { background: rgba(255,107,107,0.08); color: var(--s1); }
+.window.w2 .badge { background: rgba(243,156,18,0.08); color: var(--s2); }
+.window.w3 .badge { background: rgba(46,204,113,0.08); color: var(--s3); }
+.window.w4 .badge { background: rgba(26,188,156,0.08); color: var(--s4); }
+.window.w5 .badge { background: rgba(52,152,219,0.08); color: var(--s5); }
+.window.w6 .badge { background: rgba(108,92,231,0.08); color: var(--s6); }
+.window.w7 .badge { background: rgba(155,89,182,0.08); color: var(--s7); }
 .window-meta .arrow {
   font-size: 0.78rem;
   opacity: 0;
   transform: translateX(-8px);
   transition: all var(--ease);
   font-weight: 600;
-  color: var(--amber-dark);
+  color: var(--light-source);
 }
 .window:hover .arrow {
   opacity: 1;
   transform: translateX(0);
 }
 
-/* ===== Sequence Section ===== */
+/* ===== Observation Sequence ===== */
 .path-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 44px 36px;
+  padding: 48px 40px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 .path-card h3 {
   text-align: center;
   font-size: 1.15rem;
   color: var(--text-bright);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   letter-spacing: 1px;
   font-weight: 750;
 }
@@ -554,8 +649,8 @@ body {
   text-align: center;
   font-size: 0.82rem;
   color: var(--text-dim);
-  margin-bottom: 36px;
-  opacity: 0.7;
+  margin-bottom: 40px;
+  opacity: 0.65;
 }
 
 .path-track {
@@ -567,21 +662,21 @@ body {
 .path-track::before {
   content: "";
   position: absolute;
-  top: 22px;
-  left: 30px;
-  right: 30px;
+  top: 24px;
+  left: 36px;
+  right: 36px;
   height: 2px;
   border-radius: 1px;
   background: linear-gradient(90deg,
-    var(--w1) 0%, var(--w1) 14%,
-    var(--w2) 14%, var(--w2) 28%,
-    var(--w3) 28%, var(--w3) 42%,
-    var(--w4) 42%, var(--w4) 57%,
-    var(--w5) 57%, var(--w5) 71%,
-    var(--w6) 71%, var(--w6) 85%,
-    var(--w7) 85%, var(--w7) 100%);
+    var(--s1) 0%, var(--s1) 14%,
+    var(--s2) 14%, var(--s2) 28%,
+    var(--s3) 28%, var(--s3) 42%,
+    var(--s4) 42%, var(--s4) 57%,
+    var(--s5) 57%, var(--s5) 71%,
+    var(--s6) 71%, var(--s6) 85%,
+    var(--s7) 85%, var(--s7) 100%);
   z-index: 0;
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .path-node {
@@ -595,7 +690,7 @@ body {
   min-width: 0;
 }
 .path-dot {
-  width: 46px; height: 46px;
+  width: 50px; height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -603,29 +698,27 @@ body {
   font-weight: 800;
   font-size: 0.95rem;
   color: #fff;
-  margin-bottom: 10px;
-  border: 3px solid rgba(255,255,255,0.3);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 12px;
+  border: 3px solid rgba(255,255,255,0.25);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.3);
   transition: all var(--ease);
   position: relative;
 }
-.path-node:nth-child(1) .path-dot { background: var(--w1); }
-.path-node:nth-child(2) .path-dot { background: var(--w2); }
-.path-node:nth-child(3) .path-dot { background: var(--w3); }
-.path-node:nth-child(4) .path-dot { background: var(--w4); }
-.path-node:nth-child(5) .path-dot { background: var(--w5); }
-.path-node:nth-child(6) .path-dot { background: var(--w6); }
-.path-node:nth-child(7) .path-dot { background: var(--w7); }
-.path-node:hover .path-dot {
-  transform: scale(1.15);
-}
-.path-node:nth-child(1):hover .path-dot { box-shadow: 0 0 24px var(--w1-glow); }
-.path-node:nth-child(2):hover .path-dot { box-shadow: 0 0 24px var(--w2-glow); }
-.path-node:nth-child(3):hover .path-dot { box-shadow: 0 0 24px var(--w3-glow); }
-.path-node:nth-child(4):hover .path-dot { box-shadow: 0 0 24px var(--w4-glow); }
-.path-node:nth-child(5):hover .path-dot { box-shadow: 0 0 24px var(--w5-glow); }
-.path-node:nth-child(6):hover .path-dot { box-shadow: 0 0 24px var(--w6-glow); }
-.path-node:nth-child(7):hover .path-dot { box-shadow: 0 0 24px var(--w7-glow); }
+.path-node:nth-child(1) .path-dot { background: var(--s1); }
+.path-node:nth-child(2) .path-dot { background: var(--s2); }
+.path-node:nth-child(3) .path-dot { background: var(--s3); }
+.path-node:nth-child(4) .path-dot { background: var(--s4); }
+.path-node:nth-child(5) .path-dot { background: var(--s5); }
+.path-node:nth-child(6) .path-dot { background: var(--s6); }
+.path-node:nth-child(7) .path-dot { background: var(--s7); }
+.path-node:hover .path-dot { transform: scale(1.18); }
+.path-node:nth-child(1):hover .path-dot { box-shadow: 0 0 28px var(--s1g); }
+.path-node:nth-child(2):hover .path-dot { box-shadow: 0 0 28px var(--s2g); }
+.path-node:nth-child(3):hover .path-dot { box-shadow: 0 0 28px var(--s3g); }
+.path-node:nth-child(4):hover .path-dot { box-shadow: 0 0 28px var(--s4g); }
+.path-node:nth-child(5):hover .path-dot { box-shadow: 0 0 28px var(--s5g); }
+.path-node:nth-child(6):hover .path-dot { box-shadow: 0 0 28px var(--s6g); }
+.path-node:nth-child(7):hover .path-dot { box-shadow: 0 0 28px var(--s7g); }
 .path-name {
   font-size: 0.78rem;
   font-weight: 700;
@@ -644,27 +737,28 @@ body {
 .progress-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 36px 36px;
+  padding: 40px 40px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
 }
 .progress-card h3 {
   text-align: center;
   font-size: 1.15rem;
   color: var(--text-bright);
-  margin-bottom: 26px;
+  margin-bottom: 28px;
   letter-spacing: 1px;
   font-weight: 750;
 }
 .progress-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 .progress-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 .progress-row .label {
   width: 210px;
@@ -676,7 +770,7 @@ body {
 .progress-row .track {
   flex: 1;
   height: 8px;
-  background: var(--border-light);
+  background: rgba(255,255,255,0.04);
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -687,13 +781,13 @@ body {
   transition: width 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
   width: 0%;
 }
-.progress-row:nth-child(1) .fill { background: var(--w1); box-shadow: 0 0 6px var(--w1-glow); }
-.progress-row:nth-child(2) .fill { background: var(--w2); box-shadow: 0 0 6px var(--w2-glow); }
-.progress-row:nth-child(3) .fill { background: var(--w3); box-shadow: 0 0 6px var(--w3-glow); }
-.progress-row:nth-child(4) .fill { background: var(--w4); box-shadow: 0 0 6px var(--w4-glow); }
-.progress-row:nth-child(5) .fill { background: var(--w5); box-shadow: 0 0 6px var(--w5-glow); }
-.progress-row:nth-child(6) .fill { background: var(--w6); box-shadow: 0 0 6px var(--w6-glow); }
-.progress-row:nth-child(7) .fill { background: var(--w7); box-shadow: 0 0 6px var(--w7-glow); }
+.progress-row:nth-child(1) .fill { background: var(--s1); box-shadow: 0 0 8px var(--s1g); }
+.progress-row:nth-child(2) .fill { background: var(--s2); box-shadow: 0 0 8px var(--s2g); }
+.progress-row:nth-child(3) .fill { background: var(--s3); box-shadow: 0 0 8px var(--s3g); }
+.progress-row:nth-child(4) .fill { background: var(--s4); box-shadow: 0 0 8px var(--s4g); }
+.progress-row:nth-child(5) .fill { background: var(--s5); box-shadow: 0 0 8px var(--s5g); }
+.progress-row:nth-child(6) .fill { background: var(--s6); box-shadow: 0 0 8px var(--s6g); }
+.progress-row:nth-child(7) .fill { background: var(--s7); box-shadow: 0 0 8px var(--s7g); }
 .progress-row .pct {
   width: 42px;
   text-align: right;
@@ -713,45 +807,46 @@ body {
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  padding: 24px 24px 20px;
+  padding: 26px 24px 22px;
   display: flex;
   flex-direction: column;
   transition: all var(--ease);
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 .podcast-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--amber);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  border-color: rgba(255,255,255,0.15);
   background: var(--bg-card-hover);
 }
-.podcast-card.p1 { border-top: 3px solid var(--w1); }
-.podcast-card.p2 { border-top: 3px solid var(--w2); }
-.podcast-card.p3 { border-top: 3px solid var(--w3); }
-.podcast-card.p4 { border-top: 3px solid var(--w4); }
-.podcast-card.p5 { border-top: 3px solid var(--w5); }
-.podcast-card.p6 { border-top: 3px solid var(--w6); }
+.podcast-card.p1 { border-top: 3px solid var(--s1); }
+.podcast-card.p2 { border-top: 3px solid var(--s2); }
+.podcast-card.p3 { border-top: 3px solid var(--s3); }
+.podcast-card.p4 { border-top: 3px solid var(--s4); }
+.podcast-card.p5 { border-top: 3px solid var(--s5); }
+.podcast-card.p6 { border-top: 3px solid var(--s6); }
 
 .podcast-card .ep-num {
   font-family: "Georgia", "Times New Roman", serif;
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 900;
-  opacity: 0.04;
+  opacity: 0.03;
   position: absolute;
-  top: 8px; right: 16px;
+  top: 6px; right: 16px;
   pointer-events: none;
   line-height: 1;
   transition: opacity var(--ease);
 }
-.podcast-card:hover .ep-num { opacity: 0.08; }
-.podcast-card.p1 .ep-num { color: var(--w1); }
-.podcast-card.p2 .ep-num { color: var(--w2); }
-.podcast-card.p3 .ep-num { color: var(--w3); }
-.podcast-card.p4 .ep-num { color: var(--w4); }
-.podcast-card.p5 .ep-num { color: var(--w5); }
-.podcast-card.p6 .ep-num { color: var(--w6); }
+.podcast-card:hover .ep-num { opacity: 0.07; }
+.podcast-card.p1 .ep-num { color: var(--s1); }
+.podcast-card.p2 .ep-num { color: var(--s2); }
+.podcast-card.p3 .ep-num { color: var(--s3); }
+.podcast-card.p4 .ep-num { color: var(--s4); }
+.podcast-card.p5 .ep-num { color: var(--s5); }
+.podcast-card.p6 .ep-num { color: var(--s6); }
 
 .podcast-card h4 {
   font-size: 1rem;
@@ -776,25 +871,25 @@ body {
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid var(--border);
-  padding-top: 12px;
+  padding-top: 14px;
   position: relative;
   z-index: 1;
 }
 .podcast-card .ep-badge {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   padding: 3px 10px;
   border-radius: 10px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  background: rgba(245,158,11,0.08);
-  color: var(--amber-dark);
+  background: rgba(245,208,120,0.08);
+  color: var(--light-source);
 }
 .podcast-card .play-btn {
   width: 38px; height: 38px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: rgba(245,158,11,0.06);
-  color: var(--amber-dark);
+  background: rgba(245,208,120,0.06);
+  color: var(--light-source);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -804,26 +899,26 @@ body {
   flex-shrink: 0;
 }
 .podcast-card .play-btn:hover {
-  background: var(--amber);
-  color: #fff;
-  border-color: var(--amber);
-  box-shadow: 0 0 18px var(--amber-glow);
+  background: var(--light-source);
+  color: #1a1a2e;
+  border-color: var(--light-source);
+  box-shadow: 0 0 20px var(--light-glow);
 }
 
-/* ===== Divider ===== */
+/* ===== Shell Divider ===== */
 .shell-divider {
   max-width: 1100px;
-  margin: 60px auto 0;
+  margin: 72px auto 0;
   text-align: center;
   position: relative;
 }
 .shell-divider::before {
   content: "";
   display: block;
-  width: 120px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--amber), transparent);
-  margin: 0 auto 32px;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--light-source), transparent);
+  margin: 0 auto 36px;
   border-radius: 2px;
 }
 .shell-divider h2 {
@@ -836,8 +931,20 @@ body {
 .shell-divider .divider-sub {
   font-size: 0.82rem;
   color: var(--text-dim);
-  margin-top: 8px;
-  opacity: 0.7;
+  margin-top: 10px;
+  opacity: 0.65;
+}
+
+/* ===== Scroll-reveal animation ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ===== MKS Tab System (preserved from original) ===== */
@@ -1090,28 +1197,30 @@ body {
   .player-bar .player-wave { display: none; }
   .player-bar .player-title { font-size: 0.74rem; max-width: 160px; }
 }
+
 </style>
 </head>
 <body>
 
-<!-- ===== Observatory Ambient ===== -->
-<div class="observatory-ambient"></div>
+<!-- ===== Cosmic Ambient ===== -->
+<div class="cosmic-ambient"></div>
 
-<!-- ===== Floating Signal Dots ===== -->
-<div class="signals">
-  <div class="signal s1"></div><div class="signal s2"></div><div class="signal s3"></div>
-  <div class="signal s4"></div><div class="signal s5"></div><div class="signal s6"></div>
-  <div class="signal s7"></div><div class="signal s8"></div><div class="signal s9"></div>
-  <div class="signal s10"></div><div class="signal s11"></div><div class="signal s12"></div>
+<!-- ===== Starfield ===== -->
+<div class="starfield">
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
+  <div class="star"></div><div class="star"></div><div class="star"></div>
 </div>
 
 <!-- ===== Navigation ===== -->
 <nav class="nav" id="top-nav">
   <div class="nav-inner">
     <a href="#top-nav">🔭 首页</a>
-    <a href="#windows">观测窗口</a>
+    <a href="#windows">光谱窗口</a>
     <a href="#sequence">观测序列</a>
-    <a href="#progress">进度</a>
+    <a href="#progress">学习进度</a>
     <a href="#podcast">🎙️ 播客</a>
     <a href="#mks-system">深度交互</a>
   </div>
@@ -1121,145 +1230,191 @@ body {
 
 <!-- ===== Hero ===== -->
 <header class="hero">
-  <div class="obs-crown"></div>
-  <p class="eyebrow">MKS 知识体系 · 前沿观测台</p>
+  <div class="source-glow"></div>
+  <p class="eyebrow">科技分光镜 · 前沿信号分析</p>
   <h1>卓克<span class="dot">·</span>科技参考3</h1>
-  <p class="tagline">前沿观测台 — 扫描全球科技最前线</p>
-  <p class="sub-tagline">311 篇日更追踪，七个观测窗口 — 每一次扫描都是一次认知刷新</p>
+  <p class="tagline">一束白光穿过三棱镜，分解为七色光谱——每一次折射都是一次认知深化</p>
+  <p class="sub-tagline">317 篇日更追踪 &nbsp;·&nbsp; 七个光谱窗口 &nbsp;·&nbsp; 从混沌信息中分离出清晰的科技信号</p>
 </header>
 
-<!-- ===== Observatory SVG Illustration ===== -->
-<div class="obs-svg-wrap">
-  <svg class="obs-svg" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+<!-- ===== Prism Spectroscope SVG ===== -->
+<div class="prism-wrap">
+  <svg class="prism-svg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="dish-glow" cx="50%" cy="85%" r="50%">
-        <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.12"/>
-        <stop offset="100%" stop-color="#fafbfc" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="beam1" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#dc2626" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#dc2626" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#dc2626" stop-opacity="0.02"/>
+      <!-- Source light gradient -->
+      <linearGradient id="source-beam" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f8e8c0" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#e8c456" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#f5d078" stop-opacity="0.9"/>
       </linearGradient>
-      <linearGradient id="beam2" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#1d4ed8" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.02"/>
+      <!-- Prism glass gradient -->
+      <linearGradient id="prism-glass" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
+        <stop offset="40%" stop-color="rgba(255,255,255,0.04)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0.08)"/>
       </linearGradient>
-      <linearGradient id="beam3" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#059669" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#059669" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#059669" stop-opacity="0.02"/>
+      <!-- Spectral beam gradients -->
+      <linearGradient id="spec-1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0.15"/>
       </linearGradient>
-      <linearGradient id="beam4" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#ea580c" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#ea580c" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#ea580c" stop-opacity="0.02"/>
+      <linearGradient id="spec-2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f39c12" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#f39c12" stop-opacity="0.15"/>
       </linearGradient>
-      <linearGradient id="beam5" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#7c3aed" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.02"/>
+      <linearGradient id="spec-3" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2ecc71" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#2ecc71" stop-opacity="0.15"/>
       </linearGradient>
-      <linearGradient id="beam6" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#b91c1c" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#b91c1c" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#b91c1c" stop-opacity="0.02"/>
+      <linearGradient id="spec-4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1abc9c" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#1abc9c" stop-opacity="0.15"/>
       </linearGradient>
-      <linearGradient id="beam7" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#0891b2" stop-opacity="0.9"/>
-        <stop offset="60%" stop-color="#0891b2" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#0891b2" stop-opacity="0.02"/>
+      <linearGradient id="spec-5" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3498db" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#3498db" stop-opacity="0.15"/>
       </linearGradient>
+      <linearGradient id="spec-6" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#6c5ce7" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#6c5ce7" stop-opacity="0.15"/>
+      </linearGradient>
+      <linearGradient id="spec-7" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#9b59b6" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#9b59b6" stop-opacity="0.15"/>
+      </linearGradient>
+      <!-- Glow filter -->
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
     </defs>
 
-    <!-- Ground glow -->
-    <ellipse cx="400" cy="195" rx="340" ry="40" fill="url(#dish-glow)"/>
+    <!-- Ambient background glow behind prism -->
+    <ellipse cx="450" cy="175" rx="280" ry="90" fill="rgba(245,208,120,0.04)" filter="url(#softGlow)"/>
 
-    <!-- Observatory platform -->
-    <path d="M80,193 L70,238 Q400,225 730,238 L720,193 Z" fill="#f0f0f0" stroke="#e5e7eb" stroke-width="1.5"/>
-    <path d="M90,195 L400,180 L710,195" fill="none" stroke="#d1d5db" stroke-width="2"/>
-    <rect x="100" y="195" width="600" height="5" rx="2" fill="#e5e7eb"/>
+    <!-- Source beam — converging white light from above -->
+    <polygon points="420,0 480,0 465,155 435,155" fill="url(#source-beam)" opacity="0.7" filter="url(#glow)"/>
+    <!-- Inner bright core -->
+    <polygon points="438,0 462,0 455,155 445,155" fill="#f8e8c0" opacity="0.3"/>
 
-    <!-- Decorative lines on platform -->
-    <path d="M200,215 Q250,212 300,215 Q350,218 400,215 Q450,212 500,215 Q550,218 600,215" fill="none" stroke="#e5e7eb" stroke-width="0.8" opacity="0.6"/>
-    <path d="M220,222 Q400,218 580,222" fill="none" stroke="#e5e7eb" stroke-width="0.5" opacity="0.4"/>
+    <!-- Focal point glow -->
+    <circle cx="450" cy="158" r="8" fill="#f8e8c0" opacity="0.4" filter="url(#glow)"/>
 
-    <!-- Rivets -->
-    <circle cx="140" cy="198" r="3" fill="#d1d5db"/><circle cx="660" cy="198" r="3" fill="#d1d5db"/>
-    <circle cx="250" cy="193" r="2.5" fill="#d1d5db"/><circle cx="550" cy="193" r="2.5" fill="#d1d5db"/>
-
-    <!-- 7 Observation beams (like scanning antennas/spotlights) -->
-    <!-- Beam 1 — AI与芯片 (red) -->
-    <g class="beam-1">
-      <path d="M150,195 C145,140 135,80 160,30 C185,80 195,140 180,195 Z" fill="url(#beam1)" opacity="0.8"/>
-    </g>
-    <!-- Beam 2 — 航天 (blue) -->
-    <g class="beam-2">
-      <path d="M235,195 C230,135 222,75 248,25 C274,75 280,135 265,195 Z" fill="url(#beam2)" opacity="0.8"/>
-    </g>
-    <!-- Beam 3 — 医学 (green) -->
-    <g class="beam-3">
-      <path d="M320,195 C315,135 308,75 335,22 C362,75 368,135 350,195 Z" fill="url(#beam3)" opacity="0.8"/>
-    </g>
-    <!-- Beam 4 — 食品 (orange) -->
-    <g class="beam-4">
-      <path d="M408,195 C403,138 398,78 420,30 C442,78 450,138 435,195 Z" fill="url(#beam4)" opacity="0.8"/>
-    </g>
-    <!-- Beam 5 — 消费品 (purple) -->
-    <g class="beam-5">
-      <path d="M495,195 C490,140 485,80 505,32 C525,80 530,140 520,195 Z" fill="url(#beam5)" opacity="0.8"/>
-    </g>
-    <!-- Beam 6 — 人类演化 (dark red) -->
-    <g class="beam-6">
-      <path d="M580,195 C575,138 568,78 590,28 C612,78 618,138 605,195 Z" fill="url(#beam6)" opacity="0.8"/>
-    </g>
-    <!-- Beam 7 — 科学方法 (teal) -->
-    <g class="beam-7">
-      <path d="M665,195 C660,140 654,82 675,35 C696,82 700,140 690,195 Z" fill="url(#beam7)" opacity="0.8"/>
+    <!-- Prism body — equilateral triangle -->
+    <g class="prism-body">
+      <polygon points="450,140 395,215 505,215" fill="url(#prism-glass)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <!-- Prism internal refraction hint -->
+      <polygon points="450,155 420,200 480,200" fill="rgba(255,255,255,0.03)"/>
+      <!-- Prism edge highlights -->
+      <line x1="450" y1="140" x2="395" y2="215" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+      <line x1="450" y1="140" x2="505" y2="215" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+      <line x1="395" y1="215" x2="505" y2="215" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
     </g>
 
-    <!-- Heat shimmer lines above beams -->
-    <path d="M160,28 Q165,20 170,28" fill="none" stroke="rgba(220,38,38,0.1)" stroke-width="0.8" opacity="0.4">
-      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
-    </path>
-    <path d="M335,20 Q340,12 345,20" fill="none" stroke="rgba(5,150,105,0.1)" stroke-width="0.8" opacity="0.4">
-      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2.5s" repeatCount="indefinite"/>
-    </path>
-    <path d="M505,30 Q510,22 515,30" fill="none" stroke="rgba(124,58,237,0.1)" stroke-width="0.8" opacity="0.4">
-      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3.5s" repeatCount="indefinite"/>
-    </path>
+    <!-- 7 Spectral beams emerging from prism bottom — fanning outward -->
+    <!-- Beam 1 (Red) — far right -->
+    <g class="beam-r">
+      <polygon points="470,215 500,215 590,295 560,295" fill="url(#spec-1)" opacity="0.8"/>
+      <line x1="485" y1="215" x2="575" y2="295" stroke="#ff6b6b" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+    <!-- Beam 2 (Orange) — right -->
+    <g class="beam-o">
+      <polygon points="480,215 505,215 565,290 540,290" fill="url(#spec-2)" opacity="0.8"/>
+      <line x1="492" y1="215" x2="552" y2="290" stroke="#f39c12" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+    <!-- Beam 3 (Green) — center-right -->
+    <g class="beam-g">
+      <polygon points="470,215 490,215 525,285 505,285" fill="url(#spec-3)" opacity="0.8"/>
+      <line x1="480" y1="215" x2="515" y2="285" stroke="#2ecc71" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+    <!-- Beam 4 (Teal) — near center -->
+    <g class="beam-t">
+      <polygon points="455,215 470,215 480,280 465,280" fill="url(#spec-4)" opacity="0.8"/>
+      <line x1="462" y1="215" x2="472" y2="280" stroke="#1abc9c" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+    <!-- Beam 5 (Blue) — center-left -->
+    <g class="beam-b">
+      <polygon points="430,215 445,215 430,280 415,280" fill="url(#spec-5)" opacity="0.8"/>
+      <line x1="438" y1="215" x2="422" y2="280" stroke="#3498db" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+    <!-- Beam 6 (Indigo) — left -->
+    <g class="beam-i">
+      <polygon points="400,215 420,215 375,285 355,285" fill="url(#spec-6)" opacity="0.8"/>
+      <line x1="410" y1="215" x2="365" y2="285" stroke="#6c5ce7" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+    <!-- Beam 7 (Violet) — far left -->
+    <g class="beam-v">
+      <polygon points="375,215 400,215 335,290 310,290" fill="url(#spec-7)" opacity="0.8"/>
+      <line x1="388" y1="215" x2="322" y2="290" stroke="#9b59b6" stroke-width="1.5" opacity="0.6" filter="url(#glow)"/>
+    </g>
+
+    <!-- Scattered light particles at beam ends -->
+    <circle cx="575" cy="295" r="1.5" fill="#ff6b6b" opacity="0.5">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="552" cy="290" r="1.2" fill="#f39c12" opacity="0.5">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="515" cy="285" r="1.4" fill="#2ecc71" opacity="0.5">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="365" cy="285" r="1.3" fill="#6c5ce7" opacity="0.5">
+      <animate attributeName="opacity" values="0.25;0.65;0.25" dur="3.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="322" cy="290" r="1.5" fill="#9b59b6" opacity="0.5">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4.2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Ground reflection glow -->
+    <ellipse cx="450" cy="300" rx="200" ry="15" fill="rgba(245,208,120,0.04)"/>
   </svg>
 </div>
 
+<!-- Spectral dust particles near the prism -->
+<div class="starfield">
+  <div class="spec-dust sd1"></div><div class="spec-dust sd2"></div>
+  <div class="spec-dust sd3"></div><div class="spec-dust sd4"></div>
+  <div class="spec-dust sd5"></div><div class="spec-dust sd6"></div>
+  <div class="spec-dust sd7"></div>
+</div>
+
 <!-- ===== Intro ===== -->
-<section class="intro">
+<section class="intro reveal">
   <p>
-    科技世界日新月异——AI 在指数级进化，芯片在逼近物理极限，太空运输正在改写经济学。卓克以<strong>311 篇日更追踪</strong>覆盖了 2023-2024 年全球科技的最重要信号，从 ChatGPT 到星舰，从 LK-99 到端到端智驾。
+    2023 到 2024，两个科技爆炸年。AI 跨越了从"能聊天"到"能推理"的门槛；星舰完成了从"烟花"到"筷子夹火箭"的跨越；基因编辑从实验室走进了人体。科技世界的信号密度前所未有——但<strong>信号越密集，噪音也越嘈杂</strong>。
   </p>
   <p>
-    这不是一本"新闻合集"，而是一座<strong>前沿观测台</strong>：七个观测窗口各自锁定一个关键领域，10 个核心概念织成认知框架，让你在科技洪流中拥有自己的判断坐标——不被热点裹挟，不被谣言误导。
+    卓克以<strong>317 篇日更追踪</strong>，将混沌的白光穿过分光镜——七个光谱窗口各自锁定一个关键领域，10 个核心概念织成认知坐标。这不是一本新闻合集，而是一台<strong>科技信号的频谱分析仪</strong>：告诉你什么是真正的突破，什么是聪明的忽悠，什么只是过眼云烟。
   </p>
 </section>
 
 <!-- ===== Stats ===== -->
-<div class="stats">
-  <div class="stat"><span class="num">311</span><span class="lbl">篇日更文章</span></div>
-  <div class="stat"><span class="num">7</span><span class="lbl">观测窗口</span></div>
+<div class="stats reveal">
+  <div class="stat"><span class="num">317</span><span class="lbl">篇日更文章</span></div>
+  <div class="stat"><span class="num">7</span><span class="lbl">光谱窗口</span></div>
   <div class="stat"><span class="num">10</span><span class="lbl">核心概念</span></div>
   <div class="stat"><span class="num">200+</span><span class="lbl">道题库</span></div>
 </div>
 
-<!-- ===== Seven Observation Windows ===== -->
-<div class="section-head" id="windows">
-  <h2>七大观测窗口</h2>
-  <p class="sub">七个领域，七种视角 — 从芯片到星辰，从基因到认知</p>
+<!-- ===== Spectral Bar ===== -->
+<div class="spectral-bar reveal">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<!-- ===== Seven Spectral Windows ===== -->
+<div class="section-head reveal" id="windows">
+  <h2>七大光谱窗口</h2>
+  <p class="sub">一道白光分解为七条光谱 — 每条光谱揭示一个领域的前沿信号</p>
 </div>
 
 <div class="window-grid">
 
-  <!-- Window 1: AI与芯片革命 -->
-  <a class="window w1" href="1-AI与芯片革命.html">
+  <!-- Window 1: AI与芯片 — 红 (longest wavelength, hottest computation) -->
+  <a class="window w1 reveal" href="1-AI与芯片革命.html">
     <div class="win-glow"></div>
     <span class="window-num">01</span>
     <div class="window-body">
@@ -1268,13 +1423,13 @@ body {
       <p class="desc">LLM原理与能力边界、AI安全对齐、EUV光刻与先进制程、GPU/HBM算力竞赛。从ChatGPT到Sora，追踪AI奇迹年的技术底层逻辑。</p>
       <div class="window-meta">
         <span class="badge">75 篇 · 10 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
 
-  <!-- Window 2: 航天与太空探索 -->
-  <a class="window w2" href="2-航天与太空探索.html">
+  <!-- Window 2: 航天 — 橙 (rocket fire) -->
+  <a class="window w2 reveal" href="2-航天与太空探索.html">
     <div class="win-glow"></div>
     <span class="window-num">02</span>
     <div class="window-body">
@@ -1283,13 +1438,13 @@ body {
       <p class="desc">星舰与可回收火箭的经济学革命、月球基地计划、木卫二生命探索、旅行者号的星际使命。走出地球的每一步技术跨越。</p>
       <div class="window-meta">
         <span class="badge">20 篇 · 6 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
 
-  <!-- Window 3: 医学与健康前沿 -->
-  <a class="window w3" href="3-医学与健康前沿.html">
+  <!-- Window 3: 医学 — 绿 (life) -->
+  <a class="window w3 reveal" href="3-医学与健康前沿.html">
     <div class="win-glow"></div>
     <span class="window-num">03</span>
     <div class="window-body">
@@ -1298,13 +1453,13 @@ body {
       <p class="desc">mRNA疫苗技术、癌症免疫治疗、FDA审批逻辑、阿尔茨海默症最新研究、长新冠认知。用科学方法理解疾病与身体的复杂关系。</p>
       <div class="window-meta">
         <span class="badge">59 篇 · 9 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
 
-  <!-- Window 4: 食品营养与安全 -->
-  <a class="window w4" href="4-食品营养与安全.html">
+  <!-- Window 4: 食品 — 青 (fresh, natural) -->
+  <a class="window w4 reveal" href="4-食品营养与安全.html">
     <div class="win-glow"></div>
     <span class="window-num">04</span>
     <div class="window-body">
@@ -1313,13 +1468,13 @@ body {
       <p class="desc">阿斯巴甜致癌风波、转基因食品科学评估、微塑料健康风险、食品添加剂安全性。用证据等级思维拆解"吃进去的焦虑"。</p>
       <div class="window-meta">
         <span class="badge">44 篇 · 7 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
 
-  <!-- Window 5: 消费品评测与避坑 -->
-  <a class="window w5" href="5-消费品评测与避坑.html">
+  <!-- Window 5: 消费品 — 蓝 (technology, trust) -->
+  <a class="window w5 reveal" href="5-消费品评测与避坑.html">
     <div class="win-glow"></div>
     <span class="window-num">05</span>
     <div class="window-body">
@@ -1328,13 +1483,13 @@ body {
       <p class="desc">石墨烯电暖器智商税、电动车选购逻辑、净水器技术对比、降噪耳机参数解读。建立科技消费的理性决策框架。</p>
       <div class="window-meta">
         <span class="badge">47 篇 · 8 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
 
-  <!-- Window 6: 人类演化与文明进程 -->
-  <a class="window w6" href="6-人类演化与文明进程.html">
+  <!-- Window 6: 演化 — 靛 (deep time, mystery) -->
+  <a class="window w6 reveal" href="6-人类演化与文明进程.html">
     <div class="win-glow"></div>
     <span class="window-num">06</span>
     <div class="window-body">
@@ -1343,13 +1498,13 @@ body {
       <p class="desc">朊粒与生命边界、远古病毒与人类基因组、嵌合体现象、人类迁徙的基因证据。从演化纵深理解"我们是谁"。</p>
       <div class="window-meta">
         <span class="badge">32 篇 · 5 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
 
-  <!-- Window 7: 科学方法与认知论 -->
-  <a class="window w7" href="7-科学方法与认知论.html">
+  <!-- Window 7: 科学方法 — 紫 (wisdom, highest frequency) -->
+  <a class="window w7 reveal" href="7-科学方法与认知论.html">
     <div class="win-glow"></div>
     <span class="window-num">07</span>
     <div class="window-body">
@@ -1358,7 +1513,7 @@ body {
       <p class="desc">同行评议制度的运作与缺陷、第一性原理思维、可复现性危机、"凉水逻辑"。掌握识别科技真假的方法论武器。</p>
       <div class="window-meta">
         <span class="badge">34 篇 · 6 个核心概念</span>
-        <span class="arrow">进入观测 →</span>
+        <span class="arrow">进入光谱 →</span>
       </div>
     </div>
   </a>
@@ -1366,12 +1521,12 @@ body {
 </div>
 
 <!-- ===== Observation Sequence ===== -->
-<div class="section-head" id="sequence">
+<div class="section-head reveal" id="sequence">
   <h2>观测序列</h2>
   <p class="sub">从算力基础到方法论收束 — 七个窗口的推荐浏览顺序</p>
 </div>
 
-<section class="path-section">
+<section class="path-section reveal">
   <div class="path-card">
     <h3>前沿观测的推荐路径</h3>
     <p class="path-sub">层层递进 — 每扇窗口都为下一扇打开更广的视野</p>
@@ -1388,166 +1543,172 @@ body {
       </div>
       <div class="path-node">
         <div class="path-dot">3</div>
-        <div class="path-name">医学·生命科学</div>
-        <div class="path-desc">深入人体复杂系统</div>
+        <div class="path-name">医学·生命前沿</div>
+        <div class="path-desc">理解人体复杂性</div>
       </div>
       <div class="path-node">
         <div class="path-dot">4</div>
-        <div class="path-name">食品·日常安全</div>
-        <div class="path-desc">运用证据等级思维</div>
+        <div class="path-name">食品·安全评估</div>
+        <div class="path-desc">建立证据等级思维</div>
       </div>
       <div class="path-node">
         <div class="path-dot">5</div>
-        <div class="path-name">消费·理性决策</div>
-        <div class="path-desc">应用智商税框架</div>
+        <div class="path-name">消费品·决策</div>
+        <div class="path-desc">理性消费避坑</div>
       </div>
       <div class="path-node">
         <div class="path-dot">6</div>
-        <div class="path-name">人类·演化纵深</div>
-        <div class="path-desc">拉长文明时间尺度</div>
+        <div class="path-name">演化·文明进程</div>
+        <div class="path-desc">纵深理解人类</div>
       </div>
       <div class="path-node">
         <div class="path-dot">7</div>
-        <div class="path-name">科学·方法论收束</div>
-        <div class="path-desc">形成完整认知闭环</div>
+        <div class="path-name">科学方法·收束</div>
+        <div class="path-desc">方法论武器化</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== Progress ===== -->
-<div class="section-head" id="progress">
-  <h2>观测进度</h2>
+<!-- ===== Progress Section ===== -->
+<div class="section-head reveal" id="progress">
+  <h2>学习进度</h2>
+  <p class="sub">七个光谱窗口的完成度追踪</p>
 </div>
 
-<section class="path-section">
+<section class="progress-section reveal">
   <div class="progress-card">
-    <h3>七大窗口阅读进度</h3>
+    <h3>窗口完成度</h3>
     <div class="progress-list">
       <div class="progress-row">
-        <span class="label">1. AI与芯片革命</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/75</span>
+        <span class="label">🔴 AI与芯片革命</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
       <div class="progress-row">
-        <span class="label">2. 航天与太空探索</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/20</span>
+        <span class="label">🟠 航天与太空探索</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
       <div class="progress-row">
-        <span class="label">3. 医学与健康前沿</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/59</span>
+        <span class="label">🟢 医学与健康前沿</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
       <div class="progress-row">
-        <span class="label">4. 食品营养与安全</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/44</span>
+        <span class="label">🩵 食品营养与安全</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
       <div class="progress-row">
-        <span class="label">5. 消费品评测与避坑</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/47</span>
+        <span class="label">🔵 消费品评测与避坑</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
       <div class="progress-row">
-        <span class="label">6. 人类演化与文明进程</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/32</span>
+        <span class="label">💜 人类演化与文明</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
       <div class="progress-row">
-        <span class="label">7. 科学方法与认知论</span>
-        <div class="track"><div class="fill" style="width: 0%;"></div></div>
-        <span class="pct">0/34</span>
+        <span class="label">🟣 科学方法与认知论</span>
+        <div class="track"><div class="fill" data-pct="0"></div></div>
+        <span class="pct">0%</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===== Podcast Section ===== -->
-<div class="section-head" id="podcast">
-  <h2>🎙️ 观测之音</h2>
-  <p class="sub">六期深度播客 — 用声音收束科技前沿</p>
+<div class="section-head reveal" id="podcast">
+  <h2>🎙️ 精选播客试听</h2>
+  <p class="sub">从 317 篇中精选 6 篇代表性深度解读</p>
 </div>
 
-<section class="path-section">
-  <div class="podcast-grid">
-
-    <!-- EP1: AI与芯片 -->
-    <div class="podcast-card p1">
-      <span class="ep-num">01</span>
-      <h4>EP1 · AI与芯片革命</h4>
-      <p class="ep-desc">从 token 预测到 EUV 光刻，理解 AI 奇迹年的底层算力逻辑。</p>
-      <div class="ep-meta">
-        <span class="ep-badge">即将上线</span>
-        <button class="play-btn" onclick="playEpisode(this, 1)" title="播放 / 暂停">▶</button>
-      </div>
+<div class="podcast-grid">
+  <div class="podcast-card p1 reveal">
+    <span class="ep-num">001</span>
+    <h4>室温超导：只是实验室内的突破</h4>
+    <p class="ep-desc">15°C室温超导轰动科学界，但实现条件极其苛刻——267GPa高压，相当于地球中心压力的70%。距离商用还有多远？</p>
+    <div class="ep-meta">
+      <span class="ep-badge">AI与芯片</span>
+      <button class="play-btn" onclick="this.innerHTML=this.innerHTML==='▶'?'⏸':'▶'">▶</button>
     </div>
-
-    <!-- EP2: 航天 -->
-    <div class="podcast-card p2">
-      <span class="ep-num">02</span>
-      <h4>EP2 · 航天与太空探索</h4>
-      <p class="ep-desc">星舰经济学 — 可回收火箭如何将太空运输成本降低两个数量级。</p>
-      <div class="ep-meta">
-        <span class="ep-badge">即将上线</span>
-        <button class="play-btn" onclick="playEpisode(this, 2)" title="播放 / 暂停">▶</button>
-      </div>
-    </div>
-
-    <!-- EP3: 医学 -->
-    <div class="podcast-card p3">
-      <span class="ep-num">03</span>
-      <h4>EP3 · 医学与健康前沿</h4>
-      <p class="ep-desc">mRNA 疫苗、癌症免疫、FDA逻辑 — 科学方法在人体中的胜利。</p>
-      <div class="ep-meta">
-        <span class="ep-badge">即将上线</span>
-        <button class="play-btn" onclick="playEpisode(this, 3)" title="播放 / 暂停">▶</button>
-      </div>
-    </div>
-
-    <!-- EP4: 食品 -->
-    <div class="podcast-card p4">
-      <span class="ep-num">04</span>
-      <h4>EP4 · 食品营养与安全</h4>
-      <p class="ep-desc">阿斯巴甜、转基因、微塑料 — 用证据等级拆解"吃进去的焦虑"。</p>
-      <div class="ep-meta">
-        <span class="ep-badge">即将上线</span>
-        <button class="play-btn" onclick="playEpisode(this, 4)" title="播放 / 暂停">▶</button>
-      </div>
-    </div>
-
-    <!-- EP5: 消费品 -->
-    <div class="podcast-card p5">
-      <span class="ep-num">05</span>
-      <h4>EP5 · 消费品评测与避坑</h4>
-      <p class="ep-desc">石墨烯智商税、电动车选购、降噪耳机 — 科技消费的理性决策框架。</p>
-      <div class="ep-meta">
-        <span class="ep-badge">即将上线</span>
-        <button class="play-btn" onclick="playEpisode(this, 5)" title="播放 / 暂停">▶</button>
-      </div>
-    </div>
-
-    <!-- EP6: 人类演化 -->
-    <div class="podcast-card p6">
-      <span class="ep-num">06</span>
-      <h4>EP6 · 人类演化与文明进程</h4>
-      <p class="ep-desc">朊粒、远古病毒、嵌合体 — 从演化纵深理解"我们是谁"。</p>
-      <div class="ep-meta">
-        <span class="ep-badge">即将上线</span>
-        <button class="play-btn" onclick="playEpisode(this, 6)" title="播放 / 暂停">▶</button>
-      </div>
-    </div>
-
   </div>
-</section>
+
+  <div class="podcast-card p2 reveal">
+    <span class="ep-num">170</span>
+    <h4>马斯克与火箭3：造火箭的几种技术门派</h4>
+    <p class="ep-desc">全流量分级燃烧 vs 燃气发生器循环——SpaceX选择NASA"实习款"设计，却造出了史上最强火箭发动机。</p>
+    <div class="ep-meta">
+      <span class="ep-badge">航天</span>
+      <button class="play-btn" onclick="this.innerHTML=this.innerHTML==='▶'?'⏸':'▶'">▶</button>
+    </div>
+  </div>
+
+  <div class="podcast-card p3 reveal">
+    <span class="ep-num">234</span>
+    <h4>准诺奖：体内基因编辑技术</h4>
+    <p class="ep-desc">单剂注射，TTR蛋白最高下降96%。基因编辑首次在活人体内成功治病，从"科幻"到"临床"的历史性跨越。</p>
+    <div class="ep-meta">
+      <span class="ep-badge">医学</span>
+      <button class="play-btn" onclick="this.innerHTML=this.innerHTML==='▶'?'⏸':'▶'">▶</button>
+    </div>
+  </div>
+
+  <div class="podcast-card p4 reveal">
+    <span class="ep-num">120</span>
+    <h4>微塑料：每年吃进5.5万颗，意味着什么？</h4>
+    <p class="ep-desc">瓶装水、海鲜、食盐——微塑料已遍布食物链。科学界对健康风险的评估到了哪一步？该怎么看待这个新问题？</p>
+    <div class="ep-meta">
+      <span class="ep-badge">食品</span>
+      <button class="play-btn" onclick="this.innerHTML=this.innerHTML==='▶'?'⏸':'▶'">▶</button>
+    </div>
+  </div>
+
+  <div class="podcast-card p5 reveal">
+    <span class="ep-num">206</span>
+    <h4>如何对抗算法？</h4>
+    <p class="ep-desc">消费类算法 vs 生产类算法——前者让你凌晨2点还在刷短视频，后者帮你发现新知识。识别并摆脱算法的操控。</p>
+    <div class="ep-meta">
+      <span class="ep-badge">消费品</span>
+      <button class="play-btn" onclick="this.innerHTML=this.innerHTML==='▶'?'⏸':'▶'">▶</button>
+    </div>
+  </div>
+
+  <div class="podcast-card p6 reveal">
+    <span class="ep-num">157</span>
+    <h4>拉马努金机4：直觉产生器</h4>
+    <p class="ep-desc">科学最基本的公理只有两条：事物有规律，规律有普遍性。直觉先行、证据随后——这才是科学发现的真实路径。</p>
+    <div class="ep-meta">
+      <span class="ep-badge">科学方法</span>
+      <button class="play-btn" onclick="this.innerHTML=this.innerHTML==='▶'?'⏸':'▶'">▶</button>
+    </div>
+  </div>
+</div>
 
 <!-- ===== Divider → MKS System ===== -->
-<div class="shell-divider" id="mks-system">
+<div class="shell-divider reveal" id="mks-system">
   <h2>🔬 深度交互 — 全课程概念体系</h2>
   <p class="divider-sub">10 个核心概念 · 20 道选择题 · 12 道简答题 · 概念关系图 · 案例分析 · 实战决策</p>
 </div>
 
 </div><!-- /.page -->
+
+<!-- ===== Scroll Reveal Script ===== -->
+<script>
+(function(){
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.15});
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+</script>
 
 <!-- ===== MKS 9-Tab System (preserved from original) ===== -->
 <script>
