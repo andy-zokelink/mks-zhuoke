@@ -236,13 +236,13 @@ body {
   50% { transform: translateX(-50%) translateY(10px); }
 }
 
-/* ===== SCALE NAVIGATOR ===== */
+/* ===== SCALE NAVIGATOR (HORIZONTAL) ===== */
 .scale-section {
   position: relative; z-index: 1;
-  max-width: 1100px; margin: 0 auto;
+  max-width: 1200px; margin: 0 auto;
   padding: 80px 24px 60px;
 }
-.scale-header { text-align: center; margin-bottom: 52px; }
+.scale-header { text-align: center; margin-bottom: 40px; }
 .scale-header h2 {
   font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800;
   color: var(--text-bright); letter-spacing: 2px; margin-bottom: 10px;
@@ -255,42 +255,79 @@ body {
   max-width: 560px; margin: 0 auto;
 }
 
+/* ——— Horizontal track ——— */
 .scale-bar-wrap {
   position: relative; margin-bottom: 48px;
-  display: flex; flex-direction: column; align-items: center;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding: 0 4px;
 }
 .scale-bar {
-  position: relative; width: 4px;
-  display: flex; flex-direction: column; gap: 0;
+  position: relative;
+  display: flex; flex-direction: row; flex-wrap: wrap;
+  justify-content: center; align-items: stretch;
+  gap: 0;
+  padding: 36px 8px 12px;
+  min-width: min-content;
 }
+/* continuous gradient track line behind the dots */
 .scale-bar::before {
-  content: ''; position: absolute; top: 0; bottom: 0; left: 50%;
-  width: 2px; transform: translateX(-50%);
-  background: linear-gradient(180deg,
+  content: '';
+  position: absolute;
+  top: 60px; /* center of the 52px dots: 36px padding-top + 26px */
+  left: 5%; right: 5%;
+  height: 3px;
+  background: linear-gradient(90deg,
     var(--bio-purple) 0%, var(--bio-blue) 20%, var(--bio-cyan) 40%,
     var(--bio-green) 60%, var(--diagnostic-amber) 80%, var(--immune-red) 100%);
-  border-radius: 1px; opacity: 0.4;
+  border-radius: 2px; opacity: 0.35;
+  z-index: 0; pointer-events: none;
 }
-.scale-node {
-  display: flex; align-items: center; gap: 28px;
-  padding: 20px 0; cursor: pointer; position: relative;
-  transition: all var(--ease);
-}
-.scale-node:hover .scale-dot { transform: scale(1.35); }
-.scale-node:nth-child(1):hover .scale-dot { box-shadow: 0 0 24px var(--bio-purple-glow); border-color: var(--bio-purple); }
-.scale-node:nth-child(2):hover .scale-dot { box-shadow: 0 0 24px var(--bio-blue-glow); border-color: var(--bio-blue); }
-.scale-node:nth-child(3):hover .scale-dot { box-shadow: 0 0 24px var(--bio-cyan-glow); border-color: var(--bio-cyan); }
-.scale-node:nth-child(4):hover .scale-dot { box-shadow: 0 0 24px var(--bio-green-glow); border-color: var(--bio-green); }
-.scale-node:nth-child(5):hover .scale-dot { box-shadow: 0 0 24px var(--amber-glow); border-color: var(--diagnostic-amber); }
-.scale-node:nth-child(6):hover .scale-dot { box-shadow: 0 0 24px var(--immune-red-glow); border-color: var(--immune-red); }
 
+/* ——— Individual node column ——— */
+.scale-node {
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  padding: 0 10px 10px; cursor: pointer;
+  position: relative; z-index: 1;
+  transition: all var(--ease);
+  flex: 0 1 155px; min-width: 120px;
+}
+.scale-node:hover .scale-dot { transform: scale(1.22); }
+.scale-node:hover .scale-info {
+  border-color: rgba(0, 229, 160, 0.18);
+  background: var(--bg-card-hover);
+  box-shadow: 0 4px 28px rgba(0,0,0,0.3);
+}
+
+/* per-node dot glow colours */
+.scale-node:nth-child(1):hover .scale-dot { box-shadow: 0 0 28px var(--bio-purple-glow); border-color: var(--bio-purple); }
+.scale-node:nth-child(2):hover .scale-dot { box-shadow: 0 0 28px var(--bio-blue-glow); border-color: var(--bio-blue); }
+.scale-node:nth-child(3):hover .scale-dot { box-shadow: 0 0 28px var(--bio-cyan-glow); border-color: var(--bio-cyan); }
+.scale-node:nth-child(4):hover .scale-dot { box-shadow: 0 0 28px var(--bio-green-glow); border-color: var(--bio-green); }
+.scale-node:nth-child(5):hover .scale-dot { box-shadow: 0 0 28px var(--amber-glow); border-color: var(--diagnostic-amber); }
+.scale-node:nth-child(6):hover .scale-dot { box-shadow: 0 0 28px var(--immune-red-glow); border-color: var(--immune-red); }
+
+/* active node highlight */
+.scale-node.active .scale-dot {
+  transform: scale(1.15);
+  box-shadow: 0 0 32px var(--bio-green-glow);
+  border-color: var(--bio-green);
+  background: rgba(0,229,160,0.08);
+}
+.scale-node.active .scale-info {
+  border-color: var(--bio-green-glow);
+  background: var(--bg-card-hover);
+}
+
+/* ——— Dot circle ——— */
 .scale-dot {
-  width: 48px; height: 48px; min-width: 48px;
+  width: 52px; height: 52px; min-width: 52px;
   border-radius: 50%; background: var(--bg-surface);
   border: 2px solid var(--border);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; font-weight: 800;
-  transition: all var(--ease); position: relative; z-index: 1;
+  font-size: 1.35rem; font-weight: 800;
+  transition: all var(--ease); position: relative; z-index: 2;
+  margin-bottom: 12px; flex-shrink: 0;
 }
 .scale-node:nth-child(1) .scale-dot { color: var(--bio-purple); }
 .scale-node:nth-child(2) .scale-dot { color: var(--bio-blue); }
@@ -299,26 +336,28 @@ body {
 .scale-node:nth-child(5) .scale-dot { color: var(--diagnostic-amber); }
 .scale-node:nth-child(6) .scale-dot { color: var(--immune-red); }
 
+/* ——— Info card below dot ——— */
 .scale-info {
   background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px 22px;
-  transition: all var(--ease); flex: 1; max-width: 600px;
-}
-.scale-node:hover .scale-info {
-  border-color: rgba(0, 229, 160, 0.2);
-  background: var(--bg-card-hover);
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius); padding: 14px 12px;
+  transition: all var(--ease); width: 100%; flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
 }
 .scale-info .scale-name {
-  font-size: 1rem; font-weight: 750; color: var(--text-bright);
-  margin-bottom: 4px; letter-spacing: 0.5px;
+  font-size: 0.85rem; font-weight: 750; color: var(--text-bright);
+  margin-bottom: 5px; letter-spacing: 0.4px;
 }
 .scale-info .scale-range {
-  font-size: 0.68rem; color: var(--text-subtle);
-  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
+  font-size: 0.65rem; color: var(--text-subtle);
+  letter-spacing: 0.8px; text-transform: uppercase;
+  margin-bottom: 5px;
+  font-family: "Georgia","Times New Roman",serif;
 }
 .scale-info .scale-desc {
-  font-size: 0.8rem; color: var(--text-dim); line-height: 1.6;
+  font-size: 0.72rem; color: var(--text-dim); line-height: 1.55;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ===== SECTION TITLE ===== */
@@ -668,8 +707,13 @@ body {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
-  .scale-node { gap: 16px; }
-  .scale-info { padding: 14px 16px; }
+  .scale-node { flex: 0 1 140px; min-width: 110px; padding: 0 6px 8px; }
+  .scale-dot { width: 44px; height: 44px; min-width: 44px; font-size: 1.15rem; }
+  .scale-info { padding: 10px 8px; }
+  .scale-info .scale-name { font-size: 0.78rem; }
+  .scale-info .scale-range { font-size: 0.6rem; }
+  .scale-info .scale-desc { font-size: 0.66rem; }
+  .scale-bar::before { top: 52px; }
   .mrna-step { min-width: 130px; }
   .immune-battlefield { grid-template-columns: repeat(2, 1fr); }
   .body-map-grid { grid-template-columns: 1fr; }
@@ -690,7 +734,14 @@ body {
   .mrna-step { max-width: 100%; }
   .pyramid-level { padding: 12px 16px; }
   .fda-phase { min-width: 100px; }
-  .scale-info { max-width: 220px; }
+  .scale-node { flex: 0 1 105px; min-width: 95px; padding: 0 4px 6px; }
+  .scale-dot { width: 38px; height: 38px; min-width: 38px; font-size: 1rem; margin-bottom: 8px; }
+  .scale-info { padding: 8px 6px; }
+  .scale-info .scale-name { font-size: 0.7rem; }
+  .scale-info .scale-range { font-size: 0.56rem; }
+  .scale-info .scale-desc { font-size: 0.6rem; -webkit-line-clamp: 2; }
+  .scale-bar { padding: 28px 4px 8px; }
+  .scale-bar::before { top: 43px; }
   .flip-card { height: 240px; }
   .section-anchor { padding: 40px 16px 0; }
   .scale-section, .immune-section, .mrna-section,
@@ -736,65 +787,65 @@ body {
   </div>
 </section>
 
-<!-- ===== SCALE NAVIGATOR ===== -->
-<section class="scale-section reveal" id="scale">
-  <div class="scale-header">
-    <h2>🔬 微观航程：从分子到文明的六层跃迁</h2>
-    <p>医学探索如同深海潜航——每一层生物尺度都揭示着不同的生命秘密。点击每个层级，进入对应的探索领域。</p>
-  </div>
-  <div class="scale-bar-wrap">
-    <div class="scale-bar">
-      <div class="scale-node" onclick="navigateToScale(this, 1)">
-        <div class="scale-dot">🧬</div>
-        <div class="scale-info">
-          <div class="scale-name">分子密码层</div>
-          <div class="scale-range">10⁻⁹m · DNA · mRNA · 蛋白质</div>
-          <div class="scale-desc">生命的源代码。mRNA疫苗技术、基因编辑CRISPR、药物分子设计——这是医学最精密的战场。</div>
-        </div>
-      </div>
-      <div class="scale-node" onclick="navigateToScale(this, 2)">
-        <div class="scale-dot">🦠</div>
-        <div class="scale-info">
-          <div class="scale-name">细胞战场层</div>
-          <div class="scale-range">10⁻⁶m · 免疫细胞 · 病毒 · 癌细胞</div>
-          <div class="scale-desc">免疫系统的24/7防御战。T细胞识别、B细胞抗体生产、巨噬细胞吞噬——你体内每秒都在进行无声的战争。</div>
-        </div>
-      </div>
-      <div class="scale-node" onclick="navigateToScale(this, 3)">
-        <div class="scale-dot">🧠</div>
-        <div class="scale-info">
-          <div class="scale-name">器官系统层</div>
-          <div class="scale-range">10⁻²m · 大脑 · 心脏 · 肺 · 生殖系统</div>
-          <div class="scale-desc">器官是细胞社会的"城市群"。阿尔茨海默症、长新冠后遗症、精子质量下降——每个器官都有未解之谜。</div>
-        </div>
-      </div>
-      <div class="scale-node" onclick="navigateToScale(this, 4)">
-        <div class="scale-dot">💉</div>
-        <div class="scale-info">
-          <div class="scale-name">个体防御层</div>
-          <div class="scale-range">10⁰m · 疫苗 · 药物 · 手术</div>
-          <div class="scale-desc">人体是一个需要持续维护的堡垒。疫苗训练免疫系统，药物精准打击病原，手术修复结构损坏。</div>
-        </div>
-      </div>
-      <div class="scale-node" onclick="navigateToScale(this, 5)">
-        <div class="scale-dot">🌍</div>
-        <div class="scale-info">
-          <div class="scale-name">社会免疫层</div>
-          <div class="scale-range">10⁶m · 流行病学 · 公共卫生 · 群体免疫</div>
-          <div class="scale-desc">一个人的免疫是不够的。核酸检测、隔离措施、疫苗分配——当个体防御连成网络，社会免疫系统才真正诞生。</div>
-        </div>
-      </div>
-      <div class="scale-node" onclick="navigateToScale(this, 6)">
-        <div class="scale-dot">🏛️</div>
-        <div class="scale-info">
-          <div class="scale-name">证据认知层</div>
-          <div class="scale-range">抽象 · FDA审批 · 临床试验 · 循证医学</div>
-          <div class="scale-desc">医学如何"知道"它知道的？从随机双盲对照到荟萃分析，医学证据的金字塔是人类对抗认知偏误的终极武器。</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ===== SCALE NAVIGATOR (HORIZONTAL) ===== -->
+	<section class="scale-section reveal" id="scale">
+	  <div class="scale-header">
+	    <h2>🔬 微观航程：从分子到文明的六层跃迁</h2>
+	    <p>医学探索如同深海潜航——点击每个层级，跳转到对应的探索领域。</p>
+	  </div>
+	  <div class="scale-bar-wrap">
+	    <div class="scale-bar">
+	      <div class="scale-node active" onclick="navigateToScale(this, 1)">
+	        <div class="scale-dot">🧬</div>
+	        <div class="scale-info">
+	          <div class="scale-name">分子密码层</div>
+	          <div class="scale-range">10⁻⁹m</div>
+	          <div class="scale-desc">DNA · mRNA · 蛋白质 — 生命源代码</div>
+	        </div>
+	      </div>
+	      <div class="scale-node" onclick="navigateToScale(this, 2)">
+	        <div class="scale-dot">🦠</div>
+	        <div class="scale-info">
+	          <div class="scale-name">细胞战场层</div>
+	          <div class="scale-range">10⁻⁶m</div>
+	          <div class="scale-desc">免疫细胞 · 病毒 · 癌细胞 — 24/7无声战争</div>
+	        </div>
+	      </div>
+	      <div class="scale-node" onclick="navigateToScale(this, 3)">
+	        <div class="scale-dot">🧠</div>
+	        <div class="scale-info">
+	          <div class="scale-name">器官系统层</div>
+	          <div class="scale-range">10⁻²m</div>
+	          <div class="scale-desc">大脑 · 心脏 · 肺 — 细胞社会的城市群</div>
+	        </div>
+	      </div>
+	      <div class="scale-node" onclick="navigateToScale(this, 4)">
+	        <div class="scale-dot">💉</div>
+	        <div class="scale-info">
+	          <div class="scale-name">个体防御层</div>
+	          <div class="scale-range">10⁰m</div>
+	          <div class="scale-desc">疫苗 · 药物 · 手术 — 人体堡垒的维护</div>
+	        </div>
+	      </div>
+	      <div class="scale-node" onclick="navigateToScale(this, 5)">
+	        <div class="scale-dot">🌍</div>
+	        <div class="scale-info">
+	          <div class="scale-name">社会免疫层</div>
+	          <div class="scale-range">10⁶m</div>
+	          <div class="scale-desc">流行病学 · 公共卫生 · 群体免疫网络</div>
+	        </div>
+	      </div>
+	      <div class="scale-node" onclick="navigateToScale(this, 6)">
+	        <div class="scale-dot">🏛️</div>
+	        <div class="scale-info">
+	          <div class="scale-name">证据认知层</div>
+	          <div class="scale-range">抽象</div>
+	          <div class="scale-desc">FDA审批 · RCT · 荟萃分析 — 对抗认知偏误</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</section>
 
 <!-- ===== IMMUNE BATTLEFIELD ===== -->
 <div class="section-anchor reveal" id="immune">
@@ -1296,9 +1347,9 @@ function navigateToScale(el,level){
   if(level<=targets.length){
     document.querySelector(targets[level-1]).scrollIntoView({behavior:'smooth'});
   }
-  document.querySelectorAll('.scale-node').forEach(n=>n.style.opacity='0.5');
-  el.style.opacity='1';
-  setTimeout(()=>document.querySelectorAll('.scale-node').forEach(n=>n.style.opacity='1'),600);
+  // update active state
+  document.querySelectorAll('.scale-node').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
 }
 
 // ===== IMMUNE CARD TOGGLE =====
