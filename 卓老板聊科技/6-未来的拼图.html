@@ -5,562 +5,219 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>未来的拼图 — 卓老板聊科技 MKS</title>
 <style>
-:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+/* ===== 未来的拼图 — 设计语言 =====
+ * 本质洞察：未来不是预测出来的——是一块一块拼出来的
+ * 情感基调：期待与审慎 — 对未来技术既有希望也有清醒
+ * 叙事锚点：拼图桌 — 碎片散落，有些已经拼上，有些还不知该放哪里
+ * 视觉策略：深青灰+信号蓝 — 科技前沿的冷峻与不确定
+ */
+:root { --bg:#f5f8fa; --card:#fafcfd; --accent:#2a6a7a; --accent2:#4a8a9a; --gold:#c47820; --gold-light:#d8c0a0; --success:#4a7c5e; --text:#1a242a; --text-light:#3a5058; --border:#c8d4d8; --shadow:0 2px 14px rgba(26,36,42,.06); --radius:12px; --nav-bg:#0a1a24; --nav-text:#f5f8fa; }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
-.container { max-width:960px; margin:0 auto; padding:0 16px; }
-.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
-.top-bar .title { font-size:1.05rem; font-weight:600; }
-.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
-.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
-.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
+body { font-family:'Noto Serif SC','Source Han Serif SC',Georgia,serif; background:var(--bg); color:var(--text); line-height:1.8; padding-top:56px; font-size:16px; }
+.container { max-width:980px; margin:0 auto; padding:0 20px; }
+.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; box-shadow:0 2px 12px rgba(0,0,0,.3); }
+.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; }
+.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.85rem; padding:6px 16px; border:1px solid rgba(255,255,255,.25); border-radius:20px; font-family:'Noto Sans SC',sans-serif; transition:all .2s; }
+.top-bar .home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--accent2); color:var(--gold-light); }
+.tab-bar { display:flex; flex-wrap:wrap; gap:6px; padding:14px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:24px; }
+.tab-btn { padding:8px 16px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .25s; white-space:nowrap; font-family:'Noto Sans SC',sans-serif; }
 .tab-btn:hover { border-color:var(--accent); color:var(--accent); }
 .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel { display:none; animation:fadeIn .4s ease; }
 .tab-panel.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
-.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
-.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
-.skeleton-list { list-style:none; padding:0; }
-.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
-.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
-.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
-.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
-.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+.hero { position:relative; overflow:hidden; background:linear-gradient(175deg,#f5f8fa 0%,#d8e4e8 35%,#a0c0c8 60%,#2a6a7a 82%,#0a1a24 100%); border-radius:var(--radius); margin-bottom:32px; min-height:370px; display:flex; align-items:center; justify-content:center; }
+.hero-svg { width:100%; max-width:900px; height:auto; display:block; }
+.hero-caption { position:absolute; bottom:36px; left:0; right:0; text-align:center; color:#f5f8fa; font-size:1.15rem; letter-spacing:2px; font-family:'Noto Serif SC',serif; opacity:.85; text-shadow:0 1px 8px rgba(0,0,0,.5); }
+.narrative-block { background:linear-gradient(135deg,#fafcfd,#f5f8fb); border-left:4px solid var(--accent); padding:28px 32px; margin:28px 0; border-radius:0 var(--radius) var(--radius) 0; box-shadow:var(--shadow); }
+.narrative-block .lead { font-size:1.2rem; color:var(--accent); font-weight:600; margin-bottom:12px; }
+.narrative-block p { color:var(--text-light); font-size:.95rem; line-height:1.9; margin-bottom:8px; }
+
+.puzzle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:20px 0; }
+.puzzle-piece { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); border-left:3px solid var(--accent); }
+.puzzle-piece .certainty { float:right; font-size:.7rem; padding:2px 8px; border-radius:10px; }
+.certainty.high { background:rgba(74,124,94,.1); color:#4a7c5e; }
+.certainty.medium { background:rgba(196,120,32,.1); color:#c47820; }
+.certainty.low { background:rgba(192,57,43,.1); color:#c0392b; }
+.puzzle-piece h3 { color:var(--accent); font-size:.95rem; margin-bottom:6px; font-family:'Noto Sans SC',sans-serif; }
+.puzzle-piece p { font-size:.84rem; color:var(--text-light); line-height:1.7; }
+
+.article-excerpt { background:var(--card); border-radius:var(--radius); padding:18px; margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border); }
+.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
+.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; }
+.svg-stage { background:var(--card); border-radius:var(--radius); padding:20px; margin:28px 0; box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
+.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
+.socratic-panel { background:linear-gradient(135deg,#f5f8fb,#fafcfd); border:1px dashed var(--accent); border-radius:var(--radius); padding:24px; margin:20px 0; }
+.socratic-panel .q-a { margin-bottom:20px; }
+.socratic-panel .question { font-weight:600; color:var(--accent); margin-bottom:6px; font-size:.95rem; }
+.socratic-panel .answer { color:var(--text-light); font-size:.9rem; padding-left:16px; border-left:2px solid var(--gold-light); }
+.mindmap { margin:16px 0; }
+.mindmap .node { margin-bottom:6px; }
+.mindmap .node-header { display:flex; align-items:center; gap:8px; cursor:pointer; padding:10px 14px; background:var(--card); border-radius:8px; border:1px solid var(--border); transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
+.mindmap .node-header:hover { border-color:var(--accent); }
+.mindmap .node-header .toggle { font-size:.7rem; transition:transform .3s; color:var(--accent); width:16px; text-align:center; }
+.mindmap .node-header .toggle.open { transform:rotate(90deg); }
+.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
+.mindmap .node-body.open { display:block; }
+.mindmap .leaf { padding:6px 12px; margin:4px 0; font-size:.85rem; color:var(--text-light); border-left:2px solid var(--gold-light); }
+.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
+.boundary-table th { background:var(--accent); color:#fff; padding:12px 16px; text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500; }
+.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
 .boundary-table tr:nth-child(even) td { background:var(--card); }
-.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
-.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
-.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
-.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
-.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
-.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
-.flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
-.flip-front { background:var(--card); }
-.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
-.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
-.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
-.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
-.btn-outline:hover { background:var(--accent); color:#fff; }
-.btn-success { background:var(--success); color:#fff; }
-.btn-sm { padding:5px 12px; font-size:.8rem; }
-.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
+.level-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; }
+.level-core { background:var(--accent); color:#fff; }
+.level-understand { background:var(--accent2); color:#fff; }
+.level-know { background:#ddd; color:#555; }
 .quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
-.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
-.q-option:hover { border-color:var(--accent); background:#fff5f5; }
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
+.q-option { display:block; width:100%; text-align:left; padding:10px 16px; margin:6px 0; border:1px solid var(--border); border-radius:8px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.88rem; font-family:inherit; }
+.q-option:hover { border-color:var(--accent); }
 .q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
 .q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
 .q-option:disabled { cursor:default; }
-.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
-.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
-.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
-.mindmap { padding:10px 0; }
-.mindmap .node { margin:4px 0 4px 20px; }
-.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
-.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
-.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
-.mindmap .node-title.open::before { transform:rotate(90deg); }
-.mindmap .node-body { display:none; }
-.mindmap .node-body.open { display:block; }
-.inquiry-item { margin-bottom:12px; }
-.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
-.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
-.inquiry-q.open::after { content:' \25B2'; }
-.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.inquiry-a.open { display:block; }
-.case-item { margin-bottom:14px; }
-.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.case-title:hover { border-color:var(--accent); background:#fff5f5; }
-.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
-.case-title.open::after { content:' \25B2'; }
-.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.case-body.open { display:block; }
-.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.d-scenario { margin-bottom:16px; }
-.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
-.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
-.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
-.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
-.svg-wrap svg { max-width:100%; height:auto; }
-.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
-.toast.show { opacity:1; }
-@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
+.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
+.sa-input { width:100%; min-height:100px; padding:14px; font-family:inherit; font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg); resize:vertical; }
+.sa-reveal { background:var(--card); padding:16px; border-radius:var(--radius); margin-top:10px; display:none; border:1px dashed var(--accent); font-size:.9rem; line-height:1.8; }
+.decision-scene { background:linear-gradient(135deg,#f5f8fb,#e8f0f4); border-radius:var(--radius); padding:24px; margin:20px 0; border:1px solid var(--gold-light); }
+.decision-scene .scenario { background:var(--card); padding:18px; border-radius:8px; margin-bottom:14px; border-left:3px solid var(--accent); }
+.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-scene .choice-btn { text-align:left; padding:10px 16px; border:1px solid var(--border); border-radius:8px; background:var(--card); cursor:pointer; transition:all .2s; font-family:inherit; font-size:.88rem; }
+.decision-scene .choice-btn:hover { border-color:var(--accent); }
+.score-bar { text-align:center; padding:16px; font-size:1.1rem; font-weight:600; color:var(--accent); }
+.progress-bar { width:100%; height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .5s ease; }
+.section-title { font-size:1.25rem; color:var(--accent); margin:32px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border); font-family:'Noto Sans SC',sans-serif; letter-spacing:1px; }
+.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
+.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
+.btn-outline:hover { background:var(--accent); color:#fff; }
+.footer { text-align:center; padding:32px 20px; margin-top:40px; border-top:1px solid var(--border); color:var(--text-light); font-size:.82rem; }
+.footer a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
-<div class="top-bar"><span class="title">🤖 未来的拼图</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+<nav class="top-bar"><span class="title">🤖 未来的拼图</span><a href="index.html" class="home-btn">← 返回课程首页</a></nav>
 <div class="container">
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
-  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
-  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
-  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
-  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
-  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
-  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
-  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
-  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+
+<div class="hero">
+<svg class="hero-svg" viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="370" fill="none" rx="12"/>
+  <!-- Puzzle pieces scattered on a table -->
+  <g opacity=".5">
+    <rect x="120" y="110" width="100" height="60" rx="6" fill="#2a6a7a"/><text x="170" y="145" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">AI与自动化</text>
+    <rect x="300" y="80" width="100" height="60" rx="6" fill="#4a8a9a"/><text x="350" y="115" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">量子计算</text>
+    <rect x="500" y="110" width="100" height="60" rx="6" fill="#2a6a7a"/><text x="550" y="145" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">新能源</text>
+    <rect x="680" y="80" width="100" height="60" rx="6" fill="#4a8a9a"/><text x="730" y="115" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">虚拟现实</text>
+    <rect x="200" y="210" width="100" height="60" rx="6" fill="#3a7a8a"/><text x="250" y="245" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">自动驾驶</text>
+    <rect x="420" y="200" width="100" height="60" rx="6" fill="#2a6a7a"/><text x="470" y="235" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">虚拟货币</text>
+    <rect x="600" y="210" width="100" height="60" rx="6" fill="#4a8a9a"/><text x="650" y="245" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">海水淡化</text>
+  </g>
+  <!-- Missing piece outline -->
+  <rect x="340" y="280" width="100" height="60" rx="6" fill="none" stroke="#c47820" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/><text x="390" y="315" fill="#c47820" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" opacity=".7">？</text>
+  <text x="450" y="28" fill="#f5f8fa" font-size="15" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="6" opacity=".8">未来的拼图</text>
+  <text x="450" y="360" fill="#f5f8fa" font-size="11" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="3" opacity=".7">有些碎片已经拼上了，有些还不知道该放在哪里</text>
+</svg>
+<div class="hero-caption">33篇文章，拼凑一个正在成型的明日世界</div>
 </div>
-<div class="tab-panel active" id="panel0">
-  <div class="section-title">核心目标</div>
-  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
-  <div class="section-title">核心概念</div>
-  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
-<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
-<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
-<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
-<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
-<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
-<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
-<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
-<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
-<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
-  <div class="section-title">最小知识集（骨架中的骨架）</div>
-  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
-<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
-<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
-<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
-  <div class="section-title">概念关系图</div>
-  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
- viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
-<title>G</title>
-<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
-<g id="clust1" class="cluster">
-<title>cluster_legend</title>
-<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
-<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
-</g>
-<!-- root -->
-<g id="node1" class="node">
-<title>root</title>
-<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
-<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">未来的拼图——物理定律的层级结构</text>
-</g>
-<!-- qm -->
-<g id="node2" class="node">
-<title>qm</title>
-<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
-<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
-</g>
-<!-- root&#45;&gt;qm -->
-<g id="edge1" class="edge">
-<title>root&#45;&gt;qm</title>
-<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
-<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
-<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- gr -->
-<g id="node3" class="node">
-<title>gr</title>
-<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
-<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
-</g>
-<!-- root&#45;&gt;gr -->
-<g id="edge2" class="edge">
-<title>root&#45;&gt;gr</title>
-<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
-<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
-<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- th -->
-<g id="node4" class="node">
-<title>th</title>
-<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
-<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
-</g>
-<!-- root&#45;&gt;th -->
-<g id="edge3" class="edge">
-<title>root&#45;&gt;th</title>
-<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
-<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
-<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- u -->
-<g id="node5" class="node">
-<title>u</title>
-<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
-<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
-</g>
-<!-- qm&#45;&gt;u -->
-<g id="edge4" class="edge">
-<title>qm&#45;&gt;u</title>
-<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
-<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
-<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
-</g>
-<!-- w -->
-<g id="node6" class="node">
-<title>w</title>
-<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
-<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
-</g>
-<!-- qm&#45;&gt;w -->
-<g id="edge5" class="edge">
-<title>qm&#45;&gt;w</title>
-<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
-<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
-<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
-</g>
-<!-- v -->
-<g id="node7" class="node">
-<title>v</title>
-<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
-<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
-</g>
-<!-- qm&#45;&gt;v -->
-<g id="edge6" class="edge">
-<title>qm&#45;&gt;v</title>
-<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
-<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
-<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
-</g>
-<!-- sy -->
-<g id="node8" class="node">
-<title>sy</title>
-<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
-<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
-</g>
-<!-- qm&#45;&gt;sy -->
-<g id="edge7" class="edge">
-<title>qm&#45;&gt;sy</title>
-<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
-<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
-<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
-</g>
-<!-- st -->
-<g id="node9" class="node">
-<title>st</title>
-<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
-<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
-</g>
-<!-- gr&#45;&gt;st -->
-<g id="edge8" class="edge">
-<title>gr&#45;&gt;st</title>
-<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
-<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
-<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
-</g>
-<!-- bh -->
-<g id="node10" class="node">
-<title>bh</title>
-<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
-<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
-</g>
-<!-- gr&#45;&gt;bh -->
-<g id="edge9" class="edge">
-<title>gr&#45;&gt;bh</title>
-<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
-<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
-<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
-</g>
-<!-- co -->
-<g id="node11" class="node">
-<title>co</title>
-<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
-<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
-</g>
-<!-- gr&#45;&gt;co -->
-<g id="edge10" class="edge">
-<title>gr&#45;&gt;co</title>
-<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
-<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
-<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
-</g>
-<!-- en -->
-<g id="node12" class="node">
-<title>en</title>
-<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
-<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
-</g>
-<!-- th&#45;&gt;en -->
-<g id="edge11" class="edge">
-<title>th&#45;&gt;en</title>
-<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
-<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
-<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
-</g>
-<!-- u&#45;&gt;v -->
-<g id="edge14" class="edge">
-<title>u&#45;&gt;v</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
-<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
-<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
-</g>
-<!-- ob -->
-<g id="node19" class="node">
-<title>ob</title>
-<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
-</g>
-<!-- w&#45;&gt;ob -->
-<g id="edge20" class="edge">
-<title>w&#45;&gt;ob</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
-<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
-<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
-</g>
-<!-- hr -->
-<g id="node14" class="node">
-<title>hr</title>
-<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
-<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
-<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
-<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
-</g>
-<!-- v&#45;&gt;hr -->
-<g id="edge12" class="edge">
-<title>v&#45;&gt;hr</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
-<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
-<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
-</g>
-<!-- sm -->
-<g id="node16" class="node">
-<title>sm</title>
-<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
-<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
-<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
-<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
-</g>
-<!-- sy&#45;&gt;sm -->
-<g id="edge16" class="edge">
-<title>sy&#45;&gt;sm</title>
-<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
-<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
-<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
-</g>
-<!-- gp -->
-<g id="node15" class="node">
-<title>gp</title>
-<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
-<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
-<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
-<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
-</g>
-<!-- st&#45;&gt;gp -->
-<g id="edge15" class="edge">
-<title>st&#45;&gt;gp</title>
-<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
-<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
-<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
-</g>
-<!-- bh&#45;&gt;hr -->
-<g id="edge13" class="edge">
-<title>bh&#45;&gt;hr</title>
-<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
-<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
-<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
-</g>
-<!-- nu -->
-<g id="node13" class="node">
-<title>nu</title>
-<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
-<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
-</g>
-<!-- en&#45;&gt;nu -->
-<g id="edge18" class="edge">
-<title>en&#45;&gt;nu</title>
-<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
-<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
-<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
-</g>
-<!-- it -->
-<g id="node17" class="node">
-<title>it</title>
-<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
-<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
-<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
-<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
-</g>
-<!-- en&#45;&gt;it -->
-<g id="edge17" class="edge">
-<title>en&#45;&gt;it</title>
-<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
-<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
-<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
-</g>
-<!-- se -->
-<g id="node18" class="node">
-<title>se</title>
-<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
-<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
-<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
-<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
-</g>
-<!-- nu&#45;&gt;se -->
-<g id="edge19" class="edge">
-<title>nu&#45;&gt;se</title>
-<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
-<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
-<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
-</g>
-<!-- hr&#45;&gt;bh -->
-<g id="edge21" class="edge">
-<title>hr&#45;&gt;bh</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
-<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
-<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
-<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
-</g>
-<!-- l1 -->
-<g id="node20" class="node">
-<title>l1</title>
-<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
-<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
-</g>
-<!-- l2 -->
-<g id="node21" class="node">
-<title>l2</title>
-<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
-<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
-</g>
-<!-- l1&#45;&gt;l2 -->
-<!-- l3 -->
-<g id="node22" class="node">
-<title>l3</title>
-<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
-<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
-</g>
-<!-- l2&#45;&gt;l3 -->
-<!-- l4 -->
-<g id="node23" class="node">
-<title>l4</title>
-<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
-<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
-<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
-<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
-</g>
-<!-- l3&#45;&gt;l4 -->
-<!-- l5 -->
-<g id="node24" class="node">
-<title>l5</title>
-<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
-<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
-</g>
-</g>
-</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
-  <div class="section-title">边界知识表</div>
-  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
-  <div class="section-title">学习路径</div>
-  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
-<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
-<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
-<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
-<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
-  <div class="section-title">学习进度</div>
-  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="t0">🧩 拼图桌</button>
+  <button class="tab-btn" data-tab="t1">🤖 核心概念</button>
+  <button class="tab-btn" data-tab="t2">🗺️ 技术图谱</button>
+  <button class="tab-btn" data-tab="t3">💡 深度追问</button>
+  <button class="tab-btn" data-tab="t4">🧭 思维导图</button>
+  <button class="tab-btn" data-tab="t5">⚠️ 知识边界</button>
+  <button class="tab-btn" data-tab="t6">📝 题库系统</button>
+  <button class="tab-btn" data-tab="t7">🎯 未来决策</button>
 </div>
-<div class="tab-panel" id="panel1">
-  <div class="section-title">知识卡片</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
-  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
-  <div class="flip-nav">
-    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
-    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
-    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
-  </div>
-  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+
+<div class="tab-panel active" id="t0">
+  <div class="narrative-block"><div class="lead">未来不是预言——是一块一块拼出来的</div><p>卓老板用33篇文章，带我们看正在成型的明天：AlphaGo赢了围棋、比特币从极客玩具变成金融资产、电动车从边缘进入主流、虚拟现实从科幻变成产品。这些不是孤立的新闻——它们是同一幅拼图的碎片。有些已经严丝合缝（AI的实用化），有些还没找到位置（量子计算的商业化），有些我们甚至不知道形状（通用人工智能）。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《AlphaGo和李世石的对决中，谁的耗能高？》</div><p>李世石的大脑功耗约20瓦，AlphaGo约1兆瓦——是人类的5万倍。但AlphaGo赢了。能耗差距告诉我们：<strong>AI的"智能"和人类的"智能"在底层机制上完全不同</strong>——它不是用更高效的方式做人类做的事，而是用完全不同（且极其低效）的方式达成类似的结果。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《你怎么就敢推荐比特币？》</div><p>比特币本质上是一个去中心化的账本——通过工作量证明（PoW）共识机制来防止双重支付，无需银行或政府背书。它的价值不是在"挖矿"中创造出来的——而是在人们对其稀缺性和不可篡改性的共识中产生的。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《无人驾驶汽车更安全了吗？》</div><p>人类司机每年造成约130万人死亡。无人驾驶不需要完美——只需要比人类更好。目前Waymo等公司的数据显示，自动驾驶在处理常规路况时已经优于人类，但在极端边缘场景（长尾问题）仍需要更多数据。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《新能源车为什么火了？》</div><p>电池成本的指数级下降（每年约降低15%）是电动车起飞的底层推动力。当电池组成本低于100美元/kWh时，电动车的总拥有成本开始低于燃油车——这个临界点已在2020年代到来。</p></div>
 </div>
-<div class="tab-panel" id="panel2">
-  <div class="section-title">题库系统</div>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
-    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
-  </div>
-  <div id="quizContainer"></div>
-  <div id="staticQuiz" style="display:none"></div>
-</div>
-<div class="tab-panel" id="panel3">
-  <div class="section-title">考试模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
-    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
-  </div>
-  <div id="examContainer"></div>
-  <div id="examResult" style="display:none;text-align:center;padding:20px;">
-    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
-    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
-    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+
+<div class="tab-panel" id="t1">
+  <div class="section-title">十个核心概念 — 未来的拼图碎片</div>
+  <div class="puzzle-grid">
+    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>① 深度学习</h3><p>AlphaGo/Master的核心——多层神经网络通过反向传播从数据中学习模式。它不是"编程"出来的——是"训练"出来的。已从游戏扩展到翻译、医疗影像、蛋白质折叠预测。</p></div>
+    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>② 区块链与共识</h3><p>去中心化账本的底层逻辑：工作量证明（PoW）解决了"拜占庭将军问题"——在不可信的网络中达成共识。比特币是第一个成功的应用，但不是唯一的应用（智能合约、DeFi、NFT）。</p></div>
+    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>③ 自动驾驶等级</h3><p>L0-L5分级。L2（辅助驾驶）已普及，L4（限定区域无人驾驶）在测试中，L5（全场景无人驾驶）仍需解决长尾场景。核心挑战不是"正常驾驶"——是处理从未见过的极端边缘情况。</p></div>
+    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>④ 电池技术曲线</h3><p>锂离子电池成本从2010年~1200美元/kWh降至2024年~100美元/kWh——降幅>90%。能量密度在同步提升。电池成本是电动车、储能、消费电子三大产业的共同基础。</p></div>
+    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>⑤ 量子计算</h3><p>量子比特利用叠加和纠缠实现并行计算——对特定问题（因子分解、量子化学模拟）有指数级加速。量子货币的理论可能性来自不可克隆定理。但容错量子计算机仍在实验室阶段。</p></div>
+    <div class="puzzle-piece"><span class="certainty low">未知形状</span><h3>⑥ 通用人工智能(AGI)</h3><p>与专用AI（如下围棋）不同——AGI需要跨领域学习、推理、适应。我们目前不知道实现AGI需要什么突破——是更大的模型？新的架构？还是全新的理论？能耗差距（人脑20W vs 数据中心1MW）暗示可能需要根本性创新。</p></div>
+    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>⑦ VR/AR/MR</h3><p>虚拟现实提供了完全沉浸的数字体验，增强现实在真实世界上叠加信息。Quest等设备已让VR进入消费市场，但"杀手级应用"尚未出现。核心瓶颈：分辨率、延迟、晕动症、续航。</p></div>
+    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>⑧ 可再生能源</h3><p>光伏和风电的度电成本已在多数地区低于化石能源。海水淡化技术（反渗透膜）的能耗已降至~3kWh/m³。能源转型的最大障碍不再是技术成本——是储能和电网基础设施。</p></div>
+    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>⑨ 石墨烯与新材</h3><p>单层碳原子的二维材料——强度是钢的200倍，导电性超越铜。但大规模生产仍是瓶颈。"石墨烯电池"的新闻标题常言过其实——实验室成果到量产之间隔着巨大的工程鸿沟。</p></div>
+    <div class="puzzle-piece"><span class="certainty low">未知形状</span><h3>⑩ 脑机接口</h3><p>Neuralink等公司正在开发植入式脑机接口——读取神经元信号来控制外部设备。初步应用瞄准瘫痪患者的辅助交流。长期愿景（意识上传、记忆存储）目前仍属于科幻而非科学预测。</p></div>
   </div>
 </div>
-<div class="tab-panel" id="panel4">
-  <div class="section-title">复习模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
-  <div id="reviewContainer">
-    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
-    <div id="reviewWeakAreas"></div>
-  </div>
-  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
+
+<div class="tab-panel" id="t2">
+  <div class="section-title">未来技术关系图谱</div>
+  <div class="svg-stage"><svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><defs><filter id="s6"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#1a242a" flood-opacity=".08"/></filter></defs><rect width="880" height="400" fill="#fafcfd" rx="12"/><g filter="url(#s6)"><rect x="80" y="60" width="160" height="44" rx="22" fill="#2a6a7a"/><text x="160" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">AI与深度学习</text><rect x="340" y="60" width="160" height="44" rx="22" fill="#2a6a7a"/><text x="420" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">量子计算</text><rect x="640" y="60" width="160" height="44" rx="22" fill="#2a6a7a"/><text x="720" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">区块链</text><rect x="80" y="300" width="160" height="44" rx="22" fill="#4a8a9a"/><text x="160" y="327" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">新能源汽车</text><rect x="340" y="300" width="160" height="44" rx="22" fill="#4a8a9a"/><text x="420" y="327" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">可再生能源</text><rect x="640" y="300" width="160" height="44" rx="22" fill="#4a8a9a"/><text x="720" y="327" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">VR/AR</text><rect x="340" y="180" width="200" height="50" rx="25" fill="#c47820"/><text x="440" y="210" fill="#fff" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">计算的未来</text></g><g stroke="#4a8a9a" stroke-width=".8" fill="none" opacity=".4"><line x1="200" y1="104" x2="340" y2="205"/><line x1="480" y1="104" x2="460" y2="180"/><line x1="640" y1="104" x2="540" y2="205"/><line x1="200" y1="300" x2="340" y2="230"/><line x1="500" y1="300" x2="480" y2="230"/><line x1="680" y1="300" x2="540" y2="230"/></g><text x="440" y="25" fill="#2a6a7a" font-size="14" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">明日技术生态系统</text></svg></div>
 </div>
-<div class="tab-panel" id="panel5">
-  <div class="section-title">思维导图</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
-  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">未来的拼图——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
-</div>
-<div class="tab-panel" id="panel6">
+
+<div class="tab-panel" id="t3">
   <div class="section-title">深度追问</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
-  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
+  <div class="socratic-panel">
+    <div class="q-a"><div class="question">AlphaGo赢李世石——是AI"理解"了围棋吗？</div><div class="answer">不是。AlphaGo不"理解"围棋——它通过数百万局自我对弈，学到了哪些走法更可能通向胜利。这和人学习围棋有本质区别：人可以用语言解释策略（"这里要围空"），而AlphaGo的"知识"编码在数百万个浮点参数中——无法被翻译成人类语言。它比人类强，但它不知道自己为什么强。</div></div>
+    <div class="q-a"><div class="question">比特币是货币还是资产？</div><div class="answer">从设计初衷看，比特币是"点对点的电子现金系统"——一种货币。但它的价格波动性（年化波动率常>50%）让它作为记账单位和交易媒介不实用。目前它更多被当作一种数字资产（"数字黄金"）——具有稀缺性（2100万上限）、不可篡改性、去中心化这些特征。至于是货币还是资产，市场仍在定义中。</div></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel7">
-  <div class="section-title">案例分析</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
-  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
+
+<div class="tab-panel" id="t4">
+  <div class="section-title">思维导图</div>
+  <div class="mindmap" id="mm6"><div class="node"><div class="node-header" onclick="toggleM6(this)" style="background:var(--accent);color:#fff;"><span class="toggle open">▶</span> 未来的拼图</div><div class="node-body open">
+    <div class="node"><div class="node-header" onclick="toggleM6(this)"><span class="toggle">▶</span> 人工智能</div><div class="node-body"><div class="leaf">深度学习：从数据中学习模式</div><div class="leaf">AlphaGo/AlphaZero：自我博弈训练</div><div class="leaf">专用AI vs AGI：窄vs宽</div><div class="leaf">能耗对比：人脑20W vs AI数MW</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM6(this)"><span class="toggle">▶</span> 数字资产</div><div class="node-body"><div class="leaf">区块链：去中心化共识账本</div><div class="leaf">比特币：PoW+稀缺性</div><div class="leaf">量子货币：基于不可克隆定理</div></div></div>
+    <div class="node"><div class="node-header" onclick="toggleM6(this)"><span class="toggle">▶</span> 交通与能源</div><div class="node-body"><div class="leaf">电动车：电池成本下降90%</div><div class="leaf">自动驾驶：L2普及/L4测试中/L5遥远</div><div class="leaf">新能源：光伏风电已低于化石能源成本</div></div></div>
+  </div></div></div>
 </div>
-<div class="tab-panel" id="panel8">
-  <div class="section-title">实战决策</div>
-  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
+
+<div class="tab-panel" id="t5">
+  <div class="section-title">知识边界</div>
+  <table class="boundary-table"><thead><tr><th>知识条目</th><th>程度</th><th>理由</th></tr></thead><tbody>
+    <tr><td>深度学习的基本原理</td><td><span class="level-tag level-core">核心</span></td><td>理解AI能力的来源和局限</td></tr>
+    <tr><td>区块链去中心化共识</td><td><span class="level-tag level-core">核心</span></td><td>理解数字货币和Web3</td></tr>
+    <tr><td>电池成本下降曲线</td><td><span class="level-tag level-understand">理解</span></td><td>理解电动车革命的经济驱动力</td></tr>
+    <tr><td>自动驾驶L0-L5分级</td><td><span class="level-tag level-understand">理解</span></td><td>判断新闻中的技术进展</td></tr>
+    <tr><td>量子计算具体算法</td><td><span class="level-tag level-know">知道</span></td><td>需要量子力学和计算机科学背景</td></tr>
+    <tr><td>神经网络反向传播数学</td><td><span class="level-tag level-know">知道</span></td><td>需要微积分和线性代数</td></tr>
+  </tbody></table>
 </div>
+
+<div class="tab-panel" id="t6">
+  <div class="section-title">题库 — 20题</div>
+  <div class="score-bar" id="qs6">已答：0 / 20</div><div class="progress-bar"><div class="progress-fill" id="qp6" style="width:0%"></div></div>
+  <div id="qc6"></div><button class="btn btn-outline" onclick="resetQ6()" style="margin-top:16px;">🔄 重新作答</button>
+  <div class="section-title">简答</div>
+  <div class="quiz-card"><p class="q-text">🖊️ AlphaGo下围棋比人类强——这是否意味着AI"理解"了围棋？为什么？</p><textarea class="sa-input" id="sa6"></textarea><button class="btn btn-outline" onclick="showSA6()" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR6">AlphaGo不"理解"围棋——它的"知识"编码在数百万个浮点参数中，无法转化为人类可理解的语言解释。它通过数百万局自我对弈学到了哪些走法统计上更可能通向胜利，但这和人类棋手的"策略理解"在认知层面完全不同。AlphaGo不知道自己为什么强——这恰恰是当前AI的根本局限：<strong>模式匹配≠理解</strong>。</div></div>
 </div>
-<div class="toast" id="toast"></div>
+
+<div class="tab-panel" id="t7">
+  <div class="section-title">未来决策模拟</div>
+  <div class="decision-scene"><h3>场景：朋友问"比特币现在还能买吗？"</h3><div class="scenario">朋友看到比特币价格波动大，想投一笔钱进去"搏一把"。你基于对区块链原理的理解，会怎么回应？</div><div class="choice-btn" onclick="evalD6(this,'a')">A) 加密货币有投资价值——推荐All in</div><div class="choice-btn" onclick="evalD6(this,'b')">B) 解释比特币的基本原理、价格波动风险和"只投你能承受全部损失的钱"原则</div><div class="choice-btn" onclick="evalD6(this,'c')">C) 比特币是骗局——坚决反对</div><div id="dfb6" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div></div>
+</div>
+
+<div class="footer"><p>🤖 未来的拼图 — 卓老板聊科技 MKS</p><p>33篇文章 · 10核心概念</p><p><a href="index.html">← 返回课程首页</a></p></div>
+</div>
+
 <script>
-const concepts = [{"id": "c1", "name": "指数增长直觉", "def": "人类直觉擅长线性外推但极不擅长理解指数增长——折叠一张纸42次可到达月球，50次可到达太阳。技术指数增长同理。", "analogy": "池塘里的睡莲每天翻倍，第29天覆盖一半，第30天覆盖整个池塘。如果你在第29天才开始担心，你只有一天的反应时间。", "example": "摩尔定律：晶体管密度每18-24个月翻倍——从1971年Intel 4004(2300个晶体管)到今天的数千亿——50年间的进步是万亿倍而非50倍。", "counter": "指数增长不能永远持续——摩尔定律已显著放缓。任何指数增长最终都受物理或经济约束而变为S曲线。关键是判断何时从指数期进入平缓期。"}, {"id": "c2", "name": "技术成熟度曲线(Gartner Hype Cycle)", "def": "新技术经历：技术触发→期望膨胀顶峰→幻灭低谷→启蒙爬升→生产力高原。大多数技术被过度炒作后暴露局限性，少数最终改变世界。", "analogy": "像过山车：一开始所有人都说'这会改变一切'(顶峰)，然后所有人都说'这完全没用'(低谷)，最后它安静地嵌入日常生活——没什么人大惊小怪了。", "example": "3D打印：2012-14年过度炒作(每家一台3D打印机)→2015-17进入幻灭低谷→2018后在工业和医疗领域稳步增长。比特币：2017年2万美金(顶峰)→2018年3000美金(低谷)→2021年6万+。", "counter": "不是所有技术都能走出幻灭低谷。大部分技术概念永远停留在期望膨胀顶峰或幻灭低谷——能走到生产力高原的只是少数。"}, {"id": "c3", "name": "量子计算原理", "def": "量子比特(qubit)利用叠加态和纠缠——n个量子比特可同时表示2^n个状态。对特定问题(因式分解、搜索、模拟量子系统)提供指数级加速，但非万能。", "analogy": "经典计算机像走迷宫时一条路一条路试；量子计算机像'同时走所有路'。但只能在出口处问一个问题——'哪条路最短？'而不能问'每条路长什么样？'。", "example": "Shor算法：量子计算机可在多项式时间内因式分解大数——理论上破解RSA加密。但目前最大量子计算机(~1000 qubit)离破解2048位RSA还差数个数量级。", "counter": "量子计算机不擅长所有计算——对排序、文本处理等经典任务没有优势。它不是'快1000倍的经典计算机'而是处理不同类型问题的不同范式。"}, {"id": "c4", "name": "自动化与就业悖论", "def": "技术自动化在消灭某些工作的同时创造新工作——但创造和消灭的速度和技能要求可能不匹配。历史上每次技术革命都伴随机遇和痛苦的过渡期。", "analogy": "ATM机出现后银行柜员数量反而增加了(1985-2015美国增长)——因为ATM降低了开分行的成本，每家分行需要更少柜员但分行数大量增加。技术改变工作内容而非简单消灭工作。", "example": "自动驾驶对卡车司机的影响：不是所有司机一夜失业，而是长途高速路段逐步自动化→司机转变为'最后一公里配送+监控多个车辆'的角色。过渡期可能持续15-25年。", "counter": "并非所有工作都同样脆弱。例行性高+重复性高的工作最易被自动化(数据录入、基础翻译)；需要创造力+情感+复杂手动技能的工作相对安全。"}, {"id": "c5", "name": "能源转型的系统思维", "def": "从化石能源到可再生能源的转换不是简单的'替换'——它是涉及发电、储能、电网、政策的复杂系统转型。任何单一维度的分析都会得出误导性结论。", "analogy": "不是把马车发动机换成汽油发动机——你需要建加油站、修高速公路、改造交通规则、处理废气污染。能源转型同理：太阳能板+风电机只是第一步，储能和智能电网才是关键瓶颈。", "example": "德国能源转型(Energiewende):大力发展风光电→但电网和储能未跟上→部分地区弃风弃光+电价上涨。中国同时推进发电(全球最大光伏风电装机)+特高压输电网+储能→系统思维的优势。", "counter": "不同地区的能源转型路径应不同。挪威(水电资源丰富)vs日本(土地稀缺)vs沙特(阳光充沛)——不存在全球统一的'正确方案'。"}, {"id": "c6", "name": "区块链的信任机制", "def": "区块链通过分布式账本+共识机制实现'去信任化'——不依赖任何中心机构来验证交易。但'去中心化'在不同应用场景的成本效益比差异巨大。", "analogy": "村里的公共账本：每个村民手里都有完整账本副本，谁想篡改一笔记录需要同时改写51%以上村民的账本——不划算。但记一笔账全村人都要更新账本——效率极低。", "example": "比特币的能源消耗：工作量证明(PoW)机制每年耗电约150太瓦时(相当于阿根廷全国用电)——这是'去信任化'的代价。以太坊转向权益证明(PoS)后能耗降低99.9%。", "counter": "区块链适用于信任成本高的场景(跨境汇款、供应链溯源)但不适用于信任成本已低的场景(支付宝转账、超市购物)。'区块链+万物'多半是泡沫。"}, {"id": "c7", "name": "AI能力的边界", "def": "当前AI(大语言模型)擅长模式匹配和统计推断但不具备真正的理解、因果推理和常识——它们是'极其博学的文盲'：读过所有书但不理解任何一本。", "analogy": "就像一个从未见过猫但读过100万份猫的描述的人——它可以写出关于猫的优美文章、回答猫的分类问题、甚至生成猫的图片——但它不知道猫摸起来是什么感觉。", "example": "ChatGPT可以通过律师资格考试但无法区分'一根香蕉放进冰箱是因为要保鲜'和'放进冰箱是为了炫耀香蕉'。它缺乏物理世界的因果模型——它的'知识'是文本统计规律而非关于世界的真实知识。", "counter": "AI能力边界在快速扩展。从GPT-3到GPT-4的跳跃超出多数专家预期。应避免两种极端：认定AGI永远不会到来和认定AGI下个月就到来。"}, {"id": "c8", "name": "自动驾驶的安全悖论", "def": "自动驾驶理论上比人类驾驶更安全（消除疲劳/酒驾/分心），但过渡期的问题是：当AI造成事故时公众容忍度远低于人类造成事故——即使统计上更安全。", "analogy": "飞机自动驾驶已普及数十年——但飞行员仍需在起飞降落时操控。不是因为AI不能做，而是因为公众对AI独自掌控的信任度需要几代人建立。", "example": "Waymo和Cruise的自动驾驶服务已在部分城市运营——事故率显著低于同地区人类驾驶。但每次事故都成为全国头条→公众感知:'自动驾驶很危险'。", "counter": "全自动驾驶(L5)在城市复杂环境中比高速公路难一个数量级——预测行人意图、处理异常路况(道路施工、警察手势)仍是开放挑战。"}, {"id": "c9", "name": "科技风险评估中的概率思维", "def": "新技术的风险常被极端化：要么'完全安全'要么'毁灭人类'。理性的风险评估需要：具体化危害、估计概率、比较替代方案的风险——而非停留在抽象恐惧。", "analogy": "核能vs煤电：煤电每年因空气污染致死数百万人(确定性)；核电历史上三次重大事故致死约4000人(含预估长期癌症)。怕核能而接受煤电=选择更高确定风险的替代方案。", "example": "基因编辑婴儿(贺建奎事件)：技术本身(CRISPR)的风险可控+收益可期——但未经充分安全验证+违反伦理共识+缺乏社会讨论→风险从技术转移到社会治理。", "counter": "风险评估不等同于风险消除。任何技术都有风险——问题不是'是否有风险'而是'风险是否被理解和管理到可接受水平'。"}, {"id": "c10", "name": "虚拟-现实边界模糊", "def": "VR/AR/MR技术模糊物理和数字世界的边界——不是创造'另一个世界'而是增强和重叠现实世界。长期社会影响(社交、教育、身份认同)尚未被充分理解。", "analogy": "智能手机已半模糊了现实边界——你和朋友吃饭时各自看手机(你在物理空间里但注意力在数字空间)。AR眼镜只是把这个过程变得更自然(或更侵入性)。", "example": "Pokemon Go(2016)：数千万人在物理世界中追逐虚拟生物——首次大规模展示AR在日常生活中的潜力和社会影响(人群聚集、交通事故、社区互动)。", "counter": "VR的长期沉浸是否改变大脑发育(特别是儿童)尚不明确。这不是反对VR而是说：大脑可塑性+强沉浸技术的组合效应尚未有纵向研究数据。"}];
-const mcqAll = [{"q": "摩尔定律描述了什么趋势？", "opts": ["晶体管密度约每18-24个月翻倍——指数增长而非线性增长", "芯片价格每年降低50%", "计算机速度每10年翻倍", "所有技术都以指数增长"], "answer": 0}, {"q": "Gartner技术成熟度曲线中'幻灭低谷'之后是什么？", "opts": ["启蒙爬升——技术被更实际地理解和应用", "期望膨胀顶峰", "技术触发", "直接进入生产力高原"], "answer": 0}, {"q": "量子计算机的'量子比特'利用了什么原理？", "opts": ["叠加态和纠缠——n个qubit可同时表示2^n个状态", "只比经典比特更快", "和经典比特完全相同", "不需要纠错"], "answer": 0}, {"q": "为什么ATM机出现后银行柜员数量反而增加了？", "opts": ["ATM降低了开分行成本→分行数大增→每家需要更少柜员但总雇佣增加。技术改变工作内容而非简单消灭", "统计错误", "柜员转行做ATM维护", "只是暂时现象"], "answer": 0}, {"q": "比特币工作量证明(PoW)每年耗电约多少？", "opts": ["约150太瓦时(相当于阿根廷全国用电)——这是'去信任化'的能量代价", "几乎不耗电", "和普通数据中心一样", "约等于一台家用电脑"], "answer": 0}, {"q": "当前大语言模型(如GPT-4)的核心局限是什么？", "opts": ["具备模式匹配能力但缺乏真正的因果推理和物理世界常识——'极其博学的文盲'", "不能生成文本", "需要人类编程每个回答", "只懂英文"], "answer": 1}, {"q": "自动驾驶的安全悖论指什么？", "opts": ["统计上比人类司机安全但每次AI事故都成头条——公众容忍度远低于容忍人类司机事故", "自动驾驶比人类司机更危险", "AI永不会比人类更安全", "法律不允许自动驾驶"], "answer": 1}, {"q": "Shor算法在量子计算机上能做什么？", "opts": ["在多项式时间内因式分解大数——理论上可破解RSA加密", "加速所有类型的计算", "替代所有经典算法", "让量子计算机更快"], "answer": 1}, {"q": "能源转型的关键系统瓶颈是什么？", "opts": ["发电不是最大问题——储能和智能电网才是关键瓶颈", "太阳能板不够多", "风电机不够大", "人们不愿意用清洁能源"], "answer": 1}, {"q": "区块链最适合什么场景？", "opts": ["信任成本高的场景(跨境汇款、供应链溯源)——而非信任成本已低的场景(支付宝、超市)", "所有支付场景", "取代所有银行", "社交网络"], "answer": 1}, {"q": "S曲线在技术发展中代表什么？", "opts": ["技术从指数期进入平缓期——所有指数增长最终受物理或经济约束", "永远指数增长", "技术必然失败", "只有软件符合"], "answer": 2}, {"q": "核能vs煤电的对比说明什么风险评估原则？", "opts": ["理性的风险比较需要量化替代方案的风险——煤电年致死数百万人，核电事故约4000人。怕核电而接受煤电=选择更高的确定风险", "核能完全安全", "煤电完全安全", "不需要比较"], "answer": 2}, {"q": "为什么折叠纸张42次可到达月球是理解指数增长的好例子？", "opts": ["每次折叠厚度翻倍——42次是2^42倍=4.4万亿倍。人类直觉误以为只需要几百次", "这只是一个巧合", "指数增长不重要", "只有小学生才用这例子"], "answer": 2}, {"q": "Pokemon Go(2016)展示了什么？", "opts": ["AR技术首次大规模展示其在日常生活中的潜力和社会影响——数千万人在物理世界追逐虚拟生物", "VR技术的成熟", "AI游戏的巅峰", "游戏产业的衰落"], "answer": 2}, {"q": "为什么艺术家的作品在数字时代更容易被复制但原创反而增值？", "opts": ["数字复制使稀缺性从'物理唯一'转移到'认证和来源'——区块链用于NFT艺术品溯源即此逻辑", "艺术已不值钱", "数字复制无损价值", "只有名人作品增值"], "answer": 2}, {"q": "基因编辑婴儿事件的核心问题是什么？", "opts": ["技术风险可控+收益可期——但未经充分安全验证+违反伦理共识+缺乏社会讨论。风险从技术转移到社会治理", "技术完全不安全", "基因编辑永远不该用", "CRISPR技术有致命缺陷"], "answer": 3}, {"q": "为什么'怕核能而选择煤电'是风险评估谬误？", "opts": ["煤电年致死数百万人(确定性)，核电事故约4000人(含预估)——选择更高确定风险暴露了风险评估的直觉缺陷", "核能比煤电更危险", "煤电其实很安全", "应该只用可再生能源"], "answer": 3}, {"q": "未来10年AI发展最确定的趋势是什么？", "opts": ["AI将嵌入更多日常工具(搜索/办公/编程)——而非完全替代人类或产生意识", "AGI将在明年实现", "AI将彻底消失", "AI只能用于游戏"], "answer": 3}, {"q": "区块链的信任机制最适合什么场景？", "opts": ["所有支付场景", "信任成本高的场景(跨境汇款、供应链溯源)——而非信任成本已低的日常支付", "取代所有银行", "社交网络"], "answer": 3}, {"q": "为什么说'怕核能而选择煤电'是风险评估谬误？", "opts": ["核能比煤电更危险", "煤电年致死数百万人(确定性)，核电事故约4000人——选择更高确定风险暴露了风险评估的直觉缺陷", "煤电其实很安全", "应该只用可再生能源"], "answer": 3}];
-const saqAll = [{"q": "用指数增长直觉解释为什么我们对气候变化和技术奇点的威胁反应迟缓。", "hint": "人类直觉线性外推——当指数过程已过半程时才注意到变化(睡莲第29天)。气候变化和AI能力增长都是指数型"}, {"q": "技术成熟度曲线如何帮助我们评估一项'热炒'的新技术？", "hint": "定位该技术处于曲线哪一阶段→期望膨胀顶峰的东西要等5-10年才能成熟→幻灭低谷的东西可能被低估"}, {"q": "量子计算机是'更快的经典计算机'吗？为什么？", "hint": "不是——它是不同计算范式。叠加态允许同时表示指数多个状态但只能读取有限信息。对特定问题(因式分解)有指数加速，对大部分问题无优势"}, {"q": "自动化会消灭所有工作吗？用ATM机-柜员的例子说明你的观点。", "hint": "ATM降低银行成本→分行增加→柜员总量增加。技术改变工作内容而非简单消灭。但过渡期痛苦真实存在——政策需帮助技能转型"}, {"q": "为什么能源转型必须用系统思维而非'多建风光电站'？", "hint": "发电是起点——储能(电池/抽水蓄能)+输电网(特高压)+需求响应需要同步升级。德国的教训：风光电建多了但电网没跟上→弃风弃光+电价上涨"}, {"q": "区块链的'去信任化'适合什么场景不适合什么场景？", "hint": "适合：信任成本高的跨境汇款、供应链溯源、产权登记。不适合：信任成本已低的日常支付(支付宝效率远超任何区块链)"}, {"q": "如何用概率思维评估'AI会毁灭人类'vs'AI完全安全'这两种极端说法？", "hint": "具体化'毁灭'的含义、估计概率、考虑替代风险(不使用AI的代价)、区分近期风险和远期风险。极端确定性(0%或100%)几乎总是错的"}, {"q": "自动驾驶全面普及的主要障碍是技术还是社会接受度？", "hint": "两者都有——L5城市自动驾驶在技术上仍难(预测行人意图)，但即使技术成熟，社会接受(AI事故容忍度)将是更大瓶颈"}, {"q": "为什么说当前AI是'极其博学的文盲'？这个比喻说明了什么？", "hint": "读过所有文本但缺乏物理世界因果模型——知道'香蕉放冰箱'的文本分布但不理解'保鲜'vs'炫耀'的意图差异。这是统计模式匹配≠理解的本质"}, {"q": "从能源转型中总结一条适用于其他技术转型的一般原则。", "hint": "任何大规模系统转型都需要'技术+基础设施+政策+社会接受'的同步推进。单维度的乐观(突破性技术)或悲观(成本太高)都过于简化"}];
-const SK = 'mks_1';
-let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
-let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
-let currentCardIdx = 0;
-function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
-function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
-function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
-function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
-function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
-function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
-function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
-function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
-document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
-function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
-function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
-function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
-function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
-function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
-let et=null,el=1800,eq=[],ea={};
-function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
-function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
-function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
-function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
-function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
-function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
-setCard(0);updateProgress();
+(function(){var t=document.querySelectorAll('#tabBar .tab-btn'),p=document.querySelectorAll('.tab-panel'),s=localStorage.getItem('mks-future-tab');t.forEach(function(b){b.addEventListener('click',function(){t.forEach(function(x){x.classList.remove('active');});p.forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');localStorage.setItem('mks-future-tab',this.getAttribute('data-tab'));});});if(s){var b=document.querySelector('[data-tab="'+s+'"]');if(b)b.click();}})();
+function toggleM6(h){var t=h.querySelector('.toggle'),b=h.parentElement.querySelector('.node-body');if(b){b.classList.toggle('open');t.classList.toggle('open');}}
+
+var q6=[{q:'AlphaGo与李世石对弈时的能耗对比是？', opts:['人脑约20W，AlphaGo约1MW（5万倍）','两者相当','人脑更高','AlphaGo更低'], ans:0, expl:'李世石大脑功耗~20W，AlphaGo~1MW（1,000,000W）——是人类的5万倍。这揭示了AI和人类智能在底层机制上的巨大差异。'},{q:'比特币防止双重支付的核心机制是什么？', opts:['银行担保','工作量证明(PoW)共识','政府监管','密码保护'], ans:1, expl:'比特币通过PoW共识机制——矿工竞争计算哈希值，最长链被视为有效链。攻击者需要控制>51%的算力才能双重支付——成本极高。'},{q:'推动电动车普及的最关键经济因素是什么？', opts:['政府补贴','环保意识','电池成本下降超过90%','油价上涨'], ans:2, expl:'锂离子电池成本从2010年~1200美元/kWh降至2024年~100美元/kWh——降幅>90%。当电池成本<100美元/kWh时，电动车总拥有成本开始低于燃油车。'},{q:'自动驾驶L4级别的定义是什么？', opts:['完全无人驾驶，任何地方','没有自动化','辅助驾驶','限定区域内的无人驾驶，无需人类接管'], ans:3, expl:'L4=限定区域/条件下的无人驾驶，系统在特定区域内完全负责驾驶，无需人类接管。Waymo在凤凰城的Robotaxi服务就是L4级别的。L5=任何地方、任何条件下全无人驾驶。'},{q:'量子计算机相对于经典计算机的理论优势是什么？', opts:['对特定问题（如因子分解）有指数级加速','所有计算都更快','更省电','更便宜'], ans:0, expl:'量子计算机并不对所有任务更快——对特定问题（大数因子分解→破解RSA加密、量子化学模拟）利用叠加和纠缠实现指数级加速。通用计算仍以经典计算机为主。'},{q:'深度学习与人类学习的根本区别是什么？', opts:['没有区别','深度学习通过大量标注数据训练，不"理解"所学内容','深度学习更聪明','人类学习不需要数据'], ans:1, expl:'深度学习从数据中学习统计模式——但它不"理解"。AlphaGo不知道围棋的"策略"是什么——它的知识是数百万个无法解释的浮点参数。人类可以用语言解释，AI不能。'},{q:'目前实现通用人工智能(AGI)的最大障碍是什么？', opts:['资金不足','硬件不够','我们不知道需要什么突破','没人研究'], ans:2, expl:'当前AI是"窄AI"——每个系统只做一件事（下棋/翻译/识别）。AGI需要跨领域学习和推理，实现路径尚不明确——更大的模型？新架构？新理论？这是根本的未知。'},{q:'VR技术进入消费市场的主要瓶颈不包括以下哪项？', opts:['分辨率与延迟','晕动症','电池续航','价格已经足够便宜'], ans:3, expl:'Quest等设备已将价格降至消费级。主要瓶颈仍然是：分辨率/纱窗效应、延迟导致的晕动症、电池续航短。"杀手级应用"的缺失是另一大挑战。'},{q:'"石墨烯电池"的新闻报道需要谨慎对待，为什么？', opts:['实验室成果到量产之间有巨大的工程鸿沟','石墨烯不存在','电池不需要改进','石墨烯太贵'], ans:0, expl:'石墨烯的许多"突破"仍在实验室阶段——毫克级别的样品。大规模生产（吨级）仍面临成本和质量控制的巨大挑战。从论文到产品通常需要10-20年。'},{q:'海水淡化(反渗透膜)的能耗现已降至约多少？', opts:['10kWh/m³','3kWh/m³','50kWh/m³','20kWh/m³'], ans:1, expl:'反渗透海水淡化能耗已降至~3kWh/m³——这是巨大的技术进步。作为参考，普通家庭每天用水约0.3m³，淡化能耗仅~1kWh——约0.5元电费。'},{q:'为什么说"量子货币"在理论上是不可伪造的？', opts:['因为有政府背书','因为加密更强','基于量子不可克隆定理——未知量子态无法完美复制','因为使用量子计算机'], ans:2, expl:'量子不可克隆定理：任意未知量子态不能被完美复制。这是量子力学的基本原理，不是技术限制。如果可以用量子态来编码货币，它将是物理上不可伪造的——目前仍是理论概念。'},{q:'自动驾驶的最大技术挑战是？', opts:['高速行驶','正常道路行驶','停车','长尾问题——从未见过的极端边缘场景'], ans:3, expl:'长尾问题：自动驾驶系统在99.9%的常见场景中表现出色，但那0.1%的罕见极端场景（施工现场异常标志、动物突然窜出、信号灯故障）需要海量真实路测数据来覆盖。'},{q:'AlphaGo的"棋力"来自什么？', opts:['数百万局自我对弈中学习的统计模式','程序员写的规则','从人类棋谱中背诵的','随机猜测'], ans:0, expl:'AlphaGo通过强化学习——数百万局自我对弈——学到了哪些走法统计上通向胜利。初始版本学习了人类棋谱，AlphaZero完全从零开始自我博弈——不依赖人类棋谱。'},{q:'比特币的总量上限是多少？', opts:['1000万','2100万','1亿','无限'], ans:1, expl:'比特币协议规定总量上限为2100万枚——通过每4年减半的区块奖励机制逐步释放。预计最后一枚比特币将在2140年左右被挖出。这个稀缺性是比特币价值主张的核心。'},{q:'光伏发电的度电成本在过去十年发生了什么变化？', opts:['上升了','不变','下降了约90%','下降了10%'], ans:2, expl:'光伏电力成本在过去十年下降约90%——在许多地区已低于化石能源。这是全球能源转型最根本的经济驱动力。'},{q:'"锂离子电池"的发明获得了哪年的诺贝尔化学奖？', opts:['2016年','2015年','2020年','2019年'], ans:3, expl:'2019年诺贝尔化学奖颁给了约翰·古迪纳夫、斯坦利·惠廷厄姆和吉野彰——以表彰他们在锂离子电池开发中的贡献。这是史上最高龄的诺贝尔奖得主（古迪纳夫97岁）。'},{q:'关于电动车换电模式，以下哪项是正确的？', opts:['标准化困难和基础设施成本高导致普及有限','已广泛普及','比充电更好','只在欧洲有'], ans:0, expl:'换电模式（如蔚来）提供了3分钟换电的便利——但面临电池标准化（不同品牌/车型电池不同）和换电站建设成本高的挑战。充电和换电不是替代关系——是互补。'},{q:'Waymo（谷歌自动驾驶）目前在哪些城市有商业无人出租车服务？', opts:['全球','凤凰城、旧金山等','仅北京','仅东京'], ans:1, expl:'Waymo在凤凰城（亚利桑那州）提供完全无人驾驶的出租车服务（L4级别），并已扩展到旧金山等地。这是目前全球商业化运营最成熟的自动驾驶服务。'},{q:'虚拟货币"挖矿"的实质是什么？', opts:['真的在挖','创造货币','竞争计算哈希值来打包交易并获得奖励','破解密码'], ans:2, expl:'挖矿是通过竞争计算SHA-256哈希值来获得下一个区块的打包权——成功的矿工获得区块奖励（新生成的比特币）+交易手续费。这个过程同时保障了网络的安全性和去中心化。'},{q:'对"未来技术预测"，最理性的态度是什么？', opts:['所有预测都会成真','所有预测都不准','不需要关注未来','技术发展有迹可循但充满不确定性——保持审慎乐观'], ans:3, expl:'技术发展遵循某些规律（摩尔定律、莱特定律等），但突破性创新难以预测。最理性的态度：理解底层趋势、对具体预测保持怀疑、为多种可能性做好准备。'}];
+var qa6=0,qc6=0;
+function renderQ6(){var c=document.getElementById('qc6'),h='';q6.forEach(function(item,idx){h+='<div class="quiz-card" id="q6'+idx+'"><div class="q-text">'+(idx+1)+'. '+item.q+'</div>';var l=['A','B','C','D'];item.opts.forEach(function(o,oi){h+='<button class="q-option" id="q6'+idx+'o'+oi+'" onclick="answerQ6('+idx+','+oi+')">'+l[oi]+'. '+o+'</button>';});h+='<div class="q-feedback" id="q6'+idx+'fb"></div></div>';});c.innerHTML=h;var s=localStorage.getItem('mks-future-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){var ob=document.getElementById('q6'+st.i+'o'+st.c);if(ob){ob.classList.add(st.ok?'correct':'wrong');ob.disabled=true;}var fb=document.getElementById('q6'+st.i+'fb');fb.style.display='block';fb.innerHTML=st.ok?'✅ 正确！'+q6[st.i].expl:'❌ 错误。'+q6[st.i].expl;fb.style.background=st.ok?'#d4edda':'#f8d7da';for(var oi=0;oi<4;oi++){var o2=document.getElementById('q6'+st.i+'o'+oi);if(o2)o2.disabled=true;}}});up6();}}
+function answerQ6(i,c){var it=q6[i],ok=c===it.ans;if(ok)qc6++;qa6++;var fb=document.getElementById('q6'+i+'fb');document.getElementById('q6'+i+'o'+c).classList.add(ok?'correct':'wrong');if(!ok)document.getElementById('q6'+i+'o'+it.ans).classList.add('correct');for(var oi=0;oi<4;oi++){var ob=document.getElementById('q6'+i+'o'+oi);if(ob)ob.disabled=true;}fb.style.display='block';fb.innerHTML=ok?'✅ 正确！'+it.expl:'❌ 错误。'+it.expl;fb.style.background=ok?'#d4edda':'#f8d7da';up6();save6();}
+function up6(){document.getElementById('qs6').textContent='已答：'+qa6+' / '+q6.length+' | 正确：'+qc6;document.getElementById('qp6').style.width=(qa6/q6.length*100)+'%';}
+function save6(){var st=[];for(var i=0;i<q6.length;i++){for(var oi=0;oi<4;oi++){var ob=document.getElementById('q6'+i+'o'+oi);if(ob&&(ob.classList.contains('correct')||ob.classList.contains('wrong'))){st.push({i:i,c:oi,ok:oi===q6[i].ans,d:true});break;}}}localStorage.setItem('mks-future-quiz',JSON.stringify(st));}
+function resetQ6(){qa6=0;qc6=0;localStorage.removeItem('mks-future-quiz');renderQ6();}
+function showSA6(){var r=document.getElementById('saR6');r.style.display=r.style.display==='block'?'none':'block';}
+function evalD6(el,ch){var fb=el.parentElement.querySelector('[id^="dfb6"]');var bs=el.parentElement.querySelectorAll('.choice-btn');bs.forEach(function(b){b.disabled=true;});if(ch==='b'){fb.innerHTML='✅ <strong>理性的回应。</strong>比特币是一个有趣的技术实验——去中心化账本的创新。但它的价格波动性极大，没有任何人能预测走势。铁律：只投你完全能承受损失的钱。不要借钱投资、不要用生活费投资、不要让FOMO（害怕错过）驱动你的决策。';fb.style.background='#d4edda';}else if(ch==='a'){fb.innerHTML='❌ "All in"任何单一资产都是极端冒险——尤其是波动性如此之大的加密货币。分散投资、只投能承受损失的钱——这些原则不会因为是新技术就失效。';fb.style.background='#f8d7da';}else{fb.innerHTML='⚠️ "骗局"是一个过于简化的标签。比特币是一个真实存在的技术系统——但它的市场充满投机、操纵和泡沫。理解技术≠推荐投资。保持中立、提供信息、让对方自己做决定。';fb.style.background='#fff3cd';}fb.style.display='block';}
+document.addEventListener('DOMContentLoaded',function(){renderQ6();var s=localStorage.getItem('mks-future-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){qa6++;if(st.ok)qc6++;}});up6();}});
 </script>
 </body>
 </html>
