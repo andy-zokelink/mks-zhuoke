@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技重塑社会 — 卓克·科技参考4</title>
+<style>
+/* ============================================================
+   科技重塑社会 — 技术与人性的交织图
+   母隐喻：黄昏中的城市天际线——紫色暮光与铜色灯火
+   74篇文章追踪科技如何悄无声息地重塑我们的社会关系
+   配色：黄昏紫 + 暖铜色
+   ============================================================ */
+
+/* ===== Foundations ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Twilight purple — the dusk sky */
+  --bg-deep: #1a1028;
+  --bg-mid: #231738;
+  --bg-card: rgba(35,23,56,0.78);
+  --bg-card-hover: rgba(45,30,70,0.88);
+  --text: #c8bfd8;
+  --text-bright: #ece4f8;
+  --text-dim: #8a7ea0;
+  --border: rgba(180,170,200,0.08);
+  --border-glow: rgba(180,170,200,0.14);
+
+  /* Warm copper — the city lights */
+  --copper: #d4946c;
+  --copper-light: #e8b898;
+  --copper-bright: #f0c8a4;
+  --copper-dark: #b8673e;
+  --copper-deep: #8a4a2c;
+  --copper-glow: rgba(212,148,108,0.18);
+  --copper-glow-strong: rgba(212,148,108,0.32);
+
+  /* Accent — twilight amber */
+  --amber: #e8c088;
+  --amber-glow: rgba(232,192,136,0.15);
+
+  /* Chapter accent colors — warm spectrum through dusk */
+  --ch1: #d4946c; --ch1g: rgba(212,148,108,0.18);  /* warm copper */
+  --ch2: #c97da0; --ch2g: rgba(201,125,160,0.18);  /* rose */
+  --ch3: #b878c8; --ch3g: rgba(184,120,200,0.18);  /* purple */
+  --ch4: #9a80d4; --ch4g: rgba(154,128,212,0.18);  /* violet */
+  --ch5: #c89070; --ch5g: rgba(200,144,112,0.18);  /* bronze */
+
+  --radius: 12px;
+  --radius-lg: 18px;
+  --ease: 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: 0.35s cubic-bezier(0, 0, 0.2, 1);
+}
+
+body {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "SimSun", serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  line-height: 1.85;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  padding-bottom: 64px;
+}
+
+/* ===== Dusk Ambient Background ===== */
+.dusk-ambient {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* Dusk sky — purple to dark */
+    radial-gradient(ellipse 60% 40% at 50% 15%, rgba(120,70,140,0.10) 0%, transparent 60%),
+    /* Horizon glow — warm copper bleeding up */
+    radial-gradient(ellipse 80% 30% at 50% 85%, rgba(212,148,108,0.09) 0%, transparent 55%),
+    /* Left nebula — deep purple */
+    radial-gradient(ellipse 35% 45% at 12% 40%, rgba(80,45,120,0.10) 0%, transparent 55%),
+    /* Right nebula — warm bronze */
+    radial-gradient(ellipse 35% 45% at 88% 40%, rgba(180,120,80,0.07) 0%, transparent 55%),
+    /* Copper light scatter upper */
+    radial-gradient(ellipse 25% 30% at 70% 25%, rgba(212,148,108,0.05) 0%, transparent 50%),
+    /* Purple light scatter upper */
+    radial-gradient(ellipse 25% 30% at 30% 25%, rgba(140,100,180,0.05) 0%, transparent 50%),
+    /* Void edges */
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 35%, rgba(26,16,40,0.92) 100%);
+}
+
+/* ===== City Light Particles ===== */
+.city-lights {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.light-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--copper);
+  animation: light-float linear infinite;
+  opacity: 0;
+}
+@keyframes light-float {
+  0%   { opacity: 0; transform: translateY(0) translateX(0) scale(1); }
+  15%  { opacity: 0.75; }
+  40%  { opacity: 0.25; transform: translateY(-80px) translateX(10px) scale(0.6); }
+  70%  { opacity: 0.04; }
+  100% { opacity: 0; transform: translateY(-140px) translateX(20px) scale(0.3); }
+}
+.lp1  { left: 8%;  top: 75%; width: 2px; height: 2px; animation-duration: 13s; animation-delay: 0s; }
+.lp2  { left: 16%; top: 82%; width: 1.5px; height: 1.5px; animation-duration: 17s; animation-delay: 2s; }
+.lp3  { left: 24%; top: 70%; width: 2px; height: 2px; animation-duration: 14s; animation-delay: 4s; }
+.lp4  { left: 32%; top: 88%; width: 1px; height: 1px; animation-duration: 19s; animation-delay: 1s; }
+.lp5  { left: 40%; top: 78%; width: 2px; height: 2px; animation-duration: 15s; animation-delay: 3s; }
+.lp6  { left: 48%; top: 65%; width: 1.5px; height: 1.5px; animation-duration: 21s; animation-delay: 6s; }
+.lp7  { left: 56%; top: 85%; width: 2px; height: 2px; animation-duration: 16s; animation-delay: 5s; }
+.lp8  { left: 64%; top: 72%; width: 1px; height: 1px; animation-duration: 18s; animation-delay: 2.5s; }
+.lp9  { left: 72%; top: 80%; width: 2px; height: 2px; animation-duration: 14s; animation-delay: 7s; }
+.lp10 { left: 80%; top: 68%; width: 1.5px; height: 1.5px; animation-duration: 20s; animation-delay: 1.5s; }
+.lp11 { left: 88%; top: 76%; width: 2px; height: 2px; animation-duration: 15s; animation-delay: 4.5s; }
+.lp12 { left: 94%; top: 84%; width: 1px; height: 1px; animation-duration: 22s; animation-delay: 8s; }
+
+/* Purple dust specks */
+.purple-dust {
+  position: absolute;
+  border-radius: 50%;
+  animation: dust-drift linear infinite;
+  opacity: 0;
+}
+@keyframes dust-drift {
+  0%   { opacity: 0; transform: translateY(0) scale(1); }
+  20%  { opacity: 0.55; }
+  50%  { opacity: 0.15; transform: translateY(-50px) scale(0.5); }
+  100% { opacity: 0; transform: translateY(-90px) scale(0.2); }
+}
+.pd1 { left: 30%; top: 55%; width: 3px; height: 3px; background: #8a6eb8; animation-duration: 5.5s; animation-delay: 0s; }
+.pd2 { left: 45%; top: 60%; width: 2px; height: 2px; background: #9a80d4; animation-duration: 6s; animation-delay: 1.5s; }
+.pd3 { left: 60%; top: 52%; width: 3px; height: 3px; background: #7a5ea8; animation-duration: 5s; animation-delay: 2.5s; }
+.pd4 { left: 70%; top: 58%; width: 2px; height: 2px; background: #8a6eb8; animation-duration: 6.5s; animation-delay: 0.8s; }
+.pd5 { left: 38%; top: 48%; width: 2.5px; height: 2.5px; background: #a080d8; animation-duration: 4.8s; animation-delay: 3s; }
+
+/* ===== Navigation ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(22,14,36,0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+}
+.nav-home {
+  color: var(--copper);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: color var(--ease);
+}
+.nav-home:hover { color: var(--copper-light); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  transition: color var(--ease);
+  cursor: pointer;
+}
+.nav-links a:hover { color: var(--copper); }
+.nav-links a::after {
+  content: '';
+  display: block;
+  width: 0; height: 1.5px;
+  background: var(--copper);
+  border-radius: 1px;
+  margin-top: 2px;
+  transition: width var(--ease);
+  box-shadow: 0 0 6px var(--copper-glow);
+}
+.nav-links a:hover::after { width: 100%; }
+
+/* ===== Page Shell ===== */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 28px 0;
+}
+
+/* ===== Hero ===== */
+.hero {
+  text-align: center;
+  padding: 20px 0 0;
+  position: relative;
+}
+.hero .horizon-glow {
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 260px;
+  background: radial-gradient(ellipse 55% 70% at 50% 0%, rgba(212,148,108,0.14), transparent 70%);
+  pointer-events: none;
+}
+.hero .kicker {
+  display: inline-block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: var(--copper);
+  margin-bottom: 16px;
+  border: 1px solid rgba(212,148,108,0.25);
+  padding: 5px 16px;
+  border-radius: 20px;
+}
+.hero h1 {
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  line-height: 1.3;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, #f0d0b0 0%, #d4946c 30%, #b878a0 55%, #8a60b8 80%, #6a40a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 16px rgba(180,120,160,0.3));
+}
+.hero h1 .dot {
+  -webkit-text-fill-color: #d4946c;
+  display: inline-block;
+  animation: copper-pulse 2.8s ease-in-out infinite;
+}
+@keyframes copper-pulse {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+  40% { transform: translateY(-5px) scale(1.15); opacity: 0.6; }
+  70% { transform: translateY(-1px) scale(1.05); opacity: 0.85; }
+}
+.hero .tagline {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.hero .sub-tagline {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+}
+
+/* ===== Horizon Line SVG ===== */
+.horizon-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1100px;
+  position: relative;
+}
+.horizon-wrap::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 140px;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(140,100,180,0.07), transparent 70%);
+  pointer-events: none;
+}
+.horizon-svg {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+}
+/* Horizon glow animation */
+.hz-glow { animation: horizonBreath 5s ease-in-out infinite; }
+@keyframes horizonBreath { 0%,100%{opacity:0.4} 50%{opacity:0.85} }
+.hz-core { animation: corePulse 3.5s ease-in-out infinite; }
+@keyframes corePulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+.hz-beam { animation: beamFlow 2.2s linear infinite; stroke-dasharray: 4 12; }
+@keyframes beamFlow { to { stroke-dashoffset: -32; } }
+.hz-particle { animation: particleRise 4s ease-in-out infinite; }
+@keyframes particleRise { 0%,100%{opacity:0.05;transform:translateY(0)} 50%{opacity:0.35;transform:translateY(-8px)} }
+
+/* ===== Intro ===== */
+.intro {
+  max-width: 720px;
+  margin: 56px auto 0;
+  text-align: center;
+}
+.intro p {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 2.15;
+  margin-bottom: 12px;
+}
+.intro p:last-child { margin-bottom: 0; }
+.intro em {
+  color: var(--copper);
+  font-style: normal;
+  position: relative;
+  font-weight: 600;
+}
+.intro em::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 1px;
+  height: 5px;
+  background: rgba(212,148,108,0.15);
+  border-radius: 2px;
+  z-index: -1;
+}
+.intro .big-question {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  margin-top: 20px;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, var(--copper), var(--copper-light), var(--copper));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Stats ===== */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  max-width: 780px;
+  margin: 48px auto 0;
+}
+.stat {
+  text-align: center;
+  padding: 18px 24px;
+  min-width: 90px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  transition: all var(--ease);
+  border: 1px solid var(--border);
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+.stat::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,148,108,0.3), transparent);
+  opacity: 0;
+  transition: opacity var(--ease);
+}
+.stat:hover { transform: translateY(-3px); box-shadow: 0 8px 36px rgba(0,0,0,0.5); border-color: rgba(212,148,108,0.3); }
+.stat:hover::after { opacity: 1; }
+.stat .num {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--copper);
+  line-height: 1.2;
+  letter-spacing: 1px;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+.stat .lbl {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Chapter Divider ===== */
+.chapter-divider {
+  max-width: 1100px;
+  margin: 80px auto 0;
+  text-align: center;
+  position: relative;
+}
+.chapter-divider::before {
+  content: "";
+  display: block;
+  width: 160px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  margin: 0 auto 40px;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+.chapter-divider .ch-num {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 4rem;
+  font-weight: 900;
+  opacity: 0.04;
+  color: var(--copper);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  line-height: 1;
+}
+.chapter-divider h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: 2px;
+  display: inline-block;
+  position: relative;
+}
+.chapter-divider h2::before,
+.chapter-divider h2::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 1px;
+}
+.chapter-divider h2::before {
+  right: calc(100% + 16px);
+  background: linear-gradient(90deg, transparent, var(--copper));
+}
+.chapter-divider h2::after {
+  left: calc(100% + 16px);
+  background: linear-gradient(90deg, var(--copper), transparent);
+}
+.chapter-divider .sub {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: 12px;
+  letter-spacing: 0.5px;
+  opacity: 0.65;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== Narrative Card ===== */
+.narrative-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+  margin: 36px auto 0;
+  max-width: 900px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  transition: all var(--ease);
+}
+.narrative-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+.narrative-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  opacity: 0.6;
+  transition: all var(--ease);
+}
+.narrative-card:hover::before { opacity: 1; height: 4px; }
+.narrative-card.ch1::before { background: var(--ch1); }
+.narrative-card.ch2::before { background: var(--ch2); }
+.narrative-card.ch3::before { background: var(--ch3); }
+.narrative-card.ch4::before { background: var(--ch4); }
+.narrative-card.ch5::before { background: var(--ch5); }
+
+.narrative-card h3 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  color: var(--text-bright);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  padding-left: 18px;
+  border-left: 3px solid var(--copper);
+}
+.narrative-card p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 2;
+  margin-bottom: 14px;
+}
+.narrative-card p:last-child { margin-bottom: 0; }
+
+/* ===== Quote Block (Interaction 1: Hover-reveal source) ===== */
+.quote-block {
+  position: relative;
+  margin: 24px 0;
+  padding: 22px 28px;
+  background: rgba(26,16,40,0.5);
+  border-radius: var(--radius);
+  border-left: 2px solid var(--copper);
+  transition: all var(--ease);
+  cursor: default;
+}
+.quote-block:hover {
+  background: rgba(35,22,50,0.7);
+  border-left-width: 4px;
+  box-shadow: 0 0 24px var(--copper-glow);
+}
+.quote-block .quote-text {
+  font-size: 0.92rem;
+  color: var(--copper-light);
+  line-height: 1.9;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.quote-block .quote-source {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all var(--ease);
+  letter-spacing: 0.3px;
+}
+.quote-block:hover .quote-source {
+  opacity: 0.8;
+  transform: translateY(0);
+}
+.quote-block .quote-marker {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  font-size: 1.8rem;
+  color: var(--copper);
+  opacity: 0.2;
+  line-height: 1;
+}
+
+/* ===== Intersection Pulse (Interaction 2: Pulse-reveal key insight) ===== */
+.insight-pulse {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 28px 0;
+  padding: 18px 24px;
+  background: rgba(212,148,108,0.04);
+  border-radius: var(--radius);
+  border: 1px solid rgba(212,148,108,0.1);
+  transition: all var(--ease);
+}
+.insight-pulse:hover {
+  background: rgba(212,148,108,0.08);
+  border-color: rgba(212,148,108,0.25);
+}
+.insight-pulse .pulse-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--copper);
+  flex-shrink: 0;
+  animation: insightPulse 2.2s ease-in-out infinite;
+  box-shadow: 0 0 12px var(--copper-glow-strong);
+}
+@keyframes insightPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.6); opacity: 1; }
+}
+.insight-pulse .insight-label {
+  font-size: 0.82rem;
+  color: var(--copper-light);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Data River (Interaction 3: Animated stat bars) ===== */
+.data-river {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+.data-flow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.data-flow .flow-label {
+  width: 180px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  flex-shrink: 0;
+  text-align: right;
+}
+.data-flow .flow-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.data-flow .flow-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  width: 0%;
+}
+.data-flow .flow-fill.visible { width: var(--fw); }
+.data-flow:nth-child(1) .flow-fill { background: linear-gradient(90deg, var(--copper-dark), var(--copper)); box-shadow: 0 0 8px var(--ch1g); }
+.data-flow:nth-child(2) .flow-fill { background: linear-gradient(90deg, #b87090, #c97da0); box-shadow: 0 0 8px var(--ch2g); }
+.data-flow:nth-child(3) .flow-fill { background: linear-gradient(90deg, #9a60b8, #b878c8); box-shadow: 0 0 8px var(--ch3g); }
+.data-flow:nth-child(4) .flow-fill { background: linear-gradient(90deg, #7a58b8, #9a80d4); box-shadow: 0 0 8px var(--ch4g); }
+.data-flow:nth-child(5) .flow-fill { background: linear-gradient(90deg, #b87860, #c89070); box-shadow: 0 0 8px var(--ch5g); }
+.data-flow .flow-val {
+  width: 52px;
+  text-align: left;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--copper);
+  flex-shrink: 0;
+}
+
+/* ===== Weave Grid (Interaction 4: Hover-reveal relationship cards) ===== */
+.weave-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 28px 0;
+}
+.weave-card {
+  background: rgba(26,16,40,0.5);
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  border: 1px solid var(--border);
+  transition: all var(--ease);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.weave-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,148,108,0.3);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.4);
+  background: rgba(35,22,50,0.7);
+}
+.weave-card .weave-icon {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+.weave-card h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+.weave-card .weave-desc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+.weave-card .weave-source {
+  font-size: 0.66rem;
+  color: var(--copper-dark);
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all var(--ease);
+}
+.weave-card:hover .weave-source { opacity: 0.8; transform: translateY(0); }
+.weave-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity var(--ease);
+  background: var(--copper);
+}
+.weave-card:hover::before { opacity: 1; }
+
+/* ===== Timeline (Interaction 5: Animated scroll timeline) ===== */
+.timeline-section {
+  margin: 28px 0;
+  position: relative;
+}
+.timeline-track {
+  position: relative;
+  padding: 20px 0 20px 40px;
+}
+.timeline-track::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 16px;
+  width: 2px;
+  background: linear-gradient(to bottom,
+    var(--copper-dark) 0%, var(--copper) 25%,
+    #c97da0 40%, #b878c8 60%,
+    #9a80d4 80%, rgba(154,128,212,0.2) 100%);
+  border-radius: 1px;
+}
+.tl-node {
+  position: relative;
+  padding: 14px 0 14px 28px;
+  margin-bottom: 4px;
+  transition: all var(--ease);
+  border-radius: 8px;
+}
+.tl-node:hover {
+  background: rgba(212,148,108,0.03);
+}
+.tl-node::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: -28px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--copper);
+  box-shadow: 0 0 8px var(--copper-glow);
+  transition: all var(--ease);
+}
+.tl-node:hover::before {
+  transform: scale(1.5);
+  box-shadow: 0 0 18px var(--copper-glow-strong);
+}
+.tl-node:nth-child(2)::before { background: #c97da0; box-shadow: 0 0 8px var(--ch2g); }
+.tl-node:nth-child(3)::before { background: #b878c8; box-shadow: 0 0 8px var(--ch3g); }
+.tl-node:nth-child(4)::before { background: #9a80d4; box-shadow: 0 0 8px var(--ch4g); }
+.tl-node:nth-child(5)::before { background: #c89070; box-shadow: 0 0 8px var(--ch5g); }
+.tl-node .tl-year {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--copper);
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+}
+.tl-node .tl-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 3px;
+}
+.tl-node .tl-desc {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ===== Close Card (Interaction 6: Click-to-expand detail card) ===== */
+.close-card {
+  background: rgba(26,16,40,0.5);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin: 20px 0;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.close-card:hover {
+  border-color: rgba(212,148,108,0.25);
+  background: rgba(30,20,48,0.6);
+}
+.close-card .cc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.close-card .cc-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: 0.3px;
+}
+.close-card .cc-toggle {
+  font-size: 0.9rem;
+  color: var(--copper);
+  transition: transform var(--ease);
+  width: 28px; height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.close-card.open .cc-toggle { transform: rotate(45deg); }
+.close-card .cc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), margin 0.5s ease;
+  margin-top: 0;
+}
+.close-card.open .cc-body {
+  max-height: 600px;
+  margin-top: 16px;
+}
+.close-card .cc-body p {
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  line-height: 1.9;
+  margin-bottom: 10px;
+}
+.close-card .cc-body .cc-source {
+  font-size: 0.7rem;
+  color: var(--copper-dark);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* ===== Reflection Panel ===== */
+.reflection-panel {
+  text-align: center;
+  max-width: 680px;
+  margin: 60px auto 0;
+  padding: 44px 36px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.reflection-panel::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--copper-dark), var(--copper), var(--copper-light), var(--copper), var(--copper-dark));
+}
+.reflection-panel h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.reflection-panel .re-question {
+  font-size: 1.15rem;
+  color: var(--copper-light);
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.reflection-panel .re-answer {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 2;
+  font-weight: 500;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  padding: 48px 28px 40px;
+  margin-top: 64px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+.footer-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 44px;
+  margin-bottom: 18px;
+}
+.footer-stat { text-align: center; }
+.footer-stat .num {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--copper-dark);
+  letter-spacing: 1px;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+.footer-stat .lbl {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+.footer .copy {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  opacity: 0.4;
+  margin-bottom: 6px;
+}
+.footer a {
+  color: var(--copper-dark);
+  text-decoration: none;
+  transition: color var(--ease);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.footer a:hover { color: var(--copper); }
+
+/* ===== Scroll Reveal ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .weave-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .hero h1 { font-size: 2.2rem; letter-spacing: 2px; }
+  .page { padding: 40px 18px 0; }
+  .narrative-card { padding: 30px 24px; }
+  .chapter-divider h2 { font-size: 1.15rem; }
+  .chapter-divider h2::before,
+  .chapter-divider h2::after { width: 16px; }
+  .nav-links { gap: 16px; }
+  .nav-links a { font-size: 0.7rem; letter-spacing: 0.3px; }
+  .data-flow .flow-label { width: 120px; font-size: 0.72rem; }
+  .intro .big-question { font-size: 1.15rem; }
+}
+
+@media (max-width: 640px) {
+  .weave-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.7rem; letter-spacing: 2px; }
+  .hero .tagline { font-size: 0.88rem; }
+  .hero .sub-tagline { font-size: 0.72rem; }
+  .hero .kicker { font-size: 0.64rem; letter-spacing: 3px; }
+  .chapter-divider h2 { font-size: 1rem; letter-spacing: 1px; }
+  .chapter-divider h2::before,
+  .chapter-divider h2::after { width: 10px; }
+  .intro { margin-top: 36px; }
+  .intro p { font-size: 0.86rem; }
+  .intro .big-question { font-size: 1rem; }
+  .stat { padding: 10px 12px; min-width: 56px; }
+  .stat .num { font-size: 1.2rem; }
+  .stat .lbl { font-size: 0.66rem; }
+  .narrative-card { padding: 22px 16px; }
+  .narrative-card h3 { font-size: 1rem; }
+  .narrative-card p { font-size: 0.84rem; }
+  .quote-block { padding: 16px 18px; }
+  .quote-block .quote-text { font-size: 0.84rem; }
+  .data-flow .flow-label { width: 90px; font-size: 0.66rem; }
+  .timeline-track { padding-left: 28px; }
+  .tl-node { padding-left: 20px; }
+  .tl-node::before { left: -24px; width: 8px; height: 8px; }
+  .footer-stats { gap: 20px; }
+  .reflection-panel { padding: 28px 18px; }
+  .reflection-panel .re-question { font-size: 0.95rem; }
+  .nav-inner { height: 44px; }
+  .nav-links { gap: 10px; }
+  .nav-links a { font-size: 0.64rem; letter-spacing: 0; }
+  .nav-home { font-size: 0.7rem; }
+  .horizon-svg { max-height: 240px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Dusk Ambient ===== -->
+<div class="dusk-ambient"></div>
+
+<!-- ===== City Light Particles ===== -->
+<div class="city-lights">
+  <div class="light-particle lp1"></div>
+  <div class="light-particle lp2"></div>
+  <div class="light-particle lp3"></div>
+  <div class="light-particle lp4"></div>
+  <div class="light-particle lp5"></div>
+  <div class="light-particle lp6"></div>
+  <div class="light-particle lp7"></div>
+  <div class="light-particle lp8"></div>
+  <div class="light-particle lp9"></div>
+  <div class="light-particle lp10"></div>
+  <div class="light-particle lp11"></div>
+  <div class="light-particle lp12"></div>
+  <div class="purple-dust pd1"></div>
+  <div class="purple-dust pd2"></div>
+  <div class="purple-dust pd3"></div>
+  <div class="purple-dust pd4"></div>
+  <div class="purple-dust pd5"></div>
+</div>
+
+<!-- ===== Navigation ===== -->
+<nav class="nav" id="top-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-home">← 科技参考4</a>
+    <div class="nav-links">
+      <a href="#ch1">AI与职业</a>
+      <a href="#ch2">系统与博弈</a>
+      <a href="#ch3">日常与分层</a>
+      <a href="#ch4">知识与权力</a>
+      <a href="#ch5">共存之道</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="horizon-glow"></div>
+  <p class="kicker">科技参考4 · 第五章</p>
+  <h1>科技重塑社会<span class="dot">·</span></h1>
+  <p class="tagline">技术从来不是中性的——每项技术都在重塑人与人的关系</p>
+  <p class="sub-tagline">74 篇文章 &nbsp;·&nbsp; 五个叙事维度 &nbsp;·&nbsp; 一幅科技与社会的交织图</p>
+</header>
+
+<!-- ===== Horizon Skyline SVG ===== -->
+<div class="horizon-wrap">
+  <svg class="horizon-svg" viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1028" stop-opacity="1"/>
+      <stop offset="60%" stop-color="#2d1b3d" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#3d2750" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="hzGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d4946c" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#b878a0" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#6a40a0" stop-opacity="0.05"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#f0c8a4" stop-opacity="0.8"/>
+      <stop offset="15%" stop-color="#d4946c" stop-opacity="0.4"/>
+      <stop offset="40%" stop-color="#b878a0" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="softGlow"><feGaussianBlur stdDeviation="4"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="strongGlow"><feGaussianBlur stdDeviation="12"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- SKY -->
+  <rect width="1200" height="360" fill="url(#sky)"/>
+
+  <!-- SUN / LIGHT SOURCE AT HORIZON -->
+  <ellipse cx="600" cy="310" rx="260" ry="80" fill="url(#sunGlow)" class="hz-glow" filter="url(#strongGlow)"/>
+  <ellipse cx="600" cy="310" rx="100" ry="30" fill="rgba(240,200,164,0.15)" class="hz-core"/>
+
+  <!-- HORIZON LINE -->
+  <line x1="0" y1="320" x2="1200" y2="320" stroke="url(#hzGrad)" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- CITY SILHOUETTES — built from rectangles representing tech reshaping society -->
+  <!-- Left cluster: Old structures -->
+  <g opacity="0.25">
+    <rect x="60" y="280" width="30" height="40" rx="2" fill="#3d2750"/>
+    <rect x="100" y="260" width="24" height="60" rx="2" fill="#3d2750"/>
+    <rect x="135" y="290" width="20" height="30" rx="1" fill="#3d2750"/>
+    <rect x="165" y="270" width="28" height="50" rx="2" fill="#3d2750"/>
+    <rect x="205" y="250" width="18" height="70" rx="2" fill="#3d2750"/>
+  </g>
+
+  <!-- Center-right cluster: Rising new structures -->
+  <g opacity="0.35">
+    <rect x="420" y="230" width="22" height="90" rx="2" fill="#4a3070"/>
+    <rect x="455" y="210" width="35" height="110" rx="2" fill="#5a3d80"/>
+    <rect x="500" y="240" width="18" height="80" rx="1" fill="#4a3070"/>
+    <rect x="530" y="180" width="28" height="140" rx="2" fill="#6a4d90" opacity="0.8"/>
+    <rect x="570" y="220" width="20" height="100" rx="2" fill="#5a3d80"/>
+    <rect x="605" y="195" width="32" height="125" rx="2" fill="#7a5da0" opacity="0.7"/>
+  </g>
+
+  <!-- Right cluster: Distant structures -->
+  <g opacity="0.2">
+    <rect x="800" y="260" width="26" height="60" rx="2" fill="#3d2750"/>
+    <rect x="840" y="240" width="20" height="80" rx="2" fill="#4a3070"/>
+    <rect x="875" y="275" width="18" height="45" rx="1" fill="#3d2750"/>
+    <rect x="910" y="255" width="30" height="65" rx="2" fill="#4a3070"/>
+    <rect x="960" y="235" width="22" height="85" rx="2" fill="#5a3d80"/>
+    <rect x="1000" y="265" width="16" height="55" rx="1" fill="#3d2750"/>
+  </g>
+
+  <!-- CONNECTION LINES — technology weaving society together -->
+  <g opacity="0.12" class="hz-beam">
+    <line x1="160" y1="290" x2="430" y2="250" stroke="#d4946c" stroke-width="0.8"/>
+    <line x1="250" y1="270" x2="520" y2="210" stroke="#c97da0" stroke-width="0.6"/>
+    <line x1="480" y1="230" x2="620" y2="200" stroke="#b878c8" stroke-width="0.8"/>
+    <line x1="550" y1="260" x2="820" y2="270" stroke="#9a80d4" stroke-width="0.6"/>
+    <line x1="630" y1="210" x2="930" y2="265" stroke="#d4946c" stroke-width="0.7"/>
+  </g>
+
+  <!-- RISING PARTICLES — tech signals -->
+  <g class="hz-particle">
+    <circle cx="200" cy="250" r="1.5" fill="#d4946c" opacity="0.3"/>
+    <circle cx="350" cy="220" r="1" fill="#c97da0" opacity="0.25"/>
+    <circle cx="500" cy="180" r="1.8" fill="#b878c8" opacity="0.35"/>
+    <circle cx="650" cy="160" r="1.2" fill="#9a80d4" opacity="0.28"/>
+    <circle cx="750" cy="210" r="1.5" fill="#d4946c" opacity="0.3"/>
+    <circle cx="880" cy="200" r="1" fill="#b878c8" opacity="0.25"/>
+  </g>
+
+  <!-- PEOPLE DOTS — scattered at base -->
+  <g opacity="0.15">
+    <circle cx="100" cy="322" r="2" fill="#e8b898"/>
+    <circle cx="160" cy="325" r="1.5" fill="#e8b898"/>
+    <circle cx="220" cy="320" r="2.5" fill="#e8b898"/>
+    <circle cx="300" cy="324" r="1.8" fill="#e8b898"/>
+    <circle cx="380" cy="322" r="2" fill="#e8b898"/>
+    <circle cx="700" cy="326" r="2.2" fill="#e8b898"/>
+    <circle cx="780" cy="323" r="1.6" fill="#e8b898"/>
+    <circle cx="860" cy="321" r="2.4" fill="#e8b898"/>
+    <circle cx="940" cy="325" r="1.8" fill="#e8b898"/>
+    <circle cx="1020" cy="323" r="2" fill="#e8b898"/>
+    <circle cx="1100" cy="320" r="1.5" fill="#e8b898"/>
+  </g>
+
+  <!-- REFLECTION on water/surface -->
+  <ellipse cx="600" cy="332" rx="280" ry="8" fill="rgba(212,148,108,0.04)"/>
+  <ellipse cx="600" cy="338" rx="180" ry="5" fill="rgba(180,120,100,0.03)"/>
+  </svg>
+</div>
+
+<!-- ===== Intro ===== -->
+<section class="intro reveal">
+  <p>
+    卓克用<em>74篇文章</em>画了一幅科技与社会的交织图。这幅图里没有简单的"技术好"或"技术坏"——有的是AI淘汰职业的同时也在创造新工作，有的是电动车新国标在改变千万人的出行方式，有的是比特币在挑战我们习以为常的货币体系，有的是马斯克的中国血统在一个全球化的时代引发的文化讨论。
+  </p>
+  <p>
+    每项技术都是一次社会关系的重组。技术从来不是中性的——它改变谁有权力、谁被边缘化、谁的声音能被听到。
+  </p>
+  <span class="big-question">不再问「技术会不会取代我」<br>而是问「我如何与技术共处」</span>
+</section>
+
+<!-- ===== Stats ===== -->
+<div class="stats reveal">
+  <div class="stat"><span class="num">74</span><span class="lbl">篇文章追踪</span></div>
+  <div class="stat"><span class="num">5</span><span class="lbl">叙事维度</span></div>
+  <div class="stat"><span class="num">17+</span><span class="lbl">处原文引用</span></div>
+  <div class="stat"><span class="num">6</span><span class="lbl">种交互形式</span></div>
+</div>
+
+<!-- ================================================================ -->
+<!-- CHAPTER 1: AI与职业 — 当算法开始评判你的价值 -->
+<!-- ================================================================ -->
+<div class="chapter-divider reveal" id="ch1">
+  <span class="ch-num">01</span>
+  <h2>当算法开始评判你的价值</h2>
+  <p class="sub">AI 不只是工具，它在重新定义"谁有价值"和"什么工作值得存在"</p>
+</div>
+
+<!-- Narrative Card 1-1 -->
+<section class="narrative-card ch1 reveal">
+  <h3>文科消亡，全世界的大学都在用脚投票</h3>
+  <p>2023年，中国高校经历了史上最大规模的专业调整。设计专业撤销305个，工商管理、电子信息管理、公共管理合计撤销1060余个——文科专业撤销总数达1065个。而理工科当年撤销605个，且多为整合升级而非撤销后消失。</p>
+  <p>这并不是中国独有的现象。在美国、英国、日本、韩国，人文学科的入学人数在过去十年里下降了30%至50%。AI 大模型能够生成报告、翻译文档、编写代码——这些能力的跃迁，让人们开始用 ROI 来衡量每一个学位的价值。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">刘擎老师说，他自己是一个理工男改的文科，所以他对文科没有那么强烈的感情，认为文科只需要非常少而精的人，特别热衷、特别有才华的人从事就够了。而张雪峰也强烈建议同学们选理工科专业。</p>
+    <p class="quote-source">—— 卓克《科技参考4》085｜当下文科衰落，今后文理科一起衰落？</p>
+  </div>
+
+  <p>但问题真的只是"文科没用了"吗？当 AI 能写出看起来通顺的文章、能通过律师资格考试、能生成商业计划书，真正被挑战的其实不是文科——而是<em>所有可以被明确评估、标准化输出</em>的能力。当机器的评判标准成为唯一的评判标准，连"什么是好的写作""什么是好的思考"的定义本身，也在被重写。</p>
+</section>
+
+<!-- Narrative Card 1-2: Silicon Valley -->
+<section class="narrative-card ch1 reveal">
+  <h3>4年3亿美元 — 当一个人的薪酬超过NBA球星</h3>
+  <p>2025年，Meta 为组建超级智能团队，在硅谷以天价薪酬抢人。针对顶级 AI 研究员，开出的条件是<em>4年3亿美元</em>，折合年均7500万美元。这个数字超过了库里（5960万）、约基奇（5522万）、詹姆斯（5262万）等所有 NBA 顶级球星的基本工资。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">他们早在2025年4月就已经开始零零星星地动手了。直到7月23日，在LinkedIn上流出了一份44人的完整名单……Meta的创始人扎克伯格之前透露的关于超级团队的规模就是50人。</p>
+    <p class="quote-source">—— 卓克《科技参考4》154｜硅谷抢人大战，坏了规矩</p>
+  </div>
+
+  <div class="insight-pulse">
+    <div class="pulse-dot"></div>
+    <span class="insight-label">技术不是在消灭工作——它在极度拉大"被需要的人"和"不被需要的人"之间的鸿沟</span>
+  </div>
+</section>
+
+<!-- Narrative Card 1-3: Human thinking speed -->
+<section class="narrative-card ch1 reveal">
+  <h3>人类思维速度：10 bit/s — 和机器比，我们有多"慢"？</h3>
+  <p>一篇引发争议的研究指出：人脑对外界信息的处理速度大约只有 10 bit/s。换算一下，打字快的人一分钟打120个单词，每个词按5字母算，每个字母1bit，正好是每秒10bit。而现代 AI 模型的信息吞吐量已经达到数十万甚至百万 token/秒的量级。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">我看遍了各个媒体和自媒体的报道、分析，没有一篇做了深入的思考和解读……假设一个字母算作1bit数据，一个单词平均5个字母，打字快的人一分钟能打120个单词，那么总共的速度就是5bit×120=600bit/分钟，除以60秒，这个速度就是10bit/s。</p>
+    <p class="quote-source">—— 卓克《科技参考4》019｜人类思维速度10bit/s，太慢了</p>
+  </div>
+
+  <p>但卓克提醒我们，这个数字本身并不重要——重要的是它让我们重新思考：<em>人类的价值从来不在"速度快"</em>。我们的优势在于直觉、共情、跨域联想和意义构建。当机器在速度上彻底碾压我们的时候，反而逼我们直面一个问题：哪些人类能力是速度无法替代的？</p>
+</section>
+
+<!-- ================================================================ -->
+<!-- CHAPTER 2: 系统与博弈 — 当技术撞上制度的墙 -->
+<!-- ================================================================ -->
+<div class="chapter-divider reveal" id="ch2">
+  <span class="ch-num">02</span>
+  <h2>当技术撞上制度的墙</h2>
+  <p class="sub">每一项"技术落地"的背后，都是一场制度、资本与人性的三方博弈</p>
+</div>
+
+<!-- Narrative Card 2-1: HarmonyOS -->
+<section class="narrative-card ch2 reveal">
+  <h3>鸿蒙之路：技术可以自研，但生态无法速成</h3>
+  <p>从2021年发布到2025年，华为鸿蒙用4年时间兑现了当初的承诺，成功打造了一个类 iOS 的独立操作系统。据卓克分析，其发展轨迹已经远超当年微软 Windows Phone 的水平。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">这4年里鸿蒙发展很大，已经完全兑现了当初发布会上所说的内容，而且正在往类iOS系统上发展，但发展前景如何完全取决于那上面生态的繁荣度如何……PC版鸿蒙操作系统几乎不可能达到手机版鸿蒙的水平了。</p>
+    <p class="quote-source">—— 卓克《科技参考4》052｜鸿蒙今天怎么样了？手机OK了，PC够呛</p>
+  </div>
+
+  <div class="insight-pulse">
+    <div class="pulse-dot"></div>
+    <span class="insight-label">操作系统不是写出来的代码——是千千万万开发者用脚投票的结果</span>
+  </div>
+</section>
+
+<!-- Narrative Card 2-2: Drone delivery -->
+<section class="narrative-card ch2 reveal">
+  <h3>无人机送外卖：技术可行 ≠ 社会可行</h3>
+  <p>美团设计的城市无人机载重仅2.5公斤，即使按最理想状况核算，成本也超过了快递小哥。而中通海燕那种能装30件快递的大型无人机——翼展2米、重量35公斤、时速100公里——在城市上空飞行，是对地面安全的重大挑战。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">海燕那种体型的无人机，摔机之后是可以击碎混凝土预制板的。中国民航总局……对无人机可靠性的要求大约在一万次飞行，坠机一次是可以的。而且坠也得坠到无人的地方，顶多赔点庄稼钱。</p>
+    <p class="quote-source">—— 卓克《科技参考4》287｜无人机送外卖的一盆凉水（下）</p>
+  </div>
+
+  <p>技术已经跑到了制度的前面——但我们不是缺制度，而是制度本身就是社会的安全阀。当一项技术的失败可能以人命为代价时，"能不能做"和"该不该做"之间的距离，就是文明的距离。</p>
+</section>
+
+<!-- Narrative Card 2-3: Australia teen social ban -->
+<section class="narrative-card ch2 reveal">
+  <h3>20天立法：澳大利亚用政治压倒了科学</h3>
+  <p>2025年12月，澳大利亚正式实施社交媒体青少年禁令——16岁以下禁止使用社交媒体，违者平台最高罚款4950万澳元。这项法案从起草到颁布仅20天，公众征询期不足24小时。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">简单地说，这个禁令是澳大利亚版本的用政治压倒科学证据的家长式严格管理……青少年们还没有成年，虽然可以发表反对意见，但并不能像成年人一样，用合法渠道阻止立法通过，他们在立法过程里是零权利者。</p>
+    <p class="quote-source">—— 卓克《科技参考4》280｜博弈：澳大利亚青少年社交app禁令</p>
+  </div>
+
+  <div class="insight-pulse">
+    <div class="pulse-dot"></div>
+    <span class="insight-label">当"保护"以剥夺权利的方式执行——被保护者的声音却恰恰是最轻的</span>
+  </div>
+</section>
+
+<!-- Narrative Card 2-4: Paris Climate -->
+<section class="narrative-card ch2 reveal">
+  <h3>巴黎气候协定：承诺与现实的裂缝</h3>
+  <p>2015年联合国195个成员签署《巴黎协定》，十年后美国退出、欧洲放弃燃油车禁令。卓克分析认为，到2030年统计时，相当多国家的碳排放将和当初承诺出现巨大缺口。这些缺口既反映了各国在"画饼"，也反映出科学家对气候变化的误判。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">中国在这些国家里，前期进度落后，但到了2030年时会追到中游，2060年时很可能已经是优等生了。这些缺口，既反映了当初签署承诺时各国在画饼，又反映出科学家对气候变化的误判。</p>
+    <p class="quote-source">—— 卓克《科技参考4》091｜《巴黎气候协定》还算数吗？</p>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- CHAPTER 3: 日常与分层 — 技术如何悄悄划分阶级 -->
+<!-- ================================================================ -->
+<div class="chapter-divider reveal" id="ch3">
+  <span class="ch-num">03</span>
+  <h2>技术如何悄悄划分阶级</h2>
+  <p class="sub">从吃糖到接电话，技术在日常生活中织出一张看不见的阶层之网</p>
+</div>
+
+<!-- Narrative Card 3-1: Sugar & Class -->
+<section class="narrative-card ch3 reveal">
+  <h3>吃不吃糖，已经体现出阶级性了</h3>
+  <p>卓克引用了一句扎心的话："今天吃不吃糖，吃多少糖，已经开始体现出阶级性了。"大口喝含糖饮料的人月收入普遍更低，饭店里如果没有代糖饮料，档次往往也更低。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">今天还在大口喝含糖饮料的人的月收入，普遍比喝代糖饮料的人更低。而饭店或者商店里如果压根没有代糖饮料，那这个饭店和商店的档次也往往更低。如果统计一下教育程度，也是常年喝含糖饮料的人，比主动拒绝含糖饮料的人更低。</p>
+    <p class="quote-source">—— 卓克《科技参考4》220｜糖越来越不受欢迎（上）</p>
+  </div>
+
+  <p>世界卫生组织早在2003年就建议将"添加糖"摄入量控制在每日总能量的10%以下。代糖技术的成熟让"不吃糖"成为可能——但正如卓克指出的，技术的可及性从来不是均等的。当健康本身成为一种消费品，技术的红利并不平等地流向每个人。</p>
+</section>
+
+<!-- Weave Grid: daily tech -->
+<div class="weave-grid reveal">
+  <div class="weave-card">
+    <span class="weave-icon">🦟</span>
+    <h4>城市化副产品：全年吸血的蚊子</h4>
+    <p class="weave-desc">城市化让地下车库、暖气管道成为蚊子越冬的"避难所"。库蚊和按蚊靠滞育过冬，伊蚊靠卵的形态挨过去——城市温暖的地下空间打破了它们的冬眠节律。</p>
+    <p class="weave-source">—— 239｜城市化副产品：全年吸血的蚊子</p>
+  </div>
+
+  <div class="weave-card">
+    <span class="weave-icon">📞</span>
+    <h4>10通电话8通骚扰</h4>
+    <p class="weave-desc">营销骚扰电话的生态链：从员工批量办卡到AI语音机器人外呼，技术让骚扰的成本降到了几乎为零，而你的注意力成了被收割的商品。</p>
+    <p class="weave-source">—— 251｜营销骚扰电话生态解析（上）</p>
+  </div>
+
+  <div class="weave-card">
+    <span class="weave-icon">🔥</span>
+    <h4>垃圾不够烧了？黑白颠倒的宣传</h4>
+    <p class="weave-desc">一条火爆视频宣称中国垃圾焚烧"遥遥领先"，实际上进口国外垃圾焚烧对中国环境百害无一利。技术乐观主义有时正是掩盖问题的帷幕。</p>
+    <p class="weave-source">—— 115｜解读：《中国的垃圾不够烧了》</p>
+  </div>
+
+  <div class="weave-card">
+    <span class="weave-icon">🎆</span>
+    <h4>喜马拉雅山上的烟花</h4>
+    <p class="weave-desc">始祖鸟在海拔5500米燃放烟花——技术让艺术可以抵达任何角落，但高原生态的脆弱性让"降解材料"的承诺在缺氧环境下化为空谈。</p>
+    <p class="weave-source">—— 196｜喜马拉雅山上放烟花</p>
+  </div>
+
+  <div class="weave-card">
+    <span class="weave-icon">🎵</span>
+    <h4>音乐如何被技术重塑</h4>
+    <p class="weave-desc">数字合成器技术催生了世界音乐和New Age——当嬉皮士们成为城市中产，他们用技术去往东方、非洲寻找素材，技术改变了我们听什么、怎么听。</p>
+    <p class="weave-source">—— 275｜世界音乐的兴盛，从技术角度谈起</p>
+  </div>
+
+  <div class="weave-card">
+    <span class="weave-icon">🌍</span>
+    <h4>太阳系源于一颗超新星</h4>
+    <p class="weave-desc">75%氢、24%氦、1%其他元素——引力与热运动的拉锯催生了第一颗恒星。技术社会中的我们，也不过是宇宙物质的一次暂时组合。</p>
+    <p class="weave-source">—— 084｜太阳系源于一颗超新星爆炸</p>
+  </div>
+</div>
+
+<!-- Data River -->
+<div class="narrative-card ch3 reveal">
+  <h3>技术分层的量化切片</h3>
+  <p>以下数据来自卓克在过去一年里的多篇文章，每一条背后都是技术对社会的真实重塑：</p>
+  <div class="data-river">
+    <div class="data-flow">
+      <span class="flow-label">中国高校文科撤销</span>
+      <div class="flow-track"><div class="flow-fill" style="--fw:70%"></div></div>
+      <span class="flow-val">1065个</span>
+    </div>
+    <div class="data-flow">
+      <span class="flow-label">AI研究员年薪峰值</span>
+      <div class="flow-track"><div class="flow-fill" style="--fw:95%"></div></div>
+      <span class="flow-val">$7500万</span>
+    </div>
+    <div class="data-flow">
+      <span class="flow-label">牛顿炒股损失(折合今日)</span>
+      <div class="flow-track"><div class="flow-fill" style="--fw:65%"></div></div>
+      <span class="flow-val">¥6500万</span>
+    </div>
+    <div class="data-flow">
+      <span class="flow-label">澳青少年禁令罚款上限</span>
+      <div class="flow-track"><div class="flow-fill" style="--fw:42%"></div></div>
+      <span class="flow-val">¥2.3亿</span>
+    </div>
+    <div class="data-flow">
+      <span class="flow-label">中国垃圾焚烧厂(7年)</span>
+      <div class="flow-track"><div class="flow-fill" style="--fw:85%"></div></div>
+      <span class="flow-val">1000+座</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- CHAPTER 4: 知识与权力 — 谁在定义"什么是对的" -->
+<!-- ================================================================ -->
+<div class="chapter-divider reveal" id="ch4">
+  <span class="ch-num">04</span>
+  <h2>谁在定义"什么是对的"</h2>
+  <p class="sub">科学的权威、院士的争议、炒作与真相——知识本身就是权力</p>
+</div>
+
+<!-- Narrative Card 4-1: Musk -->
+<section class="narrative-card ch4 reveal">
+  <h3>马斯克的中国血统：当身份成为武器</h3>
+  <p>2024年美国大选中，马斯克一面支持驱逐非法移民，一面被挖出自己90年代持有的是J-1签证，在身份"灰色地带"中创办了Zip2公司。据《华盛顿邮报》援引法庭记录和公司文件：马斯克并未在斯坦福报到上课，中间两年签证状态不合规。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">大家心里说了，你本人就是美国移民，你们家三代都是移民，你上岸了就要把其他移民的门都关上吗？……马斯克还故意抹掉了他1995年-1997年的工作经历。</p>
+    <p class="quote-source">—— 卓克《科技参考4》023｜埃隆·马斯克的中国血统</p>
+  </div>
+
+  <div class="insight-pulse">
+    <div class="pulse-dot"></div>
+    <span class="insight-label">技术精英的身份叙事——既是全球化的产物，也是全球化的"关门人"</span>
+  </div>
+</section>
+
+<!-- Narrative Card 4-2: Newton stock -->
+<section class="narrative-card ch4 reveal">
+  <h3>牛顿炒股赔了6500万："我可以计算天体，但无法计算人性"</h3>
+  <p>这句名言几乎成了金融科普的标配。但真实细节直到2020年才被揭晓——研究人员从英格兰银行资料库中找到了牛顿的票据。从1720年南海泡沫破裂到1723年全部割肉离场，牛顿损失了约3万英镑，折合今日约6500万人民币。</p>
+
+  <div class="quote-block">
+    <span class="quote-marker">"</span>
+    <p class="quote-text">从1720年7月初南海泡沫破裂，到1723年牛顿全部割肉离场，牛顿大约损失了3万英镑，而1723年的3万英镑大约相当于今天6500万人民币。所以还是非常非常重大的损失。</p>
+    <p class="quote-source">—— 卓克《科技参考4》055｜牛顿炒股赔了多少钱？6500万</p>
+  </div>
+
+  <p>人类最伟大的头脑也逃不过泡沫——技术可以计算天体的轨道，但市场里的人性永远是无法建模的变量。</p>
+</section>
+
+<!-- Close Cards (Click to expand) -->
+<section class="narrative-card ch4 reveal">
+  <h3>科学技术中的权力博弈</h3>
+  <p>点击下方卡片展开详情——每一项"权威结论"背后，都有不为人知的博弈。</p>
+
+  <div class="close-card" onclick="this.classList.toggle('open')">
+    <div class="cc-header">
+      <span class="cc-title">🏛️ 院士争议：十年后的公案</span>
+      <span class="cc-toggle">+</span>
+    </div>
+    <div class="cc-body">
+      <p>2025年新增院士中，饶毅连发十篇文章质疑地学部当选者王艳芬。理由包括：10篇代表性论文中7篇发表于参选前3年内、缺乏典型的地学野外工作、学术成果"像是在赶稿子"。</p>
+      <p class="cc-source">—— 卓克《科技参考4》257｜十年后的公案</p>
+      <p>学术荣誉体系的评审标准本身，就是技术知识权力结构的集中体现。当"速成"可以通向"终身荣誉"，科学共同体的信用就在被消解。</p>
+    </div>
+  </div>
+
+  <div class="close-card" onclick="this.classList.toggle('open')">
+    <div class="cc-header">
+      <span class="cc-title">🕊️ 强化学习的开端：塞进导弹里的鸽子</span>
+      <span class="cc-toggle">+</span>
+    </div>
+    <div class="cc-body">
+      <p>1943年，心理学家斯金纳受命研发精确制导导弹——他训练鸽子来给导弹制导。鸽子被装进弹头前端的锥形舱，通过啄击屏幕来修正飞行方向。虽然最终未被采用，但这正是强化学习的早期思想源头。</p>
+      <p class="cc-source">—— 卓克《科技参考4》222｜强化学习的开端：塞进导弹里的鸽子</p>
+      <p>AI 的前身来自战争需求——今天最前沿的强化学习算法，思想的种子却是在鸽子啄食的行为实验中种下的。</p>
+    </div>
+  </div>
+
+  <div class="close-card" onclick="this.classList.toggle('open')">
+    <div class="cc-header">
+      <span class="cc-title">📜 垃圾焚烧：一条视频的"话语权新标杆"</span>
+      <span class="cc-toggle">+</span>
+    </div>
+    <div class="cc-body">
+      <p>网上火爆的视频称"中国垃圾不够烧了"，宣称七年建了超1000座焚烧厂。视频话术写道："我们焚化的不只是垃圾，还焚化了西方用百年环保理论建筑的话语高墙，煅烧出中国在绿色科技领域的话语权新标杆"。</p>
+      <p class="cc-source">—— 卓克《科技参考4》115｜解读：《中国的垃圾不够烧了》</p>
+      <p>卓克指出：这条视频宣传的内容与主流垃圾处理方法背道而驰。"专门进口国外垃圾焚烧的做法，反而对中国的环境有百害而无一利。"——当技术被用于建构民族主义叙事，"真相"就成了可有可无的装饰品。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- CHAPTER 5: 共存之道 — 重新定义人与技术的关系 -->
+<!-- ================================================================ -->
+<div class="chapter-divider reveal" id="ch5">
+  <span class="ch-num">05</span>
+  <h2>重新定义人与技术的关系</h2>
+  <p class="sub">不做技术的奴隶，也不做技术的敌人——而是做一个清醒的共处者</p>
+</div>
+
+<!-- Timeline -->
+<section class="narrative-card ch5 reveal">
+  <h3>科技与社会的交织时间线</h3>
+  <p>以下关键事件标记了技术如何在不同节点上改变社会结构：</p>
+  <div class="timeline-section">
+    <div class="timeline-track">
+      <div class="tl-node">
+        <div class="tl-year">1943</div>
+        <div class="tl-title">鸽子导弹：强化学习的萌芽</div>
+        <div class="tl-desc">斯金纳训练鸽子制导——战时技术需求意外埋下了AI学习的种子</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-year">1720</div>
+        <div class="tl-title">牛顿南海泡沫：理智的边界</div>
+        <div class="tl-desc">"我可以计算天体轨道，但无法计算人性的疯狂"——损失折合今日6500万人民币</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-year">2021</div>
+        <div class="tl-title">鸿蒙发布：技术自主之路</div>
+        <div class="tl-desc">4年后兑现承诺超越WP，但PC版前路艰险——生态不是代码能写出来的</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-year">2023</div>
+        <div class="tl-title">AI元年：文科大撤退</div>
+        <div class="tl-desc">1065个文科专业撤销，ChatGPT改写教育坐标系——什么是"有用"被重新定义</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-year">2025</div>
+        <div class="tl-title">禁令与反思：我们如何与技术共存</div>
+        <div class="tl-desc">澳大利亚青少年社媒禁令、硅谷AI薪酬泡沫、巴黎气候协定裂痕——技术带来的问题必须由制度来回应</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reflection Panel -->
+<section class="reflection-panel reveal">
+  <h3>最后的追问</h3>
+  <p class="re-question">
+    卓克用74篇文章画出的这幅交织图<br>最终指向一个追问：
+  </p>
+  <p>
+    AI 在淘汰职业，也在创造新工作。电动车新国标在改变出行方式。比特币在挑战货币体系。马斯克的中国血统引发文化讨论——<em>每项技术都是一次社会关系的重组</em>。
+  </p>
+  <p style="margin-top:18px;">
+    技术不会停止。我们也不需要停止。但我们需要保持清醒：当一项技术承诺改变世界的时候，追问一句——<em>它会让谁更有权力？会让谁更无声？会让我更自由，还是更被束缚？</em>
+  </p>
+  <p style="margin-top:18px; font-size:1.05rem; color: var(--copper-light); font-weight: 700;">
+    不再问「技术会不会取代我」<br>而是问「我如何与技术共处」。
+  </p>
+</section>
+
+<!-- ===== Footer ===== -->
+<div class="footer">
+  <div class="footer-stats">
+    <div class="footer-stat"><span class="num">74</span><span class="lbl">篇文章</span></div>
+    <div class="footer-stat"><span class="num">17+</span><span class="lbl">处原文引用</span></div>
+    <div class="footer-stat"><span class="num">6</span><span class="lbl">交互形式</span></div>
+    <div class="footer-stat"><span class="num">5</span><span class="lbl">叙事维度</span></div>
+  </div>
+  <p class="copy">卓克 · 科技参考4 — 第五章：科技重塑社会</p>
+  <p class="copy" style="margin-top:4px;">技术从来不是中性的 · 每项技术都在重塑人与人的关系</p>
+  <p style="margin-top:12px;"><a href="../index.html">← 返回科技参考4 首页</a></p>
+</div>
+
+</div><!-- /.page -->
+
+<!-- ===== Scroll Reveal Observer ===== -->
+<script>
+(function() {
+  'use strict';
+
+  // ===== Interaction 1: Scroll Reveal =====
+  const observerOptions = {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  };
+
+  const revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  // ===== Interaction 2: Animated data bars on scroll =====
+  const barObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.flow-fill').forEach(function(el) {
+    barObserver.observe(el);
+  });
+
+  // ===== Smooth scroll for nav links =====
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ===== Interaction: Close-card toggle is handled by inline onclick
+
+  console.log('科技重塑社会 — 沉浸式叙事已就绪');
+  console.log('74篇文章 · 5个叙事维度 · 17+处原文引用 · 6种交互形式');
+})();
+</script>
+
+</body>
+</html>
