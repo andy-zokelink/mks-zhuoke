@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>硬核科技引擎 — 科技参考4 · MKS</title>
+<style>
+/* ===== 硬核科技引擎 · 沉浸叙事版 MKS v1 =====
+ * 本质洞察：硬科技不是「仰望」而是「拆解」——每项技术背后都有可理解的物理定律和工程权衡
+ * 情感基调：不讲神话，只讲物理和工程
+ * 叙事锚点：芯片制程逼近物理极限，电池重塑能源版图，SpaceX把火箭变成可回收公交车，量子计算在实验室蠢蠢欲动
+ * 视觉策略：工业灰+电光蓝+能量橙——引擎/硬件的质感
+ */
+
+:root {
+  --bg: #1a1a1e; --bg-deep: #111115; --card: #242428;
+  --accent: #ff6600; --accent-deep: #cc4400; --accent-light: #ff9933;
+  --electric: #0066ff; --electric-deep: #003d99; --electric-light: #4da6ff;
+  --steel: #4a4a50; --steel-light: #6a6a72; --steel-dark: #2a2a30;
+  --success: #33cc66; --warn: #ff6600;
+  --text: #e0e0e8; --text-light: #a0a0b0; --text-muted: #6a6a78;
+  --border: #3a3a44; --border-light: #4a4a54;
+  --shadow: 0 2px 14px rgba(0,0,0,.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.5);
+  --radius: 12px; --radius-sm: 8px;
+  --nav-bg: #0a0a0f; --nav-text: #e0e0e8;
+  --font-display: 'Noto Serif SC','Source Han Serif SC',Georgia,serif;
+  --font-ui: 'Noto Sans SC','Source Han Sans SC',system-ui,sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font-display);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.85;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+/* ===== Top Navigation ===== */
+.top-bar {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  background: rgba(10,10,15,.92); backdrop-filter: blur(12px);
+  color: var(--nav-text);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; height: 56px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06);
+  font-family: var(--font-ui); border-bottom: 1px solid rgba(255,102,0,.15);
+}
+.top-bar .title { font-size: .95rem; font-weight: 600; letter-spacing: .5px; }
+.top-bar .accent-dot { color: var(--accent); margin: 0 4px; }
+.top-bar .home-btn {
+  color: var(--nav-text); text-decoration: none;
+  font-size: .82rem; padding: 6px 16px;
+  border: 1px solid rgba(255,255,255,.2); border-radius: 20px;
+  transition: all .2s;
+}
+.top-bar .home-btn:hover {
+  background: rgba(255,102,0,.12); border-color: var(--accent); color: var(--accent-light);
+}
+
+/* ===== Progress Bar ===== */
+.read-progress {
+  position: fixed; top: 56px; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--electric), var(--accent));
+  z-index: 1001; transition: width .1s linear;
+}
+
+/* ===== Hero — Engine Core Canvas ===== */
+.hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(175deg, #0a0a12 0%, #111122 25%, #0d1128 50%, #0a0a18 75%, #060610 100%);
+  min-height: 92vh; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0;
+}
+#heroCanvas { position: absolute; top:0; left:0; width:100%; height:100%; }
+.hero-overlay {
+  position: relative; z-index: 2; text-align: center;
+  padding: 40px 24px; max-width: 760px;
+}
+.hero-overlay h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  color: #f0f0f8; font-weight: 700;
+  letter-spacing: 5px; margin-bottom: 16px;
+  text-shadow: 0 0 60px rgba(0,102,255,.4), 0 2px 20px rgba(0,0,0,.6);
+}
+.hero-overlay .subtitle {
+  font-size: clamp(.9rem, 1.8vw, 1.15rem);
+  color: var(--electric-light); letter-spacing: 4px;
+  font-family: var(--font-ui);
+  opacity: .8; margin-bottom: 24px;
+}
+.hero-overlay .hero-quote {
+  font-size: clamp(.85rem, 1.6vw, 1rem);
+  color: rgba(255,255,255,.7);
+  font-style: italic; line-height: 1.9;
+  border-top: 1px solid rgba(0,102,255,.3);
+  border-bottom: 1px solid rgba(255,102,0,.3);
+  padding: 20px 0; margin: 24px 0;
+}
+.scroll-hint {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  z-index: 3; color: rgba(255,255,255,.5); font-size: .78rem;
+  font-family: var(--font-ui); letter-spacing: 2px;
+  animation: floatHint 2.5s ease-in-out infinite;
+}
+@keyframes floatHint {
+  0%,100% { opacity:.3; transform:translateX(-50%) translateY(0); }
+  50% { opacity:.9; transform:translateX(-50%) translateY(-8px); }
+}
+.scroll-hint::after { content: ' ↓'; display: block; font-size:1.2rem; margin-top:4px; }
+
+/* ===== Section Layout ===== */
+.section {
+  max-width: 980px; margin: 0 auto; padding: 60px 20px;
+}
+.section-header {
+  text-align: center; margin-bottom: 40px;
+}
+.section-num {
+  font-family: var(--font-ui); font-size: .78rem;
+  letter-spacing: 5px; color: var(--accent-light);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  color: #e8e8f0; font-weight: 700;
+  letter-spacing: 2px; margin-bottom: 12px;
+}
+.section-desc {
+  font-size: .92rem; color: var(--text-light);
+  max-width: 600px; margin: 0 auto;
+  line-height: 1.9;
+}
+
+/* ===== Presentation 1: Narrative Lead Block ===== */
+.narrative-block {
+  background: linear-gradient(135deg, #1e1e28, #1a1a24);
+  border-left: 4px solid var(--accent);
+  padding: 28px 32px; margin: 28px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.narrative-block::after {
+  content: ''; position: absolute; right: -40px; top: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,102,255,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.narrative-block .lead {
+  font-size: 1.15rem; color: var(--accent);
+  font-weight: 600; margin-bottom: 10px;
+  font-family: var(--font-display);
+}
+.narrative-block p {
+  color: var(--text-light); font-size: .92rem;
+  line-height: 1.95; margin-bottom: 8px;
+}
+
+/* ===== Presentation 2: Engine Rotor Timeline ===== */
+.rotor-timeline {
+  position: relative; padding: 32px 0; margin: 24px 0;
+}
+.rotor-timeline::before {
+  content: ''; position: absolute; left: 28px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--electric-deep), var(--electric), var(--accent), var(--accent-deep));
+  opacity: .5;
+}
+.rotor-node {
+  display: flex; gap: 20px; margin-bottom: 28px;
+  align-items: flex-start; position: relative;
+}
+.rotor-marker {
+  background: linear-gradient(135deg, var(--steel-dark), #1a1a28);
+  color: var(--accent); min-width: 56px; height: 56px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .85rem;
+  font-family: var(--font-ui); flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(0,102,255,.25), 0 4px 12px rgba(0,0,0,.3);
+  border: 2px solid var(--electric-deep);
+  z-index: 1; letter-spacing: 1px;
+}
+.rotor-content {
+  flex: 1; background: var(--card); padding: 18px 22px;
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  border: 1px solid var(--border); transition: transform .2s, box-shadow .2s;
+}
+.rotor-content:hover {
+  transform: translateY(-3px); box-shadow: var(--shadow-lg);
+  border-color: var(--electric-deep);
+}
+.rotor-content h3 {
+  color: var(--electric-light); font-size: 1rem;
+  margin-bottom: 6px; font-family: var(--font-ui);
+}
+.rotor-content .domain {
+  font-size: .72rem; color: var(--accent-light);
+  letter-spacing: 3px; font-family: var(--font-ui);
+  margin-bottom: 8px; text-transform: uppercase;
+}
+.rotor-content p {
+  font-size: .85rem; color: var(--text-light); line-height: 1.8;
+}
+.rotor-articles {
+  margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;
+}
+.rotor-article-tag {
+  font-size: .7rem; padding: 4px 10px;
+  background: rgba(0,102,255,.1); color: var(--electric-light);
+  border-radius: 14px; font-family: var(--font-ui);
+  white-space: nowrap; border: 1px solid rgba(0,102,255,.2);
+}
+
+/* ===== Presentation 3: Blueprint / Schematic Panels ===== */
+.blueprint-panels {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  margin: 40px 0; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,102,255,.02) 3px, rgba(0,102,255,.02) 4px);
+}
+.blueprint-panel {
+  padding: 36px 28px; position: relative; overflow: hidden;
+}
+.blueprint-panel.chip {
+  background: linear-gradient(135deg, #0a0a1e, #0d0d28);
+  color: #a0c8ff; border-right: 1px solid rgba(0,102,255,.15);
+}
+.blueprint-panel.battery {
+  background: linear-gradient(135deg, #1a1008, #1e0e04);
+  color: #e0b880;
+}
+.blueprint-panel .bp-label {
+  font-family: var(--font-ui); font-size: .7rem;
+  letter-spacing: 5px; text-transform: uppercase;
+  opacity: .5; margin-bottom: 12px;
+}
+.blueprint-panel h3 {
+  font-family: var(--font-display); font-size: 1.15rem;
+  margin-bottom: 12px; letter-spacing: 1px;
+}
+.blueprint-panel p {
+  font-size: .84rem; line-height: 1.8; opacity: .82;
+}
+.blueprint-divider {
+  grid-column: 1 / -1; text-align: center;
+  padding: 14px; font-family: var(--font-display);
+  font-size: .9rem; letter-spacing: 4px;
+  background: linear-gradient(90deg, var(--electric-deep), var(--accent-deep));
+  color: #fff;
+}
+
+/* ===== Presentation 4: 3D Tech Chip Card Grid ===== */
+.tech-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px; margin: 32px 0;
+}
+.tech-card {
+  perspective: 900px; height: 280px;
+}
+.tech-inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d;
+}
+.tech-card:hover .tech-inner,
+.tech-card.flipped .tech-inner { transform: rotateY(180deg); }
+.tech-front, .tech-back {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border-radius: var(--radius); overflow: hidden;
+}
+.tech-front {
+  background: linear-gradient(135deg, #1a1a28, #12121c);
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 24px;
+  box-shadow: var(--shadow);
+}
+.tech-front .tech-icon {
+  font-size: 2.6rem; margin-bottom: 12px;
+  width: 68px; height: 68px; border-radius: 50%;
+  background: rgba(0,102,255,.08); display: flex;
+  align-items: center; justify-content: center;
+  border: 1px solid rgba(0,102,255,.2);
+}
+.tech-front h4 {
+  font-family: var(--font-ui); font-size: .92rem;
+  color: var(--electric-light); margin-bottom: 4px;
+}
+.tech-front .domain-tag {
+  font-size: .72rem; color: var(--accent-light);
+  font-family: var(--font-ui); letter-spacing: 2px;
+}
+.tech-back {
+  background: linear-gradient(135deg, #0d0d28, #081028);
+  color: #c0d8f8; transform: rotateY(180deg);
+  padding: 24px; display: flex; flex-direction: column;
+  justify-content: center; border: 1px solid rgba(0,102,255,.2);
+}
+.tech-back p { font-size: .8rem; line-height: 1.7; }
+.tech-back .tech-ref {
+  margin-top: 12px; font-size: .7rem; opacity: .6;
+  font-family: var(--font-ui); color: var(--accent-light);
+}
+
+/* ===== Presentation 5: Socratic Folding Panel ===== */
+.socratic-set { margin: 28px 0 8px; }
+.socratic-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 12px;
+  overflow: hidden; background: var(--card);
+  box-shadow: var(--shadow); transition: box-shadow .2s;
+}
+.socratic-item:hover { box-shadow: var(--shadow-lg); }
+.socratic-q {
+  padding: 18px 24px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-ui); font-weight: 600;
+  color: var(--electric-light); font-size: .93rem;
+  user-select: none;
+}
+.socratic-q::after {
+  content: '+'; font-size: 1.3rem; color: var(--accent-light);
+  transition: transform .3s; width: 24px; text-align: center;
+}
+.socratic-item.open .socratic-q::after {
+  content: '−'; transform: rotate(180deg);
+}
+.socratic-a {
+  max-height: 0; overflow: hidden;
+  padding: 0 24px; font-size: .86rem; color: var(--text-light);
+  line-height: 1.85; border-top: 0px solid var(--border-light);
+  transition: max-height .4s ease, padding .4s ease, border-top-width .4s ease;
+}
+.socratic-item.open .socratic-a {
+  max-height: 500px; padding: 16px 24px 20px;
+  border-top-width: 1px;
+}
+
+/* ===== Presentation 6: Article Excerpt River ===== */
+.excerpt-river {
+  position: relative; padding: 20px 0;
+}
+.excerpt-river-item {
+  display: flex; gap: 18px; margin-bottom: 18px;
+  align-items: flex-start; opacity: .88;
+  transition: opacity .3s;
+}
+.excerpt-river-item:hover { opacity: 1; }
+.excerpt-tag {
+  flex-shrink: 0; width: 80px; text-align: right;
+  font-family: var(--font-ui); font-size: .67rem;
+  color: var(--accent-light); letter-spacing: 2px;
+  padding-top: 4px;
+}
+.excerpt-card {
+  flex: 1; background: var(--card); border-radius: var(--radius-sm);
+  padding: 16px 20px; border: 1px solid var(--border-light);
+  box-shadow: var(--shadow); transition: transform .2s, border-color .2s;
+}
+.excerpt-card:hover {
+  transform: translateX(4px); border-color: var(--electric-deep);
+}
+.excerpt-card .excerpt-title {
+  font-weight: 600; color: var(--electric-light);
+  font-size: .85rem; margin-bottom: 6px;
+  font-family: var(--font-ui);
+}
+.excerpt-card p {
+  font-size: .8rem; color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* ===== Presentation 7: Energy Density Comparator (Interactive) ===== */
+.comparator {
+  margin: 32px 0; padding: 28px;
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.comparator h3 {
+  font-family: var(--font-ui); color: var(--electric-light);
+  margin-bottom: 16px; font-size: 1rem;
+}
+.comp-row {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+}
+.comp-label {
+  width: 140px; font-family: var(--font-ui);
+  font-size: .8rem; color: var(--text-light);
+  text-align: right; flex-shrink: 0;
+}
+.comp-bar-bg {
+  flex: 1; height: 24px; background: var(--steel-dark);
+  border-radius: 4px; overflow: hidden; position: relative;
+}
+.comp-bar-fill {
+  height: 100%; border-radius: 4px; transition: width 1s ease;
+  display: flex; align-items: center; padding-left: 10px;
+  font-family: var(--font-ui); font-size: .7rem; color: #fff; font-weight: 600;
+}
+.comp-bar-fill.lead-acid { background: linear-gradient(90deg, #555, #777); width: 8%; }
+.comp-bar-fill.lfp { background: linear-gradient(90deg, #cc6600, var(--accent)); width: 35%; }
+.comp-bar-fill.nmc { background: linear-gradient(90deg, var(--accent), #ff9933); width: 48%; }
+.comp-bar-fill.solid-state { background: linear-gradient(90deg, #0066cc, var(--electric)); width: 65%; }
+.comp-bar-fill.lithium-metal { background: linear-gradient(90deg, var(--electric), #4da6ff); width: 85%; }
+.comp-unit {
+  font-family: var(--font-ui); font-size: .72rem;
+  color: var(--text-muted); margin-left: 8px; width: 80px;
+}
+
+/* ===== Presentation 8: Rocket Stage Interactive ===== */
+.rocket-stages {
+  margin: 32px 0;
+}
+.rocket-stage {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 10px; overflow: hidden;
+  background: var(--card); cursor: pointer;
+  transition: all .2s;
+}
+.rocket-stage:hover { border-color: var(--accent); }
+.rocket-stage-header {
+  padding: 16px 24px; display: flex; align-items: center;
+  gap: 14px; font-family: var(--font-ui);
+}
+.rocket-stage-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .85rem; color: #fff; flex-shrink: 0;
+}
+.rocket-stage-title {
+  font-weight: 600; color: var(--electric-light); font-size: .9rem;
+}
+.rocket-stage-stat {
+  margin-left: auto; font-size: .75rem; color: var(--accent-light);
+  font-family: var(--font-ui);
+}
+.rocket-stage-body {
+  max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .4s ease;
+  padding: 0 24px; font-size: .84rem; color: var(--text-light);
+  line-height: 1.85;
+}
+.rocket-stage.open .rocket-stage-body {
+  max-height: 400px; padding: 0 24px 18px;
+}
+.rocket-stage-header::after {
+  content: '▶'; font-size: .7rem; color: var(--accent);
+  transition: transform .3s; margin-left: 8px;
+}
+.rocket-stage.open .rocket-stage-header::after {
+  transform: rotate(90deg);
+}
+
+/* ===== Presentation 9: Quote Block ===== */
+.quote-block {
+  background: linear-gradient(135deg, rgba(0,102,255,.06), rgba(255,102,0,.06));
+  border: 1px solid rgba(255,102,0,.2);
+  border-radius: var(--radius);
+  padding: 28px 32px; margin: 28px 0;
+  position: relative;
+}
+.quote-block::before {
+  content: '"'; position: absolute; top: 10px; left: 16px;
+  font-size: 4rem; color: var(--accent); opacity: .15;
+  font-family: var(--font-display); line-height: 1;
+}
+.quote-block blockquote {
+  font-family: var(--font-display); font-style: italic;
+  font-size: .95rem; color: #c8c8d8; line-height: 1.9;
+  margin: 0; padding-left: 8px;
+}
+.quote-block .quote-source {
+  margin-top: 12px; font-family: var(--font-ui);
+  font-size: .75rem; color: var(--accent-light);
+  text-align: right;
+}
+
+/* ===== CTA Panel ===== */
+.cta-panel {
+  background: linear-gradient(135deg, #0d0d28, #08081c);
+  border: 1px solid rgba(0,102,255,.25);
+  color: #c0d8f8; border-radius: var(--radius);
+  padding: 48px 32px; text-align: center; margin: 40px 0;
+  box-shadow: var(--shadow-lg);
+}
+.cta-panel h2 {
+  font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin-bottom: 12px; letter-spacing: 2px;
+}
+.cta-panel p {
+  font-size: .9rem; opacity: .8; max-width: 580px;
+  margin: 0 auto 24px; line-height: 1.9;
+}
+.cta-buttons {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  margin-bottom: 20px;
+}
+.cta-btn {
+  padding: 10px 24px; border: 1px solid var(--electric);
+  border-radius: 24px; background: transparent;
+  color: var(--electric-light); cursor: pointer;
+  font-family: var(--font-ui); font-size: .85rem;
+  transition: all .25s;
+}
+.cta-btn:hover, .cta-btn.picked {
+  background: var(--electric); color: #fff;
+  font-weight: 600; box-shadow: 0 0 20px rgba(0,102,255,.3);
+}
+#ctaResult {
+  font-size: .88rem; min-height: 56px; opacity: 0;
+  transition: opacity .5s; line-height: 1.9;
+}
+#ctaResult.show { opacity: 1; }
+
+/* ===== Footer ===== */
+.site-footer {
+  text-align: center; padding: 48px 20px;
+  border-top: 1px solid var(--border); margin-top: 60px;
+}
+.site-footer a {
+  color: var(--electric-light); text-decoration: none;
+  font-family: var(--font-ui); font-size: .85rem;
+  border-bottom: 1px dotted var(--electric-deep);
+}
+.site-footer .footer-quote {
+  font-family: var(--font-display); font-style: italic;
+  color: var(--text-muted); font-size: .9rem;
+  margin: 16px 0;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .section { padding: 40px 16px; }
+  .blueprint-panels { grid-template-columns: 1fr; }
+  .blueprint-panel { padding: 24px 20px; }
+  .blueprint-panel.chip { border-right: none; border-bottom: 1px solid rgba(0,102,255,.15); }
+  .tech-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .tech-card { height: 240px; }
+  .rotor-node { gap: 12px; }
+  .rotor-marker { min-width: 40px; height: 40px; font-size: .75rem; }
+  .excerpt-tag { width: 52px; font-size: .6rem; }
+  .hero { min-height: 80vh; }
+  .narrative-block { padding: 20px; }
+  .comp-label { width: 110px; font-size: .7rem; }
+  .comp-bar-bg { height: 20px; }
+}
+@media (max-width: 480px) {
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .top-bar .title { font-size: .78rem; }
+  .section-title { font-size: 1.3rem; }
+  .hero-overlay h1 { font-size: 1.6rem; letter-spacing: 2px; }
+  .comp-label { width: 90px; font-size: .65rem; }
+  .comp-unit { font-size: .6rem; width: 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="read-progress" id="readProgress"></div>
+
+<!-- Navigation -->
+<nav class="top-bar">
+  <span class="title">⚙️ 硬核科技引擎<span class="accent-dot">·</span>科技参考4</span>
+  <a href="../index.html" class="home-btn">← 返回首页</a>
+</nav>
+
+<!-- ===== Hero: Engine Core Canvas ===== -->
+<section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-overlay">
+    <h1>硬核科技引擎</h1>
+    <div class="subtitle">HARDCORE TECH ENGINE</div>
+    <div class="hero-quote">
+      芯片制程逼近物理极限，电池技术重塑能源版图<br>
+      SpaceX把火箭变成可回收的公交车<br>
+      量子计算在实验室里蠢蠢欲动<br>
+      ——不讲神话，只讲物理和工程。
+    </div>
+  </div>
+  <div class="scroll-hint">向下拆解</div>
+</section>
+
+<!-- ===== Section 0: 序章 — 拆解而非仰望 ===== -->
+<section class="section" id="prologue">
+  <div class="narrative-block" style="margin-top:-1px;">
+    <div class="lead">🔧 打开引擎盖</div>
+    <p>卓克用33篇文章拆解了这些「硬科技」的底层逻辑。芯片为什么有大小年？量子计算为什么还不能算1+1？SpaceX凭什么把发射成本砍到十分之一？固态电池为什么喊了十年还没装车？</p>
+    <p>答案不在神话里——<strong>在半导体物理的能带理论里，在电化学的离子迁移率里，在火箭方程的质量比里</strong>。读懂硬科技不是「仰望」而是「拆解」：每项技术背后都有可理解的物理定律和工程权衡。</p>
+    <p>现在，转动引擎。</p>
+  </div>
+</section>
+
+<!-- ===== Section 1: 核心引擎 — 四大驱动器 ===== -->
+<section class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-num">· 第一章 ·</div>
+    <div class="section-title">四大驱动器</div>
+    <div class="section-desc">芯片、电池、火箭、量子——这四台引擎正在同时加速</div>
+  </div>
+
+  <div class="rotor-timeline">
+    <!-- Node 1: 芯片 -->
+    <div class="rotor-node">
+      <div class="rotor-marker">Ⅰ</div>
+      <div class="rotor-content">
+        <div class="domain">SEMICONDUCTOR · 半导体</div>
+        <h3>芯片「大年」——摩尔定律失效后的跃升逻辑</h3>
+        <p>2024年底到2025年初是芯片升级的「大年」：骁龙8至尊版比上一代综合性能提升<strong>50%</strong>，而前三年总提升才85%。造成大小年的原因是，摩尔定律10年前就开始失效了——现在性能跃升靠的是制造工艺和架构设计两方面的罕见叠加。卓克提醒：买了这一代旗舰，即便到2028年性能依然可位列高端。</p>
+        <div class="rotor-articles">
+          <span class="rotor-article-tag">001｜芯片"大年"，升级超划算</span>
+          <span class="rotor-article-tag">279｜国产EUV光刻机造出来了？</span>
+          <span class="rotor-article-tag">200｜iPhone17信号质量</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Node 2: 电池 -->
+    <div class="rotor-node">
+      <div class="rotor-marker">Ⅱ</div>
+      <div class="rotor-content">
+        <div class="domain">ELECTROCHEMICAL · 电化学</div>
+        <h3>电池混战——磷酸铁锂崛起，固态电池还要再等五年</h3>
+        <p>2025年磷酸铁锂已占装机量主流，宁德时代神行Plus做到<strong>205Wh/kg</strong>。钠离子电池第二代跃升到175Wh/kg，开始瞄准车用市场。而真全固态电池？最乐观也要<strong>2028年</strong>才能装车，售价起码60万起步——普通人用得起的固态电池车，至少要2030年。</p>
+        <div class="rotor-articles">
+          <span class="rotor-article-tag">010｜新能源车电池2025年动向</span>
+          <span class="rotor-article-tag">049｜真全固态电池什么时候买？</span>
+          <span class="rotor-article-tag">077｜钠离子电池的复兴</span>
+          <span class="rotor-article-tag">040｜比亚迪兆瓦闪充</span>
+          <span class="rotor-article-tag">041｜地上锂矿：电池回收</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Node 3: 火箭 -->
+    <div class="rotor-node">
+      <div class="rotor-marker">Ⅲ</div>
+      <div class="rotor-content">
+        <div class="domain">AEROSPACE · 航天</div>
+        <h3>SpaceX——把火箭变成可回收的公交车</h3>
+        <p>2024年全球259次轨道发射中，<strong>SpaceX独占136次（53%）</strong>。2025年猎鹰9号将至少发射180次，每隔一天发射一次。每个助推器可完成25-30次重复使用，周转间隔从43天压缩到<strong>21天</strong>。星舰已成功用「筷子」机械臂夹住返航的超重型助推器——火箭回收从魔术变成了工程。</p>
+        <div class="rotor-articles">
+          <span class="rotor-article-tag">007｜SpaceX雄心勃勃的2025年</span>
+          <span class="rotor-article-tag">230｜核聚变发电无前景？</span>
+          <span class="rotor-article-tag">011｜氢能和飞行汽车泡沫破裂</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Node 4: 量子 -->
+    <div class="rotor-node">
+      <div class="rotor-marker">Ⅳ</div>
+      <div class="rotor-content">
+        <div class="domain">QUANTUM · 量子计算</div>
+        <h3>量子计算——实验室里的「霸权」争夺</h3>
+        <p>费曼1981年提出量子计算的想法：<strong>用量子体系模拟量子问题，计算效率才是最高的</strong>。谷歌悬铃木首次展现「量子霸权」，Willow芯片在此基础上再进一步。但客观评价：Willow今天的性能并不能处理1+1这样的运算——它只是纠错编码路径上的又一小步突破。微软的Majorana1？《自然》编辑在文章开头就注明了免责声明。</p>
+        <div class="rotor-articles">
+          <span class="rotor-article-tag">024｜量子芯片是怎么工作的？</span>
+          <span class="rotor-article-tag">025｜秒杀超算的谷歌量子计算机</span>
+          <span class="rotor-article-tag">028｜微软量子芯片是突破吗？</span>
+          <span class="rotor-article-tag">210｜解读2025诺贝尔物理学奖</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 2: 蓝图对比 — 芯片 vs 电池 ===== -->
+<section class="section" id="blueprint">
+  <div class="section-header">
+    <div class="section-num">· 第二章 ·</div>
+    <div class="section-title">两套物理定律的极限博弈</div>
+    <div class="section-desc">一边是纳米级的晶体管栅极，一边是微米级的离子迁移——都在逼近物理的天花板</div>
+  </div>
+
+  <div class="blueprint-panels">
+    <div class="blueprint-panel chip">
+      <div class="bp-label">▸ 硅基极限</div>
+      <h3>芯片：当制程逼近原子尺度</h3>
+      <p>摩尔定律在10年前就开始失效了。在它还有效的年代，CPU性能每年提升50%——每一代都踩着上一代的肩膀。现在，制造工艺和架构设计<strong>同时</strong>提升才能造就一个「大年」，否则就是挤牙膏式的「小年」。</p>
+      <p style="margin-top:10px;">路透社报道中国已造出EUV光刻机原型，能产生13.5nm极紫外光——但尚未产出可用芯片。从DUV的193nm到EUV的13.5nm，跨越的不仅是波长，更是全套精密光学、真空系统和光源工程的极限挑战。</p>
+      <p style="margin-top:10px;font-size:.75rem;opacity:.5;">引用：001｜芯片"大年" · 279｜国产EUV光刻机 · 028｜微软量子芯片</p>
+    </div>
+    <div class="blueprint-divider">硅 基 与 锂 离 子 之 间</div>
+    <div class="blueprint-panel battery">
+      <div class="bp-label">▸ 能量密度竞赛</div>
+      <h3>电池：从液态到固态的三十年跨越</h3>
+      <p>传统锂电池的电解液和隔膜占据电池内部体积约<strong>40%</strong>，占重量约25%。固态电池把这些换成固态电解质——体积能量密度从622Wh/L跃升到<strong>800Wh/L以上</strong>，增加近30%。</p>
+      <p style="margin-top:10px;">但代价是什么？固态电解质的离子电导率在室温下比液态低几个数量级，界面阻抗让快充成了奢望。卓克的判断：最乐观2028年装车，售价<strong>60万起步</strong>。过渡期内，磷酸铁锂和钠离子电池才是真正的「沉默革命」。</p>
+      <p style="margin-top:10px;font-size:.75rem;opacity:.5;">引用：049｜真全固态电池 · 077｜钠离子电池复兴 · 010｜电池2025动向</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 3: 能量密度对比器 (Interactive #1) ===== -->
+<section class="section" id="comparator">
+  <div class="section-header">
+    <div class="section-num">· 第三章 ·</div>
+    <div class="section-title">能量密度光谱</div>
+    <div class="section-desc">从铅酸到锂金属——电池技术的进化，本质是能量密度的军备竞赛</div>
+  </div>
+
+  <div class="comparator">
+    <h3>⚡ 体积能量密度对比（Wh/L）</h3>
+    <div class="comp-row">
+      <span class="comp-label">铅酸电池</span>
+      <div class="comp-bar-bg"><div class="comp-bar-fill lead-acid">80-100</div></div>
+      <span class="comp-unit">~90 Wh/L</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-label">磷酸铁锂 (LFP)</span>
+      <div class="comp-bar-bg"><div class="comp-bar-fill lfp">205</div></div>
+      <span class="comp-unit">~205 Wh/L</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-label">三元锂 (NMC)</span>
+      <div class="comp-bar-bg"><div class="comp-bar-fill nmc">300</div></div>
+      <span class="comp-unit">~300 Wh/L</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-label">固态电池 (最低)</span>
+      <div class="comp-bar-bg"><div class="comp-bar-fill solid-state">800</div></div>
+      <span class="comp-unit">≥800 Wh/L</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-label">锂金属 (远期)</span>
+      <div class="comp-bar-bg"><div class="comp-bar-fill lithium-metal">1200</div></div>
+      <span class="comp-unit">~1200 Wh/L</span>
+    </div>
+    <p style="margin-top:14px;font-size:.75rem;color:var(--text-muted);text-align:center;font-family:var(--font-ui);">
+      数据综合自卓克《科技参考4》第010、049、077、087期 | 固态电池能量密度为理论最低值
+    </p>
+  </div>
+</section>
+
+<!-- ===== Section 4: 技术翻转卡片 (Interactive #2) ===== -->
+<section class="section" id="tech-cards">
+  <div class="section-header">
+    <div class="section-num">· 第四章 ·</div>
+    <div class="section-title">引擎零件</div>
+    <div class="section-desc">点击翻转 → 每张卡片拆解一项硬科技的底层逻辑</div>
+  </div>
+
+  <div class="tech-grid">
+    <!-- Card 1: EUV -->
+    <div class="tech-card" onclick="this.classList.toggle('flipped')">
+      <div class="tech-inner">
+        <div class="tech-front">
+          <div class="tech-icon">💡</div>
+          <h4>EUV光刻</h4>
+          <div class="domain-tag">13.5nm 极紫外光</div>
+        </div>
+        <div class="tech-back">
+          <p>7nm以下芯片必须用13.5nm波长的EUV光。相比上一代DUV的193nm，改变是「全套设施的飞跃」——需要锡滴等离子体产生极紫外光、钼/硅多层膜反射镜、超高真空环境。中国已点亮EUV的光，但尚缺蔡司级别的精密光学系统。</p>
+          <div class="tech-ref">引用：279｜国产EUV光刻机造出来了？</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Solid State -->
+    <div class="tech-card" onclick="this.classList.toggle('flipped')">
+      <div class="tech-inner">
+        <div class="tech-front">
+          <div class="tech-icon">🔋</div>
+          <h4>全固态电池</h4>
+          <div class="domain-tag">≥800 Wh/L</div>
+        </div>
+        <div class="tech-back">
+          <p>电解液变固态、隔膜取消，体积能量密度立刻增加近30%。但代价是：固态电解质室温离子电导率远低于液态，界面阻抗让快充困难。最乐观2028年装车，售价60万起。过渡期内，磷酸铁锂和钠离子电池才是真正的主角。</p>
+          <div class="tech-ref">引用：049｜真全固态电池什么时候买？</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Falcon 9 -->
+    <div class="tech-card" onclick="this.classList.toggle('flipped')">
+      <div class="tech-inner">
+        <div class="tech-front">
+          <div class="tech-icon">🚀</div>
+          <h4>猎鹰9号</h4>
+          <div class="domain-tag">周转间隔 21天</div>
+        </div>
+        <div class="tech-back">
+          <p>2025年每个助推器至少完成25次任务，最多30次重复使用。从着陆到再次起飞间隔缩短到21天。2024年这个数字还是27天，再往前是43天。仅周转加速一项，SpaceX就可以少建一半的新火箭。火箭回收从「不可能」变成了「每隔一天一次」的日常。</p>
+          <div class="tech-ref">引用：007｜SpaceX雄心勃勃的2025年</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Quantum -->
+    <div class="tech-card" onclick="this.classList.toggle('flipped')">
+      <div class="tech-inner">
+        <div class="tech-front">
+          <div class="tech-icon">⚛️</div>
+          <h4>量子纠错</h4>
+          <div class="domain-tag">超导量子比特</div>
+        </div>
+        <div class="tech-back">
+          <p>谷歌Willow芯片的核心突破不在计算能力，而在量子纠错——当量子比特数增加时，错误率不升反降。这是超导量子比特路径上的一小步，但也是关键一步。费曼1981年的直觉——用量子系统模拟量子问题——正在被工程师一砖一瓦地实现。</p>
+          <div class="tech-ref">引用：024-025｜量子芯片+谷歌Willow</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Sodium Battery -->
+    <div class="tech-card" onclick="this.classList.toggle('flipped')">
+      <div class="tech-inner">
+        <div class="tech-icon">🧂</div>
+        <h4>钠离子电池</h4>
+        <div class="domain-tag">175 Wh/kg</div>
+        </div>
+        <div class="tech-back">
+          <p>宁德时代「钠新」第二代钠离子电池能量密度从130Wh/kg跃升到175Wh/kg，最大的贡献来自电压提升——从3.2V到3.7V，背后是高压梯度层状氧化物正极（掺杂镍-锰-铁）。仅落后磷酸铁锂17%，已可以给乘用车做动力电池。</p>
+          <div class="tech-ref">引用：077/087｜钠离子电池的复兴与突破</div>
+        </div>
+      </div>
+
+    <!-- Card 6: Megawatt Charge -->
+    <div class="tech-card" onclick="this.classList.toggle('flipped')">
+      <div class="tech-inner">
+        <div class="tech-front">
+          <div class="tech-icon">⚡</div>
+          <h4>兆瓦闪充</h4>
+          <div class="domain-tag">1000V × 1000A</div>
+        </div>
+        <div class="tech-back">
+          <p>比亚迪展示的兆瓦闪充：1000V电压×1000A电流=100万瓦。演示中8%电量开始充电，一上来就达到兆瓦功率。卓克评价：「在电动汽车快充这个细分领域里做得最好、考虑最周到、技术门槛最高的方案」。但要铺开规模，还需很久。</p>
+          <div class="tech-ref">引用：040｜比亚迪兆瓦闪充，不止是功率大</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 5: 火箭回收系统 (Interactive #3) ===== -->
+<section class="section" id="rocket">
+  <div class="section-header">
+    <div class="section-num">· 第五章 ·</div>
+    <div class="section-title">可回收的公交车</div>
+    <div class="section-desc">点击展开 → 拆解SpaceX如何把航天从「一次性奢侈品」变成「可重复公交系统」</div>
+  </div>
+
+  <div class="quote-block">
+    <blockquote>
+      今天全球火箭发射领域可以分为两类机构：一类是SpaceX，一类是其他。就算以最严格的标准去苛责，这个划分也都是成立的，因为SpaceX的优势实在太大了。
+    </blockquote>
+    <div class="quote-source">—— 卓克《科技参考4》007｜SpaceX雄心勃勃的2025年</div>
+  </div>
+
+  <div class="rocket-stages">
+    <div class="rocket-stage" onclick="this.classList.toggle('open')">
+      <div class="rocket-stage-header">
+        <span class="rocket-stage-num">1</span>
+        <span class="rocket-stage-title">猎鹰9号 · 重复使用</span>
+        <span class="rocket-stage-stat">25-30次/枚</span>
+      </div>
+      <div class="rocket-stage-body">
+        <p>2024年，全球259次轨道发射中SpaceX占136次（53%），其中132次都是猎鹰9号。2025年将至少发射180次，每个助推器至少完成<strong>25次任务，最多30次</strong>重复使用。从着陆到再次起飞的时间间隔从43天降到27天，2025年再降到<strong>21天</strong>——仅此一项，SpaceX就可以少建造一半的新火箭。</p>
+      </div>
+    </div>
+
+    <div class="rocket-stage" onclick="this.classList.toggle('open')">
+      <div class="rocket-stage-header">
+        <span class="rocket-stage-num">2</span>
+        <span class="rocket-stage-title">星舰 · 筷子回收</span>
+        <span class="rocket-stage-stat">2025年月发2次</span>
+      </div>
+      <div class="rocket-stage-body">
+        <p>2024年星舰发射4次，<strong>没有一次在起飞阶段爆炸</strong>，每次发射都大幅进步。最后一次甚至用「筷子」一样的机械臂夹住了返航的超重型助推器——比预计提早一到两次完成这一步。2025年星舰发射将大幅提升到<strong>每月2次</strong>，中期尝试在轨燃料补给。</p>
+      </div>
+    </div>
+
+    <div class="rocket-stage" onclick="this.classList.toggle('open')">
+      <div class="rocket-stage-header">
+        <span class="rocket-stage-num">3</span>
+        <span class="rocket-stage-title">在轨燃料补给 · 火星前奏</span>
+        <span class="rocket-stage-stat">星舰关键技能</span>
+      </div>
+      <div class="rocket-stage-body">
+        <p>为什么需要轨道燃料补给？因为星舰太大太沉——脱离地球引力后就不剩多少燃料了。不论直接飞到火星还是月球，都需要在轨道上「加一次油」。这是SpaceX从近地轨道走向深空的关键一步。2025年中期将开始尝试这一动作。</p>
+      </div>
+    </div>
+
+    <div class="rocket-stage" onclick="this.classList.toggle('open')">
+      <div class="rocket-stage-header">
+        <span class="rocket-stage-num">4</span>
+        <span class="rocket-stage-title">成本真相 · 不是无限便宜</span>
+        <span class="rocket-stage-stat">发射成本的经济学</span>
+      </div>
+      <div class="rocket-stage-body">
+        <p>「猎鹰9号单次发射成本从6000万降到6万」？卓克提醒你：这数字是给投资人看的。参考NASA航天飞机的教训——设计重复使用100次，但实际发射成本只有初期比较低。火箭不是越复用就越便宜，<strong>维护、翻新和检测</strong>都有地板成本。可回收只是把「扔掉整个火箭」变成了「扔掉部分燃料+翻新成本」。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 6: 苏格拉底追问 (Interactive #4) ===== -->
+<section class="section" id="socratic">
+  <div class="section-header">
+    <div class="section-num">· 第六章 ·</div>
+    <div class="section-title">追问硬科技</div>
+    <div class="section-desc">不讲神话——只问物理和工程能回答的问题</div>
+  </div>
+
+  <div class="socratic-set">
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">🔬 摩尔定律失效了，芯片性能还能继续提升吗？</div>
+      <div class="socratic-a">
+        <p>能，但不再靠「制程」一条腿走路。卓克在节目中指出，性能提升的两个途径——<strong>架构改进和半导体工艺改进</strong>——现在只有在两者同时提升时才出现「大年」，否则就是挤牙膏的「小年」。当晶体管的栅极宽度已经逼近原子尺度，量子隧穿效应让漏电流无法忽略。所以今天的芯片升级已经不是简单的「缩小晶体管」——那是摩尔定律时代的故事了。现在要靠chiplet（芯粒）、3D堆叠、专用加速器，以及从材料到架构的全栈优化。</p>
+        <p style="margin-top:8px;font-size:.72rem;opacity:.5;">引用：001｜芯片"大年"，升级超划算</p>
+      </div>
+    </div>
+
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">⚡ 固态电池喊了十年，为什么还没装车？</div>
+      <div class="socratic-a">
+        <p>因为固态电解质的<strong>室温离子电导率</strong>比液态电解质低几个数量级。这就像把高速公路突然变成了乡间小路——锂离子在固体中迁移的速度远远慢于在液体中扩散。此外，固态电解质与电极的<strong>固-固界面接触</strong>天然不如液-固浸润，导致界面阻抗巨大。卓克的判断：最乐观2028年才能看到第一批（60万起步的）固态电池车，普通人用得起的固态电池车至少要2030年。而在此之前，磷酸铁锂和钠离子电池的持续优化才是真正改变普通人生活的「沉默革命」。</p>
+        <p style="margin-top:8px;font-size:.72rem;opacity:.5;">引用：049｜真全固态电池什么时候买？· 010｜电池2025动向</p>
+      </div>
+    </div>
+
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">🚀 SpaceX真的把发射成本降到原来的十分之一了吗？</div>
+      <div class="socratic-a">
+        <p>发射成本大幅降低了，但「猎鹰9号单次降到6万美元」是夸大。卓克在分析NASA航天飞机的教训时指出：可回收不等于「无限便宜」——维护、翻新和发动机检测都有不可压缩的<strong>地板成本</strong>。真正的经济账是：把一枚全新的猎鹰9号（造价约3000万美元）使用25次，每次分摊的硬件成本是120万美元，加上燃料、发射场、回收船等运营成本，单次总成本约为<strong>1500-2000万美元</strong>——对比传统一次性火箭的6000万-1.5亿美元，确实是革命性降低，但不是「免费的公交车」。</p>
+        <p style="margin-top:8px;font-size:.72rem;opacity:.5;">引用：007｜SpaceX雄心勃勃的2025年 · 火星殖民成功率</p>
+      </div>
+    </div>
+
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">⚛️ 谷歌的量子芯片Willow是「核弹级突破」吗？</div>
+      <div class="socratic-a">
+        <p><strong>不是。</strong>卓克明确说：「Willow今天的性能并不能处理1+1这样的运算。客观的评价是，它是在2023年9月份那次突破的基础上又一小步突破。」之所以被媒体渲染成「核弹级」，是因为公众对量子计算的认知停留在「量子=超级厉害」的层面，而忽略了工程现实的残酷：量子比特的纠缠态<strong>极容易受到环境噪声干扰</strong>，纠错才是过去十年的真正工作重心。如果Willow真的是「核弹级」，那2023年悬铃木的「量子霸权」为什么没被记住？——因为实际能解决的问题范围还极其有限。</p>
+        <p style="margin-top:8px;font-size:.72rem;opacity:.5;">引用：024-025｜量子芯片是怎么工作的？+ 秒杀超算的谷歌量子计算机</p>
+      </div>
+    </div>
+
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">🧂 钠离子电池会取代锂电池吗？</div>
+      <div class="socratic-a">
+        <p>在某些场景会，尤其是<strong>储能和低端乘用车</strong>。宁德时代「钠新」第二代钠离子电池能量密度已到175Wh/kg，仅落后磷酸铁锂17%。但对比三元锂还差得远。钠离子电池的核心优势不在能量密度，而在于：钠资源比锂丰富<strong>1000倍</strong>，不受锂矿地缘政治约束；低温性能更好；材料成本更低。它是电池行业的「岔路口」——不是要取代锂电池，而是提供了一个不受资源约束的平行选项。在储能和入门级车型上，钠电池很可能成为主流。</p>
+        <p style="margin-top:8px;font-size:.72rem;opacity:.5;">引用：077/087｜钠离子电池的复兴与突破</p>
+      </div>
+    </div>
+
+    <div class="socratic-item">
+      <div class="socratic-q" onclick="this.parentElement.classList.toggle('open')">🔋 电池「终身质保」靠谱吗？</div>
+      <div class="socratic-a">
+        <p><strong>不靠谱。</strong>卓克在节目中直言：今天所有厂商的电池终身质保条款都有陷阱——<strong>必须同时满足6个条件，任意一个不满足厂家就可以拒保</strong>。这个陷阱可以保证99%的车主在真的遇到电池故障时被拒保。所以「电池终身质保」绝对不要花钱买。这不是工程问题，是商业条款设计问题——也是一个典型的「拆解」案例：不是电池本身不靠谱，是条款让你以为它靠谱。</p>
+        <p style="margin-top:8px;font-size:.72rem;opacity:.5;">引用：010｜新能源车电池2025年动向：磷酸铁锂崛起</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 7: 文章之河 (Interactive #5) ===== -->
+<section class="section" id="river">
+  <div class="section-header">
+    <div class="section-num">· 第七章 ·</div>
+    <div class="section-title">33块引擎零件</div>
+    <div class="section-desc">每篇文章拆解一个硬科技的底层逻辑——滚动浏览全部</div>
+  </div>
+
+  <div class="excerpt-river" id="excerptRiver">
+    <!-- JS populated -->
+  </div>
+</section>
+
+<!-- ===== Section 8: 你如何拆解 (Interactive #6) ===== -->
+<section class="section" id="you-choose">
+  <div class="cta-panel">
+    <h2>🔧 你站在引擎的哪个位置？</h2>
+    <p>硬科技不是「仰望」而是「拆解」。你对哪一个驱动器的底层物理最感兴趣？</p>
+    <div class="cta-buttons" id="ctaButtons">
+      <button class="cta-btn" data-pick="chip">💡 半导体物理</button>
+      <button class="cta-btn" data-pick="battery">🔋 电化学储能</button>
+      <button class="cta-btn" data-pick="rocket">🚀 航天推进</button>
+      <button class="cta-btn" data-pick="quantum">⚛️ 量子信息</button>
+      <button class="cta-btn" data-pick="all">🔧 全部拆解</button>
+    </div>
+    <div id="ctaResult"></div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer">
+  <div class="footer-quote">
+    "硬科技不是神话——它是可以被拆解的物理定律，<br>
+    可以被计算的工程权衡，可以被验证的实验结果。"
+  </div>
+  <a href="../index.html">← 返回科技参考4首页</a>
+  <p style="margin-top:16px;font-size:.72rem;color:var(--text-muted);font-family:var(--font-ui);">
+    基于33篇卓克《科技参考4》文章 · 硬核科技引擎 MKS v1 沉浸叙事版<br>
+    芯片制程 · 电池技术 · 航天推进 · 量子计算
+  </p>
+</footer>
+
+<!-- ===== JavaScript ===== -->
+<script>
+// ===== Article Data =====
+const articles = [
+  {title:"001｜芯片「大年」，升级超划算",domain:"半导体",preview:"2024年底到2025年初是芯片升级大年。摩尔定律10年前就已失效，造成大小年的原因是性能提升靠架构改进和半导体工艺两方面——只有两者同时提升才出现大年。"},
+  {title:"007｜SpaceX雄心勃勃的2025年",domain:"航天",preview:"2024年全球259次轨道发射，SpaceX占136次（53%）。2025年猎鹰9号至少发射180次，助推器重复使用25-30次，周转间隔缩至21天。星舰成功用机械臂夹住返航助推器。"},
+  {title:"010｜新能源车电池2025年动向：磷酸铁锂崛起",domain:"电池",preview:"真全固态电池量产前，磷酸铁锂是过渡期主角。「电池终身质保」不要花钱买——所有厂商都设了陷阱，6个条件任意不满足即可拒保。"},
+  {title:"011｜氢能和飞行汽车的泡沫正在破裂",domain:"能源",preview:"氢能在2008年后已渐渐边缘化，赛道上最后一位选手日本也难以为继。飞行汽车的泡沫同样在破裂——科技参考之前浇过的凉水正在应验。"},
+  {title:"024｜量子芯片是怎么工作的？",domain:"量子",preview:"费曼1981年提出用量子体系模拟量子问题。传统硅芯片算量子问题可能比宇宙历史还久——量子计算不是「更快的计算机」，是根本不同的计算范式。"},
+  {title:"025｜秒杀超算的谷歌量子计算机",domain:"量子",preview:"谷歌悬铃木首次展现量子霸权，Willow在此基础上再进一步。但Willow不能处理1+1运算——它只是纠错编码路径上的又一小步突破，被媒体夸大了。"},
+  {title:"028｜问答：微软量子芯片是突破吗？",domain:"量子",preview:"微软Majorana1远不如谷歌量子芯片。《自然》编辑在文章开头注明：本文结果不代表设备中存在Majorana零模式——等于给自己加免责声明。"},
+  {title:"040｜比亚迪兆瓦闪充，不止是功率大",domain:"电池",preview:"比亚迪展示兆瓦闪充：1000V×1000A=1百万瓦。卓克评价：在电动汽车快充领域做得最好、考虑最周到、技术门槛最高——但要铺开规模需很久。"},
+  {title:"041｜地上锂矿：电池回收",domain:"电池",preview:"2025年中国锂电池产能预计1500GWh，是5年前的9.4倍。电池回收市场规模2025年400亿，2030年1500亿——错过宁德时代就别错过电池回收。"},
+  {title:"049｜真全固态电池什么时候买？2030年之后",domain:"电池",preview:"最乐观2028年装车，60万起步。固态电池体积能量密度>800Wh/L，比4680的622Wh/L提升近30%——因为电解液和隔膜原来占体积40%，现在取消或固化了。"},
+  {title:"076｜增程和混动生命力还长吗？",domain:"电池",preview:"固态电池成熟（2032年前）后，增程和混动将变成小众产品。CLTC 650km的车换纯固态后续航上升到1100-1200km。"},
+  {title:"077｜钠离子电池的复兴",domain:"电池",preview:"宁德时代第二代钠离子电池能量密度175Wh/kg，仅落后磷酸铁锂17%。用高压梯度层状氧化物正极（掺杂镍-锰-铁），电压从3.2V提升到3.7V。"},
+  {title:"080｜问答：激光雷达对行人安全吗？",domain:"传感器",preview:"多辆车的激光雷达不会互相干扰——城市里手机4G/5G同时通信的数量几十倍于激光雷达车数量，用编码技术即可区分。"},
+  {title:"087｜问答：钠电池的突破在哪？",domain:"电池",preview:"宁德时代「钠新」最大的贡献来自电压提升——从3.2V到3.7V。材料上采用高压梯度层状氧化物正极，掺杂镍-锰-铁材料实现了电压飞跃。"},
+  {title:"107｜海底发现了暗氧，但先别激动",domain:"能源",preview:"深海海底某些区域类似电池结构——电解海水产生氢气和氧气。这种「暗氧」的量有多少、从何时开始产生、哪些生物依赖它——目前全部未知。"},
+  {title:"122｜近期充电宝召回事件",domain:"电池",preview:"机场严查充电宝：无3C认证、标识不清、被召回批次都不让带。2025年3月充电宝起火致航班迫降，引发行业地震——上游电池原料出问题。"},
+  {title:"158｜理想i8和卡车对撞怎么看？",domain:"电池安全",preview:"理想i8纯电SUV与8吨中型卡车100km/h对撞——A/B/C柱完好，电池包未漏液起火，车门自动解锁。子弹头造型钻入卡车底部形成了托举力。"},
+  {title:"168｜电动自行车新国标：限速别想破解了",domain:"电池",preview:"2025年9月起旧国标电动车停产。锂电池让两轮电动车功率从800瓦跃升到6000瓦，从自行车形态过渡到电摩形态——新国标要管住速度。"},
+  {title:"177｜问答：电动车新国标将产生哪些影响？",domain:"电池",preview:"快递员比一般人更不能接受25km/h限速——宁愿不断换电池也不换新车。监管部门将用摄像头抓拍电动车超速，像机动车一样。"},
+  {title:"185｜太阳系访客的谣言与真相",domain:"天文",preview:"彗星31/ATLAS直径46公里——北京六环那么大。韦伯望远镜发现它几乎没有彗尾但异常亮眼，说明光主要来自本体反射——什么材料才有这样的反射率？"},
+  {title:"192｜数学家格林的传奇",domain:"数学物理",preview:"格林公式是每个理工科大学生的必修课。但更深的是格林函数——在量子力学处理实际问题时才系统讲授。这个成果诞生于一座风车磨坊。"},
+  {title:"200｜iPhone17信号质量如何？",domain:"半导体",preview:"iPhone17信号质量第一次大幅提升。苹果自研基带C1用在iPhone16e上，宣传「超越高通」，实测依然不敌。问题出在天线设计而非基带芯片。"},
+  {title:"210｜解读2025诺贝尔物理学奖",domain:"量子",preview:"诺奖颁发给超导量子比特技术路径的理论基础。三名科学家发现了电路中的宏观量子隧穿和能量量子化——量子计算从理论走向工程的关键一步。"},
+  {title:"215｜早期宇宙中的「小红点」难题",domain:"天文",preview:"韦伯望远镜发现35个小红点，每个都含超大质量黑洞。光谱红移到近红外——这些是宇宙诞生仅几亿年后的星体。"},
+  {title:"219｜问答：稀土的竞争力在哪？",domain:"材料",preview:"中国稀土垄断高性能磁性元件市场。被制裁国家即使有矿，补强到产出合格磁性元件保守需8年，从零开始需16年。90%的稀土用于制造高性能磁体。"},
+  {title:"230｜问答：核聚变发电无前景？",domain:"能源",preview:"强化学习环境比算法本身更重要。好的训练环境：单机单卡可跑、可泛化到真实世界、奖励信号梯度均匀、结果可复现——Meta-World、Brax都是好例子。"},
+  {title:"279｜问答：国产EUV光刻机造出来了？",domain:"半导体",preview:"路透社报道：深圳机密实验室中，前ASML团队通过逆向工程复刻了EUV系统，已能产生13.5nm极紫外光，但尚未产出可用芯片。原型机缺少蔡司精密光学系统。"},
+  {title:"296｜问答：VR/AR前景如何？固态电池量产了？",domain:"消费电子",preview:"高端AR/VR未来5年技术巨人、市场矮子——需求已被元宇宙和Vision Pro两波热潮耗尽，硬件规格停滞，背后技术已触长期瓶颈。"},
+  {title:"310｜《科技参考》复盘+下一季开更通知",domain:"综述",preview:"复盘：芯片大年预测成真——骁龙8至尊和下一代性能差距不大。2025诺贝尔物理学奖颁给量子计算路径。全固态电池索要60万起步。"},
+];
+
+// ===== Populate Excerpt River =====
+(function populateRiver() {
+  const river = document.getElementById('excerptRiver');
+  const domainColors = {
+    '半导体':'💡 半导体','电池':'🔋 电池','航天':'🚀 航天',
+    '量子':'⚛️ 量子','能源':'⚡ 能源','天文':'🔭 天文',
+    '传感器':'📡 传感器','材料':'🧪 材料','数学物理':'📐 数学物理',
+    '电池安全':'🛡️ 电池安全','消费电子':'📱 消费电子','综述':'📋 综述'
+  };
+
+  articles.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'excerpt-river-item';
+    div.innerHTML = `
+      <div class="excerpt-tag">${domainColors[a.domain]||'📄 '+a.domain}</div>
+      <div class="excerpt-card">
+        <div class="excerpt-title">${a.title}</div>
+        <p>${a.preview}</p>
+      </div>`;
+    river.appendChild(div);
+  });
+})();
+
+// ===== Interactive: You Choose =====
+(function setupCTA() {
+  const resultEl = document.getElementById('ctaResult');
+  const messages = {
+    chip: '💡 <strong>半导体物理派</strong>——你关注的是晶体管栅极宽度逼近原子尺度的极限挑战。从EUV光刻到chiplet架构，芯片的未来不只靠制程——还靠对固体物理的更深理解和架构创新。推荐阅读：001｜芯片「大年」· 279｜国产EUV光刻机。',
+    battery: '🔋 <strong>电化学派</strong>——你关心的是锂离子在固液界面上的迁移速率。从磷酸铁锂到钠离子到全固态，电池的进化不是「换材料」那么简单——它是离子电导率、界面阻抗和制造成本的三角博弈。推荐阅读：049｜真全固态电池 · 077｜钠离子电池复兴。',
+    rocket: '🚀 <strong>推进工程派</strong>——你迷恋的是齐奥尔科夫斯基火箭方程和梅林发动机的涡轮泵。SpaceX的真正创新不在「可回收」这个概念——而在他们把周转间隔从43天压缩到21天的工程执行力。推荐阅读：007｜SpaceX雄心勃勃的2025年。',
+    quantum: '⚛️ <strong>量子信息派</strong>——你追问的是退相干时间和纠错码的阈值定理。量子计算今天的「霸权」只针对极其特定的问题——费曼1981年的愿景还需要几代人的工程积累。推荐阅读：024-025｜量子芯片+谷歌Willow。',
+    all: '🔧 <strong>全栈拆解者</strong>——你不满足于任何一个单一领域。芯片、电池、火箭、量子——这四台引擎虽然分属不同的物理领域，但它们共享同一个底层逻辑：<strong>物理定律不容神话，工程权衡没有奇迹</strong>。这33篇文章就是你的工具箱。'
+  };
+
+  document.getElementById('ctaButtons').addEventListener('click', (e) => {
+    if (!e.target.classList.contains('cta-btn')) return;
+    document.querySelectorAll('.cta-btn').forEach(b => b.classList.remove('picked'));
+    e.target.classList.add('picked');
+    const pick = e.target.dataset.pick;
+    resultEl.innerHTML = messages[pick];
+    resultEl.classList.add('show');
+  });
+})();
+
+// ===== Socratic toggle =====
+document.querySelectorAll('.socratic-q').forEach(q => {
+  q.addEventListener('click', function() {
+    this.parentElement.classList.toggle('open');
+  });
+});
+
+// ===== Canvas Hero: Engine Particle Simulation =====
+(function initHeroCanvas() {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animId;
+
+  function resize() {
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
+    initParticles();
+  }
+
+  function initParticles() {
+    const count = Math.min(150, Math.floor(canvas.width * canvas.height / 6000));
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 20 + Math.random() * Math.min(canvas.width, canvas.height) * 0.4;
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      particles.push({
+        x: cx + Math.cos(angle) * radius * (Math.random() * 0.6 + 0.4),
+        y: cy + Math.sin(angle) * radius * (Math.random() * 0.6 + 0.4),
+        cx, cy,
+        r: Math.random() * 2 + .5,
+        angle: angle,
+        orbitRadius: radius,
+        angularSpeed: (Math.random() - .5) * 0.008,
+        radialDrift: (Math.random() - .5) * 0.15,
+        opacity: Math.random() * .5 + .2,
+        isElectric: Math.random() > .5,
+        isOrange: Math.random() > .8
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw core glow
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 180);
+    coreGrad.addColorStop(0, 'rgba(0,102,255,.08)');
+    coreGrad.addColorStop(.4, 'rgba(0,102,255,.03)');
+    coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath(); ctx.arc(cx, cy, 180, 0, Math.PI * 2); ctx.fill();
+
+    // Draw connection lines between nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 70) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          const alpha = 0.04 * (1 - dist/70);
+          const color = particles[i].isElectric && particles[j].isElectric
+            ? `rgba(0,102,255,${alpha})`
+            : `rgba(255,102,0,${alpha})`;
+          ctx.strokeStyle = color;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw particles
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      let color;
+      if (p.isOrange) {
+        color = `rgba(255,120,30,${p.opacity})`;
+      } else if (p.isElectric) {
+        color = `rgba(50,140,255,${p.opacity})`;
+      } else {
+        color = `rgba(160,160,180,${p.opacity})`;
+      }
+      ctx.fillStyle = color;
+      ctx.fill();
+
+      // Glow for larger particles
+      if (p.r > 1.3) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+        const glowColor = p.isOrange
+          ? `rgba(255,102,0,${p.opacity * .12})`
+          : `rgba(0,102,255,${p.opacity * .12})`;
+        ctx.fillStyle = glowColor;
+        ctx.fill();
+      }
+    });
+
+    // Draw rotating gear rings (ghost)
+    for (let ring = 0; ring < 3; ring++) {
+      const r = 90 + ring * 45;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(0,102,255,${0.04 - ring * 0.01})`;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 20 + ring * 10]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  function update() {
+    particles.forEach(p => {
+      p.angle += p.angularSpeed;
+      p.orbitRadius += p.radialDrift;
+      if (p.orbitRadius < 15) p.orbitRadius = 15;
+      if (p.orbitRadius > Math.min(canvas.width, canvas.height) * 0.5) {
+        p.orbitRadius = Math.min(canvas.width, canvas.height) * 0.5;
+        p.radialDrift *= -1;
+      }
+      p.x = p.cx + Math.cos(p.angle) * p.orbitRadius;
+      p.y = p.cy + Math.sin(p.angle) * p.orbitRadius;
+    });
+  }
+
+  function animate() {
+    update();
+    draw();
+    animId = requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  animate();
+})();
+
+// ===== Reading Progress Bar =====
+(function progressBar() {
+  const bar = document.getElementById('readProgress');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = Math.min(progress, 100) + '%';
+  });
+})();
+
+// ===== Intersection Observer: Section Reveal =====
+(function sectionReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: .1 });
+
+  document.querySelectorAll('.section').forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(20px)';
+    section.style.transition = 'opacity .6s ease, transform .6s ease';
+    observer.observe(section);
+    if (section.getBoundingClientRect().top < window.innerHeight) {
+      section.style.opacity = '1';
+      section.style.transform = 'translateY(0)';
+    }
+  });
+})();
+
+// ===== Staggered rotor node reveal =====
+(function rotorReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateX(0)';
+        }, i * 100);
+      }
+    });
+  }, { threshold: .15 });
+
+  document.querySelectorAll('.rotor-node').forEach(node => {
+    node.style.opacity = '0';
+    node.style.transform = 'translateX(-20px)';
+    node.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(node);
+  });
+})();
+
+// ===== Animate comparator bars on scroll =====
+(function comparatorAnim() {
+  let animated = false;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !animated) {
+        animated = true;
+        document.querySelectorAll('.comp-bar-fill').forEach(bar => {
+          const targetWidth = bar.style.width;
+          bar.style.width = '0%';
+          setTimeout(() => { bar.style.width = targetWidth; }, 100);
+        });
+      }
+    });
+  }, { threshold: .3 });
+  const comp = document.querySelector('.comparator');
+  if (comp) observer.observe(comp);
+})();
+</script>
+
+</body>
+</html>
