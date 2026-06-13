@@ -7,13 +7,12 @@
 <style>
 /* ============================================================
    科技参考3 · MKS 知识主板
-   设计：白底 + 琥珀色(#F59E0B)强调 + 卡片式布局
-   纯 HTML/CSS，移动端响应式
+   设计：白底 + 琥珀色(#F59E0B)强调 + 9标签 MKS 交互页面
    ============================================================ */
 
 :root {
   --bg: #fafbfc;
-  --card-bg: #ffffff;
+  --card: #ffffff;
   --accent: #F59E0B;
   --accent-dark: #D97706;
   --accent-light: #FEF3C7;
@@ -28,24 +27,30 @@
   --radius: 12px;
   --radius-sm: 8px;
   --transition: 0.2s ease;
+  --red: #dc2626;
+  --blue: #2563eb;
+  --green: #059669;
+  --purple: #7c3aed;
+  --orange: #ea580c;
+  --teal: #0d9488;
+  --pink: #db2777;
+  --indigo: #4f46e5;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "SimSun", serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.75;
+  line-height: 1.8;
   min-height: 100vh;
 }
 
 a { color: var(--accent-dark); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--accent); }
 
-/* ============================================================
-   TOP NAV BAR
-   ============================================================ */
+/* Top Nav */
 .top-nav {
   position: sticky; top: 0; z-index: 100;
   background: rgba(255,255,255,0.92);
@@ -67,968 +72,1545 @@ a:hover { color: var(--accent); }
   text-decoration: none;
   transition: all var(--transition);
 }
-.top-nav .home-btn:hover {
-  background: var(--accent-dark);
-  color: #fff;
-}
-.top-nav .breadcrumb {
-  font-size: 13px; color: var(--text-light);
-}
+.top-nav .home-btn:hover { background: var(--accent-dark); color: #fff; }
+.top-nav .breadcrumb { font-size: 13px; color: var(--text-light); }
 
-/* ============================================================
-   MAIN CONTAINER
-   ============================================================ */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px 20px 60px;
+/* Tab Navigation */
+.tab-nav {
+  position: sticky; top: 48px; z-index: 99;
+  display: flex; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  padding: 0;
+  margin-bottom: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
-
-/* ============================================================
-   INDEX PAGE — HERO
-   ============================================================ */
-.hero {
-  text-align: center;
-  padding: 40px 16px 32px;
-}
-.hero .icon-row {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-.hero h1 {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: 0.04em;
-  margin-bottom: 8px;
-}
-.hero h1 .accent {
-  color: var(--accent-dark);
-}
-.hero .subtitle {
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
-  color: var(--text-light);
-  margin-bottom: 4px;
-}
-.hero .meta {
-  font-size: 0.8rem;
-  color: var(--text-lighter);
-}
-
-/* Divider */
-.divider {
-  display: flex; align-items: center; gap: 16px;
-  margin: 0 auto 40px;
-  max-width: 600px;
-}
-.divider::before, .divider::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-}
-.divider .dot {
-  width: 8px; height: 8px;
-  background: var(--accent);
-  border-radius: 50%;
-}
-
-/* ============================================================
-   INDEX — TOPIC CARDS GRID
-   ============================================================ */
-.topics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
-
-.topic-card {
-  display: flex; flex-direction: column;
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  padding: 28px 24px 24px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s ease;
+.tab-btn {
+  flex: 1; min-width: 70px;
+  padding: 10px 6px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.78);
+  cursor: pointer;
+  font-size: 12.5px; font-weight: 600;
+  transition: all 0.3s;
   position: relative;
-  overflow: hidden;
+  white-space: nowrap;
 }
-.topic-card::before {
+.tab-btn:hover, .tab-btn.active { color: #fff; background: rgba(255,255,255,0.14); }
+.tab-btn.active::after {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-  border-radius: 0 0 2px 2px;
-}
-.topic-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--accent);
-}
-.topic-card .card-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
-}
-.topic-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.topic-card .card-subtitle {
-  font-size: 0.82rem;
-  color: var(--accent-dark);
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-.topic-card .card-desc {
-  font-size: 0.88rem;
-  color: var(--text-light);
-  line-height: 1.65;
-  flex: 1;
-}
-.topic-card .card-count {
-  margin-top: 14px;
-  font-size: 0.78rem;
-  color: var(--text-lighter);
-  display: flex; align-items: center; gap: 6px;
-}
-.topic-card .card-count .badge {
-  display: inline-block;
-  background: var(--accent-light);
-  color: var(--accent-dark);
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.75rem;
+  position: absolute; bottom: 0; left: 10%; width: 80%; height: 3px;
+  background: #fff;
+  border-radius: 2px;
 }
 
-/* ============================================================
-   TOPIC PAGE — HEADER
-   ============================================================ */
-.topic-header {
-  text-align: center;
-  padding: 30px 16px 24px;
-}
-.topic-header .topic-icon {
-  font-size: 44px;
-  margin-bottom: 8px;
-}
-.topic-header h2 {
-  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-  font-weight: 900;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.topic-header .topic-subtitle {
-  font-size: 0.95rem;
-  color: var(--accent-dark);
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-.topic-header .topic-desc {
-  font-size: 0.88rem;
-  color: var(--text-light);
-  max-width: 680px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
+/* Tab Section */
+.tab-section { display: none; padding: 24px 20px; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.5s; }
+.tab-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Stats row */
-.stats-row {
-  display: flex; gap: 12px; flex-wrap: wrap;
-  justify-content: center;
-  margin: 20px 0;
-}
-.stat-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  font-size: 0.82rem;
-  color: var(--text-light);
-}
-.stat-badge .num {
-  font-weight: 700;
-  color: var(--accent-dark);
-  font-size: 1rem;
-}
+h1 { font-size: clamp(1.4rem, 2.8vw, 2rem); color: var(--accent-dark); text-align: center; margin: 16px 0 8px; }
+h2 { font-size: clamp(1.15rem, 2vw, 1.5rem); color: var(--accent-dark); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin: 20px 0 14px; }
+h3 { font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--text); margin: 14px 0 8px; }
 
-/* ============================================================
-   ARTICLE CARDS
-   ============================================================ */
-.articles-list {
-  display: flex; flex-direction: column;
-  gap: 14px;
-  margin-top: 20px;
-}
+/* Overview */
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin: 16px 0; }
+.overview-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); }
 
-.article-card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-  transition: all var(--transition);
-  border-left: 4px solid transparent;
-}
-.article-card:hover {
-  box-shadow: var(--shadow);
-  border-left-color: var(--accent);
-}
-.article-card .art-num {
-  display: inline-block;
-  font-size: 0.7rem;
-  color: var(--text-lighter);
-  background: var(--border-light);
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-bottom: 6px;
-  font-family: monospace;
-}
-.article-card h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-.article-card .art-summary {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  line-height: 1.65;
-  margin-bottom: 8px;
-}
-.article-card .art-insights {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.article-card .insight-tag {
-  font-size: 0.75rem;
-  color: var(--accent-dark);
-  background: var(--accent-light);
-  padding: 2px 10px;
-  border-radius: 12px;
-}
-
-/* ============================================================
-   KEY CONCEPTS section
-   ============================================================ */
-.section-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 40px 0 20px;
-  padding-bottom: 10px;
-  border-bottom: 3px solid var(--accent);
-  display: inline-block;
-}
-.concepts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
-  margin-top: 16px;
-}
-.concept-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
+.goal-box {
+  background: linear-gradient(135deg, #fffbeb, var(--accent-light));
+  border-left: 4px solid var(--accent);
   padding: 16px 20px;
-  transition: all var(--transition);
-}
-.concept-card:hover {
-  box-shadow: var(--shadow);
-  border-color: var(--accent);
-}
-.concept-card .concept-num {
-  display: inline-block;
-  width: 28px; height: 28px; line-height: 28px;
-  text-align: center;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.concept-card h5 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-.concept-card p {
-  font-size: 0.82rem;
-  color: var(--text-light);
-  line-height: 1.6;
+  border-radius: 0 8px 8px 0;
+  margin: 12px 0;
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.footer {
-  text-align: center;
-  padding: 32px 20px 16px;
-  color: var(--text-lighter);
-  font-size: 0.72rem;
-  border-top: 1px solid var(--border-light);
-  margin-top: 48px;
-}
+.stats-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 16px 0; }
+.stat-badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 24px; font-size: 0.82rem; color: var(--text-light); }
+.stat-badge .num { font-weight: 700; color: var(--accent-dark); font-size: 1rem; }
+
+/* Graph */
+.graph-container { background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); text-align: center; overflow-x: auto; }
+.graph-container svg { max-width: 100%; height: auto; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 12px 0; font-size: 13px; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* Progress */
+.progress-bar { height: 10px; background: var(--border); border-radius: 5px; margin: 12px 0; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 5px; transition: width 0.5s; }
+
+/* Flip Cards */
+.flip-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; margin: 16px 0; }
+.flip-card{perspective:1000px;height:clamp(220px,40vw,280px);margin-bottom:14px}
+.flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+.flip-inner.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; padding: clamp(16px, 3vw, 24px); }
+.flip-front { background: var(--card); border: 2px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.flip-front .concept-icon { font-size: 44px; margin-bottom: 8px; }
+.flip-front .concept-name { font-size: 18px; font-weight: 700; color: var(--accent-dark); }
+.flip-front .concept-hint { font-size: 12.5px; color: var(--text-lighter); margin-top: 6px; }
+.flip-back { background: var(--card); border: 2px solid var(--accent); transform: rotateY(180deg); overflow-y: auto; font-size: 13.5px; line-height: 1.7; }
+.flip-back h4 { color: var(--accent-dark); font-size: 15px; margin-bottom: 6px; }
+.flip-back .label { display: inline-block; background: var(--accent); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-right: 4px; font-weight: 600; }
+
+.card-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+.card-nav button { padding: 6px 16px; border: 2px solid var(--accent); background: #fff; color: var(--accent-dark); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 13px; }
+.card-nav button:hover { background: var(--accent); color: #fff; }
+.card-nav .card-idx { font-size: 13px; color: var(--text-light); min-width: 50px; text-align: center; }
+.card-learned { opacity: 0.5; }
+.card-learned .flip-front { border-color: #ccc; }
+
+/* Quiz */
+.quiz-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.quiz-controls button { padding: 8px 18px; border: 2px solid var(--accent); background: #fff; color: var(--accent-dark); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 13px; }
+.quiz-controls button:hover { background: var(--accent); color: #fff; }
+
+.quiz-item { background: var(--card); border-radius: 10px; padding: 16px; margin: 12px 0; border: 1px solid var(--border); }
+.quiz-item h4 { color: var(--accent-dark); margin-bottom: 10px; }
+.quiz-item label { display: block; padding: 8px 12px; margin: 4px 0; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+.quiz-item label:hover { background: var(--accent-light); }
+.quiz-item input[type="radio"] { margin-right: 8px; }
+
+.quiz-feedback { margin-top: 10px; padding: 10px; border-radius: 6px; font-weight: 600; display: none; }
+.quiz-feedback.correct { background: #d4edda; color: #155724; display: block; }
+.quiz-feedback.wrong { background: #f8d7da; color: #721c24; display: block; }
+
+.sa-item { background: var(--card); border-radius: 10px; padding: 16px; margin: 12px 0; border: 1px solid var(--border); }
+.sa-item textarea { width: 100%; min-height: 80px; border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-family: inherit; resize: vertical; margin: 8px 0; }
+.sa-item .show-answer { background: var(--accent-light); padding: 10px; border-radius: 6px; margin-top: 8px; display: none; font-size: 13px; }
+.static-quiz{display:none}
+
+/* Exam / Review */
+.exam-timer { font-size: 24px; font-weight: 700; color: var(--accent-dark); text-align: center; margin: 16px 0; }
+.exam-score { font-size: 20px; font-weight: 700; text-align: center; margin: 12px 0; }
+.review-list { list-style: none; margin: 16px 0; }
+.review-list li { padding: 10px 16px; margin: 6px 0; background: var(--card); border-radius: 8px; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; }
+.review-list li:hover { border-color: var(--accent); }
+.review-list li.reviewed { opacity: 0.5; text-decoration: line-through; }
+
+/* Deep Q */
+.dq-item { background: var(--card); border-radius: 10px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--accent); }
+.dq-item .dq-question { font-weight: 700; color: var(--accent-dark); cursor: pointer; }
+.dq-item .dq-answer { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 14px; }
+
+/* Cases */
+.case-card { background: var(--card); border-radius: 10px; padding: 20px; margin: 12px 0; border: 1px solid var(--border); }
+.case-card .case-title { font-weight: 700; color: var(--accent-dark); font-size: 18px; }
+.case-card .case-meta { font-size: 13px; color: var(--text-light); margin: 6px 0; }
+.case-steps { margin: 12px 0; padding-left: 20px; }
+.case-steps li { margin: 6px 0; }
+
+/* Decision */
+.decision-scenario { background: var(--card); border-radius: 10px; padding: 20px; margin: 16px 0; border: 1px solid var(--border); }
+.decision-scenario h4 { color: var(--accent-dark); }
+.decision-scenario select, .decision-scenario button { margin: 8px 4px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-family: inherit; }
+.decision-scenario button { background: var(--accent); color: #fff; cursor: pointer; border: none; font-weight: 600; }
+.decision-output { background: var(--accent-light); padding: 16px; border-radius: 8px; margin-top: 12px; display: none; font-size: 14px; }
+
+/* Toast */
+.toast { position: fixed; top: 20px; right: 20px; background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 8px; z-index: 999; animation: slideIn 0.3s; font-size: 14px; }
+@keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Mind Map */
+.mindmap-container { text-align: center; margin: 16px 0; }
+.mindmap-container svg { max-width: 100%; height: auto; }
+
+/* Article Cards */
+.articles-list { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+.article-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); padding: 16px 20px; transition: all var(--transition); border-left: 4px solid transparent; }
+.article-card:hover { box-shadow: var(--shadow); border-left-color: var(--accent); }
+.article-card .art-num { display: inline-block; font-size: 0.7rem; color: var(--text-lighter); background: var(--border-light); padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; font-family: monospace; }
+.article-card h4 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
+.article-card .art-summary { font-size: 0.85rem; color: var(--text-light); line-height: 1.65; }
+
+/* Footer */
+.footer { text-align: center; padding: 32px 20px 16px; color: var(--text-lighter); font-size: 0.72rem; border-top: 1px solid var(--border-light); margin-top: 40px; }
 .footer a { color: var(--accent-dark); }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 768px) {
-  .topics-grid {
-    grid-template-columns: 1fr;
-  }
-  .container {
-    padding: 16px 12px 40px;
-  }
-  .article-card {
-    padding: 16px;
-  }
-  .hero {
-    padding: 24px 12px 20px;
-  }
-  .top-nav {
-    padding: 8px 12px;
-    gap: 10px;
-  }
-  .concepts-grid {
-    grid-template-columns: 1fr;
-  }
+  .tab-btn { font-size: 11px; padding: 8px 4px; min-width: 55px; }
+  .tab-section { padding: 16px 10px; }
+  .overview-grid, .flip-container { grid-template-columns: 1fr; }
+  .top-nav { padding: 8px 12px; }
 }
-
 @media (max-width: 480px) {
-  .topics-grid,
-  .concepts-grid {
-    grid-template-columns: 1fr;
-  }
-  .topic-card {
-    padding: 20px 16px;
-  }
-  .article-card h4 {
-    font-size: 0.92rem;
-  }
+  .flip-container { grid-template-columns: 1fr; }
+  .tab-btn { font-size: 10px; padding: 6px 2px; min-width: 45px; }
 }
-
 </style>
 </head>
 <body>
 
+<!-- TOP NAV -->
 <div class="top-nav">
   <a href="index.html" class="home-btn">← 科技参考3 主板</a>
-  <span class="breadcrumb">医学与健康前沿 · 59 篇文章</span>
+  <span class="breadcrumb">医学与健康前沿 · 59 篇文章 · MKS 最小知识集</span>
 </div>
 
-<div class="container">
-  <div class="topic-header">
-    <div class="topic-icon">🔬</div>
-    <h2>医学与健康前沿</h2>
-    <p class="topic-subtitle">疾病机制、衰老研究与医疗突破</p>
-    <p class="topic-desc">从癌症治疗到抗衰老研究，从朊病毒到超级细菌，现代医学正在分子层面重新理解生命。59篇文章深入探讨疾病的生物学机制、前沿疗法与健康科学的最新发现。</p>
+<!-- TAB NAV -->
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="overview">知识集总览</button>
+  <button class="tab-btn" data-tab="cards">知识卡片</button>
+  <button class="tab-btn" data-tab="quiz">题库系统</button>
+  <button class="tab-btn" data-tab="exam">考试模式</button>
+  <button class="tab-btn" data-tab="review">复习模式</button>
+  <button class="tab-btn" data-tab="mindmap">思维导图</button>
+  <button class="tab-btn" data-tab="deepask">深度追问</button>
+  <button class="tab-btn" data-tab="cases">案例分析</button>
+  <button class="tab-btn" data-tab="decision">实战决策</button>
+</nav>
+
+<!-- ============================================================
+     TAB 0: 知识集总览
+     ============================================================ -->
+<section class="tab-section active" id="tab-overview">
+<h1>🔬 医学与健康前沿</h1>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">疾病机制 · 衰老研究 · 医疗突破 · 59 篇文章 · 2023-2024</p>
+
+<div class="goal-box">
+  <strong>核心目标：</strong>在分子层面重新理解生命——从疫苗免疫机制到新冠病毒后遗症，从癌症致癌物分级到抗衰老科学前沿，从朊病毒到超级细菌，现代医学正在以前所未有的精度解码人体。本专题帮助你建立医学科学的底层认知框架，理解疾病的发生机制与前沿疗法的科学原理。
+</div>
+
+<div class="stats-row">
+  <div class="stat-badge"><span class="num">59</span> 篇文章</div>
+  <div class="stat-badge">📅 2023-2024</div>
+  <div class="stat-badge">🧬 10 核心概念</div>
+  <div class="stat-badge">🏥 4 层医学架构</div>
+</div>
+
+<!-- 概念关系图 -->
+<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
+  <h3>📊 概念关系图 — 医学与健康前沿的四层知识架构</h3>
+  <div class="graph-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" style="max-width:100%;height:auto">
+  <defs>
+    <filter id="gshadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/></marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#059669"/></marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#ea580c"/></marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/></marker>
+    <marker id="arrowTeal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0d9488"/></marker>
+  </defs>
+  <rect width="1100" height="700" fill="#fafbfc" rx="8"/>
+
+  <!-- 图例 -->
+  <text x="860" y="32" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#1f2937">图例</text>
+  <rect x="860" y="42" width="14" height="14" rx="3" fill="#dc2626"/><text x="882" y="55" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">病原体与传染病</text>
+  <rect x="860" y="62" width="14" height="14" rx="3" fill="#2563eb"/><text x="882" y="75" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">免疫与防御机制</text>
+  <rect x="860" y="82" width="14" height="14" rx="3" fill="#059669"/><text x="882" y="95" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">癌症与细胞生物学</text>
+  <rect x="860" y="102" width="14" height="14" rx="3" fill="#ea580c"/><text x="882" y="115" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">衰老与代谢</text>
+  <rect x="860" y="122" width="14" height="14" rx="3" fill="#7c3aed"/><text x="882" y="135" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">神经与脑科学</text>
+  <rect x="860" y="142" width="14" height="14" rx="3" fill="#0d9488"/><text x="882" y="155" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">食品安全与毒理</text>
+  <line x1="860" y1="168" x2="920" y2="168" stroke="#9ca3af" stroke-dasharray="6,3" stroke-width="1.5"/>
+  <text x="882" y="183" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#9ca3af">虚线：交叉影响/反馈回路</text>
+
+  <!-- Layer 0: 核心 -->
+  <ellipse cx="550" cy="650" rx="145" ry="38" fill="#F59E0B" filter="url(#gshadow)"/>
+  <text x="550" y="644" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="15" font-weight="700" fill="#fff">现代医学知识体系</text>
+  <text x="550" y="662" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">分子层面理解生命 · 循证医学驱动</text>
+
+  <!-- Layer 1: 六大维度 -->
+  <!-- 病原体与传染病 -->
+  <rect x="20" y="430" width="175" height="56" rx="10" fill="#dc2626" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="107" y="452" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#fff">🦠 病原体与传染病</text>
+  <text x="107" y="472" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">新冠·猴痘·朊病毒</text>
+
+  <!-- 免疫与防御 -->
+  <rect x="215" y="430" width="175" height="56" rx="10" fill="#2563eb" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="302" y="452" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#fff">🛡️ 免疫与防御</text>
+  <text x="302" y="472" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">疫苗·抗体·免疫记忆</text>
+
+  <!-- 癌症与细胞 -->
+  <rect x="410" y="430" width="175" height="56" rx="10" fill="#059669" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="497" y="452" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#fff">🔬 癌症与细胞</text>
+  <text x="497" y="472" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">致癌物·海拉细胞·靶向药</text>
+
+  <!-- 衰老与代谢 -->
+  <rect x="605" y="430" width="175" height="56" rx="10" fill="#ea580c" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="692" y="452" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#fff">⏳ 衰老与代谢</text>
+  <text x="692" y="472" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">二甲双胍·表观遗传·GLP-1</text>
+
+  <!-- 神经脑科学 -->
+  <rect x="800" y="430" width="175" height="56" rx="10" fill="#7c3aed" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="887" y="452" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#fff">🧠 神经与脑科学</text>
+  <text x="887" y="472" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">偏头痛·阿尔兹海默·长新冠</text>
+
+  <!-- 食品安全与毒理 -->
+  <rect x="995" y="430" width="90" height="56" rx="10" fill="#0d9488" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="1040" y="452" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">🍽️ 食品</text>
+  <text x="1040" y="472" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">致癌物·补品·毒性</text>
+
+  <!-- Layer 2: 具体概念（病原体下） -->
+  <rect x="10" y="270" width="155" height="48" rx="8" fill="#ef4444" filter="url(#gshadow)"/>
+  <text x="87" y="290" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">新冠病毒变异</text>
+  <text x="87" y="306" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">Delta·Omicron·免疫逃逸</text>
+
+  <rect x="175" y="270" width="155" height="48" rx="8" fill="#ef4444" filter="url(#gshadow)"/>
+  <text x="252" y="290" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">朊病毒病</text>
+  <text x="252" y="306" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">疯牛病·克雅氏病·库鲁病</text>
+
+  <!-- Layer 2: 免疫下 -->
+  <rect x="340" y="270" width="155" height="48" rx="8" fill="#3b82f6" filter="url(#gshadow)"/>
+  <text x="417" y="290" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">疫苗技术路线</text>
+  <text x="417" y="306" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">mRNA·灭活·腺病毒载体</text>
+
+  <rect x="505" y="270" width="155" height="48" rx="8" fill="#3b82f6" filter="url(#gshadow)"/>
+  <text x="582" y="290" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">自然免疫vs获得性免疫</text>
+  <text x="582" y="306" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">先天免疫·抗体·T细胞</text>
+
+  <!-- Layer 2: 癌症下 -->
+  <rect x="670" y="270" width="155" height="48" rx="8" fill="#10b981" filter="url(#gshadow)"/>
+  <text x="747" y="290" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">致癌物IARC分级</text>
+  <text x="747" y="306" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">1类·2A·2B·剂量-效应</text>
+
+  <rect x="835" y="270" width="155" height="48" rx="8" fill="#10b981" filter="url(#gshadow)"/>
+  <text x="912" y="290" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">海拉细胞系</text>
+  <text x="912" y="306" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">永生化·端粒酶·医学伦理</text>
+
+  <!-- Layer 2: 衰老代谢下 -->
+  <rect x="10" y="155" width="155" height="48" rx="8" fill="#f97316" filter="url(#gshadow)"/>
+  <text x="87" y="175" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">抗衰老药物</text>
+  <text x="87" y="191" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">二甲双胍·NAD+·Senolytics</text>
+
+  <rect x="175" y="155" width="155" height="48" rx="8" fill="#f97316" filter="url(#gshadow)"/>
+  <text x="252" y="175" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">GLP-1受体激动剂</text>
+  <text x="252" y="191" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">司美格鲁肽·减重·代谢</text>
+
+  <rect x="340" y="155" width="155" height="48" rx="8" fill="#f97316" filter="url(#gshadow)"/>
+  <text x="417" y="175" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">表观遗传学</text>
+  <text x="417" y="191" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">DNA甲基化·组蛋白修饰</text>
+
+  <!-- Layer 2: 神经下 -->
+  <rect x="505" y="155" width="155" height="48" rx="8" fill="#8b5cf6" filter="url(#gshadow)"/>
+  <text x="582" y="175" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">偏头痛机制</text>
+  <text x="582" y="191" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">CGRP·三叉神经·皮层扩散</text>
+
+  <rect x="670" y="155" width="155" height="48" rx="8" fill="#8b5cf6" filter="url(#gshadow)"/>
+  <text x="747" y="175" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">长新冠脑改变</text>
+  <text x="747" y="191" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">脑雾·认知下降·神经炎症</text>
+
+  <!-- Layer 2: 食品毒理下 -->
+  <rect x="835" y="155" width="155" height="48" rx="8" fill="#14b8a6" filter="url(#gshadow)"/>
+  <text x="912" y="175" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#fff">加工肉致癌机制</text>
+  <text x="912" y="191" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)">亚硝酸盐·N-亚硝基化合物</text>
+
+  <!-- Layer 3: 基础概念 -->
+  <rect x="120" y="70" width="180" height="42" rx="8" fill="#fca5a5" opacity="0.7" filter="url(#gshadow)"/>
+  <text x="210" y="96" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#7f1d1d">PCR核酸检测原理</text>
+
+  <rect x="350" y="70" width="180" height="42" rx="8" fill="#93c5fd" opacity="0.7" filter="url(#gshadow)"/>
+  <text x="440" y="96" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#1e3a5f">mRNA疫苗递送系统</text>
+
+  <rect x="580" y="70" width="180" height="42" rx="8" fill="#86efac" opacity="0.7" filter="url(#gshadow)"/>
+  <text x="670" y="96" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#14532d">PCNA癌症靶点</text>
+
+  <rect x="810" y="70" width="180" height="42" rx="8" fill="#fdba74" opacity="0.7" filter="url(#gshadow)"/>
+  <text x="900" y="96" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" font-weight="700" fill="#7c2d12">毒物兴奋效应</text>
+
+  <!-- Edges: Layer 3 → Layer 2 -->
+  <line x1="210" y1="112" x2="170" y2="155" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arrowRed)"/>
+  <line x1="440" y1="112" x2="417" y2="155" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arrowBlue)"/>
+  <line x1="670" y1="112" x2="747" y2="155" stroke="#059669" stroke-width="1.8" marker-end="url(#arrowGreen)"/>
+  <line x1="900" y1="112" x2="900" y2="155" stroke="#ea580c" stroke-width="1.8" marker-end="url(#arrowOrange)"/>
+
+  <!-- Edges: Layer 2 → Layer 1 -->
+  <line x1="87" y1="318" x2="107" y2="430" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="98" y="375" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#dc2626">变异驱动</text>
+  <line x1="252" y1="318" x2="252" y2="430" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="200" y="375" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#dc2626">蛋白错折叠</text>
+
+  <line x1="417" y1="318" x2="417" y2="430" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="408" y="375" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#2563eb">抗原呈递</text>
+  <line x1="582" y1="318" x2="500" y2="430" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <line x1="747" y1="318" x2="747" y2="430" stroke="#059669" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="738" y="375" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#059669">风险评估</text>
+  <line x1="912" y1="318" x2="912" y2="430" stroke="#059669" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+  <line x1="87" y1="203" x2="600" y2="430" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="300" y="310" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#ea580c">延缓衰老</text>
+  <line x1="252" y1="203" x2="680" y2="430" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="417" y1="203" x2="600" y2="430" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+
+  <line x1="582" y1="203" x2="850" y2="430" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowPurple)"/>
+  <text x="720" y="310" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#7c3aed">神经炎症</text>
+  <line x1="747" y1="203" x2="880" y2="430" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowPurple)"/>
+
+  <line x1="912" y1="203" x2="930" y2="430" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowTeal)"/>
+  <text x="940" y="310" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#0d9488">化学致癌</text>
+
+  <!-- Edges: Layer 1 → 核心 -->
+  <line x1="107" y1="486" x2="300" y2="630" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <line x1="302" y1="486" x2="380" y2="625" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <line x1="497" y1="486" x2="480" y2="620" stroke="#059669" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <line x1="692" y1="486" x2="600" y2="620" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="887" y1="486" x2="700" y2="620" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowPurple)"/>
+  <line x1="1040" y1="486" x2="800" y2="630" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+  <!-- 虚线回环：免疫 ↔ 病原体 -->
+  <path d="M 302 430 Q 400 380 252 300 Q 170 270 107 430" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="340" y="340" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#9ca3af">免疫记忆→应对变异</text>
+
+  <!-- 虚线回环：衰老 ↔ 癌症 -->
+  <path d="M 692 430 Q 750 380 835 300 Q 900 270 912 430" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="830" y="340" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#9ca3af">衰老增加癌症风险</text>
+
+  <!-- 虚线回环：神经 ↔ 免疫 -->
+  <path d="M 887 430 Q 950 500 500 500 Q 350 500 302 430" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="600" y="520" font-family="Noto Sans SC,sans-serif" font-size="8" fill="#9ca3af">神经-免疫轴调控</text>
+
+  <text x="550" y="18" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#1f2937">医学与健康前沿 · 概念关系图（四层架构 · 六大维度）</text>
+</svg>
   </div>
+</div>
 
-  <div class="stats-row">
-    <div class="stat-badge"><span class="num">59</span> 篇文章</div>
-    <div class="stat-badge">📅 2023-2024</div>
-    <div class="stat-badge">🎯 MKS 最小知识集</div>
+<!-- 创意图 -->
+<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
+  <h3>🎨 创意图 — 人体"生命体征仪表盘"</h3>
+  <p style="text-align:center;color:var(--text-light);font-size:13px;margin-bottom:12px">视觉隐喻：将人体健康视为一个多维监测系统——每个医学领域都是一个"生命体征"仪表，共同构成完整的健康图景</p>
+  <div class="graph-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 580" style="max-width:100%;height:auto">
+  <defs>
+    <filter id="cs"><feDropShadow dx="0.5" dy="1" stdDeviation="1.5" flood-opacity="0.1"/></filter>
+    <linearGradient id="gaugeGrad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef3c7"/><stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="gaugeGrad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="gaugeGrad3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dcfce7"/><stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect width="750" height="580" fill="#fafbfc" rx="8"/>
+
+  <!-- 标题 -->
+  <text x="375" y="30" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="17" font-weight="700" fill="#1f2937">🫀 人体健康多维监测仪表盘</text>
+
+  <!-- 中心人体轮廓 -->
+  <g transform="translate(375,290)">
+    <!-- 简化人体轮廓 -->
+    <ellipse cx="0" cy="-20" rx="22" ry="25" fill="none" stroke="#D97706" stroke-width="3"/>
+    <line x1="0" y1="5" x2="0" y2="70" stroke="#D97706" stroke-width="3"/>
+    <line x1="-36" y1="20" x2="36" y2="20" stroke="#D97706" stroke-width="2.5"/>
+    <line x1="0" y1="70" x2="-28" y2="135" stroke="#D97706" stroke-width="2.5"/>
+    <line x1="0" y1="70" x2="28" y2="135" stroke="#D97706" stroke-width="2.5"/>
+    <!-- 心脏位置 -->
+    <circle cx="0" cy="15" r="10" fill="#F59E0B" opacity="0.3"/>
+    <text x="0" y="18" text-anchor="middle" font-family="sans-serif" font-size="12">❤️</text>
+  </g>
+
+  <!-- 仪表1: 免疫防御 (左上) -->
+  <g transform="translate(120,110)">
+    <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
+    <path d="M -90 0 A 90 90 0 0 1 45 78" fill="none" stroke="#dc2626" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="0" cy="0" r="6" fill="#1f2937"/>
+    <line x1="0" y1="0" x2="50" y2="-75" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="0" y="108" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#dc2626">免疫防御</text>
+    <text x="0" y="124" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#6b7280">疫苗·抗体·T细胞</text>
+    <!-- 刻度 -->
+    <text x="-90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">0</text>
+    <text x="90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">100</text>
+    <text x="0" y="-85" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#dc2626">78%</text>
+  </g>
+
+  <!-- 仪表2: 代谢健康 (右上) -->
+  <g transform="translate(630,110)">
+    <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
+    <path d="M -90 0 A 90 90 0 0 1 20 88" fill="none" stroke="#ea580c" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="0" cy="0" r="6" fill="#1f2937"/>
+    <line x1="0" y1="0" x2="30" y2="-85" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="0" y="108" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#ea580c">代谢健康</text>
+    <text x="0" y="124" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#6b7280">GLP-1·胰岛素·线粒体</text>
+    <text x="-90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">0</text>
+    <text x="90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">100</text>
+    <text x="0" y="-85" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#ea580c">62%</text>
+  </g>
+
+  <!-- 仪表3: 细胞完整性 (左下) -->
+  <g transform="translate(120,400)">
+    <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
+    <path d="M -90 0 A 90 90 0 0 1 63 64" fill="none" stroke="#059669" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="0" cy="0" r="6" fill="#1f2937"/>
+    <line x1="0" y1="0" x2="60" y2="-67" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="0" y="108" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#059669">细胞完整性</text>
+    <text x="0" y="124" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#6b7280">DNA修复·端粒·凋亡</text>
+    <text x="-90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">0</text>
+    <text x="90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">100</text>
+    <text x="0" y="-85" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#059669">85%</text>
+  </g>
+
+  <!-- 仪表4: 神经功能 (右下) -->
+  <g transform="translate(630,400)">
+    <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
+    <path d="M -90 0 A 90 90 0 0 1 -10 89" fill="none" stroke="#7c3aed" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="0" cy="0" r="6" fill="#1f2937"/>
+    <line x1="0" y1="0" x2="-10" y2="-89" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="0" y="108" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#7c3aed">神经功能</text>
+    <text x="0" y="124" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#6b7280">突触·髓鞘·神经递质</text>
+    <text x="-90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">0</text>
+    <text x="90" y="18" font-family="sans-serif" font-size="9" fill="#9ca3af">100</text>
+    <text x="0" y="-85" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#7c3aed">71%</text>
+  </g>
+
+  <!-- 连接线：仪表盘到人体 -->
+  <line x1="160" y1="190" x2="340" y2="280" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="590" y1="190" x2="410" y2="280" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="160" y1="450" x2="350" y2="300" stroke="#059669" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="590" y1="450" x2="400" y2="300" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.4"/>
+
+  <!-- 底部说明 -->
+  <text x="375" y="560" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">每个仪表盘代表一个医学维度——健康不是单一数值，而是多维系统协同平衡的结果</text>
+</svg>
   </div>
+  <p style="text-align:center;color:var(--text-light);font-size:12px;margin-top:8px">💡 视觉隐喻：医学与健康前沿关注的六维生命指标——感染防御、代谢平衡、细胞完整、神经功能、衰老时钟与营养毒理</p>
+</div>
 
-  <!-- Key Concepts -->
-  <div class="section-title">核心概念</div>
-  <div class="concepts-grid">
-    
-      <div class="concept-card">
-        <div class="concept-num">1</div>
-        <h5>阿斯巴甜</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">2</div>
-        <h5>代糖致癌风波回顾</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">3</div>
-        <h5>碍于面子，狂犬病发作</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">4</div>
-        <h5>红肉、加工肉为什么被列入致癌物</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">5</div>
-        <h5>顶级减肥药</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">6</div>
-        <h5>4090显卡被禁+食肉动物会得癌吗</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">7</div>
-        <h5>冷冻再复活，又迈进一大步</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">8</div>
-        <h5>支原体感染+上亿度的温度怎么测</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">9</div>
-        <h5>饭后多久才能运动</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">10</div>
-        <h5>才能洗澡</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">11</div>
-        <h5>最近的“不明原因肺炎”是怎么回事</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">12</div>
-        <h5>能杀死一切实体肿瘤的药什么时候上市</h5>
-        <p>相关文章 1 篇</p>
-      </div>
+<!-- 学习进度 -->
+<div class="overview-card" style="grid-column:1/-1">
+  <h3>📈 全站学习进度</h3>
+  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:13px;color:var(--text-light)">已掌握 <strong id="learnedCount">0</strong> / 10 核心概念</p>
+</div>
+
+<!-- 精选文章速览 -->
+<div class="overview-card" style="grid-column:1/-1;margin-top:8px">
+  <h3>📑 精选文章速览</h3>
+  <div class="articles-list" id="articleList">
   </div>
+</div>
+</section>
 
-  <!-- Article List -->
-  <div class="section-title">全部文章</div>
-  <div class="articles-list">
-    
-      <div class="article-card">
-        <span class="art-num">#2</span>
-        <h4>阿斯巴甜：代糖致癌风波回顾</h4>
-        <div class="art-summary">2023年5月到7月间，阿斯巴甜被推上风口浪尖，因为国际癌症研究机构（IARC）把它定为2B类致癌物。</div>
-        <div class="art-insights"><span class="insight-tag">2023年5月到7月间，阿斯巴甜被推上风口浪尖，因为国际癌症研究机构（IARC）把它定为2B类致癌物</span>
-<span class="insight-tag">想必很多人在这波热潮中都看到了正确的结论：
-和以往相比，阿斯巴甜并没有被发现有任何陡然增加的癌症风险，只要控制在限量内，依然是安全的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#8</span>
-        <h4>碍于面子，狂犬病发作</h4>
-        <div class="art-summary">2023年9月16日，国家疾控中心和卫健委发布了2023版的《狂犬病暴露预防处置工作规范》，</div>
-        <div class="art-insights"><span class="insight-tag">别看死亡的人数少，实际上每年接种狂犬疫苗的人数大约有1500万左右</span>
-<span class="insight-tag">考虑到《科技参考》近1000多期都没有提及到狂犬病的内容，所以这期我们来说一说</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#10</span>
-        <h4>问答：红肉、加工肉为什么被列入致癌物？</h4>
-        <div class="art-summary">很多同学对阿斯巴甜那期提到的红肉致癌、加工肉致癌非常关心，想问问是怎么回事。</div>
-        <div class="art-insights"><span class="insight-tag">这两个咱们分开说，因为
-红肉是在2类致癌物的A级里，而加工红肉是最高的1类致癌</span>
-<span class="insight-tag">之所以叫它红肉，是因为肌肉里包含大量肌红蛋白和血红蛋白，外观是深红色的，所以叫红肉</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#13</span>
-        <h4>劝退：顶级减肥药</h4>
-        <div class="art-summary">因为严格地说，第一代安全有效的减肥药才刚刚在几个月前国内获批上市。之前中国虽然也上市了几款被人们当作是减肥药的药，但其实都是以2型糖尿病为适应症使用的，不是专门用来减肥的。</div>
-        <div class="art-insights"><span class="insight-tag">因为严格地说，第一代安全有效的减肥药才刚刚在几个月前国内获批上市</span>
-<span class="insight-tag">之前中国虽然也上市了几款被人们当作是减肥药的药，但其实都是以2型糖尿病为适应症使用的，不是专门用来减肥的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#17</span>
-        <h4>问答：4090显卡被禁+食肉动物会得癌吗？</h4>
-        <div class="art-summary">上周六我追了一把新闻热点，介绍了高通的峰会，临时把答疑调整到今天。咱们今天继续上周的第二个答疑。</div>
-        <div class="art-insights"><span class="insight-tag">价格为什么坐了一个过山车呢？
-因为美国最开始公布的先进计算芯片出口管制新规里包含了4090显卡，但是十几个小时之后，美国商务部又对出口管制文件做了澄清，对4090的禁令是这样解释的，“消费级出口产品可以申请豁免”，
-所以4090显卡可以在中</span>
-<span class="insight-tag">为什么美国公布了管制新规呢？
-因为美国很多企业为了把高性能芯片卖给中国，钻旧规的漏洞，其中NV首当其冲</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#19</span>
-        <h4>冷冻再复活，又迈进一大步</h4>
-        <div class="art-summary">2023年6月底，《自然》和《科学》两大期刊先后刊登了一篇器官冷冻的研究，《科学》杂志甚至还把它排在了6月的封面文章，可见这个研究有多么吸引人。</div>
-        <div class="art-insights"><span class="insight-tag">其实到今天，已经有几百万人使用过了，那就是试管婴儿，今天采精和采卵并不需要同时进行，丈夫先取精子，或者妻子先取卵子都可以，中间隔几个月或者隔几年都可以，卵细胞一般会取10个左右</span>
-<span class="insight-tag">而这个服务中使用的冷冻技术，其实就是这期内容我们要说的，
-先把组织冷冻，等需要时再激活</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#28</span>
-        <h4>问答：支原体感染+上亿度的温度怎么测？</h4>
-        <div class="art-summary">最近这周，周围人感冒的不少，特别是学校里的低龄学生，支原体感染有的几乎占班级一半以上。大家都反映，自从新冠一阳、二阳之后，呼吸系统免疫力有明显下降，不知道你们身边有没有类似情况？</div>
-        <div class="art-insights"><span class="insight-tag">最近这周，周围人感冒的不少，特别是学校里的低龄学生，支原体感染有的几乎占班级一半以上</span>
-<span class="insight-tag">因为新冠几年，大部分国家都施行了比较严格的风控措施，人人也都习惯了戴口罩，于是连续几年呼吸道传染病大幅降低</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#33</span>
-        <h4>问答：饭后多久才能运动？才能洗澡？</h4>
-        <div class="art-summary">常听人说“饭后不能运动”，否则容易阑尾炎。请问吃多少就不能剧烈运动了？为什么呢？还有就是，要消食到什么程度才能够运动呢？</div>
-        <div class="art-insights"><span class="insight-tag">但饭后不许孩子跑出去玩，那都是饭后半小时内的时段，所以是没有道理的</span>
-<span class="insight-tag">进而就要问了，是不是夜里1点就不能蹦蹦跳跳啊？没错，因为会吵到别人睡觉</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#45</span>
-        <h4>问答：最近的“不明原因肺炎”是怎么回事？</h4>
-        <div class="art-summary">2023年11月22日，世卫组织正式要求中国提供有关“不明原因肺炎”的更多细节。这是怎么回事呢？是不是“新新冠病毒”来了？要怎么防护呢？</div>
-        <div class="art-insights"><span class="insight-tag">2023年11月22日，世卫组织正式要求中国提供有关“不明原因肺炎”的更多细节</span>
-<span class="insight-tag">只不过因为全球所有人的免疫系统在2-3年时间里没有接触过它们，于是再次生产出足够量抗体的时间比3年前稍慢了几天，于是病情就加重了很多</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#54</span>
-        <h4>问答：能杀死一切实体肿瘤的药什么时候上市？</h4>
-        <div class="art-summary">首先，有好几位同学都提到了一种能治疗70多种癌症的新药AOH1996，据说正在做临床试验，而且他们的亲朋好友中就有癌症患者，期待这种药能给他们更多的希望。问我这个药的前景如何。</div>
-        <div class="art-insights"><span class="insight-tag">但是，癌细胞之所以没死，还能继续疯狂增值，是因为致命错误发生时有一个修复机制解决了错误，这个修复机制就和PCNA密切相关</span>
-<span class="insight-tag">正常细胞由于并不会疯狂复制，所以不太会发生撞车事故，于是正常细胞对PCNA修复机制的依赖程度就低</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#55</span>
-        <h4>掌机的复苏，游戏的衰老（上）</h4>
-        <div class="art-summary">今天的《科技参考》，我们说一个轻松的话题：游戏掌机。之所以聊这个，是因为最近两年以来，游戏掌机复苏了。</div>
-        <div class="art-insights"><span class="insight-tag">这一系列的内容有上、下两集，第一集分析一下市场上掌机的状况，第二集分析一下掌机复苏的原因</span>
-<span class="insight-tag">因为掌机的历史远超过手机游戏，最早的掌机和最早的游戏机都是上世纪70年代出现的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#56</span>
-        <h4>掌机的复苏，游戏的衰老（下）</h4>
-        <div class="art-summary">昨天我们说到，完美的掌机有这么几个标准：重量在200多克，续航超过8小时，游戏品质出色，机器价格低于1000块钱。这种掌机有吗？还真有，就是开源掌机。</div>
-        <div class="art-insights"><span class="insight-tag">之所以叫“开源”，是因为操作系统大部分用的是Linux或者安卓，里面装的都是各种模拟器，它们全都是开源的</span>
-<span class="insight-tag">模拟器最初是在特殊场合用的，比如40年前在一些特别老的机器上运行的程序，如今机器硬件早都找不到了，可还需要运行程序，那就用软件环境模拟出老机器的处理器、声卡、控制按钮等等，这样起码能把老程序运行起来</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#58</span>
-        <h4>问答：正确读音从何而来？下雪会清除病毒吗？</h4>
-        <div class="art-summary">听音频的时候，听到您说“驯化综合征”还以为是“驯化综合症”，原来是特征的征，光听音频以为是您读错了，或者是我之前竟然读错了症的读音。就像一些常见字大家也都会读错，比如细菌的菌是读一声还是三声等等。</div>
-        <div class="art-insights"><span class="insight-tag">因为“驯化综合征”的“征”是特征，不是病症的意思，属于词就不一样，只不过发音有点类似，属于英语中 feature 和 symptom 的区别了</span>
-<span class="insight-tag">当然，咱们不否认其中很多读音背后都有一大套理论，有清晰的正确与否的标准，但还有相当多其实没有历史渊源，只是硬性规定</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#63</span>
-        <h4>问答：周末为什么会头疼？</h4>
-        <div class="art-summary">自己容易偏头痛。因为经常疼，所以也摸到一些规律。最容易引起偏头痛的就是睡眠不足。只要睡眠不足，第二天准会疼。但奇怪的是，经常会在周末疼，有时候忙碌了一周，小心谨慎的维持着作息，工作日都没疼。周末终于可以休息了，还睡了个好觉，结果竟然会疼。而且，经常会在周末没有压力、心情放松时还疼。这是为什么？</div>
-        <div class="art-insights"><span class="insight-tag">有些人其实是颅内肿瘤、出血、脑膜炎、颅内压增高、鼻窦的感染、流感、严重脱水、甲状腺问题、青光眼、颈椎病等导致的头疼</span>
-<span class="insight-tag">它说的是，
-导致偏头痛的原因并不是压力本身，而是压力的波动，所以压力突然增大会偏头痛，压力突然减小也会偏头痛</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#71</span>
-        <h4>问答：勤剃光头有利于头发生长吗？</h4>
-        <div class="art-summary">不能，而且也要看光头是什么定义。如果就是光溜溜的，在剪掉头发后还要用刮刀走一遍的话，甚至还会对头发有害。</div>
-        <div class="art-insights"><span class="insight-tag">之所以一些人认为孩子多剃光头，头发就能长得更粗更多，是因为前后对比强烈</span>
-<span class="insight-tag">因为剃掉的只是头发的毛干部分，这部分头发已经没有活细胞了，甚至剪下来放一百年也能维持原样不变</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#100</span>
-        <h4>问答：12种呼吸道疾病检测该不该做？</h4>
-        <div class="art-summary">最近美团推出了一个12种呼吸道疾病病原体的上门检测服务，这是不是智商税呢？</div>
-        <div class="art-insights"><span class="insight-tag">最近美团推出了一个12种呼吸道疾病病原体的上门检测服务，这是不是智商税呢？
+<!-- ============================================================
+     TAB 1: 知识卡片
+     ============================================================ -->
+<section class="tab-section" id="tab-cards">
+<h2>🃏 知识卡片</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">点击卡片翻转查看完整知识 | 10 张核心概念卡</p>
 
+<div class="flip-container" id="flipContainer"></div>
 
-简单回答，不是智商税，但对大多数人来说没有必要，还容易增加焦虑</span>
-<span class="insight-tag">但其实，这些信息只对临床医生才有一些价值，对医学知识不足的普通人来说，更多的作用是产生焦虑，甚至促进乱用药</span>
+<div class="card-nav">
+  <button id="prevCard">◀ 上一张</button>
+  <span class="card-idx" id="cardIndex">1/10</span>
+  <button id="nextCard">下一张 ▶</button>
+  <button id="markLearned" style="background:var(--accent);color:#fff">✓ 标记已学</button>
 </div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#112</span>
-        <h4>问答：注射干细胞好吗？东亚为什么是生育洼地？</h4>
-        <div class="art-summary">最近身边朋友有打干细胞的，说是能增强抵抗力，请您讲讲干细胞吧。</div>
-        <div class="art-insights"><span class="insight-tag">真要想达到最好的疗效和最高的安全性，自己本身得是生物医药领域的内行才可以</span>
-<span class="insight-tag">这四方面哪个出了问题都会引起严重事故，比如毒性会感染新的病毒，或者因为干细胞对免疫信号的调节失控，导致免疫疾病</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#122</span>
-        <h4>起源：免疫系统的奇迹</h4>
-        <div class="art-summary">今天我们说说免疫系统两个令人不可思议的能力。第一个奇迹般的能力是，它是怎么能认得出那么多种不同样式的入侵者的？第二个是，它是怎么出现的？</div>
-        <div class="art-insights"><span class="insight-tag">由于它们是由那把特殊的钥匙激活的，所以身上长满了配合那种钥匙的孔，能很好地抓握住入侵者，并把入侵者杀死</span>
-<span class="insight-tag">免疫系统虽然可以这样杀敌，理论上也可以应付大部分入侵，但事情总有特殊情况，在入侵者干掉身体重要器官之前，那些针对性强的免疫细胞得能把入侵者全都杀掉才行，否则就来不及了，所以记忆性保证了下一次入侵者到来后，针对性强的免疫细胞量产的时间会缩短很</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#138</span>
-        <h4>韩国医生大规模辞职</h4>
-        <div class="art-summary">这个事件是从2024年2月20日开始的韩国医生大辞职、大罢工、大罢课。直到今天已经一个多月了，依然在持续。</div>
-        <div class="art-insights"><span class="insight-tag">其实这1/10的医生承担了韩国全部医疗服务工作量的35%左右，所以韩国现在有超过一半的手术是做不了的，所有的急诊都不能再进人了</span>
-<span class="insight-tag">如果是平摊，10%的医务工作者应该只承担10%的工作量，但之所以他们承担了几倍的工作量，是因为他们都是基层医生</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#139</span>
-        <h4>长新冠对人脑的改变</h4>
-        <div class="art-summary">下文有两张对比照片，方便的话你可以先看看，都是典型的活力美女在12-24个月内迅速衰老的例子，第一张隔了24个月，第二张隔了12个月。</div>
-        <div class="art-insights"><span class="insight-tag">由于时间足够长，除了某些封禁措施最严格的国家之外，其余国家60%左右的人口全都被动感染过新冠了</span>
-<span class="insight-tag">第二阶段是从2020年12月到2021年12月，整整一年的时间，这一时期，被动的感染仍然在继续，但至关重要的因素出现了，就是对预防感染和重症非常有效的辉瑞与摩德纳的新冠疫苗开始批量接种</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#141</span>
-        <h4>一剂猛药：地球工程</h4>
-        <div class="art-summary">看了《人类对地球的全面改造》系列之后，可能很多同学对今后的环境非常忧虑，所以这期我来介绍一下急救措施。这和当前全球都在施行的减排、减碳措施是非常不一样的。</div>
-        <div class="art-insights"><span class="insight-tag">看了《人类对地球的全面改造》系列之后，可能很多同学对今后的环境非常忧虑，所以这期我来介绍一下急救措施</span>
-<span class="insight-tag">这类措施见效快，温度马上就能降下来，可碳太多的问题解决不了，而且还会引入更多的副作用，所以我称之为“一剂猛药”</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#142</span>
-        <h4>问答：韩国医院问题为什么严重？牙结石能在家处理吗？</h4>
-        <div class="art-summary">有很多同学问，为什么韩国的医疗体系变得这么不平衡？</div>
-        <div class="art-insights"><span class="insight-tag">有很多同学问，为什么韩国的医疗体系变得这么不平衡？
-原因很明显，就是公立医院占比太少了，只有5%，于是自由市场竞争就只保留利润最高的一批模式，淘汰掉了利润低、风险高的模式，于是儿科、胸外科、神经外科和一切急诊提供的就比较少</span>
-<span class="insight-tag">简单说，什么不赚钱、什么风险高、什么没人愿意做，它们才应该去做什么，而不是把最赚钱的行业霸占住，然后把脏活累活甩出去</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#145</span>
-        <h4>梅西躲过了阿尔兹海默症</h4>
-        <div class="art-summary">我们知道，球星梅西的官方身高是169cm，放在今天的足坛，说成是矮子一点也不过分。</div>
-        <div class="art-insights"><span class="insight-tag">但即便169cm，也是因为梅西从11岁开始每天训练完注射一剂生长激素才摸到的这个身高</span>
-<span class="insight-tag">因为他10岁的时候，身高只有127cm，而那个年龄的平均身高是140cm</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#155</span>
-        <h4>问答：二甲双胍抗衰老的研究怎么样了？</h4>
-        <div class="art-summary">NMN作为保健品已经被叫停了，那么一直呼声很高的二甲双胍抗衰老药的研究怎么样了？</div>
-        <div class="art-insights"><span class="insight-tag">原因倒不是发现了什么不利的证据，而且相反，有利的证据越来越多，按道理说，它应该是一个有潜力的抗衰老药物</span>
-<span class="insight-tag">尽管这个药用在二型糖尿病上已经好几十年了，安全性和很多方面的作用机理也都研究得非常透彻了，但毕竟衰老是另外一种病症，想成为抗衰老药物上市去销售，依然需要通过FDA的严格审核，于是耗费资金最多的临床三期实验也就省不掉了</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#158</span>
-        <h4>来自日本的非处方药和保健品（续）</h4>
-        <div class="art-summary">之前我们曾经说到来自日本的各种非处方猛药，很多同学在评论中问的药也都是代购中常见的。所以这期内容，咱们继续挑一些著名的来说说。</div>
-        <div class="art-insights"><span class="insight-tag">不过很多人容易忽视的是，
-最影响晕车药发挥药效的因素其实是服用的时间点</span>
-<span class="insight-tag">其实30分钟对一些人是不够的，你可以适当再提前些，比如提前60-80分钟吃，大约在上车前已经有一点困意的时候，才是药物起效的时候</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#163</span>
-        <h4>羊瘙痒症、疯牛病、克雅氏病和库鲁病</h4>
-        <div class="art-summary">今天的《科技参考》，我们细致地说一说朊粒（Prion），当然也有称作“朊蛋白”“朊病毒”的，但最合适它的名字还是朊粒。</div>
-        <div class="art-insights"><span class="insight-tag">今天的《科技参考》，我们细致地说一说朊粒（Prion），当然也有称作“朊蛋白”“朊病毒”的，但最合适它的名字还是朊粒</span>
-<span class="insight-tag">羊瘙痒症
-提到朊粒，有三种疾病都会被一并提到——最早的是羊瘙痒症，然后是克雅氏病，最后是疯牛病</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#164</span>
-        <h4>朊粒、朊蛋白、朊病毒</h4>
-        <div class="art-summary">上次我们提到，美国医生盖杜谢克（Daniel Carleton Gajdusek）在参观了新几内亚食人族部落脑部病变的展览后意识到，库鲁症和羊瘙痒症可能是同一种疾病，然后在《柳叶刀》发论文，建议相关科学家做灵长类的感染实验。</div>
-        <div class="art-insights"><span class="insight-tag">5年后，实验结果终于出来了——
-最初接受感染组织注射的3只黑猩猩中，有一只表现出了症状</span>
-<span class="insight-tag">随着澳大利亚政府对弗雷族的帮助扩大，一些经济作物也成了部族人的重要收入来源，越来越多的人过上了现代人的生活，食人的习惯也逐渐消失了</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#166</span>
-        <h4>问答：轻断食增加死亡率？</h4>
-        <div class="art-summary">很多同学问到，16+8的轻断食方法大幅增加死亡率了吗？能不能说说？</div>
-        <div class="art-insights"><span class="insight-tag">而最近很多公众号一起发文章说“16+8轻断食跌落神坛，大幅增加死亡率”</span>
-<span class="insight-tag">这和此前很多研究结论完全相反，咱们是不是应该警惕这种轻断食方法呢？
-以上就是这个问题的背景</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#168</span>
-        <h4>扑朔迷离的衰老实验</h4>
-        <div class="art-summary">由于衰老在2018年6月《国际疾病分类》第11次修订中被列在其中，这个变动可以看作是医学界把衰老定义为一种疾病，所以之后相关的研究和药物会井喷式出现。</div>
-        <div class="art-insights"><span class="insight-tag">由于衰老在2018年6月《国际疾病分类》第11次修订中被列在其中，这个变动可以看作是医学界把衰老定义为一种疾病，所以之后相关的研究和药物会井喷式出现</span>
-<span class="insight-tag">原因是到目前为止，FDA都还没有批准任何一个抗衰老药物或疗法进行人体实验</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#171</span>
-        <h4>表观遗传与返老还童</h4>
-        <div class="art-summary">今天我们来说说表观遗传。这部分内容可以解释——为什么相同的基因最终表现出来的结果却不一样。</div>
-        <div class="art-insights"><span class="insight-tag">这部分内容可以解释——为什么相同的基因最终表现出来的结果却不一样</span>
-<span class="insight-tag">因为长久以来，我们都知道，基因序列决定了我们大部分的特性，但我们不知道的是，实际上是“基因+表达与否”这两个因素才决定了我们的特性</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#172</span>
-        <h4>问答：电影中名人被杜撰+疫苗致癌吗？</h4>
-        <div class="art-summary">今天看了一部电影《决胜21点》。其中老师给学生们讲物理知识，顺带提到了牛顿三大定律，但被一个学生质疑：万有引力公式从未出现在牛顿任何的书籍文献中，说他的定律也是剽窃的约瑟夫·拉佛森。请问这个约瑟夫究竟是谁？为什么会有牛顿剽窃他的科学成果之说？</div>
-        <div class="art-insights"><span class="insight-tag">请问这个约瑟夫究竟是谁？为什么会有牛顿剽窃他的科学成果之说？
+<div class="progress-bar"><div class="progress-fill" id="cardProgressBar" style="width:0%"></div></div>
+<p style="text-align:center;font-size:13px;color:var(--text-light)">已掌握 <strong id="cardLearned">0</strong> / 10</p>
+</section>
 
+<!-- ============================================================
+     TAB 2: 题库系统
+     ============================================================ -->
+<section class="tab-section" id="tab-quiz">
+<h2>📝 题库系统</h2>
+<div class="quiz-controls">
+  <button id="randomMCQ">🎲 随机抽15道选择题</button>
+  <button id="randomSA">🎲 随机抽8道简答题</button>
+  <button id="resetQuiz">🔄 重置</button>
+</div>
+<div id="quizContainer" style="margin-top:16px"></div>
+<div class="static-quiz" id="staticQuiz"></div>
+</section>
 
-另外，这让我想起来另一部电影作品，说莎士比亚根本就毫无文学功底，之所以他署名出版那么多经典著作，全然是因为当时社会风气的问题，写书的人和我们旧社会唱戏、剃头的一样，没有身份地</span>
-<span class="insight-tag">而这些名著背后真正的作者是一位达官显贵，所以就找了莎士比亚，借其之名，圆自己的梦</span>
+<!-- ============================================================
+     TAB 3: 考试模式
+     ============================================================ -->
+<section class="tab-section" id="tab-exam">
+<h2>⏱ 考试模式</h2>
+<p style="text-align:center;color:var(--text-light)">15 选择题 + 5 简答题 · 30 分钟</p>
+<div class="exam-timer" id="examTimer">30:00</div>
+<div style="text-align:center;margin:12px 0">
+  <button id="startExam" style="padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer">开始考试</button>
+  <button id="submitExam" style="padding:10px 24px;background:var(--accent-dark);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-left:8px">提交交卷</button>
 </div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#173</span>
-        <h4>问答：如何避免朊粒？+如何鉴别古玩？+灵芝孢子粉</h4>
-        <div class="art-summary">很多同学听了朊粒那期之后都很担心，典型的问题我梳理一下，比如：</div>
-        <div class="art-insights"><span class="insight-tag">很多同学听了朊粒那期之后都很担心，典型的问题我梳理一下，比如：
+<div class="exam-score" id="examScore"></div>
+<div id="examContainer"></div>
+</section>
 
+<!-- ============================================================
+     TAB 4: 复习模式
+     ============================================================ -->
+<section class="tab-section" id="tab-review">
+<h2>📖 复习模式</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">错题重做 · 核心概念复习</p>
+<div style="text-align:center;margin:12px 0">
+  <button id="startReview" style="padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer">开始复习</button>
+  <button id="exportWrong" style="padding:10px 18px;background:#fff;color:var(--accent-dark);border:2px solid var(--accent);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-left:8px">📤 导出错题</button>
+</div>
+<ul class="review-list" id="reviewList"></ul>
+</section>
 
-1.肉骨粉这种东西是不是很危险？烤肠里不是就有吗？
+<!-- ============================================================
+     TAB 5: 思维导图
+     ============================================================ -->
+<section class="tab-section" id="tab-mindmap">
+<h2>🧠 思维导图 — 医学与健康知识体系</h2>
+<div class="mindmap-container" id="mindMapContainer">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 750" style="max-width:100%;height:auto">
+  <defs>
+    <filter id="mmshadow"><feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-opacity="0.12"/></filter>
+  </defs>
+  <rect width="1000" height="750" fill="#fafbfc" rx="8"/>
 
+  <!-- 中心节点 -->
+  <ellipse cx="500" cy="375" rx="105" ry="44" fill="#F59E0B" filter="url(#mmshadow)"/>
+  <text x="500" y="367" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700">现代医学知识体系</text>
+  <text x="500" y="391" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="Noto Sans SC,sans-serif" font-size="11">分子层面 · 循证医学 · 系统思维</text>
 
-2.猪头肉、猪脑、鸡脑、鱼头、鸭头、羊蝎子、火锅里的内脏，是不是感染朊粒的风险很大？
+  <!-- 分支1: 传染病与疫苗 (右上) -->
+  <ellipse cx="730" cy="170" rx="90" ry="34" fill="#dc2626" filter="url(#mmshadow)"/>
+  <text x="730" y="165" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">🦠 传染病与疫苗</text>
+  <text x="730" y="185" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">COVID-19·猴痘·流感·狂犬病</text>
+  <line x1="590" y1="355" x2="655" y2="197" stroke="#dc2626" stroke-width="2.5"/>
 
+  <rect x="840" y="80" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="98" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">mRNA疫苗技术</text>
+  <line x1="805" y1="160" x2="845" y2="90" stroke="#dc2626" stroke-width="1.5"/>
 
-3.喝牛奶、吃牛肉会不会是</span>
-<span class="insight-tag">那么，实际情况是什么呢？
-研究中，感染最大的源头就是把用动物尸体磨成的肉骨粉喂给家畜，所以有饲料禁令</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#179</span>
-        <h4>问答：比特币为什么大涨？+阿斯利康承认疫苗致死？</h4>
-        <div class="art-summary">看到最近比特币大涨，思考了很多，它到底为什么会形成“贵重”的共识呢？</div>
-        <div class="art-insights"><span class="insight-tag">看到最近比特币大涨，思考了很多，它到底为什么会形成“贵重”的共识呢？
-这位同学从稀缺、美、便于传承、国家信用等角度考虑，也和钻石、黄金做了比较</span>
-<span class="insight-tag">如果货币的购买力不变，而我们每个月能节约30%的开销，积累50年，自然可以实现在人生的最后10年，积攒起很大一笔购买能力来应对养老</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#182</span>
-        <h4>给正常孩子打增高针</h4>
-        <div class="art-summary">那一期，我们本来是借梅西注射生长激素的话题说说阿尔兹海默症可以传染，而这个证据是由完善的保存数据的循证医学方法得到的。但后台很多评论都在关注另一个问题，就是孩子的身高。</div>
-        <div class="art-insights"><span class="insight-tag">先说最短的结论：
-是不是可以注射生长激素，判断标准比较严格，也比较复杂</span>
-<span class="insight-tag">就算骨骼最终多伸长了一些，换来的也是畸形的骨骼形态和一身基础病</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#188</span>
-        <h4>超级细菌怎么应对（上）？</h4>
-        <div class="art-summary">最近两期《科技参考》，我们说一说耐药菌的事情。</div>
-        <div class="art-insights"><span class="insight-tag">所以这个系列的内容，我们就说说细菌的耐药、人的免疫系统和今后的应对方法</span>
-<span class="insight-tag">其实这个故事的大部分逻辑是弗莱明在多次接受采访中对研究过程的美化</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#189</span>
-        <h4>超级细菌怎么应对（下）？</h4>
-        <div class="art-summary">细菌耐药的问题我们之前说过，不光是针对人体的滥用会孕育出超级细菌，哪怕是针对人体的合规足量使用也一样会孕育超级细菌，只不过是出现在环境中，而不是患者体内。</div>
-        <div class="art-insights"><span class="insight-tag">而针对人使用的抗生素还只是超级细菌出现的次要原因，超级细菌更主要的来源，是过去50年以来，各国牲畜养殖为了给牲畜增肥而喂的微量抗生素</span>
-<span class="insight-tag">虽然最近十年，各国都纷纷颁布了禁令，牲畜养殖不许再低剂量喂抗生素</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#191</span>
-        <h4>问答：换血抗衰老吗？NASA为什么不辟谣？</h4>
-        <div class="art-summary">咨询卓老板，老年人通过换年轻人的血液的方式延缓衰老，这个有科学依据吗？</div>
-        <div class="art-insights"><span class="insight-tag">因为这个人体实验的质量很差，一股脑把包含了上万种物质的血液输到其他人体内，然后声称有统计学效果，但它并不能聚焦在一种或者几种有效成分上，更没有介绍每个成分是怎么对衰老起到抵抗效果的</span>
-<span class="insight-tag">这个富豪最出名的标签是抗衰老，每年花在抗衰老上的身体维护费用至少二百万美元</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#200</span>
-        <h4>一批被改判为及格的抗衰老成分</h4>
-        <div class="art-summary">今天我们介绍一个关于衰老研究上的小反转。这个研究为很多曾经被打入冷宫的抗衰老物质重新正了名。都哪些物质呢？</div>
-        <div class="art-insights"><span class="insight-tag">因为在他们脑中，二甲双胍就算没有板上钉钉的具有抗衰老效果，起码也是非常有潜力的候选者吧？是的</span>
-<span class="insight-tag">关于它在抗衰老上的研究确实很多，但如果用统一的标准去衡量学术界的风气，抗衰老界应该算是排倒数，所以相当多的研究可靠度都存疑</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#201</span>
-        <h4>大科学家拥有连环杀手基因</h4>
-        <div class="art-summary">今天我们讲一个拥有潜在连环杀手特质、却最终没能发展成连环杀手的故事。通过这个故事，大家可以领略到基因在多大程度上对应一个功能和一类行为，和在多大程度上影响一个人。</div>
-        <div class="art-insights"><span class="insight-tag">今天我们讲一个拥有潜在连环杀手特质、却最终没能发展成连环杀手的故事</span>
-<span class="insight-tag">因为此前，医学领域并不认为这类罪犯是病人，哪怕在精神病诊疗手册中也没有对这类人的定义，传统上就是把这些罪犯归类到罪大恶极的人，是往人性的卑劣这个角度去定义的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#213</span>
-        <h4>忽悠了三十年的“亚健康”</h4>
-        <div class="art-summary">我们身边有很多概念都和医学相关，但真的去查这些概念，在全球医学界压根就没有定义，也不被认可，比如排毒、上火、碱性体质、肾虚、亚健康等等。</div>
-        <div class="art-insights"><span class="insight-tag">所以即便当年真的有一个这样的学者，创造过这样的概念“第三状态”，也肯定从未被主流医学界接纳过</span>
-<span class="insight-tag">可为什么轮到王育学去创立新的医学概念？他为什么没有针对一种具体的疾病做研究，而是从上万种疾病目录里搜肠刮肚地找目前没有定义的疾病呢？为什么医学新概念没有出现在中国医学研究水平最高的研究机构，而是轮到了青岛医学院？
-答案在央视网的一篇主持人手</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#220</span>
-        <h4>问答：亚洲为什么叫“亚洲”？年轻时膝盖受冻，老了会关节炎吗？</h4>
-        <div class="art-summary">很多同学听了“亚健康溯源”的那期节目后，都对“亚”字的含义感兴趣。既然“亚”是次于、临近的意思，那“亚洲”的“亚”是什么意思？是说我们这个洲不如其他洲，歧视我们吗？</div>
-        <div class="art-insights"><span class="insight-tag">在腓尼基语中，Asia对应的词是Asu，泛指爱琴海以东的地区，其实就是几百年后罗马帝国亚细亚省的地方</span>
-<span class="insight-tag">为什么会用Asu指代那片区域呢？因为这个词的本意是“太阳升起之处”，太阳从东方升起嘛，于是就用它指代特别远的东方</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#224</span>
-        <h4>球员猝死责任在谁？</h4>
-        <div class="art-summary">2024年6月30日晚，在印尼举办的亚洲青年羽毛球锦标赛中，17岁的中国队男单选手张志杰在比赛直播中突发倒地抽搐，随后被送往医院，在几个小时后宣布死亡。</div>
-        <div class="art-insights"><span class="insight-tag">这段时间，医疗救助和对待中暑或者崴脚是差不多的，最后竟然用担架把运动员抬下去了</span>
-<span class="insight-tag">专业运动员发病率也存在显著差异——14岁-25岁的年轻运动员发病率最高，根据运动项目不同，可以达到十万分之二到一万分之一的“运动员年”</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#237</span>
-        <h4>远古病毒导致的衰老</h4>
-        <div class="art-summary">人类的基因组是由大约32亿个碱基对形成的，不过真正表达成蛋白质的基因只占其中大约2%。</div>
-        <div class="art-insights"><span class="insight-tag">有的是非编码的RNA基因，有的是内含子，有的是调控序列，它们在基因表达多少、什么时候开始表达、什么时候停止表达、细胞的分化、染色质的修饰上都起着关键作用</span>
-<span class="insight-tag">由于尿酸在一定程度上可以弥补维生素C抗氧化的作用，所以从一定程度上说，也拯救了那些无法自己合成维生素C的灵长类祖先</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#239</span>
-        <h4>问答：晒背运动好吗？萝卜快跑是假无人驾驶吗？</h4>
-        <div class="art-summary">最近好像一下就流行起了各种晒背，有上午晒的，中午晒的，下午晒的，还说什么有各种好处。这靠谱吗？</div>
-        <div class="art-insights"><span class="insight-tag">最近好像一下就流行起了各种晒背，有上午晒的，中午晒的，下午晒的，还说什么有各种好处</span>
-<span class="insight-tag">这靠谱吗？
-简单的说，这是一种好处多坏处少的流行风潮，而且还符合流量的趋势，所以很火</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#242</span>
-        <h4>永生的细胞1：海拉细胞是如何来的？</h4>
-        <div class="art-summary">2023年8月1日，全球生命科学试剂领域的巨头赛默飞（Thermo Fisher）公司和一个名为拉克丝（Lacks）的家族达成和解协议，具体协议内容是保密的，但外界猜测，至少是千万美元的经济赔偿和一系列权利的声明与纪念活动。</div>
-        <div class="art-insights"><span class="insight-tag">因为拉克丝家族的老祖母就是今天生物医学依然在使用的海拉细胞（HeLa）的提供者，而当年约翰霍普金斯医院的医生就是从他们家老祖母身上以不太讲道义的方式取走海拉细胞的</span>
-<span class="insight-tag">她生活在巴尔的摩最贫困的黑人街区，14岁的时候就和自己的表哥生下了第一个孩子</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#243</span>
-        <h4>永生的细胞2：为什么海拉细胞如此特殊？</h4>
-        <div class="art-summary">昨天的最后我们说到，海拉细胞今天已经分裂超过23000代了，分裂出的细胞总质量超过5000万吨，而且还在不停的分裂中。</div>
-        <div class="art-insights"><span class="insight-tag">昨天的最后我们说到，海拉细胞今天已经分裂超过23000代了，分裂出的细胞总质量超过5000万吨，而且还在不停的分裂中</span>
-<span class="insight-tag">如果给到一个生物医学专业的本科生，让他培养海拉细胞，可能最初几次都会养死，要不就是温度不对，要不就是被微生物污染，要不就是血清浓度没有控制好，要不就是培养液的pH值不对</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#246</span>
-        <h4>永生的细胞3：违反伦理道德的实验</h4>
-        <div class="art-summary">医学界用海拉细胞做的实验非常多，其中最违反伦理道德的事情发生在美国斯隆-凯特琳癌症研究中心。</div>
-        <div class="art-insights"><span class="insight-tag">医学界用海拉细胞做的实验非常多，其中最违反伦理道德的事情发生在美国斯隆-凯特琳癌症研究中心</span>
-<span class="insight-tag">而这些病人因为患的是白血病，也注定会在不久后死亡，所以索瑟姆总觉得，这不是什么问题</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#247</span>
-        <h4>永生的细胞4：医学界知情权为何很晚才出现？</h4>
-        <div class="art-summary">一个是，海拉细胞的故事到底是怎么过了20多年才被海瑞塔家族的人知道的？</div>
-        <div class="art-insights"><span class="insight-tag">这条线索眼看就要断了，但医学界反而主动联系了拉克丝家族，希望抽他们家族的人一点血，原因是细胞污染</span>
-<span class="insight-tag">1966年的时候，细胞和组织培养第二十届大会上有科学家分享了自己的发现：在18种最常见的培养细胞中都存在一个罕见的遗传标记G6PD-A，这个标记几乎只在美国黑人体内出现</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#249</span>
-        <h4>大家以为的超雄XYY，其实是嵌合体</h4>
-        <div class="art-summary">2024年7月20日，一位四川的孕妇在网上发布了一份医院检查报告。报告单上看，她已经怀孕25周+5天了，而检测结果是“检测到样本Y染色体数目偏多，推测为XY与XYY嵌合或其他复杂核型”。</div>
-        <div class="art-insights"><span class="insight-tag">因为很多人说，XYY是恶魔基因，天生的高犯罪率，身边的定时炸弹</span>
-<span class="insight-tag">但实际上，这个胎儿并不是超雄综合征，家属出示的材料中，提到XYY超雄综合征的只是其中一份，后续的第二份检查就没人提了</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#251</span>
-        <h4>问答：五分熟牛排能吃吗？老烟枪更不容易患肺癌？</h4>
-        <div class="art-summary">牛排几成熟能吃？有人说，五成熟时还有血水，是不能吃的。是这样吗？</div>
-        <div class="art-insights"><span class="insight-tag">因为它在制作过程中工序比较多，肉又都是碎肉，和空气接触面积远大于原切牛排，而空气中又普遍弥漫着细菌孢子，所以合成牛排内部滋生有害菌的概率和速度都远远大于原切牛排，这种牛排务必全做熟再吃</span>
-<span class="insight-tag">屠宰或者切割过程就算引入，因为始终保持着完全的组织结构，所以也只有接触面有机会受到污染</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#253</span>
-        <h4>运动员是男还是女，很难说</h4>
-        <div class="art-summary">今年奥运会上的一场女子拳击比赛引起了大家的关注——</div>
-        <div class="art-insights"><span class="insight-tag">按照常理说，一个拳手在拳台上只打了46秒时间，既没有破相，也没有站立不稳，只因为脸部挨了两计重拳，疼得受不了而直接举手投降、放弃比赛，其实是一个非常罕见也非常有失水准的行为</span>
-<span class="insight-tag">而后她在绳圈里直接哭了出来，并且拒绝和对手凯利夫握手，并且在后续采访中说这是一场不公平的比赛，暗示对手是一个变性人，实际上是以男子的力量降级来打真正的女子</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#255</span>
-        <h4>染发剂致癌吗？不，只伤头发</h4>
-        <div class="art-summary">这个问题可能是后台提问最多、积累最久的问题了，尤其是之前我提到过，世界卫生组织旗下的癌症研究机构把理发师职业也列入致癌因素的2A组，更是让很多人联系到，染发剂是不是导致癌症呢？理发师接触染发剂会致癌，我还往脑袋上抹呢！那不是更致癌了吗？</div>
-        <div class="art-insights"><span class="insight-tag">这个问题可能是后台提问最多、积累最久的问题了，尤其是之前我提到过，世界卫生组织旗下的癌症研究机构把理发师职业也列入致癌因素的2A组，更是让很多人联系到，染发剂是不是导致癌症呢？理发师接触染发剂会致癌，我还往脑袋上抹呢！那不是更致癌了吗？
+  <rect x="840" y="118" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="136" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">病毒变异追踪</text>
+  <line x1="805" y1="168" x2="845" y2="128" stroke="#dc2626" stroke-width="1.5"/>
 
-</span>
-<span class="insight-tag">因为很多特定段落的基因突变只会导致细胞损伤和死亡，只有那些控制细胞修复、增殖或者停止分裂的DNA突变出现，才有可能让细胞无法抑制的一直分裂下去，才会是癌症</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#268</span>
-        <h4>问答：猴痘病毒又来了？吃维生素有害？</h4>
-        <div class="art-summary">简单回答，这次流行的款式不一样。目前还没有在非洲以外的地区广泛流传开，而一旦流行开来就会很危险。</div>
-        <div class="art-insights"><span class="insight-tag">首先，为什么一直以来局限在非洲的病毒会传出去呢？其次，那一时期欧美各国还在疫情末期，管控措施依然很多，人员流动远远低于疫情爆发前，按说病毒更不应该传出非洲，所以那次世界卫生组织很重视</span>
-<span class="insight-tag">感染的患者95%以上集中在男同性恋和双性恋人群，所以很可能跟男性间的性行为有关，所以大家也没有什么可恐惧的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#274</span>
-        <h4>问答：《黑神话：悟空》的影响力如何？流感疫苗选哪个？</h4>
-        <div class="art-summary">在游戏《黑神话：悟空》的节目里，同学们讨论非常热烈。我梳理了一下，核心有以下两个问题：</div>
-        <div class="art-insights"><span class="insight-tag">我梳理了一下，核心有以下两个问题：
-这次《黑神话：悟空》的大热会不会是今后中国游戏产业的良好开端？
-《黑神话：悟空》这款游戏在全球范围的影响怎么样？老外对《西游记》的熟悉度如何？
-先说它是不是今后中国游戏产业的良好开端</span>
-<span class="insight-tag">比如，同样是以《西游记》为主的网络游戏《梦幻西游》，由于是十多年前开发的，而且成本大头在后来十几年的运营中，并不像单机游戏那样大头在开发，所以不太好直接对比它们的成本</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#281</span>
-        <h4>问答：中原的基因真的稳定吗？</h4>
-        <div class="art-summary">感觉这一期基因稳定性与之前讲爱新觉罗后裔那一期有些矛盾啊！爱新觉罗后裔到现在已经有十万人，这只过了300多年。朱元璋后代在明末已经近百万，到现在起码得再提升一个数量级吧？按照这个速度，之前蒙古、隋唐乃至更早的五胡乱华，应该都留下了更多的后人，应该改写了一些中原基因啊！我自己做祖源分析，82%北方汉族，11%南方汉族，2%藏缅族群，4%东北亚，这里感觉都写了不少民族融合的历史。望卓老板解惑。</div>
-        <div class="art-insights"><span class="insight-tag">这位同学举了三个在他看来的反例：
-一个是我们曾经在这一季第138期说到的结论——今天通过测序和家谱的交叉验证，推算爱新觉罗家族后裔大约有10万人（
-爱新觉罗后裔：10万人
-）</span>
-<span class="insight-tag">为什么它们不能算反例？有强弱两个理由：
-比较弱的理由是——
-基因频繁的大规模的混杂大都集中在最近100年间，而各种研究对基因稳定性的描述主要是指文字出现后到清末这三千多年时间</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#285</span>
-        <h4>偏头痛：没有残疾证的残疾</h4>
-        <div class="art-summary">今天我们说一个对人类影响非常大，但又没有彻底治愈方法的疾病——偏头痛。</div>
-        <div class="art-insights"><span class="insight-tag">2020年更新的《全球疾病负担研究》发现，仅偏头痛一项就是残疾损失生命年（YLD）的第六大原因，所有的头痛疾病加在一起是第三大原因</span>
-<span class="insight-tag">因为很多头疼是由其他疾病引起的，比如颅内的肿瘤、出血、脑膜炎、颅内压增高、鼻窦的感染、流感、严重脱水、甲状腺问题、青光眼、颈椎病等等</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#290</span>
-        <h4>未来可期，再谈偏头痛</h4>
-        <div class="art-summary">上次偏头痛的内容是一年前写的，当时国内针对偏头痛的药物除了非甾体类药物外，只有三种曲普坦类药物。而就在这一年时间里，又批准了另外一类新药，而且我还发现了一些新的治疗仪，所以相关信息也在这期给大家补充上来。</div>
-        <div class="art-insights"><span class="insight-tag">而就在这一年时间里，又批准了另外一类新药，而且我还发现了一些新的治疗仪，所以相关信息也在这期给大家补充上来</span>
-<span class="insight-tag">作用原理是电磁脉冲影响神经系统，只要找对部位，就能打断偏头痛的发作进程</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#307</span>
-        <h4>吃得了苦，才能长寿</h4>
-        <div class="art-summary">在衰老界有一个很流行的理论，叫做毒物兴奋效应（Hormesis）。尽管这个理论在医学界是有很多争议的，但它在衰老界还是有很多人研究。</div>
-        <div class="art-insights"><span class="insight-tag">毒物兴奋效应
-最原始的含义说的是：高剂量的毒素对身体有害，但低剂量的毒素反而有可能对生物有益</span>
-<span class="insight-tag">因为低剂量时，它起到了刺激作用，激活生物体的修复机制，增加对细胞的保护性蛋白的表达</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#309</span>
-        <h4>当产科遇到危机</h4>
-        <div class="art-summary">今天的人谈到月经，会天然地认为这是女人一个月一次的事情。但这种情况对中国来说，在1970年之前是极为罕见的。因为在那之前，大多数人不使用避孕药和避孕套，所以大多数女性在可以生产的年龄，不是处于怀孕期就是处于哺乳期，等到好不容易哺乳结束，该来月经了，又怀上了。比如，我们的爷爷奶奶家，很多都是4-8个孩子，女性从20岁到40岁这二十年里，一直处于肚子里面怀着一个，手里抱着一个，地上跑着几个的状态。所以长期以来，产科都是中国医院里特别繁忙的科室。</div>
-        <div class="art-insights"><span class="insight-tag">因为在那之前，大多数人不使用避孕药和避孕套，所以大多数女性在可以生产的年龄，不是处于怀孕期就是处于哺乳期，等到好不容易哺乳结束，该来月经了，又怀上了</span>
-<span class="insight-tag">如果问什么是人类社会出现的最早的接近今天现代医学分科的科室，无疑就是产科</span>
-</div>
-      </div>
-  </div>
+  <rect x="840" y="156" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="174" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">群体免疫阈值</text>
+  <line x1="805" y1="176" x2="845" y2="166" stroke="#dc2626" stroke-width="1.5"/>
 
-  <footer class="footer">
-    <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS</p>
-  </footer>
+  <rect x="840" y="194" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="212" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">核酸检测原理</text>
+  <line x1="805" y1="185" x2="845" y2="204" stroke="#dc2626" stroke-width="1.5"/>
+
+  <!-- 分支2: 免疫系统 (右下) -->
+  <ellipse cx="730" cy="560" rx="90" ry="34" fill="#2563eb" filter="url(#mmshadow)"/>
+  <text x="730" y="555" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">🛡️ 免疫系统</text>
+  <text x="730" y="575" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">先天免疫·获得性免疫·免疫记忆</text>
+  <line x1="590" y1="395" x2="655" y2="535" stroke="#2563eb" stroke-width="2.5"/>
+
+  <rect x="840" y="475" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="493" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">抗体多样性机制</text>
+  <line x1="805" y1="550" x2="845" y2="485" stroke="#2563eb" stroke-width="1.5"/>
+
+  <rect x="840" y="513" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="531" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">T细胞杀伤机制</text>
+  <line x1="805" y1="558" x2="845" y2="523" stroke="#2563eb" stroke-width="1.5"/>
+
+  <rect x="840" y="551" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="569" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">免疫逃逸策略</text>
+  <line x1="805" y1="567" x2="845" y2="561" stroke="#2563eb" stroke-width="1.5"/>
+
+  <rect x="840" y="589" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="910" y="607" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">自身免疫病</text>
+  <line x1="805" y1="576" x2="845" y2="599" stroke="#2563eb" stroke-width="1.5"/>
+
+  <!-- 分支3: 癌症与细胞 (左下) -->
+  <ellipse cx="270" cy="560" rx="90" ry="34" fill="#059669" filter="url(#mmshadow)"/>
+  <text x="270" y="555" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">🔬 癌症与细胞</text>
+  <text x="270" y="575" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">致癌物·海拉细胞·靶向治疗</text>
+  <line x1="410" y1="395" x2="345" y2="535" stroke="#059669" stroke-width="2.5"/>
+
+  <rect x="20" y="475" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="493" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">IARC致癌物分级</text>
+  <line x1="195" y1="550" x2="155" y2="485" stroke="#059669" stroke-width="1.5"/>
+
+  <rect x="20" y="513" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="531" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">PCNA增殖靶点</text>
+  <line x1="195" y1="558" x2="155" y2="523" stroke="#059669" stroke-width="1.5"/>
+
+  <rect x="20" y="551" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="569" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">海拉细胞永生化</text>
+  <line x1="195" y1="567" x2="155" y2="561" stroke="#059669" stroke-width="1.5"/>
+
+  <rect x="20" y="589" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="607" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">表观遗传与癌症</text>
+  <line x1="195" y1="576" x2="155" y2="599" stroke="#059669" stroke-width="1.5"/>
+
+  <!-- 分支4: 衰老与代谢 (左上) -->
+  <ellipse cx="270" cy="170" rx="90" ry="34" fill="#ea580c" filter="url(#mmshadow)"/>
+  <text x="270" y="165" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">⏳ 衰老与代谢</text>
+  <text x="270" y="185" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">二甲双胍·GLP-1·端粒·线粒体</text>
+  <line x1="410" y1="355" x2="345" y2="197" stroke="#ea580c" stroke-width="2.5"/>
+
+  <rect x="20" y="80" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="98" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">二甲双胍抗衰老</text>
+  <line x1="195" y1="160" x2="155" y2="90" stroke="#ea580c" stroke-width="1.5"/>
+
+  <rect x="20" y="118" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="136" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">毒物兴奋效应</text>
+  <line x1="195" y1="168" x2="155" y2="128" stroke="#ea580c" stroke-width="1.5"/>
+
+  <rect x="20" y="156" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="174" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">GLP-1减肥机制</text>
+  <line x1="195" y1="176" x2="155" y2="166" stroke="#ea580c" stroke-width="1.5"/>
+
+  <rect x="20" y="194" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="90" y="212" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">远古病毒与衰老</text>
+  <line x1="195" y1="185" x2="155" y2="204" stroke="#ea580c" stroke-width="1.5"/>
+
+  <!-- 交叉连接 -->
+  <line x1="350" y1="200" x2="500" y2="375" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="650" y1="200" x2="500" y2="375" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="650" y1="530" x2="500" y2="375" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="350" y1="530" x2="500" y2="375" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- 边标签 -->
+  <text x="660" y="280" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#dc2626">传播·变异·防控</text>
+  <text x="660" y="480" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#2563eb">识别·记忆·清除</text>
+  <text x="340" y="480" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#059669">突变·增殖·凋亡</text>
+  <text x="340" y="280" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#ea580c">代谢·修复·再生</text>
+</svg>
 </div>
+</section>
+
+<!-- ============================================================
+     TAB 6: 深度追问
+     ============================================================ -->
+<section class="tab-section" id="tab-deepask">
+<h2>💬 深度追问</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">点击问题展开深度思考</p>
+<div id="deepAskContainer"></div>
+</section>
+
+<!-- ============================================================
+     TAB 7: 案例分析
+     ============================================================ -->
+<section class="tab-section" id="tab-cases">
+<h2>📋 案例分析</h2>
+<div id="caseContainer"></div>
+</section>
+
+<!-- ============================================================
+     TAB 8: 实战决策
+     ============================================================ -->
+<section class="tab-section" id="tab-decision">
+<h2>⚔️ 实战决策</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">模拟真实医学健康场景，做出你的选择</p>
+<div id="decisionContainer"></div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS 最小知识集</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ============================================================
+// TAB SWITCHING (hash routing)
+// ============================================================
+var tabBtns = document.querySelectorAll('.tab-btn');
+tabBtns.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var target = this.getAttribute('data-tab');
+    tabBtns.forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.tab-section').forEach(function(s){ s.classList.remove('active'); });
+    var el = document.getElementById('tab-' + target);
+    if(el) el.classList.add('active');
+    window.location.hash = target;
+    if(target === 'exam') { initExam(); }
+  });
+});
+
+function restoreTab(){
+  var hash = window.location.hash.replace('#','');
+  if(hash){
+    var btn = document.querySelector('.tab-btn[data-tab="'+hash+'"]');
+    if(btn) btn.click();
+  }
+}
+restoreTab();
+window.addEventListener('hashchange', restoreTab);
+
+// ============================================================
+// DATA: Concepts (10 cards)
+// ============================================================
+var concepts = [
+  {
+    icon: '💉', name: 'mRNA疫苗技术',
+    hint: '脂质纳米颗粒·刺突蛋白·免疫激活',
+    def: 'mRNA疫苗将编码病毒刺突蛋白的mRNA包裹在脂质纳米颗粒（LNP）中注入人体。人体细胞读取mRNA指令→合成刺突蛋白→免疫系统识别为外来物→产生抗体和T细胞记忆。疫苗本身不含病毒，不会引起感染。',
+    analogy: '就像给免疫系统发了一张"通缉令"——上面画了病毒的特征（刺突蛋白），但通缉令本身不是罪犯。免疫系统记住这张脸后，真病毒来了就能立即识别并消灭。',
+    example: '辉瑞/BioNTech和Moderna的COVID-19疫苗首次大规模验证了mRNA平台。从病毒基因测序到疫苗进入临床试验仅用了63天，传统疫苗至少需要数年。',
+    counter: 'mRNA疫苗的局限：需要在-70℃超低温保存（冷链挑战）、首剂保护率低于灭活疫苗加强针后、长期安全性数据仍在积累中。'
+  },
+  {
+    icon: '🦠', name: '新冠病毒变异',
+    hint: 'Delta·Omicron·免疫逃逸·R0值',
+    def: '新冠病毒通过复制过程中RNA聚合酶的"错误"产生变异。关键变异位点在刺突蛋白的受体结合域（RBD）——影响传播力（R0值）和免疫逃逸能力。Delta传播力是原始株的2倍，Omicron进一步增强了免疫逃逸。',
+    analogy: '病毒变异就像不断更换"钥匙"形状——每次突变都在尝试开更多锁（感染更多细胞），同时让已有的"锁匠"（抗体）认不出新钥匙。',
+    example: '英国对5%的感染者进行病毒测序，贡献了全球45%的序列数据。南非变种B.1.351的E484K突变使中和抗体效力下降10倍，推动了第二代疫苗研发。',
+    counter: '高传播力不等于高致死率——Omicron虽然传播更快，但主要感染上呼吸道而非肺部，重症率显著低于Delta。'
+  },
+  {
+    icon: '🎯', name: '致癌物IARC分级',
+    hint: '1类·2A·2B·3类·剂量-效应',
+    def: '国际癌症研究机构（IARC）将致癌物分为4类：1类（确认致癌，如加工肉、吸烟、酒精）、2A（很可能致癌，如红肉、熬夜）、2B（可能致癌，如阿斯巴甜、泡菜）、3类（无法分类）。关键：分级基于证据强度而非危险程度！',
+    analogy: 'IARC分级就像"嫌疑犯证据等级"——1类是"监控拍到作案"，2A是"有目击证人但无监控"，2B是"有作案动机但无直接证据"。但这不代表1类比2B更危险——氰化物的毒性远大于加工肉，关键在于剂量。',
+    example: '阿斯巴甜被IARC定为2B类，但每日安全摄入量（ADI）为40mg/kg体重——一个60kg成人每天需喝12-36罐无糖可乐才接近风险阈值。加工肉被定为1类（确凿证据），但每天50g才显著增加风险。',
+    counter: 'IARC只评估"是否可能致癌"而非"实际风险多大"。1类致癌物（加工肉）的绝对风险增加约为18%（结直肠癌），远低于吸烟的2000%。'
+  },
+  {
+    icon: '⏳', name: '二甲双胍抗衰老',
+    hint: 'AMPK通路·线粒体·mTOR抑制',
+    def: '二甲双胍主要用于2型糖尿病，但多项研究发现其可能延缓衰老。机制包括：激活AMPK通路（细胞能量传感器）→增强线粒体功能→抑制mTOR（促生长/促衰老信号）→减少炎症→延缓细胞衰老。TAME临床试验正在进行以确认其在非糖尿病人群中的抗衰老效果。',
+    analogy: '二甲双胍就像细胞的"节能管家"——它告诉细胞"当前能量紧张，该启用节能和维护模式了"，从而减少不必要的消耗，增强修复机制。这类似于间歇性禁食引发的细胞自噬。',
+    example: '英国临床实践研究数据链（CPRD）分析显示：服用二甲双胍的2型糖尿病患者，全因死亡率低于匹配的非糖尿病对照组（即他们比"健康人"活得更长）。这一惊人发现推动了TAME试验的启动。',
+    counter: '二甲双胍并非无风险——可能引起维生素B12缺乏、乳酸酸中毒（罕见但严重）。在非糖尿病人群中的效果仍需严格的RCT验证。'
+  },
+  {
+    icon: '🧬', name: '朊病毒疾病',
+    hint: '蛋白错折叠·疯牛病·克雅氏病',
+    def: '朊病毒不是病毒而是错误折叠的PrP蛋白（PrPSc）。当PrPSc接触正常PrP蛋白时，诱导其转变为同样的错误构象——链式反应导致脑组织海绵状病变。疾病包括：羊瘙痒症、疯牛病（BSE）、克雅氏病（CJD）、库鲁病。潜伏期可达数十年。',
+    analogy: '朊病毒就像一颗"蛋白僵尸"——它把自己的错误形状"传染"给正常的同类蛋白，就像僵尸咬人把人变成僵尸。但不同于活病毒，朊病毒不含任何遗传物质（DNA/RNA），纯粹是蛋白质的结构复制。',
+    example: '新几内亚弗雷族因食人仪式（食用死者脑组织）导致库鲁病流行。1950年代每年死亡200+人。随着食人习俗在1960年代被禁止，库鲁病逐渐消失——最后一名患者死于2005年，潜伏期超过40年。',
+    counter: '朊病毒极端稳定——120℃高温加热数小时、紫外线、甲醛都无法完全灭活。手术器械被污染后常规消毒无效，需特殊处理（134℃高压蒸汽18分钟或1M NaOH浸泡1小时）。'
+  },
+  {
+    icon: '💊', name: '超级细菌与抗生素耐药',
+    hint: 'ESBL·MRSA·碳青霉烯耐药',
+    def: '超级细菌（MDRO）指对多种抗生素同时耐药的细菌。耐药机制包括：产生β-内酰胺酶破坏抗生素结构、改变药物靶点、外排泵排出药物、形成生物被膜。最大驱动力是畜牧业中低剂量抗生素促生长（占全球抗生素使用70%+）和人类滥用。',
+    analogy: '抗生素耐药就像"军备竞赛"——每使用一种新型抗生素，细菌中总有一小撮"变异个体"碰巧能抵抗它。这些幸存者繁殖后代，逐渐使整个种群对该药物免疫。如果把抗生素当"预防性保健品"低剂量长期使用（如饲料添加剂），就相当于给细菌提供了一个完美的"训练营"。',
+    example: '印度新德里发现的NDM-1超级细菌携带金属-β-内酰胺酶基因，几乎对所有β-内酰胺类抗生素（包括碳青霉烯类"最后防线"药物）耐药。该基因存在于质粒（可移动DNA元件）上，可在不同细菌间水平传播。',
+    counter: '开发新抗生素的经济激励不足——一个新抗生素从研发到上市需10年+10亿美元，但上市后因耐药性会很快失效，药企难以收回成本。目前全球仅少数几家大药企保留抗生素研发管线。'
+  },
+  {
+    icon: '🧠', name: 'CGRP与偏头痛',
+    hint: '降钙素基因相关肽·三叉神经',
+    def: '偏头痛不是"普通头痛"——它涉及三叉神经血管系统激活→释放CGRP（降钙素基因相关肽）→脑血管扩张+神经炎症→剧烈搏动性头痛。新药CGRP单克隆抗体（erenumab等）直接阻断CGRP或其受体，从源头阻断偏头痛发作。',
+    analogy: 'CGRP就像大脑血管的"音量旋钮"——正常时可以感知正常感觉，但偏头痛发作时"音量"被扭到最大，连正常脉搏都变成剧痛。CGRP拮抗剂就像把这个旋钮调回正常位置。',
+    example: 'CGRP单抗是偏头痛史上第一个基于疾病机制的预防性药物（而非偶然发现）。临床试验显示：每月偏头痛天数减少50%以上的患者比例约为40-50%，且副作用远少于传统预防药物（如托吡酯）。',
+    counter: 'CGRP拮抗剂不适用于所有偏头痛患者——约30-40%患者应答不佳。孕妇禁用（CGRP参与胎盘血管调节）。月费用约500-700美元，医保覆盖有限。'
+  },
+  {
+    icon: '🫁', name: '长新冠后遗症',
+    hint: '脑雾·疲劳·心血管·神经炎症',
+    def: '长新冠（Long COVID）指新冠感染后症状持续12周以上，影响多器官系统。可能机制：病毒持续存在（病毒储库）、自身免疫反应、微血栓形成、线粒体功能障碍、神经炎症。常见症状：极度疲劳、脑雾、呼吸急促、心悸、关节痛。',
+    analogy: '长新冠就像"地震后的余震"——急性感染（主震）结束后，病毒引起的免疫系统紊乱（余震）仍持续破坏。免疫系统被新冠"劫持"后可能攻击自身组织，就像大火被扑灭后，建筑结构（器官）已经受到了隐性损伤。',
+    example: '大规模研究显示：感染后12个月，COVID-19康复者的心血管疾病风险增加——中风风险+52%、心力衰竭风险+72%、肺栓塞风险+2倍。即使轻症患者（未住院）也观察到这些风险的增加。有研究报道面部在12-24个月内快速衰老的案例。',
+    counter: '长新冠的风险与初始感染的严重程度正相关——接种疫苗可降低长新冠风险约50%。不同变异株的长新冠发生率不同：Omicron低于Delta和原始株。'
+  },
+  {
+    icon: '🔬', name: '海拉细胞与医学伦理',
+    hint: '永生化·端粒酶·知情同意',
+    def: '海拉细胞（HeLa）是1951年从宫颈癌患者Henrietta Lacks身上未经同意取下的癌细胞。这些细胞具有罕见的永生化能力（端粒酶异常活跃）——全球已分裂超23000代，总质量超5000万吨，用于脊髓灰质炎疫苗、HPV疫苗、基因图谱等几乎所有生物医学领域的研究。',
+    analogy: '海拉细胞就像"细胞的太空中转站"——它们可以在全球任何实验室中无限繁殖，成为生物医学研究的标准"实验对象"，贡献远超其捐赠者当初可能想象的范围。',
+    example: '海拉细胞被用于：1954年Jonas Salk的脊髓灰质炎疫苗测试、HPV疫苗（导致宫颈癌的病毒就是HeLa细胞帮助发现的）、端粒酶的发现（2009年诺贝尔奖）、甚至被送入太空研究微重力对细胞的影响。',
+    counter: 'HeLa细胞的医学伦理争议持续至今——Lacks家族直到1970年代才知道HeLa的存在，且从未获得经济补偿。2023年赛默飞公司与Lacks家族达成和解（据估千万美元级别），标志着生物样本商业化的伦理讨论进入新阶段。'
+  },
+  {
+    icon: '🏥', name: 'GLP-1受体激动剂',
+    hint: '司美格鲁肽·减重·代谢调控',
+    def: 'GLP-1（胰高血糖素样肽-1）是肠道分泌的激素，作用是：促进胰岛素分泌、抑制胰高血糖素、延缓胃排空（产生饱腹感）、作用于脑部下丘脑抑制食欲。司美格鲁肽等GLP-1受体激动剂通过模拟GLP-1作用，成为史上最有效的减肥药物（减重15-20%体重）。',
+    analogy: 'GLP-1就像身体自带的"饱腹开关"——吃饭时肠道释放GLP-1告诉大脑"够了，别吃了"。GLP-1激动剂加强了这个信号，让大脑更早、更持久地感受到饱腹。同时延缓胃排空，让食物在胃里停留更久，物理上也更饱。',
+    example: 'STEP临床试验显示：每周注射2.4mg司美格鲁肽，68周后平均减重14.9%（对照组2.4%）。约1/3参与者减重超20%。2024年司美格鲁肽口服剂型获批，减重效果接近注射版，大幅提升了依从性。',
+    counter: 'GLP-1药物副作用包括恶心（30-50%）、呕吐、腹泻（随时间减轻）。停药后体重反弹显著（1年内恢复约2/3）。月费用约900-1300美元。罕见但严重的副作用包括胰腺炎和甲状腺C细胞肿瘤（动物实验中发现）。'
+  }
+];
+
+// ============================================================
+// DATA: MCQ Bank (20 questions)
+// ============================================================
+var mcqBank = [
+  {
+    q: 'mRNA新冠疫苗的核心成分是什么？',
+    opts: ['灭活的新冠病毒颗粒', '编码刺突蛋白的mRNA分子', '新冠病毒的完整RNA', '人工合成的刺突蛋白'],
+    ans: 1,
+    explain: 'mRNA疫苗的核心是编码病毒刺突蛋白的mRNA，包裹在脂质纳米颗粒中。人体细胞读取这段mRNA后自己合成刺突蛋白，触发免疫反应。疫苗不含完整病毒。'
+  },
+  {
+    q: '病毒变异中，"免疫逃逸"指的是什么？',
+    opts: ['病毒逃避免疫系统的物理屏障', '病毒变异使已有抗体识别能力下降', '免疫系统主动放弃追踪病毒', '病毒躲藏在细胞核中'],
+    ans: 1,
+    explain: '免疫逃逸指病毒通过刺突蛋白的关键位点突变，使之前（通过感染或疫苗）产生的抗体无法有效结合病毒，从而降低中和效果。'
+  },
+  {
+    q: 'IARC致癌物分级中，加工肉属于哪一类？',
+    opts: ['2A类（很可能致癌）', '2B类（可能致癌）', '1类（确认致癌）', '3类（无法分类）'],
+    ans: 2,
+    explain: '加工肉（如培根、火腿、香肠）被IARC列为1类致癌物——有充分证据表明会增加结直肠癌风险。每天食用50g加工肉，结直肠癌风险增加约18%。'
+  },
+  {
+    q: '二甲双胍延缓衰老的最核心机制是什么？',
+    opts: ['直接清除衰老细胞', '激活AMPK通路增强线粒体功能', '抑制所有蛋白质合成', '增加端粒长度'],
+    ans: 1,
+    explain: '二甲双胍通过激活AMPK（细胞能量传感器）→增强线粒体功能→抑制mTOR信号通路→减少炎症来延缓衰老。它并不直接清除衰老细胞（那是Senolytics的作用）。'
+  },
+  {
+    q: '朊病毒的"传染性"来自什么？',
+    opts: ['病毒RNA复制', '细菌感染传播', '错误折叠蛋白诱导正常蛋白改变构象', '真菌孢子传播'],
+    ans: 2,
+    explain: '朊病毒不含任何遗传物质——它是错误折叠的PrP蛋白（PrPSc），接触正常PrP后诱导其转变为同样错误构象，形成链式反应。这完全不同于传统病毒或细菌的感染机制。'
+  },
+  {
+    q: '超级细菌最核心的耐药驱动力是什么？',
+    opts: ['医院消毒不彻底', '患者拒绝服药', '畜牧业低剂量抗生素促生长', '细菌自然进化速度加快'],
+    ans: 2,
+    explain: '全球抗生素使用约70%用于畜牧业（低剂量促生长），这为细菌提供了完美的耐药性"训练场"。人类医疗滥用是次要原因。多国已禁止畜牧业低剂量抗生素使用。'
+  },
+  {
+    q: 'CGRP在偏头痛发病中扮演什么角色？',
+    opts: ['收缩脑血管缓解疼痛', '促进脑血管扩张和神经炎症', '抑制疼痛信号传入大脑', '修复受损的神经髓鞘'],
+    ans: 1,
+    explain: 'CGRP（降钙素基因相关肽）是偏头痛的关键介质——三叉神经激活后释放CGRP→引起脑血管扩张和神经源性炎症→导致搏动性头痛。CGRP拮抗剂从源头阻断这一过程。'
+  },
+  {
+    q: '以下哪项不是长新冠（Long COVID）的常见症状？',
+    opts: ['极度疲劳和脑雾', '心悸和胸痛', '急性咯血和器官衰竭', '呼吸急促和关节痛'],
+    ans: 2,
+    explain: '长新冠主要表现为慢性症状如疲劳、脑雾、呼吸急促、心悸和关节痛，而非急性咯血和暴发性器官衰竭。长新冠是持续12周以上的多系统后遗症。'
+  },
+  {
+    q: '海拉细胞（HeLa）永生化的关键原因是什么？',
+    opts: ['细胞DNA完全不会突变', '端粒酶异常活跃使端粒不断修复', '细胞膜不能被免疫系统识别', '线粒体数量是正常细胞的10倍'],
+    ans: 1,
+    explain: '海拉细胞中端粒酶异常活跃→每次分裂后端粒不会被缩短→突破了海弗利克极限（正常细胞分裂约50次后衰老死亡），实现了永生化。海拉细胞已分裂超23000代。'
+  },
+  {
+    q: 'GLP-1受体激动剂（如司美格鲁肽）的减重机制不包括？',
+    opts: ['延缓胃排空增加饱腹感', '作用于脑部下丘脑抑制食欲', '直接燃烧脂肪细胞', '促进胰岛素分泌'],
+    ans: 2,
+    explain: 'GLP-1减重主要通过：延缓胃排空（物理饱腹感）、抑制下丘脑食欲中枢、促进胰岛素分泌。它不直接燃烧脂肪——减重效果来自于能量摄入的显著减少。'
+  },
+  {
+    q: '关于阿斯巴甜的安全性，以下哪种说法最准确？',
+    opts: ['已被证明在正常剂量下致癌', 'IARC将其列为2B类，但每日安全摄入量内仍安全', '任何剂量都安全无毒', '仅对糖尿病患者有害'],
+    ans: 1,
+    explain: 'IARC将阿斯巴甜列为2B类（可能致癌），但ADI为40mg/kg体重。一个60kg成人每天喝12-36罐无糖可乐才接近阈值，在正常饮食水平下安全性没有发生实质性变化。'
+  },
+  {
+    q: '人类精子质量下降的趋势是怎样的？',
+    opts: ['仅在中国观察到，全球其他地方没有下降', '过去四五十年间全球范围内显著下降', '精子质量在持续上升', '仅影响50岁以上男性'],
+    ans: 1,
+    explain: '多项荟萃分析显示：全球范围内精子浓度从1973年到2018年下降了约51-62%。可能原因包括环境内分泌干扰物（塑化剂、农药等）、生活方式改变等因素。'
+  },
+  {
+    q: '狂犬病毒在人体内的传播路径是什么？',
+    opts: ['通过血液直接传播全身', '从伤口沿周围神经向中枢神经系统逆行', '通过呼吸道飞沫传播', '经消化道吸收后入血'],
+    ans: 1,
+    explain: '狂犬病毒从咬伤伤口进入→沿周围神经末梢→逆行向中枢神经系统（脊髓→脑）→引起脑炎。这个"沿神经爬行"的过程需要时间，因此被咬后及时接种疫苗仍可阻止病毒到达大脑。'
+  },
+  {
+    q: '"毒物兴奋效应"（Hormesis）的核心观点是什么？',
+    opts: ['毒素在任意剂量下都对人体有害', '高剂量毒素有害，但极低剂量可能激活保护性反应', '所有毒素在低剂量下都是营养物', '人体对毒素没有阈值响应'],
+    ans: 1,
+    explain: '毒物兴奋效应指低剂量毒素可能激活生物体的应激修复机制（如热休克蛋白、抗氧化酶），产生有益效果。这一理论在衰老研究中备受关注但也充满争议——核心问题是阈值难以确定。'
+  },
+  {
+    q: '表观遗传学研究的核心是什么？',
+    opts: ['基因序列本身的突变', '不改变DNA序列但影响基因表达的化学修饰', '完全由环境决定的遗传', '线粒体DNA的遗传'],
+    ans: 1,
+    explain: '表观遗传学研究DNA序列之外的基因调控机制——例如DNA甲基化、组蛋白修饰等。这些修饰可以"开关"基因而不改变基因编码本身，且某些表观修饰可以遗传给后代。'
+  },
+  {
+    q: 'COVID-19 mRNA疫苗中的脂质纳米颗粒（LNP）的作用是什么？',
+    opts: ['作为疫苗中的佐剂增强免疫反应', '保护mRNA不被降解并帮助其进入细胞', '作为病毒抗原的一部分', '仅作为防腐剂'],
+    ans: 1,
+    explain: 'LNP的作用是保护脆弱的mRNA分子不被体内RNA酶降解，并促进mRNA与细胞膜融合进入细胞质。没有LNP，mRNA在血液中半衰期只有几分钟。'
+  },
+  {
+    q: '关于"亚健康"概念，以下哪种说法最符合循证医学观点？',
+    opts: ['WHO正式认可的疾病类别', '全球医学界广泛接受但未纳入ICD分类', '从未被主流医学界正式定义和接纳', '中国首创且已被WHO采纳的医学概念'],
+    ans: 2,
+    explain: '"亚健康"并非现代医学的诊断类别——它未被WHO纳入国际疾病分类（ICD），也从未被全球主流医学界正式定义和认可。相关概念的推广更多来自保健品市场的商业推动。'
+  },
+  {
+    q: 'COVID-19疫苗的群体免疫阈值（HIT）受哪些因素影响？',
+    opts: ['仅取决于疫苗有效率', '取决于疫苗有效率和病毒R0值', '仅取决于病毒变异速度', '任何时候都是70%'],
+    ans: 1,
+    explain: '群体免疫阈值 = 1 - 1/R0（基本再生数）。当病毒R0值升高（如Delta R0≈5-7），所需接种率也相应升高。疫苗有效率低于100%时还需进一步提高接种率来补偿。'
+  },
+  {
+    q: '人体免疫系统如何实现"认出"几乎无限的病原体？',
+    opts: ['每个免疫细胞表面有固定的一套受体', '通过V(D)J重组产生数亿种不同的抗体/受体', '免疫细胞在遇到病原体后才随机生成受体', '通过遗传获得所有病原体的识别信息'],
+    ans: 1,
+    explain: '免疫系统通过V(D)J重组——B细胞和T细胞在成熟过程中随机重组其受体基因片段，产生高达10^15种不同的抗原受体组合，理论上可以识别任何可能的病原体抗原。'
+  },
+  {
+    q: '关于冷冻保存器官技术的最新进展，以下说法正确的是？',
+    opts: ['目前可以将人体大脑完整冷冻并成功复活', '通过"玻璃化"冷冻技术已实现大鼠肾脏的长期保存和成功移植', '冷冻技术仅限于单个细胞层面', '冷冻器官后无需考虑冰晶损伤问题'],
+    ans: 1,
+    explain: '2023年《自然》和《科学》刊登的研究显示：通过玻璃化冷冻（使用特殊冷冻保护剂避免冰晶形成），大鼠肾脏可在-150℃保存100天后成功移植并恢复功能。这标志着器官冷冻保存的重大突破。'
+  }
+];
+
+// ============================================================
+// DATA: SA Bank (10 questions)
+// ============================================================
+var saBank = [
+  {
+    q: '请解释mRNA疫苗的工作原理，并说明它与传统灭活疫苗的主要区别。',
+    answer: 'mRNA疫苗工作原理：将编码病毒刺突蛋白的mRNA包裹在脂质纳米颗粒中注射入人体→人体细胞摄取并翻译mRNA→合成刺突蛋白→免疫系统识别为外来抗原→产生特异性抗体和T细胞记忆→后续遇到真病毒时可快速清除。\n\n与传统灭活疫苗的主要区别：\n1）mRNA疫苗不含任何病毒颗粒，零感染风险；灭活疫苗含被化学杀死的完整病毒。\n2）mRNA疫苗只表达单一抗原（刺突蛋白），免疫反应更集中；灭活疫苗含所有病毒蛋白，可能产生非中和抗体。\n3）mRNA疫苗开发速度快（病毒测序后63天即可临床试验），灭活疫苗需要大规模培养病毒（数月到数年）。\n4）mRNA疫苗需要超低温冷链（-70℃），灭活疫苗2-8℃即可保存。'
+  },
+  {
+    q: '请解释IARC致癌物分级体系的逻辑以及常见的误解。为什么"1类致癌物"不等于"最危险的物质"？',
+    answer: 'IARC分级逻辑：基于"是否有证据表明该物质对人类致癌"（证据强度），而非"该物质有多危险"（风险大小）。\n\n误解澄清：\n1）1类致癌物（如加工肉）表示"有充分证据确认其对人类致癌"，但不代表风险大小。加工肉每天50g使结直肠癌风险增加约18%（绝对风险从5%升至约6%）。\n2）吸烟也是1类，但肺癌风险增加2000%。两者虽同属1类，但风险量级完全不同。\n3）2B类（如阿斯巴甜）表示"证据有限/不充分"——可能有风险但动物实验证据弱，人类流行病学证据缺乏或不一致。\n\n关键：致癌风险 = 致癌效力 × 暴露剂量。IARC只评效力不评剂量，所以不看ADI就无法判断实际风险。'
+  },
+  {
+    q: '从分子机制层面解释朊病毒疾病为什么如此特殊——它如何在没有遗传物质的情况下"复制"？',
+    answer: '朊病毒疾病的独特机制：\n1）正常细胞表达PrPC蛋白（正常构象，α-螺旋为主，可被蛋白酶K消化）。\n2）PrPSc（致病构象，β-折叠为主，抗蛋白酶K）接触PrPC时，作为"模板"诱导PrPC重折叠为PrPSc构象。\n3）新生成的PrPSc继续诱导更多PrPC转变→自催化链式反应。\n4）PrPSc聚集形成淀粉样纤维→沉积在脑组织→神经元死亡→脑组织海绵状空洞化。\n\n为什么这是"复制"：一个PrPSc分子可以反复作为模板（本身不被消耗），类似催化剂。整个过程不需要DNA/RNA——这是纯粹基于蛋白质构象的信息传递，违反了传统分子生物学"中心法则"的基本框架。这一机制由Stanley Prusiner提出，他因此获得1997年诺贝尔奖。'
+  },
+  {
+    q: '阐述超级细菌（MDRO）产生的主要机制，并分析为什么新型抗生素的研发管线如此贫乏。',
+    answer: '耐药机制（四类）：\n1）产生灭活酶：如ESBL（超广谱β-内酰胺酶）水解青霉素和头孢菌素类；碳青霉烯酶水解"最后防线"碳青霉烯类。\n2）靶点修饰：如MRSA改变青霉素结合蛋白PBP2a，使β-内酰胺类无法结合。\n3）外排泵：将抗生素从细菌细胞内主动泵出（如铜绿假单胞菌的MexAB-OprM系统）。\n4）降低膜通透性：改变外膜孔蛋白减少药物进入。\n\n新抗生素研发贫乏原因：\n1）经济回报低——抗生素使用周期短（数天至数周），且新药上市后很快产生耐药，远不如慢性病药物（终身服药）利润高。\n2）开发成本高——临床III期需大规模人群，且新抗生素需放在"最后防线"（延缓耐药），使用量更少。\n3）多家大型药企（诺华、阿斯利康、赛诺菲等）已退出抗生素研发。'
+  },
+  {
+    q: '长新冠（Long COVID）的多系统影响机制包括哪些假说？为什么症状差异如此之大？',
+    answer: '长新冠机制假说：\n1）病毒储库假说：病毒RNA或蛋白在特定组织（肠道、神经系统）持续低水平存在→慢性免疫激活。\n2）自身免疫假说：新冠病毒引发分子模拟→免疫系统错误攻击自身组织（类似EBV感染后的自身免疫反应）。\n3）微血栓假说：病毒损伤血管内皮→微血栓广泛形成→多器官微循环障碍→疲劳、脑雾、呼吸困难。\n4）线粒体功能障碍：病毒感染扰乱细胞能量代谢→ATP产生减少→持续疲劳。\n5）神经炎症：病毒通过嗅神经入侵CNS→小胶质细胞慢性激活→脑雾、认知功能下降。\n\n症状差异巨大的原因：每个人的感染严重程度、病毒载量分布、既有健康状况（肥胖、糖尿病等风险因素）、遗传背景（HLA类型等）和免疫应答特征均不同→长新冠是"多病因、多通路、多表型"的综合征。'
+  },
+  {
+    q: '比较传统减肥方法（饮食+运动）与GLP-1受体激动剂（司美格鲁肽）的作用机制，分析各自的优劣。',
+    answer: '传统减肥方法：\n机制——通过能量负平衡（摄入<消耗）减重，依赖行为改变和意志力。\n优势——零药物成本、无药物副作用、改善整体健康生活方式、效果可持续（如果习惯保持）。\n劣势——减重效果通常5-10%（难以突破），长期依从性低（>80%反弹），饥饿感是生理性的难以克服。\n\nGLP-1激动剂：\n机制——直接作用于生理饥饿/饱腹调节回路：延缓胃排空+抑制下丘脑食欲中枢+促进胰岛素分泌。\n优势——减重效果强（15-20%体重）、不依赖意志力（生理性抑制食欲）、代谢益处（血糖、血脂改善）。\n劣势——月费用高（900-1300美元）、副作用（恶心30-50%）、停药后反弹显著、长期安全性数据不足（>10年未知）。\n\n最佳策略可能是：GLP-1作为"启动工具"实现初始减重，同时建立健康饮食和运动习惯，逐步减少药物依赖。'
+  },
+  {
+    q: '解释DNA甲基化如何在不改变基因序列的情况下影响基因表达，并阐述其在衰老过程中的角色。',
+    answer: 'DNA甲基化机制：\n1）在CpG二核苷酸的胞嘧啶第5位碳上添加甲基（-CH3），由DNA甲基转移酶（DNMT）催化。\n2）启动子区CpG岛的甲基化通常抑制基因转录：甲基化→招募甲基结合蛋白（MeCP2等）→阻碍转录因子结合或招募组蛋白去乙酰化酶→染色质紧缩→基因沉默。\n3）基因体区的甲基化反而可能促进转录延伸。\n\n在衰老中的角色：\n1）表观遗传时钟（Epigenetic Clock）：特定CpG位点的甲基化水平与实足年龄高度相关（Horvath时钟的误差约3年）。\n2）衰老过程中整体DNA甲基化下降（全基因组低甲基化）→基因组不稳定性增加+转座子激活；同时特定抑癌基因启动子高甲基化→癌症风险增加。\n3）表观遗传重编程（如山中因子Oct4/Sox2/Klf4/c-Myc的短暂表达）可在不改变基因序列的情况下逆转细胞的表观遗传年龄→为"返老还童"提供了理论可能。'
+  },
+  {
+    q: '从免疫学角度解释为什么COVID-19疫苗需要加强针，而有些疫苗（如麻疹疫苗）可以提供终身保护？',
+    answer: '必须区分以下因素：\n\n1）病毒变异速度：麻疹病毒抗原高度保守（几乎不变异）→40年前的疫苗仍有效。新冠病毒（RNA病毒）持续变异（Omicron与原始株的刺突蛋白差异>30个氨基酸）→抗体交叉中和能力下降→需更新疫苗。\n\n2）免疫保护类型：麻疹疫苗诱导的体液免疫+细胞免疫+黏膜免疫非常持久（抗体半衰期长+记忆B细胞数量多）。新冠疫苗（尤其是肌注型）主要诱导循环IgG抗体，黏膜IgA相对较少→对呼吸道感染的阻断不完全。\n\n3）免疫记忆衰减：mRNA疫苗刺激后抗体峰值高但衰退快（2-6个月后显著下降），灭活疫苗抗体峰值较低但细胞免疫记忆可能更持久。\n\n4）病毒感染部位：麻疹病毒入血后播散全身，血液中的IgG即可中和。新冠病毒感染上呼吸道黏膜上皮，需要黏膜表面的IgA——而肌注疫苗诱导的黏膜IgA较少。\n\n因此加强针的目的：恢复抗体滴度+应对新变种的抗原漂移。'
+  },
+  {
+    q: '为什么说"亚健康"是一个被商业营销放大的伪医学概念？从循证医学的角度分析其问题所在。',
+    answer: '从循证医学角度分析"亚健康"的问题：\n\n1）缺乏统一的诊断标准：WHO的国际疾病分类（ICD-11）中不存在"亚健康"这一诊断代码。不同版本的定义各不相同，无法作为医学诊断。\n\n2）概念的模糊性被商业利用：定义范围过于宽泛（疲劳、失眠、注意力不集中、情绪波动等非特异性症状）→几乎任何人在任何时候都可被定义为"亚健康"→为保健品/体检套餐提供巨大的"适用人群"。\n\n3）替代了真正的鉴别诊断：医生遇到"疲劳"症状应排查贫血、甲减、睡眠呼吸暂停、抑郁症等具体疾病；而"亚健康"标签终止了诊断思维，直接将患者推向保健品市场。\n\n4）中国特色的概念史："亚健康"概念在中国的走红与保健品市场（上世纪90年代起）高度同步，而全球主流医学文献中几乎检索不到高质量的"sub-health"相关研究。\n\n结论：非特异性症状确实需要关注，但应以具体鉴别诊断取代模糊概念标签。'
+  },
+  {
+    q: '解释COVID-19的实时荧光定量PCR检测原理，并说明为什么存在"假阴性"的可能。',
+    answer: 'RT-qPCR原理：\n1）采样：鼻/咽拭子刮取上皮细胞。\n2）裂解：释放细胞中的病毒RNA。\n3）逆转录：用逆转录酶将病毒RNA转录为cDNA（互补DNA）。\n4）扩增：添加引物（靶向病毒N/E/RdRp基因的保守区域）和荧光探针→PCR循环扩增cDNA→每扩增一个拷贝，探针释放一个荧光信号。\n5）检测：荧光信号超过阈值时对应的循环数（Ct值）越低=初始病毒RNA越多。\n\n假阴性原因：\n1）采样位置/深度不对——病毒主要在下呼吸道复制，鼻咽拭子可能未取到足量病毒。\n2）采样时机——感染初期（<24h）和后期（>7天）病毒载量低。\n3）病毒突变——引物/探针结合位点发生突变（如Omicron的部分亚型）。\n4）样本处理——运输/存储过程中RNA降解。\n5）PCR抑制——样本中含抑制PCR反应的物质（如某些含漱液的残留）。\n\n通常Ct<35判定阳性，Ct 35-40判定可疑（需复检）。Ct值不能直接衡量感染性。'
+  }
+];
+
+// ============================================================
+// DATA: Deep Questions (5)
+// ============================================================
+var deepQuestions = [
+  {
+    q: '如果mRNA疫苗技术是"颠覆性平台"，它未来可能用于哪些非传染性疾病？有哪些技术瓶颈需要突破？',
+    a: 'mRNA平台的潜在应用远不止传染病：<br><br><strong>1）癌症治疗性疫苗（个性化新抗原疫苗）：</strong>对患者肿瘤进行基因测序→识别独特突变→设计编码突变蛋白的mRNA→注射后训练免疫系统攻击携带该突变的癌细胞。Moderna/Merck的mRNA-4157（与Keytruda联用）在黑色素瘤III期试验中将复发风险降低44%。<br><br><strong>2）蛋白替代疗法：</strong>将mRNA作为"体内蛋白工厂"——让肝脏等器官自己生产缺失的蛋白（如血友病的凝血因子、溶酶体贮积症的酶），替代昂贵的重组蛋白药物。<br><br><strong>3）自身免疫病的耐受诱导：</strong>设计mRNA编码特定自身抗原，以"耐受原性"方式递送（如靶向肝脏的LNP），诱导免疫系统对该抗原的耐受而非攻击——有潜力用于1型糖尿病、多发性硬化等。<br><br><strong>瓶颈：</strong>①LNP的肝脏靶向偏好（大多数LNP自然蓄积在肝脏，将mRNA递送到其他器官仍是挑战）；②重复给药的免疫原性（LNP本身可能被免疫系统识别产生抗药抗体）；③表达的持续时间调控（半衰期太短→需频繁给药，太长→安全性难控）；④超低温冷链仍然限制了全球可及性。'
+  },
+  {
+    q: '从进化医学的角度看：为什么人类没有进化出"完美的免疫系统"？免疫系统的哪些"缺陷"实际上可能是进化上的折中？',
+    a: '免疫系统的"不完美"是自然选择在多约束条件下优化的结果：<br><br><strong>1）发炎 vs 抗感染的两难：</strong>强大的炎症反应可以更有效地清除病原体，但也会造成组织损伤。COVID-19的重症本身就来自"细胞因子风暴"——免疫系统过度反应杀死了患者，而非病毒本身。进化必须在"足够强以清除感染"和"足够弱以不杀死宿主"之间平衡。<br><br><strong>2）自身免疫的代价：</strong>免疫系统要识别近乎无限的病原体→必须通过V(D)J重组产生随机受体→随机过程中不可避免产生识别自身组织的受体→需要多轮负选择和调节T细胞来清除/抑制这些自身反应性淋巴细胞→体调节不当就会产生自身免疫病。这是"识别一切"的必然代价。<br><br><strong>3）母婴冲突：</strong>胎儿有一半父系基因→母体免疫系统理论上应将胎儿识别为"半异体"排斥。进化通过HLA-G分子（抑制NK细胞杀伤）和调节T细胞在母胎界面扩增来实现免疫豁免——但如果这一机制过于强大，可能降低对宫内感染的防御。<br><br><strong>4）衰老中的免疫衰退：</strong>进化不"关心"生育期后的健康——大多数免疫系统"故障"（慢性炎症、感染风险增加、疫苗应答下降）发生在50岁以后，已超出祖先的典型生育和养育寿命。自然选择对这些晚期表型的约束力很弱。'
+  },
+  {
+    q: '如果"表观遗传时钟"可以逆转（山中因子实验），这是否意味着人类有可能实现"真正的返老还童"？有哪些不可逾越的障碍？',
+    a: '表观遗传逆转的潜力与障碍：<br><br><strong>潜力：</strong><br>1）David Sinclair实验室：使用OSK（Oct4/Sox2/Klf4，去除致癌的c-Myc）短暂表达→老年小鼠的视神经损伤后再生能力恢复至年轻水平，视网膜神经节细胞的表观遗传年龄逆转约50%。<br>2）表观遗传重编程不改变DNA序列→理论上"安全性"高于基因编辑。<br><br><strong>障碍：</strong><br>①<strong>癌症风险：</strong>山中因子本身就是将体细胞重编程为iPSC（诱导多能干细胞）的因子——过度重编程可能使细胞丧失分化特性→畸胎瘤。这是一种"获得年轻"和"获得肿瘤"之间的精确剂量走钢丝。<br>②<strong>表观遗传信息的丢失：</strong>衰老不仅改变甲基化模式，还涉及组蛋白变异体的替换、异染色质的瓦解、核纤层的崩解。仅逆转DNA甲基化可能无法全面恢复年轻的染色质状态。<br>③<strong>细胞类型的差异：</strong>不同组织（脑、心脏、肝脏）的衰老表观遗传特征不同→不存在"一把钥匙开所有锁"的统一逆转方案。特别是不分裂的神经元如何通过重编程"变年轻"还是未知数。<br>④<strong>伦理与身份问题：</strong>如果你的全部细胞被重编程为"表观遗传年龄20岁"，你还是"你"吗？记忆、人格、意识的表观遗传基础我们还知之甚少。'
+  },
+  {
+    q: '抗生素耐药被WHO列为全球十大健康威胁之一。如果按照当前趋势发展（无有效干预），到2050年的医疗场景会是什么样？我们是否有可行的"后抗生素时代"策略？',
+    a: '<strong>到2050年的预测（如无有效干预）：</strong><br>1）英国O\'Neill报告预测：每年1000万人死于耐药菌感染（超过癌症，成为首位死因），全球经济损失100万亿美元。<br>2）常规手术（髋关节置换、剖腹产、阑尾切除）的风险骤升——因为没有有效的预防性抗生素，术后感染率将回到"前抗生素时代"水平。<br>3）癌症化疗将变得极其危险——化疗导致的免疫抑制使患者依赖抗生素防御，若无有效抗生素则化疗本身可能致命。<br><br><strong>"后抗生素策略"：</strong><br>①<strong>噬菌体疗法：</strong>利用能特异性杀死细菌的病毒（噬菌体）。优势：高度靶向（不伤害共生菌群）、与抗生素协同、可进化解锁细菌的抵抗。劣势：需精确匹配细菌株（个性化治疗）、监管路径不成熟、大规模生产难度大。<br>②<strong>抗毒力策略：</strong>不杀死细菌而只解除其"武器"——用小分子阻断细菌毒素的分泌或作用→病原体变为"无害化"，降低耐药选择的压力。<br>③<strong>CRISPR-Cas抗菌：</strong>用工程化噬菌体将CRISPR系统递送入细菌→靶向切割耐药基因或必需基因→精准杀灭耐药菌株。<br>④<strong>微生物组调控：</strong>通过粪菌移植（FMT）或特定菌群组合恢复健康的肠道微生态→竞争性排除耐药菌定殖（一种"以菌制菌"的生态策略）。<br><br>关键是多元化而非寻找"下一代抗生素"——依赖单一药物分类会重蹈覆辙。'
+  },
+  {
+    q: '如果把GLP-1药物（司美格鲁肽）视为"代谢健康的转折点"，它的广泛使用可能对社会产生哪些意想不到的连锁反应？',
+    a: 'GLP-1的广泛社会影响可能远超药理学范畴：<br><br><strong>1）食品工业的重塑：</strong>如果数百万人用药后食欲显著下降→含糖饮料、超加工零食、快餐的消费量可能大幅降低→食品巨头的商业模式受到根本性冲击（类似吸烟率下降对烟草业的影响）。已有报告显示Walmart注意到GLP-1用户食品购买量下降。<br><br><strong>2）医疗系统的成本悖论：</strong>短期内药物费用高（每人每年1万+美元），但长期可能通过减少减肥手术、2型糖尿病并发症、心血管事件等节省更多费用。关键取决于GLP-1的长期使用模式（是终身用药还是短期"重置"后停药）。<br><br><strong>3）美的定义与身材焦虑：</strong>当药物使减重变得"容易"（不依赖意志力），"瘦"作为自律和成功的象征意义可能弱化。但另一方面可能产生新的不平等——负担得起药物的人维持"理想身材"，经济弱势群体仍然面临肥胖及其污名。<br><br><strong>4）饮食文化与社交：</strong>如果相当比例的人口食欲被药物抑制，餐厅、聚餐、节日食物等社交活动可能受到影响。"以食为天"的文化习俗可能被重新定义。<br><br><strong>5）肌肉减少症与身体成分：</strong>GLP-1导致的体重下降中约30-40%来自肌肉而非脂肪。广泛使用可能导致老年人肌肉减少症和骨质疏松提前/加重——形成新的公共卫生问题。'
+  }
+];
+
+// ============================================================
+// DATA: Case Studies (3)
+// ============================================================
+var cases = [
+  {
+    title: '案例一：阿斯巴甜的"致癌"风波——如何理解IARC致癌物分级？',
+    meta: '涉及概念：致癌物分级、剂量-效应关系、风险评估 | 对应事件：2023年7月IARC将阿斯巴甜列为2B类',
+    content: '<p><strong>背景：</strong>2023年7月14日，IARC将阿斯巴甜列为2B类致癌物（可能对人类致癌）。消息一出，全球媒体标题炸裂——"无糖可乐致癌""零度可乐不能再喝了"。消费者恐慌，含阿斯巴甜产品的销量短期下跌。</p>'+
+      '<p><strong>MKS分析框架：</strong></p>'+
+      '<ol class="case-steps">'+
+      '<li><strong>理解IARC分级的真正含义：</strong>IARC分级基于<em>证据强度</em>（是否有证据表明该物质可能致癌），而非<em>风险大小</em>（实际多危险）。2B类意味着"人类证据有限，动物实验证据不充分"——本质上是一个"无法确认也无法排除"的分类。</li>'+
+      '<li><strong>剂量-效应分析：</strong>ADI（每日允许摄入量）为40mg/kg体重。一罐无糖可乐含约180mg阿斯巴甜。一个60kg成人每天需喝约13罐才能达到ADI上限。而动物实验中观察到致癌风险的剂量通常是ADI的100-1000倍。</li>'+
+      '<li><strong>与同类物的比较：</strong>同为2B类的还有：手机辐射、泡菜、芦荟全叶提取物、亚洲传统腌菜。你会发现很少有人因为这些2B分类而停止使用手机或吃泡菜——选择性恐惧是媒体报道偏差的结果。</li>'+
+      '<li><strong>核心启示：</strong>科学传播中最大的伤害不是错误信息本身，而是"去语境化"——把IARC的"可能致癌"解读为"致癌"，把"证据层面的不确定性"解读为"危险的确证"，是对风险评估体系的根本误用。</li>'+
+      '</ol>'
+  },
+  {
+    title: '案例二：海拉细胞的70年旅程——从医学突破到伦理反思',
+    meta: '涉及概念：细胞永生化、端粒、医学伦理、知情同意 | 对应事件：Henrietta Lacks的故事',
+    content: '<p><strong>背景：</strong>1951年，31岁的非洲裔美国女性Henrietta Lacks因宫颈癌在约翰霍普金斯医院接受治疗。医生George Gey在她不知情的情况下取走肿瘤组织样本进行培养。这些细胞表现出前所未有的特性——在体外无限增殖，成为第一个"永生化"人类细胞系（HeLa）。</p>'+
+      '<p><strong>医学贡献与伦理问题：</strong></p>'+
+      '<ol class="case-steps">'+
+      '<li><strong>不可替代的医学贡献：</strong>HeLa用于脊髓灰质炎疫苗测试（避免大量动物实验）、HPV与宫颈癌关系的发现、端粒酶机制的阐明、甚至被送入太空。HeLa细胞分裂超23000代，总质量超5000万吨——覆盖了几乎所有生物医学领域。</li>'+
+      '<li><strong>知情同意的缺失：</strong>1951年美国没有"知情同意"的法律要求。Lacks家族直到1975年才知道Henrietta的细胞"还活着"并被广泛使用。这发生在科学家联系他们进行基因检测以解决细胞污染问题时。</li>'+
+      '<li><strong>商业化与公正问题：</strong>赛默飞等公司通过HeLa相关产品获得数十亿美元收入，而Lacks家族生活在贫困中。直到2023年8月，赛默飞才与Lacks家族达成和解（据估千万美元级别补偿）。</li>'+
+      '<li><strong>当代启示：</strong>HeLa案例直接推动了《通用规则》（Common Rule）和机构审查委员会（IRB）制度的建立。今天的所有生物医学研究都须获得参与者知情同意——HeLa的故事是医学伦理发展史上最重要的一课。</li>'+
+      '</ol>'
+  },
+  {
+    title: '案例三：印度新冠海啸——为什么第二波比第一波严重得多？',
+    meta: '涉及概念：病毒变异、Delta株、公共卫生系统崩溃 | 对应事件：2021年4-5月印度第二波疫情',
+    content: '<p><strong>背景：</strong>2021年4月起，印度新冠每日新增病例从1万急剧攀升至超过40万（连续8天>20万），成为全球疫情最严重的国家。火葬场24小时运转、氧气严重短缺、黑市上一瓶氧气卖到正常价格的10倍。这与2020年9月印度血清阳性率调查显示的"大多数人口已有抗体"形成强烈反差。</p>'+
+      '<p><strong>MKS分析框架：</strong></p>'+
+      '<ol class="case-steps">'+
+      '<li><strong>Delta变异株的免疫逃逸：</strong>2020年9月的抗体来自原始株感染，而Delta的刺突蛋白L452R和P478K突变→中和抗体效力大幅下降→即使在血清阳性率高的地区也无法形成群体免疫。Delta的R0值约为5-7（原始株约2.5-3），传播速度快1倍以上。</li>'+
+      '<li><strong>"群体免疫幻觉"的陷阱：</strong>印度在第一波后曾广泛宣传"已达群体免疫"（基于>50%的城市人口血清阳性率）。但疫苗覆盖率不足（当时<10%完成两剂接种）+病毒变异=群体免疫是不稳定的动态目标——传染性更强的新毒株使HIT阈值大幅提高。</li>'+
+      '<li><strong>医疗基础设施的"非线性崩溃"：</strong>医疗系统在压力下表现为非线性失效——超过某一临界点后，每增加10%的患者，系统性能下降30-50%（氧气管道超负荷爆裂、医务人员感染缺勤、太平间溢出）。这不是印度特有的问题——任何地区的医疗系统在数倍于容量的冲击下都会崩溃。</li>'+
+      '<li><strong>核心教训：</strong>①在RNA病毒大流行中，依赖感染获得性免疫是危险的——病毒变异速度可能比群体免疫建立速度更快。②疫苗覆盖率必须与病毒变异速度竞赛——在这场竞赛中，全球疫苗分配不公是所有国家的共同风险。</li>'+
+      '</ol>'
+  }
+];
+
+// ============================================================
+// DATA: Decision Scenarios (3)
+// ============================================================
+var decisionScenarios = [
+  {
+    title: '场景一：体检报告解读——你的肿瘤标志物升高了',
+    q: '你在年度体检中发现CA19-9轻度升高（45 U/mL，参考值<37）。没有腹痛、消瘦、黄疸等症状。体检医生建议做全套肿瘤筛查（PET-CT+胃肠镜+增强CT，总费用约8000元）。作为有医学素养的决策者，你应该：',
+    opts: [
+      'A. 立即做全套肿瘤筛查，宁可错杀不可放过',
+      'B. 先了解CA19-9升高的非特异性原因（胆道炎症、胰腺炎、肝硬化等也会升高），复查确认后再决定检查范围',
+      'C. 完全忽略，无视这个指标',
+      'D. 直接要求做胰腺活检'
+    ],
+    ans: 1,
+    explain: '肿瘤标志物的核心局限是"特异性不足"——CA19-9升高可见于多种良性疾病（胆管炎、胰腺炎、肝硬化、胆结石）甚至完全健康的个体。无症状情况下的轻度升高（<2倍上限）绝大多数是良性原因。正确做法：①了解你的基线值和个人风险因素（家族史、吸烟、饮酒）；②1-2个月后复查确认是否持续性升高；③如果持续升高或翻倍增长，再考虑针对性检查（超声内镜±MRI而非全身PET-CT）。盲目做"全套筛查"的假阳性率和不必要的侵入性操作风险（肠镜穿孔率约1/1000）可能超过你实际患癌的风险。'
+  },
+  {
+    title: '场景二：新冠变异株出现——你需要升级你的防护策略吗？',
+    q: '新闻报告一种新的新冠变异株（具有显著免疫逃逸特性）正在流行。你已完成基础免疫（3剂灭活疫苗）+1年前感染过一次。办公室里最近有同事确诊。你需要决定是否接种新的加强针（已上市针对新变异株的疫苗），以及是否恢复戴口罩。你会：',
+    opts: [
+      'A. 立即接种新疫苗+N95口罩，全面升级防护',
+      'B. 评估个人风险（年龄、基础疾病）和暴露情况，分层决策——如为高风险人群则接种，低风险且无症状可暂观察',
+      'C. 认为已有"混合免疫"（疫苗+感染），完全不需要额外防护',
+      'D. 只戴口罩不接种，因为疫苗"没用"'
+    ],
+    ans: 1,
+    explain: '核心原则是风险分层而非"一刀切"——①高风险人群（>65岁、糖尿病/心血管/呼吸系统基础疾病、免疫抑制状态）从加强针获益最大，强烈建议接种；②既往感染+疫苗的"混合免疫"确实提供最强的保护（研究显示保护效果优于单一疫苗或感染），但保护仍随时间下降，且对新变异株的交叉保护存不确定性；③低风险人群可选择暂缓接种，但不代表"已有免疫=绝对安全"——长新冠的风险仍然存在；④口罩是一个低成本、高效的补充策略（N95在密闭空间的实际保护效果被充分证明），在流行高峰期恢复佩戴是理性选择。你不需要"全面防护"或"完全躺平"两者择一——科学决策总是在中间地带。'
+  },
+  {
+    title: '场景三：家人被诊断阿兹海默症——如何评估"治愈"方案？',
+    q: '你的父亲（72岁）被诊断为早期阿尔兹海默症（MMSE评分22/30）。你很焦虑，网上搜索到以下"治疗方案"：①Aducanumab（Aβ单抗，FDA争议性批准，年费用56000美元）；②甘露寡糖二酸（GV-971，中国原创药物）；③大量保健品组合（银杏叶提取物、Omega-3、磷脂酰丝氨酸、椰子油/MCTs）。你会选择：',
+    opts: [
+      'A. 全部都用，数量越多概率越大',
+      'B. 重点选择有RCT证据支持的方案（尽管效果有限），明确告知父亲诊断并参与未来规划，配合认知训练+社会活动+心血管风险控制',
+      'C. 只相信保健品，拒绝任何"西药"',
+      'D. 什么都不做，顺其自然'
+    ],
+    ans: 1,
+    explain: '这是一个艰难的决策场景——阿兹海默症确实缺乏"治愈"方案，但这不等于所有选择等价值。①Aducanumab在两项III期试验中一项阳性一项阴性，FDA的加速批准主要基于Aβ斑块减少（替代终点）而非认知改善的明确证据——这就是为什么它引发了巨大争议。②目前证据最充分（尽管效果有限）的干预是：认知训练、增加社会交往、规律体育锻炼、控制心血管风险因素（血压、血糖、血脂）——这些都免费且无副作用。③保健品方面：银杏叶提取物的大型RCT（GEM研究，3000+参与者）结论是"不延缓认知衰退"，Omega-3在已确诊AD中效果不明确。④更重要的是非药物层面——明确诊断可以让家庭提前进行财务、法律和照护规划，这可能是"做的最大的一件正确的事"。'
+  }
+];
+
+// ============================================================
+// LOCALSTORAGE KEYS
+// ============================================================
+var LS_LEARNED = 'med_learned_cards';
+var LS_WRONG = 'med_wrong_answers';
+var LS_EXAM = 'med_exam_results';
+var LS_CURRENT_CARD = 'med_current_card';
+
+// ============================================================
+// FLIP CARDS
+// ============================================================
+var learnedCards = JSON.parse(localStorage.getItem(LS_LEARNED) || '[]');
+var currentCardIdx = parseInt(localStorage.getItem(LS_CURRENT_CARD) || '0');
+
+function updateProgress(){
+  var pct = Math.round(learnedCards.length / concepts.length * 100);
+  document.getElementById('cardLearned').textContent = learnedCards.length;
+  document.getElementById('cardProgressBar').style.width = pct + '%';
+  document.getElementById('overallProgress').style.width = pct + '%';
+  document.getElementById('learnedCount').textContent = learnedCards.length;
+}
+
+function renderCards(){
+  var container = document.getElementById('flipContainer');
+  var html = '';
+  concepts.forEach(function(c, i){
+    var isLearned = learnedCards.indexOf(i) !== -1;
+    html += '<div class="flip-card' + (isLearned ? ' card-learned' : '') + '" id="card-' + i + '">';
+    html += '<div class="flip-inner" id="flipInner-' + i + '">';
+    html += '<div class="flip-front">';
+    html += '<div class="concept-icon">' + c.icon + '</div>';
+    html += '<div class="concept-name">' + c.name + '</div>';
+    html += '<div class="concept-hint">' + c.hint + '</div>';
+    html += '</div>';
+    html += '<div class="flip-back">';
+    html += '<h4>' + c.name + '</h4>';
+    html += '<p><span class="label">定义</span>' + c.def + '</p><br>';
+    html += '<p><span class="label">类比</span>' + c.analogy + '</p><br>';
+    html += '<p><span class="label">示例</span>' + c.example + '</p><br>';
+    html += '<p><span class="label">反例/误区</span>' + c.counter + '</p>';
+    html += '</div></div></div>';
+  });
+  container.innerHTML = html;
+
+  // Add flip listeners
+  concepts.forEach(function(c, i){
+    var inner = document.getElementById('flipInner-' + i);
+    if(inner){
+      inner.addEventListener('click', function(){ this.classList.toggle('flipped'); });
+    }
+  });
+
+  setCard(currentCardIdx);
+  updateProgress();
+}
+
+function setCard(idx){
+  currentCardIdx = Math.max(0, Math.min(idx, concepts.length - 1));
+  localStorage.setItem(LS_CURRENT_CARD, currentCardIdx.toString());
+  document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
+
+  // Scroll to current card
+  var card = document.getElementById('card-' + currentCardIdx);
+  if(card) card.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+  // Highlight
+  document.querySelectorAll('.flip-card').forEach(function(c){ c.style.outline = 'none'; });
+  if(card) card.style.outline = '3px solid var(--accent)';
+}
+
+document.getElementById('prevCard').addEventListener('click', function(){ setCard(currentCardIdx - 1); });
+document.getElementById('nextCard').addEventListener('click', function(){ setCard(currentCardIdx + 1); });
+
+document.getElementById('markLearned').addEventListener('click', function(){
+  var idx = learnedCards.indexOf(currentCardIdx);
+  if(idx === -1){
+    learnedCards.push(currentCardIdx);
+    showToast('✓ 已标记为已学');
+  } else {
+    learnedCards.splice(idx, 1);
+    showToast('已取消标记');
+  }
+  learnedCards.sort(function(a,b){return a-b;});
+  localStorage.setItem(LS_LEARNED, JSON.stringify(learnedCards));
+  renderCards();
+  setCard(currentCardIdx);
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e){
+  if(document.getElementById('tab-cards') && document.getElementById('tab-cards').classList.contains('active')){
+    if(e.key === 'ArrowLeft') setCard(currentCardIdx - 1);
+    if(e.key === 'ArrowRight') setCard(currentCardIdx + 1);
+    if(e.key === ' ' || e.key === 'Spacebar'){
+      e.preventDefault();
+      var inner = document.getElementById('flipInner-' + currentCardIdx);
+      if(inner) inner.classList.toggle('flipped');
+    }
+  }
+});
+
+renderCards();
+
+// ============================================================
+// QUIZ
+// ============================================================
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function renderMCQ(mcqs){
+  var container = document.getElementById('quizContainer');
+  var html = '<h3>📝 选择题 (' + mcqs.length + ' 题)</h3>';
+  mcqs.forEach(function(m, idx){
+    html += '<div class="quiz-item" id="mcq-' + idx + '">';
+    html += '<h4>' + (idx + 1) + '. ' + m.q + '</h4>';
+    var opts = shuffle([0,1,2,3]);
+    m._opts = opts; // store for checking
+    opts.forEach(function(oi){
+      html += '<label><input type="radio" name="mcq-' + idx + '" value="' + oi + '"> ' + m.opts[oi] + '</label>';
+    });
+    html += '<button onclick="checkMCQ(' + idx + ')" style="padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin-top:8px">提交</button>';
+    html += '<div class="quiz-feedback" id="fb-mcq-' + idx + '"></div>';
+    html += '</div>';
+  });
+  if(document.getElementById('saContainer')) document.getElementById('saContainer').innerHTML = '';
+  container.innerHTML = html;
+  window._currentMCQs = mcqs;
+}
+
+window.checkMCQ = function(idx){
+  var mcq = window._currentMCQs[idx];
+  var selected = document.querySelector('input[name="mcq-' + idx + '"]:checked');
+  var fb = document.getElementById('fb-mcq-' + idx);
+  if(!selected) { fb.className = 'quiz-feedback wrong'; fb.innerHTML = '请选择一个选项'; return; }
+  if(parseInt(selected.value) === mcq.ans){
+    fb.className = 'quiz-feedback correct';
+    fb.innerHTML = '✅ 正确！' + mcq.explain;
+  } else {
+    fb.className = 'quiz-feedback wrong';
+    fb.innerHTML = '❌ 错误。正确答案是：' + mcq.opts[mcq.ans] + '。<br>' + mcq.explain;
+    // Save wrong
+    var wrong = JSON.parse(localStorage.getItem(LS_WRONG) || '[]');
+    wrong.push({type:'mcq', q:mcq.q, opts:mcq.opts, ans:mcq.ans, explain:mcq.explain, date:new Date().toISOString()});
+    localStorage.setItem(LS_WRONG, JSON.stringify(wrong));
+  }
+};
+
+function renderSA(sas){
+  var container = document.getElementById('quizContainer');
+  var html = '<h3>✍️ 简答题 (' + sas.length + ' 题)</h3>';
+  sas.forEach(function(s, idx){
+    html += '<div class="sa-item">';
+    html += '<h4>' + (idx + 1) + '. ' + s.q + '</h4>';
+    html += '<textarea placeholder="输入你的回答..."></textarea>';
+    html += '<button onclick="document.getElementById(\'sa-ans-' + idx + '\').style.display=\'block\'" style="padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">显示参考答案</button>';
+    html += '<div class="show-answer" id="sa-ans-' + idx + '"><strong>参考答案：</strong><br>' + s.answer.replace(/\n/g, '<br>') + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+document.getElementById('randomMCQ').addEventListener('click', function(){
+  renderMCQ(shuffle(mcqBank).slice(0, 15));
+});
+document.getElementById('randomSA').addEventListener('click', function(){
+  renderSA(shuffle(saBank).slice(0, 8));
+});
+document.getElementById('resetQuiz').addEventListener('click', function(){
+  document.getElementById('quizContainer').innerHTML = '<p style="text-align:center;color:var(--text-light)">请点击"随机抽题"开始练习</p>';
+  window._currentMCQs = [];
+});
+
+// ============================================================
+// EXAM MODE
+// ============================================================
+var examInterval = null;
+var examTimeLeft = 1800; // 30 min
+var examActive = false;
+
+function initExam(){
+  document.getElementById('examTimer').textContent = '30:00';
+  document.getElementById('examContainer').innerHTML = '';
+  document.getElementById('examScore').textContent = '';
+  if(examInterval) clearInterval(examInterval);
+  examActive = false;
+  examTimeLeft = 1800;
+}
+
+document.getElementById('startExam').addEventListener('click', function(){
+  if(examActive) return;
+  examActive = true;
+  examTimeLeft = 1800;
+  var mcqs = shuffle(mcqBank).slice(0, 15);
+  var sas = shuffle(saBank).slice(0, 5);
+  window._examMCQs = mcqs;
+  window._examSAs = sas;
+
+  var container = document.getElementById('examContainer');
+  var html = '<h3>选择题 (15题)</h3>';
+  mcqs.forEach(function(m, idx){
+    html += '<div class="quiz-item">';
+    html += '<h4>' + (idx + 1) + '. ' + m.q + '</h4>';
+    var opts = shuffle([0,1,2,3]);
+    m._opts = opts;
+    opts.forEach(function(oi){
+      html += '<label><input type="radio" name="exmcq-' + idx + '" value="' + oi + '"> ' + m.opts[oi] + '</label>';
+    });
+    html += '</div>';
+  });
+  html += '<h3 style="margin-top:24px">简答题 (5题)</h3>';
+  sas.forEach(function(s, idx){
+    html += '<div class="sa-item">';
+    html += '<h4>' + (idx + 1) + '. ' + s.q + '</h4>';
+    html += '<textarea placeholder="输入你的回答..."></textarea>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+
+  // Timer
+  examInterval = setInterval(function(){
+    examTimeLeft--;
+    var m = Math.floor(examTimeLeft / 60);
+    var s = examTimeLeft % 60;
+    document.getElementById('examTimer').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    if(examTimeLeft <= 0){
+      clearInterval(examInterval);
+      examActive = false;
+      alert('时间到！请提交答卷。');
+    }
+  }, 1000);
+});
+
+document.getElementById('submitExam').addEventListener('click', function(){
+  if(!examActive) return;
+  clearInterval(examInterval);
+  examActive = false;
+
+  var mcqs = window._examMCQs;
+  var correct = 0;
+  mcqs.forEach(function(m, idx){
+    var sel = document.querySelector('input[name="exmcq-' + idx + '"]:checked');
+    if(sel && parseInt(sel.value) === m.ans) correct++;
+  });
+  var score = Math.round(correct / mcqs.length * 100);
+  document.getElementById('examScore').innerHTML = '选择题得分：' + correct + '/' + mcqs.length + ' (' + score + '%) | 简答题请自行对照参考答案评估';
+
+  // Save result
+  var results = JSON.parse(localStorage.getItem(LS_EXAM) || '[]');
+  results.push({score:score, correct:correct, total:mcqs.length, time:1800-examTimeLeft, date:new Date().toISOString()});
+  localStorage.setItem(LS_EXAM, JSON.stringify(results));
+  showToast('考试完成！得分：' + score + '%');
+});
+
+// ============================================================
+// REVIEW MODE
+// ============================================================
+document.getElementById('startReview').addEventListener('click', function(){
+  var wrong = JSON.parse(localStorage.getItem(LS_WRONG) || '[]');
+  var list = document.getElementById('reviewList');
+  if(wrong.length === 0){
+    list.innerHTML = '<li style="text-align:center;color:var(--text-light)">暂无错题记录 📚</li>';
+    return;
+  }
+  var html = '';
+  wrong.forEach(function(w, i){
+    html += '<li onclick="this.classList.toggle(\'reviewed\')" id="review-' + i + '">';
+    html += '<strong>' + (w.type === 'mcq' ? '[选择题]' : '[简答题]') + '</strong> ' + w.q + '<br>';
+    html += '<small style="color:var(--text-lighter)">' + new Date(w.date).toLocaleDateString() + '</small>';
+    html += '</li>';
+  });
+  list.innerHTML = html;
+});
+
+document.getElementById('exportWrong').addEventListener('click', function(){
+  var wrong = JSON.parse(localStorage.getItem(LS_WRONG) || '[]');
+  if(wrong.length === 0){ showToast('暂无错题可导出'); return; }
+  var text = '';
+  wrong.forEach(function(w, i){
+    text += (i+1) + '. ' + w.q + '\n';
+    if(w.type === 'mcq'){
+      text += '   选项：' + w.opts.join(' | ') + '\n';
+      text += '   答案：' + w.opts[w.ans] + '\n';
+      text += '   解释：' + w.explain + '\n';
+    }
+    text += '\n';
+  });
+  var blob = new Blob([text], {type: 'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '医学与健康前沿-错题_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  showToast('错题导出完成！');
+});
+
+// ============================================================
+// DEEP ASK
+// ============================================================
+function renderDeepAsk(){
+  var container = document.getElementById('deepAskContainer');
+  var html = '';
+  deepQuestions.forEach(function(d, i){
+    html += '<div class="dq-item">';
+    html += '<div class="dq-question" onclick="var ans=this.nextElementSibling;ans.style.display=ans.style.display===\'block\'?\'none\':\'block\'">' + (i+1) + '. ' + d.q + '</div>';
+    html += '<div class="dq-answer">' + d.a + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+renderDeepAsk();
+
+// ============================================================
+// CASES
+// ============================================================
+function renderCases(){
+  var container = document.getElementById('caseContainer');
+  var html = '';
+  cases.forEach(function(c){
+    html += '<div class="case-card">';
+    html += '<div class="case-title">' + c.title + '</div>';
+    html += '<div class="case-meta">' + c.meta + '</div>';
+    html += c.content;
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+renderCases();
+
+// ============================================================
+// DECISION
+// ============================================================
+function renderDecisions(){
+  var container = document.getElementById('decisionContainer');
+  var html = '';
+  decisionScenarios.forEach(function(d, i){
+    html += '<div class="decision-scenario">';
+    html += '<h4>' + d.title + '</h4>';
+    html += '<p>' + d.q + '</p>';
+    var opts = ['A','B','C','D'];
+    d.opts.forEach(function(o, oi){
+      html += '<label style="display:block;margin:6px 0"><input type="radio" name="dec-' + i + '" value="' + oi + '"> ' + opts[oi] + '. ' + o + '</label>';
+    });
+    html += '<button onclick="checkDecision(' + i + ')">确认选择</button>';
+    html += '<div class="decision-output" id="decOut-' + i + '"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+renderDecisions();
+
+window.checkDecision = function(i){
+  var sel = document.querySelector('input[name="dec-' + i + '"]:checked');
+  var out = document.getElementById('decOut-' + i);
+  if(!sel){ out.style.display='block'; out.innerHTML='请先选择一个选项'; return; }
+  var val = parseInt(sel.value);
+  var s = decisionScenarios[i];
+  out.style.display = 'block';
+  if(val === s.ans){
+    out.innerHTML = '<strong>✅ 最优选择！</strong><br>' + s.explain;
+  } else {
+    out.innerHTML = '<strong>⚠️ 并非最优。</strong>推荐选项' + ['A','B','C','D'][s.ans] + '。<br>' + s.explain;
+  }
+};
+
+// ============================================================
+// ARTICLE LIST (render 10 featured articles)
+// ============================================================
+var featuredArticles = [
+  {num:'002',title:'疫苗：我们离完善的疫苗还有多远？',summary:'从安全、有效、长期保护三个维度审视新冠疫苗研发，理解疫苗标准为何是所有药物中最严格的。'},
+  {num:'122',title:'新冠：这辈子见证了历史',summary:'盘点新冠大流行一年后的全球影响——超过240万死亡，艾滋病用了15年才研发出有效药物，而新冠一年内即有疫苗问世。'},
+  {num:'142',title:'新冠：病毒突变和疫苗最新进展',summary:'梳理英国变种、南非变种、巴西变种等关键变异，分析突变对疫苗有效性的影响及全球测序差距。'},
+  {num:'163',title:'羊瘙痒症、疯牛病、克雅氏病和库鲁病',summary:'介绍朊粒（Prion）这一独特的致病因子——不含遗传物质却能"感染"的蛋白构象病。'},
+  {num:'173',title:'新冠后遗症：可能比你想得更严重',summary:'新冠感染后一个月至一年内的高比例后遗症——疲劳、脑雾、心血管风险增加、面部衰老加速等。'},
+  {num:'188',title:'超级细菌怎么应对（上）？',summary:'回顾抗生素发现史与耐药菌的出现，分析青霉素奇迹与弗莱明对耐药性的早期预言。'},
+  {num:'213',title:'忽悠了三十年的"亚健康"',summary:'追踪"亚健康"概念的起源——从未被主流医学界正式定义，却被保健品市场充分利用的模糊概念。'},
+  {num:'247',title:'抽脂手术：能一劳永逸解决肥胖吗？',summary:'"肿胀麻醉负压脂肪抽吸术"的原理与风险——术后感染、器官衰竭、以及为什么抽脂不等于减肥。'},
+  {num:'281',title:'视角：三个角度下理解"与病毒共存"',summary:'从张文宏的防疫策略调整、病毒无法被完全消灭的理论基础、到各国不同"共存"路径的比较。'},
+  {num:'290',title:'未来可期，再谈偏头痛',summary:'一年间偏头痛治疗的新进展——CGRP类新药批准、电磁脉冲治疗仪的出现。'}
+];
+
+function renderArticleList(){
+  var container = document.getElementById('articleList');
+  var html = '';
+  featuredArticles.forEach(function(a){
+    html += '<div class="article-card">';
+    html += '<span class="art-num">#' + a.num + '</span>';
+    html += '<h4>' + a.title + '</h4>';
+    html += '<div class="art-summary">' + a.summary + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+renderArticleList();
+
+// ============================================================
+// UTILS
+// ============================================================
+function showToast(msg){
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2500);
+}
+
+// Initialize progress
+updateProgress();
+
+})();
+</script>
 
 </body>
 </html>
