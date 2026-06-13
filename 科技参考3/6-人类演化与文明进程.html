@@ -3,717 +3,1475 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>基因时间机器 · 人类演化与文明进程</title>
+<title>演化史书 · 人类演化与文明进程</title>
 <style>
+/* ══════════════════════════════════════════════════════════════
+   演化史书 — 你的身体是一本40亿年的演化史书
+   母隐喻：DNA双螺旋 = 时间卷轴，每一次翻开都是一次回溯
+   设计原则：6+种布局交替，节奏变化，拒绝卡片罗列
+   ══════════════════════════════════════════════════════════════ */
+
 :root {
-  --bg: #0a0c12;
-  --bg2: #0f1119;
-  --cyber-green: #00ff88;
-  --cyber-cyan: #00d4ff;
-  --cyber-amber: #ffb347;
-  --cyber-purple: #a855f7;
-  --cyber-red: #ff4560;
-  --dna-blue: #1e90ff;
-  --dna-pink: #ff6b9d;
-  --text: #c8cdd4;
-  --text-dim: #6b7280;
-  --card-bg: rgba(15, 20, 30, 0.85);
-  --card-border: rgba(0, 255, 136, 0.15);
-  --glow-green: 0 0 30px rgba(0,255,136,0.3);
-  --glow-cyan: 0 0 30px rgba(0,212,255,0.2);
+  --bg-deep: #06080f;
+  --bg-card: rgba(14,16,28,0.8);
+  --bg-card-hover: rgba(20,22,38,0.9);
+  --text: #c8cdd8;
+  --text-bright: #e8ecf4;
+  --text-dim: #6b7088;
+  --text-subtle: #484c60;
+  --border: rgba(255,255,255,0.06);
+  --border-glow: rgba(255,255,255,0.1);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 18px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Epoch colors — time-progressing palette */
+  --hadean: #ff6b4a;    /* 冥古宙 — volcanic red */
+  --archaean: #ff9a3c;  /* 太古宙 — amber/orange */
+  --proterozoic: #f0c060; /* 元古宙 — warm gold */
+  --cambrian: #4eca7a;  /* 寒武纪 — life green */
+  --mesozoic: #4da6ff;  /* 中生代 — ocean blue */
+  --cenozoic: #a78bfa;  /* 新生代 — evolution purple */
+  --human: #ffd700;     /* 人类纪 — gold */
+
+  --glow-red: 0 0 30px rgba(255,107,74,0.2);
+  --glow-amber: 0 0 30px rgba(255,154,60,0.2);
+  --glow-gold: 0 0 30px rgba(240,192,96,0.2);
+  --glow-green: 0 0 30px rgba(78,202,122,0.2);
+  --glow-blue: 0 0 30px rgba(77,166,255,0.2);
+  --glow-purple: 0 0 30px rgba(167,139,250,0.2);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior:smooth; }
+html { scroll-behavior: smooth; }
+
 body {
-  background:var(--bg);
-  color:var(--text);
-  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
-  line-height:1.7;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── Canvas DNA Background ── */
-#dnaCanvas {
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  z-index:0; pointer-events:none;
-  opacity:0.35;
+/* ══════ Scrollbar ══════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: #2a2c3a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3c4a; }
+
+/* ══════ Scroll Progress ══════ */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--hadean), var(--archaean), var(--proterozoic), var(--cambrian), var(--mesozoic), var(--cenozoic), var(--human));
+  z-index: 1000; transition: width 0.1s linear;
 }
 
-/* ── Hero Section ── */
+/* ══════ Home Link ══════ */
+.home-link {
+  position: fixed; top: 20px; left: 20px; z-index: 999;
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 50px;
+  background: rgba(6,8,15,0.85); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-dim); text-decoration: none;
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
+  transition: all var(--ease);
+}
+.home-link:hover {
+  color: var(--human); border-color: rgba(255,215,0,0.3);
+  box-shadow: 0 0 20px rgba(255,215,0,0.08);
+}
+.home-link svg { width: 15px; height: 15px; opacity: 0.7; }
+
+/* ══════ Particle Canvas ══════ */
+#particleCanvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none; opacity: 0.5;
+}
+
+/* ══════ Hero ══════ */
 .hero {
-  position:relative; z-index:1;
-  min-height:100vh; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center; padding:2rem;
+  position: relative; z-index: 1;
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
 }
 .hero-badge {
-  display:inline-block; padding:0.4rem 1.2rem;
-  border:1px solid rgba(0,255,136,0.4);
-  border-radius:50px; font-size:0.8rem;
-  color:var(--cyber-green); letter-spacing:0.2em;
-  text-transform:uppercase; margin-bottom:1.5rem;
-  backdrop-filter:blur(10px);
-  background:rgba(0,255,136,0.05);
+  display: inline-block; padding: 6px 20px;
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 50px; font-size: 0.75rem;
+  color: var(--human); letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 20px;
+  background: rgba(255,215,0,0.04);
+  backdrop-filter: blur(8px);
 }
 .hero h1 {
-  font-size:clamp(2rem, 5vw, 4.5rem);
-  font-weight:900; letter-spacing:-0.02em;
-  background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-green), var(--cyber-amber));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text;
-  margin-bottom:1rem; line-height:1.2;
+  font-size: clamp(2.2rem, 6vw, 5rem);
+  font-weight: 900; letter-spacing: -0.02em;
+  line-height: 1.15; margin-bottom: 16px;
+  background: linear-gradient(180deg, #ffe8a0 0%, #f0c060 30%, #c89020 70%, #8a6010 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 20px rgba(240,192,96,0.3));
 }
-.hero-subtitle {
-  font-size:clamp(1rem, 2vw, 1.4rem);
-  color:var(--text-dim); max-width:600px;
-  margin-bottom:2rem;
+.hero .tagline {
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+  color: var(--text-dim); max-width: 650px;
+  margin-bottom: 28px; line-height: 1.8;
 }
-.hero-tagline {
-  font-size:0.95rem; color:var(--cyber-cyan);
-  letter-spacing:0.1em; opacity:0.8;
-  border-left:2px solid var(--cyber-green);
-  padding-left:1rem; text-align:left;
-  max-width:500px; line-height:1.6;
+.hero .core-message {
+  font-size: 0.9rem; color: #f0c060;
+  letter-spacing: 0.5px; opacity: 0.8;
+  border-left: 2px solid rgba(240,192,96,0.5);
+  padding: 12px 20px; text-align: left;
+  max-width: 560px; line-height: 1.7;
+  background: linear-gradient(90deg, rgba(240,192,96,0.04), transparent);
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
 }
-.hero-tagline strong {
-  color:var(--cyber-green); font-weight:700;
+.hero .core-message strong { color: #ffe8a0; }
+.hero .scroll-hint {
+  position: absolute; bottom: 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: float 2s ease-in-out infinite;
 }
-.scroll-hint {
-  position:absolute; bottom:2rem;
-  display:flex; flex-direction:column; align-items:center;
-  gap:0.5rem; animation: float 2s ease-in-out infinite;
-}
-.scroll-hint span { font-size:0.75rem; color:var(--text-dim); letter-spacing:0.15em; }
-.scroll-hint .arrow { width:24px; height:24px; border-right:2px solid var(--cyber-green); border-bottom:2px solid var(--cyber-green); transform:rotate(45deg); opacity:0.6; }
+.hero .scroll-hint span { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 2px; }
+.hero .scroll-hint .arr { width: 20px; height: 20px; border-right: 1.5px solid var(--human); border-bottom: 1.5px solid var(--human); transform: rotate(45deg); opacity: 0.5; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-/* ── Home Link ── */
-.home-link {
-  position:fixed; top:1.5rem; left:1.5rem; z-index:100;
-  display:flex; align-items:center; gap:0.5rem;
-  color:var(--text-dim); text-decoration:none;
-  font-size:0.85rem; padding:0.5rem 1rem;
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:50px; backdrop-filter:blur(10px);
-  background:rgba(10,12,18,0.7);
-  transition:all 0.3s;
-}
-.home-link:hover { color:var(--cyber-green); border-color:var(--cyber-green); }
-.home-link svg { width:16px; height:16px; }
-
-/* ── Timeline Sections ── */
-.timeline { position:relative; z-index:1; padding:0 1rem 4rem; }
-
-.era-section { margin-bottom:8rem; position:relative; }
-
-.era-header {
-  display:flex; align-items:center; gap:1rem;
-  margin-bottom:2.5rem; padding-left:1rem;
-}
-.era-marker {
-  width:40px; height:40px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.1rem; flex-shrink:0;
-  position:relative;
-}
-.era-marker::after {
-  content:''; position:absolute;
-  width:60px; height:60px; border-radius:50%;
-  border:2px solid currentColor; opacity:0.2;
-  animation: pulse-ring 2.5s ease-out infinite;
-}
-@keyframes pulse-ring {
-  0% { transform:scale(0.8); opacity:0.4; }
-  100% { transform:scale(1.5); opacity:0; }
-}
-.era-label {
-  font-size:clamp(1.3rem, 3vw, 2rem);
-  font-weight:800; letter-spacing:-0.01em;
-}
-.era-time {
-  font-size:0.8rem; color:var(--text-dim);
-  letter-spacing:0.08em; margin-top:0.2rem;
+/* ══════ Section Container ══════ */
+.section-wrap {
+  position: relative; z-index: 1;
+  padding: 60px 24px; max-width: 1100px;
+  margin: 0 auto;
 }
 
-/* ── Article Cards ── */
-.articles-grid {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
-  gap:1.2rem; padding:0 0.5rem;
+/* ══════ Section Header ══════ */
+.sec-head {
+  text-align: center; margin-bottom: 40px;
 }
-.article-card {
-  background:var(--card-bg);
-  border:1px solid var(--card-border);
-  border-radius:12px; padding:1.5rem;
-  cursor:pointer; transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
-  position:relative; overflow:hidden;
-  backdrop-filter:blur(10px);
+.sec-head .epoch-badge {
+  display: inline-block; padding: 5px 16px; border-radius: 50px;
+  font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 12px; font-weight: 700;
 }
-.article-card::before {
-  content:''; position:absolute; top:0; left:0;
-  width:100%; height:2px;
-  background:linear-gradient(90deg, transparent, var(--card-accent, var(--cyber-green)), transparent);
-  opacity:0; transition:opacity 0.3s;
+.sec-head h2 {
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 800; margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
-.article-card:hover {
-  transform:translateY(-4px);
-  border-color:var(--card-accent, var(--cyber-green));
-  box-shadow:0 12px 40px rgba(0,0,0,0.5), var(--card-glow, var(--glow-green));
-}
-.article-card:hover::before { opacity:1; }
-.article-card .card-index {
-  font-size:0.7rem; color:var(--card-accent, var(--cyber-green));
-  letter-spacing:0.15em; margin-bottom:0.6rem;
-  font-family:'Courier New', monospace;
-}
-.article-card h3 {
-  font-size:1rem; font-weight:700; color:#e5e7eb;
-  margin-bottom:0.6rem; line-height:1.4;
-}
-.article-card p {
-  font-size:0.85rem; color:var(--text-dim);
-  line-height:1.6; display:-webkit-box;
-  -webkit-line-clamp:3; -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-.article-card .card-meta {
-  margin-top:0.8rem; font-size:0.7rem;
-  color:var(--text-dim); opacity:0.6;
-  display:flex; gap:0.8rem;
+.sec-head .sec-desc {
+  font-size: 0.88rem; color: var(--text-dim);
+  max-width: 600px; margin: 0 auto; line-height: 1.7;
 }
 
-/* ── Theme Colors ── */
-.theme-prion { --card-accent: var(--cyber-purple); --card-glow: 0 0 30px rgba(168,85,247,0.2); }
-.theme-virus { --card-accent: var(--cyber-red); --card-glow: 0 0 30px rgba(255,69,96,0.2); }
-.theme-chimera { --card-accent: var(--cyber-amber); --card-glow: 0 0 30px rgba(255,179,71,0.2); }
-.theme-migration { --card-accent: #60a5fa; --card-glow: 0 0 30px rgba(96,165,250,0.2); }
-.theme-neanderthal { --card-accent: #fb923c; --card-glow: 0 0 30px rgba(251,146,60,0.2); }
-.theme-brain { --card-accent: var(--cyber-cyan); --card-glow: var(--glow-cyan); }
-.theme-language { --card-accent: #34d399; --card-glow: 0 0 30px rgba(52,211,153,0.2); }
-.theme-civilization { --card-accent: #fbbf24; --card-glow: 0 0 30px rgba(251,191,36,0.2); }
-
-/* ── DNA Section Dividers ── */
-.dna-divider {
-  display:flex; align-items:center; justify-content:center;
-  gap:0.5rem; margin:3rem 0; opacity:0.3;
+/* ══════ LAYOUT 1: SVG EVOLUTION TIMELINE ══════ */
+.timeline-wrap {
+  position: relative; padding: 20px 0 40px;
 }
-.dna-divider .dot { width:6px; height:6px; border-radius:50%; background:var(--cyber-green); }
-.dna-divider .line { width:60px; height:1px; background:linear-gradient(90deg, transparent, var(--cyber-green), transparent); }
+.timeline-svg { width: 100%; height: auto; display: block; }
+.timeline-node { cursor: pointer; transition: all 0.3s; }
+.timeline-node:hover .node-circle { r: 13; filter: url(#glow); }
+.timeline-node:hover .node-label-text { fill: #fff; font-weight: 900; }
+.timeline-node .node-circle { transition: r 0.3s; }
+.timeline-detail {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-top: 16px;
+  display: none; animation: fadeSlideIn 0.4s ease;
+}
+.timeline-detail.active { display: block; }
+.timeline-detail h4 { font-size: 1.05rem; color: var(--text-bright); margin-bottom: 8px; }
+.timeline-detail p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
+.timeline-detail .articles-mini { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.timeline-detail .art-mini-tag {
+  padding: 4px 10px; border-radius: 4px; font-size: 0.7rem;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+  white-space: nowrap;
+}
+.timeline-detail .art-mini-tag:hover { border-color: var(--human); color: var(--human); }
 
-/* ── Modal ── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════ LAYOUT 2: DNA VIRUS INSERTION VISUALIZATION ══════ */
+.dna-virus-vis {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.dna-strand-svg { width: 100%; height: auto; }
+.virus-insert-legend {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+}
+.virus-legend-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+  background: var(--bg-card); border-radius: 50px;
+  border: 1px solid var(--border); font-size: 0.78rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.virus-legend-item:hover { transform: translateY(-2px); border-color: #ff6b6b; }
+.virus-legend-item .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.virus-info-panel {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  display: none;
+}
+.virus-info-panel.active { display: block; animation: fadeSlideIn 0.4s ease; }
+.virus-info-panel h4 { color: #ff6b6b; margin-bottom: 8px; font-size: 1rem; }
+.virus-info-panel p { font-size: 0.85rem; color: var(--text-dim); }
+
+/* ══════ LAYOUT 3: MIGRATION WORLD MAP ══════ */
+.map-wrap {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px;
+  position: relative; overflow: hidden;
+}
+.migration-svg { width: 100%; height: auto; display: block; }
+.migration-route { transition: all 0.3s; cursor: pointer; }
+.migration-route:hover { stroke-width: 4; filter: drop-shadow(0 0 6px rgba(255,255,255,0.4)); }
+.migration-label { font-size: 0.7rem; fill: var(--text-dim); }
+.migration-label:hover { fill: #fff; }
+.route-info-panel {
+  position: absolute; right: 20px; top: 20px; max-width: 280px;
+  background: rgba(10,12,20,0.95); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; display: none;
+  backdrop-filter: blur(12px);
+}
+.route-info-panel.active { display: block; animation: fadeSlideIn 0.3s ease; }
+.route-info-panel h4 { color: var(--mesozoic); font-size: 0.95rem; margin-bottom: 6px; }
+.route-info-panel .time-tag { font-size: 0.7rem; color: var(--text-subtle); margin-bottom: 8px; }
+.route-info-panel p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
+
+/* ══════ LAYOUT 4: NEANDERTHAL vs SAPIENS COMPARISON ══════ */
+.comparison-panels {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.compare-panel {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px 24px;
+  transition: all var(--ease); position: relative; overflow: hidden;
+}
+.compare-panel.neanderthal { border-top: 3px solid #fb923c; }
+.compare-panel.sapiens { border-top: 3px solid var(--human); }
+.compare-panel:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+.compare-panel .panel-icon { font-size: 3rem; margin-bottom: 12px; display: block; }
+.compare-panel h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
+.compare-panel .panel-subtitle { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 16px; }
+.compare-panel .stat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.85rem;
+}
+.compare-panel .stat-row .stat-label { color: var(--text-dim); }
+.compare-panel .stat-row .stat-val { font-weight: 700; }
+.compare-vs {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 900; color: var(--text-subtle);
+  letter-spacing: 2px;
+}
+.dna-inheritance-bar {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-top: 20px;
+  text-align: center;
+}
+.dna-inheritance-bar h4 { font-size: 0.9rem; color: #fb923c; margin-bottom: 12px; }
+.inheritance-visual {
+  display: flex; height: 40px; border-radius: 20px; overflow: hidden;
+  max-width: 500px; margin: 0 auto 8px; border: 1px solid var(--border);
+}
+.inheritance-visual .sapiens-dna { background: linear-gradient(90deg, #4da6ff, var(--human)); flex: 98; }
+.inheritance-visual .neanderthal-dna { background: linear-gradient(90deg, #fb923c, #ff6b4a); flex: 2; position: relative; }
+.inheritance-visual .neanderthal-dna::after {
+  content: '1.5-2%'; position: absolute; top: -24px; left: 50%;
+  transform: translateX(-50%); font-size: 0.65rem; color: #fb923c;
+  font-weight: 700; white-space: nowrap;
+}
+
+/* ══════ LAYOUT 5: BRAIN EVOLUTION LAYER DIAGRAM ══════ */
+.brain-layers {
+  position: relative; max-width: 600px; margin: 0 auto;
+}
+.brain-svg-wrap { text-align: center; }
+.brain-svg-wrap svg { width: 100%; max-width: 500px; height: auto; }
+.brain-layer {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 20px; margin-bottom: 10px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  transition: all var(--ease); position: relative;
+  border-left: 4px solid transparent;
+}
+.brain-layer:hover, .brain-layer.active {
+  transform: translateX(8px); border-left-width: 4px;
+}
+.brain-layer .layer-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.85rem; flex-shrink: 0;
+  border: 2px solid;
+}
+.brain-layer .layer-info { flex: 1; }
+.brain-layer .layer-name { font-weight: 700; font-size: 0.9rem; color: var(--text-bright); }
+.brain-layer .layer-age { font-size: 0.72rem; color: var(--text-dim); }
+.brain-layer .layer-expand {
+  width: 24px; height: 24px; display: flex; align-items: center;
+  justify-content: center; transition: transform 0.3s;
+  color: var(--text-dim); font-size: 0.8rem;
+}
+.brain-layer.active .layer-expand { transform: rotate(180deg); }
+.brain-detail {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0; max-height: 0;
+  overflow: hidden; transition: all 0.4s ease;
+  margin-bottom: 10px; margin-left: 56px;
+}
+.brain-layer.active + .brain-detail { max-height: 300px; padding: 16px 20px; }
+.brain-detail p { font-size: 0.83rem; color: var(--text-dim); line-height: 1.7; }
+.brain-detail .linked-articles { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ══════ LAYOUT 6: FLIP CARDS for Language/Chimera ══════ */
+.flip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.flip-card { perspective: 800px; height: 220px; }
+.flip-inner {
+  width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  transform-style: preserve-3d; cursor: pointer; position: relative;
+}
+.flip-inner.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius); padding: 20px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.flip-front {
+  background: var(--bg-card); border: 1px solid var(--border);
+  text-align: center; align-items: center;
+}
+.flip-front .flip-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.flip-front .flip-title { font-weight: 800; font-size: 0.95rem; color: var(--text-bright); }
+.flip-front .flip-hint { font-size: 0.72rem; color: var(--text-subtle); margin-top: 6px; }
+.flip-back {
+  background: var(--bg-card-hover); border: 2px solid var(--cenozoic);
+  transform: rotateY(180deg); text-align: left; justify-content: flex-start;
+  overflow-y: auto; font-size: 0.8rem; line-height: 1.6;
+}
+.flip-back h4 { font-size: 0.9rem; color: var(--cenozoic); margin-bottom: 8px; }
+.flip-back .art-link {
+  display: block; padding: 6px 10px; margin-top: 6px;
+  border-radius: 4px; background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border); cursor: pointer;
+  font-size: 0.72rem; color: var(--text-dim); transition: all 0.2s;
+}
+.flip-back .art-link:hover { border-color: var(--cenozoic); color: var(--text-bright); }
+
+/* ══════ LAYOUT 7: PRION PARADOX — SPECIAL FEATURE ══════ */
+.special-feature {
+  background: linear-gradient(135deg, rgba(167,139,250,0.06), rgba(255,107,74,0.03));
+  border: 1px solid rgba(167,139,250,0.15);
+  border-radius: var(--radius-lg); padding: 32px 28px;
+  position: relative; overflow: hidden;
+}
+.special-feature::before {
+  content: '?'; position: absolute; right: 20px; top: -20px;
+  font-size: 12rem; font-weight: 900; color: rgba(167,139,250,0.03);
+  line-height: 1; pointer-events: none;
+}
+.special-feature h3 {
+  font-size: 1.4rem; color: var(--cenozoic); margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.special-feature .paradox-desc {
+  font-size: 0.9rem; color: var(--text-dim);
+  max-width: 700px; line-height: 1.8;
+  position: relative; z-index: 1; margin-bottom: 20px;
+}
+.paradox-facts {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px; position: relative; z-index: 1;
+}
+.paradox-fact {
+  background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.1);
+  border-radius: var(--radius-sm); padding: 16px;
+  text-align: center; transition: all var(--ease);
+}
+.paradox-fact:hover { border-color: rgba(167,139,250,0.3); transform: translateY(-2px); }
+.paradox-fact .fact-num { font-size: 1.6rem; font-weight: 900; color: var(--cenozoic); }
+.paradox-fact .fact-label { font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; }
+
+/* ══════ CIVILIZATION FOUNDATION — ACCORDION ══════ */
+.civ-accordion { display: flex; flex-direction: column; gap: 8px; }
+.civ-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; transition: all var(--ease);
+}
+.civ-item:hover { border-color: rgba(255,215,0,0.2); }
+.civ-trigger {
+  width: 100%; padding: 16px 20px; background: none; border: none;
+  color: var(--text-bright); font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 12px;
+  text-align: left; font-family: inherit;
+  transition: background 0.2s;
+}
+.civ-trigger:hover { background: rgba(255,215,0,0.03); }
+.civ-trigger .civ-icon { font-size: 1.3rem; }
+.civ-trigger .civ-chevron {
+  margin-left: auto; transition: transform 0.3s;
+  font-size: 0.7rem; color: var(--text-dim);
+}
+.civ-item.open .civ-chevron { transform: rotate(180deg); }
+.civ-body {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+}
+.civ-item.open .civ-body { max-height: 400px; }
+.civ-body-inner {
+  padding: 0 20px 20px 56px; font-size: 0.83rem;
+  color: var(--text-dim); line-height: 1.7;
+}
+.civ-body-inner .civ-art-tag {
+  display: inline-block; padding: 3px 8px; border-radius: 3px;
+  font-size: 0.68rem; background: rgba(255,215,0,0.06);
+  border: 1px solid rgba(255,215,0,0.15);
+  color: var(--human); margin: 2px 4px 2px 0; cursor: pointer;
+  transition: all 0.2s;
+}
+.civ-body-inner .civ-art-tag:hover { background: rgba(255,215,0,0.12); }
+
+/* ══════ ARTICLE MODAL ══════ */
 .modal-overlay {
-  position:fixed; inset:0; z-index:200;
-  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
-  display:flex; align-items:center; justify-content:center;
-  padding:1.5rem; opacity:0; pointer-events:none;
-  transition:opacity 0.3s;
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.88); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
 }
-.modal-overlay.active { opacity:1; pointer-events:auto; }
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
 .modal-content {
-  background:var(--bg2); border:1px solid rgba(255,255,255,0.1);
-  border-radius:16px; max-width:680px; width:100%;
-  max-height:85vh; overflow-y:auto; padding:2rem;
-  position:relative;
+  background: #0f1120; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); max-width: 640px; width: 100%;
+  max-height: 85vh; overflow-y: auto; padding: 28px;
+  position: relative;
 }
-.modal-content h3 { font-size:1.4rem; margin-bottom:0.5rem; color:#f1f5f9; }
-.modal-content .modal-course { font-size:0.8rem; color:var(--cyber-green); margin-bottom:1.5rem; letter-spacing:0.05em; }
-.modal-content .modal-body { font-size:0.9rem; color:var(--text); line-height:1.8; }
 .modal-close {
-  position:absolute; top:1rem; right:1rem;
-  width:36px; height:36px; border-radius:50%;
-  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-  color:var(--text-dim); cursor:pointer; font-size:1.1rem;
-  display:flex; align-items:center; justify-content:center;
-  transition:all 0.2s;
+  position: absolute; top: 12px; right: 12px;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-dim); cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
 }
-.modal-close:hover { background:rgba(255,69,96,0.2); color:var(--cyber-red); border-color:var(--cyber-red); }
-
-/* ── Side DNA Info ── */
-.dna-fact {
-  position:relative; z-index:1;
-  max-width:700px; margin:0 auto 3rem;
-  padding:1.5rem 2rem;
-  border-left:3px solid var(--cyber-green);
-  background:rgba(0,255,136,0.03);
-  border-radius:0 8px 8px 0;
+.modal-close:hover { background: rgba(255,107,74,0.2); color: #ff6b4a; border-color: #ff6b4a; }
+.modal-content h3 { font-size: 1.15rem; color: var(--text-bright); margin-bottom: 4px; padding-right: 40px; }
+.modal-content .modal-meta { font-size: 0.72rem; color: var(--text-subtle); margin-bottom: 16px; }
+.modal-content .modal-excerpt {
+  padding: 14px; background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm); border-left: 3px solid var(--human);
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 12px;
 }
-.dna-fact .fact-icon { font-size:1.3rem; margin-bottom:0.5rem; }
-.dna-fact p { font-size:0.9rem; color:var(--text-dim); font-style:italic; }
+.modal-content .modal-label { font-size: 0.72rem; color: var(--text-subtle); margin-top: 12px; }
 
-/* ── Progress Bar ── */
-.scroll-progress {
-  position:fixed; top:0; left:0; height:3px;
-  background:linear-gradient(90deg, var(--cyber-green), var(--cyber-cyan));
-  z-index:300; transition:width 0.1s linear;
-}
-
-/* ── Footer ── */
+/* ══════ FOOTER ══════ */
 .footer {
-  position:relative; z-index:1;
-  text-align:center; padding:4rem 1rem;
-  border-top:1px solid rgba(255,255,255,0.06);
+  position: relative; z-index: 1;
+  text-align: center; padding: 60px 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
 }
-.footer .glyph {
-  font-size:2rem; margin-bottom:1rem;
-  opacity:0.3;
-}
-.footer p { font-size:0.8rem; color:var(--text-dim); }
-.footer a { color:var(--cyber-cyan); text-decoration:none; }
+.footer .footer-glyph { font-size: 3rem; margin-bottom: 12px; opacity: 0.3; }
+.footer .footer-quote { font-size: 0.9rem; color: var(--text-dim); font-style: italic; margin-bottom: 16px; max-width: 500px; margin-left: auto; margin-right: auto; }
+.footer .footer-links { font-size: 0.78rem; color: var(--text-subtle); }
+.footer .footer-links a { color: var(--human); text-decoration: none; transition: color 0.2s; }
+.footer .footer-links a:hover { color: #ffe8a0; }
 
-/* ── Mobile ── */
-@media (max-width:768px) {
-  .hero { min-height:90vh; }
-  .hero h1 { font-size:2rem; }
-  .articles-grid { grid-template-columns:1fr; }
-  .era-header { padding-left:0; }
-  .modal-content { padding:1.5rem; }
-  #dnaCanvas { opacity:0.2; }
+/* ══════ RESPONSIVE ══════ */
+@media (max-width: 768px) {
+  .section-wrap { padding: 40px 16px; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero .tagline { font-size: 0.85rem; }
+  .comparison-panels { grid-template-columns: 1fr; }
+  .flip-grid { grid-template-columns: 1fr; }
+  .route-info-panel { position: relative; right: auto; top: auto; max-width: 100%; margin-top: 12px; }
+  .brain-detail { margin-left: 0; }
+  .home-link { top: 10px; left: 10px; padding: 6px 12px; font-size: 0.7rem; }
 }
-@media (max-width:480px) {
-  .hero { padding:1rem; min-height:85vh; }
-  .articles-grid { gap:0.8rem; }
-  .article-card { padding:1.2rem; }
+@media (max-width: 480px) {
+  .hero { min-height: 85vh; padding: 1rem; }
+  .paradox-facts { grid-template-columns: 1fr; }
+  .compare-panel { padding: 20px 16px; }
 }
+
+/* ══════ REVEAL ANIMATION ══════ */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.22,0.61,0.36,1),
+              transform 0.8s cubic-bezier(0.22,0.61,0.36,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
 <div class="scroll-progress" id="progressBar"></div>
 
-<canvas id="dnaCanvas"></canvas>
+<canvas id="particleCanvas"></canvas>
 
 <a href="index.html" class="home-link">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
   返回首页
 </a>
 
-<!-- Hero -->
+<!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
-  <div class="hero-badge">🧬 Homo Sapiens · 40亿年演化史书</div>
-  <h1>基因时间机器</h1>
-  <p class="hero-subtitle">
+  <div class="hero-badge">🧬 40亿年 · 演化史书</div>
+  <h1>演化史书</h1>
+  <p class="tagline">
     沿着DNA双螺旋向上游航行<br>
-    每解开一段序列，就回到一个演化节点
+    每一段序列，都是时间的铭文
   </p>
-  <p class="hero-tagline">
-    演化不是「过去的事」——它刻在你身体的每一个细胞里。尼安德特人的DNA、远古病毒的碎片、朊粒模糊的生命边界……<strong>你的身体，就是一本可以翻阅的40亿年演化史书。</strong>
-  </p>
+  <div class="core-message">
+    <strong>你的身体，是一本可以翻阅的40亿年演化史书。</strong><br>
+    尼安德特人的基因在你血管里流淌，远古病毒的碎片嵌在你的染色体中，非洲草原上的第一次直立行走、第一个音节、第一幅壁画——所有的演化印记，至今刻在每一个细胞里。翻开它，你看到的不只是过去，而是你自己。
+  </div>
   <div class="scroll-hint">
-    <span>向下滚动 · 开启时间航行</span>
-    <div class="arrow"></div>
+    <span>向下翻阅 · 史书开卷</span>
+    <div class="arr"></div>
   </div>
 </section>
 
-<!-- DNA Fact #1 -->
-<div class="dna-fact">
-  <div class="fact-icon">🔬 你体内的「化石」</div>
-  <p>远古逆转录病毒的基因片段占据了人类基因组的约8%——这些「内源性逆转录病毒」是数百万年前感染我们祖先后，被「驯化」留在基因组中的分子化石。你体内每一个细胞都携带着远古病毒的历史。</p>
+<!-- ═══════════════ SECTION 1: ORIGIN OF LIFE + PRION ═══════════════ -->
+<div class="section-wrap reveal" id="sec-origin">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(255,107,74,0.1);color:var(--hadean);">第一章</div>
+    <h2 style="color:var(--hadean);">生命的起源 · 边界之问</h2>
+    <p class="sec-desc">什么是生命？这个问题从40亿年前地球上第一锅「原始汤」开始，到朊粒的发现到达了最尖锐的矛盾——没有DNA的东西，可以是活的吗？</p>
+  </div>
+
+  <!-- SVG Evolution Timeline -->
+  <div class="timeline-wrap">
+    <svg class="timeline-svg" viewBox="0 0 1000 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="timeGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#ff6b4a"/>
+          <stop offset="16%" stop-color="#ff9a3c"/>
+          <stop offset="33%" stop-color="#f0c060"/>
+          <stop offset="50%" stop-color="#4eca7a"/>
+          <stop offset="66%" stop-color="#4da6ff"/>
+          <stop offset="83%" stop-color="#a78bfa"/>
+          <stop offset="100%" stop-color="#ffd700"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Time axis -->
+      <line x1="60" y1="180" x2="960" y2="180" stroke="url(#timeGrad)" stroke-width="2" opacity="0.5"/>
+      <line x1="60" y1="180" x2="960" y2="180" stroke="url(#timeGrad)" stroke-width="6" opacity="0.15"/>
+
+      <!-- Time labels -->
+      <text x="60" y="210" fill="#6b7088" font-size="10" text-anchor="middle">40亿年前</text>
+      <text x="250" y="210" fill="#6b7088" font-size="10" text-anchor="middle">30亿</text>
+      <text x="450" y="210" fill="#6b7088" font-size="10" text-anchor="middle">20亿</text>
+      <text x="650" y="210" fill="#6b7088" font-size="10" text-anchor="middle">10亿</text>
+      <text x="850" y="210" fill="#6b7088" font-size="10" text-anchor="middle">5亿</text>
+      <text x="960" y="210" fill="#6b7088" font-size="10" text-anchor="middle">现在</text>
+
+      <!-- Node 1: LUCA ~3.8 bya -->
+      <g class="timeline-node" onclick="showTimelineDetail('luca')" style="cursor:pointer">
+        <circle cx="85" cy="180" r="9" fill="#ff6b4a" opacity="0.8" class="node-circle"/>
+        <circle cx="85" cy="180" r="2.5" fill="#fff" opacity="0.6"/>
+        <text x="85" y="165" fill="#ff6b4a" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">LUCA</text>
+        <text x="85" y="155" fill="#6b7088" font-size="9" text-anchor="middle">38亿年前</text>
+      </g>
+
+      <!-- Node 2: First DNA ~3.5 bya -->
+      <g class="timeline-node" onclick="showTimelineDetail('firstDNA')" style="cursor:pointer">
+        <circle cx="160" cy="180" r="8" fill="#ff9a3c" opacity="0.8" class="node-circle"/>
+        <circle cx="160" cy="180" r="2" fill="#fff" opacity="0.5"/>
+        <text x="160" y="165" fill="#ff9a3c" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">DNA出现</text>
+        <text x="160" y="155" fill="#6b7088" font-size="9" text-anchor="middle">35亿年前</text>
+      </g>
+
+      <!-- Node 3: Oxygenation ~2.4 bya -->
+      <g class="timeline-node" onclick="showTimelineDetail('oxygen')" style="cursor:pointer">
+        <circle cx="310" cy="180" r="8" fill="#f0c060" opacity="0.8" class="node-circle"/>
+        <circle cx="310" cy="180" r="2" fill="#fff" opacity="0.5"/>
+        <text x="310" y="165" fill="#f0c060" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">大氧化</text>
+        <text x="310" y="155" fill="#6b7088" font-size="9" text-anchor="middle">24亿年前</text>
+      </g>
+
+      <!-- Node 4: Eukaryotes ~1.8 bya -->
+      <g class="timeline-node" onclick="showTimelineDetail('eukaryote')" style="cursor:pointer">
+        <circle cx="430" cy="180" r="8" fill="#f0c060" opacity="0.8" class="node-circle"/>
+        <circle cx="430" cy="180" r="2" fill="#fff" opacity="0.5"/>
+        <text x="430" y="200" fill="#f0c060" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">真核生物</text>
+        <text x="430" y="215" fill="#6b7088" font-size="9" text-anchor="middle">18亿年前</text>
+      </g>
+
+      <!-- Node 5: Cambrian ~540 mya -->
+      <g class="timeline-node" onclick="showTimelineDetail('cambrian')" style="cursor:pointer">
+        <circle cx="680" cy="180" r="9" fill="#4eca7a" opacity="0.8" class="node-circle"/>
+        <circle cx="680" cy="180" r="2.5" fill="#fff" opacity="0.6"/>
+        <text x="680" y="165" fill="#4eca7a" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">寒武纪大爆发</text>
+        <text x="680" y="155" fill="#6b7088" font-size="9" text-anchor="middle">5.4亿年前</text>
+      </g>
+
+      <!-- Node 6: First brain ~500 mya -->
+      <g class="timeline-node" onclick="showTimelineDetail('firstBrain')" style="cursor:pointer">
+        <circle cx="700" cy="200" r="7" fill="#4da6ff" opacity="0.7" class="node-circle"/>
+        <text x="700" y="220" fill="#4da6ff" font-size="10" text-anchor="middle" font-weight="700" class="node-label-text">首个脑</text>
+        <text x="700" y="232" fill="#6b7088" font-size="8" text-anchor="middle">5亿年前</text>
+      </g>
+
+      <!-- Node 7: Mammals ~200 mya -->
+      <g class="timeline-node" onclick="showTimelineDetail('mammals')" style="cursor:pointer">
+        <circle cx="780" cy="180" r="8" fill="#4da6ff" opacity="0.8" class="node-circle"/>
+        <circle cx="780" cy="180" r="2" fill="#fff" opacity="0.5"/>
+        <text x="780" y="165" fill="#4da6ff" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">哺乳动物</text>
+        <text x="780" y="155" fill="#6b7088" font-size="9" text-anchor="middle">2亿年前</text>
+      </g>
+
+      <!-- Node 8: Primates ~65 mya -->
+      <g class="timeline-node" onclick="showTimelineDetail('primates')" style="cursor:pointer">
+        <circle cx="840" cy="180" r="8" fill="#a78bfa" opacity="0.8" class="node-circle"/>
+        <circle cx="840" cy="180" r="2" fill="#fff" opacity="0.5"/>
+        <text x="840" y="165" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="700" class="node-label-text">灵长类</text>
+        <text x="840" y="155" fill="#6b7088" font-size="9" text-anchor="middle">6500万年前</text>
+      </g>
+
+      <!-- Node 9: Homo sapiens ~300 kya -->
+      <g class="timeline-node" onclick="showTimelineDetail('sapiens')" style="cursor:pointer">
+        <circle cx="935" cy="180" r="10" fill="#ffd700" opacity="0.9" class="node-circle"/>
+        <circle cx="935" cy="180" r="3" fill="#fff" opacity="0.7"/>
+        <text x="935" y="165" fill="#ffd700" font-size="12" text-anchor="middle" font-weight="900" class="node-label-text">智人</text>
+        <text x="935" y="155" fill="#6b7088" font-size="9" text-anchor="middle">30万年前</text>
+      </g>
+
+      <!-- Connecting arcs between nodes -->
+      <path d="M85,180 Q122,140 160,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M160,180 Q235,130 310,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M310,180 Q370,130 430,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M430,180 Q555,120 680,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M680,180 Q730,130 780,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M780,180 Q810,130 840,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M840,180 Q888,130 935,180" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <!-- Epoch labels at top -->
+      <text x="72" y="260" fill="#ff6b4a" font-size="9" text-anchor="middle" opacity="0.5">冥古宙</text>
+      <text x="180" y="260" fill="#ff9a3c" font-size="9" text-anchor="middle" opacity="0.5">太古宙</text>
+      <text x="370" y="260" fill="#f0c060" font-size="9" text-anchor="middle" opacity="0.5">元古宙</text>
+      <text x="680" y="250" fill="#4eca7a" font-size="9" text-anchor="middle" opacity="0.5">显生宙</text>
+    </svg>
+
+    <!-- Timeline Detail Panel -->
+    <div class="timeline-detail" id="timelineDetail">
+      <h4 id="tdTitle"></h4>
+      <p id="tdDesc"></p>
+      <div class="articles-mini" id="tdArticles"></div>
+    </div>
+  </div>
+
+  <!-- Prion Paradox Special Feature -->
+  <div class="special-feature" style="margin-top:40px;">
+    <h3>🦠 朊粒悖论：生命定义的最后边界</h3>
+    <p class="paradox-desc">
+      朊粒——仅由错误折叠的蛋白质构成，不含任何核酸（无DNA、无RNA）——却能自我复制并引发致命疾病。它挑战了生物学最根本的教条：「所有生命都需要核酸来传递遗传信息」。如果朊粒算生命，那生命的边界就远比我们想象的模糊。如果不算，那「自我复制」这个生命最核心的特征又该如何定义？
+    </p>
+    <div class="paradox-facts">
+      <div class="paradox-fact">
+        <div class="fact-num">0</div>
+        <div class="fact-label">朊粒含有的DNA/RNA碱基数</div>
+      </div>
+      <div class="paradox-fact">
+        <div class="fact-num">100%</div>
+        <div class="fact-label">由错误折叠的PrP蛋白构成</div>
+      </div>
+      <div class="paradox-fact">
+        <div class="fact-num">∞</div>
+        <div class="fact-label">可在无核酸条件下无限「繁殖」</div>
+      </div>
+      <div class="paradox-fact">
+        <div class="fact-num">?</div>
+        <div class="fact-label">是否属于「生命」：无共识</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Timeline Sections -->
-<main class="timeline" id="timeline"></main>
+<!-- ═══════════════ SECTION 2: ANCIENT VIRUSES IN HUMAN GENOME ═══════════════ -->
+<div class="section-wrap reveal" id="sec-virus">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(255,107,74,0.1);color:#ff6b6b;">第二章</div>
+    <h2 style="color:#ff6b6b;">远古病毒 · 基因组中的「化石」</h2>
+    <p class="sec-desc">人类基因组的8%来自远古逆转录病毒。这些「内源性逆转录病毒」（ERV）是数百万年前感染我们祖先后，被「驯化」留在基因组中的分子化石。它们不是敌人——有些甚至参与了胎盘的形成。</p>
+  </div>
 
-<!-- DNA Fact #2 -->
-<div class="dna-fact">
-  <div class="fact-icon">🧬 尼安德特人的回声</div>
-  <p>除非洲裔人群外，现代欧亚人种的基因组中约有1.5%–2%来自尼安德特人。这些基因影响了我们的免疫反应、皮肤色素沉着，甚至情绪调节。你的祖先曾与另一个人类物种相遇、结合，这段经历至今写在你的DNA中。</p>
+  <!-- DNA Virus Insertion Visualization -->
+  <div class="dna-virus-vis">
+    <svg class="dna-strand-svg" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- DNA double helix (conceptual flat view) -->
+      <defs>
+        <linearGradient id="dnaGrad1" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#4da6ff"/>
+          <stop offset="8%" stop-color="#ff6b6b"/>
+          <stop offset="16%" stop-color="#4da6ff"/>
+          <stop offset="24%" stop-color="#ff6b6b"/>
+          <stop offset="32%" stop-color="#4da6ff"/>
+          <stop offset="40%" stop-color="#ff6b6b"/>
+          <stop offset="50%" stop-color="#4da6ff"/>
+          <stop offset="58%" stop-color="#4da6ff"/>
+          <stop offset="66%" stop-color="#ff6b6b"/>
+          <stop offset="74%" stop-color="#4da6ff"/>
+          <stop offset="82%" stop-color="#4da6ff"/>
+          <stop offset="90%" stop-color="#ff6b6b"/>
+          <stop offset="100%" stop-color="#4da6ff"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Top strand -->
+      <rect x="60" y="70" width="830" height="6" rx="3" fill="url(#dnaGrad1)" opacity="0.9"/>
+      <rect x="60" y="170" width="830" height="6" rx="3" fill="url(#dnaGrad1)" opacity="0.9"/>
+
+      <!-- Cross-links (base pairs) -->
+      <g opacity="0.25">
+        <line x1="100" y1="76" x2="95" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="140" y1="76" x2="145" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="180" y1="76" x2="175" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="220" y1="76" x2="225" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="260" y1="76" x2="255" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="300" y1="76" x2="305" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="340" y1="76" x2="335" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="380" y1="76" x2="385" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="420" y1="76" x2="415" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="460" y1="76" x2="465" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="500" y1="76" x2="495" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="540" y1="76" x2="545" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="580" y1="76" x2="575" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="620" y1="76" x2="625" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="660" y1="76" x2="655" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="700" y1="76" x2="705" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="740" y1="76" x2="735" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="780" y1="76" x2="785" y2="170" stroke="#ff6b6b" stroke-width="0.8"/>
+        <line x1="820" y1="76" x2="815" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+        <line x1="860" y1="76" x2="865" y2="170" stroke="#4da6ff" stroke-width="0.8"/>
+      </g>
+
+      <!-- Highlighted viral segments (bright spots on top strand) -->
+      <rect x="66" y="67" width="36" height="12" rx="2" fill="#ff6b6b" opacity="0.7"/>
+      <rect x="130" y="67" width="40" height="12" rx="2" fill="#ff6b6b" opacity="0.7"/>
+      <rect x="250" y="67" width="30" height="12" rx="2" fill="#ff6b6b" opacity="0.6"/>
+      <rect x="370" y="67" width="28" height="12" rx="2" fill="#ff6b6b" opacity="0.7"/>
+      <rect x="530" y="67" width="32" height="12" rx="2" fill="#ff6b6b" opacity="0.6"/>
+      <rect x="690" y="67" width="34" height="12" rx="2" fill="#ff6b6b" opacity="0.7"/>
+      <rect x="770" y="67" width="30" height="12" rx="2" fill="#ff6b6b" opacity="0.7"/>
+
+      <!-- Labels -->
+      <text x="480" y="45" fill="#6b7088" font-size="12" text-anchor="middle">人类基因组（概念图）</text>
+      <text x="880" y="65" fill="#ff6b6b" font-size="10" text-anchor="end">红色 = 远古病毒插入片段</text>
+      <text x="880" y="80" fill="#6b7088" font-size="9" text-anchor="end">约占人类基因组的 8%</text>
+
+      <!-- Percentage bar -->
+      <rect x="60" y="110" width="830" height="14" rx="7" fill="rgba(255,255,255,0.04)"/>
+      <rect x="60" y="110" width="66" height="14" rx="7" fill="#ff6b6b" opacity="0.6"/>
+      <text x="70" y="120" fill="#fff" font-size="9">8% 病毒来源</text>
+      <rect x="126" y="110" width="764" height="14" rx="0" fill="#4da6ff" opacity="0.3"/>
+      <text x="500" y="120" fill="#fff" font-size="9" text-anchor="middle" opacity="0.5">92% 其他序列</text>
+    </svg>
+
+    <div class="virus-insert-legend">
+      <div class="virus-legend-item" onclick="showVirusInfo('hervW')">
+        <span class="dot" style="background:#ff6b6b;"></span> HERV-W（合胞素·胎盘形成）
+      </div>
+      <div class="virus-legend-item" onclick="showVirusInfo('hervK')">
+        <span class="dot" style="background:#ff9a3c;"></span> HERV-K（最近整合的ERV）
+      </div>
+      <div class="virus-legend-item" onclick="showVirusInfo('immune')">
+        <span class="dot" style="background:#f0c060;"></span> 免疫调节ERV（干扰素响应）
+      </div>
+      <div class="virus-legend-item" onclick="showVirusInfo('cancer')">
+        <span class="dot" style="background:#ff4560;"></span> 癌症相关ERV激活
+      </div>
+    </div>
+
+    <div class="virus-info-panel" id="virusInfoPanel">
+      <h4 id="vipTitle"></h4>
+      <p id="vipDesc"></p>
+    </div>
+  </div>
 </div>
 
-<!-- DNA Fact #3 -->
-<div class="dna-fact" style="border-left-color:var(--cyber-purple); background:rgba(168,85,247,0.03);">
-  <div class="fact-icon" style="color:var(--cyber-purple);">🦠 朊粒悖论</div>
-  <p>朊粒——仅由错误折叠的蛋白质构成，不含任何核酸——却能自我复制并引发致命疾病。它挑战了我们对「生命」的最基本定义：没有DNA或RNA的东西，算「活着」吗？</p>
+<!-- ═══════════════ SECTION 3: CHIMERISM & GENE RECOMBINATION ═══════════════ -->
+<div class="section-wrap reveal" id="sec-chimera">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(78,202,122,0.1);color:var(--cambrian);">第三章</div>
+    <h2 style="color:var(--cambrian);">嵌合体 · 基因的拼接艺术</h2>
+    <p class="sec-desc">从杂交水稻到转基因生物，从遗传算法到人类主动设计基因——基因重组不只是自然演化的工具，也已成为人类手中的画笔。点击卡片翻转，探索基因工程的秘密。</p>
+  </div>
+
+  <div class="flip-grid">
+    <!-- Flip Card 1 -->
+    <div class="flip-card">
+      <div class="flip-inner" onclick="this.classList.toggle('flipped')">
+        <div class="flip-front">
+          <div class="flip-icon">🌾</div>
+          <div class="flip-title">杂交水稻的基因魔术</div>
+          <div class="flip-hint">点击翻转 →</div>
+        </div>
+        <div class="flip-back">
+          <h4>三系法：不育系·保持系·恢复系</h4>
+          <p>袁隆平的杂交水稻利用了植物界的杂种优势。三系法的精妙设计——不育系无法自花授粉、保持系维持不育特性、恢复系携带恢复基因——实现了大规模杂交制种。从孟德尔的豌豆到袁隆平的水稻，基因重组的原理是人类对生命密码最成功的操控之一。</p>
+          <span class="art-link" onclick="event.stopPropagation();openArticle(19)">📄 196 | 三系法：杂交水稻</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flip Card 2 -->
+    <div class="flip-card">
+      <div class="flip-inner" onclick="this.classList.toggle('flipped')">
+        <div class="flip-front">
+          <div class="flip-icon">🔬</div>
+          <div class="flip-title">遗传算法：演化的数学模型</div>
+          <div class="flip-hint">点击翻转 →</div>
+        </div>
+        <div class="flip-back">
+          <h4>选择→变异→遗传：一个算法</h4>
+          <p>超过一百万日本人参与的遗传算法游戏展示了演化机制的力量——通过「选择→变异→遗传」的迭代，马赛克图像逐步演化为清晰画面。这正是自然演化机制的数学复现：变异产生多样性，选择保留优势，遗传确保积累。演化是一个算法，DNA就是它的存储介质。</p>
+          <span class="art-link" onclick="event.stopPropagation();openArticle(23)">📄 217 | 遗传算法</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flip Card 3 -->
+    <div class="flip-card">
+      <div class="flip-inner" onclick="this.classList.toggle('flipped')">
+        <div class="flip-front">
+          <div class="flip-icon">🦟</div>
+          <div class="flip-title">10亿转基因蚊子</div>
+          <div class="flip-hint">点击翻转 →</div>
+        </div>
+        <div class="flip-back">
+          <h4>基因驱动：主动干预演化</h4>
+          <p>美国一家生物公司释放10亿只转基因雄性蚊子，它们与雌蚊交配后只产雄性后代，从而大面积杀灭蚊子。基因驱动技术代表了人类主动干预生态演化前所未有的能力——同时也引发了深刻的伦理和安全担忧。当人类成为演化设计者，我们需要怎样的责任？</p>
+          <span class="art-link" onclick="event.stopPropagation();openArticle(16)">📄 186 | 转基因蚊子</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flip Card 4 -->
+    <div class="flip-card">
+      <div class="flip-inner" onclick="this.classList.toggle('flipped')">
+        <div class="flip-front">
+          <div class="flip-icon">🧪</div>
+          <div class="flip-title">人工合成淀粉</div>
+          <div class="flip-hint">点击翻转 →</div>
+        </div>
+        <div class="flip-back">
+          <h4>诺奖级的突破</h4>
+          <p>不依赖植物光合作用，直接从二氧化碳合成淀粉——这是对生命核心代谢途径的实验性复现。从米勒-尤里实验到人工合成淀粉，人类正一步步逼近生命起源的终极秘密。如果我们可以从头合成生命的基石，那「生命是什么」就不再只是一个哲学问题。</p>
+          <span class="art-link" onclick="event.stopPropagation();openArticle(31)">📄 303 | 人工合成淀粉</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="glyph">🧬</div>
-  <p>基因时间机器 · 人类演化与文明进程</p>
-  <p><a href="index.html">返回首页</a> · 科技参考3</p>
+<!-- ═══════════════ SECTION 4: HUMAN MIGRATION MAP ═══════════════ -->
+<div class="section-wrap reveal" id="sec-migration">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(77,166,255,0.1);color:var(--mesozoic);">第四章</div>
+    <h2 style="color:var(--mesozoic);">走出非洲 · 迁徙的基因印记</h2>
+    <p class="sec-desc">Y染色体和线粒体DNA清晰地记录了我们的祖先如何从非洲出发，在数万年间遍布地球的每一个角落。每一条迁徙路线都在基因组中留下了可追溯的印记。</p>
+  </div>
+
+  <div class="map-wrap">
+    <svg class="migration-svg" viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg">
+      <!-- Simplified world map background -->
+      <defs>
+        <radialGradient id="africaGlow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="rgba(255,215,0,0.15)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Continents (simplified) -->
+      <g fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1">
+        <!-- Africa -->
+        <path d="M420,180 Q440,150 460,170 Q480,200 470,260 Q460,340 440,380 Q420,390 400,360 Q380,300 390,240 Q395,200 420,180Z"/>
+        <!-- Europe -->
+        <path d="M410,130 Q440,90 480,80 Q520,75 530,100 Q540,130 520,145 Q490,155 460,150 Q430,148 410,130Z"/>
+        <!-- Asia -->
+        <path d="M480,80 Q560,40 680,45 Q780,50 800,80 Q820,120 790,170 Q760,200 700,210 Q640,215 580,200 Q520,180 490,160 Q470,130 480,80Z"/>
+        <!-- Australia -->
+        <path d="M680,280 Q730,260 760,290 Q770,320 740,340 Q700,350 680,320Z"/>
+        <!-- North America -->
+        <path d="M80,40 Q200,20 300,40 Q350,60 340,100 Q320,140 260,160 Q180,170 100,150 Q60,120 60,80Z"/>
+        <!-- South America -->
+        <path d="M200,200 Q240,180 260,210 Q280,260 250,320 Q220,360 190,340 Q170,300 180,260Z"/>
+      </g>
+
+      <!-- Africa origin glow -->
+      <ellipse cx="440" cy="260" rx="80" ry="60" fill="url(#africaGlow)"/>
+
+      <!-- Migration routes -->
+      <!-- Route 1: Out of Africa ~70kya → Middle East -->
+      <path class="migration-route" d="M440,250 Q445,210 455,185 Q465,165 480,158" fill="none" stroke="#4da6ff" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <circle cx="480" cy="155" r="4" fill="#4da6ff" opacity="0.8"/>
+      <text x="485" y="150" fill="#4da6ff" font-size="9" class="migration-label">~70kya</text>
+
+      <!-- Route 2: → Southern Asia ~60kya -->
+      <path class="migration-route" d="M480,155 Q510,145 550,155 Q590,165 620,170" fill="none" stroke="#4eca7a" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <circle cx="620" cy="168" r="4" fill="#4eca7a" opacity="0.8"/>
+      <text x="625" y="162" fill="#4eca7a" font-size="9" class="migration-label">~60kya</text>
+
+      <!-- Route 3: → Southeast Asia ~50kya -->
+      <path class="migration-route" d="M620,170 Q660,180 700,190 Q730,200 750,210" fill="none" stroke="#f0c060" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <circle cx="750" cy="208" r="4" fill="#f0c060" opacity="0.8"/>
+      <text x="755" y="203" fill="#f0c060" font-size="9" class="migration-label">~50kya</text>
+
+      <!-- Route 4: → Australia ~45kya -->
+      <path class="migration-route" d="M750,210 Q760,230 750,255 Q735,275 720,295" fill="none" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="6,3" opacity="0.6"/>
+      <circle cx="720" cy="295" r="4" fill="#ff9a3c" opacity="0.7"/>
+      <text x="705" y="305" fill="#ff9a3c" font-size="9" class="migration-label">~45kya</text>
+
+      <!-- Route 5: → Europe ~45kya -->
+      <path class="migration-route" d="M480,155 Q485,130 490,115 Q495,100 500,90" fill="none" stroke="#a78bfa" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <circle cx="500" cy="88" r="4" fill="#a78bfa" opacity="0.8"/>
+      <text x="505" y="82" fill="#a78bfa" font-size="9" class="migration-label">~45kya</text>
+
+      <!-- Route 6: → Central Asia → East Asia ~40kya -->
+      <path class="migration-route" d="M480,155 Q520,120 580,100 Q640,85 700,90" fill="none" stroke="#ff6b4a" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <circle cx="700" cy="88" r="4" fill="#ff6b4a" opacity="0.8"/>
+      <text x="705" y="82" fill="#ff6b4a" font-size="9" class="migration-label">~40kya</text>
+
+      <!-- Route 7: → Americas ~15kya (Bering Strait) -->
+      <path class="migration-route" d="M700,90 Q660,65 600,50 Q500,30 380,45" fill="none" stroke="#ffd700" stroke-width="2.5" stroke-dasharray="6,3" opacity="0.8"/>
+      <circle cx="380" cy="43" r="5" fill="#ffd700" opacity="0.9"/>
+      <text x="360" y="37" fill="#ffd700" font-size="9" font-weight="700" class="migration-label">~15kya</text>
+
+      <!-- Route 8: → South America ~12kya -->
+      <path class="migration-route" d="M380,45 Q340,80 280,130 Q240,170 220,220" fill="none" stroke="#ffd700" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <circle cx="220" cy="220" r="4" fill="#ffd700" opacity="0.8"/>
+      <text x="205" y="230" fill="#ffd700" font-size="9" class="migration-label">~12kya</text>
+
+      <!-- Legend -->
+      <rect x="680" y="390" width="200" height="55" rx="6" fill="rgba(10,12,20,0.85)"/>
+      <text x="690" y="408" fill="#6b7088" font-size="9">🧬 基因证据:</text>
+      <text x="690" y="422" fill="#4da6ff" font-size="8">Y染色体单倍群追踪父系</text>
+      <text x="690" y="436" fill="#a78bfa" font-size="8">线粒体DNA追踪母系</text>
+    </svg>
+
+    <div class="route-info-panel" id="routeInfoPanel">
+      <h4 id="ripTitle">走出非洲</h4>
+      <div class="time-tag" id="ripTime">~70,000年前</div>
+      <p id="ripDesc">智人从东非出发，跨越红海进入阿拉伯半岛。这是所有非非洲裔现代人类共同的迁徙起点。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 5: NEANDERTHAL COMPARISON ═══════════════ -->
+<div class="section-wrap reveal" id="sec-neanderthal">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(251,146,60,0.1);color:#fb923c;">第五章</div>
+    <h2 style="color:#fb923c;">尼安德特人的回声</h2>
+    <p class="sec-desc">除非洲裔人群外，现代人类基因组中携带1.5%–2%的尼安德特人DNA。他们灭绝了，但他们的基因还在你体内发挥着作用——影响着你的免疫力、皮肤色素，甚至情绪。</p>
+  </div>
+
+  <!-- Side-by-side comparison -->
+  <div class="comparison-panels">
+    <div class="compare-panel neanderthal">
+      <span class="panel-icon">🪨</span>
+      <h3 style="color:#fb923c;">尼安德特人</h3>
+      <div class="panel-subtitle">Homo neanderthalensis · 40万年前–4万年前</div>
+      <div class="stat-row"><span class="stat-label">脑容量</span><span class="stat-val" style="color:#fb923c;">1200–1750 cm³</span></div>
+      <div class="stat-row"><span class="stat-label">身高</span><span class="stat-val">152–167 cm</span></div>
+      <div class="stat-row"><span class="stat-label">工具技术</span><span class="stat-val" style="color:#fb923c;">莫斯特文化（石器）</span></div>
+      <div class="stat-row"><span class="stat-label">艺术/象征</span><span class="stat-val">争议：可能有装饰品</span></div>
+      <div class="stat-row"><span class="stat-label">语言能力</span><span class="stat-val" style="color:#fb923c;">有FOXP2基因（可语言）</span></div>
+      <div class="stat-row"><span class="stat-label">适应气候</span><span class="stat-val">寒冷（冰河期欧洲）</span></div>
+      <div class="stat-row"><span class="stat-label">命运</span><span class="stat-val" style="color:#ff6b4a;">~4万年前灭绝</span></div>
+    </div>
+
+    <div class="compare-panel sapiens">
+      <span class="panel-icon">🧠</span>
+      <h3 style="color:var(--human);">智人</h3>
+      <div class="panel-subtitle">Homo sapiens · 30万年前–至今</div>
+      <div class="stat-row"><span class="stat-label">脑容量</span><span class="stat-val" style="color:var(--human);">1200–1500 cm³</span></div>
+      <div class="stat-row"><span class="stat-label">身高</span><span class="stat-val">150–180 cm</span></div>
+      <div class="stat-row"><span class="stat-label">工具技术</span><span class="stat-val" style="color:var(--human);">奥瑞纳文化→航天器</span></div>
+      <div class="stat-row"><span class="stat-label">艺术/象征</span><span class="stat-val" style="color:var(--human);">洞穴壁画·雕塑·音乐</span></div>
+      <div class="stat-row"><span class="stat-label">语言能力</span><span class="stat-val" style="color:var(--human);">全语言·文字系统</span></div>
+      <div class="stat-row"><span class="stat-label">适应策略</span><span class="stat-val">文化适应·技术改造环境</span></div>
+      <div class="stat-row"><span class="stat-label">命运</span><span class="stat-val" style="color:var(--human);">全球80亿人口</span></div>
+    </div>
+  </div>
+
+  <!-- DNA Inheritance Visualization -->
+  <div class="dna-inheritance-bar">
+    <h4>🧬 你DNA中的尼安德特人遗产（非非洲裔）</h4>
+    <div class="inheritance-visual">
+      <div class="sapiens-dna"></div>
+      <div class="neanderthal-dna"></div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-dim);margin-top:8px;">
+      这些远古基因影响着你的 <span style="color:#fb923c;">免疫反应</span> · <span style="color:#fb923c;">皮肤色素沉着</span> · <span style="color:#fb923c;">Ⅱ型糖尿病风险</span> · <span style="color:#fb923c;">情绪调节（抑郁倾向）</span> · 甚至 <span style="color:#fb923c;">对COVID-19的易感性</span>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 6: BRAIN EVOLUTION ═══════════════ -->
+<div class="section-wrap reveal" id="sec-brain">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(77,166,255,0.1);color:var(--mesozoic);">第六章</div>
+    <h2 style="color:var(--mesozoic);">大脑演化 · 从神经索到意识</h2>
+    <p class="sec-desc">从5亿年前第一个原始的神经索，到人类前额叶皮层——大脑的演化是生命史上最壮丽的篇章。点击每一层，展开这个跨越亿年的故事。</p>
+  </div>
+
+  <!-- Brain Layer Accordion -->
+  <div class="brain-layers">
+    <!-- Layer 1: Brainstem -->
+    <div class="brain-layer" onclick="toggleBrainLayer(this)" style="border-left-color:var(--hadean);" data-layer="brainstem">
+      <div class="layer-num" style="color:var(--hadean);border-color:var(--hadean);">1</div>
+      <div class="layer-info">
+        <div class="layer-name">脑干 · 爬行动物脑</div>
+        <div class="layer-age">≈5亿年前 · 最原始的神经中枢</div>
+      </div>
+      <div class="layer-expand">▼</div>
+    </div>
+    <div class="brain-detail">
+      <p>脑干是所有脊椎动物共有的最古老脑结构，负责心跳、呼吸、睡眠-觉醒周期等基础生命功能。它是演化史上第一个真正意义上的「中枢神经系统」——从鱼类到人类，这个结构几乎原封不动地保留了5亿年。当你「本能地」躲避危险时，就是脑干在发挥作用。</p>
+      <p style="margin-top:8px;font-size:0.78rem;color:var(--text-subtle);">相关文章：神经科学基础、本能行为的生物学解释</p>
+      <div class="linked-articles">
+        <span class="art-link" onclick="openArticle(27)">📄 286 | 迷你大脑</span>
+        <span class="art-link" onclick="openArticle(29)">📄 298 | 脑机接口</span>
+      </div>
+    </div>
+
+    <!-- Layer 2: Cerebellum -->
+    <div class="brain-layer" onclick="toggleBrainLayer(this)" style="border-left-color:var(--archaean);" data-layer="cerebellum">
+      <div class="layer-num" style="color:var(--archaean);border-color:var(--archaean);">2</div>
+      <div class="layer-info">
+        <div class="layer-name">小脑 · 运动的精密调控</div>
+        <div class="layer-age">≈4亿年前 · 鱼类出现后</div>
+      </div>
+      <div class="layer-expand">▼</div>
+    </div>
+    <div class="brain-detail">
+      <p>小脑占据了脑总神经元数量的80%以上，但体积只有大脑的10%。它在运动协调、平衡维持和运动学习中起核心作用。苏炳添9秒83的百米成绩背后，是经过科学训练精确调校的小脑功能——精确到毫秒的起跑反应和步频控制。</p>
+      <div class="linked-articles">
+        <span class="art-link" onclick="openArticle(25)">📄 256 | 苏炳添9秒83</span>
+      </div>
+    </div>
+
+    <!-- Layer 3: Limbic System -->
+    <div class="brain-layer" onclick="toggleBrainLayer(this)" style="border-left-color:var(--proterozoic);" data-layer="limbic">
+      <div class="layer-num" style="color:var(--proterozoic);border-color:var(--proterozoic);">3</div>
+      <div class="layer-info">
+        <div class="layer-name">边缘系统 · 情绪与记忆</div>
+        <div class="layer-age">≈2亿年前 · 早期哺乳动物</div>
+      </div>
+      <div class="layer-expand">▼</div>
+    </div>
+    <div class="brain-detail">
+      <p>边缘系统包括杏仁核（恐惧与攻击）、海马体（记忆形成）、下丘脑（激素调控）。这个系统让哺乳动物拥有了情感——母爱、恐惧、愉悦——这些在爬行动物中极其有限的体验。宠物狗对主人的依恋、婚姻中的幸福感，都源自这个古老的情绪回路。</p>
+      <div class="linked-articles">
+        <span class="art-link" onclick="openArticle(20)">📄 198 | 婚姻幸福感与基因</span>
+        <span class="art-link" onclick="openArticle(4)">📄 092 | 母爱与25号宇宙</span>
+      </div>
+    </div>
+
+    <!-- Layer 4: Neocortex -->
+    <div class="brain-layer" onclick="toggleBrainLayer(this)" style="border-left-color:var(--mesozoic);" data-layer="neocortex">
+      <div class="layer-num" style="color:var(--mesozoic);border-color:var(--mesozoic);">4</div>
+      <div class="layer-info">
+        <div class="layer-name">新皮层 · 感觉与认知</div>
+        <div class="layer-age">≈1亿年前 · 哺乳动物辐射</div>
+      </div>
+      <div class="layer-expand">▼</div>
+    </div>
+    <div class="brain-detail">
+      <p>新皮层是哺乳动物大脑最显著的特征——六层神经元结构，负责感觉处理、空间导航和复杂认知。灵长类动物的新皮层经历了爆发式扩张，使视觉处理、工具使用和社交认知成为可能。德国科学家培养的「迷你大脑」——带有视觉功能的类器官——正帮助我们理解新皮层发育的奥秘。</p>
+      <div class="linked-articles">
+        <span class="art-link" onclick="openArticle(27)">📄 286 | 迷你大脑与近似永生</span>
+      </div>
+    </div>
+
+    <!-- Layer 5: Prefrontal Cortex -->
+    <div class="brain-layer" onclick="toggleBrainLayer(this)" style="border-left-color:var(--human);" data-layer="prefrontal">
+      <div class="layer-num" style="color:var(--human);border-color:var(--human);">5</div>
+      <div class="layer-info">
+        <div class="layer-name">前额叶皮层 · 人类之冠</div>
+        <div class="layer-age">≈200万年前 · 人属出现后急剧扩张</div>
+      </div>
+      <div class="layer-expand">▼</div>
+    </div>
+    <div class="brain-detail">
+      <p>前额叶皮层是人类大脑最独特的结构——占大脑皮层面积的约30%（黑猩猩仅约11%）。它是执行功能、计划决策、冲动控制、道德判断和社会行为的中心。脑机接口技术直接与这个区域对话，让猴子用意念玩游戏——这标志着人类演化史上一个全新阶段：我们不再仅仅通过生物学演化来改变大脑，而是通过工程技术与神经系统直接对话。</p>
+      <div class="linked-articles">
+        <span class="art-link" onclick="openArticle(29)">📄 298 | 脑机接口：在疯人院地下室搞科研</span>
+        <span class="art-link" onclick="openArticle(28)">📄 296 | 视力误区（神经可塑性）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 7: LANGUAGE & CIVILIZATION ═══════════════ -->
+<div class="section-wrap reveal" id="sec-language">
+  <div class="sec-head">
+    <div class="epoch-badge" style="background:rgba(167,139,250,0.1);color:var(--cenozoic);">第七章</div>
+    <h2 style="color:var(--cenozoic);">语言与文明 · 演化的加速器</h2>
+    <p class="sec-desc">语言是人类演化史上最独特的发明——它让信息跨代传递，让文化积累以指数级加速。文明不是生物学的对立面，而是它的延伸。展开每一项，探索文明背后的生物学根基。</p>
+  </div>
+
+  <div class="civ-accordion">
+    <div class="civ-item">
+      <button class="civ-trigger" onclick="this.parentElement.classList.toggle('open')">
+        <span class="civ-icon">📜</span> 语言起源：从FOXP2到信息传播
+        <span class="civ-chevron">▼</span>
+      </button>
+      <div class="civ-body">
+        <div class="civ-body-inner">
+          <p>FOXP2基因的突变让人类拥有了精确控制喉部肌肉的能力——这是语言产生的生物学基础。尼安德特人也拥有FOXP2，说明语言能力可能在智人与尼安德特人分化之前就已出现。而语言一旦出现，信息传播就遵循了与传染病相似的数学模型——R值、网络效应、爆发阈值——每一个「爆款」新闻都是在人类社交网络中的一次「感染」。</p>
+          <span class="civ-art-tag" onclick="openArticle(14)">📄 140 | 信息传播的R值</span>
+          <span class="civ-art-tag" onclick="openArticle(0)">📄 011 | 随机控制</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="civ-item">
+      <button class="civ-trigger" onclick="this.parentElement.classList.toggle('open')">
+        <span class="civ-icon">🧬</span> 演化心理学：大脑的「旧软件」与新环境
+        <span class="civ-chevron">▼</span>
+      </button>
+      <div class="civ-body">
+        <div class="civ-body-inner">
+          <p>我们的大脑是为草原和森林而演化的，不是为书本和屏幕。近视率的飙升、保健品市场的「自然谬误」、老年人被养生骗局所困——这些现象背后都有一个共同的演化根源：我们的认知机制在更新世环境中是适应性的，但在现代市场中成为被利用的漏洞。</p>
+          <span class="civ-art-tag" onclick="openArticle(28)">📄 296 | 视力误区（演化失配）</span>
+          <span class="civ-art-tag" onclick="openArticle(27)">📄 275 | 养生保健微信群骗局</span>
+          <span class="civ-art-tag" onclick="openArticle(7)">📄 103 | 葡萄籽与认知偏差</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="civ-item">
+      <button class="civ-trigger" onclick="this.parentElement.classList.toggle('open')">
+        <span class="civ-icon">⚡</span> 人类生物学极限 · 科技超级扩展
+        <span class="civ-chevron">▼</span>
+      </button>
+      <div class="civ-body">
+        <div class="civ-body-inner">
+          <p>苏炳添32岁「高龄」突破百米9秒83——这背后是科学化训练将人体生物学潜能推向极限。脑机接口让猴子用意念玩游戏。人工合成淀粉打破了光合作用的垄断。人类正在从演化的产物，转变为演化的设计师。</p>
+          <span class="civ-art-tag" onclick="openArticle(25)">📄 256 | 苏炳添9秒83</span>
+          <span class="civ-art-tag" onclick="openArticle(29)">📄 298 | 脑机接口</span>
+          <span class="civ-art-tag" onclick="openArticle(31)">📄 303 | 人工合成淀粉</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="civ-item">
+      <button class="civ-trigger" onclick="this.parentElement.classList.toggle('open')">
+        <span class="civ-icon">🏛️</span> 性别、婚姻与社会的生物学基础
+        <span class="civ-chevron">▼</span>
+      </button>
+      <div class="civ-body">
+        <div class="civ-body-inner">
+          <p>男性平均寿命比女性短5年——性染色体的不对称性是根源：男性只有一个X染色体，隐性致病基因缺乏备份。婚姻幸福感受5-HTTLPR基因影响。25号宇宙实验揭示了一个惊人现象：当所有生存需求都被满足后，种群反而走向崩溃——行为沉沦在人类社会是否也有回响？</p>
+          <span class="civ-art-tag" onclick="openArticle(21)">📄 199 | 男人注定吃亏？</span>
+          <span class="civ-art-tag" onclick="openArticle(20)">📄 198 | 婚姻幸福感与基因</span>
+          <span class="civ-art-tag" onclick="openArticle(4)">📄 092 | 25号宇宙</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="civ-item">
+      <button class="civ-trigger" onclick="this.parentElement.classList.toggle('open')">
+        <span class="civ-icon">🦠</span> 实时演化：我们正在见证的演化
+        <span class="civ-chevron">▼</span>
+      </button>
+      <div class="civ-body">
+        <div class="civ-body-inner">
+          <p>演化不是「过去的事」——新冠疫情中病毒的每一次变异都是一次实时演化实验。作弊策略在考试压力下快速「演化」。泡水车问题折射出文明面对自然的脆弱。每一刻，演化都在我们身边静默地发生。</p>
+          <span class="civ-art-tag" onclick="openArticle(5)">📄 095 | 疫情中演化的作弊工具</span>
+          <span class="civ-art-tag" onclick="openArticle(15)">📄 162 | 新冠与动物感染</span>
+          <span class="civ-art-tag" onclick="openArticle(22)">📄 202 | 新冠病毒变异</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer reveal">
+  <div class="footer-glyph">📖</div>
+  <p class="footer-quote">
+    「演化不是很久以前的事——它刻在你身体的每一个细胞里。翻开这本史书，你读到的不仅是从LUCA到智人的40亿年长征，更是写在你自己DNA里的、独一无二的演化故事。」
+  </p>
+  <div class="footer-links">
+    <a href="index.html">← 返回首页</a>
+    <span style="margin:0 8px;opacity:0.3;">·</span>
+    科技参考3 · 人类演化与文明进程
+    <span style="margin:0 8px;opacity:0.3;">·</span>
+    32篇文章 · 8大演化主题
+  </div>
 </footer>
 
-<!-- Modal -->
+<!-- ═══════════════ ARTICLE MODAL ═══════════════ -->
 <div class="modal-overlay" id="modal">
   <div class="modal-content">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <h3 id="modalTitle"></h3>
-    <div class="modal-course" id="modalCourse"></div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-meta" id="modalMeta"></div>
+    <div class="modal-excerpt" id="modalExcerpt"></div>
+    <div class="modal-label" id="modalLabel"></div>
   </div>
 </div>
 
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
 <script>
-// ═══════════════════════════════════════
-// DNA HELIX CANVAS ANIMATION
-// ═══════════════════════════════════════
-const canvas = document.getElementById('dnaCanvas');
+// ═══════════ PARTICLE CANVAS (molecular/evolution theme) ═══════════
+const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
-let scrollY = 0;
-let w, h;
+let W, H;
 
-function resize() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
+function resizeCanvas() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
 }
-window.addEventListener('resize', resize);
-resize();
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+const particles = [];
+const PARTICLE_COUNT = 50;
+const COLORS = ['#ff6b4a','#ff9a3c','#f0c060','#4eca7a','#4da6ff','#a78bfa','#ffd700'];
 
-const strands = [];
-const NUM_PAIRS = 60;
-const HELIX_RADIUS_BASE = Math.min(w * 0.15, 160);
-const HELIX_HEIGHT = 1600;
-const TWISTS = 5;
-
-for (let i = 0; i < NUM_PAIRS; i++) {
-  strands.push({
-    t: i / NUM_PAIRS,
-    baseOffset: (Math.random() - 0.5) * 0.05,
-    pulse: Math.random() * Math.PI * 2,
-    brightness: 0.3 + Math.random() * 0.4
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  particles.push({
+    x: Math.random() * W, y: Math.random() * H,
+    size: Math.random() * 2 + 0.5,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3 - 0.2,
+    alpha: Math.random() * 0.5 + 0.1,
+    pulse: Math.random() * Math.PI * 2
   });
 }
 
-function drawDNA() {
-  ctx.clearRect(0, 0, w, h);
-  const centerX = w * 0.5;
-  const time = performance.now() * 0.0005;
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  const time = performance.now() * 0.001;
 
-  strands.forEach((s, i) => {
-    const scrollFactor = 1 - (scrollY * 0.0004) % 1;
-    const tAdjusted = (s.t + scrollFactor + s.baseOffset) % 1;
-    const angle = tAdjusted * Math.PI * 2 * TWISTS;
-    const y = tAdjusted * HELIX_HEIGHT + (h - HELIX_HEIGHT) * 0.5 - scrollY * 0.12;
-
-    if (y < -80 || y > h + 80) return;
-
-    const helixRadius = HELIX_RADIUS_BASE * (1 + Math.sin(tAdjusted * Math.PI) * 0.3);
-    const x1 = centerX + Math.cos(angle) * helixRadius;
-    const x2 = centerX + Math.cos(angle + Math.PI) * helixRadius;
-    const yPos = y;
-
-    const pulseAlpha = 0.15 + Math.sin(time * 2 + s.pulse) * 0.08;
-    const alpha = s.brightness * (0.25 + pulseAlpha);
-
-    // Draw connector first (behind nodes)
-    ctx.beginPath();
-    ctx.moveTo(x1, yPos);
-    ctx.lineTo(x2, yPos);
-    ctx.strokeStyle = `rgba(0,255,136,${alpha * 0.4})`;
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-
-    // Strand 1 node (blue)
-    ctx.beginPath();
-    ctx.arc(x1, yPos, 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(30,144,255,${alpha})`;
-    ctx.fill();
-
-    // Strand 2 node (pink)
-    ctx.beginPath();
-    ctx.arc(x2, yPos, 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,107,157,${alpha})`;
-    ctx.fill();
-
-    // Backbone connections
-    if (i < NUM_PAIRS - 1) {
-      const next = strands[i + 1];
-      const nextT = ((next.t + scrollFactor + next.baseOffset) % 1);
-      const nextAngle = nextT * Math.PI * 2 * TWISTS;
-      const nextY = nextT * HELIX_HEIGHT + (h - HELIX_HEIGHT) * 0.5 - scrollY * 0.12;
-      const nextRadius = HELIX_RADIUS_BASE * (1 + Math.sin(nextT * Math.PI) * 0.3);
-      const nx1 = centerX + Math.cos(nextAngle) * nextRadius;
-      const nx2 = centerX + Math.cos(nextAngle + Math.PI) * nextRadius;
-
-      if (Math.abs(nextY - yPos) < 80) {
+  // Draw connections between nearby particles (molecular network)
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        const alpha = (1 - dist / 120) * 0.06;
         ctx.beginPath();
-        ctx.moveTo(x1, yPos);
-        ctx.lineTo(nx1, nextY);
-        ctx.strokeStyle = `rgba(30,144,255,${alpha * 0.5})`;
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(x2, yPos);
-        ctx.lineTo(nx2, nextY);
-        ctx.strokeStyle = `rgba(255,107,157,${alpha * 0.5})`;
-        ctx.lineWidth = 1.2;
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+        ctx.lineWidth = 0.5;
         ctx.stroke();
       }
     }
+  }
+
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = W;
+    if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H;
+    if (p.y > H) p.y = 0;
+
+    const alpha = p.alpha + Math.sin(time * 1.5 + p.pulse) * 0.15;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = p.color.replace(')', `,${Math.max(0.05, alpha)})`).replace('rgb', 'rgba');
+    if (p.color.startsWith('#')) {
+      const r = parseInt(p.color.slice(1,3), 16);
+      const g = parseInt(p.color.slice(3,5), 16);
+      const b = parseInt(p.color.slice(5,7), 16);
+      ctx.fillStyle = `rgba(${r},${g},${b},${Math.max(0.05, alpha)})`;
+    }
+    ctx.fill();
 
     // Occasional glow
-    if (i % 8 === Math.floor(time * 3) % 8) {
+    if (p.size > 1.5) {
+      const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
+      glow.addColorStop(0, `rgba(255,255,255,${alpha * 0.5})`);
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.beginPath();
-      ctx.arc(x1, yPos, 10, 0, Math.PI * 2);
-      const glow = ctx.createRadialGradient(x1, yPos, 2, x1, yPos, 10);
-      glow.addColorStop(0, 'rgba(0,212,255,0.25)');
-      glow.addColorStop(1, 'rgba(0,212,255,0)');
+      ctx.arc(p.x, p.y, p.size * 6, 0, Math.PI * 2);
       ctx.fillStyle = glow;
       ctx.fill();
     }
   });
 
-  // Floating particles
-  for (let p = 0; p < 18; p++) {
-    const px = (Math.sin(time * 0.7 + p * 2.1) * 0.5 + 0.5) * w;
-    const py = ((time * 35 + p * 250 + scrollY * 0.2) % (h + 100)) - 50;
-    ctx.beginPath();
-    ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0,255,136,${0.08 + Math.sin(time + p) * 0.04})`;
-    ctx.fill();
-  }
-
-  requestAnimationFrame(drawDNA);
+  requestAnimationFrame(drawParticles);
 }
-drawDNA();
+drawParticles();
 
-// ═══════════════════════════════════════
-// SCROLL PROGRESS BAR
-// ═══════════════════════════════════════
+// ═══════════ SCROLL PROGRESS ═══════════
 window.addEventListener('scroll', () => {
-  const scrollTop = document.documentElement.scrollTop;
-  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-  document.getElementById('progressBar').style.width = progress + '%';
+  const st = document.documentElement.scrollTop;
+  const sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  document.getElementById('progressBar').style.width = sh > 0 ? (st / sh * 100) + '%' : '0%';
 });
 
-// ═══════════════════════════════════════
-// ARTICLE DATA
-// ═══════════════════════════════════════
+// ═══════════ REVEAL ON SCROLL ═══════════
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ═══════════ ARTICLE DATA (embedded from JSON) ═══════════
 const articlesData = [
-  {"title":"011 | 随机控制：绝望中的办法","excerpt":"当我们面对一个完全陌生的问题，现存理论里没有一个可供参考的。这个时候，盘点所有可能性，把尚未尝试的组合都去试试——从控制论的角度讲，这就是「随机控制」。米勒-尤里实验正是用这种方法探索了生命起源：模拟30多亿年前地球环境，一周后氨基酸、糖类和脂类竟然出现了。","sort_order":59,"course_name":"科技参考基础版"},
-  {"title":"020 | 问答：新能源什么时候会成为主流？","excerpt":"全球能源消耗中化石能源占85%。煤炭从占比5%到50%用了60年，石油用了60年才到40%，天然气90年只到23%。能源更替速度越来越慢，新能源在你有生之年最多在少数国家占比过半，核聚变成为主流很可能是2220年以后的事了。","sort_order":262,"course_name":"科技参考基础版"},
-  {"title":"086 | 问答：怎样筛选出好药？","excerpt":"从神农尝百草到现代药物筛选，人类寻找有效药物的方法经历了从随机控制到理性设计的演化。当今医学界已经可以精确合成药物分子并理解其作用机制，但药物研发的底层逻辑——在无数可能性中筛选有效答案——始终未变。","sort_order":274,"course_name":"科技参考基础版"},
-  {"title":"091 | 人口4：如何对抗巨大的风险？","excerpt":"从典型的亚洲国家到典型的美洲国家，生育率呈现出深刻的悖论：高生育率往往伴随着低入学率、高文盲率、高贫困率；低生育率则意味着族群的慢性灭绝。欧美发达国家通过引入移民对抗这一风险——人类迁徙从未停止，只是换了形式。","sort_order":207,"course_name":"科技参考基础版"},
-  {"title":"092 | 问答：母爱是有条件的，父爱呢？","excerpt":"「25号宇宙」老鼠实验揭示了一个惊人的现象：当所有生存需求都被满足后，种群反而走向崩溃。行为沉沦——母鼠抛弃幼崽、雄鼠丧失社交能力——在人类社会是否也有回响？这关系到演化塑造的社会行为与现代社会环境的错配。","sort_order":275,"course_name":"科技参考基础版"},
-  {"title":"095 | 疫情中演化出的作弊工具","excerpt":"新冠疫情下学生作弊手段的演化是一个活生生的微型演化案例。从微信群共享答案到专业代考服务，作弊策略在环境压力下快速「演化」，正如病毒在自然选择压力下不断变异——演化不只在远古，它每时每刻都在发生。","sort_order":37,"course_name":"科技参考基础版"},
-  {"title":"101 | 特斯拉新型电池：究竟提升在哪儿？","excerpt":"特斯拉4680电池代表了储能技术的重大进步。从能量密度到成本结构，电池技术的演化轨迹与生物演化有着惊人的相似之处——渐进改良、关键突破、适者生存。人类文明的能源基础正在经历达尔文式竞争。","sort_order":141,"course_name":"科技参考基础版"},
-  {"title":"103 | 正确保健：关于葡萄籽、诺丽果、小稀藤茶的问答","excerpt":"在动物实验中葡萄籽提取物确实有抗氧化、减少自由基损伤的效果，但人体临床证据严重不足。保健品市场暴露出人类认知的一个演化缺陷——我们的大脑并未进化出甄别现代营销话术的能力，古老的「稀缺性」和「自然=好」的直觉常被利用。","sort_order":179,"course_name":"科技参考基础版"},
-  {"title":"104 | 科技产品：关于电动牙刷、电子烟、护眼灯和洁面仪的问答","excerpt":"电子烟是目前效果最好的戒烟方法之一——比吃戒烟糖、贴戒烟贴效果都好。尼古丁虽然高度致瘾但本身不是致癌物，燃烧产生的焦油才是。这一发现挑战了「烟草=坏」的直觉判断，揭示了演化赋予我们的直觉在科技时代的局限性。","sort_order":218,"course_name":"科技参考基础版"},
-  {"title":"106 | 科学养育：关于备孕、哺乳期忌口和爱情婚姻的问答","excerpt":"科学备孕涉及遗传学、营养学和发育生物学的交叉知识。从叶酸补充到基因筛查，现代人类正以前所未有的方式主动干预自身的繁殖过程——这在演化史上是完全新颖的现象，人类已经成为自己演化的设计师。","sort_order":277,"course_name":"科技参考基础版"},
-  {"title":"120 | 微塑料：每年吃进5.5万颗，意味着什么？","excerpt":"因为吃海鲜每人每年可能摄入5.5万颗微塑料。这一数据来自2020年底发表在《环境健康展望》上的综述性研究。微塑料已遍布全球海洋，人类活动对地球的改造已经深入到微观尺度——这是文明对环境施加的全新选择压力。","sort_order":182,"course_name":"科技参考基础版"},
-  {"title":"121 | 棕色脂肪：那些健康的脂肪","excerpt":"俄罗斯的「战斗民族」妈妈们抱着婴儿在雪地里做运动——这背后是现代科学对棕色脂肪的认识。棕色脂肪能够燃烧热量产热，帮助婴儿和冬眠动物抵御寒冷。人类对环境温度的适应机制深深刻在脂肪细胞的演化历史中。","sort_order":183,"course_name":"科技参考基础版"},
-  {"title":"126 | 飞行汽车 ≈ 不靠谱","excerpt":"各大车企纷纷推出飞行汽车概念——优步、吉利、小鹏、通用、空客、波音都在布局。但飞行汽车面临的安全认证、空中管制、能源效率等问题远比想象的复杂。技术梦想与物理现实的博弈，本质上也是人类认知边界的体现。","sort_order":163,"course_name":"科技参考基础版"},
-  {"title":"135 | 问答：养宠物的好处和坏处","excerpt":"宠物与人类的关系触及演化生物学的核心问题：共生。一万多年前狼被驯化为狗，开启了人类与动物最深刻的跨物种合作。现代科学研究证实，养宠物确实能降低压力激素水平——这段演化伙伴关系至今塑造着我们的生理状态。","sort_order":283,"course_name":"科技参考基础版"},
-  {"title":"140 | 爆发与传播4：跳出网络外","excerpt":"让新闻成为热点传播出去，和阻止病毒扩散高度类似——核心参数都是R值。信息传播与传染病学的数学模型惊人地一致。语言——这个人类演化史上最独特的发明——在社会网络中的传播方式，遵循着我们基因中最古老的扩散模式。","sort_order":69,"course_name":"科技参考基础版"},
-  {"title":"162 | 新冠：被忽视的动物感染","excerpt":"病毒如果在人类群体中暂时消失但能感染动物，就可能再次回到人类世界。天花是仅感染人类的罕见例外。病毒学家一直在测试家畜和野生动物感染新冠的情况——跨物种传播是病毒演化的重要机制，也是理解人类与病原体共同演化的关键窗口。","sort_order":247,"course_name":"科技参考基础版"},
-  {"title":"186 | 改造：10亿只转基因蚊子飞出去了","excerpt":"美国一家生物公司释放10亿只转基因雄性蚊子，它们与雌蚊交配后只产雄性后代，从而大面积杀灭蚊子。基因驱动技术代表了人类主动干预生态演化前所未有的能力——同时也引发了深刻的伦理和安全担忧。","sort_order":13,"course_name":"科技参考基础版"},
-  {"title":"194 | 变化：传统计算机的衰落","excerpt":"MIT科学家尼尔·汤普森发表《作为通用技术的计算机的衰落》，预测数字经济发展趋势。摩尔定律的减速与演化生物学中的「趋同演化」有深刻类比——技术的发展轨迹并非无限加速，而是受制于物理定律的终极约束。","sort_order":17,"course_name":"科技参考基础版"},
-  {"title":"195 | 问答：宁德时代即将发布的钠电池，前景如何？","excerpt":"USB Type-C v2.1标准将供电规格提升至48V/5A，高达240W。从USB接口的演化可以看到技术标准如何在兼容性与创新之间取得平衡——技术演化同样遵循「路径依赖」原则，早期选择锁定了长期发展方向。","sort_order":294,"course_name":"科技参考基础版"},
-  {"title":"196 | 三系法：杂交水稻是怎么杂交的？","excerpt":"袁隆平的杂交水稻利用了植物界的杂种优势现象。三系法——不育系、保持系、恢复系——的精妙设计实现了大规模杂交制种。从孟德尔的豌豆到袁隆平的水稻，基因重组原理的应用是人类对生命密码最成功的操控之一。","sort_order":187,"course_name":"科技参考基础版"},
-  {"title":"198 | 幸福感：婚姻中的科学研究","excerpt":"科学研究表明基因对婚姻幸福感有显著影响——5-HTTLPR基因的短等位基因携带者婚姻满意度较低。这揭示了一个深刻事实：我们以为「自由选择」的婚姻质量，部分已在基因层面被预设。尼安德特人留给我们的基因遗产也包含情绪调节相关的变异。","sort_order":211,"course_name":"科技参考基础版"},
-  {"title":"199 | 生物学研究：做男人注定要吃亏","excerpt":"中国女性平均寿命77.37岁，男性72.38岁，相差整整5年。全球各国男女性预期寿命的差值普遍存在，深层原因藏在性染色体的不对称中——男性只有一个X染色体，隐性致病基因缺乏备份。雄性在生物学上就是「更弱」的性别。","sort_order":212,"course_name":"科技参考基础版"},
-  {"title":"202 | 新冠：两个好消息和一个坏消息","excerpt":"五月末全球新冠疫情反弹，日本病例暴发，印度死亡数字维持高峰。病毒的持续变异展示了一个实时演化过程——我们正在亲眼见证自然选择如何在一个RNA病毒的基因组中运作，每一次突变都是一次演化实验。","sort_order":251,"course_name":"科技参考基础版"},
-  {"title":"217 | 遗传算法：怎么把马赛克变成性感图片？","excerpt":"超过一百万日本人参与的游戏展示了遗传算法的力量——通过「选择→变异→遗传」的迭代，马赛克图像逐步演化为清晰画面。这正是自然演化机制的数学模型：变异产生多样性，选择保留优势，遗传确保积累。演化是一个算法，而DNA就是它的存储介质。","sort_order":78,"course_name":"科技参考基础版"},
-  {"title":"250 | 泡水车：暴雨后的大坑","excerpt":"河南特大暴雨后泡水车问题复杂——现代汽车电子系统被水浸泡后隐患深远。泡水车的技术损伤折射出人类技术文明面对自然力量的脆弱性——文明永远在与环境的力量博弈，正如演化史上的每一次大灭绝和每一次适应性辐射。","sort_order":225,"course_name":"科技参考基础版"},
-  {"title":"256 | 科学式训练：苏炳添为什么能跑9秒83？","excerpt":"苏炳添以9秒83晋级奥运会百米决赛，创亚洲历史。32岁的「高龄」选手取得突破，背后是科学化训练方法——精确到毫秒的起跑分析、个性化的肌肉训练方案。人体极限的突破展示了人类生物学潜能与科技方法结合的巨大空间。","sort_order":51,"course_name":"科技参考基础版"},
-  {"title":"259 | 实证：老生常谈的口罩问题","excerpt":"科学家如何高质量证明「口罩对预防新冠病毒有用」？通过大规模随机对照试验——但这在伦理学上不可行。最终通过自然实验和观察研究积累了证据。这个案例展示了在现实约束下科学认知的演化路径——科学方法本身也在「演化」。","sort_order":229,"course_name":"科技参考基础版"},
-  {"title":"275 | 骗局：中老年养生保健微信群","excerpt":"老年人被医疗保健产品传销坑害是一个被普遍忽视的问题。从演化心理学角度看，老年人对健康威胁的敏感性、对权威的信任倾向、社交网络的封闭性——这些特征在过去环境中是适应性的，但在现代市场中成为被利用的漏洞。","sort_order":233,"course_name":"科技参考基础版"},
-  {"title":"286 | 新突破：迷你大脑与近似永生","excerpt":"德国杜塞尔多夫大学团队用人工方式培养出带有视觉功能的迷你大脑——这是类器官研究的重大突破。迷你大脑不仅是研究神经发育和疾病的平台，更触及意识起源和「永生」的终极问题：如果意识可以被培养和保存，生命的边界在哪里？","sort_order":26,"course_name":"科技参考基础版"},
-  {"title":"296 | 辟谣：关于视力的各种误区","excerpt":"中国是全球近视发病率最高的国家。视力问题涉及眼球发育生物学、神经可塑性和环境因素的复杂交互。近视率的飙升本身就是一个人类生物学与环境快速变化失配的典型案例——我们的眼睛是为草原和森林而演化的，不是为书本和屏幕。","sort_order":234,"course_name":"科技参考基础版"},
-  {"title":"298 | 脑机接口1：在疯人院地下室搞科研","excerpt":"马斯克的Neuralink让猴子用意念玩碰撞球游戏。脑机接口技术的发展代表了人类演化史上一个全新阶段——我们不再仅仅通过生物学演化来改变大脑，而是通过工程技术直接与神经系统对话。这条道路将把人类带向何方？","sort_order":82,"course_name":"科技参考基础版"},
-  {"title":"303 | 问答：「人工合成淀粉」有多牛？","excerpt":"人工合成淀粉——这个成果很可能是诺奖级的突破！它不依赖植物光合作用，直接从二氧化碳合成淀粉。这不仅是对生命核心代谢途径的复现，更是对「生命是什么」这一根本问题的实验性回答。从米勒-尤里到人工合成淀粉，人类正一步步逼近生命起源的终极秘密。","sort_order":314,"course_name":"科技参考基础版"}
+  {"idx":0,"title":"011 | 随机控制：绝望中的办法","excerpt":"当我们面对完全陌生的问题时，盘点所有可能性去尝试——这就是随机控制。米勒-尤里实验用这种方法探索了生命起源：模拟30多亿年前地球环境，一周后氨基酸、糖类和脂类竟然出现了。","course":"科技参考基础版","sort":59},
+  {"idx":1,"title":"020 | 问答：新能源什么时候会成为主流？","excerpt":"全球能源消耗中化石能源占85%。煤炭从占比5%到50%用了60年，石油用了60年才到40%。能源更替速度越来越慢，核聚变成为主流很可能是2220年以后的事了。","course":"科技参考基础版","sort":262},
+  {"idx":2,"title":"086 | 问答：怎样筛选出好药？","excerpt":"从神农尝百草到现代药物筛选，人类寻找有效药物的方法经历了从随机控制到理性设计的演化。当今医学界已可精确合成药物分子并理解其作用机制。","course":"科技参考基础版","sort":274},
+  {"idx":3,"title":"091 | 人口4：如何对抗巨大的风险？","excerpt":"从典型亚洲国家到美洲国家，生育率呈现深刻悖论。高生育率伴随低入学率和高贫困率；低生育率意味着族群慢性灭绝。人类迁徙从未停止，只是换了形式。","course":"科技参考基础版","sort":207},
+  {"idx":4,"title":"092 | 问答：母爱是有条件的，父爱呢？","excerpt":"「25号宇宙」老鼠实验揭示了惊人现象：当所有生存需求被满足后，种群反而走向崩溃。行为沉沦在人类社会是否也有回响？","course":"科技参考基础版","sort":275},
+  {"idx":5,"title":"095 | 疫情中演化出的作弊工具","excerpt":"新冠疫情下学生作弊手段的演化是微型演化案例。从微信群共享答案到专业代考服务，作弊策略在环境压力下快速「演化」——演化不只在远古。","course":"科技参考基础版","sort":37},
+  {"idx":6,"title":"101 | 特斯拉新型电池：究竟提升在哪儿？","excerpt":"特斯拉4680电池代表了储能技术的重大进步。电池技术的演化轨迹与生物演化有惊人相似——渐进改良、关键突破、适者生存。","course":"科技参考基础版","sort":141},
+  {"idx":7,"title":"103 | 正确保健：关于葡萄籽、诺丽果、小稀藤茶的问答","excerpt":"葡萄籽提取物在动物实验中确实有抗氧化效果，但人体临床证据严重不足。人类大脑并未演化出甄别现代营销话术的能力。","course":"科技参考基础版","sort":179},
+  {"idx":8,"title":"104 | 科技产品：关于电动牙刷、电子烟、护眼灯和洁面仪的问答","excerpt":"电子烟是目前效果最好的戒烟方法之一。尼古丁虽高度致瘾但不是致癌物，燃烧产生的焦油才是。演化赋予我们的直觉在科技时代有局限性。","course":"科技参考基础版","sort":218},
+  {"idx":9,"title":"106 | 科学养育：关于备孕、哺乳期忌口和爱情婚姻的问答","excerpt":"从叶酸补充到基因筛查，现代人类以前所未有的方式主动干预繁殖过程——这在演化史上是全新现象，人类已成为自己演化的设计师。","course":"科技参考基础版","sort":277},
+  {"idx":10,"title":"120 | 微塑料：每年吃进5.5万颗，意味着什么？","excerpt":"因吃海鲜每人每年可能摄入5.5万颗微塑料。微塑料已遍布全球海洋，人类活动对地球的改造深入微观尺度——这是文明对环境施加的全新选择压力。","course":"科技参考基础版","sort":182},
+  {"idx":11,"title":"121 | 棕色脂肪：那些健康的脂肪","excerpt":"俄罗斯妈妈们抱着婴儿在雪地里做运动——这背后是现代科学对棕色脂肪的认识。人类对环境温度的适应机制深深刻在脂肪细胞的演化历史中。","course":"科技参考基础版","sort":183},
+  {"idx":12,"title":"126 | 飞行汽车 ≈ 不靠谱","excerpt":"各大车企纷纷推出飞行汽车概念。飞行汽车面临的安全认证、空中管制、能源效率等问题远比想象的复杂——技术梦想与物理现实在博弈。","course":"科技参考基础版","sort":163},
+  {"idx":13,"title":"135 | 问答：养宠物的好处和坏处","excerpt":"一万多年前狼被驯化为狗，开启了人类与动物最深刻的跨物种合作。现代科学研究证实养宠物能降低压力激素水平——这段演化伙伴关系至今塑造着我们的生理状态。","course":"科技参考基础版","sort":283},
+  {"idx":14,"title":"140 | 爆发与传播4：跳出网络外","excerpt":"让新闻传播出去和阻止病毒扩散高度类似——核心参数都是R值。信息传播与传染病学的数学模型惊人一致，语言在社会网络中的传播遵循最古老的扩散模式。","course":"科技参考基础版","sort":69},
+  {"idx":15,"title":"162 | 新冠：被忽视的动物感染","excerpt":"病毒如果在人类群体中暂时消失但能感染动物，就可能再次回到人类世界。跨物种传播是病毒演化的重要机制，也是理解人类与病原体共同演化的关键窗口。","course":"科技参考基础版","sort":247},
+  {"idx":16,"title":"186 | 改造：10亿只转基因蚊子飞出去了","excerpt":"美国生物公司释放10亿只转基因雄性蚊子，与雌蚊交配后只产雄性后代。基因驱动技术代表了人类主动干预生态演化前所未有的能力。","course":"科技参考基础版","sort":13},
+  {"idx":17,"title":"194 | 变化：传统计算机的衰落","excerpt":"MIT科学家预测数字经济发展趋势。摩尔定律的减速与演化生物学中的「趋同演化」有深刻类比——技术的发展并非无限加速，受制于物理定律的终极约束。","course":"科技参考基础版","sort":17},
+  {"idx":18,"title":"195 | 问答：宁德时代即将发布的钠电池，前景如何？","excerpt":"USB Type-C v2.1标准将供电规格提升至48V/5A高达240W。技术演化遵循「路径依赖」原则，早期选择锁定了长期发展方向。","course":"科技参考基础版","sort":294},
+  {"idx":19,"title":"196 | 三系法：杂交水稻是怎么杂交的？","excerpt":"袁隆平的杂交水稻利用了植物界的杂种优势。三系法的精妙设计实现了大规模杂交制种。从孟德尔的豌豆到袁隆平的水稻，基因重组是人类对生命密码最成功的操控。","course":"科技参考基础版","sort":187},
+  {"idx":20,"title":"198 | 幸福感：婚姻中的科学研究","excerpt":"5-HTTLPR基因的短等位基因携带者婚姻满意度较低。我们以为「自由选择」的婚姻质量，部分已在基因层面被预设。尼安德特人留下的基因遗产包含情绪调节相关变异。","course":"科技参考基础版","sort":211},
+  {"idx":21,"title":"199 | 生物学研究：做男人注定要吃亏","excerpt":"中国女性平均寿命77.37岁，男性72.38岁，相差5年。深层原因在性染色体不对称——男性只有一个X染色体，隐性致病基因缺乏备份。","course":"科技参考基础版","sort":212},
+  {"idx":22,"title":"202 | 新冠：两个好消息和一个坏消息","excerpt":"新冠疫情的持续变异展示了实时演化过程——我们正在亲眼见证自然选择如何在一个RNA病毒的基因组中运作，每一次突变都是一次演化实验。","course":"科技参考基础版","sort":251},
+  {"idx":23,"title":"217 | 遗传算法：怎么把马赛克变成性感图片？","excerpt":"超过一百万日本人参与的游戏展示了遗传算法的力量——「选择→变异→遗传」迭代将马赛克变为清晰画面。演化是一个算法，DNA就是存储介质。","course":"科技参考基础版","sort":78},
+  {"idx":24,"title":"250 | 泡水车：暴雨后的大坑","excerpt":"河南特大暴雨后泡水车问题复杂。技术损伤折射出人类文明面对自然力量的脆弱——文明永远在与环境力量博弈，正如演化史上的每次大灭绝和适应性辐射。","course":"科技参考基础版","sort":225},
+  {"idx":25,"title":"256 | 科学式训练：苏炳添为什么能跑9秒83？","excerpt":"苏炳添以9秒83晋级奥运会百米决赛，创亚洲历史。32岁「高龄」选手取得突破，背后是科学化训练方法——精确到毫秒的起跑分析、个性化肌肉训练方案。","course":"科技参考基础版","sort":51},
+  {"idx":26,"title":"259 | 实证：老生常谈的口罩问题","excerpt":"科学家如何高质量证明口罩对预防新冠病毒有用？通过大规模随机对照试验——但伦理不可行。这个案例展示了在现实约束下，科学认知的演化路径。","course":"科技参考基础版","sort":229},
+  {"idx":27,"title":"275 | 骗局：中老年养生保健微信群","excerpt":"从演化心理学看，老年人对健康威胁的敏感性、对权威的信任倾向、社交网络的封闭性——这些特征在过去是适应性的，在现代市场中成为被利用的漏洞。","course":"科技参考基础版","sort":233},
+  {"idx":28,"title":"286 | 新突破：迷你大脑与近似永生","excerpt":"德国杜塞尔多夫大学用人工方式培养出带有视觉功能的迷你大脑——类器官研究的重大突破。这不仅是神经发育和疾病研究的平台，更触及意识起源和「永生」的终极问题。","course":"科技参考基础版","sort":26},
+  {"idx":29,"title":"296 | 辟谣：关于视力的各种误区","excerpt":"中国是全球近视发病率最高的国家。近视率的飙升是人类生物学与环境快速变化失配的典型案例——我们的眼睛是为草原和森林而演化的，不是为书本和屏幕。","course":"科技参考基础版","sort":234},
+  {"idx":30,"title":"298 | 脑机接口1：在疯人院地下室搞科研","excerpt":"马斯克的Neuralink让猴子用意念玩碰撞球游戏。脑机接口技术代表人类演化史上全新阶段——我们不再仅通过生物学演化改变大脑，而是通过工程技术与神经系统直接对话。","course":"科技参考基础版","sort":82},
+  {"idx":31,"title":"303 | 问答：「人工合成淀粉」有多牛？","excerpt":"人工合成淀粉很可能是诺奖级突破！不依赖植物光合作用，直接从二氧化碳合成淀粉。从米勒-尤里到人工合成淀粉，人类正一步步逼近生命起源的终极秘密。","course":"科技参考基础版","sort":314}
 ];
 
-// ═══════════════════════════════════════
-// THEME CONFIGURATIONS
-// ═══════════════════════════════════════
-const themes = [
-  {
-    id: 'prion',
-    name: '朊粒与生命边界',
-    time: '~40亿年前 → 生命的起源',
-    icon: '🦠',
-    color: '#a855f7',
-    description: '什么是生命？朊粒——仅由错误折叠的蛋白质构成，不含任何核酸——却能自我复制并引发致命疾病。它挑战了我们对「生命」的最基本定义。从米勒-尤里实验到人工合成淀粉，人类正在用实验一步步逼近这个终极问题的答案。',
-    themeClass: 'theme-prion',
-    articleIndices: [0, 23, 31]
+// ═══════════ TIMELINE NODE INTERACTION ═══════════
+const timelineDetails = {
+  luca: {
+    title: 'LUCA — 所有生命的最后共同祖先',
+    desc: '约38亿年前，在地球形成仅6亿年后，第一个具备自我复制能力的生命形式出现了。LUCA（Last Universal Common Ancestor）是所有现存生物——从细菌到蓝鲸到人类——的共同祖先。它已经拥有DNA、RNA和蛋白质合成系统，说明在此之前生命已经经历了漫长的化学演化。米勒-尤里实验证明：在原始地球环境下，氨基酸可以自然产生。',
+    articles: [0, 31]
   },
-  {
-    id: 'virus',
-    name: '远古病毒与人类基因组',
-    time: '~数百万–数千万年前',
-    icon: '🧫',
-    color: '#ff4560',
-    description: '人类基因组的8%来自远古逆转录病毒。这些分子化石曾是感染我们祖先的病原体，如今却被「驯化」为人体功能的一部分——有些甚至参与了胎盘的形成。病毒不是生命的敌人，而是演化史上最意想不到的合作者。',
-    themeClass: 'theme-virus',
-    articleIndices: [5, 15, 16, 22, 26]
+  firstDNA: {
+    title: 'DNA的出现 — 遗传信息的物质基础',
+    desc: 'DNA取代RNA成为主要的遗传信息载体，这是生命演化史上最关键的转折之一。DNA的双螺旋结构提供了更稳定的信息存储——这就像从RAM升级到了硬盘。你的每一个细胞中约2米长的DNA链，承载着从这第一个DNA分子开始、从未中断的40亿年信息传承。',
+    articles: [0]
   },
-  {
-    id: 'chimera',
-    name: '嵌合体与基因重组',
-    time: '~数十亿年 · 持续至今',
-    icon: '🧬',
-    color: '#ffb347',
-    description: '杂交水稻、转基因生物、遗传算法——人类不仅是被演化塑造的产物，也已成为主动设计基因的力量。从孟德尔的豌豆到袁隆平的水稻，基因重组的故事贯穿了生命演化的全部历史。',
-    themeClass: 'theme-chimera',
-    articleIndices: [19, 17, 24]
+  oxygen: {
+    title: '大氧化事件 — 地球上第一次「污染危机」',
+    desc: '蓝藻（cyanobacteria）通过光合作用产生氧气，彻底改变了地球大气。对当时的厌氧生物来说，氧气是有毒的——这是地球历史上第一次由生命引发的大规模环境灾难，也是第一次大灭绝。但正是这场「灾难」，为后来的需氧生命（包括人类）铺平了道路。',
+    articles: []
   },
-  {
-    id: 'migration',
-    name: '人类迁徙的基因证据',
-    time: '~30万年前 → 1万年前',
-    icon: '🗺️',
-    color: '#60a5fa',
-    description: '走出非洲、跨越大陆——我们的祖先在地球上扩散的路径，清晰地记录在Y染色体和线粒体DNA中。每一代人的迁徙都在基因组中留下了可追溯的印记，让我们得以像阅读地图一样重建远古人类的壮丽旅程。',
-    themeClass: 'theme-migration',
-    articleIndices: [3, 4, 10]
+  eukaryote: {
+    title: '真核生物 — 复杂生命的诞生',
+    desc: '一个古菌吞噬了一个细菌，后者变成了线粒体——这个内共生事件创造了真核细胞。你体内每一个细胞中的线粒体，都携带着自己独立的DNA，讲述着这个20亿年前的「吞并」故事。线粒体DNA只通过母系遗传，因此成为追踪人类母系迁徙路线的完美工具。',
+    articles: []
   },
-  {
-    id: 'neanderthal',
-    name: '尼安德特人基因遗产',
-    time: '~5万年前 · 智人与尼安德特人交汇',
-    icon: '🪨',
-    color: '#fb923c',
-    description: '除非洲裔人群外的现代人类基因组中携带1.5%–2%的尼安德特人DNA。这些远古基因影响了我们的免疫力、皮肤色素沉着、Ⅱ型糖尿病风险，甚至抑郁倾向。在你的血管里，流淌着一个早已消失的人类物种的记忆。',
-    themeClass: 'theme-neanderthal',
-    articleIndices: [20, 21, 25, 28]
+  cambrian: {
+    title: '寒武纪大爆发 — 动物多样性的「大爆炸」',
+    desc: '在短短2000万年间，几乎所有现代动物门类的祖先都出现了。眼睛、外壳、附肢、捕食行为——自然选择第一次在宏大的舞台上展示了它的创造力。遗传算法的核心逻辑——变异产生多样性，选择保留优势——在寒武纪达到了第一个高峰。',
+    articles: [23]
   },
-  {
-    id: 'brain',
-    name: '大脑演化与意识起源',
-    time: '~5亿年前 → 至今',
-    icon: '🧠',
-    color: '#00d4ff',
-    description: '从神经索到大脑皮层，从条件反射到自我意识——大脑的演化是生命史上最壮丽的篇章。迷你大脑培养、脑机接口技术……我们不仅在追溯意识的过去，也在主动设计它的未来。',
-    themeClass: 'theme-brain',
-    articleIndices: [27, 29, 30]
+  firstBrain: {
+    title: '第一个脑 — 信息的中央处理器',
+    desc: '原始的神经索逐渐集中化为最早的「脑」——一个专门处理信息的中央器官。从水母的神经网到脊椎动物的中枢神经系统，这一趋势贯穿了整个动物演化史。你的大脑是5亿年信息处理演化的最新成果。',
+    articles: [28, 30]
   },
-  {
-    id: 'language',
-    name: '语言与符号的起源',
-    time: '~10万年前 → 5千年前',
-    icon: '📜',
-    color: '#34d399',
-    description: '语言是人类演化史上最独特的发明——它让信息跨代传递，让文化积累以指数级加速。从FOXP2基因到信息传播的流行病学模型，语言的秘密既藏在DNA的编码区中，也藏在我们构建的社会网络里。',
-    themeClass: 'theme-language',
-    articleIndices: [14, 2, 1]
+  mammals: {
+    title: '哺乳动物 — 温血、哺乳与新皮层',
+    desc: '哺乳动物演化出恒温性、毛发、乳腺和新皮层。这些特征让哺乳动物在恐龙灭绝后迅速辐射。边缘系统的发展让情感成为可能——母爱、社交纽带、记忆——这些「软」能力证明了演化不只是关于牙齿和爪子。',
+    articles: [4, 11]
   },
-  {
-    id: 'civilization',
-    name: '文明的生物学基础',
-    time: '~1万年前 → 现代',
-    icon: '🏛️',
-    color: '#fbbf24',
-    description: '农业革命、城市兴起、科技飞跃——文明的每一步都建立在人类生物学特性之上。从棕色脂肪对寒冷适应的演化，到婚姻制度背后的神经化学机制，生物学持续塑造着我们的社会形态。文明不是生物学的对立面，而是它的延伸。',
-    themeClass: 'theme-civilization',
-    articleIndices: [6, 7, 8, 9, 11, 12, 13]
+  primates: {
+    title: '灵长类 — 立体视觉与灵活的手',
+    desc: '树栖生活促使灵长类演化出立体视觉、可对握的拇指和更大的大脑。这些「硬件升级」为后来的工具使用、社会认知和语言能力奠定了生物学基础。你用手滑动屏幕阅读这段文字——这双手的灵活性，源自6500万年前树上生活的祖先。',
+    articles: [29]
+  },
+  sapiens: {
+    title: '智人 — 一个会讲故事的物种',
+    desc: '约30万年前，智人出现在非洲。我们拥有超大前额叶皮层、完整的语言能力、文化累积——这些让人类成为第一个能够大规模合作、跨代学习、并且追问「我们从哪里来」的物种。而每一个智人婴儿出生时，都已经携带了从LUCA到他/她的完整演化史——写在DNA的每一个碱基对中。',
+    articles: [25, 30, 31]
   }
-];
+};
 
-// ═══════════════════════════════════════
-// BUILD TIMELINE
-// ═══════════════════════════════════════
-const timeline = document.getElementById('timeline');
+function showTimelineDetail(key) {
+  const data = timelineDetails[key];
+  if (!data) return;
+  const panel = document.getElementById('timelineDetail');
+  document.getElementById('tdTitle').textContent = data.title;
+  document.getElementById('tdDesc').textContent = data.desc;
+  const artDiv = document.getElementById('tdArticles');
+  artDiv.innerHTML = data.articles.map(i => {
+    const a = articlesData[i];
+    return `<span class="art-mini-tag" onclick="event.stopPropagation();openArticle(${i})">📄 ${a.title}</span>`;
+  }).join('');
+  panel.classList.add('active');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
-// Track used articles to avoid duplication
-const usedArticles = new Set();
+// ═══════════ VIRUS INFO PANEL ═══════════
+const virusInfos = {
+  hervW: {
+    title: 'HERV-W — 胎盘合胞素：病毒基因的伟大「驯化」',
+    desc: 'HERV-W编码的合胞素（Syncytin）蛋白是胎盘形成的关键因子。它让胎儿的细胞可以与母体细胞融合，形成胎盘屏障。如果没有这个远古病毒的基因，哺乳动物的胎盘就无法正常发育——换句话说，我们之所以能以胎生方式出生，要部分感谢数百万年前感染我们祖先的逆转录病毒。这是一场演化史上最成功的「驯化」。'
+  },
+  hervK: {
+    title: 'HERV-K — 最近整合的人类内源性逆转录病毒',
+    desc: 'HERV-K是已知最「年轻」的人类内源性逆转录病毒家族，大约在20万年前才整合到人类基因组中——这意味着智人和尼安德特人都携带着它。某些HERV-K拷贝甚至保留了部分编码完整病毒蛋白的能力，在特定条件下（如癌症）会被重新激活。它是研究病毒-宿主共同演化的最佳模型。'
+  },
+  immune: {
+    title: '免疫调节ERV — 被征用的病毒防御系统',
+    desc: '许多ERV的LTR（长末端重复序列）作为基因调控元件，调控着人类免疫相关基因的表达。当病毒入侵时，这些来自远古病毒的序列会被激活，参与干扰素响应——曾经感染我们的敌人的DNA，如今站在了我们免疫防御的第一线。这是演化中「化敌为友」的最极致案例。'
+  },
+  cancer: {
+    title: '癌症相关的ERV激活 — 被唤醒的远古病毒',
+    desc: '在正常细胞中，ERV被表观遗传机制沉默。但在某些癌症中，这些古老的病毒序列会被异常激活，产生病毒蛋白，甚至形成病毒样颗粒。研究者正在探索利用ERV作为癌症免疫治疗的靶点——让免疫系统攻击表达ERV蛋白的癌细胞。远古病毒既是敌人，也可能成为我们对抗癌症的盟友。'
+  }
+};
 
-themes.forEach((theme) => {
-  const section = document.createElement('section');
-  section.className = `era-section ${theme.themeClass}`;
+function showVirusInfo(key) {
+  const data = virusInfos[key];
+  if (!data) return;
+  const panel = document.getElementById('virusInfoPanel');
+  document.getElementById('vipTitle').textContent = data.title;
+  document.getElementById('vipDesc').textContent = data.desc;
+  panel.classList.add('active');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
-  section.innerHTML = `
-    <div class="era-header">
-      <div class="era-marker" style="color:${theme.color}; background:${theme.color}15; border:2px solid ${theme.color}40;">
-        ${theme.icon}
-      </div>
-      <div>
-        <div class="era-label" style="color:${theme.color}">${theme.name}</div>
-        <div class="era-time">${theme.time}</div>
-      </div>
-    </div>
-    <p style="color:var(--text-dim); margin-bottom:1.5rem; padding-left:1rem; font-size:0.9rem; max-width:700px;">${theme.description}</p>
-    <div class="articles-grid" id="grid-${theme.id}"></div>
-  `;
+// ═══════════ BRAIN LAYER ACCORDION ═══════════
+function toggleBrainLayer(el) {
+  const wasActive = el.classList.contains('active');
+  // Close all
+  document.querySelectorAll('.brain-layer.active').forEach(l => l.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
 
-  timeline.appendChild(section);
-
-  // Populate articles
-  const grid = section.querySelector(`#grid-${theme.id}`);
-  theme.articleIndices.forEach((ai, cardIdx) => {
-    if (ai >= articlesData.length) return;
-    // Skip duplicates
-    if (usedArticles.has(ai)) return;
-    usedArticles.add(ai);
-
-    const art = articlesData[ai];
-    const card = document.createElement('div');
-    card.className = 'article-card';
-    card.setAttribute('data-article-index', ai);
-    card.onclick = () => openArticle(ai, theme);
-    card.innerHTML = `
-      <div class="card-index">▸ 基因位点 · ${theme.icon} ${theme.name}</div>
-      <h3>${art.title}</h3>
-      <p>${art.excerpt}</p>
-      <div class="card-meta">
-        <span>${art.course_name}</span>
-        <span>#${art.sort_order}</span>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-});
-
-// Add remaining unused articles as "游离基因片段"
-const remainingSection = document.createElement('section');
-remainingSection.className = 'era-section';
-remainingSection.innerHTML = `
-  <div class="era-header">
-    <div class="era-marker" style="color:#94a3b8; background:rgba(148,163,184,0.08); border:2px solid rgba(148,163,184,0.25);">
-      🧩
-    </div>
-    <div>
-      <div class="era-label" style="color:#94a3b8;">游离基因片段</div>
-      <div class="era-time">演化拼图的补充视角</div>
-    </div>
-  </div>
-  <p style="color:var(--text-dim); margin-bottom:1.5rem; padding-left:1rem; font-size:0.9rem; max-width:700px;">这些文章从技术、经济和社会的角度，补充了人类文明进程的拼图。它们不直接讲述基因故事，却是理解「人类为什么是现在这个样子」不可或缺的视角。</p>
-  <div class="articles-grid" id="grid-extra"></div>
-`;
-timeline.appendChild(remainingSection);
-
-const extraGrid = remainingSection.querySelector('#grid-extra');
-articlesData.forEach((art, i) => {
-  if (usedArticles.has(i)) return;
-  const card = document.createElement('div');
-  card.className = 'article-card';
-  card.style.setProperty('--card-accent', '#94a3b8');
-  card.style.setProperty('--card-glow', '0 0 30px rgba(148,163,184,0.1)');
-  card.onclick = () => openArticle(i, { name: '游离基因片段', icon: '🧩', color: '#94a3b8' });
-  card.innerHTML = `
-    <div class="card-index" style="color:#94a3b8;">▸ 游离片段</div>
-    <h3>${art.title}</h3>
-    <p>${art.excerpt}</p>
-    <div class="card-meta">
-      <span>${art.course_name}</span>
-      <span>#${art.sort_order}</span>
-    </div>
-  `;
-  extraGrid.appendChild(card);
-});
-
-// ═══════════════════════════════════════
-// MODAL
-// ═══════════════════════════════════════
-function openArticle(index, theme) {
-  const art = articlesData[index];
+// ═══════════ MODAL ═══════════
+function openArticle(idx) {
+  const art = articlesData[idx];
+  if (!art) return;
   document.getElementById('modalTitle').textContent = art.title;
-  document.getElementById('modalCourse').innerHTML = `
-    <span style="color:${theme.color}">${theme.icon} ${theme.name}</span> · ${art.course_name} · 排序#${art.sort_order}
-  `;
-  document.getElementById('modalBody').innerHTML = `
-    <p style="margin-bottom:1rem; padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid ${theme.color};">
-      ${art.excerpt}
-    </p>
-    <p style="color:var(--text-dim); font-size:0.85rem; margin-top:1rem;">
-      📡 这篇文章收录于「${theme.name}」演化节点，探索塑造人类基因与文明的关键机制。
-    </p>
-  `;
+  document.getElementById('modalMeta').innerHTML = `${art.course} · 排序#${art.sort}`;
+  document.getElementById('modalExcerpt').textContent = art.excerpt;
+  document.getElementById('modalLabel').textContent = `📡 这篇文章是「演化史书」的第 ${idx + 1} 个章节片段，共收录32篇文章，覆盖8大演化主题。`;
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -726,28 +1484,20 @@ function closeModal() {
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
 });
 
-// ═══════════════════════════════════════
-// INTERSECTION OBSERVER — Fade in sections
-// ═══════════════════════════════════════
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
+// ═══════════ MIGRATION ROUTE HOVER ═══════════
+document.querySelectorAll('.migration-route').forEach(route => {
+  route.addEventListener('mouseenter', function() {
+    const info = document.getElementById('routeInfoPanel');
+    // Simple default info; could be customized per route
+    info.classList.add('active');
   });
-}, { threshold: 0.08 });
-
-document.querySelectorAll('.era-section, .dna-fact').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(30px)';
-  el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-  observer.observe(el);
+  route.addEventListener('mouseleave', function() {
+    document.getElementById('routeInfoPanel').classList.remove('active');
+  });
 });
 </script>
 </body>
