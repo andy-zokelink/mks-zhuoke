@@ -1316,3 +1316,501 @@ body {
   <p style="margin-top:4px;">科学不是一堆结论，而是一套方法论武器。当你掌握了它，你就不再需要「相信」科学。</p>
   <p style="margin-top:12px;"><a href="index.html">← 返回科技分光镜首页</a></p>
 </footer>
+
+<script>
+/* ============================================================
+   HERO CANVAS — 紫罗兰神经网络粒子动画
+   ============================================================ */
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [], links = [];
+  const PC = 80, MAX_DIST = 120;
+
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < PC; i++) {
+      particles.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.55,
+        vy: (Math.random() - 0.5) * 0.55,
+        r: Math.random() * 1.8 + 0.5,
+        hue: Math.random() > 0.7 ? 275 : (Math.random() > 0.5 ? 300 : 42),
+        alpha: Math.random() * 0.5 + 0.2
+      });
+    }
+  }
+  initParticles();
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    links = [];
+
+    for (let p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 55%, 65%, ${p.alpha})`;
+      ctx.fill();
+
+      for (let q of particles) {
+        if (p === q) continue;
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX_DIST) links.push({ p, q, dist });
+      }
+    }
+
+    for (let l of links) {
+      const alpha = (1 - l.dist / MAX_DIST) * 0.18;
+      ctx.beginPath();
+      ctx.moveTo(l.p.x, l.p.y);
+      ctx.lineTo(l.q.x, l.q.y);
+      ctx.strokeStyle = `rgba(160,140,210,${alpha})`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ============================================================
+   COGNITIVE MAZE — 分支路径，选错后展示谬误原理并重选
+   ============================================================ */
+const mazeSteps = [
+  {
+    icon: '🔍', stepLabel: '第一关 · 本能反应',
+    question: '你读到一篇报道：「喝红酒的人心脏病发病率更低」',
+    context: '这篇报道来自一家葡萄酒行业协会的官网。他们已经连续5年资助这项研究了。你的第一反应是——',
+    choices: [
+      { text: '既然有研究支持，红酒对心脏肯定有好处', correct: false,
+        lesson: '<span class="fb-lesson">❌ 确认偏误 (Confirmation Bias)</span>你因为"希望红酒有益健康"而选择相信这个结论。但行业协会资助的研究存在明确的利益冲突——研究设计、数据解读都可能偏向资助方。<br><br><strong style="color:var(--gold)">真实案例：</strong>制糖业在1960年代资助哈佛研究者，将心脏病的罪魁祸首从糖转移到脂肪——这个叙事影响了全球营养政策50年。<br><br>记住：<strong>看谁出钱做的研究</strong>，这是评估证据的第一步。' },
+      { text: '看看这个研究的原始论文再说——是什么类型的研究？', correct: true,
+        lesson: '<span class="fb-lesson">✅ 正确！</span>在采纳任何科学结论之前，先追溯原始研究。关键问题：是RCT吗？样本量多大？谁是资助方？有没有其他独立研究复现了这个结果？<strong>不读原始论文，不妄下结论。</strong>' }
+    ]
+  },
+  {
+    icon: '⚖️', stepLabel: '第二关 · 因果判断',
+    question: '你找到了原始论文——这只是一项观察性队列研究，没有随机分组',
+    context: '研究追踪了12,000人、14年的饮酒习惯和健康状况。喝红酒的人群收入更高、运动更多、吸烟更少。研究标题却写成了"红酒降低心脏病风险"。你判断——',
+    choices: [
+      { text: '相关不等于因果！这是"健康用户偏误"——喝红酒的人本来就活得更健康', correct: true,
+        lesson: '<span class="fb-lesson">✅ 一针见血！</span>这就是典型的<strong>因果倒置</strong>。队列研究可以建立相关性假说，但永远不能单独证明因果关系。<br><br>要确认因果，必须做RCT——你能随机分配一群人每天喝红酒、另一群人喝葡萄汁，追踪20年吗？实际上，2014年的孟德尔随机化研究（利用基因变异模拟随机分组）发现：<strong>任何剂量的酒精都增加心血管疾病风险</strong>。' },
+      { text: '样本量这么大（n=12,000），观察时间这么久（14年），结论应该可信', correct: false,
+        lesson: '<span class="fb-lesson">❌ 样本量大 ≠ 没有混杂偏误</span>"健康用户偏误"(Healthy User Bias)是流行病学中最著名的陷阱之一。<br><br><strong style="color:var(--gold)">关键数据：</strong>大量研究发现，适度饮酒者的健康状况好于完全不饮酒者——但这很可能是因为很多"不饮酒者"是因病戒酒的前酗酒者（"病退者偏误"）。一项2016年的研究将前酗酒者从对照组移除后，"适度饮酒有益"的神话<strong>彻底消失</strong>。' }
+    ]
+  },
+  {
+    icon: '🎲', stepLabel: '第三关 · 统计学陷阱',
+    question: '你继续深入调查，发现同一组研究者还测试了20种食物和心脏病的关系',
+    context: '他们只报告了"红酒显著降低风险"这一项阳性发现。另外19种食物的结果呢？论文里没有提及。这是——',
+    choices: [
+      { text: '正常的科研实践——只报告有意义的发现，节省篇幅', correct: false,
+        lesson: '<span class="fb-lesson">❌ 大错特错！</span>这正是<strong>p值操纵</strong>的核心手段——多重比较问题(Multiple Comparisons)。<br><br>如果你测试20种食物，即使没有一种真正有效，也平均会有1种因随机波动表现出"统计显著"（p&lt;0.05 = 每20次出现1次假阳性）。<strong>只挑显著的结果报告，就是把噪声当作信号</strong>。<br><br><strong style="color:var(--gold)">记住：</strong>如果一项研究测试了多个假设但只报告了显著的，那么那些"显著"几乎肯定不显著——除非他们做了多重比较校正（如Bonferroni校正）。' },
+      { text: '这是选择性报告！多重比较不做校正，统计学意义大打折扣', correct: true,
+        lesson: '<span class="fb-lesson">✅ 完全正确！</span>这就是<strong>"数据疏浚"(Data Dredging)</strong>——在海量分析中寻找任何看起来"显著"的结果，然后假装这是你一开始就想检验的假说。<br><br>真正的科学应该：<strong>①预先注册分析方案 ②明确主要结局指标 ③对多重比较做校正</strong>。如果没做这些，p值基本上就是一张废纸。' }
+    ]
+  },
+  {
+    icon: '🏆', stepLabel: '最终关 · 综合判断',
+    question: '综合所有信息，你对"红酒有益心脏"这个结论的判断是——',
+    context: '你已经知道：①这是行业协会资助的观察性研究 ②存在健康用户偏误和因果倒置 ③可能存在多重比较和选择性报告 ④没有独立RCT证实 ⑤酒精本身是I类致癌物。',
+    choices: [
+      { text: '这个结论不可靠——目前的证据强度不足以支持"红酒有益健康"的说法', correct: true,
+        lesson: '<span class="fb-lesson">🎉 你出师了！</span>你成功运用了多层科学思维工具：<br>• 利益冲突识别 ✓<br>• 研究类型评估 ✓<br>• 混杂偏误分析 ✓<br>• 统计方法审查 ✓<br>• 独立复现需求 ✓<br><br>这就是你的<strong style="color:var(--gold)">认知武器</strong>。下次看到任何"研究表明……"，你都可以用这套方法论拆解它。' },
+      { text: '虽然有各种方法论问题，但"适度饮酒"的文化传统延续千年，总有道理', correct: false,
+        lesson: '<span class="fb-lesson">❌ 诉诸传统谬误 (Appeal to Tradition)</span>一个做法存在了很久，不等于它是对的。<br><br>人类也放了上千年的血来治病，用过砒霜当补药。传统不是证据。当传统和科学证据冲突时——<strong>科学不保证正确，但科学是唯一能够自我纠错的知识体系</strong>。<br><br><strong style="color:var(--gold)">回到武器库：</strong>问自己要证据，而不是要传统。如果千年传统真的有效，应该能找到RCT或孟德尔随机化的高质量证据——但你没有找到，这就说明了问题。' }
+    ]
+  }
+];
+
+let mazeStep = 0;
+let mazeErrors = 0;
+let mazeDots = [];
+
+function initMaze() {
+  mazeStep = 0;
+  mazeErrors = 0;
+  mazeDots = new Array(mazeSteps.length).fill('pending');
+  renderMazeStep();
+}
+
+function renderMazeStep() {
+  const step = mazeSteps[mazeStep];
+  const container = document.getElementById('mazeContainer');
+  const isLast = mazeStep === mazeSteps.length - 1;
+
+  let html = '<div class="maze-header">';
+  html += `<div class="maze-icon">${step.icon}</div>`;
+  html += `<div class="maze-step-label">${step.stepLabel}</div>`;
+  html += '</div>';
+  html += `<div class="maze-question">${step.question}</div>`;
+  html += `<div class="maze-context">${step.context}</div>`;
+  html += '<div class="maze-choices" id="mazeChoices">';
+  step.choices.forEach((c, i) => {
+    html += `<button class="maze-choice" data-idx="${i}">${c.text}</button>`;
+  });
+  html += '</div>';
+  html += '<div class="maze-feedback" id="mazeFeedback"></div>';
+  html += '<button class="maze-cta" id="mazeCTA"></button>';
+  html += '<div class="maze-progress" id="mazeProgress">';
+  mazeDots.forEach((status, i) => {
+    let cls = 'maze-dot';
+    if (i === mazeStep && status === 'pending') cls += ' current';
+    else if (status === 'correct') cls += ' done';
+    else if (status === 'wrong') cls += ' failed';
+    html += `<div class="${cls}"></div>`;
+  });
+  html += '</div>';
+
+  container.innerHTML = html;
+
+  // Bind choice clicks
+  document.querySelectorAll('.maze-choice').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const idx = parseInt(this.dataset.idx);
+      makeMazeChoice(idx);
+    });
+  });
+}
+
+function makeMazeChoice(idx) {
+  const step = mazeSteps[mazeStep];
+  const choice = step.choices[idx];
+  const fb = document.getElementById('mazeFeedback');
+  const cta = document.getElementById('mazeCTA');
+  const choices = document.querySelectorAll('.maze-choice');
+
+  // Disable all choices
+  choices.forEach(c => c.style.pointerEvents = 'none');
+
+  if (choice.correct) {
+    // Correct
+    choices[idx].classList.add('correct-flash');
+    mazeDots[mazeStep] = 'correct';
+    fb.className = 'maze-feedback correct show';
+    fb.innerHTML = choice.lesson;
+
+    if (mazeStep < mazeSteps.length - 1) {
+      cta.className = 'maze-cta show';
+      cta.textContent = '→ 进入下一关';
+      cta.onclick = () => {
+        mazeStep++;
+        renderMazeStep();
+      };
+    } else {
+      // Victory
+      showMazeVictory();
+    }
+  } else {
+    // Wrong
+    choices[idx].classList.add('wrong-flash');
+    mazeErrors++;
+    fb.className = 'maze-feedback wrong show';
+    fb.innerHTML = choice.lesson;
+
+    cta.className = 'maze-cta show';
+    cta.textContent = '🔄 重新选择';
+    cta.onclick = () => {
+      renderMazeStep();
+    };
+  }
+
+  // Update progress dots
+  renderProgressDots();
+}
+
+function renderProgressDots() {
+  const dots = document.querySelectorAll('.maze-dot');
+  dots.forEach((dot, i) => {
+    dot.className = 'maze-dot';
+    if (i === mazeStep && mazeDots[i] === 'pending') dot.className += ' current';
+    else if (mazeDots[i] === 'correct') dot.className += ' done';
+    else if (mazeDots[i] === 'wrong') dot.className += ' failed';
+  });
+}
+
+function showMazeVictory() {
+  const container = document.getElementById('mazeContainer');
+  container.innerHTML = `
+    <div class="maze-victory">
+      <div class="mv-icon">🏆</div>
+      <div class="mv-title">恭喜！你走出了认知谬误迷宫</div>
+      <div class="mv-summary">
+        你成功识别了<strong style="color:var(--teal)">确认偏误 → 因果倒置 → p值操纵 → 诉诸传统</strong>四个关键认知陷阱。
+        你犯了 <strong style="color:var(--red)">${mazeErrors}</strong> 次错误——每一次错误都让你更了解自己的认知弱点。
+        <br><br>下次看到"研究表明……"的新闻时，你不再是一个被动的信息接收者——<strong style="color:var(--gold)">你是一个拿着认知武器的科学消费者。</strong>
+      </div>
+      <button class="maze-cta show" onclick="initMaze()" style="margin:0 auto;">🔄 重新走一遍迷宫</button>
+    </div>
+  `;
+}
+
+// Initialize maze on load
+initMaze();
+
+/* ============================================================
+   PEER REVIEW SIMULATOR — 标记论文缺陷，获得审稿评分
+   ============================================================ */
+const REAL_FLAGS = ['sample', 'blind', 'multiple', 'selective', 'conflict', 'itt'];
+const FAKE_FLAGS = ['fake1', 'fake2'];
+let flagged = new Set();
+
+function toggleFlag(btn) {
+  const flag = btn.dataset.flag;
+  if (flagged.has(flag)) {
+    flagged.delete(flag);
+    btn.classList.remove('flagged');
+  } else {
+    flagged.add(flag);
+    btn.classList.add('flagged');
+  }
+  checkReview();
+}
+
+function checkReview() {
+  const resultDiv = document.getElementById('reviewResult');
+  const scoreEl = document.getElementById('rrScore');
+  const gradeEl = document.getElementById('rrGrade');
+  const detailEl = document.getElementById('rrDetail');
+
+  if (flagged.size === 0) {
+    resultDiv.classList.remove('show');
+    return;
+  }
+
+  resultDiv.classList.add('show');
+
+  let found = 0, missed = 0, falsePositives = 0;
+  const foundList = [], missedList = [], fpList = [];
+
+  REAL_FLAGS.forEach(f => {
+    if (flagged.has(f)) { found++; foundList.push(getFlagName(f)); }
+    else { missed++; missedList.push(getFlagName(f)); }
+  });
+  FAKE_FLAGS.forEach(f => {
+    if (flagged.has(f)) { falsePositives++; fpList.push(getFlagName(f)); }
+  });
+
+  const score = Math.max(0, found - falsePositives);
+  let grade, color;
+  if (found >= 5 && falsePositives === 0) { grade = '🏅 优秀审稿人'; color = 'var(--gold-bright)'; }
+  else if (found >= 3 && falsePositives <= 1) { grade = '✅ 合格审稿人'; color = 'var(--teal)'; }
+  else { grade = '⚠️ 需要更多训练'; color = 'var(--amber)'; }
+
+  scoreEl.textContent = `发现 ${found}/6 个真实缺陷`;
+  scoreEl.style.color = color;
+  gradeEl.textContent = grade;
+  gradeEl.style.color = color;
+
+  let html = '';
+  if (foundList.length) html += `<span class="found">✅ 正确识别 (${found})：</span>${foundList.join('、')}<br>`;
+  if (missedList.length) html += `<span class="missed">❌ 遗漏 (${missed})：</span>${missedList.join('、')}<br>`;
+  if (fpList.length) html += `<span style="color:var(--amber)">⚠️ 误报 (${falsePositives})：</span>${fpList.join('、')}——这些不是方法论缺陷<br>`;
+
+  if (found >= 5 && falsePositives === 0) {
+    html += '<br><span class="found">🎉 完美！你发现了论文中的所有方法论缺陷。这篇论文应该被拒稿。</span>';
+  } else if (missed > 0) {
+    html += '<br><span class="missed">回顾你遗漏的缺陷——这些都是真实影响研究有效性的问题。</span>';
+  }
+
+  detailEl.innerHTML = html;
+}
+
+function resetReview() {
+  flagged.clear();
+  document.querySelectorAll('.review-flag').forEach(b => b.classList.remove('flagged'));
+  document.getElementById('reviewResult').classList.remove('show');
+}
+
+function getFlagName(f) {
+  const map = {
+    sample: '样本量过小',
+    blind: '未使用盲法',
+    multiple: '多重比较未校正',
+    selective: '选择性报告',
+    conflict: '未声明利益冲突',
+    itt: '退出者未纳入分析',
+    fake1: '统计软件版本',
+    fake2: '参考文献格式'
+  };
+  return map[f] || f;
+}
+
+/* ============================================================
+   FIRST PRINCIPLES DECONSTRUCTOR — 逐层拆解到物理定律
+   ============================================================ */
+const FP_DATA = {
+  phone: {
+    name: '智能手机',
+    layers: [
+      { name: '整机', brief: 'iPhone / Android 设备', detail: '一台现代智能手机包含约<strong>2000+个独立零部件</strong>，整合了计算、通信、传感、显示、能源五大系统。屏幕、电池、主板、摄像头模组、外壳——每一个子系统都可以独立拆解。' },
+      { name: '核心组件', brief: 'SoC芯片、电池、屏幕、天线', detail: '<strong>SoC (片上系统)：</strong>集成CPU/GPU/神经引擎/ISP/5G基带，晶体管数量超过<strong>150亿个</strong>。<br><strong>锂电池：</strong>锂离子在正负极之间往复运动储存/释放能量。<br><strong>OLED屏幕：</strong>有机发光二极管，每个像素独立发光。' },
+      { name: '材料', brief: '硅、锂、稀土、玻璃、铝', detail: '<strong>芯片基底：</strong>高纯度单晶硅（99.9999999%，即"9个9"）。<br><strong>电池正极：</strong>钴酸锂/磷酸铁锂。<br><strong>屏幕：</strong>铟锡氧化物(ITO)透明导电膜 + 有机发光材料。<br><strong>振动马达：</strong>钕铁硼永磁体（稀土）。' },
+      { name: '原子/分子', brief: 'Si, LiCoO₂, Al₂O₃, SiO₂', detail: '<strong>硅原子 (Si)：</strong>原子序数14，半导体性质源于其4个价电子形成共价键。掺杂磷(5价)或硼(3价)可改变其导电性。<br><strong>锂 (Li)：</strong>最轻的金属，原子序数3，电化学电位极低（-3.04V），是电池的理想材料。' },
+      { name: '物理定律', brief: '量子力学、电磁学、热力学', detail: '<strong>晶体管工作原理：</strong>量子隧穿效应 → 场效应 → 半导体能带理论（量子力学）。<br><strong>无线通信：</strong>麦克斯韦方程组 → 电磁波传播。<br><strong>电池：</strong>电化学电势 + 热力学第二定律（熵增限制能量转换效率）。<br><strong>触摸屏：</strong>电容变化 → 库仑定律。<br><strong>散热：</strong>热传导方程 + 黑体辐射。' }
+    ]
+  },
+  coffee: {
+    name: '一杯咖啡',
+    layers: [
+      { name: '成品', brief: '一杯热美式/拿铁', detail: '这杯咖啡是<strong>2000+种化合物</strong>的复杂溶液——远超过葡萄酒的复杂度。烘焙过程触发了梅纳反应、焦糖化反应和斯特雷克降解，产生了今天咖啡风味的绝大部分分子。' },
+      { name: '原料与加工', brief: '咖啡豆、水、热、压力', detail: '<strong>生豆：</strong>咖啡樱桃的种子，含绿原酸、葫芦巴碱、咖啡因。<br><strong>烘焙：</strong>160-220°C加热引发数百种化学反应，生成吡嗪类（坚果香）、呋喃类（焦糖香）、硫化物（烘烤香）。<br><strong>萃取：</strong>热水/高压通过咖啡粉床，溶解可溶性化合物。' },
+      { name: '关键分子', brief: '咖啡因、绿原酸、葫芦巴碱', detail: '<strong>咖啡因 (C₈H₁₀N₄O₂)：</strong>甲基黄嘌呤类生物碱，腺苷受体拮抗剂——它阻断"疲劳信号"但并非真正提供能量。<br><strong>绿原酸：</strong>多酚类抗氧化物，在烘焙中分解产生奎宁酸和咖啡酸。<br><strong>葫芦巴碱：</strong>在烘焙中分解产生烟酸（维生素B3）。' },
+      { name: '化学键与反应', brief: '梅纳反应、共价键断裂', detail: '<strong>梅纳反应：</strong>还原糖 + 氨基酸 → 加热 → 类黑精 + 数百种香气分子。这是咖啡风味的核心来源，温度每升高10°C，反应速率翻倍。<br><strong>萃取动力学：</strong>分子从固体（咖啡粉）扩散到液体（水）中——遵循菲克扩散定律。' },
+      { name: '物理定律', brief: '热力学、扩散定律、流体力学', detail: '<strong>热传导：</strong>傅里叶定律——热量从烘焙机传递到豆子内部。<br><strong>扩散：</strong>菲克定律——咖啡化合物从高浓度（粉）向低浓度（水）迁移。<br><strong>流体力学：</strong>意式浓缩中，9个大气压推动水通过粉饼——达西定律描述多孔介质中的流动。<br><strong>热力学：</strong>美拉德反应是放热的；焦糖化是吸热的——两个反应在不同温度窗口竞争。' }
+    ]
+  },
+  car: {
+    name: '电动汽车',
+    layers: [
+      { name: '整车', brief: 'Tesla / 电动整车', detail: '一辆现代电动汽车由<strong>约25,000个零部件</strong>组成。与传统汽车最大的区别：动力系统从内燃机（约2000个运动零件）变成了电机+电池（约20个运动零件）。复杂度从机械领域转移到了电子和软件领域。' },
+      { name: '核心系统', brief: '电池包、电机、电控、车架', detail: '<strong>电池包：</strong>7000+颗18650/21700/4680锂电池，串联升压、并联扩容。<br><strong>永磁同步电机：</strong>定子绕组通电产生旋转磁场 → 转子上的永磁体跟随旋转。<br><strong>逆变器：</strong>将电池的直流电转换为电机需要的三相交流电——核心器件是IGBT/SiC MOSFET功率半导体。' },
+      { name: '关键材料', brief: '锂、钴、镍、钕、碳化硅', detail: '<strong>正极材料：</strong>NCM(镍钴锰)/LFP(磷酸铁锂)——决定电池的能量密度和安全性。<br><strong>负极：</strong>石墨（层状结构可嵌入锂离子）。<br><strong>永磁体：</strong>钕铁硼(NdFeB)——已知最强的永磁材料，含稀土元素钕和镝。<br><strong>SiC功率芯片：</strong>碳化硅的禁带宽度是硅的3倍，在高压高温下效率远超硅。' },
+      { name: '电化学与磁学', brief: '锂离子嵌入、电磁感应', detail: '<strong>锂电池原理：</strong>充电时Li⁺从正极脱嵌→穿过电解液→嵌入石墨负极层间。放电时反向。这不是化学键的断裂/生成（不同于普通电池），而是<strong>拓扑化学反应</strong>——锂离子在晶格间隙中进出，不破坏主体结构。<br><strong>电机原理：</strong>法拉第电磁感应——导体在磁场中运动产生电动势；反过来，通电导体在磁场中受到洛伦兹力。' },
+      { name: '物理定律', brief: '电磁学、量子力学、热力学', detail: '<strong>法拉第定律：</strong>变化的磁场产生电场（电机/发电机的基础）。<br><strong>洛伦兹力：</strong>F=qv×B——带电粒子在磁场中的受力（电机扭矩的来源）。<br><strong>量子力学：</strong>锂原子的电子排布 1s²2s¹ → 最外层单个电子极易失去（Li→Li⁺+e⁻），这就是锂的高电化学活性。<br><strong>热力学：</strong>电池充放电是吉布斯自由能变化 ΔG=-nFE，能量转换效率受卡诺极限限制（但锂电池不涉及热循环，效率可超90%）。<br><strong>能带理论：</strong>SiC的宽禁带(3.3eV vs 硅的1.1eV)使其在高温(>200°C)下仍保持半导体特性。' }
+    ]
+  },
+  led: {
+    name: 'LED灯泡',
+    layers: [
+      { name: '整灯', brief: '一个10W的家用LED灯泡', detail: '外表看起来像传统灯泡，但内部是<strong>完全不同的物理原理</strong>在工作。它没有灯丝会烧断，发光效率是白炽灯的<strong>5-8倍</strong>，理论寿命可达50,000小时。' },
+      { name: '核心组件', brief: 'LED芯片、荧光粉、驱动电路、散热体', detail: '<strong>LED芯片：</strong>氮化镓(GaN)半导体PN结，通电后电子与空穴复合释放光子。<br><strong>荧光粉：</strong>钇铝石榴石(YAG:Ce³⁺)，被蓝光激发后发出黄光——黄光+剩余蓝光=白光。<br><strong>驱动电路：</strong>将220V交流电转换为LED需要的低压直流恒流。<br><strong>散热片：</strong>铝合金鳍片——LED虽然比白炽灯冷，但芯片自身仍产生废热需要散出。' },
+      { name: '关键材料', brief: 'GaN、YAG:Ce、蓝宝石衬底', detail: '<strong>氮化镓(GaN)：</strong>III-V族直接带隙半导体，禁带宽度3.4eV，发蓝光（波长~450nm）。发明者赤崎勇、天野浩、中村修二获2014年诺贝尔物理学奖。<br><strong>YAG:Ce³⁺荧光粉：</strong>钇铝石榴石晶体中掺入铈离子(Ce³⁺)作为发光中心——蓝光光子被Ce³⁺吸收后，以更长的波长（黄光）重新发射。' },
+      { name: '量子物理', brief: '电子-空穴复合、光子发射', detail: '<strong>发光原理：</strong>在PN结的耗尽区，注入的电子从导带落到价带与空穴复合，释放的能量以光子形式发射。光子能量E=hv≈禁带宽度——所以GaN(3.4eV)发射蓝光，GaAs(1.4eV)发射红外。<br><strong>斯托克斯位移：</strong>荧光粉吸收高能蓝光(450nm)→发射低能黄光(550-600nm)，能量差以热的形式损失。这就是LED产热的原因之一。' },
+      { name: '物理定律', brief: '量子电动力学、固体物理、热力学', detail: '<strong>量子力学（核心）：</strong>能带理论 → 直接带隙 vs 间接带隙（GaN是直接带隙→发光效率远高于硅的间接带隙）。<br><strong>泡利不相容原理：</strong>电子分居不同能级，导带和价带之间有禁带——这是半导体存在的根本原因。<br><strong>量子效率：</strong>并非每个注入电子都产生光子——缺陷（位错、杂质）充当非辐射复合中心，将能量以热的形式浪费。<br><strong>热力学：</strong>LED效率极限 ~ 取决于荧光粉的斯托克斯损失 + 非辐射复合 + 光提取效率。目前最先进的LED整体效率约40-50%。' }
+    ]
+  }
+};
+
+function selectFPObject(obj, btn) {
+  document.querySelectorAll('.fp-object-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFPLayers(obj);
+}
+
+function renderFPLayers(obj) {
+  const data = FP_DATA[obj];
+  const container = document.getElementById('fpLayers');
+  let html = '';
+  data.layers.forEach((layer, i) => {
+    html += `
+      <div class="fp-layer" data-idx="${i}" onclick="toggleFPLayer(this, ${i}, '${obj}')">
+        <div class="fp-num">${i+1}</div>
+        <div class="fp-level-name">${layer.name}</div>
+        <div class="fp-level-brief">${layer.brief}</div>
+        <div class="fp-expand-icon">▾</div>
+      </div>
+      <div class="fp-detail" id="fpDetail-${i}">${layer.detail}</div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function toggleFPLayer(el, idx, obj) {
+  const detail = document.getElementById('fpDetail-' + idx);
+  if (detail.classList.contains('show')) {
+    detail.classList.remove('show');
+    el.classList.remove('expanded');
+  } else {
+    detail.classList.add('show');
+    el.classList.add('expanded');
+  }
+}
+
+// Init first principles with default object
+renderFPLayers('phone');
+
+/* ============================================================
+   ARTICLE DATA & RENDERING
+   ============================================================ */
+const ARTICLES = [
+  { num: '001', title: '5G：真正要走的路还很长', summary: '5G的带宽上限由光纤和数据中心决定；毫米波覆盖需要5倍基站；应用场景仍有限。', cluster: 'norms' },
+  { num: '018', title: '核能4：核电站是怎么建设的？', summary: '从选址到并网，核电站的建设流程与技术挑战。', cluster: 'method' },
+  { num: '023', title: '为什么诺贝尔奖得主还要论文造假？(上)', summary: '学术激励机制的扭曲：发表数量>质量，突破性发现>扎实复现。', cluster: 'norms' },
+  { num: '024', title: '为什么诺贝尔奖得主还要论文造假？(中)', summary: '科学界的"赢家通吃"效应——顶级期刊的版面稀缺性催生了造假动机。', cluster: 'norms' },
+  { num: '026', title: '问答：哪些书能帮我们真正学好数学？', summary: '数学思维的培养路径：证明、抽象、建模。', cluster: 'method' },
+  { num: '053', title: '科技创新从何而来，又为何消失(上)', summary: '创新需要制度、资金、自由探索的文化——三缺一不可。', cluster: 'method' },
+  { num: '062', title: '问答：新冠病毒突变，传播力增强70%？', summary: '如何评估"传播力增强70%"这个数字的可靠性——样本、模型、置信区间。', cluster: 'cognition' },
+  { num: '097', title: '反馈：建立负反馈，警惕正反馈', summary: '为什么负反馈系统稳定、正反馈系统失控——从生理学到社会机制。', cluster: 'cognition' },
+  { num: '110', title: '科学思维：破除迷信与科学荐书问答', summary: '科学思维不是知识，是一套可训练的方法论。', cluster: 'cognition' },
+  { num: '206', title: '如何对抗算法？', summary: '面对推荐算法的认知操纵，普通人能做的几件事。', cluster: 'cognition' },
+  { num: '264', title: '共识：关于咖啡的好与坏', summary: '咖啡的健康效应——从队列研究、孟德尔随机化到RCT的证据全景。', cluster: 'method' },
+  { num: '271', title: '时间晶体：热力学第二定律被挑战了？', summary: '时间晶体的发现——在时间维度上周期性重复的量子系统。', cluster: 'method' },
+  { num: '276', title: '气候变化：IPCC第六次报告', summary: '科学共识的形成机制——IPCC如何整合数千篇论文的结论。', cluster: 'method' },
+  { num: '278', title: '精神控制：到底是怎么实现的？', summary: '从脑机接口到经颅磁刺激——"精神控制"的科学事实与科幻想象。', cluster: 'method' },
+  { num: '295', title: '学术秩序：偷论文也能算偷吗？', summary: '学术抄袭的边界模糊地带——剽窃、重复发表、自我抄袭。', cluster: 'norms' },
+  { num: '301', title: '脑机接口4：算法与算力的较量', summary: '脑机接口的核心瓶颈不在电极，而在解码算法的效率。', cluster: 'method' }
+];
+
+function renderArticles() {
+  const clusters = {
+    norms: document.getElementById('cluster-norms'),
+    cognition: document.getElementById('cluster-cognition'),
+    method: document.getElementById('cluster-method')
+  };
+
+  const clusterGroups = { norms: [], cognition: [], method: [] };
+  ARTICLES.forEach(a => {
+    if (clusterGroups[a.cluster]) clusterGroups[a.cluster].push(a);
+  });
+
+  for (const [key, el] of Object.entries(clusters)) {
+    if (!el) continue;
+    const articles = clusterGroups[key];
+    el.innerHTML = articles.map(a => `
+      <div class="article-card">
+        <div class="ac-num">No. ${a.num}</div>
+        <h4>${a.title}</h4>
+        <div class="ac-snippet">${a.summary}</div>
+      </div>
+    `).join('');
+  }
+}
+
+renderArticles();
+
+/* ============================================================
+   INTERSECTION OBSERVER — scroll reveal
+   ============================================================ */
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+/* ============================================================
+   SMOOTH SCROLL for nav links
+   ============================================================ */
+document.querySelectorAll('.nav-sections a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
