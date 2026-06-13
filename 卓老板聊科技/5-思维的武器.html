@@ -2,3377 +2,565 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧠 思维的武器 · 卓老板聊科技 MKS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>思维的武器 — 卓老板聊科技 MKS</title>
 <style>
-/* ============================================================
-   卓老板聊科技 · 专题 5：思维的武器
-   设计理念：科学客厅的书房写字桌——台灯下的逻辑推演
-   ============================================================ */
-:root {
-  --bg: #1a1612;
-  --bg-card: #241e18;
-  --bg-card-hover: #2c251e;
-  --text: #d4cfc4;
-  --text-bright: #f0e8d8;
-  --text-dim: #8a8278;
-  --border: #2e2822;
-  --border-light: #3e3830;
-  --accent: #8b6db0;
-  --accent-light: #b095d0;
-  --accent-glow: rgba(139,109,176,0.25);
-  --amber: #d4a040;
-  --amber-light: #f0d878;
-  --amber-glow: rgba(212,160,64,0.2);
-  --radius: 10px;
-  --radius-lg: 16px;
-  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
-  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.8;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  padding-bottom: 80px;
-}
-
-/* ===== Room ambient light ===== */
-.room-glow {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 50% 40% at 50% 20%, rgba(139,109,176,0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 50% at 15% 60%, var(--amber-glow) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 50% at 85% 40%, rgba(180,160,120,0.03) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 30% at 50% 90%, rgba(200,160,80,0.04) 0%, transparent 50%);
-}
-
-/* ===== Dust motes in lamplight ===== */
-.dust-motes {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.mote {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--amber-light);
-  animation: mote-drift linear infinite;
-  opacity: 0;
-}
-@keyframes mote-drift {
-  0%   { transform: translateY(0) translateX(0); opacity: 0; }
-  5%   { opacity: 0.6; }
-  40%  { opacity: 0.3; }
-  90%  { opacity: 0.05; }
-  100% { transform: translateY(-100vh) translateX(var(--mx)); opacity: 0; }
-}
-.m1 { left: 5%;  bottom: -5px; width: 2px; height: 2px; --mx: 40px; animation-duration: 14s; animation-delay: 0s; }
-.m2 { left: 15%; bottom: -5px; width: 1px; height: 1px; --mx: -25px; animation-duration: 12s; animation-delay: 2s; }
-.m3 { left: 25%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 55px; animation-duration: 16s; animation-delay: 1s; }
-.m4 { left: 35%; bottom: -5px; width: 2px; height: 2px; --mx: -35px; animation-duration: 13s; animation-delay: 3s; }
-.m5 { left: 45%; bottom: -5px; width: 1px; height: 1px; --mx: 45px; animation-duration: 15s; animation-delay: 0.5s; }
-.m6 { left: 55%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: -45px; animation-duration: 11s; animation-delay: 2.5s; }
-.m7 { left: 65%; bottom: -5px; width: 2px; height: 2px; --mx: 30px; animation-duration: 14.5s; animation-delay: 1.5s; }
-.m8 { left: 75%; bottom: -5px; width: 1px; height: 1px; --mx: -20px; animation-duration: 12.5s; animation-delay: 3.5s; }
-.m9 { left: 85%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 50px; animation-duration: 15.5s; animation-delay: 0.8s; }
-.m10 { left: 92%; bottom: -5px; width: 2px; height: 2px; --mx: -30px; animation-duration: 13.5s; animation-delay: 4s; }
-
-/* ===== Top Navigation Bar ===== */
-.nav-bar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(26,22,18,0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
-}
-.nav-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.nav-home {
-  color: var(--amber);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  transition: color var(--ease);
-  white-space: nowrap;
-}
-.nav-home:hover { color: var(--amber-light); }
-.nav-sep { color: var(--text-dim); font-size: 0.85rem; }
-.nav-title {
-  color: var(--text-bright);
-  font-size: 0.95rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.nav-count {
-  color: var(--text-dim);
-  font-size: 0.78rem;
-  background: rgba(255,255,255,0.04);
-  padding: 3px 10px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-}
-
-/* Topic quick-nav */
-.topic-quick-nav {
-  margin-left: auto;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.topic-quick-nav a {
-  color: var(--text-dim);
-  text-decoration: none;
-  font-size: 0.72rem;
-  padding: 3px 8px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  transition: all var(--ease);
-  white-space: nowrap;
-}
-.topic-quick-nav a:hover {
-  color: var(--text-bright);
-  border-color: var(--border-light);
-  background: rgba(255,255,255,0.03);
-}
-.topic-quick-nav a.active {
-  color: var(--accent-light);
-  border-color: rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.04);
-  font-weight: 600;
-}
-
-/* ===== Page Header ===== */
-.page-header {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 48px auto 32px;
-  padding: 0 20px;
-  text-align: center;
-}
-.page-header .topic-icon {
-  font-size: 3.5rem;
-  display: block;
-  margin-bottom: 12px;
-  animation: icon-float 3s ease-in-out infinite;
-}
-@keyframes icon-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-.page-header h1 {
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  color: var(--text-bright);
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-}
-.page-header .subtitle {
-  font-family: "Georgia", "Times New Roman", serif;
-  font-style: italic;
-  color: var(--accent-light);
-  font-size: 1.05rem;
-  opacity: 0.7;
-  margin-bottom: 16px;
-}
-.page-header .desc {
-  max-width: 600px;
-  margin: 0 auto;
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  line-height: 1.8;
-}
-.header-line {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  margin: 20px auto;
-}
-
-/* ===== Main Content Layout ===== */
-.main-layout {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 32px;
-  align-items: start;
-}
-
-/* ===== Sidebar TOC ===== */
-.toc-sidebar {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-}
-.toc-sidebar h4 {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--amber);
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-.toc-sidebar ol {
-  list-style: none;
-  padding: 0;
-}
-.toc-sidebar li {
-  margin-bottom: 2px;
-}
-.toc-sidebar a {
-  display: block;
-  color: var(--text-dim);
-  text-decoration: none;
-  font-size: 0.78rem;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all var(--ease);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.toc-sidebar a:hover {
-  color: var(--accent-light);
-  background: rgba(255,255,255,0.03);
-}
-
-/* ===== Article Cards ===== */
-.articles-area {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.art-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 28px 32px;
-  transition: all var(--ease);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  position: relative;
-  overflow: hidden;
-}
-.art-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent 20%, var(--accent) 50%, transparent 80%);
-  opacity: 0;
-  transition: opacity var(--ease);
-}
-.art-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-  border-color: var(--border-light);
-  background: var(--bg-card-hover);
-}
-.art-card:hover::before { opacity: 0.6; }
-
-.art-header {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.art-chapter {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--accent);
-  background: rgba(255,255,255,0.04);
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
-}
-.art-title {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  color: var(--text-bright);
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.art-body {
-  font-size: 0.9rem;
-  line-height: 1.9;
-  color: var(--text);
-}
-.art-body .art-p {
-  margin-bottom: 10px;
-}
-.art-body .art-h3 {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  color: var(--accent-light);
-  margin: 18px 0 8px;
-  font-weight: 600;
-}
-.art-body .art-h4 {
-  font-size: 0.95rem;
-  color: var(--text-bright);
-  margin: 14px 0 6px;
-  font-weight: 600;
-}
-.art-body .art-h5 {
-  font-size: 0.88rem;
-  color: var(--amber-light);
-  margin: 10px 0 4px;
-  font-weight: 500;
-}
-.art-body strong {
-  color: var(--text-bright);
-  font-weight: 600;
-}
-.art-body .art-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 8px 0 16px;
-}
-.art-body .art-list li {
-  padding: 4px 0 4px 24px;
-  position: relative;
-  margin-bottom: 2px;
-}
-.art-body .art-list li::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 12px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-}
-
-/* ===== Back to top ===== */
-.back-top {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 50;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--ease);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-.back-top:hover {
-  color: var(--amber-light);
-  border-color: rgba(212,160,64,0.4);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-}
-
-/* ===== Footer ===== */
-.footer {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 48px 20px 32px;
-  color: var(--text-dim);
-  font-size: 0.78rem;
-  border-top: 1px solid var(--border);
-  margin-top: 48px;
-}
-.footer a {
-  color: var(--amber);
-  text-decoration: none;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
-  .toc-sidebar {
-    position: static;
-    max-height: none;
-    order: -1;
-  }
-  .art-card {
-    padding: 20px;
-  }
-  .topic-quick-nav {
-    display: none;
-  }
-}
+:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
+.container { max-width:960px; margin:0 auto; padding:0 16px; }
+.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+.top-bar .title { font-size:1.05rem; font-weight:600; }
+.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
+.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
+.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
+.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
+.tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
+.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
+.skeleton-list { list-style:none; padding:0; }
+.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
+.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
+.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
+.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
+.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+.boundary-table tr:nth-child(even) td { background:var(--card); }
+.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
+.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
+.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
+.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
+.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
+.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
+.flip-inner.flipped { transform:rotateY(180deg); }
+.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
+.flip-front { background:var(--card); }
+.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
+.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
+.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
+.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
+.btn-outline:hover { background:var(--accent); color:#fff; }
+.btn-success { background:var(--success); color:#fff; }
+.btn-sm { padding:5px 12px; font-size:.8rem; }
+.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
+.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
+.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
+.q-option:hover { border-color:var(--accent); background:#fff5f5; }
+.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
+.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
+.q-option:disabled { cursor:default; }
+.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
+.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
+.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
+.mindmap { padding:10px 0; }
+.mindmap .node { margin:4px 0 4px 20px; }
+.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
+.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
+.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
+.mindmap .node-title.open::before { transform:rotate(90deg); }
+.mindmap .node-body { display:none; }
+.mindmap .node-body.open { display:block; }
+.inquiry-item { margin-bottom:12px; }
+.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
+.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
+.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
+.inquiry-q.open::after { content:' \25B2'; }
+.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
+.inquiry-a.open { display:block; }
+.case-item { margin-bottom:14px; }
+.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
+.case-title:hover { border-color:var(--accent); background:#fff5f5; }
+.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
+.case-title.open::after { content:' \25B2'; }
+.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
+.case-body.open { display:block; }
+.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.d-scenario { margin-bottom:16px; }
+.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
+.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
+.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
+.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
+.svg-wrap svg { max-width:100%; height:auto; }
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast.show { opacity:1; }
+@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
 </style>
 </head>
 <body>
-
-<div class="room-glow"></div>
-
-<div class="dust-motes">
-  <div class="mote m1"></div>
-  <div class="mote m2"></div>
-  <div class="mote m3"></div>
-  <div class="mote m4"></div>
-  <div class="mote m5"></div>
-  <div class="mote m6"></div>
-  <div class="mote m7"></div>
-  <div class="mote m8"></div>
-  <div class="mote m9"></div>
-  <div class="mote m10"></div>
+<div class="top-bar"><span class="title">🧠 思维的武器</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+<div class="container">
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
+  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
+  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
+  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
+  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
+  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
+  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
+  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
+  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
 </div>
-
-<nav class="nav-bar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-home">🛋️ 科学客厅</a>
-    <span class="nav-sep">›</span>
-    <span class="nav-title">🧠 思维的武器</span>
-    <span class="nav-count">46 篇</span>
-    <div class="topic-quick-nav">
-      <a href="1-宇宙的秩序.html" class="">🌌</a>
-<a href="2-生命的算法.html" class="">🧬</a>
-<a href="3-身体的真相.html" class="">🫀</a>
-<a href="4-餐桌上的实验室.html" class="">🍽️</a>
-<a href="5-思维的武器.html" class="active">🧠</a>
-<a href="6-未来的拼图.html" class="">🤖</a>
-<a href="7-文明的阶梯.html" class="">🏛️</a>
-    </div>
+<div class="tab-panel active" id="panel0">
+  <div class="section-title">核心目标</div>
+  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
+  <div class="section-title">核心概念</div>
+  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
+<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
+<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
+<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
+<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
+<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
+<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
+<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
+<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
+<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
+  <div class="section-title">最小知识集（骨架中的骨架）</div>
+  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
+<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
+<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
+<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
+  <div class="section-title">概念关系图</div>
+  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
+ viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
+<title>G</title>
+<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_legend</title>
+<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
+<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
+</g>
+<!-- root -->
+<g id="node1" class="node">
+<title>root</title>
+<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
+<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">思维的武器——物理定律的层级结构</text>
+</g>
+<!-- qm -->
+<g id="node2" class="node">
+<title>qm</title>
+<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
+<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
+</g>
+<!-- root&#45;&gt;qm -->
+<g id="edge1" class="edge">
+<title>root&#45;&gt;qm</title>
+<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
+<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
+<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
+</g>
+<!-- gr -->
+<g id="node3" class="node">
+<title>gr</title>
+<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
+<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
+</g>
+<!-- root&#45;&gt;gr -->
+<g id="edge2" class="edge">
+<title>root&#45;&gt;gr</title>
+<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
+<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
+<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
+</g>
+<!-- th -->
+<g id="node4" class="node">
+<title>th</title>
+<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
+<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
+</g>
+<!-- root&#45;&gt;th -->
+<g id="edge3" class="edge">
+<title>root&#45;&gt;th</title>
+<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
+<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
+<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
+</g>
+<!-- u -->
+<g id="node5" class="node">
+<title>u</title>
+<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
+<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
+</g>
+<!-- qm&#45;&gt;u -->
+<g id="edge4" class="edge">
+<title>qm&#45;&gt;u</title>
+<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
+<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
+<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
+</g>
+<!-- w -->
+<g id="node6" class="node">
+<title>w</title>
+<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
+<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
+</g>
+<!-- qm&#45;&gt;w -->
+<g id="edge5" class="edge">
+<title>qm&#45;&gt;w</title>
+<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
+<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
+<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
+</g>
+<!-- v -->
+<g id="node7" class="node">
+<title>v</title>
+<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
+<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
+</g>
+<!-- qm&#45;&gt;v -->
+<g id="edge6" class="edge">
+<title>qm&#45;&gt;v</title>
+<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
+<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
+<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
+</g>
+<!-- sy -->
+<g id="node8" class="node">
+<title>sy</title>
+<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
+<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
+</g>
+<!-- qm&#45;&gt;sy -->
+<g id="edge7" class="edge">
+<title>qm&#45;&gt;sy</title>
+<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
+<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
+<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
+</g>
+<!-- st -->
+<g id="node9" class="node">
+<title>st</title>
+<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
+<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
+</g>
+<!-- gr&#45;&gt;st -->
+<g id="edge8" class="edge">
+<title>gr&#45;&gt;st</title>
+<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
+<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
+<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
+</g>
+<!-- bh -->
+<g id="node10" class="node">
+<title>bh</title>
+<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
+<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
+</g>
+<!-- gr&#45;&gt;bh -->
+<g id="edge9" class="edge">
+<title>gr&#45;&gt;bh</title>
+<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
+<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
+<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
+</g>
+<!-- co -->
+<g id="node11" class="node">
+<title>co</title>
+<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
+<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
+</g>
+<!-- gr&#45;&gt;co -->
+<g id="edge10" class="edge">
+<title>gr&#45;&gt;co</title>
+<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
+<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
+<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
+</g>
+<!-- en -->
+<g id="node12" class="node">
+<title>en</title>
+<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
+<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
+</g>
+<!-- th&#45;&gt;en -->
+<g id="edge11" class="edge">
+<title>th&#45;&gt;en</title>
+<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
+<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
+<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
+</g>
+<!-- u&#45;&gt;v -->
+<g id="edge14" class="edge">
+<title>u&#45;&gt;v</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
+<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
+<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
+</g>
+<!-- ob -->
+<g id="node19" class="node">
+<title>ob</title>
+<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
+<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
+</g>
+<!-- w&#45;&gt;ob -->
+<g id="edge20" class="edge">
+<title>w&#45;&gt;ob</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
+<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
+<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
+</g>
+<!-- hr -->
+<g id="node14" class="node">
+<title>hr</title>
+<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
+<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
+<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
+<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
+</g>
+<!-- v&#45;&gt;hr -->
+<g id="edge12" class="edge">
+<title>v&#45;&gt;hr</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
+<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
+<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
+</g>
+<!-- sm -->
+<g id="node16" class="node">
+<title>sm</title>
+<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
+<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
+<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
+<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
+</g>
+<!-- sy&#45;&gt;sm -->
+<g id="edge16" class="edge">
+<title>sy&#45;&gt;sm</title>
+<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
+<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
+<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
+</g>
+<!-- gp -->
+<g id="node15" class="node">
+<title>gp</title>
+<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
+<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
+<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
+<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
+</g>
+<!-- st&#45;&gt;gp -->
+<g id="edge15" class="edge">
+<title>st&#45;&gt;gp</title>
+<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
+<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
+<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
+</g>
+<!-- bh&#45;&gt;hr -->
+<g id="edge13" class="edge">
+<title>bh&#45;&gt;hr</title>
+<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
+<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
+<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
+</g>
+<!-- nu -->
+<g id="node13" class="node">
+<title>nu</title>
+<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
+<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
+</g>
+<!-- en&#45;&gt;nu -->
+<g id="edge18" class="edge">
+<title>en&#45;&gt;nu</title>
+<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
+<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
+<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
+</g>
+<!-- it -->
+<g id="node17" class="node">
+<title>it</title>
+<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
+<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
+<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
+<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
+</g>
+<!-- en&#45;&gt;it -->
+<g id="edge17" class="edge">
+<title>en&#45;&gt;it</title>
+<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
+<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
+<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
+</g>
+<!-- se -->
+<g id="node18" class="node">
+<title>se</title>
+<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
+<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
+<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
+<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
+</g>
+<!-- nu&#45;&gt;se -->
+<g id="edge19" class="edge">
+<title>nu&#45;&gt;se</title>
+<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
+<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
+<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
+</g>
+<!-- hr&#45;&gt;bh -->
+<g id="edge21" class="edge">
+<title>hr&#45;&gt;bh</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
+<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
+<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
+<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
+</g>
+<!-- l1 -->
+<g id="node20" class="node">
+<title>l1</title>
+<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
+<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
+</g>
+<!-- l2 -->
+<g id="node21" class="node">
+<title>l2</title>
+<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
+<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
+</g>
+<!-- l1&#45;&gt;l2 -->
+<!-- l3 -->
+<g id="node22" class="node">
+<title>l3</title>
+<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
+<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
+</g>
+<!-- l2&#45;&gt;l3 -->
+<!-- l4 -->
+<g id="node23" class="node">
+<title>l4</title>
+<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
+<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
+<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
+<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
+</g>
+<!-- l3&#45;&gt;l4 -->
+<!-- l5 -->
+<g id="node24" class="node">
+<title>l5</title>
+<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
+<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
+</g>
+</g>
+</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
+  <div class="section-title">边界知识表</div>
+  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
+  <div class="section-title">学习路径</div>
+  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
+<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
+<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
+<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
+<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
+  <div class="section-title">学习进度</div>
+  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+</div>
+<div class="tab-panel" id="panel1">
+  <div class="section-title">知识卡片</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
+  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
+  <div class="flip-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
+    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
+    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
   </div>
-</nav>
-
-<header class="page-header">
-  <span class="topic-icon">🧠</span>
-  <h1>思维的武器</h1>
-  <p class="subtitle">Weapons of Thought</p>
-  <div class="header-line"></div>
-  <p class="desc">概率思维、博弈论、批判性思考、识破伪科学——锻造一套抵御认知偏差的理性工具。</p>
-</header>
-
-<div class="main-layout">
-  <aside class="toc-sidebar">
-    <h4>📋 本专题目录</h4>
-    <ol>
-      <li><a href="#art-1">利益相争，如何博弈？</a></li>
-<li><a href="#art-2">合作与背叛的数学解释</a></li>
-<li><a href="#art-3">精准的判断，离不开精准的概率计算</a></li>
-<li><a href="#art-4">被电影误写的经济学家——约翰·纳什</a></li>
-<li><a href="#art-5">40%的黎曼猜想</a></li>
-<li><a href="#art-6">世界上最难的数学题是什么？</a></li>
-<li><a href="#art-7">得不得癌症是靠运气吗？</a></li>
-<li><a href="#art-8">烟草业的罪</a></li>
-<li><a href="#art-9">不止中国，应试教育哪国都有</a></li>
-<li><a href="#art-10">细说“超级月亮”</a></li>
-<li><a href="#art-11">混沌世界是怎么出现的？</a></li>
-<li><a href="#art-12">用网络游戏研究社会学</a></li>
-<li><a href="#art-13">网络思维与复杂性</a></li>
-<li><a href="#art-14">计算机如何模拟进化？</a></li>
-<li><a href="#art-15">证明转基因食品安全的证据在哪儿？</a></li>
-<li><a href="#art-16">为什么会感觉手脚冰凉？</a></li>
-<li><a href="#art-17">中国古代科学发达吗？</a></li>
-<li><a href="#art-18">如何理解科学与文化的平行相通？</a></li>
-<li><a href="#art-19">数学是精英们用来秀智商用的？</a></li>
-<li><a href="#art-20">新刊：杀不尽的网络谣言</a></li>
-<li><a href="#art-21">新闻、社交App会导致思想退步？</a></li>
-<li><a href="#art-22">科学思维为什么反直觉？</a></li>
-<li><a href="#art-23">经济学算科学吗？</a></li>
-<li><a href="#art-24">放烟火会污染环境吗？</a></li>
-<li><a href="#art-25">《拍砖中医》这本书值得买吗？</a></li>
-<li><a href="#art-26">《水知道答案》是伪科学吗？</a></li>
-<li><a href="#art-27">日本是怎么处理学术造假的？</a></li>
-<li><a href="#art-28">阴阳五行该写入科学素养准则吗？</a></li>
-<li><a href="#art-29">人体特异功能是真的吗？</a></li>
-<li><a href="#art-30">石油竟不是地下生物尸体变的？</a></li>
-<li><a href="#art-31">学渣怎么学数学？</a></li>
-<li><a href="#art-32">专题丨有故事的科学家</a></li>
-<li><a href="#art-33">下季预告01丨19世纪的医生</a></li>
-<li><a href="#art-34">下季预告03丨电影《天才少女》</a></li>
-<li><a href="#art-35">下季预告09｜发现天使粒子是怎么回事？</a></li>
-<li><a href="#art-36">下季预告11｜解读韩春雨撤稿事件</a></li>
-<li><a href="#art-37">新专栏发刊词｜你身边的万物简史</a></li>
-<li><a href="#art-38">1917选文丨与卓老板相识的一年</a></li>
-<li><a href="#art-39">1917选文丨写给卓克的信</a></li>
-<li><a href="#art-40">1917选文丨成为一个理性乐观的人</a></li>
-<li><a href="#art-41">1917选文丨收货满满的一年</a></li>
-<li><a href="#art-42">1917选文丨海量知识库存</a></li>
-<li><a href="#art-43">1917选文丨科学是认识世界的重要维度</a></li>
-<li><a href="#art-44">“毕业季”选文丨与卓老板相识的一年</a></li>
-<li><a href="#art-45">“毕业季”选文丨听《卓老板聊科技》信可乐也！</a></li>
-<li><a href="#art-46">加餐 | 答疑合集：这19个常见问题，都有科学答案</a></li>
-    </ol>
-  </aside>
-
-  <main class="articles-area">
-    
-    <article class="art-card" id="art-1">
-      <div class="art-header">
-        <span class="art-chapter">Ch.74</span>
-        <h3 class="art-title">利益相争，如何博弈？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">怎么挑起矛盾，又如何解决</p>
-
-<ol class="art-list">
-<li>让一群男孩子打起来的办法是，在他们一起玩耍时问：这里谁是娘娘腔？让两个男孩打起来的办法是，给他们分蛋糕，他们终会因为大小分配问题打起来。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>后者的解决方法是让一个孩子切蛋糕，另一个孩子分蛋糕，切蛋糕的孩子知道分蛋糕的人会拿走大块的，所以他才有足够动力切得平均。</li>
-</ol>
-
-<p class="art-p">囚徒困境的博弈</p>
-
-<ol class="art-list">
-<li>犯罪团伙中2个小喽啰被抓住了，分别拘留起来，他们不能互相串供。警察也知道这两个人不是主犯，为了挖出背后更大的头目，警察审讯他们。俩人都知道，如果A坦白交代，自己可以被保释，但是B却要做3年牢，B也知道，如果自己坦白，可以被保释出去，但是A要做3年牢。而且他们也知道假如他们俩都拒不交代的话就每个人坐牢一年。如果每个人都说出实情，就都得做两年牢。他们应该如何选？</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>整个问题可以用一个2x2的表格描述，这是一个非零和博弈。（见图“囚徒困境”）</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>经过语义和情景分析得出结论，两个罪犯都选择不交代（1,1）是最好的。但这只是在数学语言中规定双方利益最大化下的结果，博弈论还有其他利益规定方式，虽然它可能和现实事件有冲突，但在利用数学做分析中是可以做处理的。</li>
-</ol>
-
-<p class="art-p">博弈论的诞生的背景</p>
-
-<ol class="art-list">
-<li>第三次数学危机发生在1897年，到1920年差不多修补完成，冯诺依曼也为集合公理化提出了自己的解决办法：NBG系统。这次危机让数学界知道从前对集合的定义有问题。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>比第三次数学危机更严重的事故发生在1931年，哥德尔提出了不完备性定理，意思是说在数学体系内，如果用当前数学逻辑推理下去一定会推出一些结论，既不能被证实也不能被证伪。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>冯诺依曼在1921年用数学证明了扑克牌中使用“叫诈”的方法可以提高胜算，1928年《客厅游戏中的理论》一文被视为博弈论的开山之作。这些都是在两次数学重大动荡之间完成的。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>冯诺依曼在做博弈论研究时，一战刚刚结束，二战还要16年才能开打，这段时间也给很多数学家留出时间，否则战时很多精英都会被叫去做武器研发。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>普林斯顿大学出版社1943年出版《博弈论与经济行为》标志着博弈论建立起来了，但这套厚厚的数学理论书5年只卖了3000多本，买他的人相当比例还是赌徒，反而是经济学家没有购入。全书641个公式和几千行公式推导很难读懂。（见图叫诈1和2）</li>
-</ol>
-
-<p class="art-p">[图片: 诈1]</p>
-
-<p class="art-p">[图片: 和2]</p>
-
-
-
-<ol class="art-list">
-<li>《博弈论与经济行为》利用数学工具为20世纪40年代的经济学开了一个先锋：用数学做经济模型的工具，此前的经济学研究在数学家、物理学家眼中属于原始社会级别。</li>
-</ol>
-
-<p class="art-p">最小最大值定理</p>
-
-<ol class="art-list">
-<li>严格定义最小最大值定理需要参考《博弈论与经济行为》P.133-143，其中定义并证明了关于最大最大值，最小最小值，最大最小值，最小最大值。</li>
-</ol>
-
-<p class="art-p">最小最大定理</p>
-
-
-
-<ol class="art-list">
-<li>感性上理解可以把拥有XY两个变量的函数想成一个表格，最大最小值是指在所有行中极小值中最大的那个值。</li>
-</ol>
-
-<ol class="art-list">
-<li>切蛋糕中的博弈分析，通过最小最大定理，我们可以选出0.49就是所有行中极小值中最大的那个。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>最小最大值也被称为“鞍点”。鞍点通常是在某个维度上是极大值，而在另一个正交的维度上是最小值的点，这一点往往具有特殊性质。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>以数学理论为基础的博弈论并不是心理学，或社会学，它的抽象本质就是表格和数学运算，在表格和数字上赋予什么意义就表现成什么。</li>
-</ol>
-
-<p class="art-p">美国与苏联的博弈</p>
-
-<ol class="art-list">
-<li>1949年9月份美国通过情报分析出苏联已经试爆了原子弹，在国会内部出现两派，一派希望立刻抓紧机会公布这个发现震慑苏联，另一派不支持发布，认为会引起民众恐慌。最终杜鲁门发表了演讲，挑明了此事，苏联在演讲后2天承认核试验成功。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>冷战初期双方对原子弹数量保密工作做得相当严密，严密到荒唐的地步，以至于总统在上任2年多时间中一直不清楚美国到底有多少原子弹随时待命。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>直到1982年美国才公布了冷战初期原子弹数目。1945年2颗，1946年6颗，1947年7颗，1948年50颗，1949年240颗，1950年688颗。到了八十年代原子弹数量已经接近上万。1990年美苏两国签署协议削减核弹头到6000以下。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-2">
-      <div class="art-header">
-        <span class="art-chapter">Ch.74</span>
-        <h3 class="art-title">合作与背叛的数学解释</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">博弈论在生物、社会学上发展很快</p>
-
-<p class="art-p">全世界共8600余种鸟类，其中有320种会帮助其他种类动物喂食、筑巢、清扫身体等。帮助其他种类动物时，无疑增加了自身风险，这样的生存策略为什么会存在呢？进化论对此无力解释，《自私的基因》里则用基因最大化来解释了利他行为。</p>
-
-<p class="art-p">用“存在的稳定性”解释生存策略</p>
-
-<ol class="art-list">
-<li>星星的存在、山河湖泊的存在，海浪的形成都是因为长期以来它们处于动态平衡中，即便有扰动，地球上也存在某个机制让平衡重新出现。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>鹰派与鸽派理论可以通过得分的方式来计算这类生物共生情况下的数字比例。这个比例是动态平衡的，任何一方数量的改变，都会有自然形成的压力让他们重新回到平衡。</li>
-</ol>
-
-<p class="art-p">囚徒困境实验的3种进阶分析</p>
-
-<ol class="art-list">
-<li>阿克塞尔·罗德进行了第一阶段的“重复囚徒困境”实验，共设计出14种策略，让每种与其他都进行200局对战，之后计算每200局的平均成绩和总的平均成绩。实验结果选出的最优者是：第一局和对方合作，此后每局的策略是对手上一局所采用的策略，我们称之为“一报还一报”策略（或者说“以牙还牙”策略）。它的平均分是504.5分，最低225分，最高600分。完全随机选择合作或者背叛的平均分最低，只有276.3分。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>阿克塞尔·罗德希望找到更好的策略，胜过“一报还一报”，便进行了第二阶段的“重复囚徒困境”实验。但结果没有可以超越“一报还一报”的新策略。不过第二阶段测试中也发现“一报还一报”在应对“完全不管对手如何出牌，自顾自出招”时效果不好。在面对“90%一报还一报”策略时，容易出现回声效应（双方不断背叛对方）。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>阿克塞尔·罗德又进行了第三阶段的“重复囚徒困境”实验，这次让62个程序以相同比例进行混战，200局一轮战斗，最终留下的是“一报还一报”和它的微小改动版。在有自然选择压力的情况下“一报还一报”是一种稳定策略。总是背后捅人一刀的看似凶悍，但最终会被淘汰。</li>
-</ol>
-
-<p class="art-p">实际生活中的博弈策略</p>
-
-
-
-<ol class="art-list">
-<li>以交通为例，压实线变道如果算人们交通关系中的一种背叛，按车道线行驶算是一种合作，那么北京现在乱开车的比较多，就是因为背叛后失分太少，总体来说背叛行为得分高让它成为了一种稳定策略。如果交管局可以严格执法，或者只是简单提高处罚分数，而执法严格程度不变，也将起到很好的效果，这样做可以把合作这种行为筛选成稳定策略。而这正是交通规则制定者的职责。</li>
-</ol>
-
-<p class="art-p">Tips：</p>
-
-
-
-<p class="art-p">得到App已经升级，新版本订阅可以调整字体大小；为朋友开通订阅；订阅前试读，可免费浏览部分文章内容。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-3">
-      <div class="art-header">
-        <span class="art-chapter">Ch.74</span>
-        <h3 class="art-title">精准的判断，离不开精准的概率计算</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">最长寿的人</p>
-
-<p class="art-p">让娜·卡尔蒙特1875年出生，90岁时把唯一的财产(房子)卖给了律师拉夫雷，交换条件是律师支付她去世前的抚养费，每月2500法郎。让娜120岁时，年仅47岁的律师因为癌症过世，始终没有住上让娜的房子。最终，让娜在122岁时去世，成为世界上最长寿的人。</p>
-
-<p class="art-p">初识贝叶斯定理</p>
-
-<p class="art-p">这是一种利用过往信息逐渐逼近事件发生概率的思考方式，与频率主义截然不同。</p>
-
-<p class="art-p">在肝癌检测上的应用</p>
-
-<ol class="art-list">
-<li>肝癌诊断有一个重要的判断指标是人体内甲胎蛋白质含量的多少。这种甲胎蛋白质只在胎儿时期产生，一岁时下降到峰值的二十万分之一，大约20微克/升血浆。肝癌患者却会重新产生甲胎蛋白，血浆中含量会升到300-1000微克/升。</li>
-</ol>
-
-<ol class="art-list">
-<li>但还有15%的肝癌患者直到临终，甲胎蛋白质指标都和正常人一样，这就会让这种本来很好的检验出现不小偏差，但好在我们还有其他方法判断肝癌。</li>
-</ol>
-
-<ol class="art-list">
-<li>假阴性的意思是本来有病应该呈现阳性，但呈现了阴性，假阳性的概念与之对应。用甲胎蛋白法检测，假阴性概率99%，假阳性概率99.9%，人群中肝癌发病率万分之四，应用贝叶斯定理可知，一个人在检测为肝癌阳性时，实际发生肝癌的概率是28.6%。</li>
-</ol>
-
-
-
-<p class="art-p">在艾滋病检测上的应用</p>
-
-<ol class="art-list">
-<li>艾滋病检测的假阳性和假阴性假如都是0.1%的水平，艾滋病发病率是万分之一的话，某次检测结果是阳性，应用贝叶斯定理，那么被测人真正被感染艾滋病的概率是49.98%。</li>
-</ol>
-
-<ol class="art-list">
-<li>对这种初次检测准确率较低的方法，只需要做第二次检测就可以大幅度提升判断，这也是为什么艾滋病检测第一次呈阳性的人，还需要做第二次检测，第二次依然是阳性的还需要送交国家实验室做第三次检测。</li>
-</ol>
-
-
-
-<p class="art-p">贝叶斯定理在做判断上的应用</p>
-
-<ol class="art-list">
-<li>有两个碗，1号碗里有30个水果糖和10个巧克力，二号碗里有20个水果糖和20个巧克力。然后把碗盖住。随机选择一个碗，从里面摸一个水果糖。问题：这颗水果糖来自一号碗的概率？贝叶斯定理的结果是60%。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>这个例子中我们需要关注的是约束条件：抓出的是水果糖。如果没有这个约束条件在，来自一号碗这件事的概率就是50%了，因为水果糖的分布不均把概率从50%提升到60%。</li>
-</ol>
-
-<p class="art-p">用贝叶斯定理过滤垃圾邮件</p>
-
-<ol class="art-list">
-<li>全球垃圾邮件的高峰出现在2006年，那时候所有邮件中90%都是垃圾。最初的垃圾邮件过滤是靠静态关键词加一些判断条件来过滤，效果不好，漏网之鱼多，冤枉的也不少。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>利用贝叶斯定理过滤邮件，首先选正常邮件和垃圾邮件做训练，两种邮件数量越多之后效果越好，训练的过程就是统计在垃圾邮件中出现过的所有词汇的频次，和正常邮件中出现的所有的词汇的频次。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>典型的垃圾邮件词汇在垃圾邮件中会以更高的频率出现，所以在做贝叶斯公式计算时，肯定会被识别出来。之后用最高频的15个垃圾词汇做联合概率计算，联合概率的结果超过90%将说明它是垃圾邮件。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>用贝叶斯过滤器可以识别很多改写过的垃圾邮件，而且错判率非常低。甚至不要求对初始值有多么精确，精度会在随后计算中逐渐逼近真实情况。</li>
-</ol>
-
-<p class="art-p">贝叶斯定理是另一种世界观</p>
-
-<ol class="art-list">
-<li>心怀贝叶斯定理的人，并不试图刻画这类事件本身，而是从观察者角度出发，甚至也不去假设哪类事件是随机的，或者有一个逼近极限的总体概率。而只是先从以往经验中总结一个大致结果，再在这个结果上判断下次出现这类事件的概率，每次的结果会不断修正之前的判断，不断重复。</li>
-</ol>
-
-<ol class="art-list">
-<li>它反应的是我们知识状态的情况，而并不试图描述有那么一个客观世界，那个客观世界中什么事情发生的概率有多少。</li>
-</ol>
-
-<ol class="art-list">
-<li>科学中的一些结论反直觉是很正常的。人类基因里可以给予我们的直觉，只能指导我们如何觅食，躲避天敌，在危险的世界活下来。而一旦涉及到科学范畴，那些原始的直觉就不起作用了，想用科学的思维分析周遭，就要摒弃固有的直觉，不断通过理解与学习建立新的直觉。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-4">
-      <div class="art-header">
-        <span class="art-chapter">Ch.74</span>
-        <h3 class="art-title">被电影误写的经济学家——约翰·纳什</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">纳什均衡</p>
-
-<ol class="art-list">
-<li>《美丽心灵》这部电影中把纳什均衡理解成在博弈中找到双赢的局面，这其实是错的。电影的影响力非常大，以至于有人把约翰·纳什当做博弈论的创立者，这更是错的，冯·诺依曼才是博弈论的创立者。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>当一方策略不再变了，另一方也已选定了一个策略，如果这时候再换任何一个策略都不会比现在策略得分更高，那么这时双方的选择就是纳什均衡点。</li>
-</ol>
-
-<p class="art-p">纳什均衡的应用</p>
-
-<ol class="art-list">
-<li>比试酒量中，采用死磕策略和认怂策略时，有两个纳什均衡点。</li>
-</ol>
-
-
-<p class="art-p">其中加重的两个选择就是纳什均衡点：在对手不再改变策略的条件下，如果你改变，结果只会更差。但如果我们设定甲乙都是采取混合策略的人，甲选择死磕的概率是β，那么乙也以β概率选择死磕，才能找到纳什均衡点。</p>
-
-<ol class="art-list">
-<li>纳什均衡在劳资双方调节的应用</li>
-</ol>
-
-
-<p class="art-p">调解员的任务是：找到纳什均衡点，这样才能说服双方接受他的调解建议。劳方如果得到的建议是坚持，那么劳方就知道资方被建议的一定是妥协的策略，这样劳方就已经知道全部结果了，他将获得7万元，资方获得2万元。如果劳方被建议采用妥协方案，那么劳方面临的就是一个概率上的收益，因为资方有一半可能选择妥协，一半可能选择坚持，那么对劳方来说收益平均值是多少呢，就是1/2概率妥协的6万+1/2概率的坚持的2万，结果是平均来说是4万元的收益。如果有一方被建议妥协，但坚持不听调解员建议，也是存在概率的，所以我们要算个平均值。他有1/2可能什么都得不到，再加上1/2可能得到7万元，加合后均值是3.5万。这个均值是低于之前听调解员的话获得4万元均值的。所以调解员可以通过这个对比说服劳方听从他的建议，原因是调解员找到了纳什均衡点。但如果坚持和妥协配对的后果是坚持一方得9万元，妥协一方得2万元的话，当调解员建议任何一方妥协，其实不听从调解员的建议平均收益更大。</p>
-
-<ol class="art-list">
-<li>爱情中的博弈论</li>
-</ol>
-
-<p class="art-p">对女性的收益表格，责任男的稳定比例是5/8。</p>
-
-<p class="art-p">对男性的收益表格，谨慎女的稳定比例是5/6。</p>
-
-
-<p class="art-p">如果责任男的比例是x，谨慎女的比例是y，则（X,Y）的点组成一个平面，（5/8，5/6）是这个模型对应的稳定点。当事件偏离稳定点的时候，回到稳定点的速度会比较慢，因为任何一个变化都会产生循环影响，最终阻碍初态回到稳定点。</p>
-
-
-<p class="art-p">《美丽心灵》电影过于美好，现实比较残酷</p>
-
-<ol class="art-list">
-<li>纳什在1952年去麻省理工的时候先后认识了两个女孩，第一个女孩是他住院时照顾他的护士Eleanor，两人有了一个私生子。但之后纳什和他的物理系学生Alisia 恋爱了。Eleanor三年后在麻省理工遇到了纳什劈腿才知道真相。此后去找纳什的父亲，捅破了他们有一个私生子的事实。纳什的父亲要求纳什和Eleanor结婚，但不久就在悲愤交加中去世，纳什并没有听从父亲的要求，而是娶了Alicia。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>婚后不久纳什在事业上有了新的突破，解决了黎曼流形在欧几里得空间中的嵌入问题，但不久后患上了精神分裂症。患病3年后Alicia和他离婚，又过了3年Alicia差一点和另一位数学家再婚，但并未如愿。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>纳什在生病期间辞掉了麻省理工的工作去欧洲旅游了9个月，最后因为签证过期，在日内瓦被遣送回美国。此后病情加重，但纳什和Alicia一直住在一个家里，只是屋子分开。纳什形容他在获得诺贝尔经济学奖之前两人的关系时这样说：两人实际就像居住在同一屋檐下的远亲一样。真相并没有电影中那么美好。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>纳什获得诺贝尔奖后并没有像电影里那样进行过颁奖演说，颁奖委员会考虑到他病情不稳定，所以取消了演讲。但纳什在普林斯顿的聚会上说过诺贝尔奖是他非常需要的，因为有了这个奖他才有资格弄到一张信用卡，而且他希望独揽这个奖，因为他非常缺钱，可惜这个奖是3人分享的。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>纳什和Alicia复婚的主要动机是因为2001年《美丽心灵》播出之后反响太大，为了避免过多舆论压力才复婚的。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>纳什在1990年后逐渐清醒，但生活得并不开心，时常处于深深的孤单中，Alicia和他生活的也不如意，因为他们的儿子同样患有严重的精神疾病，Alicia一辈子不得不照顾两个病人。他们没有分开并不是因为爱的多深，而是生活所迫不得不凑合过，直到1994年的诺贝尔经济学奖才给了他们一些喘息的机会。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>2015年12月29日纳什和Alicia在一场车祸中同时丧生。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-5">
-      <div class="art-header">
-        <span class="art-chapter">Ch.76</span>
-        <h3 class="art-title">40%的黎曼猜想</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">哈代与李特尔伍德</p>
-
-<ol class="art-list">
-<li>哈代最初接触黎曼猜想是计划找出一个反例，推翻这个猜想，后来态度转变，倾向于承认这个猜想，并证明了有无穷多零点在临界线上。</li>
-</ol>
-
-<ol class="art-list">
-<li>李特尔伍德小哈代8岁，当年接触黎曼猜想属于误打误撞，他的老师因为对这个猜想的研究状况不了解，当作暑假作业布置下去，结果李特尔伍德后半生就以这个暑假作业为目标攻克了。</li>
-</ol>
-
-<ol class="art-list">
-<li>哈代和李特尔伍德的合作时间长达35年，交流方式很独特：书信沟通学术思想。而且先看问题，自己解决，再看信中对方的解答。在35年的合作中有20年都不在一个城市，但这种高效的沟通让两个人一直保持合作，虽然后来两人都到了剑桥，可以天天见面，但他们的学术沟通还是以这样的方式进行。哈代一生三分之一的论文是和李特尔伍德共同完成。李特尔伍德这个名字曾被欧洲数学家认为是一个杜撰出来的虚拟人物，专门准备为哈代背黑锅。</li>
-</ol>
-
-<ol class="art-list">
-<li>哈代和李特尔伍德合作解决的黎曼猜想结果是，当零点的虚部，0＜Im（s）＜T时，临界线上零点的个数在[T/2π×ln T/2π，T/2π]，之间，但这相比全体非平凡零点来说比例仍然无限趋近于零。黎曼猜想如果能被证明，这个比例数字应该是100%。</li>
-</ol>
-
-<p class="art-p">临界线上零点比例的推进</p>
-
-<ol class="art-list">
-<li>塞尔伯格证明了当零点的虚部，0＜Im（s）＜T时，临界线上的零点个数的下限是KTlnT，这个成果首次让临界线上零点个数的比例占全部非平凡零点的比例大于零。</li>
-</ol>
-
-<ol class="art-list">
-<li>莱文森以62岁高龄写出论文证明临界线上零点占比超过98.6%，但这篇论文中有错误，修正错误后，比例数字下降到34%，后莱文森用尽生命中最后的力量把比例数字推进到34.74%，最后他因脑部肿瘤去世，终年63岁。为了纪念他，推进比例的方法称为莱文森方法。</li>
-</ol>
-
-<ol class="art-list">
-<li>利用莱文森方法，1980年中国数学家楼世拓和姚琦把比例推进到35%，1983年美国数学家康瑞推进到36.85%，六年后还是他推进到40%，这就是黎曼猜想迄今为止得到的最好的结果。</li>
-</ol>
-
-<p class="art-p">在监狱中研究简化版黎曼猜想</p>
-
-<ol class="art-list">
-<li>法国数学家埃里·嘉当收到一封监狱来信，是他儿子的朋友，安德烈韦伊写来的，记述了他逃兵役到芬兰，因频繁和苏联数学家通信被警方怀疑，被判间谍罪面临处死的危机下，芬兰数学家为他出庭作证，才被遣返回法国，最终以逃兵役罪关押在监狱的整个过程。这封信中还有一部分内容是他在候审3个月的时间里做出的简化版黎曼猜想的学术成果。</li>
-</ol>
-
-<ol class="art-list">
-<li>简化版黎曼猜想利用若干种函数的模算术，对应到了临界线上的零点，函数具体是什么样取决于采用什么曲线，其中椭圆曲线和超椭圆曲线是最先被解决的。</li>
-</ol>
-
-<ol class="art-list">
-<li>韦伊服从法国军方要求，继续服兵役免除了处罚，但1年后通过伪造肺炎证明退伍，并逃往美国，在普林斯顿高等研究所安度晚年。他一直怀念蹲监狱那3个月时不受打扰的研究时光。</li>
-</ol>
-
-<p class="art-p">黎曼猜想和物理世界的关系</p>
-
-<ol class="art-list">
-<li>蒙哥马利最先注意到临界线上零点分布的规律和孪生素数对儿在数轴上的分布规律有些类似，并写出了一个关联函数。</li>
-</ol>
-
-<ol class="art-list">
-<li>他在公布结果前担心普林斯顿的塞尔伯格已经做完了这项成果，所以特地去了一趟，确定一切安全后，他放心的在高等研究所喝下午茶。</li>
-</ol>
-
-<ol class="art-list">
-<li>下午茶时因朋友Chowla牵线，认识了物理学家弗里曼·戴森，结果戴森发现他研究的关联函数就是自己研究了十年的东西：随机厄密矩阵本征值的对关联函数。这是一个描述多粒子系统在相互作用下，能级分布规律的函数。</li>
-</ol>
-
-<ol class="art-list">
-<li>一个纯数学的证明竟然找到了物理世界中对应的图谱，这到底说明了什么？现在仍然是一个迷。</li>
-</ol>
-
-<p class="art-p">黎曼猜想中其他贡献者</p>
-
-<ol class="art-list">
-<li>Lious Branges 是一个体制外的数学研究者，他使用的工具没人看得懂，但因为曾经证明出过贝尔巴赫猜想，所以在数学圈也不是完全没有口碑，他声称自己证明了黎曼猜想，但文章被人用数学家可以看懂的语言翻译出来后发现里面有致命的错误，再加上他已经年过七旬，精力不足，所以之后不论如何宣称自己有新的推进，都没人相信了。</li>
-</ol>
-
-<ol class="art-list">
-<li>《美丽心灵》中的约翰纳什是在研究简化版黎曼猜想时患上的精神分裂症，很多人怀疑是黎曼猜想让他发了疯。</li>
-</ol>
-
-<p class="art-p">黎曼的后人</p>
-
-<ol class="art-list">
-<li>黎曼因肺结核只活到了39岁，最后几年生活贫困，买纸和笔的钱都没有。</li>
-</ol>
-
-<ol class="art-list">
-<li>黎曼去世后，妻子带着唯一的女儿搬家和黎曼的姐姐一起生活。</li>
-</ol>
-
-<ol class="art-list">
-<li>黎曼的女儿嫁给了一个数学博士，这位博士曾经经常去他导师的家，他的导师施瓦茨就住在她们家隔壁。</li>
-</ol>
-
-<ol class="art-list">
-<li>黎曼的女儿和女婿，还有妻子、姐姐后来一起随女婿搬家到了不莱梅，因为女婿在那里做航海学校的校长，所以他们生活的很不错，但之后并没有人再在数学界有什么影响了。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-6">
-      <div class="art-header">
-        <span class="art-chapter">Ch.76</span>
-        <h3 class="art-title">世界上最难的数学题是什么？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">23+7个数学难题</p>
-
-<ol class="art-list">
-<li>1900年希尔伯特提出23个数学难题，其中第八个是黎曼猜想。希尔伯特凭借自己的威望让全世界数学界都重视起这些问题。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>2000年克雷研究所提出了千禧年7大数学难题，其中也有黎曼猜想，克雷研究所凭借每个难题100万美元奖金引起了媒体的重视。</li>
-</ol>
-
-<p class="art-p">微积分之战</p>
-
-<ol class="art-list">
-<li>牛顿和莱布尼茨年龄相仿，只差3岁。莱布尼茨1684年发表了关于微积分的论文，牛顿在1687年出版了《自然哲学的数学原理》，其中的“流数”也包含了微积分的思想。此后莱布尼茨的成果成为教科书在欧洲大陆流传，牛顿的《自然哲学的数学原理》也成了著作传播。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>《自然哲学的数学原理》这本书在第一版还肯定了莱布尼茨在微积分上的贡献，但有好事者挑拨牛顿与莱布尼茨之间关系，最终让两人失和。牛顿在第二版《自然哲学的数学原理》中删掉了这段话，并且在他的其他出版物中旁敲侧击的暗指莱布尼茨抄袭他的微积分思想。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>我们在《高等数学》中学的符号系统大部分来源自莱布尼茨，这种表示方法有利于数学概念的分析，牛顿的符号系统省略了一些东西，后世被人认为只是一种工具，而不是理论，但其实牛顿对微积分的理论是熟透了的，只是从符号系统上看容易产生错觉。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>这场争论最终导致欧洲大陆和英国大陆数学家之间的分崩离析，此后150年间，英国大陆的数学家不承认欧洲数学家的成果，从此英国数学大幅落后于欧洲。</li>
-</ol>
-
-<p class="art-p">黎曼猜想的提出</p>
-
-<ol class="art-list">
-<li>1859年黎曼当选了柏林科学院院士，为了表示感谢他写了一篇短小的论文，只有8页纸，是来研究素数分布规律的一篇内容，在论文里他提出了一个猜想：zeta函数的非平凡零点都在复平面实轴，Re=1/2这根线上。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>这篇论文过于简练，其中出现了好几处“证明从略”。这些证明过程难度极大，因为黎曼手稿部分遗失，为了补上这几处“证明从略”的地方，耗费了数学家们40年的时间，有些到现在也没有被证明。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>黎曼猜想中的“证明从略”从后来的手稿分析中发现，黎曼很多成果都有详细的论证，只是因为太过复杂还没有整理好，所以没有发表，很多数学家猜测黎曼在生前对这个问题的研究已经比我们现在走的还要远。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>黎曼猜想因为涉及较专业的数学概念，所以并不是民科聚集地。它的重要性体现在：它如果被证明了，数学界大致图景不会变，如果它被证伪了，数论领域可能会倒退160年。因为目前已经有1000多个定理是以黎曼猜想成立为前提提出的。</li>
-</ol>
-
-<p class="art-p">非平凡零点的围追堵截</p>
-
-<ol class="art-list">
-<li>黎曼最初猜测所有非平凡零点都集中在0到1之间，经过46年的努力，数学家们仅仅将这个猜测向前推进了一小步。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>1903年丹麦数学家格拉姆第一次算出了前15个非平凡零点的具体数值，他采用的是欧拉-麦克劳林求和公式，这是一个相当复杂的计算，以至于黎曼猜想公布了44年后数学家们才第一次看到了非平衡零点到底是什么样。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>1925年李特尔伍德和哈代改进了欧拉-麦克劳林公式后，数学家们算出了前138个零点，但此后因为计算量过大，就没有人继续往下计算了。</li>
-</ol>
-
-
-<ol class="art-list">
-<li>哈代是英国大陆数学长期落后于欧洲大陆背景下第一个对黎曼猜想做出贡献的数学家，他年轻时曾经拿黎曼猜想打过赌，出海远行前给丹麦的朋友寄了明信片，上面写：我已经证明的黎曼猜想。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-7">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">得不得癌症是靠运气吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">Dolphin：</p>
-<p class="art-p">最近有一种说法是66%的癌症可能就是随机发生的，运气不好的结果，是这样吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“癌症与生命终结”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">这个说法来自《科学》上的一篇论文，但要怎么看待它，还需要另外的解释。</p>
-
-<p class="art-p">听众Dolphin问，听说最近有一种说法是66%的癌症是基因的随机突变造成的，就是运气不好的结果，是这样吗？</p>
-
-<p class="art-p">这个问题我看在“知识新闻”里前几天也更新了，我先介绍一下背景，这是三月二十几号《科学》期刊上刊登的一篇论文，结论说的是引发癌症的突变里有66%是随机突变导致的，29%是环境因素导致的，5%是遗传导致的。</p>
-
-<p class="art-p">其实这要从2015年《科学》杂志上同一个作者的这方面研究说起，他当年被刊登的那篇论文也是要说明这个结论，但是搜集的数据，使用的模型不如2017年的好，当年文章发布后曾经引起圈内热议，有很多反对声音，然后他经过改进，主要是数据量加大了很多，从69个国家的疾病控制机构拿到了数据，涵盖了48亿人，癌症涵盖了32种。所以这篇证据更强了。</p>
-
-<p class="art-p">《科学》那是顶级期刊，能发表的文章都可以算得上是研究水平过硬的。这两位研究者一位是数学家，一位是癌症遗传学家，最早做这方面研究是源于这类事件，比如统计中发现人的一生结肠癌发病率4.82%，而十二指肠癌一生的发病率只有0.2%，如果环境和遗传因素是癌症发病的主要原因，那我肠道经历的消化液、食物环境是类似的啊，基因也是一样的，为什么会造成数量及上的差异呢？</p>
-
-<p class="art-p">咱们在细胞系列节目里也说过，癌症在细胞有丝分裂频繁的地方更高发，而干细胞的分裂就是很频繁的。所以最初他们就从研究结肠和十二指肠中的干细胞入手的。2015年1月份发的文章，他们那时只用了全美的数据，这次几乎覆盖了全球2/3的人口了，而且统计完之后和2年前那次结论依然大致吻合，所以结论被加强了。</p>
-
-<p class="art-p">你说这怎么还有数学家啊？因为整个统计设计数据量非常庞大，每种癌症的发病因素又有很大差异，要想让结果可靠，就由这位数学家建立了一套比较复杂的统计模型。</p>
-
-<p class="art-p">但这篇文章的隐患就是，一旦被媒体知道了，公众知道了，就会被解读成反正三分之二都是运气，我干嘛还谨言慎行啊，我还是吃喝嫖赌吧，张学良不是一辈子抽烟喝酒吸毒，还是活到100岁嘛。就连文章作者也专门说到了这个问题，他们说如果多个驱动突变才能致癌，那么就算是前几个突变都是因为细胞分裂产生的随机突变造成的，只要最后一个关键突变是环境因素造成的，我们也不能说这个癌症是由运气差，因为最后造成癌症的突变其实是可控的，可预防的。</p>
-
-<p class="art-p">咱们在上一个细胞系列的节目里最后提到了癌症，最终能形成恶性肿瘤可不是一个突变给予足够时间就可以的，因为它们往往被修复的机制干掉，或者被免疫系统干掉，而且肯定不是一次突变就能成为恶性肿瘤的，至少需要突变出十几种能力才行，比如生出可以忽略抑制细胞停止分裂的信号，再生出可以自行补上端粒的功能，再生出溶穿血管壁的功能，等等，等等。</p>
-
-<p class="art-p">这里每个条件都相当于文章里说的突变的发生，需要叠加十几个因素在一起才能最终变成癌症。三分之二的致癌突变来自于干细胞的随机突变，这句话不等于三分之二的癌症病例是随机突变造成的。所以媒体那么解读是错误的。</p>
-
-<p class="art-p">但是这一些研究对科研人员是有意义的，它至少提示了科学家要重视随机错误对癌症发生的研究，因为从前的观念是偏向另一侧的，就是癌症主要由环境因素和遗传因素导致。现在起码提醒了人们，你们是不是太低估了随机错误的影响呢？虽然文章发布在了《科学》上，但仍然属于新结论，需要后续的同行验证，也许今后会扭转癌症的研究方向，到时候进行普遍的早期癌症筛查可能就比现在更重要了。</p>
-
-<p class="art-p">另外这是一个庞大的平均值，必然一些突变更受随机突变，另外一些更受环境影响，哪些更受环境影响才突变呢，很不幸，抽烟导致的肺癌，喝酒导致的肝癌，胡吃海塞导致的结肠癌，不注意防护导致的皮肤癌都是更受环境因素影响的癌症。所以真要是看了一句话标题就开始胡来的话，运气不会太好的。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-8">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">烟草业的罪</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">香烟销量增长的恐怖数据</p>
-
-<p class="art-p">1870年美国人均年消耗香烟不到1支，1900年到了香烟40支、雪茄80支，1953年达到3500支，1970年就是4000支了。各国中苏格兰的人均消费量最大，成年人平均每天每人抽20支。这个时候也没人认为香烟对身体健康有害处，医学界的主流看法都是，吸烟和穿丝袜、坐着的危害一样可以忽视。</p>
-
-<p class="art-p">香烟和肺癌有关系？</p>
-
-<ol class="art-list">
-<li>香烟和肺癌的关系是1947年英国统计局发现的，自从香烟畅销二十多年来，英国肺癌发病率升高了15倍，后来又从解刨学上发现吸烟者的肺部情况异常糟糕，可能与肺癌相关。但当年伦敦的空气也是恶劣到极点，人们曾经更怀疑肺癌高发和工业化城市污染的关系更密切。</li>
-</ol>
-
-<ol class="art-list">
-<li>1948年美国医学生温德尔在学业中设计了一个吸烟信息和肺癌发病情况的统计实验。温德尔的导师格林厄姆初期非常不看好这个研究方向，但仍然放手让学生去做，目的是让他自己体会科学的艰难，最后统计结果在他严格的审核下没有找出任何问题，他也很认可这个实验结果，即吸烟和肺癌发病率高度相关。</li>
-</ol>
-
-<ol class="art-list">
-<li>1949年，希尔带领研究小组统计了英国4.1万名注册医师详细的吸烟数据，那个年代英国注册医师总数是6万人。从数据上看，这是一个非常成功的调查问卷。他们又在1954年统计了在此期间死亡的789名医师的死亡原因，其中36人是肺癌导致的死亡，这36人里只有2人没有吸烟史。希尔自己也在统计结果出炉后悄悄戒了烟。</li>
-</ol>
-
-<p class="art-p">烟草企业的反击</p>
-
-<ol class="art-list">
-<li>烟草企业在1950年初嗅到了危机的苗头，他们发现越来越多的科学团体把矛头指向了吸烟有害健康。为了保护自己的利益，他们在1954年成立了烟草产业研究委员会，并聘请遗传学家担任主席，这个人不但受过科学训练，观点还很偏激，认为一切疾病都起源于遗传缺陷，烟草只不过暴露了缺陷，而不是病因。</li>
-</ol>
-
-<ol class="art-list">
-<li>烟草产业委员会主席对香烟有害论的反驳最有力的武器就是：医学界没有找到病原体。</li>
-</ol>
-
-<p class="art-p">找到香烟致癌的“病原体”</p>
-
-<ol class="art-list">
-<li>病原体的概念源于1880年微生物学家对细菌感染的发现，当时医学界把3条规则定为找到病因的标志：①患者体内找到致病物质、②分离并提取出致病物质、③致病物质可以感染其他宿主。但这三条显然不适用于后续医学的发展，比如癌症就不会传染。</li>
-</ol>
-
-<ol class="art-list">
-<li>希尔修正了上一代医生对病原体的定义，他认为当前对香烟可以证明吸烟者比不吸烟者发病率高10倍、吸烟越久发病越高、吸烟越多发病越高，不同地点不同实验中发现了相同的规律，还有大量流行病学的证据，这些同时存在的情况下，即便没有易读易懂的病因，也可以把吸烟和肺癌看做是因果关系。</li>
-</ol>
-
-<p class="art-p">科学界大反击、烟草企业撤退</p>
-
-<ol class="art-list">
-<li>美国国家癌症协会、国家心脏协会、国家防痨协会联盟写信给肯尼迪总统，要求国家出面调查香烟危害健康的情况。当时，肯尼迪把这项艰巨的任务交给了国家卫生局，局长特里马上着手成立10人的调查小组。</li>
-</ol>
-
-<ol class="art-list">
-<li>调查小组经过几年时间，访问了几十个实验室，翻阅1200份期刊和6000篇论文，参与所有研究的患者与对照组人数多达112万人，经过13个月的撰写，最终完成了387页的调查报告。结论是：吸烟是肺癌高发的主要诱因。</li>
-</ol>
-
-<ol class="art-list">
-<li>调查结论发布不久后，美国起草《联邦香烟标签和广告法案》，最初意图要求烟草企业在包装盒上标注“吸烟对健康极为有害，可导致癌症和其他导致死亡的疾病”，但烟草企业通过关系运作，最终把这句话弱化成“吸烟可能有害健康”。</li>
-</ol>
-
-<ol class="art-list">
-<li>烟草企业受到舆论挑战，曾经有律师以“公平原则”为由要求电视台播放烟草的负面报道。这桩案件最终得到最高法院的支持，从1969年后电视中的公益广告大都是反烟的内容。</li>
-</ol>
-
-<p class="art-p">政府状告烟草企业，却形成更稳固的利益共同体</p>
-
-<ol class="art-list">
-<li>1994年密西西比州政府因为需要支付大量医疗费用给肺癌患者，而把4家烟草企业告上法庭，要求他们支付所有费用，后续佛罗里达州、德州、明尼苏达州都陆续加入了诉讼。最终演化成一场更大规模的诉讼，为了解决这场诉讼，在1998年46个州和47家烟草企业签署了一个和解协议。协议的内容就是烟草公司做最大的妥协，每年上缴很大比例的利润，公布所有烟草公司内部资料，采取最严格的烟草广告限制，广泛教育公众烟草的危害，最大化公开烟草业历史上的责任和罪行。换来的是，州政府不再起诉烟草企业了，如果是个人诉讼，地方法院会对烟草企业有所保护，允许他们继续销售烟草。和解条约最终形成了一个更加封闭垄断的环境，没有竞争了，新企业不可能再进来。曾经的烟草巨头地位更稳固，而且有了保护伞。烟草公司上缴的钱大都给医疗机构，实际上形成了更稳固的利益集团。</li>
-</ol>
-
-<ol class="art-list">
-<li>烟草企业从1979年起不在美国做任何电视广告，大部分企业把新市场定在里中国、印度、墨西哥这样的人口众多的发展中国家。在短短几年时间里就通过巨大的经济利益绑架了政府。中国在2015年才推出了最严的“禁烟令”，但实际执行效果不好，只有北上广深可以勉强及格。</li>
-</ol>
-
-<p class="art-p">糖业是下一个烟草行业</p>
-
-<ol class="art-list">
-<li>美国医学学会期刊揭开一个惊人的黑幕，就是制糖企业从1960几年开始花钱收买科学家，把心血管疾病的原因尽量推到脂肪身上去，弱化糖和心血管疾病的关联。已经抓到的证据有，糖业协会资助哈佛大学的3位科学家，相当于现在一个人5万美元，让他们做一些论文，尽量把糖和疾病撇清关系。还有可口可乐公司常年大量资助此类研究。</li>
-</ol>
-
-<ol class="art-list">
-<li>糖对身体的危害也因为利益集团的操控被弱化。而实际烟草行业到现在依然绑架着美国政策监管者。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-9">
-      <div class="art-header">
-        <span class="art-chapter">Ch.81</span>
-        <h3 class="art-title">不止中国，应试教育哪国都有</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">高中理科课程背离学科本身属性</p>
-
-<p class="art-p">物理这种和数学工具结合紧密的学科，差不多变相为披着物理外衣的数学技巧训练；化学这种本来在科学领域中和数学、物理结合很紧密的学科，在高中变成了披着化学外衣的死记硬背。只有数学科目的学习和数学本身有点像，就是一种智力测验。</p>
-
-<p class="art-p">各国都有应试教育，只是形式不同</p>
-
-<ol class="art-list">
-<li>日本、韩国的应试教育压力不比中国小，模式和中国类似。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>美国大学入学考试需要很多材料：平均成绩+课外活动简历+导师报告+两封推荐信。</li>
-</ol>
-
-<p class="art-p">美国应试教育的逐步变化</p>
-
-<p class="art-p">在50年前，美国大学入学考试只看平均成绩和SAT分数，这样平民出身的孩子只要通过应试训练赢得分数上的优势，就能进入好大学，而贵族子弟成绩往往没有这么高。</p>
-
-
-
-<p class="art-p">常青藤盟校是贵族学校，开设这类贵族学校的目的主要是培养社会精英。为了避免很多名额被占据，常青藤盟校才提出了额外标准，以区分普通家庭的孩子和贵族家庭的孩子。这种区分主要体现在丰富的课外活动和牛人的推荐信上。</p>
-
-
-
-<p class="art-p">常青藤盟校这个规则只在初期起到了作用，后来平民学子也可以搞到这些材料，所以常青藤盟校继续搞出一些特殊规则，比如特招学生和学校资源委员会的孩子可以更容易被录取等等。只有捐款超过100万美元的人，才可以列入学校资源委员会名单。就这样，常青藤盟校由校友供养，校友为自己的孩子提供更优质的教育环境。</p>
-
-<p class="art-p">什么是真贵族？</p>
-
-<ol class="art-list">
-<li>贵族精神包括崇尚勇敢、光明磊落、尊重女性、同情弱者、有强烈的社会责任感。富不等于贵，为富不仁的人不是贵族。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>杨振宁在普林斯顿工作时带着儿子杨光诺散步，遇到爱因斯坦还合过影，这是贵族的一个缩影。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>玻尔的两个孩子从小和爸爸的研究生们一起玩，这3位研究生一位将来是诺贝尔物理奖得主，一位将来是美国氢弹之父，一位写的物理学讲义被全世界各大学当经典教科书用。在这样的环境下，贵族阶层精英不断，玻尔的小儿子1975年获得诺贝尔奖。</li>
-</ol>
-
-<p class="art-p">印象派给人带来的启发</p>
-
-<p class="art-p">19世纪60年代，巴黎的画家首先要经历4年巴黎高等美术学院的学习和淘汰，再争取进入皇家内阁美术部的名单，然后争取进入巴黎美术展览会，最后争取让自己的画挂在与视线平齐的位置，这样才算得上颇有成就。</p>
-
-
-
-<p class="art-p">几万画家争夺几百个位置，竞争异常激烈。当时的印象派是绘画中的非主流派别，与主流画派的最大区别就是构图模糊、选题出自生活，这样的作品很难挂在与视线平齐的位置。</p>
-
-
-
-<p class="art-p">莫奈建议几位印象派画家，不要参加巴黎画展，自己搞单独的小型印象派画展。最终，塞尚、莫奈的印象派绘画经历了100年的发展，成为主流画派的一支。</p>
-
-<p class="art-p">[图片: 莫奈作品《睡莲》]</p>
-
-<p class="art-p">相对剥夺理论</p>
-
-<ol class="art-list">
-<li>社会学家 Samuel Stouffer 对50万美军的研究发现，待遇和晋升最好的空军，对空军部门的满意度远低于待遇最低的宪兵对宪兵部门的态度。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>空军有52%的人会晋升，于是大部分都处于晋升和未晋升的焦虑、嫉妒心态中。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>宪兵有21%的人会晋升，大部分都没有晋升机会，所以大家心里不攀比。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>北欧高福利国家自杀率高，南欧经济衰落国家生活条件差，但自杀率低，也可以用相对剥夺理论来解释。</li>
-</ol>
-
-<p class="art-p">学习的过程永远是艰苦的</p>
-
-<ol class="art-list">
-<li>学习知识，尤其是科学知识永远不会轻松。如果你感觉轻松，那别人学会这些也没有门槛，你依然没有持续的优势。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>科学知识由概念搭建，逻辑相连。</li>
-</ol>
-
-
-
-<ol class="art-list">
-<li>《卓老板聊科技》只把最易懂的、最有意思的观点从一个领域筛选出来，实际上每个领域的科学知识都是一小部分有趣，大多数枯燥、艰涩难懂。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-10">
-      <div class="art-header">
-        <span class="art-chapter">Ch.81</span>
-        <h3 class="art-title">细说“超级月亮”</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">咱们节目是每晚0点准时上线，真的让不少听众久等，我估计有1/10的人可以在上线那半小时内点开看，为了感谢这些深夜守候我的听众，给大家聊聊今晚大月亮的事儿。</p>
-<p class="art-p">您如果有条件，现在就可以拉开窗帘看看月亮，因为今晚的月亮是从1948年起最大月亮的月亮。</p>
-<p class="art-p">从昨天起您会陆续看到“超级月亮”的新闻。趁着明月当空，我们一起说说为什么今晚的月亮这么大这么亮。</p>
-
-<p class="art-p">简单来说，原因就是，这是一次月亮在满月的时候赶上了近地点。具体来说就是月球绕地球转并不是完美的圆形，而是椭圆的，高中数学我们就学过椭圆，地球就在这个椭圆上的其中一个焦点上，所以月球绕到焦点这一侧就会离地球很近。我们也常说月球距离地球38万公里，这个距离只是一个平均值，实际上近地点是35.6万公里，远地点是40.7万公里，您看，还是有很大差异的。</p>
-<p class="art-p">而且这个椭圆的形状还在不停的变化，所以月亮从地球上看到的大小变化也很多，最小的满月比您今天看到的月亮，直径小了14%，亮度上暗了30%，这是一个肉眼都可以感受到的区别。</p>
-
-<p class="art-p">最大的月亮，也就最理想的情况是，当达到满月的那一刻，月球也正好转到了最近的近地点，但这往往凑不了这么齐，比如这一轮的月亮变化中，满月的那一刻发生在11月14日的21点52分，而这一轮的近地点是11月14日的19点21分，您看，离得最近了，但月亮还没有露出整个身体，所以稍有遗憾，没有达到完美。您现在抬头看到的月亮实际比刚刚还小了一些，因为月亮离地球更远了，月亮也开始遮住身体的一部分了。</p>
-
-
-<p class="art-p">各位还可能听说到的一个危言耸听的超级月亮的谣言，那就是离地球最近时的满月不但会影响潮汐力，让海浪更凶猛，还会影响女性月经周期。对潮汐力来说，决定因素在于太阳、地球、月亮三者之间的相互位置，在新月和满月时，如果太阳、月亮和地球在一条直线上，潮汐力会叠加，这时候的潮汐称为大潮，当月亮在下弦月上弦月，地球和月亮的连线垂直于太阳和地球的连线时，这时候潮汐力最小，称为小潮。太阳的引力完全不可忽视。女性月经周期大都是27-28天，和月亮运转周期的29.5天本来就有区别，月经是生理功能的一部分，并不是月亮导致的，虽然他们都带了一个月字儿。</p>
-
-
-<p class="art-p">看到今晚的月亮我也突然想起我从前一个兄弟，他平时也神神道道的，有一阵子非常着迷天文，买了不少书，下了不少付费的app，每天和我吃饭的时候不停的聊，有时候还掏出手机对着小面馆屋顶的灯就搜起星来，老板娘看着他眼光都是异样的。他当年给自己定了一个目标，就是可以训练出一种技能，抬眼看一看月亮，简单通过测量月亮在天空中的角度和圆度，说出现在是几月几号几点，我觉得说出几月几号还是可以训练出来的，好像说出几点已经不太可能了。月夜有一些感慨，祝所有执着于自己爱好的人得到快乐。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-11">
-      <div class="art-header">
-        <span class="art-chapter">Ch.82</span>
-        <h3 class="art-title">混沌世界是怎么出现的？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">复杂系统都有哪些</p>
-
-<ol class="art-list">
-<li>有些复杂系统我们可以看着它们一点一滴形成，比如神经系统最初从受精卵发育，出现脊索，干细胞分化成神经细胞，神经细胞连接成神经元。但等到婴儿可以做出神经反射的时候，那时的复杂度已经是我们无法理解和模拟的了。一窝蚂蚁从单个一只，逐渐发育成一窝几百万只蚂蚁，这么多蚂蚁没有中央信号的调控，怎么维持蚁窝生态平衡的？这个也是从零长成一个复杂系统的例子。</li>
-</ol>
-
-<ol class="art-list">
-<li>有些复杂系统我们没有机会观察它们如何从零长大，比如稳定的政权组织形式、全球经济的运作。</li>
-</ol>
-
-<p class="art-p">关键词：非线性</p>
-
-<ol class="art-list">
-<li>非线性是造成复杂性的一个重要原因，最简单的理解就是，两个量之间的数学关系不是成比例的直线。比如Y=X^2 这样的关系就是典型的非线性。</li>
-</ol>
-
-<ol class="art-list">
-<li>非线性造成了：整体不等于各部分之和。哪怕是简单的二次方关系也会在迭代计算过程中出现令人费解的情况。</li>
-</ol>
-
-<ol class="art-list">
-<li>物理学家费根鲍姆对生物群落数量做出一个数学模型，公式的形式就是Xn+1=R×Xn×（1-Xn），这里面R是个系数，Xn是本次的结果，Xn+1是下一次的结果。</li>
-</ol>
-
-<p class="art-p">混沌的出现</p>
-
-<ol class="art-list">
-<li>当我们着眼于公式Xn+1=R×Xn×(1-Xn)时，R代表出生率减死亡率的差，Xn代表当前种群数量比空间可容纳数量最大值之比。当R=2时，不论X0的值等于多少，最后都会在几次迭代后，让X最终等于50%。</li>
-</ol>
-
-<ol class="art-list">
-<li>当R逐渐增大后，X会逐渐增加，直到R=3.1以后X不再固定在一个值上，而是在2个固定值间跳变，随着R继续增加，会在4个固定值间跳变，之后随着R增加，跳变周期会按8个、16个、32个、64个的样式增加。这个趋势在R=3.57后，跳变周期会趋于无穷大，即混沌出现。</li>
-</ol>
-
-<ol class="art-list">
-<li>当混沌出现后，初始值X0上微小的差异都会在迭代几次后出现巨大的偏差。</li>
-</ol>
-
-<p class="art-p">混沌与复杂</p>
-
-<ol class="art-list">
-<li>如果一个系统今后的状态无法预测了，我们就把它理解成复杂，那么一个非线性系统在进入混沌点之前的状态，我们是可以通过测量和定理来预测的，这个点之后的状态因为微小的测量偏差都会导致巨大的偏离，所以是不可预测的。这里微小的偏差甚至指10个数位的测量精度。</li>
-</ol>
-
-<ol class="art-list">
-<li>混沌状态非常复杂，这种复杂的产生没有额外引入任何干扰，而完全是由从前的规范和确定的定律中迭代而来，所以混沌是非线性系统的内秉属性，无法去除。</li>
-</ol>
-
-<p class="art-p">太阳系的稳定性</p>
-
-<ol class="art-list">
-<li>三体就是典型的非线性系统，庞加莱在当年因为标准三体问题过于复杂，把它简化为“限制性三体问题”，结果还是很复杂。</li>
-</ol>
-
-<ol class="art-list">
-<li>限制性三体问题就是假设一个双体问题，互相围绕旋转，再增加一个质量远小于他们的第三体，求第三体收到双体的引力之和会出现怎样的轨迹。庞加莱最终的结论发现，限制性三体问题，会因为初始值稍有偏差而导致后续结果无法预测。</li>
-</ol>
-
-<ol class="art-list">
-<li>太阳系行星运动规律最早由开普勒、牛顿等建立，但那时无法很好描述土星和木星的轨道偏差，这是因为牛顿忽视了其他行星之间的引力，他的理由是太阳占据整个星系99.8%以上的质量，实际上还因为他缺少足够的数学工具来处理那些微扰。</li>
-</ol>
-
-<p class="art-p">[图片: 太阳系行星偏心率变化]</p>
-
-<ol class="art-list">
-<li>拉普拉斯、拉格朗日、欧拉这些大数学家用自己的数学强项帮牛顿填上了坑，从此轨道倾角、节点经度、离心率、远日点等等参数让太阳系行星轨道描述更精确，那时人们相信，只要数据足够全，我们甚至可以预测整个宇宙的未来。</li>
-</ol>
-
-<ol class="art-list">
-<li>庞加莱对限制性三体的研究打破了人们的美梦，但当时庞加莱的研究属于非主流，并未被广泛接纳。</li>
-</ol>
-
-<ol class="art-list">
-<li>现代计算机的应用大幅推进了混沌的研究，因为迭代计算往往是一种计算量巨大而又枯燥的工作。在计算太阳系行星时发现，外太阳系四颗气态行星比内太阳系四颗岩石行星的轨道要稳定很多，稳定性最差的是水星。在不考虑广义相对论效应时，水星在太阳的有生之年，其轨道坠入太阳或与其他行星轨道相交的几率超过10%，不过好在有相对论效应补充，这时出问题的几率降到了1%。</li>
-</ol>
-
-<p class="art-p">下期剧透</p>
-
-<p class="art-p">下期节目中会介绍一个新概念——熵。</p>
-
-<p class="art-p">熵原本是一个热力学单位，但现在广泛应用在信息领域中，它是如何应用的，又如何度量事物的复杂度呢？</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-12">
-      <div class="art-header">
-        <span class="art-chapter">Ch.82</span>
-        <h3 class="art-title">用网络游戏研究社会学</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">留言</p>
-<p class="art-p">牟海望：2011年底，Facebook和米兰大学合作，针对7亿多Facebook用户之间的好友关系网络所做的研究发现，两个用户之间的平均距离仅为4.74度。</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“网络思维与复杂性”。</p>
-
-
-<p class="art-p">在《网络思维与复杂性》这期我们聊到了六度间隔理论，牟海望给我们补充了一个例子，2011年年底，米兰大学和Facebook合作，针对7亿多Facebook用户的好友关系网络做了研究，发现两个用户之间平均距离是4.74度。我也看了一下，这项研究利用的是一个月内访问Facebook的用户，一共7.2亿人的好友关系，这个规模超过了世界人口的10%，虽然人群有一定特殊性，就是他们普遍在15-55岁之间，但因为参与社会生活的群体也主要是他们，所以非常有参考性，有说法是六度间隔要改成四度间隔了。</p>
-
-<p class="art-p">这里有一些数学、统计学量化做基础的成果是从事销售和传销从业者最最欢迎的，直到现在还有很多线下直销在把东西卖给你后，还要你提供一份5个人的联系方式，他们好去继续联系扩大销售。不过六度间隔理论是1950年年初提出来的，从那时就不断被各种曲解和误用，那个年代人与人之间的交流远不如现在，所以当年不少严谨的研究是质疑这些说法的，但随着技术进步，真的在不断促进人与人的关系，20年前我们身边有谁认识个外国人是很少见的，现在有人的朋友圈有个外籍人士，你也不会刮目相看。所以这个被着力营销的卖点竟然经过了60多年成了真实情况。</p>
-
-<p class="art-p">在这些年里利用互联网产品做社会学研究也挺多的，因为数据细致，可靠度高，只不过人群特征太明显，不具备普遍性。比如在PC年代微软就利用2006年某一个月的MSN短信后台数据，统计了2.4亿用户的300亿条信息，发现只要通过平均6.6个人就可以和全数据库的1800亿组配对产生关联，48%的用户在6次以内就可以产生关联，78%的人可以通过7次联系内产生关联。Facebook这次研究是任何2个用户之间通过4次关联就可以连接上的概率是92%，通过5次可以连接上的概率是99.6%。</p>
-
-<p class="art-p">通过互联网产品做社会学分析的还有个特别有意思的例子，用的是魔兽世界，那还是10年前发生的一次bug。当时推出最新的副本巨魔城市祖尔格拉布，这个副本的大boss是哈卡，灵魂剥夺者，不知道大家还记不记得怎么打，它有个法术叫堕落止血，被打中的就持续掉血，不只掉血，还有传染性，一定距离里有其他玩家也会被感染。</p>
-
-<p class="art-p">最初设计也考虑到传染的情况，但这种副本伤害挺大的，很难有人活下来回到主城。不过还是有人通过猎人宠物把这个掉血的疾病带回城了，还有一些角色用瞬移和传送把这个掉血功能带回了主城。所以一场游戏中的瘟疫就大爆发了，很多玩家赶紧撤离大城市，但是不断有人去打副本，把瘟疫带回来，最后有大约400万玩家感染上了。</p>
-
-<p class="art-p">暴雪只能通过修改boss技能，把这场瘟疫平息下来。这本来是游戏里的事情，但引起了科学家的关注，理由嘛你也知道，科学家里很多宅男嘛，不搞科研就打魔兽，哎，就注意到这很有研究价值啊。这不就是空气传播的很好的模型嘛，每天650万人同时在线，跟现实模型都很接近了。从前只能用计算机规定一些参数，就像我们吃豆游戏那样，然后模拟感染，观察效果总结经验，但那不是真人，真人面对感染是有更多行为的，这又不能用真人感染。所以后续波士顿的塔夫茨大学和新泽西的拉各斯大学就仔细研究了这个现象，论文发表在《柳叶刀》上。</p>
-
-<p class="art-p">从这个角度看，不只是杀怪感染瘟疫，像魔兽世界中财富的分配，等级的提升，贵重物品的交易，通货膨胀等等参数都是可以统计的。社会学家甚至可以和暴雪这样的公司联合，开发一些为科研项目而设置的任务，玩儿起来有意思，又告诉大家你们玩这个任务是在为科学做贡献，我想游戏也会更有意思了。</p>
-
-<p class="art-p">好，这个补充就到这。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-13">
-      <div class="art-header">
-        <span class="art-chapter">Ch.82</span>
-        <h3 class="art-title">网络思维与复杂性</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">蚂蚁的网络世界</p>
-
-<ol class="art-list">
-<li>蚁后是雌蚁，它们从蚁窝中飞出，以千分之几的存活率在其他地方开辟新的蚁窝，自己也从普通雌蚁变成了蚁后，拥有超过30年的寿命，而工蚁（一种没有发育完全的雌蚁）的寿命只有3-5年。</li>
-</ol>
-
-<ol class="art-list">
-<li>蚁后自从开始产卵就居住在蚁窝中一栋大房子里，它此后的一生也不会出屋一步，它无法了解外面的世界，也无法对其他蚂蚁发号施令，一生的任务只有吃饭和产卵，“蚁后”的称号一点都没有尊严，完整是一台生育机器，一个生育奴隶。</li>
-</ol>
-
-<ol class="art-list">
-<li>工蚁的数量占蚁窝所有蚂蚁数量的70%以上，它们负责整个蚁窝生活的维持工作。工种分五类，窝内蚁、清洁工、建筑工、侦察兵、搬运工。</li>
-</ol>
-
-<ol class="art-list">
-<li>工蚁的工种存在优先级，窝内蚁＜清洁工＜建筑工＜侦察兵＜搬运工，下一级工种的蚂蚁经过一段时间可以升级到上一个工种，升级后就不会再降级。当某一工作量猛增后，下一级工人会放下当前工作协助上一级工人一起劳动。搬运工负责搬运食物，等级最高，即便其他工作需要人手，它们闲下来也不会帮忙。</li>
-</ol>
-
-<ol class="art-list">
-<li>蚂蚁通过头上的触角交换费尔蒙，这是一种信息素，蚂蚁只通过它旁边的蚂蚁了解蚁窝的信息，这里没有指令处理中心，也没有哪个蚂蚁是总司令。蚂蚁世界的信息网络是单个个体的互相连接形成的。</li>
-</ol>
-
-<p class="art-p">不一样的网络思维</p>
-
-<ol class="art-list">
-<li>“网络思维”最早是由两篇物理学领域的论文引发的。当时《小世界网络的集体动力学》和《随机网络中标度的涌现》一篇发在Nature上，一篇发在Science上，引起了很多科学家的关注。</li>
-</ol>
-
-<ol class="art-list">
-<li>“六度分割”理论说人和人之间距离不超过6个人，原本是一个普通的研究，后来被各种营销课程当素材，篡改其中数据、结论，增加自己的臆断，最终变了味儿。这个研究是一九五几年做的，当年研究中有大量信件转手次数远超过6次，还有更大量信件根本没有被收到。</li>
-</ol>
-
-<ol class="art-list">
-<li>网络思维重视个体间的关联，比如人与芥菜都有23000个基因，但是人的复杂性远超过芥菜，一种观点认为，人的复杂体现在基因关联远超过芥菜。</li>
-</ol>
-
-<p class="art-p">小世界网络</p>
-
-<ol class="art-list">
-<li>在一个网络中，随机把5%的短程连接改成长程连接后，平均路径长度会大幅下降，增加网络内消息传递效率。这就是小世界网络，它最早发源于1999年的《物理评论快报》上。</li>
-</ol>
-
-<ol class="art-list">
-<li>生活中的人际关系网就类似小世界网络，这里大部分人拥有较少的交往关系，少数人拥有大量交往关系，他们的存在让信息交流效率提高。</li>
-</ol>
-
-<ol class="art-list">
-<li>自然界出现小世界网络的原因：有高效传递消息的刚需和维护长程连接的高成本。所以最终只有少数大节点。</li>
-</ol>
-
-<ol class="art-list">
-<li>工程类网络就在研究小世界性，比如电网和互联网，都需要尽量快的走完路径，这样可以节省变压器、变电站、路由器等设备，减少延迟和线上损耗。这些网络结构因为是我们一手搭建起来的，所以更加符合数学模型。</li>
-</ol>
-
-<ol class="art-list">
-<li>小世界网络的脆弱体现在大节点失效上，如果有人蓄意破坏大节点，网络会陷入瘫痪。</li>
-</ol>
-
-<p class="art-p">无尺度网络</p>
-
-<ol class="art-list">
-<li>无尺度网络和小世界网络有一点相似：都存在少数大节点，但无尺度网络从任意尺度看，大节点所占比例都是相同的，这个比例结构上的自相似和图形上的分形结构很像，分形结构是图形上的自相似嵌套，无尺度网络是比例上的自相似嵌套。</li>
-</ol>
-
-<ol class="art-list">
-<li>无尺度网络更加坚韧，随机选取一些节点删除后整个网络的属性和重要参数不会大幅改变，因为总有小一些的节点承担这些负担。</li>
-</ol>
-
-<ol class="art-list">
-<li>互联网上的网站，入链接数量呈现无尺度网络特征，这个发现最早引起了谷歌创始人的注意，他们通过分析每个页面入链接的特征矩阵，为搜索结果排序提出了新的算法，大大超越了上一代以关键词分类为基础的搜索结果排序法。</li>
-</ol>
-
-<p class="art-p">复杂结构中的网络</p>
-
-<ol class="art-list">
-<li>生物代谢网络中把反应物和生成物当做节点，把反应当做连接关系，经过研究发现这个网络也呈现无尺度网络特征。从微生物到哺乳类动物的新陈代谢反应物和生成物存在几个大节点，它们是磷酸、果糖、葡萄糖这样的东西。因为这些物质在地球上有合理的稳定性和活跃性，所以可以保证长程连接的存在。</li>
-</ol>
-
-<ol class="art-list">
-<li>疾病传播中把感染者和被感染者当做节点，传染当做连接关系，这个网络也符合无尺度网络特征，预防艾滋病的新思路是控制大节点，比如增加平均路径长度，提高传染门槛，再辅以全民防控，这样的效果非常好。</li>
-</ol>
-
-<p class="art-p">对网络思维的质疑和否定</p>
-
-<ol class="art-list">
-<li>复杂性研究的开创地，最有发言权的圣塔菲研究所的研究员表示：无尺度网络被滥用，这是一种对研究者的侮辱。</li>
-</ol>
-
-<ol class="art-list">
-<li>现实生活中很难有符合网络数学模型的例子。在现实生活中，事物的连接有强弱之分，被当做节点的个体也有类型之别，自相似嵌套也不严格相似，甚至嵌套只有3-4层，根本谈不上分形。</li>
-</ol>
-
-<ol class="art-list">
-<li>不少营销类培训利用熵、非线性、小世界性、无尺度网络等名词作噱头，身披科学外衣宣传伪科学，更应该提高警惕。</li>
-</ol>
-
-<p class="art-p">下期剧透</p>
-
-<p class="art-p">接下来要聊的话题是“水”。</p>
-
-<p class="art-p">假如100个人住在一起，该怎么喝水？那如果是100万个人住在一起呢？</p>
-<p class="art-p">水有哪些神奇的物理属性？与生活密切相关的净水器、饮水机是不是真的安全呢？</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-14">
-      <div class="art-header">
-        <span class="art-chapter">Ch.82</span>
-        <h3 class="art-title">计算机如何模拟进化？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">第一位计算机学博士</p>
-
-<ol class="art-list">
-<li>约翰·霍兰德是世界上第一位计算机科学博士，毕业于密歇根大学，他的老师是计算机工程师巴克斯，巴克斯曾经协助冯·诺依曼建造EDVAC，这台计算机是世界上第一台计算机ENIAC的改进版，采用的是二进制算法。</li>
-</ol>
-
-<ol class="art-list">
-<li>当年最早建成的计算机都是军事用途的，主要用来计算导弹的弹道。近水楼台先得月，霍兰德用最早的计算机进行了最早一批复杂性系统的研究，他不但是计算机博士，还跨界研究复杂理论和非线性理论。</li>
-</ol>
-
-<p class="art-p">遗传算法</p>
-
-<ol class="art-list">
-<li>在节目中对这套算法有具体数字和逻辑的介绍，文字里只做大概说明：在一场类似：“吃豆子”游戏中，先随机生成拥有第一代策略的吃豆人，然后他们在变化莫测的豆子阵里穿梭，在非常大规模高频率的比赛里，按照分配给自己的策略执行动作，也正是因为场次多，频率高，最终评分就能反应他持有的生存策略是不是有竞争力。</li>
-</ol>
-
-<ol class="art-list">
-<li>进化体现在还会生成第二代策略，第二代策略从第一代中得分较高的生成，得分越高，越有几率被选中，选出的一对策略会以类似“有性生殖”的方式，生成下一代策略，并且添加一个随机数，在下一代策略中引入小概率的变异。</li>
-</ol>
-
-<ol class="art-list">
-<li>照此做法遗传1000代，这就是整个模型的过程，并不需要利用穷举法计算最优策略，穷举的运算量往往是一个天文数字。</li>
-</ol>
-
-<p class="art-p">遗传算法模拟进化实验的启示</p>
-
-<ol class="art-list">
-<li>高水准的生存策略只有它自身的行为总和能描述自身，不是N条规则可以总结描述的。我们虽然可以通过日常经验分析出一部分高水准的原因，但还有更多细碎的内容无法通过线性思维总结。</li>
-</ol>
-
-<ol class="art-list">
-<li>稳定的自然法则下，可以快速剔除不合理策略，策略进化速度在开始非常快，后期非常慢，所以一个生态形成后短期内就会筛选出有竞争力的模式。</li>
-</ol>
-
-<ol class="art-list">
-<li>有性繁殖的出现很可能是因为环境变化剧烈，对生物适应环境的速度提出了更高的要求，有性繁殖是一种快速更迭优质策略的繁衍方式。</li>
-</ol>
-
-<ol class="art-list">
-<li>社会上70后对80后，80后对90后、00后的“看不惯”是普遍现象，如果把社会生存也比喻成一场吃豆游戏的话，90后和00后的游戏中豆子远多于前辈，所以他们的生存难度低，于是有更多策略可以存活。老一代因为豆子少，所以只有少数几种策略可以活下来，有人把这种现象理解成“越往后道德水平越低”，其实只是生存策略更多样了而已。</li>
-</ol>
-
-<p class="art-p">间断式进化</p>
-
-<ol class="art-list">
-<li>间断式进化的主要观点认为，生物个体和物种多样性在相当久的地质年代中变化不大，只在少数“关键时刻”才快速变化。</li>
-</ol>
-
-<ol class="art-list">
-<li>虽然间断式进化也是支持进化论的，但和传统进化论支持的积累式进化持完全相反的观点，积累式进化的观点是：物种进化是渐进式的、连续式的。</li>
-</ol>
-
-<ol class="art-list">
-<li>从前的间断式进化证据主要来自化石中呈现的形态上的断档，但因为化石本来就容易断档，所以依据化石做证据有点站不住脚，但遗传算法模拟的进化给间断式进化提供了更多证据。</li>
-</ol>
-
-<ol class="art-list">
-<li>遗传算法也会应用在某些计算量超大的任务上，是人工智能算法中的一部分。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-15">
-      <div class="art-header">
-        <span class="art-chapter">Ch.90</span>
-        <h3 class="art-title">证明转基因食品安全的证据在哪儿？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">肖林：我非常喜欢卓老板，讲得清楚，故事性强，给了我很多启发。唯独，我不赞同卓老板对于转基因的态度，不，应该是对于“反转基因”的态度。不谈那些组织、崔永元什么的，人还没有怀疑的权利了，转基因如何安全、怎么验证的、当中的科学道理，如果人们不了解，你倒是详细说出来看看。你所有的节目中大都只是一句带过，为何不详细说说？实验在哪里，做了多少次，哪个机构发表的？针对的是什么转基因产品？你说反转没有理性，你们支持转的就有理性吗？只告诉我们反的不科学，那请拿出你们的科学来，我急需要呢！其实好多人没有“反”，我们也是人之常情怀疑一下嘛，不管我们有没有科学素养，但是你们支持转基因的倒是给点力好吧!别只是抓对方做事方式的漏洞，也别谈什么利益，就谈安全！</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第13期“在转基因食品是不是安全这件事儿上，我们应该听谁的？”。</p>
-
-
-
-<p class="art-p">附“农业转基因生物安全评价资料”的网址：</p>
-
-<p class="art-p">http://www.moa.gov.cn/ztzl/zjyqwgz/spxx/201307/t20130702_3509313.htm</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-16">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">为什么会感觉手脚冰凉？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">刘元魁：</p>
-<p class="art-p">卓老板，上期节目说上火是发炎，能不能聊聊手脚冰凉，血气不足的问题？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“水土不服是怎么回事？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">会让人感觉发冷的原因很多，除了性别差异，还有生活习惯呀，身体状况等。</p>
-
-
-<p class="art-p">听众刘元魁听完《上火》那期节目后，又想起一个关于冷的问题，问能不能聊聊为什么会手脚冰凉，血气不足什么的。我觉得你真是妇女之友，替她们道出了心中的困惑，这期问答我们就说说为什么会感觉冷。</p>
-
-<p class="art-p">总的来说，感觉冷暖确实有男女之别。女性身体结构不同，她们的身体会优先把热量供给内脏，而忽略四肢一些。统计学上，女性内脏温度就是比男性高，四肢的温度就是比男性低，这是一个规律。</p>
-
-<p class="art-p">除了性别因素，咱们按照概率来说，最大的可能性就是太瘦了，因为你体内脂肪少，保温效果就差，因为你身体里细胞数量少，所以发热少。原来咱们节目就说过，体积是按细胞数量的三次方增长的，而体表面积是按细胞数量的二次方增长的，可是细胞数量决定了发热总量，体表面积决定了散热总量，所以要是像个球一样膨胀下去，总会有平方的增长赶不上立方增长的。</p>
-
-<p class="art-p">如果你自己用BMI指数衡量一下，低于18，那大概率你就是怕冷，温度一低，小风一来，你的血液马上都回流保护重要的身体脏器，体表的血液就更少了，于是就更冷。</p>
-
-<p class="art-p">BMI指数怎么算？就是体重的公斤数除以身高米数的平方。刚说了，血液流不到的地方就是冷，所以血液循环不好，即便胖也一样会觉得冷，一般年轻人比较少见，这都是因为心血管疾病，哪儿的动脉堵塞了，这个堵塞点之后的肢体就容易冷，手和脚都是循环系统的最末端，所以前面被堵，手脚就遭殃。</p>
-
-<p class="art-p">还有一些药物是促进血管收缩的，比如麦角胺，实际效果也跟血管堵塞有点接近，还有像抽烟的人，烟碱会使四肢的血管收缩，所以瘦瘦的女生还吸烟，那简直是能冻死了。</p>
-
-<p class="art-p">那你说为什么血液会让人暖和呢？因为血液的主要成分是水，水是地球上比热最大的物质，你想让水升高1℃需要的热量是最多的。所以你体内如果缺血，或者说缺水，也就说明体内储存的热量本来就少，底子就薄，怎么办，多喝热水，500ml，60℃热水喝下去，可以让你暖和好一阵子。你要是嘴馋或者习惯喝冰水，那冬天确实容易冷。</p>
-
-<p class="art-p">还有什么原因呢，肌肉量的多少也是一个重要因素，我们冷的时候会发抖，其实就是肌肉在产热，所以你的肌肉总量比较多，也不容易冷。睡眠不足也容易感觉冷，这个原因还没定论，但是统计结果就是高度相关。以上都是正常人出现的情况。</p>
-
-<p class="art-p">还有一些疾病和营养缺乏也会导致冷，比如甲状腺功能减退的人，他们甲状腺激素分泌少，或者完全没有，新陈代谢就比正常慢很多，这些人不光是冷了，整个人都不正常，头发少，皮肤干，人总是累，容易病。甲减在甲状腺切除的患者停药后，或者是60岁以上的妇女身上会更常见，所以如果你家的老人，尤其是女性非常怕冷，也可以查查甲状腺。而反过来，甲状腺功能亢奋的人就容易热，脾气大，精力旺盛，那种也是危险的，也要吃药。</p>
-
-<p class="art-p">还有的情况就是缺铁和缺维生素B12都会造成冷，因为他们都和血红细胞功能的强弱有关系，你要是平时特挑食，不爱吃蔬菜，也不爱吃肉，那就多喝点奶，吃维生素补充剂。老年人60岁后维生素B12的吸收能力大幅度下降，所以如果经常感觉冷，也可以适当补充些B12。</p>
-
-<p class="art-p">还有糖尿病人，如果平时不太注意血糖，会出现周围神经的病变，这时手脚传往大脑的信号会有问题，有时候感觉冷，但并不存在低温，所以糖尿病人不要相信骗子和保健品，按正规医院的要求服降糖药。</p>
-
-<p class="art-p">总结下来呢，如果你是一个瘦高瘦高的，手无缚鸡之力的，烟不离口的，爱熬夜，爱挑食，还不爱喝水的女生，那你必定经常觉得冷，因为你把所有感觉冷的因素都叠加在一起了。老年人要注意补充维生素，防治糖尿病。以上这些差不多就是发冷的原因了，都是有根有据的，并不需要什么额外的什么理论了。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-17">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">中国古代科学发达吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">讨论</p>
-<p class="art-p">Monroe：这期卓老板明显在验证标题党的错误，该标题不就是标题党类嘛？我有个建议，就是能不能把中国及世界从古至今的发明联系起来，说说其中的原理。聊科技，个人感觉不该只有现在及未来的，过去的有些发明也在延续，不是吗？还有以前学历史，什么指南针、火药、水银，各种纤维材料出现，很多感觉很熟悉，但是实际一点不通透，从来没有一本书很连续聊过。</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：NASA发明违反牛顿定律的引擎了吗？”。</p>
-
-
-<p class="art-p">有听众说，那期“NASA发明了违反牛顿定律的引擎吗？”这个是标题党。这位听众应该是没有看全标题，这是个问句，题目是 “问答：NASA发明了违反牛顿定律的引擎了吗？”，后面有个问号呢。就像我们曾经粉碎谣言类的节目标题——一颗电池能污染600吨水？维生素吃多了会致癌吗？跟这类标题一样，所以还要仔细看看。接着他又说到另一个问题，说这个节目总说现在和未来的科学技术，但是没说过过去的科技，尤其是中国是个文明古国，中国科技也是应该有延续性的，以前学历史，什么指南针、火药，能不能串起来说说。</p>
-
-<p class="art-p">这是个值得说的话题。我认为这是我国长期以来不客观的史学和言论受限制下产生的非常广泛的误解，认为中国的科技是在近代才被西方超越的，言下之意是从前是超越西方的。实际上科技要分为科学和技术两部分，而科学就是从1600年左右文艺复兴开始才从欧洲诞生的，这是一套逐渐完善起来的体系，我们在节目里反复说过多次科学精神啊，验证复现的过程啊，同行评议的过程啊，自我否定自我纠错的特性啊，这里不重复了。中国是在科学这套系统诞生后好几百年才参与到其中的。也就是上世纪初那个年代才参与进来的。这是一套全新的文化现象，是一套全新的思考和行为规范。中国从前没有，所以根本谈不上中国古代的科学超越西方。我觉得只能说中国古代的一些技术，一些发现，一些发明有一些科学性，但离全套的科学系统还远得很。</p>
-
-<p class="art-p">但中国古代是有技术的，实际上也没有像历史教科书里、电视里说的，全方面地长期领先全世界。现代科学出现前，全世界只要有人住的地方都有技术出现，你在ABC方面做得好一些，我在DEF方面做得好一些，他在GHI方面做得好一些，但是所有这些都因为一本著作和一个人被捧红而掩盖住了，那就是李约瑟的《中国科技史》。</p>
-
-<p class="art-p">这套书确实花费了这个英国科学史学家50年的心血，一共6卷，好几十册，整套书对中国古代科技的评价非常高，在那个年代，科技如此落后的情况下，有这样一个英国史学家，这么高度评价，尽毕生精力认真写出的内容，被我们高度重视。可以说，这是一剂强心针，国际性的荣誉，我们太需要这样的肯定了，而且能在1930年代就来中国花这么大心血研究中国的科技，这是西方发达国家的第一人，所以他的观点也影响了一代西方学术界。对中国的影响就更大了，以至于我们根本没有机会接触到相反方面的信息，但一个历史学上的观点，有争论才是正常的。我们因为长期落后，就一直没有出现过反面的声音。但是随着经济发展，到了2000年以后，质疑这种观点的也终于多了起来，也有很重量级的 ，比如《继承与叛逆——现代科学为何出现于西方》。</p>
-
-<p class="art-p">这书太厚了，有兴趣的人可以仔细参考，没时间的听众我给大家展示几张图，大家来感受一下吧。在康熙年间，我们有个博物学家，叫聂璜，他很喜欢生物，就是苦于中国自古以来没有过海洋生物的图谱流传，于是决定自己画，他在我国沿海考察，然后连写带画地描述了上百种海洋动植物，就写成了一本中国清朝的海洋生物图鉴。也是历经几十年，这本图鉴叫做《海错图》。第一组对比是《海错图》中描绘的棱皮龟和真实的棱皮龟，第二组对比是同年代，《海错图》中的箱鲀和德国博物学家画的箱鲀。</p>
-
-<p class="art-p">不知道各位看了以后有什么感触，因为是一本生物图鉴，这可不是孩子画画闹着玩呢，都是有学术精神，本着越画越像为目的，否则您画完，后面研究的人对着您的图鉴根本认不出来真实世界的动物，多悲催。后来《海错图》被乾隆收入宫中收藏，可见这多少是一份够档次的图鉴。但您看看棱皮龟，我反正第一次看觉得像龟仙人。箱鲀也是从几个视角画的，但是跟德国的博物学家一比，那简直是萌萌哒了。以小见大，我们到了清朝，还没有发展出一套可以客观记录事物的能力。我们讲究的是写意，只可意会不可言传。</p>
-
-<p class="art-p">上千年来的主流中国文化宣传是“学会文武艺，货卖帝王家”。书中有黄金屋有颜如玉。中国文化中就缺少科学这个类别的定位，即便到了近现代，有人问了，为什么而读书？堂而皇之地说就是为中华崛起而读书，私下里都是为了赚钱、当官而读书。没听说主流文化中描写说那会儿有回答我只是爱读书的。从前西方科学家学天文学，我们以为人家是为了航海时定位用的，有助于扩张殖民地，学完了之后成为国王分封地的总督。要是这么理解他们的天文学就错了，从数学和观测开始的天文学，在西方如果真有什么目的，就是它能唤醒理性。你了解了一些宇宙的规律，感受到了理论的美妙，现实中竟然有和数学上吻合如此之好的对应关系，你会发现原来真的有一个理性世界，只是自己从来没发现，然后你整个人就觉醒了，有一种从浑浑噩噩变清醒的感觉。很多学科就勾连在一起了，甚至还产生了副作用，给大航海的船定位。</p>
-
-<p class="art-p">当每个技术都是为了特定目的产生的，最容易出现的情况是，技术发明之间没有积累，不成体系，很多技术都是反复被发明，很少有我只是站在巨人的肩膀上的体会。我们现在有一部分人愿意承认中国的科学是落后的，而且一直也没领先过，技术也是和从前出现过的文明中的技术水平相当，这是一种进步，说明我们自信了。</p>
-
-<p class="art-p">好了，这个问题讨论到这里。欢迎大家把感受写在评论里，尤其是写在最新版本得到APP的1917小组讨论模块里。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-18">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">如何理解科学与文化的平行相通？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">刘奇30345773：卓老板，都说科学与我们的文化是平行相通的，能谈谈你的认识吗？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第8期“史上最牛科学家合影，以及物理学中的不确定性”。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-19">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">数学是精英们用来秀智商用的？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">仰望星空：今天听完第二期“黎曼猜想”，又去维基百科查了有关黎曼生平和黎曼猜想的有关内容！1854年，波恩哈德·黎曼初次登台作了题为“论作为几何基础的假设”的演讲，开创了黎曼几何学。而黎曼几何为爱因斯坦在1915年提出的广义相对论提供了数学基础。广义相对论的另一个数学工具“张量分析”则是由意大利数学家、理论物理学家格雷戈里奥·里奇·库尔巴斯托罗在1890年发展出来的。数学在某种程度上是精英们秀智商的工具，但在秀智商的同时也为人类对世界的认知做好了充足的铺垫。卓老板，你怎么看呢？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第27期“人工智能与黎曼的较量”。</p>
-
-
-
-<p class="art-p">#新消息</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-20">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">新刊：杀不尽的网络谣言</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">对于猖獗的网络谣言，我聊聊自己的想法。</p>
-
-
-<p class="art-p">今年我发现不约而同的，有很多不错的公众号都发布了怎么给爸妈微信破除谣言的话题。这也是因为最近两年来中老年人微信谣言传播的太猛了。我也出了一个系列内容，跟大家分享下。</p>
-
-<p class="art-p">首先可以趁着在家的这一周把爸妈的微信订阅，尤其是和养生、健康、疾病相关的，给他们更新换代一下，关注上那些优质的号，删掉谣言号。</p>
-
-<p class="art-p">然后就是心理预期，通常大部分人定的预期都远高于实际情况，比如我们家，经我净化科普后达到了一个什么效果呢？就是不会转发特征明显的，从标题就可以看出是谣言的劣质文章，也不会相信宣扬不吃药降血压、降血糖，花上千块钱买保健品的内容。</p>
-
-<p class="art-p">我觉得能到这一步就可以算达到目标了，至于他们还是去三甲医院开中药什么的，也没法把控，能抵御大部分谣言就是成功，父母一辈人是做不到完全粉碎谣言的。</p>
-
-<p class="art-p">网络谣言背后的利益</p>
-
-<p class="art-p">在看了几十个垃圾公众号以后，我心里也有个怀疑，因为不确定，所以也没在文章里具体写。我从那些文章标题，标题中的特殊符号，标题中的错别字，到内容的重复度来看，肯定是有几个机构在批量的制造劣质文章和谣言，手中有几十或者几百个号，然后大面积散播，互相带流量，大号养小号，这样借流量盈利。而且很有可能是用钱买的刷流量服务，因为他们大多数文章都是10万+的流量，还都不开评论。</p>
-
-<p class="art-p">微信是这样的，文章被投诉后，自己不删，而被官方删了，就会扣一些分，分扣多了就不能发文章了。号就废了。如果是真实流量的话，留言也是价值的一种体现，干嘛不开呢？如果是真实流量的话，号的主人难道不珍惜这个有价值的号吗？就任其今天被删一篇，明天被删一篇，最终落得个封号处理？我不相信，所以我严重怀疑这是刷流量出来的。</p>
-
-<p class="art-p">这就有点像PC时代的垃圾邮件，比如曾经的垃圾软件之王的Robert Soloway，它在电脑性能还不济，网络带宽还不高的2005年，15天里就能发超过2000万封垃圾邮件，这些邮件里很多中奖信息，诈骗理财的内容。你当然觉得正常人怎么可能相信呢，但是人家玩的就是概率，当1000个人里没有一个相信，无所谓，10万个人里有1个相信的就行，如果上当被骗100块钱，那么他发的垃圾邮件盈利的效率就是15天里有200个人被骗走100块钱，这就是月收入四万的买卖。</p>
-
-<p class="art-p">况且中老年用户对微信谣言的抵抗力远不如垃圾邮件。所以这个行业存在非常丰厚的利润。而且我怀疑很可能这些制造微信谣言的人从前也从事过垃圾邮件、诈骗信息的分发，因为他们深蕴此道。刚刚那个垃圾邮件大王在2005年就赚了30万美元，后来被捕了，判了26年。</p>
-
-<p class="art-p">低水平的网络内容</p>
-
-<p class="art-p">中国这方面的处罚力度很弱，写一篇谣言文章成本很低，甭说写一篇了，就算是上百个造谣号握在手中，每天批量发谣言被处罚的几率也近乎为零，只要不碰政治，其他领域的谣言，有关部门不会制裁。只有微信官方能出一些惩治，也只是不让他们继续发布了而已，这都算不上惩治。</p>
-
-<p class="art-p">没有监管环境是微信谣言散布一个原因，还有就是造谣者有一块肥沃的盈利土壤，也就是有大批的人信谣，传谣，这和文明程度、受教育程度、信息开放程度紧密相关。常年以来youku上的视频就是网络视频平均水平的代表了，各种文化出版内容的排名中TOP10都是什么质量，电影、电视剧的水平如何，这些大家都有感触。没有高水平的内容引导大众口味，大众自然就把次一档的内容当作顶级内容去欣赏，次一档的内容再为了追求销量把质量再放低一个层次，劣质的东西就这样出来了。</p>
-
-<p class="art-p">我突然想起方舟子以前写过的一个生物界的现象，说的是大象体型变小的例子，几万年前陆地上生活的大象那是真的大象，4-5米高，十几吨重，但是在地中海上有一些孤岛，比如西西里岛、马耳他岛，在这些岛上发现的大象化石体型就很小，1米多高，100多公斤重，大象还不如一头牛大。</p>
-
-<p class="art-p">结合地质学的证据，我们知道了，这些岛屿曾经是和大陆相连的，后来海平面上升，岛屿才和曾经的主要大陆完全隔离。那些大象从原来巨大身材进化到矮小身材，是因为曾经在广阔大陆上求生的一个好手段就是尽量往大了长，大到是它们天敌体重的几十倍时，天敌们就放弃捕食它们了。</p>
-
-<p class="art-p">体型大保住了它们在食物链上的优势，但维持大体型需要很多食物，它们每天要吃2百公斤的植物。后来岛屿和大陆彻底隔开了，岛上的狮子老虎逐渐灭绝了，岛上的食物又很有限，食量小的象更不容易被饿死，所以慢慢进化到后来，体型也不需要那么大了。</p>
-
-<p class="art-p">一个岛屿上的新生植物如果能满足500头象进食的需求，那甚至能计算出每头象每天吃多少，这么算完每头象也就100多公斤重。</p>
-
-<p class="art-p">所以，一个没有激烈竞争的孤岛上，不会出现大型动物，文化上也是这样。</p>
-
-<p class="art-p">官方封这个封那个，还要继续加强管制，最终效果就是赶走竞争者、捕食者，剩下来制作文化内容的机构没有了压力，就不用挑战更棒的内容了，所以在一个封闭的墙内不会诞生文化巨作。</p>
-
-<p class="art-p">同样道理，动物学家们在这些孤岛上还发现了啮齿类动物体型变大的趋势，那就是因为没有强有力的捕食者。所以一个文化孤岛上，那些制造劣质内容的人反而有更好的生存环境。文化氛围影响着每一个参与其中的人，文化内容劣质化，鼠辈巨型化就是这种封闭环境的最终形态。如果这种封锁一直加强，也许2010年以后出生的孩子长到20多岁还不知道Google和Facebook，那就糟糕了。</p>
-
-<p class="art-p">说回谣言，微信官方起码还是可以在平台上更有作为的，比如进行更严格的流量审查制度，利用深度学习识别谣言特征，甚至可以给受害者提供法律援助和诉讼援助，这相当于人为的添加了一种生存竞争压力，让硕鼠们很难长大。</p>
-
-<p class="art-p">为了避免上当，只能提高自己的知识储备了。↓↓↓</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-21">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">新闻、社交App会导致思想退步？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">二当家的：今天在《第一财经周刊》16年45期的14页看到这样一段话：西方媒体还在进一步思考Facebook们根据用户习惯推送偏好消息，是否会导致一种封闭世界观的形成。从而成为看不见的手而影响社会事件的走向。我曾经很长时间拒绝使用得到App，就是担心得到上的内容与我的基本道德观和价值观太相似，自己一旦使用得到App之后，看得过瘾，听得爽快，会变得懒惰，形成依赖，严重影响自己博览与兼听。坚持了很久，还是下载了得到App，还好，内心有警惕就可以在某种程度上避免自己被相近的价值观所束缚。</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“加料：睡眠基因找到了”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">有老听众二当家的留了这么一条评论我觉得很好，他在《第一财经周刊》看到一段话，“西方媒体在进一步思考Facebook根据用户习惯推送偏好消息，是否会导致一种封闭价值观的形成，从而变成一只看不见的手，影响社会事件的走向。”</p>
-<p class="art-p">二当家的说他很久以来拒绝用得到App，就是担心这上面的价值观和他自身太相似，一旦上瘾，人会变懒惰，形成依赖，影响自己博览与兼听，即便现在已经在用了，还是时刻保持警惕，不要被相似的价值观绑架。</p>
-<p class="art-p">这方面我是这样看的，能有您这样警惕性的人是很少的，这种警惕性也是很有益处的，时刻保持适度的怀疑、自省，能做到这样也十分难得。您连用App都保持这种思考方式，那就更能抵御劣质内容带来的危害了。西方媒体思考的，根据用户习惯推送是好还是不好，我觉得这和保持适度的怀疑精神并不矛盾。</p>
-<p class="art-p">怎么说呢，对于有这样精神的人，就算是总推送同一类内容，甚至是同一个口味的内容，这个人的思维习惯也会导致他时不时地查询反方面意见，主动去搜那些不在自己熟悉领域的内容。现在不只是Facebook，国内的很多新闻客户端也是这样做的。我们脑子里的内容分类也许是一种理想化的概念，实际上真正说某类内容仅仅局限在某一狭窄领域的，只有学术论文了。大部分大众化内容会涉及很多方面，尤其像社会评论类的。从另个角度看，普通人你就是强制推送他们不关注不关心的内容，他们也会忽视，就像从前的报纸，每个人手中的报纸都一样，大部分人翻这几十版的版面也就看其中十几版，剩下的也不看。</p>
-<p class="art-p">我觉得更重要的是，它筛选出来的，推送给人的内容质量高不高，这才是对全体国民影响最大的。比如像现在某些APP，已经是国内新闻客户端最大的号了，全国几亿人每天接收到的相当大比例的信息、观点和导向，就是它起到的主导作用 。它的影响力比20年前任何一份报纸都大。那么它会不会反思，是不是要继续无休止地满足没有太高素质，又缺乏耐性的人的阅读习惯呢？要不要把更俗中透俗的，或者博眼球的精神刺激的内容大量推荐出去呢？还是说，自己已经成了平台巨头，不需要再拼命追求流量和在线时长了，要实现更大的价值 ，能起到教育民众的作用，专门安排一些深刻的、唤起人们心内的美好，引发理性思考的新闻内容推荐出去呢？虽然相比低俗内容，阅读量会少很多。</p>
-<p class="art-p">但这也存在着天生的限制，我想很多从央视出来的新闻人都会有感触。即便现在有App了，有直播，有网上视频节目，但只要能覆盖大多数人，国家的新闻管制就会出现，把它纳入管理体系中。因为国体不一样，所以在中国是有禁止讨论的内容的。我相信做新闻的人和其他行业一样，至少有一小部分是有新闻理想的，想挖出真相，剖析现实，做新闻有很多条路可走，这是其中一条路，但是因为以上因素，这条路走不了多深多远就走不通了。众多媒体又是处于商业竞争的环境下，那大家只好在其他可选的路上竞争了。竞争什么呢，娱乐八卦嘛，这个方向没有太多限制，所以这方面内容发展得枝繁叶茂。</p>
-<p class="art-p">像这位听众说的，会不会导致一种封闭的价值观形成呢？在中国，封闭的价值观早已形成，原因不是App或者媒体一味地按照订阅者的喜好推荐内容。我们的封闭价值观是由内容限制形成的，大众都封闭在钱的价值观下，新闻理想、匠人理想、科学理想、冒险精神和牺牲精神就从价值观的选择中渐渐消失了。但我对这个事情不悲观，如果拿现在的媒体内容和5年前比，还是有整体提升的。现在和30年前比，言论也自由多了。我觉得这和经济发展分不开，所以社交媒体的智能推荐会不会导致封闭价值观的出现，可能还不是我们现阶段担心的。其实担心这个事情的人本身有免疫。不担心这事的人只会受大环境影响，勉强不来。</p>
-<p class="art-p">好，这个话题就讨论这么多，欢迎大家留下自己的看法。欢迎大家把感受写在评论里，尤其是写在最新版本得到APP的1917小组讨论模块里。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-22">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">科学思维为什么反直觉？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">涉世未深2005：“科学的世界观是反直觉的”，一语惊醒梦中人。刚好在看郑也夫的书，说到动物界是真的强留弱汰，变异造就了更强壮的物种；人类由于发明了武器和各种工具，使得弱者也能在生物意义上保留生存和繁衍的权利。人类的变异更多地体现在文化的变异上，极少数人的想法揭示了关于世界的真相（也是逐步），有了科学定理，有了科技，使得人类的命运有了翻天覆地的变化。但这样的文化变异离进入人的基因仍有太长时间的等待，所以一般人理解起来觉得“惶惶然”，这也许就是“科普”的最大意义，卓老板这样的讲课功莫大焉。多么希望更多人接受到这些知识。以讹传讹的所谓知识、道理、心灵鸡汤太多太害人了。</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第17期“精准的判断，离不开精准的概率计算”。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-23">
-      <div class="art-header">
-        <span class="art-chapter">Ch.93</span>
-        <h3 class="art-title">经济学算科学吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">derekxue:卓老板聊聊经济学是不是科学吧？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第16期“为什么80%的财富聚集在20%人的手中？”。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-24">
-      <div class="art-header">
-        <span class="art-chapter">Ch.94</span>
-        <h3 class="art-title">放烟火会污染环境吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">@宋宋：</p>
-<p class="art-p">卓老板，你好。我和我老公都爱听你的节目，我们六岁的女儿也是你的粉丝。她让我问两个问题。一是前不久我们去上海迪士尼，她看到焰火表演时就一直担心那些烟火冒出的黑烟，她想问问那些烟火会对空气产生多大的污染？第二个问题是她现在在幼儿园学手风琴，她说到了天冷的时候手风琴会变声，就像生病了一样，想问问为什么？本来我想在百度或者知乎上给她查查的，但是她说你讲的很有趣，不仅能解答问题，还能扩展很多。所以很期待您能给这个小听众解答一下。</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：学渣怎么学数学？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">一个6岁小姑娘的问题，我得用孩子能听懂的方式告诉她。</p>
-
-
-<p class="art-p">咱们的听众宋宋说，经常和老公一起听节目，她六岁的女儿也喜欢听，女儿想问两个问题给我，第一个是前不久去迪士尼玩儿，看火焰表演的时候就一直有黑烟冒出来，她想问问那些焰火对空气会产生多大的污染呢？第二个问题是她现在在幼儿园学手风琴，说天冷了以后手风琴会变声，就像生病了一样。</p>
-
-<p class="art-p">哎，就这么两个问题，我不是从前还说做个小卓卓的节目给我的孩子嘛，但是没经验，不知道把话说给孩子们用什么方式最好，那我就先试试回答这两个问题。</p>
-
-
-<p class="art-p">先回答小朋友那个迪士尼的焰火表演是不是会污染环境？</p>
-
-<p class="art-p">直接回答，这属于短时间小范围的污染。一场迪士尼焰火表演大概会让迪士尼乐园里的PM2.5和PM10上升几十，但对整个上海的空气质量影响几乎可以忽略，所以国家对焰火表演并没有特别严格的管控。之所以影响小是因为燃放的量少，如果是每个上海市民都这么玩儿，那就是一个恐怖的状况了。</p>
-
-<p class="art-p">这不马上就要过年了嘛，从前过年都要放花放炮的，那不夸张说，连六岁的小姑娘都得点几颗炮，放几支花，所以还就真是上千万的人一起玩儿焰火。北京去年春节有过统计，大年三十晚上这么一放，北京的PM2.5从200多升到400多，这还是放炮的习俗已经很淡的情况下的数字，从前上世纪九十年代，我估计从几十升到六七百都有可能。现在因为大城市雾霾严重了，所以有一些焰火表演在没有风的情况下，气象局已经发出雾霾橙色预警的情况下，那焰火表演大都会被取消。</p>
-
-<p class="art-p">咱们再说说黑烟，小朋友观察挺细，其实焰火表演大都是花花绿绿的，她却注意到黑烟。那些黑烟之所以那么黑，其实是因为它是碳的小颗粒，你平时用的铅笔，写出的字为什么是炭黑色的呢，就是因为那是碳的颗粒，所以你看到的黑烟是那些非常非常细小的颗粒被风吹起来的效果。当然你还会看到很多其他颜色，那是因为烟花里还有其他金属粉末，比如最亮的白色通常是镁和铝的粉末，黄色主要是钠，绿色主要是钡，红色主要是锶，蓝色主要是铜。所以焰火表演的附近空气如果收集起来，里面除了有很多没充分燃烧的黑火药，还会有很多金属粉末，这些也一样是污染，只不过不严重。小朋友如果觉得呛，就戴上口罩看。其实呢，你看到的焰火表演稍微有些落后了，视觉效果想做得比迪士尼的焰火表演好看，可以用激光实现，很多重要的演出和体育大赛的开幕式都使用了激光，这个设备当然比焰火贵得多，但不污染环境，小孩子也不用戴口罩看。</p>
-
-<p class="art-p">那第二个问题是手风琴变声了，像生病一样。</p>
-
-<p class="art-p">我觉得很可能是因为手风琴的音准出问题了，不如你听听这段钢琴，这就是很多键都不准了，弹出来就像生病了。钢琴跑音了是非常常见的，因为它是由好几百根钢线组成的，气温下降，弦就会拉得更紧，音就会变高，湿度也会影响琴体的尺寸大小，一般钢琴每3个月得调一次。</p>
-
-<p class="art-p">但手风琴和钢琴不一样，它是靠簧片震动发声的，音高基本就由簧片的薄厚、材质决定的，它不太受环境影响。所以很多人没太听说过手风琴还有调音一说。其实手风琴用久了也会跑音，尤其是南方潮湿的环境，簧片上会生锈，这就对它的薄厚材质有影响了。还有可能是这琴摔过，结果簧片错位，或者松动，拉起来就会刺啦刺啦地乱响。如果这位小朋友的琴是那种拉了一会儿音高都正常的情况，那可能琴没有什么问题，就是天气突然变冷，热胀冷缩导致的暂时性的变化。</p>
-
-<p class="art-p">我比较喜欢音乐，所以能感觉到这位小朋友的耳朵很敏感，想起在我弟弟3年级的时候，他好奇，听我的CD，那是一张摇滚乐队的演出，他那么小当然是不知道，看他听得越来越认真，我还问他听什么呢，他摘下耳机问我，哥，为什么会有嚓嚓嚓很大的声。我很奇怪，哪儿有啊，我们一人戴上一个耳机，我让他在出现嚓的时候指出来，原来他指的是弹吉他换把位时手指蹭琴弦的声音，我当时一惊，这么小的孩子对这个细节能这么敏感，大家可以来听听，看看您对这段音乐中换把位时蹭弦的声音敏感不，其实开头第一下就蹭了。</p>
-
-<p class="art-p">所以我觉得这位小朋友可以认真学学音乐，你比其他小朋友对音乐更敏感，说不定可以体会出更多音乐里的情绪和美。</p>
-
-<p class="art-p">埃隆·马斯克说：“地球不配我死，要死就死在火星上。”↓↓↓</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-25">
-      <div class="art-header">
-        <span class="art-chapter">Ch.97</span>
-        <h3 class="art-title">《拍砖中医》这本书值得买吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">路可以慢慢走：我看了方舟子写的《批判中医》，不知道棒棒医生写的《拍砖中医》有没有新的知识，还有必要再买一本《拍砖中医》来看吗？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第26期“世界上最难的数学题是什么？”。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-26">
-      <div class="art-header">
-        <span class="art-chapter">Ch.97</span>
-        <h3 class="art-title">《水知道答案》是伪科学吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">Little Pony：卓老板为什么《水知道答案》是伪科学呢？写这本书的作者不是做了很多实验并且拍摄了水结晶的照片么？难道这些都是作者伪造的么？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“聊聊2016罗辑思维跨年演讲”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">最近接连有听众问到水是不是能听懂我们内心的声音，有人呢是看了一部网上传的视频，各种情况下水结晶的神奇样子，有人呢是看了一本书——《水知道答案》。其实这些素材都是同根同源的，都来自日本人江本胜，他在十多年前出了一本书，叫《水知道答案》，是本非常畅销的书，最常见到的就是在机场的书店里。在某些线上书店里，它还被列在科普书一栏。直接给结论：这是一本宣扬伪科学的书。</p>
-
-<p class="art-p">如果您看过这本书，印象估计不错，因为书中有大量精美的水结晶的显微图片，但它不仅仅是展示结晶的微观结构，而是提出一个明确观点——水在结晶过程中会受人情绪的影响而变成不同的样子。比如你在瓶子上贴上“谢谢你”，或者“爱”，这样的字眼，水结晶就会形成规则的形状，如果你贴的标签是“真恶心”，“我要杀了你”，水结晶就会是不规则的泡沫一样的丑陋形状，让水听重金属音乐，结晶就会有很多躁动的波纹。而且贴日语的、英语的、德文的都管用。江本胜博士也亲自演示了用意念对水表达信息，让水呈现各种样子的实验，然后告诉大家人的善良美好的意念有着不受距离影响的伟大力量。他出了很多书，宣扬用水传递爱与和平，及治愈系的能量。</p>
-
-<p class="art-p">稍有科学知识的人就知道这有点邪教的味道了，我们还是以一个标准去卡，就是它是不是和主流科学观点相悖。如果违背主流科学观点的话，那对不住，您的观点要立得住，需要提供足够多的证据。这种证据需要禁得起最严格的同行评议挑刺找错，像江本胜这种结论用对照试验就可以设计。比如100桶一样的水，50个贴赞美的标签，50个贴辱骂的标签，最后看结晶的样子。这种实验不是没人做过，早在江本胜出名前，1988年就有个法国科学家写过一篇，水具有智能、情感和记忆的文章，还投稿给《自然》，最后被撤稿。</p>
-
-<p class="art-p">对结晶方面的研究提出全新观点，这人至少应该有化学或者物理方面的学术资历，结果再一查这位江本胜博士，他的博士学位是在印度拿的，什么大学呢，印度国际开放大学，隶属于印度替代医学委员会。有个词叫野鸡大学，说的是名字虽然叫大学，但往往没有固定校址，没有老师，只有一个办公室，学生交钱就给寄一些教学资料，交够了钱就发毕业证，学生也不用去学校上课，最后也不用考试就发一个学位证。哎，这位江本胜同学就是花了350美元买到的博士学位。就冲这一条，剩下的，物理化学领域的学术成就啊，查都不用查了。这种学校生意是不错的，因为常有骗子需要装点门面，比如中国养生界有个刘太医，说自己是明朝皇宫里太医院医生刘纯的后代，刘太医的儿子也是印度开放大学拿的证儿。</p>
-
-<p class="art-p">这个印度国际开放大学的上位机构，印度替代医学委员会是干嘛的呢？这其实是医学发展过程中遗留的一部分。现代医学在美国突飞猛进以后，医疗体系中并不是只有现代医学，还有其他非主流的，比如冥想疗法、催眠疗法、顺势疗法、香味疗法和维生素疗法等。中国传统医学中针灸和草药也都是归在这一类中，美国至少是个兼容并包的国家，只要你不违法就允许你存在，但医保不报销，你愿意相信冥想可以消除肿瘤你可以去那里治疗。但是对身体有害的，比如放血疗法就连替代医学的门槛也进不去了。就因为欧美还是允许这类掺杂着文化成分，治疗效果几乎没有，但害处也不明显的治疗生存，所以世界各地，尤其是科学不太昌盛的地方，也冒出很多打着替代医学名号的组织。但这些地方基本都是骗子老窝。所以这样的人写的关于水科学的书就别信了，350美元的博士学位，合2400块钱，咱们都买得起。</p>
-
-<p class="art-p">那么顺便我们推荐一本真正关于水的好科普书，叫《水4.0》，讲的是人类文明史以来，供水系统的发展。我也正在看，只提一个小点，在古罗马和欧洲，17世纪都曾经出现过一个难题，就是污水和饮用水分不开，被污染的情况，当时不少富人是喝啤酒、红酒，以酒代水的。好了，这个问题回答到这里。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-27">
-      <div class="art-header">
-        <span class="art-chapter">Ch.97</span>
-        <h3 class="art-title">日本是怎么处理学术造假的？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">静谧小时光：我觉得韩春雨不一定是造假，分子生物学实验就是这样，存在一定几率性。前几年我们实验室的一个博士做出很好的实验结果，就把论文投到一个不错的杂志，当时杂志的审稿人提出其中某个实验对照不全，然后这个博士就准备增加对照，把这个实验再完善一下。可是谁知这个实验就再也重复不出来了，这个博士自己做了大半年也没有结果，后来实验室其他人也帮他做，但是没有一个人能做出来，最后这个博士不得不延期毕业。前两年日本的小保方晴子也是一样。我不觉得他们故意造假，只是恰巧碰到了理想化的数据，就没有再重复，直接写文章投稿了。</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“问答：聊聊韩春雨事件”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">有听众静谧小时光听了韩春雨事件的节目认为韩春雨不一定是造假，他就是做分子生物学研究的，他们实验室就有一个博士曾经做出过很好的结果，投到一个不错的杂志，审稿时发现有些缺漏需要补充一个对照组的数据。这个博士就按原来的方式想把对照组也加进来再做一次，但这回是怎么都做不出来了，同事一起帮忙也无济于事，最终弄得毕业延期。然后又提到前两年日本的小保方晴子也是一样，所以他的结论是这些人是碰巧遇到了理想化的数据，但没能力重复出来了。</p>
-
-<p class="art-p">我觉得您说的这个有道理，尤其是在系统化的基础理论缺失的领域，一个个的技术性实验堆积起来的经验，那就是会有运气好，或者出了错也没发现的时候，也许就诞生了一个意想不到的好结果。而且现在科研气氛就是这样，恨不得蹦出一个这样的新奇特结果赶紧发表。在这种环境中就涌现了大批机会主义者，那些秉承科学精神，反复验证的科学家就是吃亏，他们遇到的貌似突破的东西如果反复验证就被自己否定掉了。那些机会主义者，只要有一次逮到了机会，在大杂志上发了一篇结果惊人的研究，就名利双收。所以这也给学术期刊提出更高的要求。这种情况在中国可能更突出，所以现在很多国外著名的学术期刊对中国作者是有歧视的，看到中国人的名字就会更加警惕。</p>
-
-<p class="art-p">这里我也补充下小保方晴子那个事件，她和韩春雨事件前半截有点像，2014年1月29号在《Natrue》上，同一天登了她两篇文章，这可算爆炸性好消息，她的成果简单来说就是发明出一个方法在弱酸环境下把小鼠的体细胞恢复到未分化阶段的干细胞，大家知道干细胞的应用前景非常好，但制备非常难，小保方晴子这种方法竟然这么高效，于是被高度重视，这种方法简称STAP。论文刊发过了20天，学术界的质疑也纷纷来了，首先就是对《Natrue》里描述的实验，没法复现。还有一部分质疑是很多科学家研究她从前发过的论文，也发现有数据造假，图片PS的嫌疑。2月18号，她正式被她所在单位日本理化学研究所调查。论文刊发后35天，所在单位回应了，公布小保方晴子更多实验细节，帮助大家复现这个结果。但这个声明发布后质疑更猛，因为公布出来的实验步骤跟《Natrue》上那篇论文的差异太大。论文刊发41天后被人发现她的论文中有一幅图就是她几年前博士学位论文中的图，论文的结果根本没有实验对应。</p>
-
-<p class="art-p">之后她所在单位展开进一步调查，在60天后宣布结果，小保方晴子在研究中捏造篡改数据，有学术不端行为。从事发到结束，60天时间，按说这已经定性了。但是她本人不服，不承认是有意造假。6月份又有人深挖她的博士学位论文，发现那里也有造假嫌疑。那时候她原单位日本理化学研究所发育生物学中心自查后发声明，为了防止再次出现学术丑闻，该中心关闭。</p>
-
-<p class="art-p">事情发生整5个月后《Natrue》把两篇论文撤稿。小保方晴子的实验室导师向公众道歉后自杀。他遗书里写：自己被耻辱感淹没了。并且希望小保方晴子，如果你没有造假，请一定要再现STAP干细胞。事情发生8个月后，小保方晴子的母校早稻田大学撤销了她的博士学位，当时的博士生导师停职，其他和学位相关的老师罚款，早稻田大学校长也被罚款。</p>
-
-<p class="art-p">自己的导师因自己而自杀，小保方晴子拼死也要再搏一把，她向原单位提出给她一个自证清白的机会，她要在原单位的实验室复现这个实验，2014年12月18号，研究所邀请第三方学术界监督，同时也有N多摄像头监控的环境中，她开始了实验，但是最终也没有出现一个干细胞。这件事就这样终结了。</p>
-
-<p class="art-p">我们不讨论小保方晴子本人是不是最初做实验就抱着主动欺骗的心态，我觉得更多值得注意的是日本学术界对质疑造假的态度。没有听说发了两篇论文就开始发奖金，评职称，而是等结果，当发现有问题后，结果处理非常迅速，60天后就已经出了调查结果。《Natrue》撤稿，研究所除名，学位论文发现造假连博士学位也迅速取消，当年毕业时和颁发学位有关的人都追查，这里甚至有人还自杀了。就可想而知在那个环境中一旦造假被查出来后果有多严重，这种环境就有利于遏制学术不端。相比韩春雨事件，我想更多的不同还是在于整个大环境，而不是这个事件中涉及的机构和人。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-28">
-      <div class="art-header">
-        <span class="art-chapter">Ch.97</span>
-        <h3 class="art-title">阴阳五行该写入科学素养准则吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">最近在中科院搞的一次辩论，题目叫《阴阳五行该不该写入公民科学素质基准》，听众·科学有故事·提问，要我也说说这件事。</p>
-
-<p class="art-p">我先介绍一下背景，这是2016年4月18日，科技部印发的《中国公民科学素质基准》，里面第九个基准点，要求公民知道“阴阳五行”、“天人合一”、“格物致知”等中国传统哲学思想观念，这是中国古代朴素的唯物论和整体系统的方法论，并具有现实意义。</p>
-
-<p class="art-p">其实这个准则已经提出快一年了，当时也有很多科学家反对，但因为3月20多号中科院人文学院的孙小淳教授和中科院高能物理所的张双南研究员就这个话题辩论了一场，所以算重燃战火。</p>
-
-<p class="art-p">我的观点是反对把这些内容写进基准里，关键一点在于那条基准的后半句，“阴阳五行等理论，具有现实意义。”所以尽管推广的细则还没有出来，一旦出来，这半句，具有现实意义就会把戏唱歪。</p>
-
-<p class="art-p">当时孙小淳在辩论时的理由是，其他国家列写公民科学素养的时候可以介绍性地说，为什么要写亚里士多德的四元素说，怎么我们就不能说。这一点辩论里张双南已经明确说过，因为科学是从人家那一支长出来的，那是现代科学出现的源头。就像你要介绍CPU发展史，虽然当年仙童出的芯片在结构上，技术上，算力上远远不如现在的CPU，但不好意思，INTEL和AMD都是那里的人离职后创业才诞生的，是绕不过去的。但这时突然有个非洲人冒出来，说我们在1920年时还用过给绳子打结的方法做过计算，或者某个人说我们用算珠做过计算，这也是处理器的雏形，要写进CPU的发展史，那就有点攀亲攀太远了。</p>
-
-<p class="art-p">另外一点是阴阳五行如果一定要写进科学素养准则，我觉得只能往这个方向写：他是一个古代人对世界真理的思考，但因为条件有限，所以思考出来的东西对当今现实只有历史研究的意义，是文化领域的一种非科学的东西。</p>
-
-<p class="art-p">但实际上科技部是要按照对现实有指导意义的这个角度去写，所以我相信，编写公民科学素养条目的人是缺少科学素养的。</p>
-
-<p class="art-p">上周末熊逸答复万维钢的那篇文章里也正好提到了阴阳五行，《黄帝内经》发现中国的地势西北高，东南低，所以这一高一低就分出了阴阳，西北高所以西北方向的天就有所不足，于是西北为阴，东南照这个理论就是阳。然后继续对应在人身上，就认为右耳不如左耳灵，右眼不如左眼明亮，而左侧的手脚不如右侧强，这一条倒是反过来了。原因是，古人认为，东方为阳，所谓阳，精气上升，结果就是上明下虚，耳朵眼睛在上面，但手脚在相对靠下的位置，所以耳目是左边更强，到了手脚却是左边更弱。</p>
-
-<p class="art-p">然后会继续延伸到对病症的理解上，说，如果生活在西北的人和东南的人同时受到邪气的侵犯，表现在身体上，就会是左右的严重程度不一样。熊逸老师给的评价很好，这套医术真的不适合其他国家，除非那里也是西高东低的地势。这就是一个很典型的从阴阳五行演绎出庞杂的，比原理论内容丰富的多的过程。但因为每一步都没有现实上的证实，所以结论也是荒谬的。</p>
-
-<p class="art-p">想了解熊逸老师是怎么讲《黄帝内经》的吗？点击下面图片，可试读《2.7丨熊逸答万维钢：国学的三个问题》</p>
-
-<p class="art-p">我们古代有相当多这样的例子，比如辩论中就提到屠呦呦获诺贝尔奖，说这个就是受到了中医的启发获得的成就，而中医就最讲究阴阳五行。可是诺贝尔颁奖委员会在接受记者采访的时候专门说过，我们不是把奖颁给传统医学，而是颁给了创造出新药的研究者。因为屠呦呦当年是从600多种药方里挨个试，几千人帮忙，最终过了N年才碰到青蒿素，只有一种貌似有点用，但还要改进方法才行。另外600多种全都是无效的，往腋窝里夹热鸡蛋，抱着公鸡对太阳大喊，吃蜘蛛这些，都是通过阴阳五行理论得到的治疗疟疾的方法，而且医术里也都宣称这些有效。</p>
-
-<p class="art-p">当然不止咱们国家，除了文艺复兴以后的欧洲，其他地区也都出现过各种掺杂着迷信、巫术、宗教的思辨内容，如果把阴阳五行写进去，其他非科学内容也可以要求写进去，这准则就是一锅大杂烩。比如现在就有很多研究哲学的，研究社会科学的人要把自己学科领域内容往里加，认为编写基准的指导思想就是以马克思恩格斯创立的辩证唯物主义为指导，为什么要把他们排除在外，这明显违背了马克思主义。而凡是在中国的人文学科，大都跟马克思主义有关联。然后我们发现这是一项持续到2049年的大计划，很可能最终成为一个人文学科划分势力范围的工具。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-29">
-      <div class="art-header">
-        <span class="art-chapter">Ch.98</span>
-        <h3 class="art-title">人体特异功能是真的吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">Ricky：卓老板，我是忠实铁杆听众，台湾有个李嗣涔教授，研究人体特异功能，比如手指认字等，还发现有神灵，李敖曾经采访过，请问你怎么评价这事，能讲讲吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“净化旧金山海湾”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">我们最近在周一、三、四里聊的大都是和本周或者上周内容关系比较密切的内容，不过我偶尔也会聊一些关系不大的，它关系不大只是和当周节目关系不大，实际和整个节目关系还是很紧密，比如听众Ricky就问，台湾有个教授，研究人体特异功能，如手指认字，李敖还采访过他，问我怎么评价。</p>
-<p class="art-p">这个问题和节目是有关联的，因为这和咱们国家民众科学素养有关，听这个节目稍微久一些的人，这方面素养就比普通人提高很多。当我们遇到这样的问题，应该怎么判断呢？很多人会觉得这是骗子，就开始找人体特异功能的负面新闻吗？不是的，我们也要本着实事求是的原则看。</p>
-<p class="art-p">我也查过这位台湾的教授——李嗣涔，其实他不只是教授，还是台湾大学的校长，而且台湾大学在整个亚洲就能排到前10名吧，跟咱们中科大、复旦啊，差不多水准的学校。他的专业领域是半导体材料 ，这也是一门和物理联系非常紧密，差不多是半个物理学的学科，这些都是令人信服的部分。但是不是科学还得看他做了什么，我专门在台大的主页上看了他在人体特异功能上的研究内容，粗看了一下，他是按照传统科学研究的范式做的，实验设计、数据统计、双盲条件的控制，这些内容都有，从他过往经历看，我相信他对什么是伪科学比绝大部分人都清楚。</p>
-<p class="art-p">如果对比中国曾经出现过的人体特异功能大师，有的说能治病，能长寿，背后的目的就是为了钱，跟着这股政策风儿搞研究的也是为了出人头地。但这人不同，他其中一个身份就是台大校长了，其他什么荣誉奖章啊，这学会，那学会的名誉主席啊，那个研究所的顾问啊，这些名号多了去了，在世俗眼光中可以称之为功成名就。所以我相信他研究人体特异功能也不是为名为利，就是出于自身世界观的研究选择。</p>
-<p class="art-p">但我们还得注意，他的学术背景是电子工程，半导体材料，没有接受过生物学、医学方面的专业训练。他从上世纪90年代起突然开始对人体特异功能感兴趣，然后做的各种研究都是和人体有关的，他并没有相关学术背景，所以他从上世纪90年代开始发的各种论文，要不是因为他任台大教务长，发在学校刊物，要不就是发在了一些专门研究人体特异功能的杂志上，没有一篇是在主流医学界上刊发的。</p>
-<p class="art-p">这其实又转到病根儿上了，就是他研究的是非主流科学。因为一篇论文有100来页，我也没时间逐字逐句看，但我知道主流科学界对这类研究是非常排斥的，相信如果真的有主流科学界的人，尤其是生物医学方面的科学家，哪怕是普通的博士，打算花上几个月时间审核他的内容，大概率说是会出现很多硬伤的。</p>
-<p class="art-p">科学的每次进步都是非主流通过大量证据把主流干掉。成功率比较高的方式是，从前一直是主流科学体系内的，在越研究越深的过程中，突然在某个观点上，和曾经的主流观点产生了分歧，在分歧上越走越远，最后竟然证明，他走的这条“歧途”是对的，然后在这个领域有名望的期刊上成功把结论写成文章发表，如果这时候他的名望已经很高了，结果还是对的话，推翻主流的过程会快一些，否则有可能文章被埋没几十年的可能。</p>
-<p class="art-p">像这位李嗣涔，压根就不是生物医学圈的，打算凭一己之力，重新建立一套人体科学、生物医学的新体系出来，几乎没有希望。那边主流学术圈曾经诞生过的结论也都是成千上万的生物学家积累毕生精力，又经过同行的百般审核甚至是鸡蛋挑骨头后剩下的可信的部分。真的想发表非主流观点，最少也得有相关资历，这个资历的及格线是这个领域的博士，如果连这都没有的话，没人会承认你。你可能觉得怎么科学圈还整这排资论辈的事儿啊？当然啊，这是一种节省精力最有效的方式，否则噪音太多干扰得谁也没时间干正事了。所以李嗣涔的特异功能，您就当噪音好了，林子大了什么鸟都有，哪怕是科学家，老了以后也有各种想法。</p>
-<p class="art-p">好，这个问题就回答到这。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-30">
-      <div class="art-header">
-        <span class="art-chapter">Ch.98</span>
-        <h3 class="art-title">石油竟不是地下生物尸体变的？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">老耿老耿老耿：</p>
-<p class="art-p">卓老板你好，今天在网上看到一篇叫做《石油竟不是地下生物变的》的文章，文中说：“生物变油”只是上世纪美国地质学家哈伯特提出的一个假说，是没有科学支撑的，而基于利益集团的利益牵扯，这种观点横行全球……而苏联科学家则发现：石油源于地壳深处的以太物质，在高压冷喷下进入地壳浅层地带，而且油田是可以自我修复的。我是觉得这观点不靠谱：1.文中的新观点没有进行可信的推论；2.引用的材料没有注明出处，难以查证；3.“以太物质”，倒是是个啥也没有进行明确解释；4.又是将故事置于“利益集团”“美苏冷战”这样的框架下，看着就不像真的。但是又不知道如何科学的反驳，请卓老板科普一下。</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“水土不服是怎么回事？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">春节期间我们总结过谣言的特征，只看标题就能识别90%的谣言了，凡是出现了类似惊天大骗局之类的，直接当谣言就行。</p>
-
-
-<p class="art-p">听众老耿最近看了一篇文章《石油竟不是埋在地下的生物变成的》，想让我帮忙看看是不是对的。</p>
-
-<p class="art-p">文章里说，古生物变成石油是上世纪美国地质学家提出的一个假说，没有科学支撑，而且是石油利益集团勾结，苏联科学家就发现了不同的证据，证明石油源于地壳深处的太初物质，在高压冷喷下进入地壳浅层，油田是可以自我修复的。</p>
-
-<p class="art-p">老耿觉得不可靠，因为他觉得证据不足，也没有注明出处，还专门提及了利益集团阴谋论。其实你这差不多就识别出来了。而且我搜了这篇文章，标题前半段是：三百年惊天大骗局。后面才是石油竟不是埋在地下生物变成的。</p>
-
-<p class="art-p">咱们春节期间做的辟谣的系列节目就总结过谣言的特征，只看标题就能识别90%的谣言了，凡是出现了类似惊天大骗局之类的，直接当谣言就行。</p>
-
-<p class="art-p">其实石油究竟是怎么形成的，科学界主流观点还是由生物形成的，但也有非主流观点。</p>
-
-<p class="art-p">主流观点支持石油是海洋动植物、微生物的尸体和海底污泥混合，然后被埋在沉积岩下面，经过高温高压逐渐转化成石油的，因为它们最终的密度比较小，所以在地质活动中会往上飘，飘到一个适合聚集石油的地层就聚集起来形成油田，大约是四千米深度聚集最多。</p>
-
-<p class="art-p">那个非主流观点就是文章里的观点，他们认为地壳中已经有很多碳的化合物存在了，主要就是碳氢化合物，石油里的生物标志物是因为那些生物本来就生活在那个区域，结果突然涌来了石油导致的。这种非主流观点没法解释为什么世界上99%以上的石油都存储在沉积岩中，也没法解释石油中广泛存在的生物标记物，比如甾烷、伽马蜡烷、植烷、藿烷、萜类和同位素偏轻等现象。</p>
-
-<p class="art-p">像这篇文章里说的，不少干枯的油井丢弃过了一段时间后又可以产油了，就是因为石油是非生物资源生成的，在石油工程中也有详细的解释，那是因为油井压力回复的正常现象。这些内容大概就是这篇谣言文章的来源了，他捡了一个非主流的观点作为主要依据，然后再添加一些大国矛盾，利益纷争的故事就攒出一篇惊世骇俗的内容，主要还是为了吸引眼球。</p>
-
-<p class="art-p">这个例子提示了我们，相信主流科学观点的重要性，任何单个科学家或者几个科学家的观点都不如主流科学观点可靠。比如现在连中学生都认可的，艾滋病是由HIV病毒感染导致的，这个观点在1980几年时就是主流观点，但当时加州大学伯克利校区的一位病毒学家就认为HIV并不是艾滋病的病因，你想，伯克利分校，这就够知名的了吧，反对者还是病毒学家，这又是本门学科，还是教授，那他说了，艾滋病不是HIV导致的，他认为感染艾滋病是因为人存在易感体质导致的，如果你不是易感体质，你即便每天跟不同的艾滋病人啪啪啪也不会得病。</p>
-
-<p class="art-p">我们普通人该信谁？还是得相信当时的主流科学观点，因为这是更大多数科学家认同的，这里有更多著名的大学，更多病毒学教授的支持。也许某天那个小众观点真的有机会翻身成为主流科学观点，但需要它提出足够硬的证据，其他科学家也会逐渐把兴趣转向那个角度的研究。</p>
-
-<p class="art-p">但总的来说，小众观点成为主流总是很小概率的事件，我们相信大概率事件就可以。不过当年这位伯克利的病毒学家的主张有一个非洲国家采纳了，于是全国艾滋病继续肆虐。这类问题其实挺多的，比如说现在中国反对转基因的团体里，没有一人是分子生物学专业的，大都是人文学者、社会活动家、主持人，拉来的最贴边的是一个农业经济学的人，这些人别说反对主流观点了，就算是写出非主流观点，有声望的学术期刊，比如SCI列表里的那些，都不会刊发。</p>
-
-<p class="art-p">所以媒体如何对待非主流科学观点也可以算作是一个试金石，可以试出这家媒体的编辑和记者有没有基本的科学素养。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-31">
-      <div class="art-header">
-        <span class="art-chapter">Ch.101</span>
-        <h3 class="art-title">学渣怎么学数学？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">土豆：卓老师连续几期宣传数学，连我这个曾经的数学渣渣都忍不住要开始重新学习数学了。所以卓老师有什么推荐的系统学习数学的书吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“讨论：中国古代科学发达吗？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">最近接连有好几个听众都受我节目安利，开始找一些数学和物理书看了，有的人看的是《费曼物理学讲义》，有人看的是公开课。有听众说，我连续几期宣传数学，连他这样曾经的数学渣渣都忍不住想开始重新学数学，问有什么推荐的系统学习数学的书吗？</p>
-<p class="art-p">我是最喜欢看到节目出这样效果的了，当然最满意的情况还是发现一个高中生有这样的冲动。因为实话说，高中正是好时光，如果你是高中生，甚至初中生特喜欢听这节目，其实一定程度上反映了你们心智早熟，你们比听众的平均年龄要小。大部分听众是有冲动要去学的时候，突然一个电话，领导催了，客户策划案怎么还没给，或者又得去见投资人了，数学课只能先放一放了。而你们是听到动心的时候，直接就可以付诸行动，想学什么就学什么。但那些已经工作了的人有心无力也比浑浑噩噩的人好上太多，因为你们知道了世上还存在一种理性的世界，魅力无穷。我相信你们会把这种价值判断传递给你们的孩子，这些是节目的核心价值。</p>
-<p class="art-p">那么说到推荐什么书呢，是这样，数学课程只看书的难度会高很多，所以我推荐网上的公开课。比如网易公开课里，你搜搜麻省理工的线性代数，再看看可汗学院的微积分预备和微积分，还有概率、统计，差不多这几门就是数学基础课，任何学科只要用数学工具，这些基础都避不开。其实只要你把这几门课的概念掌握了，不出意外，就是百里挑一的数学素养了，甚至是几百里挑一的。熟悉了这些内容，再看到用数学工具描述的物理过程，你就一下能从公式的长相意识到，哪部分是应该格外重视的。外行看这一长串公式，就是一行热热闹闹的符号，而在你眼中的这行公式，其实有的地方是标红的，有的地方是粗写的。尤其像可汗学院的视频，自打诞生就是为了网上教学用的，所以没有什么老师站着拿着粉笔和教室嗡嗡嗡听不清的回声，更加适合收看。</p>
-<p class="art-p">课堂实拍也有它的好处，你可以欣赏到一位科学家从最前沿领域退出后，在课堂上给大一新生讲课时散发的魅力。这就有点像我们看NBA，今天是快船对勇士，好，都是强队，打得胶着也好，大比分领先也好，其实我们是体会不到他们的实力有多好的。但现在勇士队和高中篮球队打，即便勇士只上替补，替补只发挥1/3的实力，你也会看得叹为观止。原来职业选手的实力如此之强，那些大科学家给大一新生讲课就偶然会给你一种四两拨千斤的感觉，他们会流露出一些对世界的看法，或者一个处理过程中的思考方式，带着个人性格的解读。我们生在一个好时代，曾经要想听到这种水平的课，你真的得有能力考进MIT才行，现在每个有求知欲的人都可以享受到。</p>
-<p class="art-p">如果听节目的你是中学生或者大学生，那就别错过黄金时机。如果你已经工作了，也把业余时间用在刀刃上吧。这个问题就回答这么多，大家如果有什么好资源，可以留在1917小组中。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-32">
-      <div class="art-header">
-        <span class="art-chapter">Ch.102</span>
-        <h3 class="art-title">专题丨有故事的科学家</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">No.1  人工智能之父-图灵</p>
-
-<p class="art-p">智力超群 同性恋 自杀</p>
-
-<p class="art-p">虽然我们听说图灵大都是因为他和计算机、人工智能、破解密码有关，但其实作为数学家，数学研究也是他的主业。</p>
-
-<p class="art-p">在二战开的打前一年，年轻的图灵在普林斯顿读研，他遇到了数学家哈代。那时候，哈代已经研究黎曼猜想20多年了，还是没有结果，他都开始怀疑黎曼猜想根本就是错的，这个观点也影响到了图灵。</p>
-
-<p class="art-p">图灵就从哈代的角度出发，打算找出证据证明黎曼猜想是错的，最简单直接的方法就是找出一个非平凡零点，它的实数部分不等于1/2就可以。</p>
-
-<p class="art-p">这个想法产生不久后二战开打，图灵在英国军情六处的出色工作让战争至少提前两年结束，之后他就花了不少精力建造可以计算非平凡零点的机器。在1953年，图灵的计算机取得了突破，算出了1104个非平凡零点，但不幸的是，所有结果都落在实部等于1/2那根线上，并不能证伪黎曼猜想。但在那前后几年出现了图灵命运的转折点。</p>
-
-<p class="art-p">1951年圣诞节的前几天，39岁的图灵喜欢上了一个19岁的年轻小伙子。在这段恋爱中，他的同性恋身份暴露了，最后图灵主动向警察招供，被判严重猥亵罪。</p>
-
-<p class="art-p">但从被捕到审讯的这1个多月时间里，他竟然也没闲下来，除了参加过几次和化学有关的学术会议，还提交了一篇关于黎曼zeta函数计算的论文，就是在这篇论文中他公布了最新的1104个非平凡零点的具体数值。这也说明了图灵的心理素质非常好，这时候还能集中精力搞学术。</p>
-
-<p class="art-p">最终判决下来了，是缓刑1年执行，在这一年里图灵必须接受化学阉割法治疗，也就是注射雌性激素。在接下来的2年中，图灵不但身体发生的改变，胸变大了，精神也受到了激素的影响。谁也不知道在1954年6月7日晚上他是怎么想的，服用氰化物自杀了。</p>
-
-<p class="art-p">No.2  调皮的物理学家-费曼</p>
-
-<p class="art-p">诺奖得主 爱因斯坦之后最睿智的理论物理学家</p>
-
-<p class="art-p">费曼在他的自传《别闹了，费曼先生》里写到，他在普林斯顿工作的时候，每天中午在餐厅吃饭，这里坐的几乎都是各领域最牛的人，午餐时间一到，一般来说大家都喜欢物以类聚，物理学家跟物理学家一起吃，生物学家跟生物学家一起吃。</p>
-
-<p class="art-p">最开始费曼也是和物理学家一起的，但他就是个闲不住的人，好奇心重。他就想，既然都是各领域天才，那不如趁着这个机会看看世界上其他人在做什么，肯定很好玩。</p>
-
-<p class="art-p">于是就开始轮流的和其他学科的同事一起吃饭，终于有那么一天，轮到了哲学小组。</p>
-
-<p class="art-p">第一天吃饭时，这些哲学家们讨论的是怀海德写的哲学名著《过程与实相》这本书。费曼觉得他们用词怪癖，一辈子没用过的生癖词，这顿午饭都听全乎了，也听不太懂，但是费曼也没想打断他们的谈话，因为每句话都差不多有生僻的词，这要是挨个问下去，就感受不到哲学家的世界了。</p>
-
-<p class="art-p">但是往后的几天，费曼就忍不住地问了，结果哲学家们还挺热心，说，干脆，你来参加我们的研讨会吧，饭厅里说不清那么多概念的，时间也不允许。</p>
-
-<p class="art-p">费曼当然是愿意参加了，这是深入了解一个他都没琢磨明白的领域的好机会嘛。</p>
-
-<p class="art-p">他以一种好奇、探索，或者说游戏的心态，去加入了哲学家的研讨会。为了不破坏这次探险，满足好奇心，费曼在参加研讨会之前反复的拼命的嘱咐自己，你只不过是去旁听，千万别把你大嘴巴的本性露出来，不论听到什么都憋住，只听就好，听到任何让你兴奋的内容都别乱说。他把这个嘱咐在心理默念了几遍，就去参加研讨会了。</p>
-
-<p class="art-p">结果按他原话就是，难以置信的事情，千真万确的发生了。</p>
-
-<p class="art-p">开始时，费曼老老实实，一句话也不说，在哲学家们聊到“本质物体”这个词时，意见发生了分歧，这时候主持研讨会的教授开始在黑板上画了起来，费曼看不出时什么，好像是画了一堆闪电，或者是锯齿。费曼托着下巴正看呢，教授突然朝向他，问，费曼先生，电子是不是本质物体呢？</p>
-
-<p class="art-p">费曼在自传中的原话是，“于是，我又惹上麻烦了。”</p>
-
-<p class="art-p">看看这个心怀鬼胎的物理教授，平时就是个惹是生非的祸根，看到哲学家们从上礼拜吃饭讨论到现在的研讨会上，竟然连“本质物体”的定义才在1分钟前才开始澄清，难道他们的毕业证都是买来的吗？虽然费曼心里肯定多少已经开始这么想了，但他一定要憋住，如果发表看法了，那这场深入哲学家世界的游戏就得结束了。</p>
-
-<p class="art-p">但没想到，竟然有人指名点姓地问他，电子是不是本质物体？那完了，这场游戏的大结局就要上演了。</p>
-
-<p class="art-p">费曼说，“实在抱歉，我没看过《过程与实相》，所以我也不知道怀海德说的‘本质物体’指的是什么，而且我只是来旁听的。”这句说完，他考虑了5秒钟，还是没憋住，费曼接着说，“不过，如果在座各位能先回答我一个问题，让我多了解一点‘本质物体’这个概念，我就可以试着回答一下教授问我的问题了。我就是想问下，砖头算不算是一种本质物体呢？”</p>
-
-<p class="art-p">费曼当时问这个问题是想帮哲学家们区分理论模型和真实模型两个概念。因为他大致判断，这个教授把电子当做了一种真实存在的本质物体了，而实际上电子只不过是理论构想中一种描述。</p>
-
-<p class="art-p">说清楚电子是理论描述后，再用砖头有没有内部做例子，就是每当有人劈开一块砖，看到的就只能是砖头的侧面，而不是内部。而砖头有内部，这个理论只不过是为了让哲学家们更好的理解，电子理论中不存电子，砖头有内部理论中不存在内部。这两件事本质是一样的，都仅仅是用来描述现象的虚拟模型。</p>
-
-<p class="art-p">回到费曼的问题上，一个人站起来说，“一块砖就是单独的、特别的砖头。这就是怀海德所说的“本质物体”的意思。”</p>
-
-<p class="art-p">可是又有人说：“不对，“本质物体”的意思不是指个别的砖头，而是指所有砖头，他们共有的普遍特性，换句话说，‘砖性’才是本质物体。”</p>
-
-<p class="art-p">接着，这些哲学家们一个接一个地起立发言，费曼听迷糊了，他在自传中写到：“我发现这是我出生以来，第一次听到那么多关于砖头的天才的说法。后来，就像所有典型的哲学家一般，场面一片混乱，有意思的是，在那么多次的讨论中，他们从来没有问过自己，究竟像砖头这种简单的东西是不是“本质物体”，所以就更别提他们似乎完全不了解的电子了！”</p>
-
-<p class="art-p">于是，费曼打入哲学家内部的游戏也就在这样无休止的讨论中结束了。最后，他像个调皮的孩子扫兴而归。</p>
-
-<p class="art-p">No.3  文艺的物理学家-汤川秀树</p>
-
-<p class="art-p">1949年诺贝尔物理奖得主 文艺气质 科普</p>
-
-<p class="art-p">日本物理学家汤川秀树出版了一本科普书叫《眼睛看不到的东西》。这书名听上去挺文艺范儿的，实际上连内容也有点文艺范儿，在物理圈里能这么有文艺气息还是不多见的。</p>
-
-<p class="art-p">这本书有3部分，第一部分说的都和物理相关还介绍了他当年诺奖中预言了π介子的工作，可能略有些烧脑，因为这部分知识和我们绝大部分人上学时的知识体系没有太多重合。但后面2部分就很好懂了，像散文那样，通读下来可以感受到他理解世界和人生的东方哲学的味道，而且也能明显感觉到他对科普工作有很多想法，很想做高质量的科普。</p>
-
-<p class="art-p">在这本散文集最后的最后，有一篇文章和书名同名，就叫《眼睛看不见的东西》。这里他说生病这件事从前大家都相信医生的解释，医生说是细菌造成的，那大家也就这么信下来，可没人去想过致病的原因是一种我们根本无法肉眼可见的东西。汤川秀树是在1943年底写的这段文字，那时候日本国民普遍对电子、质子、中子的存在没有认同感，但对病菌的存在是没什么人怀疑的，所以汤川秀树写这篇文章想表达的意思是，有两种东西的所谓的看不见，只不过是肉眼上看不见，我们用设备去看却都是一样真实存在的，病菌用显微镜就能看到，电子用威尔逊云室就可以看到轨迹，所以要科普就要尽可能的从微小的东西入手，让民众对这些东西产生好感。</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-33">
-      <div class="art-header">
-        <span class="art-chapter">Ch.103</span>
-        <h3 class="art-title">下季预告01丨19世纪的医生</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">科学史虽然也叫史，但还真比不了历史，因为它大约在1910年才形成了一个独立的学科，而且还是个地位不太高的学科，在咱们国家还经常被放在哲学系里，而它又谈的是科学有关的事儿，那就成了我从前经常批判的科学哲学了。难道下一季要讲我曾经最看不上的内容吗，当然不是。我可不会随随便便冒出这个主义，那个主义的。</p>
-
-<p class="art-p">近代科学如果从哥白尼的《天体运行论》出版作为诞生标志，那到今年才474年，相比全世界任何一个文明，动辄四、五千年实在是短暂。但也因为离现在近，离印刷机出现，图书出版，更近，所以保留的资料更详细。我需要参考的资料相比上一季单独某个具体问题来说，简直多了成百上千倍，刚开始我真是有点不知所措，但多看基本的书就有了感觉。</p>
-
-<p class="art-p">这个脉络就是科学的思维方式对人们三观的影响。</p>
-
-<p class="art-p">这种思维方式用在哪，哪就能成为一个快速发展的独立学科。</p>
-
-<p class="art-p">比如天文学是最早植入科学思维方式的。这个领域最早被选中可以算是命中注定，因为天空不论世界哪个民族都在面对，而且长久以来大家都手握同样水准的工具，那就是双眼和纸笔。所以在没有互联网，没有论坛的时期，天空是最早的全人类都在关注和讨论的焦点。</p>
-
-<p class="art-p">对天空将要出现的现象预言，对发生过的事情归因，都随时准备接受一个考验，就是跟现实是不是吻合。星星还有一个好处，就是它的运动和变化相对来说可以看成质点运动。这相比地面上，潮起潮落，或者身体生了病之类的变化，天生就更容易和数学结合。</p>
-
-<p class="art-p">而相比把科学思维用在天文学上来说，用在人体上的时间就晚太多了，可能是人体太复杂的原因吧。</p>
-
-<p class="art-p">我最近看到的一个统计，就是在英国，直到1830年，儿童死亡率还有25%左右，这统计的是5岁以前的死亡率。四个孩子就有一个活不到5岁，这真的很高，想降低怎么办？靠医学，那个时候人们温饱已经不是限制寿命的最大问题了。可是医学在那个年代也不太靠得住，虽然个别领域已经有了突破，但整体来说，去治病有时候也等于去送死。</p>
-
-<p class="art-p">比如婴儿出生9个月后开始长乳牙，但是萌生的过程有可能会发低烧，估计孩子也会感觉难受，会哭闹。当时的医生把这个当成病去治。怎么治呢？就是用刀把牙床切开，提前暴露出还没萌发出来的乳牙，有的医生甚至切得更深，切到牙槽骨，认为这样做还会减少婴儿今后长大以后阴茎发育不正常的症状。还有医生认为切开牙床治标不治本，要用水蛭放到牙床上吸血，保持体液平衡。</p>
-
-<p class="art-p">切开牙床的方法可不是蒙古大夫做的，是当年《柳叶刀》这本医学专业期刊里的建议。《柳叶刀》现在可是医学界顶级学术期刊啊，代表了外科学水平的最高峰，但当年的认知水平也就这么高。结果凡是这么做的，婴儿大都会感染，别看人家英国儿童死亡率高，但统计工作做的真好，1839年统计的，伦敦市当年因发乳牙导致死亡的婴儿5016位。这也为25%的儿童死亡率做了不少贡献。</p>
-
-<p class="art-p">你看，这已经到了19世纪了，医生的观念和对世界的理解尚且如此，更何况一五几几年，甚至更早的时候了。那时候的医生连肾是干什么的都不知道，能指望他治好病吗？以我们现在的认知看是不行的，但当年贵族和皇家就是花重金聘请他们。像开创现代科学先河的哥白尼，他第二次去意大利留学，学的就是医学。而且在他还活着的时候，他比较出名的手艺就是治病，天体运行论是他身后的事了。</p>
-
-<p class="art-p">之后我们讲科学史时，聊到哥白尼再仔细说说当今流传的形象和那个真实的哥白尼差别在哪儿？你以为他是个科学家呢，还是个天文学家呢？咱们之后细说吧。</p>
-
-<p class="art-p">相比运用到天文学，运用到人体，我觉得科学思维还会运用到社会学，就是多个人的关系，那个领域一定是比单个人更复杂的。也正是因为极度复杂，所以还没有一个很好的数学模型来描述，也许是数学还不够发达吧。</p>
-
-<p class="art-p">上面的图片就是《卓克·科学史》第一批30节课的内容。主要是从生命的诞生，到微生物的出现开始讲。正好过度到欧洲那次引发了后来文艺复兴的黑死病。然后把牛顿出现之前的天文学方面的故事梳理出来。这里很多人物都被中小学课本扭曲了，我可能要多做矫正的工作。</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-34">
-      <div class="art-header">
-        <span class="art-chapter">Ch.103</span>
-        <h3 class="art-title">下季预告03丨电影《天才少女》</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">最近在紧张准备《卓克·科学史》时利用吃饭的时间陪老婆看了一部电影，叫《天才少女》。开始我以为是家庭关系的剧情，但后来发现和数学有点关系，这才看了下来。看完后突然有了点感触。</p>
-
-<p class="art-p">这部片子说的是舅舅和姥姥争夺一个6岁小女孩抚养权的故事。为什么要争夺抚养权呢？因为两个人对怎么抚养孩子的理念不同。小女孩她姥姥家都是波士顿大学做数学研究的，从姥姥开始，到妈妈和舅舅都是，但命运都不同。</p>
-
-<p class="art-p">姥姥因为结婚后生活重心不得不变为家庭，所以最后放弃了数学研究，但其实婚姻也没维持住。小女孩的爸妈离婚了，抚养权留给妈妈，但是妈妈却因为心理问题自杀了，而且很可能心理压力来自于她搞的数学研究。舅舅曾经也是数学系的助教，不过后来竟然改行修游艇去了。</p>
-
-<p class="art-p">小女孩Mary从小就有过人的智商，遗传了家人的数学天分，不过他舅舅执意让她过普通孩子的生活，去普通学校读书，不跳级，不在6/7岁时就接触线性代数、微积分什么的。但是她姥姥不这么认为，她姥姥属于怀才不遇，希望Mary能继承她，甚至继承她妈妈的遗愿，从事数学研究。看着这孩子这么小就这么有天分，可自己儿子，也就孩子舅舅却偏偏故意不让她接触数学，心里着急，最后竟然去打官司，争夺抚养权。</p>
-
-<p class="art-p">这个故事挺温馨的，也没什么好剧透的，看的是感觉不是结局。但是引起我兴趣的是，她妈妈当年去世之前所有的心思都扑在解Navier-Stokes 方程上了，只是没做出什么有价值的进展。这个方程你可能不熟悉，但上一季常听我节目的人知道，在2000年5月份，克雷数学研究所在千禧年数学会议上提出了7大难题，这个举动是效仿正好100年前，大数学家希尔伯特在巴黎数学大会提出的23个数学难题，每隔100年就有这么一次总结和展望，虽然到现在才做了2次，但很可能这就成了一个数学界的惯例，我相信在2100年还会举行一次。</p>
-
-<p class="art-p">1900年那次提出的问题很多，到今天完全解决的有14个，部分解决的3个，剩下的问题有些不属于数学，有些太隐晦。其实过了117年，这些问题可以算是差不多都解决了。但是克雷研究所那7个问题到现在为止，本世纪已经过了1/6了，只有1个问题解决了，咱们曾经详细说过，就是佩雷尔曼证明庞加莱猜想的故事，剩下6个还都差很远，而小女孩她妈妈研究的Navier-Stokes方程就是其中之一。</p>
-
-<p class="art-p">当时剧情里有个镜头，姥姥领着孩子走到数学系的一面展示墙前，上面有7个相框，6个是空的，只有一个上面有个胡子拉碴的男人头像，这就是我刚说的千禧年7大数学问题，那个胡子拉碴的男人就是佩雷尔曼。</p>
-
-<p class="art-p">我知道这部电影是提倡让孩子自由快乐的成长，不要强加自己的意愿给孩子。但我要说，真的要在四周同行们还比较落后的时候，自己在科学上迈出一大步的话，尤其是迈出那些关键性步骤，是不可能没有牺牲的，比如唯一一个上墙的佩雷尔曼，他就是一个与世隔绝的怪人。他就是从7岁开始在卢克欣数学俱乐部做高强度特训，并后来一辈子和数学为伍的人，他牺牲的就是惬意的生活和差异更小的人格，当然，这和前苏联那种集中国家资源，军事化管理的方式有很大关系。</p>
-
-<p class="art-p">他虽然是个怪人，但他这一步迈出的价值如果拉长时间去看，那就是人类文明史上浓重的一笔，这样的例子很多，比如围棋大师们，小提琴大师们，大都经历过痛苦的童年，但他们的伟大和神奇也一直流传到现在。</p>
-
-<p class="art-p">不过呢，个案说明不了太多，我们也可以轻松找到很多反例，那些人的伟大远超过佩雷尔曼，围棋、小提琴大师，比如牛顿、达尔文、霍金，他们小时候也没刻意受过训练，都是在接近20岁后自己选择了新的目标，最终都实现了一个很高水准的成就。</p>
-
-<p class="art-p">有时候我把天才做出惊人的成就想成是一锅沸腾的冒着泡的热粥溅出汤汁的过程，我们没法预测哪个泡泡破裂后会溅出来，但我们敢肯定，只要火不要停，把盖子敞开，早晚会有足够多的汤水溅出来的。这些溅出来的汤水就是人类文明的结晶，越多越好。</p>
-
-<p class="art-p">作为社会的管理者来说，如果他能营造出一个环境，比如持续的高质量的教育普及，营造自由竞争，无障碍交流的科研气氛。我想，中国出产十几个、几十个诺贝尔奖是很有可能的，因为我们人口基数比别人大很多。</p>
-
-<p class="art-p">这种观念也可以用来想想中国足球，我们也有天生的人口优势，甚至是很多欧洲小国人口的几百倍。但还是到今天没有世界级水平的运动员诞生，这也和这锅粥没煮好有关系，可能是没有火，可能是锅沿儿太高。</p>
-
-<p class="art-p">所以从这个角度说，大环境具备了，迈出神奇的科学发现的一步就是大概率事件，虽然不能指望预测是谁做出什么样的突破，但我们能肯定，这个环境下将诞生很多优秀的人才。我在整理文艺复兴之后的科学发展中也发现了这个规律，世界科学中心从最早的佛罗伦萨，到剑桥，到巴黎，再到德国，最后到美国，这些地方诞生的重大科学发明的数量可以持续占比全世界当年25%以上，持续60年，或者120年，焦点和中心的变更就是严重依赖于人才的出现。牛顿出现了，世界科学中心就是以剑桥为圆心。一旦牛顿去世了，马上就换地方了。具体的内容我们等正式节目上线在说吧。</p>
-
-<p class="art-p">这次的课表放出，是第三批，排到了103节，这次的中心是进化论和达尔文。我在整理资料的时候强烈地感受到进化论的影响之大，更多在于颠覆人们思维，可以说从此，人看待自己，看待其他生物的想法全变了。好了，这次就汇报这么多，课表奉上。</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-35">
-      <div class="art-header">
-        <span class="art-chapter">Ch.103</span>
-        <h3 class="art-title">下季预告09｜发现天使粒子是怎么回事？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">很多听众都特别关心一个问题，我下一季节目里，还有没有回答听众问题的内容，有些听众甚至觉得这些比30分钟的节目听得都过瘾，其实我估计主要是有立竿见影的实用价值。这个问题回答，当然会有。</p>
-<p class="art-p">下季是每周有6期节目，其中4期是趣味科学史的内容，还有2期是专门答疑的部分。这样一年下来有100期出头的答疑，我想用这些应对一些热点事件还算够用了。下一季节目争取是在7月31日上，不过现在来看还要继续推迟一周左右，因为调整幅度比较大，所以实在抱歉让大家久等。</p>
-
-<p class="art-p">咱们说回问问题的事儿。</p>
-
-<p class="art-p">比如上周突然就集中出现了一堆人的提问，问张首晟发现了天使粒子，让我来说说到底是怎么回事儿。估计我现在提这个新闻，您都快忘了。那天我朋友圈也快被刷屏了，但其实简单来说，这又是一次媒体的过度宣传，最先出现的几个篇幅较长的主流新闻媒体的报道，几乎是在利用一些特殊的词，比如像天使、上帝、诺贝尔奖、丹布朗、基本粒子等词汇，营造出了一个传播的噱头，实际却存在非常多的误导。</p>
-
-<p class="art-p">实际情况是这样的，研究高能物理现在都承认一个基本原则，叫做粒子物理标准模型 ，世界上一切粒子的存在和行为都可以用这个模型来规范，这个模型里一共有17种粒子，分为2类：</p>
-
-<p class="art-p">一类叫做费米子，组成所有基本物质的这些粒子都叫费米子，比如像电子、中子、中微子，它们都是构成世界的原材料。</p>
-<p class="art-p">另外一类叫玻色子，它们专门负责传递各种作用力，比如光子、介子、胶子等</p>
-
-<p class="art-p">这17种粒子里相当大的一部分，它们的特征参数，比如质量、带电情况、自旋情况，都不是先在实验室里发现，然后再测得，最后把这个数填上的。而是先通过物理理论，先计算出它们有这些特征值，做出预言之后，再照着这个预言利用各种高能加速器、对撞机，在大型实验中去找，最后找到了这些粒子，就是先有理论，后发现这些粒子 。</p>
-
-<p class="art-p">那么大约在高能物理发展的最初期，物理学家狄拉克的理论中，就得出这么一个预言，那就是，所有费米子都是成对的，除了它本身之外，还有一个反粒子。比如说存在电子，就有反电子，其他参数都一样，就带电的特性上反了，一个带正的，一个带负的。当然反粒子反的不只是反在电特性这一点上，但是其他特性上的反又太复杂了，咱们就不说了。</p>
-
-<p class="art-p">后来陆陆续续真发现了不少反粒子，但1937年，意大利的物理学家马约拉纳又从理论上推导出一个新的观点，就是有些费米子的反粒子就是它本身。后来，物理学家们就把反粒子是它本身的那些粒子叫做马约拉纳费米子。不过这种粒子到现在还没有被直接发现，而且在上周铺天盖地的“发现天使粒子”的新闻出现的时候，也仍然是没有发现的状态。</p>
-
-<p class="art-p">这次在Science上公布的论文是什么呢？</p>
-<p class="art-p">这些团队其实只是发现了符合马约拉纳费米子特征的准粒子而已，并不是马约拉纳费米子本身，这是怎么回事呢？</p>
-
-<p class="art-p">如果我们从那些可测的外部特征看，确实发现在很多方面，这个东西测起来符合马约拉纳费米子的特性，可是与此同时，做这个实验的科学家们更清楚，这些表现出来的特性其实是我们在某一种特定状态下， 通过对电子的控制，让一群电子以一种特殊的方式携手达成的 。这就有点像我们在球场上造的人浪，那看起来真跟波涛汹涌的波浪是一样的，但其实只不过是每一个人站起再坐下，这节奏配合好了以后形成的一个总体效果，你不能因为看见这个效果逼真，就说我在工体的看台上发现了海浪。可是最初几篇新闻里已经言之凿凿地说发现了马约拉纳费米子，所以这属于新闻上的误导。</p>
-
-<p class="art-p">那么电子组合在一起，在什么特殊状态下会呈现出马约拉纳费米子的特性呢？这种特殊状态叫做反常量子霍尔效应 。</p>
-
-<p class="art-p">先说霍尔效应，假如说有一块平板似的材料，就像一本书那样，把这本书平放在桌子上。如果给这本书通上电，再垂直于桌面加一个磁场，就会发现一个奇怪的现象：就是这本书的书脊一侧和书脊对面翻页的那一侧，会出现电压差。也就是电子都集中跑到其中一边儿去了。这就叫做霍尔效应，是130年前发现的。</p>
-
-<p class="art-p">在1980年的时候，发现一个新的叫量子霍尔效应，多了“量子”两个字，这条件跟霍尔效应只有一点不同，就是外加的垂直桌面的磁场超强，不是130年前那种比较弱的磁场了，这时候虽然有一部分电子会靠边走，跑到书脊这边来，但是内部更多的电子不会往外边靠，而是自己在原地打转转，这会造成这个材料在某一个方向上的电阻为零。这个特性要是真能做到，很多投资人就疯了，没有电阻，这个特性如果应用到工程领域，前景太广阔了，很多发热问题迎刃而解。</p>
-
-<p class="art-p">比如CPU的频率现在顶多做到4点几G，之后做到100多G也没问题。但问题是，这个超强磁场可不是那么容易得到的，得配个车间一样的设备才能产生。</p>
-
-<p class="art-p">但是后来，又有物理学家通过新的数学工具计算出，量子霍尔效应还有一个更加奇怪的情况，就是不用加任何的超强磁场，甚至连一点磁场都不用加，也能实现量子霍尔效应，也就是说在某个方向上出现零电阻的情况。但是要达到这种效果，就需要用到一个很特殊的方式来制备材料，做出来的这个材料，它的电子就会携起手来，形成一种表面看起来像马约拉纳费米子的样子。</p>
-
-<p class="art-p">有些人听到这就会想，去年诺贝尔物理学奖好像就是这方面的，没错，其实这方面的东西，实物早就有人做出来了，所以严格来说也不是张首晟个人的发现，所以新闻标题里“中国科学家张首晟发现天使粒子”，把功劳归功于他个人又是一个严重的误导。</p>
-
-<p class="art-p">而且就算是只针对这次发表在Science上的论文，张首晟也是次要人物。有多次要呢？</p>
-
-<p class="art-p">整篇文章的署名一共20人，张首晟排第17，完成这篇论文最主导的人是加州大学洛杉矶分校的王康团队。之所以媒体在科学贡献的大小上出现这么大的偏差错误，主要就是他们不认识另外19个人，而张首晟在这之前的报道还挺多的，所以媒体就用很多惯用的手法，找熟悉的概念拼凑在一起。</p>
-
-<p class="art-p">比如之前曾经出现过上帝粒子，那咱们这回重点突出天使粒子。其实那根本是两码事，上帝粒子那可是17个基本粒子中的一个，所以发现上帝粒子意义非常重大，但是这个天使粒子只是描述一类已知的费米子。虽然客观地说，它是一个很不错的科学发现，实验做得也很出色。但是根本上达不到新闻里说的，又是诺贝尔奖，又是重新定义粒子物理标准模型的地步。</p>
-
-<p class="art-p">但是乐观地看，这也算是一个非常复杂非常专业的高能物理领域中的问题，误打误撞，借着爱造势的媒体，进入到大众视野的一次机会。</p>
-
-<p class="art-p">好了，这个问题就回答到这。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-36">
-      <div class="art-header">
-        <span class="art-chapter">Ch.103</span>
-        <h3 class="art-title">下季预告11｜解读韩春雨撤稿事件</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">上一季我们曾经用两期答疑的节目，说了说韩春雨事件。一次是在2016年的10月份，那会儿质疑声四起。还有一次是今年的1月份，已经几乎没人关注了。</p>
-
-<p class="art-p">就在烟消云散的时候，没想到最终在上周8月2号，韩春雨跟那篇论文的另外四个作者在当初发表论文的《自然·生物技术》期刊上发布了撤稿声明。</p>
-
-<p class="art-p">他说的是，因为科研界一直无法用我们的论文中提供的实验方法把论文中图4的关键步骤重复出来，我们决定撤回这项研究。</p>
-
-<p class="art-p">论文中的图4</p>
-
-
-<p class="art-p">第二天一早，他工作的河北科技大学官网上也给登出撤稿的消息了。</p>
-
-<p class="art-p">说韩春雨团队同意按学校安排，选择一家第三方实验室在同行专家的支持下开展实验，验证其研究的有效性。学校决定启动对韩春雨该项研究成果的学术评议及相关程序。但是又补充说，在满足一些关键条件的情况下，其系统可以进行有效的基因编辑。</p>
-
-<p class="art-p">这个就是最新的进展。</p>
-
-<p class="art-p">在1月份那期节目里，我曾经说，撤稿不撤稿的调查，《自然》杂志是没有能力完成的，它只能由河北科技大学或者是跟这项研究有关的国家自然基金主动去调查，才能推动《自然》杂志撤稿。</p>
-
-<p class="art-p">那现在看来，韩春雨先发声明，学校第二天早上紧接着发声明，那看来是早就协调好的。这次学校在各方的压力下不得不展开调查了。但可是这个声明距离最早集中出现的高品质的质疑已经过去12个月了。</p>
-
-<p class="art-p">我们之前节目还比较了当年日本小保方晴子这个学术造假事件。</p>
-
-<p class="art-p">当时有理有据的质疑是在论文登出20天后出现的，然后学校启动调查几乎就是在质疑声出现之后的第2天，第3天。质疑出现之后的第15天，学校第一次协助小保方晴子公布了更多的实验细节跟数据，不过还是没有说服大家。所以，在质疑出现之后的第40天，学校调查结果公布了，结果就是小保方晴子篡改数据，捏造数据，有学术不端行为。</p>
-
-<p class="art-p">你看，这就是日本处理这类事件的速度。</p>
-
-<p class="art-p">但是，咱们几乎用了400天的时间还仅仅停留在人家第3天的地步上，也就是学校终于宣布启动调查了。</p>
-
-<p class="art-p">所以，你说这学校它是主动想调查吗？它还是被逼无奈不得不调查了呢？这个答案很明显吧。它如果想主动弄清事实的话，第二天它就会宣布调查，它不用等400天呀。</p>
-
-<p class="art-p">韩春雨团队对这个事的最后一次回应发生在今年1月份，这就很有意思了，这么久都拖过去了，按说大概率本就应该是不了了之了，怎么竟然还来了一个剧情的反转呢？</p>
-
-<p class="art-p">这个答案就来自于今年5月20号央视新闻频道竟然播出了《新闻调查-副教授韩春雨》这一期45分钟的节目，把韩春雨事件前前后后都说了个遍。</p>
-
-<p class="art-p">这次报道可不是先定性他为英雄人物，科研先锋，不是这样的。而是一开始就突出了别人的争议跟他的回应，把从去年9月份到节目播出的所有的质疑都给总结了一个遍，然后当面锣，对面鼓地把这质疑抛给韩春雨，听他怎么说。但是可惜，因为问的人是记者，他不懂基因技术，也不知道韩春雨之前回应之后其他人是怎么继续质疑的，所以韩春雨怎么说这记者也就只能怎么听。所以，这次韩春雨他的回复内容跟他最早在去年10月份在百度贴吧上回的是差不多的内容。</p>
-
-<p class="art-p">大致意思就是，其他人的实验都有过污染，我的没有被污染。至于你们怎么污染的，我就不清楚了，反正我这是可以做出来的。</p>
-
-<p class="art-p">但是央视的级别又是45分钟的报道，所以影响力是足够大的。</p>
-
-<p class="art-p">这就像当年有多少晚报，多少杂志都报道了同仁堂龙胆泻肝丸里头含有马兜铃酸，它会导致大量的肾衰竭的病例。但是，报道了10年也没用，就这个公司的这个药还会继续卖。那直到有那么一天，央视也参与报道了，结果第二个月就开会，然后把药给下架了，之后换掉成分才上市。</p>
-
-<p class="art-p">所以，也就是说韩春雨跟河北科技大学在这个级别的媒体压力下是终于顶不住了，所以才启动了调查。如果没有央视这个节目，调查还不会出现。</p>
-
-<p class="art-p">那这个事的结果我们要分两部分看：</p>
-
-<p class="art-p">一部分是学术部分，你看他已经撤稿了，就代表主流学术界对这个研究成果是否定的。但是，到这一步，棺材板只盖了一半。因为这个事件它已经涉嫌到捏造数据了，所以学术界至少还要弄清一个问题，就是他到底造假没造假，这个是有待于河北科技大学的调查了。</p>
-<p class="art-p">另一部分就是荣誉的部分，因为韩春雨已经因为这篇文章发表，已经当选了河北科技科协的副主席，评上了美丽河北最美教师，还被推荐成为长江学者，万人计划和中青年科技创新领军人物。而更大的利益在于河北科大还获得了发改委2.24亿元的财政拨款，用于建设基因编辑技术研究中心，而且还跟丹麦的一家生物技术企业签署了一个合作协议。</p>
-
-<p class="art-p">这个事如果要像当年小保方晴子那样很快启动调查，很快出结果，那再怎么造假也只限于学术领域，那都好处理。但是因为拖得这么久，结果没有出来，到现在巨额的经费也批下来了，堆积如山的荣誉也都来了，这就不太好办了。</p>
-
-<p class="art-p">你看这2.24亿，这个算多算少呢？</p>
-
-<p class="art-p">咱们国家给高校的科研经费的支出总体是这样的，就是985的大学它是拿大头的。</p>
-
-<p class="art-p">比如说2013年，清华是所有985学校里拿的最多的，这研究经费是27.8亿。那非985，也不是211的这些大学就几乎没什么研究经费了。</p>
-
-<p class="art-p">比如说还是2013年，排名最高的非985学校拿到研究经费最多的就是西南石油大学，拿了多少呢？就1.2亿。</p>
-
-<p class="art-p">你看这河北科技大学它既不是211，也更不是985了，但就因为这篇文章，所以就获批了2.24亿呀。</p>
-
-<p class="art-p">你看，这差不多是非985学校可以获得的全年研究经费最高值的2倍。河北科大是肯定不愿意放弃这笔收入的，它跟韩春雨的利益是一致的。</p>
-
-<p class="art-p">所以，我在这儿也挺担心的，就是河北科技大学所组织的调查，它说它要调查，可能只是一种策略，其实根本就没有必要找第三方实验室了，因为到现在15个月都过去了，全球有几十家实验室做了几百次的实验都没有一次能够重复出结果，所以这已经是最好的、最大规模的第三方的调查结果了。</p>
-
-<p class="art-p">那河北科技大学还能找到比这个更有说服力的第三方的调查吗？</p>
-
-<p class="art-p">真正的客观的调查就是让韩春雨自证清白，把原始数据给拿出来。如果原始数据没有了，那就可以直接定性为捏造数据了。</p>
-
-<p class="art-p">当年小保方晴子也是这样定性的，拿不出原始数据，然后在第三方机构监督下也长时间地不能重复出实验结果，所以日本理化研究所就宣布她是捏造数据。官方宣布出来之后，她本人还是不承认，还在到处解释。但是没关系，官方定性是很利索的，是盖棺定论的。</p>
-
-<p class="art-p">我就担心河北科技大学它如果是想找一个所谓的第三方，然后作一个最终的评定，评定完了，结果是实验有效。今后学术界，你再怎么质疑，我也不管了，反正这论文我已经撤稿了，我也不会再发，起码不会有国外的同行揪着不放。那来自国内的质疑嘛，科学研究当然是可以有争论的嘛，反正我就是能做出来，你们就是做不出来，就咬死这一点，谁也拿我没办法。</p>
-
-<p class="art-p">如果是这样的话，那就是最坏最坏的结果了。</p>
-
-<p class="art-p">为什么呢？</p>
-
-<p class="art-p">因为它就会起到一个非常恶劣的示范，就是说中国的科研工作者可以不择手段地实现自己的目的。只要能在撤稿之前把经费给搞定了，就算成功。只要这个钱足够多，所有收尾擦屁股的工作都由学校来帮忙出面搞定。</p>
-
-<p class="art-p">鉴于这个事件，从质疑四起到启动调查都用了一年多的时间，那么调查结果要想出来，我估计需要更久的时间了。</p>
-
-<p class="art-p">所以，我也会在下一期的节目中，甚至是下下一期的节目里头继续跟踪这个事。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">好了，这就是这期的预告，咱们下期再见。</p>
-<p class="art-p">下一期的预告应该是咱们在正式节目播出之前的最后一次预告了。</p>
-<p class="art-p">8月21号，咱们下一季的节目就正式开播了。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-37">
-      <div class="art-header">
-        <span class="art-chapter">Ch.103</span>
-        <h3 class="art-title">新专栏发刊词｜你身边的万物简史</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">你好，我是卓克。</p>
-<p class="art-p">“来自现代科学的诞生地”全球第一所大学—— 建立于1088年的博洛尼亚大学，硕士。</p>
-<p class="art-p">《卓老板聊科技》早已结束。</p>
-<p class="art-p">推荐你学习我的第二门课程《卓克·科学思维课》，它是我为你打造的一部——你身边的万物简史。</p>
-
-<p class="art-p">这世界上有两种人。</p>
-
-<p class="art-p">一种，总是期待灵光一现的巧思和顿悟。所以，他们只能指望天纵才智。</p>
-<p class="art-p">另一种，总希望把一件事做在上一件事的基础之上，拾级而登高。他们，才知道方法的妙用。</p>
-
-<p class="art-p">我的这个专栏——《卓克·科学思维课》——就是为后一种人准备的。</p>
-
-<p class="art-p">为什么有人下了一辈子的棋，还是臭棋篓子？</p>
-<p class="art-p">为什么有人在面对新事物的时候，总是惊慌失措？</p>
-<p class="art-p">为什么有人总是一惊一乍？</p>
-
-<p class="art-p">因为他们的世界观不完整。或者说白了，他们不知道迭代自己的方法。</p>
-
-<p class="art-p">到目前为止，人类知识迭代最好的方法就是——“科学方法”，没有之一。</p>
-
-<p class="art-p">整个十九世纪，人类最伟大的成就，不是蒸汽机，不是电磁学，而是“发明了发明的方法”。</p>
-
-<p class="art-p">｜科学方法对你锻造自己的思维有什么用？</p>
-
-<ol class="art-list">
-<li>摆脱本能和直觉</li>
-</ol>
-
-<p class="art-p">你觉得拔河比赛比的是选手们的力量吗？</p>
-
-<p class="art-p">事实是，力量大的贡献只是把绳子握得更紧，而地面摩擦系数和参与者的总质量才是关键。所以要想赢，最有效的方法就是，选对鞋（鞋底），然后再把绳子绑在每一个大胖子的身上。</p>
-
-<p class="art-p">植物人还能和人交流吗？</p>
-
-<p class="art-p">事实是，约20%被诊断为植物人的病人，是可以听到、听懂语言的，我们甚至可以通过脑电波与他们交谈。</p>
-
-<p class="art-p">如果我们可以及时查证，摆脱直觉和本能作判断，往小了说可以帮我们赢下拔河比赛，往大了说可以安抚一个被囚禁在躯体内的灵魂。</p>
-
-<ol class="art-list">
-<li>识别真知和谎言</li>
-</ol>
-
-<p class="art-p">酵素/葡萄籽/胶原蛋白/水素水，这些东西是上一代保健品中的主力军，虽然经过多年科普，很多人已经不再趋之若鹜地购买，但它们仍然畅销。</p>
-
-<p class="art-p">几年后，还是这批保健品商，他们卖的是：硫酸软骨素、藤黄素、水飞蓟、橙黄决明素，这又是一批你没听说过的名词，它们值得买吗？</p>
-
-<p class="art-p">事实是，它们大都是谎言和技术泡沫，只是大多数人没有能力从快速变化的信息里发现这些隐藏的陷阱。</p>
-
-<p class="art-p">而科学思维，科学方法，可以让你以不变应万变。</p>
-
-<ol class="art-list">
-<li>打通阶梯和路径</li>
-</ol>
-
-<p class="art-p">用任何方法获取信息都有收获。但每种方法都无法避免出错，之后只好推倒重来。</p>
-
-<p class="art-p">科学方法之所以说是“人类知识迭代最好的方法”，是因为它出现偏差的可能性最小，就算出现了，推倒重来的代价也最小。所以时间拉长到十年以上，一直使用科学方法获取信息的人，他们的知识存量，价值最高。</p>
-
-<p class="art-p">如果比喻一下，掌握科学方法的人，就像买到了一只大趋势一直增长的股票，这样的股票不用我们劳神，只要把你的资源不断投入其中，并且拿稳它，退休时你一定是朋友圈里投资收益最拔尖的一个。</p>
-
-<p class="art-p">科学方法是一条逐渐积累认知的阶梯。</p>
-
-<p class="art-p">现实生活中我们往往抵御不住某些新观点带来的冲击，花精力去研究、实践，这就像我们在股市里费尽心机要追涨停的那几只股票，大概率说，几年下来，你很难比一直手握谷歌、腾讯股票的人盈利更多。</p>
-
-<ol class="art-list">
-<li>积累灵感和顿悟</li>
-</ol>
-
-<p class="art-p">你会生出很多念头，它们是普通人少有的，比如：</p>
-
-<p class="art-p">发明并不重要，发明家只是风起云涌的时代弄潮儿。</p>
-
-<p class="art-p">具体科学知识没有一个是正确的，最好的水准也只能是“暂时没有发现错误”。</p>
-
-<p class="art-p">科技带来的问题，不论多严重也只能依靠继续发展科技来解决。</p>
-
-<p class="art-p">……</p>
-
-<p class="art-p">这些顿悟和灵感，会帮你滤掉绝大部分的信息噪音，让你生活得更稳健。</p>
-
-<p class="art-p">| 这个课程的设计，将为你提供</p>
-
-<p class="art-p">四大科学思维知识模块</p>
-
-<p class="art-p">未来1年时间，每天8分钟，我将会用超过300期的“音频+图文”内容，分为四大科技思维知识模块，涵盖32个与科学、技术相关概念，为你提供成体系的科学思维知识服务：</p>
-
-<p class="art-p">模块一：思维与方法</p>
-<p class="art-p">数字、复杂、变量、模型、证据、计算、务实、极限</p>
-
-<p class="art-p">模块二：演化与认知</p>
-<p class="art-p">真理、起源、发展、旁证、边界</p>
-
-<p class="art-p">模块三：真相与因果</p>
-<p class="art-p">流变、泡沫、成瘾、谬误、严谨、必然、直觉、抗辩</p>
-
-<p class="art-p">模块四：文化与体系</p>
-<p class="art-p">荣耀、符号、源头、性别、宗教、精英、痕迹、文化、基石、时间、台阶</p>
-
-<p class="art-p">帮你建立通过理论模型、演化视角、生态视角看世界的能力，辨识出归纳与演绎的区别，塑造因果关系的正确性认知。</p>
-
-<p class="art-p">未来一年，你将会用科学思维发现一个更为稳固的世界。</p>
-
-<p class="art-p">从故事中学习科学思维</p>
-
-<p class="art-p">专栏每周有7次更新，其中4次讲课，2次答疑，1次预告。每课讲一个问题，结合科学史给出问题背后的答案和科学思维。</p>
-
-<p class="art-p">周一到周四：</p>
-
-<p class="art-p">你体验的，是从每个人身边的问题切入→到故事→到知识→到认知升级。</p>
-<p class="art-p">你听到的，是复杂、抽象概念的通俗化翻译，无障碍理解事物背后的深层逻辑。</p>
-<p class="art-p">你学会的，是有即时效用的思维工具，事业上有用，生活中也有用。</p>
-<p class="art-p">你得到的，不是固化的知识点，而是知识点的提炼，是背后的科学思维。</p>
-
-<p class="art-p">周五和周六：</p>
-
-<p class="art-p">我将针对你的问题进行解答和补充，让观点和想法在这里碰撞，固化为知识，强化你的认知，用科学的方法塑造你的科学思维。</p>
-
-<p class="art-p">| 全年课表</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">欢迎你的订阅。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-38">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">1917选文丨与卓老板相识的一年</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员“统统1130-闫月川”。</p>
-
-<p class="art-p">电影《华尔街之狼》中有一个经典的桥段：</p>
-
-<p class="art-p">股票公司创始人莱昂纳多，让合伙人布拉德演示如何把一支钢笔推销给自己。布拉德的做法是，先向莱昂纳多索要签名，而莱昂纳多要想签名就需要钢笔，于是布拉德就把钢笔顺手推销给了对方。</p>
-
-<p class="art-p">这个桥段的寓意是：要想把一个事物（一件商品、一个人、一种宗教理念等）推销给对方，首先要让对方对这个事物有强烈的需求。</p>
-
-<p class="art-p">《通往财富自由之路》和《薛兆丰的经济学课》的成功，都是因为能够满足人们对某种能力或认知的需求。人们渴望财富自由和让自己更值钱；也渴望用一套靠谱的理论，来看待社会上的复杂现象，解决各种复杂问题。</p>
-
-<p class="art-p">那么要把《卓老板聊科技》这件产品推销给更多的人，也就需要先让更多的人对这件商品有强烈的需求。</p>
-
-<p class="art-p">卓老板在这一年里，为我带来了非常大的价值，分别是有趣的科学故事，和生活必备的科学思维两个层面。</p>
-
-<p class="art-p">趣味的科学故事</p>
-
-<p class="art-p">我以前所认为的杨振宁先生，就是一位智力超群的物理学巨匠，能在实验室和草稿纸之间创造出惊人理论的大师。</p>
-
-<p class="art-p">但通过卓老板的介绍，我心目中的杨振宁先生变得立体，而有温度了起来。他是一位有着极高的职业素养和生活品味，并且心系祖国的老先生。通过观看相关视频，我进一步了解了杨老传奇的一生，和他晚年宁静唯美的爱情故事。</p>
-
-<p class="art-p">这样的科学人物故事还有很多，比如受到爱情力量鼓舞，而奋发精进的霍金；被爱丁顿打压了50年，最后终于熬出头的钱德拉.塞卡；历经波折，循序渐进的人类登月计划；专门喜欢老牛吃嫩草，自己和妻子都搞婚外恋的薛定谔等等。</p>
-
-<p class="art-p">生活必备的科学思维</p>
-
-<p class="art-p">我曾经是一个阴阳五行爱好者，曾经迷信“中药纯天然无副作用”，“寒邪入体，热邪入侵”等说法，觉得李时珍和张仲景非常伟大。然而学习了卓老板一年之后，我开始质疑原来的逻辑。</p>
-
-<p class="art-p">传统文化里有太多的想当然和类比了，熊逸老师在讲《尚书》时说过，中国人有尚古情节，总爱把祖先的只言片语当天书一样膜拜和解读；并喜欢根据两种事物的相似性，建立起对应的关系，比如男女与阴阳，五官与五脏等。</p>
-
-<p class="art-p">而西医的每一次发现与发明，都要经过验证，做到实验可重复，结论可证伪；中医思辨得再好，如果不能用数据把“寒邪、热邪”等玄之又玄的概念进行描述，不能用中药对患者进行双盲实验，那就只能停留在思辨的层面。</p>
-
-<p class="art-p">不得不说，卓老板的专栏是一个让国家GDP“受损”的产品。如果每个人都学习过这个专栏，那么中医和保健行业恐怕要关门大吉了。</p>
-
-<p class="art-p">但学习过经济学的同学都会知道，卓老板的专栏虽然会让中医药行业受损，但它所带来的益处是眼下所看不见的：人们拥有科学思维之后，会作出更加明智的决策，减少许多无谓损失，社会总财富会因此增加，而不是减少。</p>
-
-<p class="art-p">《卓老板聊科技》不应该仅仅是科学发烧友的天堂，更应该是每一位渴望让家人过得健康幸福的人，所必备的工具箱。</p>
-
-<p class="art-p">与卓老板相识的一年：</p>
-
-<p class="art-p">是我不断破除错误认知，获得真相的一年；</p>
-<p class="art-p">是许多科学大师和故事，伴我成长的一年；</p>
-<p class="art-p">是我告别思辨与直觉，走向逻辑与怀疑的一年。</p>
-
-<p class="art-p">《卓老板聊科技》销量欠佳，正是人们对事物真相、科学历史，和科学思维的需求不够高的体现，让我们正视这一点。</p>
-
-<p class="art-p">只有让科学知识帮助到更多迷茫的人，让科学世界燃起更多年轻人的热情，让科学思维根植到更多孩子的内心最深处，人们对科学的需求才会渐渐增加。</p>
-
-<p class="art-p">我想，这是卓老板一直在做的事情。</p>
-
-<p class="art-p">这也是我们1917小组可以做的，一件非常有意义的事。</p>
-
-<p class="art-p">卓老板并不孤独，还记得利物浦队的队歌吗：</p>
-
-<p class="art-p">You will never walk alone！</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">自从开办这个专栏以来，我就养成了时不时翻看评论的习惯，所以你可能也感觉到，即便是你给1年前的某期内容留言，也会在一两天后收到我的回复。我大致估算过，这一年我大约给20%以上的留言进行了回复。</p>
-<p class="art-p">所以，我对很多ID印象深刻，我发现他们有一个统一的特征，就是已经建立起“科学思维”，所以在今后的人生里，各种“大师”们的说法想忽悠到他们是几乎不可能的了。</p>
-<p class="art-p">统统1130就是其中之一，感谢你这一年，用约一百小时的时间在我的节目上。</p>
-<p class="art-p">其实，我做内容最希望的就是把科学的思维方式带给大家，但思维方式的改变不同于接受一个具体的知识那么容易感知。</p>
-<p class="art-p">不知道你有没有感受到自己思维方式的改变呢？如果你深有体会，就把你的感受写下来吧。每周五，我把它更新在专栏里，供我们1917小组的成员交流学习。</p>
-<p class="art-p">欢迎并感谢大家踊跃投稿。文章请发送至：</p>
-<p class="art-p">liangzhiyi@luojilab.com</p>
-<p class="art-p">期待你的来信。</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-39">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">1917选文丨写给卓克的信</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员-huzhiqin。</p>
-
-<p class="art-p">《卓老板聊科技》专栏组：</p>
-
-<p class="art-p">你们好！</p>
-
-<p class="art-p">看到后台的征文通知，自己很是犹豫了一段时间。我是个很内向的人，这不是自谦或自夸，其实是自私，只想获取，不愿付出。</p>
-
-<p class="art-p">我向来把写出来发表的东西，说出来给人听的东西，都当作是付出，对此始终有一种本能的抵触。其实，自己经常会写点儿东西，只是这些文字都是写给自己的，不用修饰，不用雕琢，随心所欲，想到哪儿写到哪儿，或许只是比日记多了一些主题和逻辑罢了。</p>
-
-<p class="art-p">“得到”上的内容，除了自己订的以外，和大家众筹的也有好几个。现在产品越来越多，根本看不过来，必须要有取舍，如果只能保留一个的话，那我会选择《卓老板聊科技》。</p>
-
-<p class="art-p">也许，有一天栏目的内容可能不适合我，也许，有一天卓克江郎才尽，我依然会不离不弃，只因为它在我迷茫和困惑时，为我指明了方向，我也会把它作为一种象征放置在我人生的祭台上。</p>
-
-<p class="art-p">70后的我，早已过了矫情的年龄。</p>
-
-<p class="art-p">倒不是“为赋新词强说愁”，的的确确是人到中年，对人生的思考、对人性的思考越来越多，疑惑越来越多，问题也越来越多。差不多十年前，自己就开始了系统的阅读，希求找寻问题的答案。</p>
-
-
-<p class="art-p">研读过佛法，学习过哲学、心理学，涉猎过艺术文学方面的书籍，做这些真的不是为了人前显摆的谈资，只是想求得人生的意义在哪里。随着时间的推移和学习的深入，问题的终极指向竟然落脚到了认识论和价值观上，至此便止步不前。</p>
-
-<p class="art-p">传统的信仰体系被摧毁了（这你懂得），可是新的信仰还没有建立，有一段时间非常的痛苦，如果不是偶然听到了《卓老板聊科技》，或许我已经是存在主义或者是虚无主义的信众了。虽然，我知道在哲学层面上的主义并没有对错之分，好坏之别。</p>
-
-<p class="art-p">对于《卓老板聊科技》其实再说什么“讲得精彩、内容新颖”之类的褒奖，都显多余了，而且其他同学会比我讲得更悦耳动听。节目中，深深吸引我的是无时无刻不流露出的科学精神，正是包容、理性和实证，让我找到了解决诸多困惑的钥匙。也就是自己一直在找寻的价值观所在—科学理性。</p>
-
-<p class="art-p">在这盏明灯的指引下，我理解了生命的意义和文明的价值，理解了人类进步的阶梯和前进方向。或许正是从那时起，对于在生活中遇到的所有问题，我都试着用科学理性的思维和方法去解释或找寻答案，有的困惑能被解释，不能被解释的困惑现在知道并不是什么冥冥之中的神奇的力量在主宰，而是科学还没有找到原因和解释。</p>
-
-<p class="art-p">也许，大家并不能体会这是一种什么样的释然和轻松，你“知道答案就在那里”和“有没有答案”这两个问题，真的会困扰人的一生，甚至是生命的质量。</p>
-
-<p class="art-p">你坚信“答案就在那里”，你就会相信剩下的只是时间问题，就少了茫然和彷徨，就会主动地通过学习去找寻；可是你执着于“有还是没有答案”，就会陷入信仰危机或者宗教狂热，最后变成疯子和傻子。</p>
-
-<p class="art-p">大家可能想象不到，有一天当你和9岁的女儿参观天主教堂，面对神甫执着地灌输基督教义时，她会用进化论来表达自己的感受，带给我的何止是震撼，更多是深深的感动。想想自己在不惑之年才求得的认知，她却在懵懂之年就扎下了根基，而这将会让她终身受益无穷。</p>
-
-<p class="art-p">《卓老板聊科技》这个栏目在“得到”上是一个不一样的存在，“是那个不一样的烟火”，当所有的人都在“如何成功”、“如何获取财富”、“如何幸福”的路上一路狂奔时，仍然能够偏安于一隅，为一小众人的求知而执着坚守时，更显得弥足珍贵。或许，《卓老板聊科技》的真正的价值就在坚持，时间越久，价值越大。</p>
-
-<p class="art-p">这是自己的愿望也是对专栏的期许。</p>
-
-<p class="art-p">最后，再次谢谢你们。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">《卓老板聊科技》虽然已经更新完成了，但是在第二季内容《卓克·科学史》还没有上线之前，我依然会保持本专栏的更新。</p>
-<p class="art-p">其实，我做内容最希望的就是把科学的思维方式带给大家，但思维方式的改变不同于接受一个具体的知识那么容易感知。</p>
-<p class="art-p">不知道大家有没有感受到自己思维方式的改变呢？如果你深有体会，就把你的感受写下来吧。每周五，我把它更新在专栏里，供我们1917小组的成员交流学习。</p>
-<p class="art-p">欢迎并感谢大家踊跃投稿。文章请发送至：</p>
-<p class="art-p">liangzhiyi@luojilab.com</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-40">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">1917选文丨成为一个理性乐观的人</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员- Yuyang。</p>
-
-<p class="art-p">看过不少侦探片，有一个故事印象深刻。不是因为抓到罪犯的过程有多曲折，离奇之处是受害者根本不认为自己被骗了。</p>
-
-<p class="art-p">故事里好几个女性受害者，在年轻时遇到男性罪犯A，被其一通花言巧语忽悠，相信他是国家情报人员，正从事神秘的“卧底”工作。坠入情网的受害者们为了成就“007 身边的女人”这个浪漫幻想，跟着A开始流浪生活。</p>
-
-<p class="art-p">因为要保护A的“安全”，她们放弃学业或工作，割断和家人的一切联系，隐姓埋名，只能做些无需提供身份证明的零杂苦活。她们把辛苦挣来的最低工资贡献给A的 “间谍事业（挥霍）”，像一只忠犬般等着间歇性失踪的 A“办案”归来，殊不知A是去其他城市别的受害者处享受他的007待遇。</p>
-
-<p class="art-p">故事的高潮处当然是最执迷不悟的受害人B在现场听到A的陈词，终于明白一切都是谎言，蔷薇泡沫破裂。B笃信A的说辞，为了阻止家人追踪自己下落，甚至假造了自己的溺水现场。她母亲因思女成疾去世，B也不知道，最美好的近10年青春，B过着逃亡般的日子。在和警员交流时，B反反复复说：“我怎么会这么蠢”。</p>
-
-<p class="art-p">我不知道你会不会像我一样，对B充满了同情。我们每个人大抵都免不了犯傻上当被忽悠，不过多半不至于严重到毁灭的程度。</p>
-
-<p class="art-p">盲信和迷信的人，往往认识不到自己经验和认知的局限性，从结论中寻找支持证据，“证明”自己的先验观点，以至于走在迷途上还坚定不移，丝毫不知离期望的幸福和成功越来越远。</p>
-
-<p class="art-p">人们容易盲信，是因为他们缺乏理性。</p>
-
-<p class="art-p">不懂科学的人，难以拥有批判性思维，也难以建立理性价值观。</p>
-
-<p class="art-p">我学习《卓老板聊科技》栏目很深刻的认知是，只是具备了某些科学的知识，不等于具备了科学态度。我们经常诧异，怎么有些人受到过高等教育，在自己的专业领域里讲得头头是道，但还是会相信巫术、星座、算命，诸如此类的怪力乱神。</p>
-
-<p class="art-p">懂得多少科学知识，和一个人是否迷信，常常毫无关系。</p>
-
-<p class="art-p">科学态度，或者说科学精神，是明白现有的科学知识并非不可质疑的真理，所有的知识都有其适用的范围和假设前提；科学是不断证伪的过程，从证据出发反复验证假设，比较其与现实世界的符合程度，根据比较结果决定假设是否可靠，而不是反过来。</p>
-
-<p class="art-p">真正做到理性，首先我们要知道自己的认知存在局限性、片面性，这个世界在很多方面和我们长久自持的观念并不一致。</p>
-
-<p class="art-p">这就够让人不自在了。我们凡事爱找因果关系，从经验归纳结论，从结论找佐证，这恐怕是人类在百万年演化过程中保存下的“内置基因”。在探究世界的过程中保持理性，坚持科学态度，我们还得时时提醒自己别掉入这个直觉习惯的坑。</p>
-
-<p class="art-p">天性如此，我们可能永远无法做到完全理性。和咱们得到的小伙伴一样，我当然也不甘心舒舒服服地在自己“先验观念”的深井里坐井观天。我有着强烈的自我提升的渴求。</p>
-
-<p class="art-p">我来到得到短短三个多月，生吞活剥的学习了很多智慧和套路，但消化吸收的速度跟不上吞咽速度，难以转化为我自己的知识体系。好比吃的肚子都胀了，但却有“营养不良”的焦虑感。但收听了《卓老板聊科技》栏目，我的焦虑感挺低的。我思考了很长时间，渐渐明白了其中原由。</p>
-
-<p class="art-p">学习的过程肯定是一手经验最记得住，二手则次之。他人提炼的套路和道理，再用简单清晰的方式表述出来，达到在我的大脑皮层上印下痕迹，需要时间，需要不断的刻意练习。</p>
-
-<p class="art-p">套路的底层是认知，认知的底层是态度。真正的高手，是从态度开始打通认知掌握套路的。</p>
-
-<p class="art-p">《卓老板聊科技》，我是抱着兴趣而非功利的目的在学习。我未必清楚有丝分裂是如何发生的，黑洞的几个模型都有何区别，量子纠缠是怎么回事，重力怎么就和加速度是一回事……但卓老板用简单生动的语言，重新激发了我探究事物的纯粹的好奇心，架起了我和科学彼岸的桥梁。</p>
-
-<p class="art-p">我津津有味地学习了很多的天文、物理、生物、统计、数学方面的知识，以及大量实用的科技和保健科普知识。这些知识点，开阔了我的眼界，也改变了我看问题的视角。</p>
-
-<p class="art-p">世界还是那么纷繁复杂，但是我和世界的互动变了。我不再因为种种看起来毫无规律的混乱而放弃对规律的寻找，不再害怕迷雾中看不清真相而茫然不知所措，不再对各种未知和假设理论左右摇摆……我可能对某些事物仍然半信半疑，但我清楚的知道自己该如何思考事情，知道如何寻找存疑的具体原因，知道什么条件下这个疑虑可以被推翻。</p>
-
-<p class="art-p">简单的说，作为一个长久以来的悲观主义者，我现在逐渐成为了一个理性乐观的人。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">《卓老板聊科技》虽然已经更新完成了，但是在第二季内容《卓克·科学史》还没有上线之前，我依然会保持本专栏的更新。</p>
-<p class="art-p">其实，我做内容最希望的就是把科学的思维方式带给大家，但思维方式的改变不同于接受一个具体的知识那么容易感知。</p>
-<p class="art-p">不知道大家有没有感受到自己思维方式的改变呢？如果你深有体会，就把你的感受写下来吧。每周五，我把它更新在专栏里，供我们1917小组的成员交流学习。</p>
-<p class="art-p">欢迎并感谢大家踊跃投稿。文章请发送至：</p>
-<p class="art-p">kangjuexin@luojilab.com</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-41">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">1917选文丨收货满满的一年</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员“飘香客”。</p>
-
-<p class="art-p">一年的学习感触特别多，借这个机会，在节目学习之余聊聊一年来学习心得。</p>
-
-<p class="art-p">听这个节目开始有点困难，好多名词听不懂，可能正像人们常说的，好多知识是读书时接触并学习的，那是为了考试，死记硬背的成分多一点，真正理解的少。</p>
-
-<p class="art-p">从参加工作以后，很少抽出时间深入地学习各方面的知识，想的多是工作，工作中想的多是薪水的提高，以及自己在组织体系中的位置和被他人的认可度。有时甚至还一度怀疑自己上学时从老师那学到的知识究竟能发挥多大作用？</p>
-
-<p class="art-p">就这样，一年又一年地我没有了对科技知识的兴趣，更别说学习了。也就是在去年这个时候，听同事聊天提到了“罗辑思维”这个微信公众号，并下载了“得到”APP。在这里，偶遇卓老板，开始关注他的科技音频节目，从此一发不可收拾，直到现在“上瘾了”，每天不听卓老板，就特别不自在。喜欢在散步时听，在地铁里听，在饭后听，在睡前听，每天甚至是听着卓老板的声音进入梦乡……</p>
-
-<p class="art-p">要说节目颠覆了我的价值观，可能有点夸张，但这个节目确实让我重拾了对数学、物理学的兴趣，也让我第一次相对深入地了解了宏观的宇宙、微观粒子世界、细胞生命世界，引起了我对宏观和微观世界的无限遐想和猜测。</p>
-
-<p class="art-p">原来微观粒子世界离我们这么近，而我对它竟知之甚微，组成我们身体的细胞对我们那么重要，我对它竟如此陌生，真是太遗憾了。我要了解宇宙的奥秘，我要了解生命的秘密，卓老板就是我学习这些知识最好的老师。</p>
-
-<p class="art-p">一年的节目当中最颠覆我认知的是有关中医和转基因方面的知识。</p>
-
-<p class="art-p">原以为中医是那么的博大精深，是那么的深奥不可测，可它不是通过科学的实践方法来传承和发展的，靠的是中医老师傅的口口相传或没有经过验证的文字记载，好多药效“尚不明确”。李时珍的《本草纲目》也有一些搞笑的治疗疾病的方法和药方，而我在中学历史课上学到的全是他怎么跋山涉水采集中药材的动人故事。我这里并不是要贬低他老人家，而是感到科学的思维和实践方法对人类文明的进步多么重要，客观真实地记载历史及历史人物具有多么重要的意义。</p>
-
-<p class="art-p">颠覆我认知的另一个知识点就是有关转基因方面的知识。</p>
-
-<p class="art-p">之前我也对转基因食品抱有敌视的态度，特别对美国的农业科技公司“孟山都”更是恨之入骨，认为这个公司就是个披着科技农业外衣，榨取世界财富的骗子公司。对转基因科学存在误解还因为前几年听了崔永元关于转基因的美国之行的调查，以及和方舟子的微博上的论战。因为小崔是央视的著名主持人，就对他说的话很信任，听了这期节目才知道了主流科学界对转基因的态度。</p>
-
-<p class="art-p">听卓老板聊科技的另一收获——重拾起了对数学的兴趣。</p>
-
-<p class="art-p">上学时就特别喜欢数学，但为了高考，各科都要顾及一下，所以数学学习也没有更加深入，但骨子里还是对数学充满了兴趣和偏爱。听了《费马大定理》和《黎曼猜想》系列节目，更感到数学世界是那么深奥，要取得数学上的重大突破是那么艰难，一代代的数学家为推动数学进步付出了毕生的心血却无怨无悔，许多数学的业余爱好者，也为了满足好奇和兴趣对数学的发展做出了很大的贡献，这都值得我们学习。特别是在经济高速发展、略有浮躁的时代，保持一颗安静的心去研究数学、物理这些基础学科甚至取得突破的人，多么值得尊重。</p>
-
-<p class="art-p">关于“发烧是怎么回事？”、“辐射是怎么回事？”、“什么是过敏？”、“超级细菌来了，我们怎么办？”——这些身边的科技知识也对我都有很大帮助，最直接的帮助就是不再人云亦云，不再乱用抗生素了……</p>
-
-<p class="art-p">一年的学习收获满满，感受很多，希望这个卓老板聊科技能一直办下去，我会随它一起奔跑、一起迭代……</p>
-
-<p class="art-p">加油卓老板，加油自己……</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">栏目收到过几十封这样的来信，“飘香客”很有代表性，去年一整年我全部精力都投入其中，回看真觉得在2年前我是做不到这一点的。</p>
-<p class="art-p">下一季内容就要开始了，我预估是7月底可以上线。希望再经历一年，我自己也能有更多收获，磨炼出更好的技能。</p>
-<p class="art-p">我做内容最希望的就是把科学的思维方式带给大家，但思维方式的改变不同于接受一个具体的知识那么容易感知。</p>
-<p class="art-p">不知道你有没有感受到自己思维方式的改变呢？如果你深有体会，就把你的感受写下来吧。每周五，我把它更新在专栏里，供我们1917小组的成员交流学习。</p>
-<p class="art-p">欢迎并感谢大家踊跃投稿。文章请发送至：</p>
-<p class="art-p">liangzhiyi@luojilab.com</p>
-<p class="art-p">期待你的来信。</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-42">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">1917选文丨海量知识库存</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">今天的内容来自“刘迪”和“妄人”。下周开始，1917选文更新将暂停，复盘是最好的学习，我会将第一季的部分内容进行整理，希望你跟我一起重温那些知识。</p>
-
-<p class="art-p">1917小组成员——刘迪</p>
-
-<p class="art-p">我就不煽情了，直接上我听《卓老板聊科技》的感受 。</p>
-
-<p class="art-p">一、知识存量</p>
-
-<p class="art-p">《卓老板聊科技》最先吸引我的，是卓老板丰富的知识存量，可以说是上知天文，下知地理。他讲述的内容纠正了我在医学方面很多片面的看法，这个专栏使我上瘾。</p>
-
-<p class="art-p">我曾问过卓老板，“你是有一个团队，还是单打独斗？因为专栏每天更新的内容，在知识深度和广度上，是远超普通人范畴的。后来我才知道，卓老板的知识，是天天查新，时时更新。而且他也很诚恳，有一期节目中他还说过，“其实我有时侯看我以前的节目，发觉以前讲的很多知识现在都忘记了，需要重新回顾”，本来我以为他是“神”，原来他是诚实勤恳的超人！</p>
-
-<p class="art-p">二、科学思维</p>
-
-<p class="art-p">拥有海量的知识存量并不能让人膜拜，因为现代人都有互联网这玩意儿。予人鱼不如予人渔，卓老板的节目最启发人的应该是——客观严谨的科学思维！</p>
-
-<p class="art-p">他用统计、盲法等这些简单而容易被我们忽视的科学工具，来驳斥很多传统医学中那些荒谬的理论，在严密的逻辑和数据的支持下，让我这个曾经在工作中对传统医学持有怀疑却不能否定它的医生，也变身成了不折不扣反传统医学阵营中的一员。我觉得老板的受众越年轻越好，因为那些学校习来的议论文方法，让我们失去了很多用事实说话的能力。星星之火可以燎原，借马丁·路德金之口——我有一个愿望，希望中华大地上人人皆有科学思维的能力，到那时，愚昧得以破除，蒙昧得到改善，悲剧不再重演！</p>
-
-<p class="art-p">三、客观世界的模样</p>
-
-<p class="art-p">在介绍引力波时，卓老板曾经说过，“某种意义上，客观世界是什么样我们并不清楚，因为那得仰仗我们使用什么样的探测方法”。这种陈述对我来说可谓振聋发聩！引用费曼那首诗——潮起潮落，无法计数的分子，各自孤独地运行，相距遥远却又息息相关，泛起和谐的白浪，旷代久远......</p>
-
-<p class="art-p">斯蒂芬·平克曾经说过，“写作之难，在于需要将网状的思维用树状的逻辑通过线性的语言表达出来”。我想，反过来，我们要读取线性的文字，找出树状的逻辑，探索作者网状的思维，那比写作还难！而卓老板却用精炼的语言让我的困惑释然，这是何等的功力啊！</p>
-
-<p class="art-p">写在最后</p>
-
-<p class="art-p">篇幅很短，说不尽道不完从卓老板那儿得来的收获，仅用费曼高中写的一首诗来送给老板以表感谢：</p>
-
-<p class="art-p">我想知道这是为什么 ，</p>
-<p class="art-p">我想知道这是为什么 ，</p>
-<p class="art-p">我想知道为什么我想知道这是为什么 ，</p>
-<p class="art-p">我想知道究竟为什么我非要知道我为什么想知道这是为什么！</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">刘迪提到了海量知识的库存，我当然是不具备的，但如果说出产大量的内容，我倒还真能算得上一个合格的高产者。大量的内容并不是100%沉淀在我脑中，甚至有不少内容在我做完三四个月以后就差不多忘记了。那对我来说留下了什么呢？</p>
-<p class="art-p">我觉得就是：</p>
-<ol class="art-list">
-<li>查找过程中对只言片语的敏感程度。</li>
-<li>辨真假过程中，形成的惯性思考方式。</li>
-</ol>
-<p class="art-p">这样高强度的训练会有什么效果呢？</p>
-<p class="art-p">针对一个话题，在网上的内容很多，经过这样地训练，你就更容易在较少的时间里找到最可靠的那一部分。这个能力如何培养出来，我想绝大部分还是要通过搭时间去练习。</p>
-<p class="art-p">我有时间的时候会把它们总结出来和大家分享。但总体来看，我觉得这和乒乓球里削弧旋球有点儿像。刘国梁，孔令辉，当然可以给我们列出如何削出弧线球的1、2、3、4，但如果只是看过听过，而不去练，仍然是打不出这样的球的。想掌握大部分人都不具备的技能，总是要花大量时间训练的。</p>
-
-<p class="art-p">1917小组成员——妄人</p>
-
-<p class="art-p">卓老板，你好。</p>
-
-<p class="art-p">卓老板的专栏是我在“得到”订阅的第一个专栏，这一年来帮助了我很多，正是卓老板的这个专栏，带我走进了一个新的世界。</p>
-
-<p class="art-p">第一个方面，我好像记得有一个人说过，这个世界最不能理解的就是它竟然可以被理解，所以在我这有限的一生里，不求有什么贡献，只求对这个世界的了解，比大多数人多那么一丁点儿。值得庆幸的是，我是一个学机械专业的大学生，学的很多东西都是物理方面的，所以我的研究生是不是能去转读物理呢？这也是我挺想知道的一个问题，不知道卓老板有什么建议给我吗？直接读研究生会不会差很多知识导致跟不上呢？</p>
-
-<p class="art-p">第二个方面，我印象最深的是杨振宁那期节目，完全颠覆了我对杨振宁的认识，我开始敬佩他，并跟朋友聊天时积极地宣传对杨振宁的正确认识，这样的伟人不应该被这些花边新闻所淹没。</p>
-
-<p class="art-p">第三个方面，我记得好像是机器学习那一期，也可能是讲贝叶斯定理那期，那时我正在学一门课，正好也用到贝叶斯定理，一开始觉得极度无聊，但在听了节目后不知为什么感觉每道题都是“神迹”啊！这是发自内心的很奇怪的一种感觉，虽然不会做的还是不会做。不过，后来我好像就理所当然地入了机器学习的深坑，正好我对编程有些基础。现在学了快一年了，进展虽然缓慢，不过倒是发现了很多以前觉得很普通的事，背后的原理竟然这么高端，有种看到了另一个世界的感觉。</p>
-
-<p class="art-p">第四个方面，这个影响非常直接，就是在听了登月那个系列节目之后，我的毕业设计想都没想就跟着我的导师去设计火箭了，哎，厉害是厉害，但确实是太难了，有些好尴尬啊！</p>
-
-<p class="art-p">最后，再次感谢卓老板给我这个机会，让我来到了这个新的世界，只是现在都有点不敢听您的节目了，就怕自己又跳到另一个坑里无法自拔了，哈哈，开个玩笑。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">能不能转到物理专业，我说了不算，你说了也不算，是系里的评估和最后的考试说了算。能不能考上，这也跟你自己目前学习状况密切相关。</p>
-<p class="art-p">所以直接回答这个问题，就是，应该去两个系的教学处问一问如何转专业，找哪个导师。</p>
-<p class="art-p">但一般来说，机械系跟物理系课程重合的课程内容，我估计顶多也就25%，所以除非你在这四年学习当中一直利用业余时间补习物理方面必修的内容，否则难度还是挺大的。</p>
-<p class="art-p">经常有正在上学的同学问我，该学哪个专业，该选什么方向，我的回答就是选你爱好的，选你的兴趣。因为你真正喜欢的东西是一辈子也放不下的，即使你当前没有从事这个领域的工作，今后总是会见缝插针不由自主地进入这个领域。你通过几年机械专业的学习，接触了一些物理课，我觉得你已经知道学习物理的过程大概是个什么样子。这种情况下仍然选择物理，可见你还是挺有兴趣的，所以我建议你，一是去两个系的教务处问问，另外就是向有类似经历的师兄们讨教，祝你一切顺利。</p>
-
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-43">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">1917选文丨科学是认识世界的重要维度</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员- 黄展新。</p>
-
-<p class="art-p">一年前多以前，我在一个播客平台无意中听到了《卓老板聊科技》这个节目，立刻就被卓老板的声音吸引了，然后又进一步被这个节目的内容吸引，我迫不及待地查找了往期的内容，一期不落地听了一遍，果然没让我失望，这个节目既涨知识又有乐趣。从此以后等待《卓老板聊科技》更新就成了我最期待的事儿。</p>
-
-<p class="art-p">后来，罗辑思维找卓老板合作在「得到」App里推出付费订阅专栏，我心里非常高兴，因为这就代表以后卓老板就是可以专职提供知识服务了，就可以为我们生产更多更好的科普知识了，而这正是像我这样的人最最需要的。我本来就是「得到」的用户，所以我第一时间就订阅了《卓老板聊科技》。</p>
-
-<p class="art-p">转眼一年时间已经过去了，这一年当中这个专栏就成了我的个人科学知识顾问和谣言粉碎机。而我从这个专栏中除了学到了很多具体的科学知识，更重要的是学会了用科学思维的这个维度去看事物。</p>
-
-<p class="art-p">科学思维是现代人认识世界的一个非常重要的维度。</p>
-
-<p class="art-p">比如关于手机或其他电子设备的辐射，我们总能看到一些耸人听闻的文章和报道说辐射怎么怎么危险，虽然主流科学的结论都认为这些辐射基本上对人体没有任何影响，但科学的结论往往在谣言面前显得很无力。</p>
-
-<p class="art-p">那我们应该如何用科学思维看待辐射这件事呢？所谓的手机辐射就是一种低频率的电磁波，而电磁波是无处不在的，其中就包括我们肉眼能看见的可见光，所以反过来说我们看到的任何光都是一种辐射。</p>
-
-<p class="art-p">我们担心手机辐射的同时，却并不担心可见光会对我们造成什么伤害，难道是因为手机辐射比可见光的辐射要强的多吗？事实恰好相反。</p>
-
-<p class="art-p">辐射的强度主要看功率和频率，手机辐射最高的功率基本上也不超过1.5瓦，而太阳光照射到地球的功率平均是600瓦左右，比手机辐射的功率强了几百倍。</p>
-
-<p class="art-p">而关于电磁波辐射强度，另外一个参数就是频率，频率越高辐射的能量就越大，把辐射频率从高到低做一个排序，分别是：1.伽马射线；2.X射线；3.紫外线；4.可见光；5.红外线；6.微波；7.无线电波。你看手机用的无线电波是频率最低的，它比可见光中最低的频率，还要低10万倍以上。</p>
-
-<p class="art-p">其实很多人在学校里也是学过这些知识的，光是一种电磁波，无线电波的频率比可见光低很多，但是当现实生活中听到别人说手机辐射有危害的时候，却不去想一下我连光都不怕我还有必要担心手机辐射吗？</p>
-
-<p class="art-p">把具体的科学知识随时调用到一个现实的场景当中，就是让所学的科学知识最大限度的派上用场，也就是学会用科学思维去更好的认识世界，卓老板一直在往这个方向上引导着我们。</p>
-
-<p class="art-p">再举一个最典型的现实生活中的例子：转基因食品到底安全不安全，虽然科学界普遍的共识是转基因食品无害，123位诺贝尔奖获得者联合署名支持转基因作物，但大多数人还是更愿意相信转基因食品是有害的。为什么会这样呢？</p>
-
-<p class="art-p">虽然科学家们很清楚转基因食品的安全性已经得到了充分的验证，但我们看到科学家们表述的观点都是像：“没有任何证据显示转基因食品比传统食品的安全性差”、“目前没有发现人或动物因吃转基因食品损害健康的案例”等都是这些非常保守的表述。而不会跟你说转基因食品100%绝对安全，因为这本身就不科学。</p>
-
-<p class="art-p">普通人在那些谣言和阴谋论的怂恿下，会很容易相信转基因食品真的很危险，就算他们不是很相信那些谣言和阴谋论，也会认为现在转基因食品无害的结论还是下的太早了，虽然目前没有证据证明转基因食品有害健康，万一我吃了以后再发现有害健康的证据不是就太迟了吗？大多数人其实就是抱着这样的心态去反对转基因食品的，这时候用科学思维看问题就显得极为重要了。</p>
-
-<p class="art-p">科学家之所以这么保守并不是因为对转基因食品的研究还不够深入，恰恰相反，他们对转基因食品的安全性试验已经通过了最最严格的验证，比传统食品要严格得多。科学家们保守的态度是因为科学精神本身就是这样的，在科学家眼里任何食品包括绿色有机食品都不可能100%安全。</p>
-
-<p class="art-p">如果明白这个道理那我到底要不要吃转基因食品这个问题就变的简单多了，没有绝对的安全，只有相对的安全，所以我们只需要比较一下转基因食品和传统食品到底哪一种相对安全就可以了。</p>
-
-<p class="art-p">很多人认为传统食品是天然的，人类都吃了几千几万年了所以肯定是安全的，但事实上我们现在吃的主要农作物，并不是天然的，而是我们人类祖先——智人在开始了农业革命之后就不断经过优选杂交改造的，现在的农作物早就跟几万年前的天然农作物有了天翻地覆的差别。</p>
-
-<p class="art-p">而现代的农业杂交技术，你以为是让植株在自然条件下发生一些基因突变，再筛选出好的突变性状进行杂交吗？植株在自然条件下发生基因突变的概率实在是太低了，所以都是用强辐射的伽马射线照射植株诱导基因突变或者用强致癌化学物质诱导植株基因突变。</p>
-
-<p class="art-p">转基因和传统杂交技术，本质上都是改变一小部分基因使得农作物的性状发生改变，不同的是转基因需要通过世界上最最严格的安全性测试才能通过审批，而杂交技术的审批和安全性测试就简单多了，所以你觉得哪种技术更安全呢？</p>
-
-<p class="art-p">我们不能一听到转基因这词，就觉得是不安全的，听到有机食品绿色食品，就觉认为是一定是安全的。学过经济学的朋友应该会知道，很多凭直觉得出来结论，往往跟事实正好相反。而很多科学的结论也是跟直觉相反的，所以科学思维是现代社会认识世界的一个很重要的维度。</p>
-
-<p class="art-p">我认为科学思维比具体的科学知识更加重要，而《卓老板聊科技》这个专栏就在帮我们建立正确的科学思维能力，这也是我向朋友推荐这个专栏的主要原因。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">《卓老板聊科技》虽然已经更新完成了，但是在第二季内容《卓克·科学史》还没有上线之前，我依然会保持本专栏的更新。</p>
-<p class="art-p">其实，我做内容最希望的就是把科学的思维方式带给大家，但思维方式的改变不同于接受一个具体的知识那么容易感知。</p>
-<p class="art-p">不知道大家有没有感受到自己思维方式的改变呢？如果你深有体会，就把你的感受写下来吧。每周五，我把它更新在专栏里，供我们1917小组的成员交流学习。</p>
-<p class="art-p">欢迎并感谢大家踊跃投稿。文章请发送至：</p>
-<p class="art-p">kangjuexin@luojilab.com</p>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-44">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">“毕业季”选文丨与卓老板相识的一年</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员-zuzu。</p>
-
-<p class="art-p">初识卓老板</p>
-
-<p class="art-p">第一次知道卓老板是因为得到APP特辑-《除了争吵，如何让父母远离谣言侵害？》，我深受父母轻信微信谣言的困扰，却一直没找到好的办法解决。卓老板的节目对我帮助非常大，让我从全新的角度去思考，审视这个问题。</p>
-
-<p class="art-p">节目的精妙之处还在于，根据不同受众把节目分为两部分：“给自己听”和“给父母听”，核心内容相同，但阐述角度不同，让节目更具有针对性。</p>
-
-<p class="art-p">还记得我把节目分享给妈妈，她受固有思维影响，拖了一个月都没听，直到我抓住一个好机会，和她一起听，毫不夸张地说，她还没听完就已经被卓老板诚恳，极具亲和力的态度，客观、专业的分析所折服。我都不敢相信，妈妈长久以来对微信谣言的盲目崇拜会在半小时内被卓老板轻松化解，无论是观点还是讲解技巧都直揭老人痛点。</p>
-
-<p class="art-p">那时，卓老板在我看来，是一个懂心理学的科普专家。</p>
-
-<p class="art-p">跟随卓老板</p>
-
-<p class="art-p">今年3月卓老板第一次在得到直播，我秒订了卓老板的专栏《卓老板聊科技》。要说《除了争吵，如何让父母远离谣言侵害？》给我带来一个新角度，而卓老板的专栏就是带我进入了一个新世界，这世界一直存在，只是因为我认知的局限一直没有机会去了解，这是一个客观的、智慧的科普世界。</p>
-
-<p class="art-p">有和每个人生活密切相关的，比如人为什么会上火，雾霾口罩如何选择，代糖的危害，初春的禽流感有多危险；有对我一个文科生来说天马行空的，比如了解黑洞必备的几个知识点，关于心脏移植手术，杨振宁提出的宇称不守恒定律是什么？</p>
-
-<p class="art-p">我之前说父母轻信谣言，跟着卓老板了解世界后，发现我自己也并没有比父母理智多少，比如对保健品的盲目信赖，对坐月子的封闭观念，对所谓的传统医学的迷信，这些思想都被卓老板一一颠覆。从无知变得了解，从迷信变得理智，这些变化对我及我家人的影响不仅限于学知识的快感，而是跟着客观、理智的方向重新认识生命与生活。</p>
-
-<p class="art-p">这时，卓老板在我生活里，是一个懂科技的生活指路人。</p>
-
-<p class="art-p">吃定卓老板</p>
-
-<p class="art-p">如果说卓老板只是一个讲科普的领路人，尚不足以让我对他如此敬佩，他还有一点尤为令我感动。</p>
-
-<p class="art-p">这要从《我的节目为什么不做的有感情些》说起，卓老板曾介绍过一封听众来信，讲了家里人迷信保健品，贻误了他治疗十几年的事，另一位听众不理解为什么卓老板没有对信本身给予评价或者说说想法，为什么做节目不能有些感情，只是理性的就事论事。卓老板给出的回答令我十分触动：</p>
-
-<ol class="art-list">
-<li>“在人类有文字记录以来的万年历史中，科学如果算作一种文化类别，它和其他类别最大的区别就是剥离了情绪的部分，这里掺杂的和情绪相关的内容越少，价值就越高。是这样一种文化。”</li>
-</ol>
-
-<ol class="art-list">
-<li>“但我说的不掺杂情绪和情感只是在科学研究过程中，科学家们愿意付出几年时间废寝忘食的搞一项研究，推动他们这么做一定有一个因素是对科学的巨大热情，对未知的巨大好奇，甚至是一种牺牲精神，是这些强烈的情感推动他们在研究中摒弃情绪，只做分析和推理。”</li>
-</ol>
-
-<ol class="art-list">
-<li>“冷静、平静时才能思考更多有价值的东西”。</li>
-</ol>
-
-<p class="art-p">在知识背后，卓老板的专业与深刻让我更加敬佩。卓老板专栏更新即将结束，我挺忧伤的，幸好他还会与得到有其他合作，我将一如既往的支持卓老板，跟着卓老板升级认知，理性看待世界。</p>
-
-<p class="art-p">End</p>
-
-<p class="art-p">《卓老板聊科技》毕业季——“ 「与卓老板相识的一年」征文”仍在进行中，欢迎1917小组成员踊跃提交“毕业论文”。邮件请发送至：</p>
-
-<p class="art-p">kangjuexin@luojilab.com</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-45">
-      <div class="art-header">
-        <span class="art-chapter">Ch.104</span>
-        <h3 class="art-title">“毕业季”选文丨听《卓老板聊科技》信可乐也！</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本文来自1917小组成员-芸鸡。</p>
-
-<p class="art-p">在听《卓老板聊科技》以前，我自以为理工科出身，不轻信谣言，不迷信鬼神，很懂科学。但听的节目越多，越发现过去自己对科学的认知，停留在一个很低的层次——懂得并愿意接纳科学常识——而科学远不只于此。</p>
-
-<p class="art-p">听节目最大的收获是，逐渐建立起科学的世界观。科学不是一个个科学知识的简单累加，而是一套认识世界的方法。现在，我心中有了一个用来帮助我思考的“黄金圈”：圈里是科学领域，如物“理化生”；圈外是人文领域，如“文史哲”；心理学、经济学、社会学则处在二者的边缘地带。</p>
-
-<p class="art-p">每当我和人讨论问题，或思考书里的观点，脑子里有了根“科学”的弦。圈内的问题就用科学方法讨论，讨论前先弄清楚：论点中涉及的概念如何定义，论据的来源是否可靠，推理的逻辑是否严密。圈外的问题，则要先转化为科学问题再讨论。</p>
-
-<p class="art-p">科学思维是认知大厦的地基，节目帮我夯实和拓建了原有的知识。</p>
-
-<p class="art-p">中学时，我生物一直不太好，可能因为生物知识庞杂，又不像“数理化”那样能符号化。而卓老板在节目（如细胞系列）里，把它们具象化和故事化了，听的时候很有画面感，这样既便于理解和记忆，又能激发兴趣。听完有关DNA的一期节目后，我还去找了转录转译的动画看。如果中学时能听到卓老板，我的生物成绩一定不差。</p>
-
-<p class="art-p">此外，大部分的内容都处在我的“学习区”，大大拓展了我知识边界。纳什均衡、路径积分、量子加密、混沌系统、动力蛋白、贝叶斯算法、傅里叶变换……都很烧脑，但我愿意反复听，直到听懂为止。特别高冷的内容，如P=NP问题、黎曼猜想、相对论，哪怕听起来一知半解，我也乐在其中。这大概是王小波说的“思维的乐趣”。</p>
-
-<p class="art-p">除了“正三观”外，节目还“刷新三观”。</p>
-
-<p class="art-p">理性、客观、不带感情色彩的观点通常不受媒体待见，我们平时获取的信息不可避免地被歪曲。节目帮我剥离了干扰和噪音。对于中医、转基因食品、辐射等问题，在听节目前，我也和大多数人一样的，要么模糊不清，要么标签化。听了节目后，我再看这些问题，才发觉自己曾停留在认知惰性中而不自知。</p>
-
-<p class="art-p">节目里最具实用价值的部分是健康保健方面的科普。</p>
-
-<p class="art-p">比比皆是的过度医疗和保健，其实只是人们为缓解焦虑，“不知常，妄作凶”的盲目行为。现在我知道了，我们身体“不健康、有问题”是常态——接受了这一残酷而不可否认的现实，我在面对疾病和死亡时，反倒少了分恐惧，多了分坦然。</p>
-
-<p class="art-p">过分追求“功用”的古代中国，有技术而无科学；跳脱“功用”窠臼的西方，诞生了现代科学。“功用”只是科学的副产品。我觉得节目里那些“无用”的部分更迷人。</p>
-
-<p class="art-p">《物种灭绝的周期》聊到太阳系的边界，我也仿佛飞入太空；《伤口愈合与组织再生》讨论了纳米尺度下的生命迹象，我又仿佛钻进细胞。当人在如此大或如此小的尺度上思考问题时，洞见自然不同。</p>
-
-<p class="art-p">如今，节目已经成为我的一方精神家园。戴上耳机，我便暂时忘掉生活中的烦心事。仰观宇宙之大，俯察品类之盛，信可乐也！</p>
-
-<p class="art-p">《卓老板聊科技》毕业季——“ 「与卓老板相识的一年」征文”仍在进行中，欢迎1917小组成员踊跃提交“毕业论文”。邮件请发送至：</p>
-
-<p class="art-p">kangjuexin@luojilab.com</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-46">
-      <div class="art-header">
-        <span class="art-chapter">Ch.899</span>
-        <h3 class="art-title">加餐 | 答疑合集：这19个常见问题，都有科学答案</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">你好，我是卓克。</p>
-
-<p class="art-p">最近，我出版了自己的第一本书——《我们脑中那些挥之不去的问题》。这本书的电子版，我选择了在咱们「得到」独家首发。</p>
-
-<p class="art-p">书里选择了20个你一定会关心的常见问题，给出了当今科学界最主流的科学结论。</p>
-
-<p class="art-p">如果你想要避免被各种谣言迷惑，想要培养自己的科学思维，推荐你阅读这本书。</p>
-
-<p class="art-p">这本书发布后，很多用户都给我留言，问了很多生活中的好问题。</p>
-
-<p class="art-p">我从中挑出了被最多人问到的19个问题，统一回答一下。</p>
-
-<p class="art-p">关于白头发的问题</p>
-
-<p class="art-p">问题1:</p>
-
-
-<p class="art-p">aypoet/(18554634)：年轻人白头发多是怎么一回事？黑芝麻、何首乌可以乌发么？</p>
-<p class="art-p">康尼扎罗/(36208455)：生姜和何首乌会帮助生发吗？我才20岁，开始秃了怎么办？</p>
-<p class="art-p">另一种绅士/(1039839)：吃黑芝麻不能使白头发变黑吗？最近每天都吃，难道我要做无用功了？求卓克老师解答。</p>
-
-<p class="art-p">答：一根头发如果用显微镜看横截面，最外层是外皮层，很薄，基本是透明的，对颜色没有影响。中间占绝大部分的是皮质层，决定着头发颜色。核心部分是髓质层，头发吸收水分就靠这里，这里也和头发的颜色无关。皮质层是由一些已经失去了细胞核、细胞器的上皮细胞组成的，这里还有黑色素，决定了头发有多黑。</p>
-
-<p class="art-p">头发一旦从毛囊中长出来，就不会再有颜色上的变化。所以身体健康情况下降导致的白发，是没法及时发现的。头发平均生长速度是0.4mm/天，一般要经历10天以上才能发现一段头发的根部变成了灰白色。当人们发现时，其实问题早在十几天前就已经产生了。</p>
-
-<p class="art-p">黑色素的合成，强烈依赖络氨酸和与之相关的酶。身体衰老、营养失衡、头部毛细血管出现的问题，都会导致络氨酸酶活性降低，于是黑色素不再产生，就只能长出白头发。这是绝大部分老年人或者身体状况极差的人，头发花白的原因。</p>
-
-<p class="art-p">但在年轻人中，即便身体状况不是很差，也出现了白发，这是另外的原因造成的，主要是免疫系统的问题。在动物实验中发现，外界过大的精神压力会导致毛囊中的黑色素细胞被自身的免疫系统攻击，这时候虽然络氨酸和相关的酶还都正常，但生产黑色素的细胞已经很少了，所以白头发就出现了。</p>
-
-<p class="art-p">这就是很多年轻人熬夜加班，短时间里出现大量白头发的原因。他们长期忍受高强度的工作压力，不但头发变白，疱疹病毒也会爆发，患上俗称的“砍头创”“转腰龙”，而且还会患口疮，长期难愈合。解决办法就是摆脱压力环境，充分休息后适度的锻炼身体，让免疫系统恢复正常。</p>
-
-<p class="art-p">关于头发变白，大家的问题有一个共性，就是觉得何首乌、生姜、黑芝麻这些日常食物和调料有疗效。实际上，有疗效的东西，今天只可能是那些针对特定功能设计出来的药物，而不再可能是任何常见食品。</p>
-
-<p class="art-p">认为何首乌、生姜、黑芝麻有效的想法，背后的逻辑是一致的，那就是以形补形，俗称“吃什么补什么”。世界各地的古代人都曾经用这个逻辑思考过疾病，比如红枣因为果皮是血红色所以可以补血，核桃仁因为表面有沟回一样的结构，所以补脑，吃腰子补肾，都是以形补形得出的迷信。头发颜色上也是如此，何首乌，名字里都蕴含着“头发黑”的意思，所以吃它可以满头黑发；生姜有很多姜须像头发一样，所以生发；黑芝麻是黑色的，所以吃了会让头发变黑……</p>
-
-<p class="art-p">虽然我们依然可以参考科学方法去挨个验证这些食物到底对头发颜色有怎样的影响，但这样研究的效率是极低的，真正高效的研究应该是先弄清头发的结构、黑发产生的生理过程，从这里找出关键步骤加以治疗。</p>
-
-<p class="art-p">关于膝盖损伤的问题</p>
-
-<p class="art-p">问题2:</p>
-
-
-<p class="art-p">小鱼/(34544551)：很多人总认为，跑步会伤膝盖，希望老师能带来科学的解释^_^</p>
-<p class="art-p">子衿/(637140) ：膝盖有些不舒服，但是检查也没发现任何异常，现在就是不敢跑步运动了。请老师来答疑解惑。</p>
-<p class="art-p">雨滴/(1684334)：很多人说打太极拳和下蹲都会影响到膝盖，是真的吗？什么样的情况下会受损？</p>
-<p class="art-p">海棋Originator张朴诚/(1464672) ：我母亲老说常爬楼梯伤膝盖，所以要多用电梯，我不以为然，不知道爬楼梯伤膝盖这个有科学研究没？</p>
-
-<p class="art-p">答：膝关节是人体受力最大的部位，所以这里的磨损也最大。尤其是髌骨软骨，它在各种直立的身体活动中对膝关节起到润滑和缓冲作用。软骨部分是没有神经的，所以受力和摩擦不会有痛感，一旦因为长期过度磨损或者某次严重外伤，导致软骨被破坏，软骨两侧的骨头就会直接挤压神经，非常的疼。</p>
-
-<p class="art-p">很多人听说这里会逐渐磨损，磨没了就要一直疼，就特别担心跑步、上楼梯、打太极拳、爬山之类的运动，其实大都担心过度了。因为很多证据都显示，适度的锻炼反而会增加软骨厚度。</p>
-
-<p class="art-p">那什么算适度呢？有研究专门对那些已经退役的职业运动员做过统计，看他们是不是比普通人更容易患关节炎。最后结果是，除了足球和举重运动员，其他项目的运动员晚年患关节炎的比例都比普通人群更低，哪怕是长跑运动员也是这样的。所以，如果你平时的运动量赶不上一个职业运动员的话，基本就不用担心膝关节软骨过快磨损的问题。</p>
-
-<p class="art-p">大家的问题里，跑步锻炼、不坐电梯上楼梯、打太极拳、爬山这类活动，就是典型的不但不会让软骨受伤，反而会对软骨有益处的活动。</p>
-
-<p class="art-p">当然，职业运动员本身就有天生的基因优势和很专业的运动指导和医疗服务，对他们不造成过度磨损的运动量，不代表对普通人也是无害的。喜欢长跑的人，特别应该注意鞋和护具的选择，也更要注意动作的标准，否则用一个错误姿势把马拉松跑下来，身上肯定会有很多部位受伤。那些喜欢踢球的同学，也要尽量佩戴护具。</p>
-
-<p class="art-p">如果软骨已经严重受伤怎么办呢？其实也有补救，就是增强关节周围肌肉的力量。发达的肌肉，能很大程度上弥补软骨的缓冲功能。这种弥补的效果往往超出想象，比如有些球员在场上因为一次冲撞导致膝关节十字韧带断裂，对普通人来说，可能走起路来连平衡都把握不住了，但足球运动员竟然还可以靠肌肉力量支撑着踢完后半场球。</p>
-
-<p class="art-p">关于“吃”的问题</p>
-
-<p class="art-p">问题3:</p>
-
-
-<p class="art-p">Jessie/(19968626) ：甜菜根补血吗？补血靠植物能吸收吗？尤其孕妇。</p>
-
-<p class="art-p">答：这又是一个古代“以形补形”思维下的结论。</p>
-
-<p class="art-p">因为古代提炼糖的技术比较落后，把甘蔗或者甜菜榨汁熬干，这时棕红色的浓汁叫“糖蜜”，等到它们冷却结晶，就是古代的糖了。因为含杂质多，这种糖变质很快。而现代工艺到了糖蜜后，还有后续步骤对它做脱色提纯的处理。这种经过处理、滤除杂质的糖，是很难变质的。</p>
-
-<p class="art-p">如果只看棕红色的糖蜜，容易让人联想起静脉血，于是“以形补形”就派上用场了。</p>
-
-<p class="art-p">实际上什么是补血呢？应该只有输血才能算补血，但现在也有把补铁当作补血的说法，所以甜菜根能不能补血就要看它含铁元素的高低，以及甜菜根吃进去后人体吸收率高不高来判断了。</p>
-
-<p class="art-p">很可惜，几乎所有植物性食物的含铁量都很低，比如最著名的菠菜，一公斤含铁20几毫克，而一公斤猪肝是接近300毫克，这就是15倍的差距了。更大的差距还在吸收率上，人体能高效吸收血红蛋白中的铁元素，但这在植物里是基本没有的，所以植物补铁的吸收率只有2%左右，而动物肝脏里以血红蛋白形式存在的铁，人体吸收率在20%左右。</p>
-
-<p class="art-p">两个因素叠加在一起，用猪肝补铁的效率普遍比用植物补充的效率，高100多倍。当然，现在因为各种不可控的因素，用动物内脏和血液做的食品还是尽量少吃，我们可以用鸡蛋来补铁，这个效率也是甜菜根的几十倍。</p>
-
-<p class="art-p">问题4:</p>
-
-
-<p class="art-p">Tong/(234799785)：我身边的闺蜜说喝胶原蛋白粉可以抗衰老，希望卓克老师能解惑，谢谢。</p>
-
-<p class="art-p">答：胶原蛋白无法抗衰老，现在只有长期服用二甲双胍有确切的延长寿命的效果。但延长寿命和抗衰老依然是两个不同的概念，衰老是所有生物必须接受的现实，只能通过健康饮食、保持锻炼来延缓。</p>
-
-<p class="art-p">如果是合法合规的胶原蛋白保健品，在经济条件允许的情况下吃一吃，心情愉快、给自己一个良好的心理暗示，也没有什么大不了的。如果钱紧，也可以用吃猪蹄或者肉皮冻代替，效果其实更好。</p>
-
-<p class="art-p">但现在因为很多不可控的因素，导致保健品市场混乱，有些胶原蛋白粉里会偷加雌激素类药物，短期内会让女性感觉皮肤变好、精力充沛，但长期会扰乱正常激素分泌，造成各种问题，尤其是增加乳腺癌风险。当然，对女性来说最致命的害处是，长期摄入雌激素会抑制脂肪分解，让人发胖。这也是为什么我说“吃猪蹄或者肉皮冻代替胶原蛋白，效果更好”的原因。</p>
-
-<p class="art-p">问题5:</p>
-
-
-<p class="art-p">world星/(234066930)：因为有在健身，所以会喝增肌粉，看成分大部分是碳水化合物呀，但是家人一直说里面含有激素，喝不得，到底什么是激素？</p>
-
-<p class="art-p">答：正规的增肌粉不含激素。它的大部分成分确实是碳水化合物，少部分是蛋白质。碳水化合物和蛋白质的比重一般是2:1-3:1之间。</p>
-
-<p class="art-p">专业的健身训练会让身体耗能的情况和普通人大不相同，如果仅仅通过正常饮食补充，会觉得不够、总是饿，饿了以后往往胡吃海塞，这样一来本来就不容易增加的肌肉就白练了。为了让高强度训练尽量只燃烧糖原和脂肪里存储的能量，而不消耗肌肉，就需要精准的食物成分配比。</p>
-
-<p class="art-p">还有一个因素是，日常食物提供能量的效率不如增肌粉高。一个高强度训练的健美运动员，一天需要摄入300克碳水化合物，通过吃米饭获取的话，大约相当于1公斤米饭，这对胃的压力很大，吃增肌粉就能减轻胃的压力。</p>
-
-<p class="art-p">但以上只是正规增肌粉的情况，不正规的会添加类固醇类的药物。这是职业健身行业中一个很普遍的现象，那些肌肉极其夸张的职业运动员其实都在注射和服用这类药物，但这需要特别专业的教练指导。</p>
-
-<p class="art-p">中国市场上的保健品产品质量不高，有些宣称增肌效果更好，其实偷加类固醇药物的增肌粉，使用后不但不能增肌，还会有明显的副作用。健身爱好者请从正规渠道选择大品牌的增肌粉。</p>
-
-<p class="art-p">问题6:</p>
-
-
-<p class="art-p">钱钱儿不睡觉/(218998857)：我嫂子认为空心菜是燥性食物，因为她认为空心菜生长很快，并且靠发枝散叶的方式生长，和韭菜、椿香的生长方式相似，所以就是燥性食物。跟她解释虽然它们的生长方式一样，可是它们的特性不一样。就跟人一样，有些脾气大，有些脾气温和。她执坳的认为空心菜就是燥性食物。求老师解释，拜托拜托。</p>
-
-<p class="art-p">答：食物的“温良寒热”四性，是古代人总结的食物对身体造成的影响的理论，还有一套是味道对身体的影响，叫作“五味”——酸苦甘辛咸。</p>
-
-<p class="art-p">这些理论是基于古代人的观察和经验推导出来的，如今早已经没法解释大棚里的蔬菜、炸冰淇淋和冰镇巧克力、奶茶等食物了。</p>
-
-<p class="art-p">科学思想在2000多年前涌现出来，最重要的逻辑就是承认人有人的逻辑，物有物的逻辑，而不是通过把事物拟人化，再通过道德规范推理事物的变化规律。但这些道理你是不能跟嫂子讲的，一是她听不进去，二是听了也不会马上改变思考习惯。</p>
-
-<p class="art-p">她如果只是给常见食物分分类，最大的损失如果只是在你想吃炒空心菜时给你炒一盘香椿鸡蛋，我觉得也没有什么，家庭和睦比食物的四性、五味更重要。只要家人不真的开始吃有害的东西，那就互相理解吧。</p>
-
-<p class="art-p">问题7:</p>
-
-
-<p class="art-p">°蛋烘糕°/(31775780)：自己煮一根水果玉米吃，完了公公气急败坏的说：那是转基因的，吃了不好。再问，怎么不好了？说：崔永元和方舟子的骂战balabala。再问，你相信一个主持人的观点？说：反正就是不好，不准买了！哎……</p>
-
-<p class="art-p">答：其实您家引发了一场不必要的争论，因为您提到的水果玉米其实并不是转基因的。</p>
-
-<p class="art-p">水果玉米是1844年通过杂交，培育出来的一种受欢迎的玉米。就像我们从前吃的所有的水稻、小麦一样，都是杂交技术得到的。你可以把这些告诉公公。除了水果玉米，我们特别爱吃的甜糯玉米也不是转基因的。</p>
-
-<p class="art-p">但另一方面，按法规来说，中国允许进口的十几种转基因玉米暂时只能用于饲料，确实不能直接啃着吃。这倒不是因为有害，而仅仅是规定。实际情况中，规定执行难度很大，绝大部分农作物是不是转基因只能通过基因检测才能知道，从外观是没法分辨出来的。而转基因作物在抗虫、耐旱、产量上优势特别大，农民都会想法弄一些来种。</p>
-
-<p class="art-p">在各类农作物中，中国的检测机构经常查出超范围使用的转基因产品，或者是没被批准进口，却已经可以在市场上买到的大米、大豆。但荒唐的是，不论玉米实际是什么类型的，商场只贴“非转基因”的标签，你下次可以注意把标签保留下来，在家里人担心时给他们看看。</p>
-
-<p class="art-p">改变观念是很难的，老人受时代限制已经错过了最好的学习的年纪，所以培养科学思考，还是得从娃娃抓起。</p>
-
-<p class="art-p">问题8:</p>
-
-
-<p class="art-p">刘晋嘉/(883168)：老人认为竹笋是发物，吃多会诱发身体长疮之类的。望卓老板用科学的观点破之。谢谢。</p>
-
-<p class="art-p">答：“发物”是古代人在观察能力落后、知识有限的情况下，对食物某些特征的抽象，放在今天已经没有什么医学价值了。</p>
-
-<p class="art-p">那种抽象指的是，当人们吃完某种食物后，会出现起疹子、散发某种味道、长疮、腹泻等症状。这些看上去好像是，体内原本平安无事，但吃完后有一种邪祟从体表生发出来，于是就叫它们“发物”。</p>
-
-<p class="art-p">比如常见的说法是海鲜是发物，那其实是因为古代生活在内地的人很少吃到海产品，海鲜里的蛋白质对大部分人都是陌生的，容易引起过敏。更主要是因为古代没有冷链运输，海产品哪怕只是运到北京，也会大量变质，变质的食物导致过敏、腹泻就更不稀奇了。如今食物运输和保鲜都不是问题，海鲜早就不能算“发物”了。</p>
-
-<p class="art-p">而你的问题中，老人认为竹笋是发物，其实也是有解释的。如果细心你会发现，凡是大量吃过竹笋或者芦笋后，尿的味道就特别重，有些人甚至因此认为笋伤肾。其实不是的，很多笋类都含有芦笋酸，在人体代谢后会产生甲硫醇等等一系列带挥发性的硫化物，而硫化物的味道大都不好，所以尿味重就成了笋是发物的证据。</p>
-
-<p class="art-p">解决办法也有，因为笋尖部位积累的芦笋酸比根部多，下次炒菜把笋尖切掉，尿尿就没有那么重的味道了。</p>
-
-<p class="art-p">问题9:</p>
-
-
-<p class="art-p">雷磊/(1609591)：作为一个四川人，吃火锅就是日常。通常吃火锅的人也都知道这种方式不健康，所以“来来来，多加点蒜，杀毒！”希望能听到全面的关于吃蒜的「功效」。谢谢~</p>
-
-<p class="art-p">答：吃大蒜不能杀菌，但这个说法还是有一些来源的。</p>
-
-<p class="art-p">1999年世界卫生组织对有药用价值的植物发表过一个专论，里面提到了“大蒜素”有抑制细菌生长的效果。后来这句话就被传歪了，变成了“吃大蒜杀菌、治拉肚子”等说法。其实原话的意思是，把“大蒜素”从大蒜里提取出来，滴到细菌培养皿里会抑制细菌生长。</p>
-
-<p class="art-p">这一点也不稀奇，我们滴一滴洗涤灵在培养皿里也有这个效果，或者滴一滴硫酸，效果就更好了。也就是说，在培养皿中有抑菌效果，和吃进肚子里有效果，中间还有巨大的鸿沟要迈。要找到一种在体内消化道环境中能抑制细菌生长的东西难不难？其实东西是现成的，那就是抗生素。</p>
-
-<p class="art-p">而且我们要留意，抑制细菌生长的是“大蒜素”，不是“大蒜汁”。一公斤大蒜只含0.1克大蒜素。退一万步说，就算大蒜素在消化道内一样有抑制细菌的功效，按抗生素服用的比例服用大蒜素，一次大约需要吃十几斤大蒜，才能有杀菌效果。所以即便大蒜能杀菌，也要通过药厂把大蒜素成批的提炼出来，做成片剂或者针剂，服下或者注射才管用。</p>
-
-<p class="art-p">吃饭时就大蒜能起到的作用，最多就是满足个人口味上的偏好，或者熏走一些不想见的人。</p>
-
-<p class="art-p">问题10:</p>
-
-
-<p class="art-p">可爱的Q/(35642374)：请问卓克老师，吃了隔夜饭菜会致癌吗？我的外公活到一百零五岁，他还算是比较注意养生的。可是我的外婆活到一百一十岁，她是很随意的人。听说她年轻时受过很多的苦，不过她是无疾而终。也算是给我们的安慰吧。他们那个年代能吃上饱饭就不错了，哪还有条件不吃隔夜饭菜？不是也没有得癌吗？现在好了，我老婆绝对不允许有隔夜饭菜，说是会致癌。老师能讲讲吗？</p>
-
-<p class="art-p">答：隔夜饭致癌的说法，来自于“隔夜饭里亚硝酸盐含量会增高”。亚硝酸盐在世界卫生组织公布的致癌物分级中，列在2A级。这一级致癌物说的是，在动物实验中找到了充分的致癌证据，但对人体的研究中证据有限，比如油炸食品、汽车尾气，都在其中。</p>
-
-<p class="art-p">但实际上，“隔夜饭致癌”这种说法是错的。</p>
-
-<p class="art-p">简单的说，隔夜菜中的亚硝酸盐确实明显比刚出锅的时候高。但即便升高了，也离国家对食品中亚硝酸盐含量的标准差很远。相关的实验很多，过程就是炒上几盘菜，有荤有素，然后放置若干小时再采样测试里面的亚硝酸盐含量。2012年新国标中，对蔬菜制品和腌菜规定的标准是不超过20mg/公斤，而实测中放置24小时后的炒菜很少有超过10mg/公斤的。</p>
-
-<p class="art-p">这是国家标准上的比较，医学上还有另外一条线，只要超过了就会造成亚硝酸盐的中毒，这条线是300mg/公斤。所以隔夜菜不但离国家标准很远，离造成实际的身体危害就更远了。</p>
-
-<p class="art-p">细究亚硝酸盐的来源，其实它是植物细胞死亡后释放的一种酶和细菌共同制造出来的，而不是因为炒菜导致的。植物从地里收割后就一直在积累，在增加，运输过程越久，在超市货架上摆得越久，亚硝酸盐含量就越高。</p>
-
-<p class="art-p">如果真的担心隔夜菜里的亚硝酸盐，那要操心的环节就太多了：农民收割后多久被蔬菜商收走的？路上耽搁了时间没有？进到超市后又在货架上摆了多久？要控制这些环节，才能控制住亚硝酸盐的含量。反而是当我们把菜炒熟了，那种酶因为高温分解了，细菌也死了，亚硝酸盐积累的效应会削弱很多。</p>
-
-<p class="art-p">所以最终总结，我们更应该关注的是，隔夜菜是不是坏了，因为细菌的污染远比亚硝酸盐更严重。我们不提倡吃隔夜菜的理由，应该是隔夜菜容易坏、容易腐败，而不是因为它的亚硝酸盐含量高。</p>
-
-<p class="art-p">问题11:</p>
-
-
-<p class="art-p">李远/(22612232)：很多人认为吃鱼的时候被鱼刺卡住喉咙之后，用醋可以软化它并顺利咽下去。我想问问这真的能行吗？另外，同学经常说什么小龙虾、鲢鱼都是用很脏很脏的水喂养出来的，它们的肉也很脏，我们真的不可以吃这些东西吗？以上两个问题希望得到卓克老师的回答，谢谢！</p>
-
-<p class="art-p">答：认为可以通过喝醋解决鱼刺卡嗓问题的，都是基于一个理论——醋是酸性，可以把鱼刺这种钙软化。但实际上，这是行不通的。我们至少需要把鱼刺全部浸泡在醋里几个小时，刺才会明显变软，根本不是喝几口醋就能变软的，哪怕是喝上一瓶醋也没用。</p>
-
-<p class="art-p">民间还有其他偏方，说大口吞米饭、馒头可以解决问题，这也不是正规方法。因为鱼刺扎在喉咙里，角度各异，刺的大小形状也不一样，没人能预测一大团食物涌来，刺会被裹在食物里顺着食道下去，还是会像钉钉子一样，刺到更深的位置。万一扎进了食管旁的动脉，反而会导致生命危险。</p>
-
-<p class="art-p">正确处理方法是，先不要吞咽任何东西，找人用手电照一照喉咙，然后用镊子把刺拔出来。你可能觉得不可思议，但其实绝大多数人尽力把喉咙张开后，都可以看到刺，95%的刺不会扎得很深。如果你身边找不到人，又感觉刺痛非常明显，就只能去医院了。</p>
-
-<p class="art-p">接下来就正好可以回答你的第二个问题：其实那些小龙虾、淡水鱼的肉并不会变脏。如果要吃的话，注意洗干净就行了。不过特别提醒的是，不要吃鱼头，不要吃小龙虾头，因为那里会沉积很多重金属。</p>
-
-<p class="art-p">现在市场中鲢鱼、鲤鱼已经不是主要的食用鱼了，其中一个重要原因是这类鱼有肉间刺，吃的时候非常容易卡到嗓子，而其他鱼没有肉间刺，身上只有一根脊椎和沿脊椎骨放射状的肋骨，这样的鱼吃起来自然方便很多，安全很多。</p>
-
-<p class="art-p">问题12:</p>
-
-
-<p class="art-p">俞爱伦/(80562872)：我奶奶的认知里觉得炒的菜热气，晒的东西热气，牛肉、辣椒也是（热气，广东话，“上火”的意思）。青菜是凉的（与热气相反），水里游的是凉的，吃了会腿软。她有风湿。还有吃鱼，说海鲜是腥的，会腿痒（她患有一种顽固的皮肤病）。她觉得鸭和鹅是凉的，而且有毒素。还有南瓜、土豆，也是有毒素的。以上这些就都不吃，只是吃猪肉、鸡肉两种肉类，需要水煮的，不能炒。还有蔬菜，喜欢酸菜和菜干。这些导致她严重偏食。有时候没有这几样东西就只吃青菜、白饭，一点不摄入蛋白质。可是我们改变不了她的想法。很苦恼。</p>
-
-<p class="art-p">答：老年人的偏食对身体害处更大，不过现在她愿意吃的这几种食物还是可以维持正常营养配比的。</p>
-
-<p class="art-p">几十年的习惯养成了，很难改，劝说效果往往不大。如果她能接受复合维生素片的话，可以在她日常用的药里加上一片，补充偏食造成的损失。或者考虑改进食物，把她不吃的东西做成馅儿，和她愿意吃的混合在一起，用饺子或者包子的形式做给她。</p>
-
-<p class="art-p">关于“喝”的问题</p>
-
-<p class="art-p">问题13:</p>
-
-
-<p class="art-p">Ivan/(694151)：卓老师，我喜欢喝冰水和凉水，不喜欢喝温水和开水。我觉得没有什么不好的，但是家人常常劝我不要这样，要注意养生。请问凉水和开水对身体有哪些好处和坏处呢？</p>
-<p class="art-p">李冠/(11947829)：我的六十几岁的岳母十分偏执，尤其对于喝什么水。她对“山泉水”十分迷信，认为山泉水够“凉”，对于她的“润热”“虚火”体质十分有好处，喝了就是舒服，甚至还能治好她的脚痛。其他的水，包括我家纯水机产出的纯水，她都嫌弃。在老家时她会逼着岳父和她去某些山脚下接山泉水，辛辛苦苦扛回家；住我家没有山泉水可装了，就买桶装或瓶装的写有“山泉”两个字的水，比如农夫山泉之类的来喝、煲凉茶，甚至煮饭菜。她的这种偏执，我们各种解释和劝说她都听不进去。卓老师怎么看？能有办法说得通她吗？</p>
-
-<p class="art-p">答：喝水上的讲究，中国人有很多，也很奇怪，尤其是讲究养生的老年人更是集中。怎么把正确信息传达给他们呢？首要一条要把握的就是，不要发生价值观的冲突。虚火、寒气这些内容一旦争起来，不但没法说服老年人，甚至连自己想喝的冰水都喝不成了，适得其反。你可以试试把中国人喝热水的历史讲给他们。</p>
-
-<p class="art-p">中国人在60多年前是根本没有喝热水习惯的，从前的中国人和世界各地的老百姓一样，都是直接喝水缸里的水、河水、井水。很容易因为细菌感染拉肚子，甚至得痢疾。</p>
-
-<p class="art-p">中国人喝热水的习惯是突然出现的，那时正值朝鲜战争。1952年，有传言说美帝国主义要发动细菌战，于是中央防疫委员会为了应对战争威胁，开展了轰轰烈烈的爱国卫生运动。各省、市、自治区、直辖市都发布了反细菌战指示，要求各地搞好灭蝇、灭蚊、灭跳蚤、灭鼠工作。</p>
-
-<p class="art-p">在“除四害，讲卫生”的运动中，很多民众的不良生活习惯都被纠正了。有些口号我们现在还很熟悉，比如“饭前便后要洗手”就是在那个岁月诞生的。其中跟喝水有关的指示就是“不喝生水”。这场爱国卫生运动极大的提升了全民健康状况，在那个年代是非常有用的，因为那个年代绝大多数家庭没有自来水。只是到了后来跑偏了，不喝生水被执行为喝热水。</p>
-
-<p class="art-p">无独有偶，今天还在传播的关于“如何防护电磁辐射”的健康谣言里，大都来自1969年中苏核危机时，发放给各地的防核辐射的小册子，比如说“多洗脸能防手机辐射”就是这样诞生的。</p>
-
-<p class="art-p">应该喝什么样的水，这其实并没有太多限制，根据自己习惯就可以，从0°C-50°C范围的水都是对健康无害的。但恰恰喝热水才是有害的，这里的热水是指温度超过65℃的水。世界卫生组织在致癌物分类中，把65℃以上的热饮列为2A级。热水致癌的理由是，它会大幅增加食道癌和喉癌的风险。</p>
-
-<p class="art-p">有些老年人反其道行之，迷信起山泉水，非要专门接到瓶子里喝。偶尔一次也就算了，但如果长期坚持，肯定是拿健康冒险。这样的作法甚至都没达到我国1952年对民众的最基本要求——不喝生水。如果他能接受某带山泉二字的瓶装水的话，建议多备一些，一个住在城市的老人经常去山里挑几十斤水回家，万一摔倒，那就更加得不偿失了。</p>
-
-<p class="art-p">除了温度的差异、生水和开水外，保健品市场这些年还出现了很多忽悠人的产品，比如富氧水、水素水、小分子团水、弱碱性水、能量水、磁化水、月子水、冰川水、活化水、功能水，以上所有，和今后即将出现的各种名目的水，都是把1块钱一瓶的纯净水、矿泉水卖高价的噱头，不要花冤枉钱就是了。</p>
-
-<p class="art-p">问题14:</p>
-
-
-<p class="art-p">Carey.W/(1686789)：我妈什么都网上查一查，唯独“喝咖啡对身体不好”这个谣言不去网上查一查，一棒子打死，一见我喝咖啡就会开始生气碎碎念，以至于我现在在家喝咖啡都要偷偷摸摸的。希望卓克老师能帮忙给个强有力的辟谣。</p>
-
-<p class="art-p">答：喝咖啡对身体的影响，已经有很可靠的研究结论：只要每日摄入的咖啡因小于400毫克，咖啡温度不超过65℃，非但无害，反而有益。如果是孕妇的话，咖啡因摄入量的上限要除以2，也就是不超过200毫克/天。200毫克的咖啡因对应多少咖啡呢？用星巴克的标准就是，对应一个大杯的美式咖啡。</p>
-
-<p class="art-p">喝咖啡对身体有害的研究大都集中在2000年之前，那时的研究没能很好的排除一个干扰因素——长期喝咖啡的人本来就有一些属性，比如工作强度大、缺乏锻炼、饮食不健康，长期大量喝咖啡其实是被迫让自己保持清醒的手段，这样的人身体健康状况自然好不到哪儿去。</p>
-
-<p class="art-p">2010年之后更多排除这个因素后的大规模统计出现了，有些实验参加的人数超过8000人，最多的有30万人，还有的考察时间长达20年之久。它们都指向那个结论——长期喝咖啡对身体有益。我再补充一些，如果你能不加糖的话，益处会更大。</p>
-
-<p class="art-p">其他方面的问题</p>
-
-<p class="art-p">问题15:</p>
-
-
-<p class="art-p">蒋小蒋✿/(79181472)：卓克老师能不能说说拔罐这事？我老妈经常说这疼那疼，尤其是腿，所以她特别信各种保健，最近迷信拔罐，就是那种塑料材质的采用罐顶的活塞来抽气的抽气罐。她把这东西吹的视乎其神，每次一个地方要拔四十分钟，把皮肤拔得冒血泡、流血水为止，说拔完哪哪都通了，哪哪都好。把自己身上拔的这一个疤那一个疤，其实我看来就是一块块起泡、流血的伤口，还告诉我拔出来的血水都是湿气，说血水拔没了就说明没有湿气了，身体就好了！一个罐+一瓶喷的药，人家收她老人家一千多块，让她哪里痛就去医院，她说医院治不好她，就拔罐好。</p>
-
-<p class="art-p">答：虽然你没提到她去的是什么机构做的拔罐，但从“把皮肤拔得冒血泡，流血水为止”可以判断，这不是医院做的，正规医疗机构不敢这样干。而且她接受这样的拔罐，伤口大面积感染的风险很高。国家卫计委和中医药管理局对这类现象的评论是：“非正规医疗机构给人针灸、刮痧、艾灸、拔罐均涉嫌非法行医。”</p>
-
-<p class="art-p">再从美团和大众点评搜索拔罐的收费看，北京拔罐的平均价格是46块钱，上海是54块钱。而她被收了1000多块钱，这不但涉嫌非法行医还涉嫌诈骗。</p>
-
-<p class="art-p">通过负压把感染部位的脓吸出来，或者把蛇毒吸出来，这个做法在治疗中是有的，但对完全健康的人，专门通过负压主动的、大面积的破坏皮肤，这种行为在任何国家、任何医院都是被禁止的。</p>
-
-<p class="art-p">现代科学对拔罐的研究也有一些，基本都是来自亚洲的，可能是受限于拔罐过程的特殊性，双盲实验几乎没有，论文的质量很低。在这些研究中，拔罐的作用仅仅是缓解疼痛，对其他疾病并没有疗效。这并不是说研究质量提高以后，就能发现拔罐可以治疗其他疾病了。因为拔罐的做法是基于上千年前古代医学的理论，那些理论早就该进博物馆了，而不能指导今天的治疗。这个道理对针灸也是一样的。</p>
-
-<p class="art-p">假如家里父母热衷拔罐，实际上你发现只是一种变相的按摩和肌肉放松，我觉得可以不用干涉，但如果已经发展到每次拔罐都要大面积弄破皮肤的程度，那一定要拦下来。你可以向当地的卫计委举报，并且搜集类似的美容院、足疗馆因拔罐导致伤残的新闻和处罚结果给家人看，让他们知道自己这么做是有多危险。</p>
-
-<p class="art-p">问题16:</p>
-
-
-<p class="art-p">王金革/(34677662)：卓老板，请问，吸二手烟真的比吸烟者更有害吗？</p>
-
-<p class="art-p">答：这个看似简单的问题，回答其实是尚无定论。</p>
-
-<p class="art-p">对二手烟和一手烟的定义是，经过滤嘴输出的烟雾叫做一手烟，不经过过滤嘴，香烟自发燃烧产生的烟雾是二手烟。曾经有种说法是二手烟比一手烟的危害还要大，因为香烟自发燃烧时的温度大约300℃，比主动吸入时经过过滤嘴的那一端要低，那一端可以到700℃的高温。在实测中，偏低温度燃烧不充分，产生的致癌芳香烃更多。所以二手烟比一手烟有害的说法就这样推出来了。</p>
-
-<p class="art-p">但实际上，很难做真实情况中两者伤害的对比测试，因为吸一手烟的人做不到吸烟的同时不吸二手烟。而烟民周围有可能吸二手烟的人，至少和香烟间隔了一段距离，比如几米，所以燃烧产生的有害颗粒物浓度也会降低很多，这抵消了不充分燃烧致癌物更多的因素，而且这个距离变化的幅度也很大。</p>
-
-<p class="art-p">所以虽然有很多动物实验证明，在一手烟和二手烟产生的颗粒物浓度相等的情况下，二手烟的伤害更大，但只要搬到实际环境中，就很难比较了。</p>
-
-<p class="art-p">问题17:</p>
-
-
-<p class="art-p">邓卓裕/(752521)：卓老板，您好！我的问题是关于“甲醛”。以前不觉得，随着飘进耳朵次数增多，到现在已经感觉“甲醛”无处不在了。衣料、塑料、木材、石材……这都是我们日常生活避无可避的东西。进到一个房间，如果有一丝异味，下意识就觉得是甲醛。随之而来的就是甲醛检测和“除甲醛”行业的兴起，植物类、食材类（洋葱大蒜）、化学材料（活性炭）……，最多的还是除甲醛的各种机器。想请卓老板讲一下关于正确理解甲醛，以及如何辨别各种花式除甲醛的靠谱性。谢谢！</p>
-
-<p class="art-p">答：甲醛在生活中很普遍，有效可靠的去除办法有2种：第一是开窗通风，简单易行；第二是使用光触媒产品，它不但可以去除甲醛，甚至连苯、氨气、一氧化碳、二氧化硫之类的有害气体也都可以处理，最终的产物是二氧化碳和水。</p>
-
-<p class="art-p">其余网上流传的方法，包括摆放植物、用活性炭、空气净化器等，效果都不行。植物根本没法去除室内甲醛，活性炭和空气净化器是一个道理，都是用活性炭吸附，但活性炭只能吸附一定量的甲醛，吸饱和后，这张活性炭的网子反而成了甲醛的挥发源。</p>
-
-<p class="art-p">重点说一下光触媒去甲醛。这种方法非常有效，它可以做成涂层，或者薄膜、喷雾剂等，附在家具表面或者玻璃表面，在日光的照射下，产生催化作用，让常温常压下不会和氧气反应的甲醛等有害物在接触到这层膜后发生氧化反应，最终改变化学结构，对人体不再有害。</p>
-
-<p class="art-p">光触媒70年代由日本开发出来后，今天在欧洲、日本、韩国、台湾的幼儿园和中小学里已经广泛使用了。它在中国的兴起和房地产的蓬勃发展是同步的，但因为各种不可控因素，出现了一大批噱头产品，它们会用热触媒、冷触媒、气触媒、复合媒、金属触媒、光触媒伴侣、空气媒等字眼夸大宣传。</p>
-
-<p class="art-p">光触媒早期的产品要起效，必须依赖充足的日光才可以，因为它需要借助日光里的紫外线。后续几十年的发展，对紫外线的要求不那么强烈了，但也还需要充足的日光。</p>
-
-<p class="art-p">中国的夸大宣传主要表现在，把根本接触不到日光的东西也贴上光触媒的功能宣传，比如卫生间里的瓷砖、卧室的家具涂层。这些做法还算好的，绝大多数在售的产品是把光触媒材料稀释到几乎失效的边缘，然后高价销售。所以虽然这项去甲醛的技术是可靠的，但在中国，如果不是内行，想买到可靠的光触媒产品门槛不低。</p>
-
-<p class="art-p">有人曾经花大量时间调查了天猫上排名前5的光触媒店铺，其中四家店铺存在伪造、冒用其他检测报告的问题，1家检测报告是真的，但宣传中把甲醛和苯的去除率改高了。还有光催化方向的日本留学生回国创业，做市场调查，测试了电商渠道能买到的60多种光触媒产品，总体结果也是极差的。</p>
-
-<p class="art-p">效果很好的光触媒干燥粉末，也就是粉末颗粒直径在5nm的那种，正常市场价格大约是3000元/公斤左右。我找到的可靠的品牌是日本光触媒行业的大品牌艾普德（Air Plot），它们在2016年也完善了中国的渠道，所以正规渠道买这个品牌是不会被骗的，只不过价格不低。</p>
-
-<p class="art-p">问题18:</p>
-
-
-<p class="art-p">斗魂/(29325223)：有些貌似高端的保健品，宣传白藜芦醇可以抗衰老，产品具有可以修复端粒等功效，同时在自有网站上搞类似传销式的擦边球营销，宣传成功之道。身边不乏富贵之人食用，甚至推广或者销售，望卓老板解惑。</p>
-
-<p class="art-p">答：先说白藜芦醇。学术界最早出现跟健康有关的白藜芦醇研究，是1980年代的日本，不过影响力很小。</p>
-
-<p class="art-p">到了90年代，一个印度裔美国科学家（Dipak K. Das）在葡萄酒中也发现了白藜芦醇，认为这是法国人饮食不那么健康，但心血管发病率还不高的原因。这位科学家后来升任了康涅狄格大学健康中心心血管研究中心主任，而且致力于研究白藜芦醇对健康的影响，一干就是20年，这个领域其他人发表论文都不得不引用他的研究。</p>
-
-<p class="art-p">可是2012年，康涅狄格大学把他开除了，因为学校证实了他过往关于白藜芦醇的论文，有140多篇都存在伪造数据。这只终生学术造假的大老鼠被抓了出来。从2012年后，白藜芦醇对健康的改善之梦就算破灭了。 而讽刺的是，这时候白藜芦醇抗癌、改善心血管功能、延长寿命等传说已经在保健品商那里成了营销卖点。</p>
-
-<p class="art-p">修复端粒的保健品有类似过程。端粒理论曾经是研究衰老领域的大热门，甚至还获得过2009年诺贝尔奖，但这个领域是从2012年开始热度骤减的。虽然端粒对细胞的作用还有人在研究，但科学家群体都形成了共识——端粒决定不了寿命，仅仅修复端粒不但不能增加哺乳类动物的寿命，甚至还可以诱发癌症。</p>
-
-<p class="art-p">关于修复端粒，关于消除自由基，抗衰老的理论是怎么出现，之后又是怎么被推翻的过程，我曾经在2018年7月27日、28日《科学思维课》的两次问答环节中仔细说过，如果你感兴趣可以参考。</p>
-
-<p class="art-p">简单总结，白藜芦醇和端粒修复保健品都是利用早已被证明无效的研究，从里面找出新词怪词，然后夸大宣传做出来的。真正的保健只有合理饮食、适度锻炼和充分休息。虽然听起来老掉牙，但坚持做很难，保持身体健康本来就不是一件容易事。</p>
-
-<p class="art-p">问题19:</p>
-
-
-<p class="art-p">Li Xia/(111576072)：希望卓克老师能辟谣三伏贴的神奇功效。我觉得它浓浓的仪式感，让太多人迷之相信。</p>
-
-<p class="art-p">答：三伏贴起源于清朝康熙年间，依据阴阳五行理论，希望达到冬病夏治的效果，也就是冬天将要患上的病，在夏天提前治，来达到预防的目的。这是一种典型的迷信活动。</p>
-
-<p class="art-p">冬季常见病是流感，预防的最好方法就是在秋天接种当年的流感疫苗。尤其是儿童和老年人，他们患流感后的危险更高，所以接种疫苗的益处更多。</p>
-      </div>
-    </article>
-  </main>
+  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
+  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
 </div>
-
-<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
-
-<footer class="footer">
-  <p>卓老板聊科技 · 最小知识集（MKS）</p>
-  <p>298 篇文章 · 7 个专题 · 32 个原章节</p>
-  <p>
-    <a href="index.html">← 返回科学客厅</a> ·
-    <a href="concepts.svg" target="_blank">🗺️ 知识星系图</a> ·
-    <a href="quiz.html">📝 科学素养自测</a>
-  </p>
-</footer>
-
+<div class="tab-panel" id="panel2">
+  <div class="section-title">题库系统</div>
+  <div style="text-align:center;margin-bottom:20px;">
+    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
+    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
+  </div>
+  <div id="quizContainer"></div>
+  <div id="staticQuiz" style="display:none"></div>
+</div>
+<div class="tab-panel" id="panel3">
+  <div class="section-title">考试模式</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
+  <div style="text-align:center;margin-bottom:20px;">
+    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
+    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
+  </div>
+  <div id="examContainer"></div>
+  <div id="examResult" style="display:none;text-align:center;padding:20px;">
+    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
+    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
+    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+  </div>
+</div>
+<div class="tab-panel" id="panel4">
+  <div class="section-title">复习模式</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
+  <div id="reviewContainer">
+    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
+    <div id="reviewWeakAreas"></div>
+  </div>
+  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
+</div>
+<div class="tab-panel" id="panel5">
+  <div class="section-title">思维导图</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
+  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">思维的武器——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
+</div>
+<div class="tab-panel" id="panel6">
+  <div class="section-title">深度追问</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
+  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
+</div>
+<div class="tab-panel" id="panel7">
+  <div class="section-title">案例分析</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
+  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
+</div>
+<div class="tab-panel" id="panel8">
+  <div class="section-title">实战决策</div>
+  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const concepts = [{"id": "c1", "name": "贝叶斯更新", "def": "新证据不应推翻旧信念，而应按概率规则更新旧信念的置信度——这是应对不确定性的最优推理框架。", "analogy": "你估计明天下雨概率30%，看了天气预报说会下雨（准确率80%），用贝叶斯公式更新：新概率不是100%也不是30%，而是约63%。", "example": "肝癌检测：甲胎蛋白阳性时实际患病率仅28.6%——因为发病率仅万分之四，假阳性率抵消了看似高的检测准确率。贝叶斯定理强制你考虑基础概率。", "counter": "贝叶斯更新要求你有'先验概率'——对完全未知的事件（黑天鹅）贝叶斯方法无法提供初始先验。"}, {"id": "c2", "name": "纳什均衡", "def": "当每个参与者都已选定策略，且无人能通过单方面改变策略来提高自己收益——这个策略组合就是纳什均衡点。不是'对所有人最优'，而是'无人有动机偏离'。", "analogy": "两个人在拥挤走廊迎面相遇——如果都向左或都向右则顺畅通过（均衡点）；一左一右则撞上。纳什均衡不保证最优结果（囚徒困境中双方都供认是均衡但非最优）。", "example": "劳资谈判：调解员的任务就是找到纳什均衡点——让劳方知道资方被建议妥协时，劳方的最优策略就是坚持。找到均衡=找到双方都不能单方面改进的方案。", "counter": "纳什均衡不总是唯一的。有些博弈有多个均衡点（如'认怂'和'死磕'各是一个均衡），需要额外规则（如谁先行动）来选择。"}, {"id": "c3", "name": "囚徒困境中的合作演化", "def": "单次囚徒困境中背叛占优——但重复博弈中'一报还一报'(tit-for-tat)策略：第一轮合作，之后模仿对手上一轮行为——在所有策略竞赛中胜出。", "analogy": "你和邻居每天见面：今天你帮他收快递，明天他帮你喂猫。如果只一次交往→占便宜就走最优。但反复博弈→合作自然涌现。", "example": "阿克塞尔罗德囚徒困境竞赛：14种策略200局对战→'一报还一报'平均分最高(504.5)。它不'聪明'，只是①善良(先合作)、②报复(对方背叛就惩罚)、③宽容(对方恢复合作就原谅)。", "counter": "在嘈杂环境(信息不完全)中，一报还一报因连锁报复而失效——'宽容版一报还一报'(偶尔原谅一次背叛)在有误差的现实中更优。"}, {"id": "c4", "name": "数学作为思维脚手架", "def": "数学不是关于数字的学科，而是关于模式和结构的语言——它给思维搭建了逻辑脚手架，让模糊直觉变成可推导、可验证的推理链条。", "analogy": "像建筑工地的脚手架——没有它也能盖小棚子，但盖摩天大楼是妄想。数学是思维的基础设施，让你接触直觉无法企及的复杂推理。", "example": "黎曼猜想：一个关于素数分布的猜想，看似纯数学。但破解它将重塑我们对'随机性'和'结构'关系的理解——影响密码学、量子混沌、甚至物理中的能级分布。", "counter": "数学作为工具也可能'过拟合'——强行为复杂现实套用优美模型。经济学对2008年金融危机的预测失败部分来自对数学模型的过度信仰。"}, {"id": "c5", "name": "伪科学识别框架", "def": "伪科学常具有以下特征：不可证伪、依赖个案、逃避同行评议、使用科学术语但无操作化定义、声称被体制打压。学会识别这些'红旗信号'。", "analogy": "如果你的车发出奇怪声音，你去找了三个修车师傅，一个说'你这车的灵气不纯'，一个说'需要换机油'，一个说'先检查发动机'——哪个更可能是对的？看谁给出可验证的判断。", "example": "《水知道答案》声称水能'感知'人类情绪并形成不同结晶——但实验未设盲法、未控制温度湿度、未独立复现。'被体制打压'叙事不能替代实验证据。", "counter": "并非所有非主流观点都是伪科学。魏格纳的大陆漂移说最初遭主流地质学界抵制——但他提供了可验证的预测（化石分布、海岸线匹配）。区别在是否愿意接受实证检验。"}, {"id": "c6", "name": "统计显著性的陷阱", "def": "p<0.05意味着'如果零假设为真，观察到这样的数据（或更极端）的概率小于5%'——不是'假设备择为真的概率是95%'。混淆两者是最常见的统计误解。", "analogy": "你在赌场连赢10把——如果骰子公平，概率极低(p<0.001)。这不等于'你确实出千的概率是99.9%'——还需考虑先验概率(多少人会出千？)。", "example": "p值黑客(p-hacking)：研究者尝试多种分析方法、排除'不理想'数据点、选择性报告——直到找到p<0.05。这导致大量已发表的'显著'发现无法复现（可重复性危机）。", "counter": "p值不是效应大小的度量。超大样本下，一个微小的无关紧要的差异也能p<0.001。报告效应量和置信区间比单纯报告p值更有信息量。"}, {"id": "c7", "name": "反直觉思维：科学为什么'反常识'", "def": "科学结论常与直觉相悖：地球绕太阳转（而非相反）、重的和轻的物体下落一样快、随机事件会出现'热手'错觉——因为我们的直觉是为非洲草原生存优化的，不是为理解量子力学演化的。", "analogy": "你的直觉告诉你太阳'升起落下'——地球不动太阳在转。花了人类几千年才接受'其实是我们在转'。科学是系统性地纠正直觉偏误的方法。", "example": "热手谬误：篮球运动员连中几球后，人们相信他'手热'——但统计分析(包括NBA数据)发现投篮命中率并不依赖于前一次是否命中。独立随机事件中'手感'是幻觉。", "counter": "反直觉≠反常识。有些科学结论与常识一致（吸烟有害），有些相反（运动对减重效果有限）。科学的价值恰在于它能区分两者。"}, {"id": "c8", "name": "科学vs文化权威", "def": "科学知识通过可复现的公共证据建立权威——而非通过传统、经典、大师或政治权力。文化权威在事实问题上不享有特权。", "analogy": "法官判案：最终权威是证据和法律的公共推理——不是法官的职称或年龄。科学同理：一个博士后可以推翻诺奖得主的结论——如果他的实验数据更有力。", "example": "牛顿和莱布尼茨的微积分之争导致英国数学落后欧洲150年——因为英国人出于民族自尊拒绝使用莱布尼茨的更优符号系统。把科学权威和文化权威混淆的代价。", "counter": "科学界内部也有权威等级——资深科学家更容易获得经费和发表机会。科学社会学研究的是'科学实际如何运作'而非'科学应该如何运作'——两者不同。"}, {"id": "c9", "name": "混沌与可预测性边界", "def": "确定性系统可以产生完全不可长期预测的行为——不是因为我们无知，而是因为初始条件的微小差异会被指数放大（蝴蝶效应）。混沌不是无序，而是'确定的不可预测性'。", "analogy": "精确知道台球桌上每个球的初始位置和速度→你可以预测前几秒的碰撞→但10秒后空气分子和重力的微小扰动就被放大到不可忽略→1分钟后完全无法预测。不是知识不够，是系统的本质属性。", "example": "天气预报：即使有完美的模型和无限计算力，超过2-3周的天气预报在理论上就不可能——因为大气是混沌系统。但短期预报准确率已从50%(1980)提升到95%+(今天)。", "counter": "混沌≠随机。混沌系统的短期行为是可预测的（明天天气），长期行为虽不可预测但有统计规律（气候模式）。可预测性是有时间边界的。"}, {"id": "c10", "name": "从相关性到因果性的推理阶梯", "def": "确立因果关系需要：①时间先后(因在前)、②相关性、③排除替代解释(混杂变量)、④剂量-效应关系、⑤机制合理性、⑥实验证据(RCT)。相关性只是阶梯的第一级。", "analogy": "冰淇淋销量和溺水死亡正相关——共同原因：夏天。如果你根据相关性建议'禁止卖冰淇淋以防止溺水'，那就是经典的因果谬误。", "example": "吸烟与肺癌：①吸烟在前(时间)、②强相关(相对风险>10)、③排除职业暴露等混杂、④吸烟量越大风险越高(剂量-效应)、⑤动物实验证实致癌机制(机制)、⑥戒烟后风险下降(实验类证据)——因果推断的黄金标准。", "counter": "有些因果关系无法做RCT（如'教育对收入的影响'），需用自然实验、工具变量、断点回归等方法逼近因果。因果关系的确立是一个渐进的证据积累过程。"}];
+const mcqAll = [{"q": "贝叶斯定理最关键的应用是什么？", "opts": ["利用新证据按概率规则更新旧信念的置信度——而非全盘接受或全盘否定", "证明旧信念总是错的", "计算精确的未来概率", "消除所有不确定性"], "answer": 0}, {"q": "纳什均衡的核心定义是什么？", "opts": ["无人能通过单方面改变策略提高自己的收益时的策略组合", "对所有参与者最优的策略组合", "得分最高的策略", "双方都妥协的策略"], "answer": 0}, {"q": "'一报还一报'(tit-for-tat)策略在囚徒困境竞赛中胜出的原因是什么？", "opts": ["善良(先合作)、报复(对方背叛则惩罚)、宽容(对方恢复合作则原谅)——简单而有效", "它总是选择背叛", "它总是选择合作", "它是随机策略"], "answer": 0}, {"q": "为什么p<0.05不等于'假设备择为真的概率是95%'？", "opts": ["p值条件于零假设为真——不涉及备择假设的概率。这混淆了P(data|H0)和P(H1|data)", "p值正是这个含义", "只有p<0.01才不能这样解释", "这是统计学家的过度谨慎"], "answer": 0}, {"q": "伪科学最常见的特征是什么？", "opts": ["不可证伪、依赖个案、逃避同行评议、声称被体制打压——而非提供可复现的证据", "发表在学术期刊上", "使用复杂数学", "被科学家反对"], "answer": 0}, {"q": "混沌系统的核心特征是什么？", "opts": ["确定性方程产生完全不可长期预测的行为——初始条件微小差异被指数放大", "完全随机无序", "所有行为可精确预测", "只有天气系统是混沌的"], "answer": 1}, {"q": "为什么牛顿和莱布尼茨的微积分之争导致英国数学落后150年？", "opts": ["英国人出于民族自尊拒绝莱布尼茨更优符号系统——把科学权威和文化权威混淆", "莱布尼茨的微积分是错的", "英国不重视数学", "牛顿禁止英国人使用微积分"], "answer": 1}, {"q": "p值黑客(p-hacking)指什么？", "opts": ["尝试多种分析、排除不理想数据、选择性报告——直到找到p<0.05", "用黑客技术改数据", "只报告显著结果但不操纵数据", "一种统计软件"], "answer": 1}, {"q": "为什么科学结论常与直觉相悖？", "opts": ["人类直觉为非洲草原生存优化而非为理解量子力学演化——科学系统性纠正直觉偏误", "科学家故意说反话", "直觉总是错的", "科学太复杂"], "answer": 1}, {"q": "吸烟与肺癌确立因果关系的关键证据链不包括什么？", "opts": ["中医古籍记载", "时间先后+强相关+排除混杂+剂量效应+动物实验+戒烟后风险下降——这是因果推断黄金标准", "大规模队列研究", "生物学机制实验"], "answer": 1}, {"q": "贝叶斯更新在什么情况下最有用？", "opts": ["有先验信念且新证据不完全确定时——更新而非替换旧信念", "完全无知时", "证据100%确定时", "不需要做决策时"], "answer": 2}, {"q": "'蝴蝶效应'是指什么？", "opts": ["巴西蝴蝶扇翅理论上可引发德州龙卷风——微小初始差异在混沌系统中被放大", "蝴蝶能预测天气", "蝴蝶翅膀有特殊能力", "只是一种文学比喻"], "answer": 2}, {"q": "为什么经济学模型在2008年金融危机中失败？", "opts": ["部分源于对数学模型的过度信仰——强行将复杂现实套用优美模型(过拟合)", "经济学不是科学", "模型太简单", "没有人预测到危机"], "answer": 2}, {"q": "科学权威和文化权威的根本区别是什么？", "opts": ["科学权威通过可复现的公共证据建立——博士后可推翻诺奖得主(如果数据更有力)", "科学权威更高", "文化权威更高", "两者没有区别"], "answer": 2}, {"q": "确立因果关系需要满足什么条件？", "opts": ["时间先后+相关性+排除替代解释+剂量效应+机制合理性+实验证据——相关性只是第一步", "只需要强相关", "只需要时间先后", "只需要专家意见"], "answer": 2}, {"q": "'热手谬误'(hot hand fallacy)指什么？", "opts": ["篮球运动员连中几球后人们相信他'手热'——但统计分析发现命中率不依赖前一次是否命中", "球员手真的会变热", "只有篮球有这现象", "这是真实的体育现象"], "answer": 3}, {"q": "天气预报为什么不能精确预测2周后的天气？", "opts": ["大气是混沌系统——即使有完美模型和无限计算力，长期预测在理论上就不可能", "气象学家不够努力", "计算机不够快", "数据不够多"], "answer": 3}, {"q": "如何区分真正的科学创新和被体制打压的伪科学？", "opts": ["看是否愿意接受实证检验——魏格纳给出可验证预测(化石分布)，伪科学逃避检验", "看有多少人相信", "看是否被主流反对", "看发表在什么期刊"], "answer": 3}, {"q": "数学为什么被称为'思维脚手架'？", "opts": ["它给逻辑搭建基础设施——让模糊直觉变成可推导可验证的推理链条", "数学就是数字计算", "只有科学家需要数学", "数学限制思维"], "answer": 3}, {"q": "'善良-报复-宽容'三个特质为什么是重复博弈中合作演化的关键？", "opts": ["善良启动合作、报复防止被剥削、宽容避免连锁报复——三者缺一则策略脆弱", "只需要善良", "只需要报复", "只需要宽容"], "answer": 3}];
+const saqAll = [{"q": "用贝叶斯更新解释为什么'甲胎蛋白检测阳性=肝癌'是错误推理。", "hint": "需考虑肝癌发病率(万分之四)的先验概率——即使检测99%准确，阳性结果的阳性预测值仅28.6%。先验概率不能被忽略"}, {"q": "纳什均衡和'最优结果'有什么区别？以囚徒困境为例说明。", "hint": "纳什均衡=无人有动机单方面偏离。囚徒困境中双方供认是均衡但非最优(最优是双方沉默)。均衡≠最优"}, {"q": "为什么'一报还一报'策略在有噪声的现实环境中需要'宽容版本'？", "hint": "噪声导致误判对方背叛→连锁报复永不停止。偶尔原谅一次→打破报复循环。这是'信任但要留余地'的数学基础"}, {"q": "给一个现实生活中的p值误解例子并纠正。", "hint": "媒体报道'每天喝咖啡降低心脏病风险30%(p<0.05)'→实际可能是观察性研究的混杂效应。p值不等于效应大小，也不等于临床意义"}, {"q": "用'混沌'概念解释为什么长期经济预测和长期天气预报都不靠谱。", "hint": "两者都是混沌系统——初始条件微小差异被指数放大。可预测性有明确的时间边界：天气2-3周、经济可能更短"}, {"q": "如何用'反直觉思维'评估一个'听起来很有道理'的健康建议？", "hint": "检查是否经过RCT验证、是否与已知科学一致、提供者是否有利益冲突。直觉正确≠事实正确"}, {"q": "为什么p-hacking是科学可重复性危机的核心问题之一？", "hint": "多种分析+选择性报告→大量假阳性结果被发表→后续研究无法复现。解决：预注册研究方案+报告所有分析"}, {"q": "如何区分'被体制打压的创新'和'因缺乏证据被拒绝的伪科学'？", "hint": "创新者愿意接受严格检验并提出可验证预测；伪科学者逃避检验、依赖个案和阴谋论叙事"}, {"q": "用科学vs文化权威的概念分析'古人的智慧被现代科学证实'这类说法。", "hint": "古代观察可能是原料但≠科学证据。古人知道柳树皮退热但不知有效成分和剂量——现代阿司匹林才是可靠的。崇古心态混淆文化权威和科学权威"}, {"q": "为什么确立因果关系需要多重证据而非单一统计相关？", "hint": "相关可能被混杂变量解释(Bradford Hill标准)。吸烟-肺癌用了时间先后+强相关+排除混杂+剂量效应+机制+实验证据六条链——每条都增加因果推断的信心"}];
+const SK = 'mks_1';
+let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
+let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
+let currentCardIdx = 0;
+function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
+function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
+function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
+function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
+function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
+function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
+function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
+function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
+document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
+function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
+function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
+function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
+function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
+function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
+let et=null,el=1800,eq=[],ea={};
+function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
+function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
+function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
+function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
+function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
+function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
+setCard(0);updateProgress();
+</script>
 </body>
 </html>

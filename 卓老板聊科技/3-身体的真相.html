@@ -2,2988 +2,565 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🫀 身体的真相 · 卓老板聊科技 MKS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>身体的真相 — 卓老板聊科技 MKS</title>
 <style>
-/* ============================================================
-   卓老板聊科技 · 专题 3：身体的真相
-   设计理念：科学客厅的诊疗室书架——听诊器旁的科学文献
-   ============================================================ */
-:root {
-  --bg: #1a1612;
-  --bg-card: #241e18;
-  --bg-card-hover: #2c251e;
-  --text: #d4cfc4;
-  --text-bright: #f0e8d8;
-  --text-dim: #8a8278;
-  --border: #2e2822;
-  --border-light: #3e3830;
-  --accent: #c45b5b;
-  --accent-light: #e08080;
-  --accent-glow: rgba(196,91,91,0.25);
-  --amber: #d4a040;
-  --amber-light: #f0d878;
-  --amber-glow: rgba(212,160,64,0.2);
-  --radius: 10px;
-  --radius-lg: 16px;
-  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-  --font-display: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Serif SC", serif;
-  --font-body: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.8;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  padding-bottom: 80px;
-}
-
-/* ===== Room ambient light ===== */
-.room-glow {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 50% 40% at 50% 20%, rgba(196,91,91,0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 50% at 15% 60%, var(--amber-glow) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 50% at 85% 40%, rgba(180,160,120,0.03) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 30% at 50% 90%, rgba(200,160,80,0.04) 0%, transparent 50%);
-}
-
-/* ===== Dust motes in lamplight ===== */
-.dust-motes {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.mote {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--amber-light);
-  animation: mote-drift linear infinite;
-  opacity: 0;
-}
-@keyframes mote-drift {
-  0%   { transform: translateY(0) translateX(0); opacity: 0; }
-  5%   { opacity: 0.6; }
-  40%  { opacity: 0.3; }
-  90%  { opacity: 0.05; }
-  100% { transform: translateY(-100vh) translateX(var(--mx)); opacity: 0; }
-}
-.m1 { left: 5%;  bottom: -5px; width: 2px; height: 2px; --mx: 40px; animation-duration: 14s; animation-delay: 0s; }
-.m2 { left: 15%; bottom: -5px; width: 1px; height: 1px; --mx: -25px; animation-duration: 12s; animation-delay: 2s; }
-.m3 { left: 25%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 55px; animation-duration: 16s; animation-delay: 1s; }
-.m4 { left: 35%; bottom: -5px; width: 2px; height: 2px; --mx: -35px; animation-duration: 13s; animation-delay: 3s; }
-.m5 { left: 45%; bottom: -5px; width: 1px; height: 1px; --mx: 45px; animation-duration: 15s; animation-delay: 0.5s; }
-.m6 { left: 55%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: -45px; animation-duration: 11s; animation-delay: 2.5s; }
-.m7 { left: 65%; bottom: -5px; width: 2px; height: 2px; --mx: 30px; animation-duration: 14.5s; animation-delay: 1.5s; }
-.m8 { left: 75%; bottom: -5px; width: 1px; height: 1px; --mx: -20px; animation-duration: 12.5s; animation-delay: 3.5s; }
-.m9 { left: 85%; bottom: -5px; width: 1.5px; height: 1.5px; --mx: 50px; animation-duration: 15.5s; animation-delay: 0.8s; }
-.m10 { left: 92%; bottom: -5px; width: 2px; height: 2px; --mx: -30px; animation-duration: 13.5s; animation-delay: 4s; }
-
-/* ===== Top Navigation Bar ===== */
-.nav-bar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(26,22,18,0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
-}
-.nav-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.nav-home {
-  color: var(--amber);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  transition: color var(--ease);
-  white-space: nowrap;
-}
-.nav-home:hover { color: var(--amber-light); }
-.nav-sep { color: var(--text-dim); font-size: 0.85rem; }
-.nav-title {
-  color: var(--text-bright);
-  font-size: 0.95rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.nav-count {
-  color: var(--text-dim);
-  font-size: 0.78rem;
-  background: rgba(255,255,255,0.04);
-  padding: 3px 10px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-}
-
-/* Topic quick-nav */
-.topic-quick-nav {
-  margin-left: auto;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.topic-quick-nav a {
-  color: var(--text-dim);
-  text-decoration: none;
-  font-size: 0.72rem;
-  padding: 3px 8px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  transition: all var(--ease);
-  white-space: nowrap;
-}
-.topic-quick-nav a:hover {
-  color: var(--text-bright);
-  border-color: var(--border-light);
-  background: rgba(255,255,255,0.03);
-}
-.topic-quick-nav a.active {
-  color: var(--accent-light);
-  border-color: rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.04);
-  font-weight: 600;
-}
-
-/* ===== Page Header ===== */
-.page-header {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 48px auto 32px;
-  padding: 0 20px;
-  text-align: center;
-}
-.page-header .topic-icon {
-  font-size: 3.5rem;
-  display: block;
-  margin-bottom: 12px;
-  animation: icon-float 3s ease-in-out infinite;
-}
-@keyframes icon-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-.page-header h1 {
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  color: var(--text-bright);
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-}
-.page-header .subtitle {
-  font-family: "Georgia", "Times New Roman", serif;
-  font-style: italic;
-  color: var(--accent-light);
-  font-size: 1.05rem;
-  opacity: 0.7;
-  margin-bottom: 16px;
-}
-.page-header .desc {
-  max-width: 600px;
-  margin: 0 auto;
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  line-height: 1.8;
-}
-.header-line {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  margin: 20px auto;
-}
-
-/* ===== Main Content Layout ===== */
-.main-layout {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 32px;
-  align-items: start;
-}
-
-/* ===== Sidebar TOC ===== */
-.toc-sidebar {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-}
-.toc-sidebar h4 {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--amber);
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-.toc-sidebar ol {
-  list-style: none;
-  padding: 0;
-}
-.toc-sidebar li {
-  margin-bottom: 2px;
-}
-.toc-sidebar a {
-  display: block;
-  color: var(--text-dim);
-  text-decoration: none;
-  font-size: 0.78rem;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all var(--ease);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.toc-sidebar a:hover {
-  color: var(--accent-light);
-  background: rgba(255,255,255,0.03);
-}
-
-/* ===== Article Cards ===== */
-.articles-area {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.art-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 28px 32px;
-  transition: all var(--ease);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  position: relative;
-  overflow: hidden;
-}
-.art-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent 20%, var(--accent) 50%, transparent 80%);
-  opacity: 0;
-  transition: opacity var(--ease);
-}
-.art-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-  border-color: var(--border-light);
-  background: var(--bg-card-hover);
-}
-.art-card:hover::before { opacity: 0.6; }
-
-.art-header {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.art-chapter {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--accent);
-  background: rgba(255,255,255,0.04);
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
-}
-.art-title {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  color: var(--text-bright);
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.art-body {
-  font-size: 0.9rem;
-  line-height: 1.9;
-  color: var(--text);
-}
-.art-body .art-p {
-  margin-bottom: 10px;
-}
-.art-body .art-h3 {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  color: var(--accent-light);
-  margin: 18px 0 8px;
-  font-weight: 600;
-}
-.art-body .art-h4 {
-  font-size: 0.95rem;
-  color: var(--text-bright);
-  margin: 14px 0 6px;
-  font-weight: 600;
-}
-.art-body .art-h5 {
-  font-size: 0.88rem;
-  color: var(--amber-light);
-  margin: 10px 0 4px;
-  font-weight: 500;
-}
-.art-body strong {
-  color: var(--text-bright);
-  font-weight: 600;
-}
-.art-body .art-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 8px 0 16px;
-}
-.art-body .art-list li {
-  padding: 4px 0 4px 24px;
-  position: relative;
-  margin-bottom: 2px;
-}
-.art-body .art-list li::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 12px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-}
-
-/* ===== Back to top ===== */
-.back-top {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 50;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--ease);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-.back-top:hover {
-  color: var(--amber-light);
-  border-color: rgba(212,160,64,0.4);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-}
-
-/* ===== Footer ===== */
-.footer {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 48px 20px 32px;
-  color: var(--text-dim);
-  font-size: 0.78rem;
-  border-top: 1px solid var(--border);
-  margin-top: 48px;
-}
-.footer a {
-  color: var(--amber);
-  text-decoration: none;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
-  .toc-sidebar {
-    position: static;
-    max-height: none;
-    order: -1;
-  }
-  .art-card {
-    padding: 20px;
-  }
-  .topic-quick-nav {
-    display: none;
-  }
-}
+:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
+.container { max-width:960px; margin:0 auto; padding:0 16px; }
+.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+.top-bar .title { font-size:1.05rem; font-weight:600; }
+.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
+.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
+.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
+.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
+.tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
+.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
+.skeleton-list { list-style:none; padding:0; }
+.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
+.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
+.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
+.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
+.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+.boundary-table tr:nth-child(even) td { background:var(--card); }
+.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
+.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
+.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
+.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
+.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
+.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
+.flip-inner.flipped { transform:rotateY(180deg); }
+.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
+.flip-front { background:var(--card); }
+.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
+.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
+.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
+.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
+.btn-outline:hover { background:var(--accent); color:#fff; }
+.btn-success { background:var(--success); color:#fff; }
+.btn-sm { padding:5px 12px; font-size:.8rem; }
+.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
+.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
+.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
+.q-option:hover { border-color:var(--accent); background:#fff5f5; }
+.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
+.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
+.q-option:disabled { cursor:default; }
+.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
+.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
+.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
+.mindmap { padding:10px 0; }
+.mindmap .node { margin:4px 0 4px 20px; }
+.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
+.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
+.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
+.mindmap .node-title.open::before { transform:rotate(90deg); }
+.mindmap .node-body { display:none; }
+.mindmap .node-body.open { display:block; }
+.inquiry-item { margin-bottom:12px; }
+.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
+.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
+.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
+.inquiry-q.open::after { content:' \25B2'; }
+.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
+.inquiry-a.open { display:block; }
+.case-item { margin-bottom:14px; }
+.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
+.case-title:hover { border-color:var(--accent); background:#fff5f5; }
+.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
+.case-title.open::after { content:' \25B2'; }
+.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
+.case-body.open { display:block; }
+.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.d-scenario { margin-bottom:16px; }
+.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
+.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
+.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
+.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
+.svg-wrap svg { max-width:100%; height:auto; }
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast.show { opacity:1; }
+@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
 </style>
 </head>
 <body>
-
-<div class="room-glow"></div>
-
-<div class="dust-motes">
-  <div class="mote m1"></div>
-  <div class="mote m2"></div>
-  <div class="mote m3"></div>
-  <div class="mote m4"></div>
-  <div class="mote m5"></div>
-  <div class="mote m6"></div>
-  <div class="mote m7"></div>
-  <div class="mote m8"></div>
-  <div class="mote m9"></div>
-  <div class="mote m10"></div>
+<div class="top-bar"><span class="title">🫀 身体的真相</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+<div class="container">
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
+  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
+  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
+  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
+  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
+  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
+  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
+  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
+  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
 </div>
-
-<nav class="nav-bar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-home">🛋️ 科学客厅</a>
-    <span class="nav-sep">›</span>
-    <span class="nav-title">🫀 身体的真相</span>
-    <span class="nav-count">37 篇</span>
-    <div class="topic-quick-nav">
-      <a href="1-宇宙的秩序.html" class="">🌌</a>
-<a href="2-生命的算法.html" class="">🧬</a>
-<a href="3-身体的真相.html" class="active">🫀</a>
-<a href="4-餐桌上的实验室.html" class="">🍽️</a>
-<a href="5-思维的武器.html" class="">🧠</a>
-<a href="6-未来的拼图.html" class="">🤖</a>
-<a href="7-文明的阶梯.html" class="">🏛️</a>
-    </div>
+<div class="tab-panel active" id="panel0">
+  <div class="section-title">核心目标</div>
+  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
+  <div class="section-title">核心概念</div>
+  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
+<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
+<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
+<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
+<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
+<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
+<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
+<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
+<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
+<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
+  <div class="section-title">最小知识集（骨架中的骨架）</div>
+  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
+<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
+<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
+<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
+  <div class="section-title">概念关系图</div>
+  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
+ viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
+<title>G</title>
+<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_legend</title>
+<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
+<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
+</g>
+<!-- root -->
+<g id="node1" class="node">
+<title>root</title>
+<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
+<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">身体的真相——物理定律的层级结构</text>
+</g>
+<!-- qm -->
+<g id="node2" class="node">
+<title>qm</title>
+<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
+<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
+</g>
+<!-- root&#45;&gt;qm -->
+<g id="edge1" class="edge">
+<title>root&#45;&gt;qm</title>
+<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
+<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
+<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
+</g>
+<!-- gr -->
+<g id="node3" class="node">
+<title>gr</title>
+<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
+<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
+</g>
+<!-- root&#45;&gt;gr -->
+<g id="edge2" class="edge">
+<title>root&#45;&gt;gr</title>
+<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
+<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
+<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
+</g>
+<!-- th -->
+<g id="node4" class="node">
+<title>th</title>
+<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
+<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
+</g>
+<!-- root&#45;&gt;th -->
+<g id="edge3" class="edge">
+<title>root&#45;&gt;th</title>
+<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
+<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
+<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
+</g>
+<!-- u -->
+<g id="node5" class="node">
+<title>u</title>
+<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
+<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
+</g>
+<!-- qm&#45;&gt;u -->
+<g id="edge4" class="edge">
+<title>qm&#45;&gt;u</title>
+<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
+<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
+<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
+</g>
+<!-- w -->
+<g id="node6" class="node">
+<title>w</title>
+<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
+<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
+</g>
+<!-- qm&#45;&gt;w -->
+<g id="edge5" class="edge">
+<title>qm&#45;&gt;w</title>
+<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
+<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
+<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
+</g>
+<!-- v -->
+<g id="node7" class="node">
+<title>v</title>
+<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
+<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
+</g>
+<!-- qm&#45;&gt;v -->
+<g id="edge6" class="edge">
+<title>qm&#45;&gt;v</title>
+<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
+<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
+<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
+</g>
+<!-- sy -->
+<g id="node8" class="node">
+<title>sy</title>
+<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
+<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
+</g>
+<!-- qm&#45;&gt;sy -->
+<g id="edge7" class="edge">
+<title>qm&#45;&gt;sy</title>
+<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
+<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
+<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
+</g>
+<!-- st -->
+<g id="node9" class="node">
+<title>st</title>
+<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
+<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
+</g>
+<!-- gr&#45;&gt;st -->
+<g id="edge8" class="edge">
+<title>gr&#45;&gt;st</title>
+<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
+<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
+<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
+</g>
+<!-- bh -->
+<g id="node10" class="node">
+<title>bh</title>
+<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
+<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
+</g>
+<!-- gr&#45;&gt;bh -->
+<g id="edge9" class="edge">
+<title>gr&#45;&gt;bh</title>
+<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
+<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
+<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
+</g>
+<!-- co -->
+<g id="node11" class="node">
+<title>co</title>
+<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
+<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
+</g>
+<!-- gr&#45;&gt;co -->
+<g id="edge10" class="edge">
+<title>gr&#45;&gt;co</title>
+<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
+<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
+<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
+</g>
+<!-- en -->
+<g id="node12" class="node">
+<title>en</title>
+<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
+<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
+</g>
+<!-- th&#45;&gt;en -->
+<g id="edge11" class="edge">
+<title>th&#45;&gt;en</title>
+<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
+<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
+<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
+</g>
+<!-- u&#45;&gt;v -->
+<g id="edge14" class="edge">
+<title>u&#45;&gt;v</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
+<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
+<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
+</g>
+<!-- ob -->
+<g id="node19" class="node">
+<title>ob</title>
+<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
+<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
+</g>
+<!-- w&#45;&gt;ob -->
+<g id="edge20" class="edge">
+<title>w&#45;&gt;ob</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
+<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
+<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
+</g>
+<!-- hr -->
+<g id="node14" class="node">
+<title>hr</title>
+<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
+<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
+<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
+<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
+</g>
+<!-- v&#45;&gt;hr -->
+<g id="edge12" class="edge">
+<title>v&#45;&gt;hr</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
+<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
+<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
+</g>
+<!-- sm -->
+<g id="node16" class="node">
+<title>sm</title>
+<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
+<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
+<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
+<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
+</g>
+<!-- sy&#45;&gt;sm -->
+<g id="edge16" class="edge">
+<title>sy&#45;&gt;sm</title>
+<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
+<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
+<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
+</g>
+<!-- gp -->
+<g id="node15" class="node">
+<title>gp</title>
+<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
+<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
+<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
+<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
+</g>
+<!-- st&#45;&gt;gp -->
+<g id="edge15" class="edge">
+<title>st&#45;&gt;gp</title>
+<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
+<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
+<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
+</g>
+<!-- bh&#45;&gt;hr -->
+<g id="edge13" class="edge">
+<title>bh&#45;&gt;hr</title>
+<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
+<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
+<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
+</g>
+<!-- nu -->
+<g id="node13" class="node">
+<title>nu</title>
+<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
+<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
+</g>
+<!-- en&#45;&gt;nu -->
+<g id="edge18" class="edge">
+<title>en&#45;&gt;nu</title>
+<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
+<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
+<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
+</g>
+<!-- it -->
+<g id="node17" class="node">
+<title>it</title>
+<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
+<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
+<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
+<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
+</g>
+<!-- en&#45;&gt;it -->
+<g id="edge17" class="edge">
+<title>en&#45;&gt;it</title>
+<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
+<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
+<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
+</g>
+<!-- se -->
+<g id="node18" class="node">
+<title>se</title>
+<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
+<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
+<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
+<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
+</g>
+<!-- nu&#45;&gt;se -->
+<g id="edge19" class="edge">
+<title>nu&#45;&gt;se</title>
+<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
+<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
+<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
+</g>
+<!-- hr&#45;&gt;bh -->
+<g id="edge21" class="edge">
+<title>hr&#45;&gt;bh</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
+<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
+<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
+<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
+</g>
+<!-- l1 -->
+<g id="node20" class="node">
+<title>l1</title>
+<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
+<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
+</g>
+<!-- l2 -->
+<g id="node21" class="node">
+<title>l2</title>
+<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
+<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
+</g>
+<!-- l1&#45;&gt;l2 -->
+<!-- l3 -->
+<g id="node22" class="node">
+<title>l3</title>
+<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
+<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
+</g>
+<!-- l2&#45;&gt;l3 -->
+<!-- l4 -->
+<g id="node23" class="node">
+<title>l4</title>
+<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
+<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
+<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
+<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
+</g>
+<!-- l3&#45;&gt;l4 -->
+<!-- l5 -->
+<g id="node24" class="node">
+<title>l5</title>
+<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
+<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
+</g>
+</g>
+</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
+  <div class="section-title">边界知识表</div>
+  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
+<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
+  <div class="section-title">学习路径</div>
+  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
+<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
+<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
+<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
+<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
+  <div class="section-title">学习进度</div>
+  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+</div>
+<div class="tab-panel" id="panel1">
+  <div class="section-title">知识卡片</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
+  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
+  <div class="flip-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
+    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
+    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
   </div>
-</nav>
-
-<header class="page-header">
-  <span class="topic-icon">🫀</span>
-  <h1>身体的真相</h1>
-  <p class="subtitle">The Truth of the Body</p>
-  <div class="header-line"></div>
-  <p class="desc">癌症、免疫、疫苗、药物、辐射——用科学证据回答关于健康与疾病的那些关键问题。</p>
-</header>
-
-<div class="main-layout">
-  <aside class="toc-sidebar">
-    <h4>📋 本专题目录</h4>
-    <ol>
-      <li><a href="#art-1">发胖不一定因为又懒又馋</a></li>
-<li><a href="#art-2">让我们瘦下来的手术和药</a></li>
-<li><a href="#art-3">过敏与过敏药</a></li>
-<li><a href="#art-4">一滴血能检测癌症，是真的吗？</a></li>
-<li><a href="#art-5">杀死癌细胞之化学疗法</a></li>
-<li><a href="#art-6">杀死癌细胞之放射治疗</a></li>
-<li><a href="#art-7">癌症免疫疗法与莆田系医院</a></li>
-<li><a href="#art-8">癌症筛查值得做吗？</a></li>
-<li><a href="#art-9">伤口愈合与组织再生</a></li>
-<li><a href="#art-10">癌症与生命终结</a></li>
-<li><a href="#art-11">微波炉的辐射危险吗？</a></li>
-<li><a href="#art-12">方方面面聊辐射</a></li>
-<li><a href="#art-13">以面食为主的饮食习惯好不好？</a></li>
-<li><a href="#art-14">HPV疫苗管用吗？</a></li>
-<li><a href="#art-15">中国人为什么坐月子？</a></li>
-<li><a href="#art-16">中药在美国批准上市了？</a></li>
-<li><a href="#art-17">为什么人会上火？</a></li>
-<li><a href="#art-18">人为什么会发烧？</a></li>
-<li><a href="#art-19">入耳式耳机对听力有损伤吗？</a></li>
-<li><a href="#art-20">关于心脏移植手术</a></li>
-<li><a href="#art-21">减脂，该不该吃减肥药？</a></li>
-<li><a href="#art-22">初春的禽流感有多危险？</a></li>
-<li><a href="#art-23">新刊：口腔护理是伪需求吗？</a></li>
-<li><a href="#art-24">用什么办法可以解决过敏？</a></li>
-<li><a href="#art-25">电子烟有害处吗？</a></li>
-<li><a href="#art-26">美容保健水真能美容吗？</a></li>
-<li><a href="#art-27">聊聊植发的事儿</a></li>
-<li><a href="#art-28">肚脐眼会暗藏什么健康危机吗？</a></li>
-<li><a href="#art-29">胰岛素传奇</a></li>
-<li><a href="#art-30">脱发怎么办？</a></li>
-<li><a href="#art-31">请把这10条健康问答，转给你最关心的人</a></li>
-<li><a href="#art-32">防蓝光眼镜有必要买吗？</a></li>
-<li><a href="#art-33">夏天来了，怎么防蚊？</a></li>
-<li><a href="#art-34">科技可以用在找男友上吗？</a></li>
-<li><a href="#art-35">专题丨5个知识点，弄懂减肥这件事儿</a></li>
-<li><a href="#art-36">专题丨关于癌症你该知道的事儿</a></li>
-<li><a href="#art-37">关于发烧、手脚冰凉和上火的清单</a></li>
-    </ol>
-  </aside>
-
-  <main class="articles-area">
-    
-    <article class="art-card" id="art-1">
-      <div class="art-header">
-        <span class="art-chapter">Ch.77</span>
-        <h3 class="art-title">发胖不一定因为又懒又馋</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">体脂率的N个知识点</p>
-
-<ol class="art-list">
-<li>乔丹巅峰时，据说体脂率只有3%，有人质疑这不可能。其实查询一下NBA的数据网站就能发现绝大多数运动员的体脂率都在4%-8%之内，也有个别球员低于4%，所以乔丹那个数值完全有可能。通常，专业健身运动员的体脂率普遍低于5%，而普通人很少有低于10%的，一般到了30%就已经挺胖的了。</li>
-</ol>
-
-<ol class="art-list">
-<li>测试体脂率的方法很多，其中水下称重法是最可靠的，它的原理是利用脂肪和非脂肪组织的不同密度来计算出脂肪的含量。在水下称重时，需要测试肺活量，还需要专业人员指导排空肺部的空气，测量时用的水环境要是专用水池或纯净水，反正要求比较多，所以测试虽准确，但很不方便。</li>
-</ol>
-
-<ol class="art-list">
-<li>用皮脂钳也可以测量体脂率，只是精度不如水下称重法。皮脂钳测量法是利用人体3个典型部位的脂肪厚度来推算整体脂肪含量，这需要测量者有丰富的经验。测试的时候还比较疼，一旦测试者经验不足，也会让误差会大到没有参考性。</li>
-</ol>
-
-<ol class="art-list">
-<li>电阻法测试体脂率是误差最大的，原理是利用脂肪组织导电率低，其他组织导电率高的特点。市场上买的带体脂率测试的智能秤都是利用电阻法测的，这种秤的测试点的数量不合格，测试要求也做不到，体重计显示的体脂率误差很大。</li>
-</ol>
-
-<ol class="art-list">
-<li>局部脂肪、肌肉、骨骼密度可以使用X射线吸收骨密度仪来测量，生物学上也用它给小白鼠测量全身体脂率，因为它们都很小。</li>
-</ol>
-
-<p class="art-p">喂食低剂量的抗生素对小白鼠体重的影响</p>
-
-<ol class="art-list">
-<li>低剂量抗生素喂养的小白鼠比没有喂抗身素的小白鼠脂肪含量高了15%。</li>
-</ol>
-
-<ol class="art-list">
-<li>无论喂哪类抗生素都会让小鼠变胖。</li>
-</ol>
-
-<ol class="art-list">
-<li>抗生素喂得越早，小鼠之后就越胖。</li>
-</ol>
-
-<ol class="art-list">
-<li>抗生素能加快小鼠骨骼的生长。</li>
-</ol>
-
-<ol class="art-list">
-<li>服用抗生素的小鼠肠道内细菌会分泌更多的脂肪酸，这是导致它们变胖的主要原因。</li>
-</ol>
-
-<p class="art-p">解读生物学研究的思路</p>
-
-<ol class="art-list">
-<li>生物学研究中大都出现的是相关性结论，而A与B即便高度相关也不能等同于A和B有因果关系，因果关系的确立还需要更多确凿证据。</li>
-</ol>
-
-<ol class="art-list">
-<li>涉及人体影响的结论很少有确凿的证据，因为很难给人做实验，条件难控制，伦理审核也难通过。</li>
-</ol>
-
-<ol class="art-list">
-<li>生物研究中类似A与B的相关性的结论更适合参考，不适合全信。</li>
-</ol>
-
-<p class="art-p">服用低剂量抗生素时间长短不同有什么影响</p>
-
-<ol class="art-list">
-<li>连续服用4周、8周、28周抗生素的小鼠体重增加的程度相似，也就是说早期接触了抗生素，就会让小鼠体重增加，不论后来时间长短。</li>
-</ol>
-
-<ol class="art-list">
-<li>如果模仿儿童早年生病服用抗生素的节奏，间歇式给低剂量抗生素，则不会发胖，反而骨骼和肌肉会长得更大。</li>
-</ol>
-
-<ol class="art-list">
-<li>联合用药会造成肠道内细菌的种类再也无法恢复到用药前的样子。</li>
-</ol>
-
-<p class="art-p">人服用抗生素的统计证据</p>
-
-<ol class="art-list">
-<li>在一个有14500名孕妇的样本中，做了长达15年的统计，发现有1/3的孩子在6个月前使用过抗生素，有3/4的孩子在2岁前使用过抗生素，越早接触抗生素的孩子之后越胖。</li>
-</ol>
-
-<ol class="art-list">
-<li>间歇性给药的方式虽然没有观察到肥胖的问题，但和I型糖尿病高发密切相关。</li>
-</ol>
-
-<ol class="art-list">
-<li>I型糖尿病是一种免疫类疾病，淋巴T细胞攻击胰腺细胞，儿童糖尿病通常从3岁就开始发生了，到6岁时胰腺细胞已所剩无几，所以糖尿病症状就会出现。</li>
-</ol>
-
-<p class="art-p">抗菌皂被禁售</p>
-
-<ol class="art-list">
-<li>美国食品药品管理局在9月16日给抗菌皂下禁售令，因为它没有抗菌功能的证据，而且很不安全。</li>
-</ol>
-
-<ol class="art-list">
-<li>使用抗菌皂洗手并没有起到抗菌作用，甚至和只用水洗没有区别。</li>
-</ol>
-
-<ol class="art-list">
-<li>抗菌皂的成分大都含有三氯生、三氯卡班，对身体有害。典型产品有：舒肤佳，婴儿滴露，蓝月亮，贝亲。</li>
-</ol>
-
-<ol class="art-list">
-<li>抗菌皂会破坏皮肤表面的皮脂保护层，把更多细菌引入体内，还会引起免疫调节失衡。</li>
-</ol>
-
-<ol class="art-list">
-<li>非抗菌皂的特征是：包装不含抗菌字眼，突出丝滑柔顺，清凉润肤等字眼。</li>
-</ol>
-
-<p class="art-p">点右下角红包分享，让你的朋友也知道体脂率是怎么回事。</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-2">
-      <div class="art-header">
-        <span class="art-chapter">Ch.77</span>
-        <h3 class="art-title">让我们瘦下来的手术和药</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">身体质量指数（BMI）</p>
-
-<ol class="art-list">
-<li>肥胖被定义成一种疾病是近年来才发生的事儿。1997年世界卫生组织承认肥胖是一种疾病，诊断的指标就是身体质量指数（BMI），这个指数的计算公式是体重除以身高的平方，计算下来的结果超过25算超重，超过30算肥胖症。</li>
-</ol>
-
-<ol class="art-list">
-<li>在美国，有2/3的人BMI指数超过25，1/3的人BMI指数超过30。但这个划分超重和肥胖症的指数用在亚洲需要适当缩小到24和28，因为亚洲人体内脂肪比例多一些。</li>
-</ol>
-
-<p class="art-p">体育锻炼对减重效果微弱</p>
-
-<ol class="art-list">
-<li>如果一个人每天通过运动燃烧450千卡热量，持续一个月，就相当于燃烧了1.5公斤脂肪产生的热量。这个数听起来不少，但实际这种情况是不可能发生的。因为450千卡的运动量相当于商业楼宇30层楼来回上下2趟，而且运动燃烧的热量不一定都来自脂肪，蛋白质和糖原也会提供能量。</li>
-</ol>
-
-<ol class="art-list">
-<li>为了减肥，平白无故每天增加450千卡热量的运动，绝大部分人的食量也会增加，所以体育锻炼对减肥的效果十分微弱。但不要低估体育运动对身体其他各方面的好处。</li>
-</ol>
-
-<p class="art-p">消耗人体能量的几种方式</p>
-
-<ol class="art-list">
-<li>基础代谢负责维持人体体温、血液循环和细胞的正常工作，这部分能耗24小时每时每刻都在进行，它占据每日能耗60%以上。</li>
-</ol>
-
-<ol class="art-list">
-<li>消化也需要能耗，它负责食物的物理研磨、化学变化，以及最后被人体吸收的过程。整个消化耗能大约占人每日总能量的10%</li>
-</ol>
-
-<ol class="art-list">
-<li>日常中有意识的活动，体育锻炼、上下班走路、站立、开会、说话、玩手机等等都会耗能，这个能量占每日总能量消耗的20%-30%，主要还要看锻炼强度的高低。</li>
-</ol>
-
-<p class="art-p">手术减肥是怎么回事</p>
-
-<ol class="art-list">
-<li>胃旁路手术是把胃的入口和小肠末端连接，让食物不经过消化和吸收直接排出体外。还有些手术在胃里放一个口袋状的东西，往里面注入液体，造成人为的饱腹感，可以减少食物摄入量，达到减肥的目的。</li>
-</ol>
-
-<ol class="art-list">
-<li>手术减肥只适用于严重肥胖，在美国BMI指数超过40，或者35的才可以动手术。手术也有一些风险，包含感染，术后恢复，老龄后营养吸收困难等问题。</li>
-</ol>
-
-<ol class="art-list">
-<li>总的来说，手术减肥效果十分明显，一周大约能减少1公斤，大部分人在1年内可以持续减重30公斤以上，医药费大概是2万美元左右，其中的一半可以通过医保报销。</li>
-</ol>
-
-<p class="art-p">瘦素的发现</p>
-
-<ol class="art-list">
-<li>在诱导基因突变的实验过程中人们发现了两类超胖的小鼠，肥胖鼠和糖尿病鼠。在深入研究之后，人们发现了瘦素其实诞生于脂肪组织。肥胖鼠因为身体内缺少瘦素，所以他们吃个不停。糖尿病鼠是体内瘦素非常多，但受体不足，所以对瘦素充耳不闻。</li>
-</ol>
-
-<ol class="art-list">
-<li>1994年瘦素和瘦素受体被找到，化学式确定之后被安进公司用2000万美元买下。后来，安进公司研发的减肥药相当成功。</li>
-</ol>
-
-<p class="art-p">瘦素减肥药为什么对大多数胖子没作用？</p>
-
-<ol class="art-list">
-<li>在美国食品药品管理局的一期临床试验上，瘦素的安全性通过认证，初步效果还发现对正常人也有减肥效果。</li>
-</ol>
-
-<ol class="art-list">
-<li>但是2年后，瘦素的二期临床试验结果表明，瘦素对人体初期有减重效果，但随后反弹严重，而且无法对严重肥胖症的并发症有缓解。后续的研究中还发现瘦素只对基因中就缺少瘦素分泌的胖子有效果，但这种人到目前全球只确认了十多个。</li>
-</ol>
-
-<p class="art-p">保健品市场乱象</p>
-
-<ol class="art-list">
-<li>不少保健品的灵感都来源于失败的美国食品药品管理局对瘦素的一期临床试验。</li>
-</ol>
-
-<ol class="art-list">
-<li>现在瘦素也被保健品拿来作为减肥保健品，宣传中还声称是植物提取，可口服。但其实瘦素只在脂肪组织中存在，植物中是没有脂肪组织的。而且瘦素是蛋白质，口服后会被消化分解成氨基酸，原来的瘦素蛋白可以起到的作用将会荡然无存，所以瘦素的使用在临床试验中是通过静脉注射的。现在市场上的保健品需要的不是效果，而是噱头。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-3">
-      <div class="art-header">
-        <span class="art-chapter">Ch.77</span>
-        <h3 class="art-title">过敏与过敏药</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本期你将听到↓↓↓</p>
-
-<p class="art-p">免疫系统怎么不胡乱攻击自身细胞？</p>
-
-<p class="art-p">过敏是怎么回事？</p>
-
-<p class="art-p">输血为什么不发生排异反应？</p>
-
-<p class="art-p">本期知识清单↓↓↓</p>
-
-<p class="art-p">1</p>
-
-<p class="art-p">康熙皇帝即位与天花有关</p>
-
-<ol class="art-list">
-<li>1661年顺治感染了天花，在去世之前他曾经向传教士汤若望咨询过立储的事情。（汤若望是出色的天主教传教士，在罗马学院上学时曾经是伽利略的学生。）</li>
-</ol>
-
-<ol class="art-list">
-<li>顺治的大儿子出生89天就去世了，二儿子只比康熙大一岁，但到了9岁也没有生过天花，康熙因为在2岁时曾染天花并且恢复了，所以最终顺治为了稳妥，让康熙继位。</li>
-</ol>
-
-<p class="art-p">2</p>
-
-<p class="art-p">天花已经在地球上消失</p>
-
-<ol class="art-list">
-<li>最后一个天花病例是1978年出现的。天花病毒只在人类中存在，所以WHO（世界卫生组织）在1980年宣布人类已经完全消灭了天花病毒。</li>
-</ol>
-
-<ol class="art-list">
-<li>人类第一次对抗天花的有效办法是接种牛痘。牛感染了牛痘病毒后会在乳头上长脓疱，挤奶工在挤奶的时候会挤破脓疱感染牛痘病毒。牛痘病毒对人类几乎没有致病性，但凡是被牛痘病毒感染的人都不会在天花肆虐中被感染，于是牛痘接种的方法就这样被发现了。</li>
-</ol>
-
-<ol class="art-list">
-<li>牛痘病毒和天花病毒不是一种，它们只是属于同一科的病毒，带有同一种抗原。</li>
-</ol>
-
-<ol class="art-list">
-<li>牛的词根Vacca和疫苗Vaccine是同一来源。牛痘病毒后来被用作载体，艾滋病病毒疫苗和流感病毒疫苗就是用牛痘病毒嫁接了抗原蛋白质的DNA序列得到的。</li>
-</ol>
-
-<ol class="art-list">
-<li>现在全世界还存有400株天花病毒，美国有300株，俄罗斯有100株。因为在八十年代传出苏联的天花病毒被盗，所以美国为了以防万一，制造了1.5亿支疫苗。</li>
-</ol>
-
-<p class="art-p">3</p>
-
-<p class="art-p">免疫系统怎么不胡乱攻击自身细胞？</p>
-
-<ol class="art-list">
-<li>在体细胞上，每个生物个体都存在“主要组织相容复合体”，简称MHC。它是一个系列的蛋白质，个体与个体之间的MHC都不同，这是细胞的良民证，拥有它就可以免受杀手T细胞的追杀。</li>
-</ol>
-
-<ol class="art-list">
-<li>MHC蛋白质还可以粘附在任何异常的蛋白质上，黏住后就会改变形状，变成杀手T细胞认识的样子，于是异常的蛋白质也可以通过这样的方式被清除。</li>
-</ol>
-
-<ol class="art-list">
-<li>亲属间的MHC差异比陌生人小，所以亲属间器官移植成功的概率高，但除了同卵双胞胎，其他亲属也只是相近，达不到一致，仍然需要配合抑制免疫的药终身服用。</li>
-</ol>
-
-<p class="art-p">4</p>
-
-<p class="art-p">输血为什么不发生排异反应？</p>
-
-<ol class="art-list">
-<li>输血时输的血并不是全血，而是浓缩后的红细胞，不包含白细胞和血小板等其他物质，只要红细胞匹配就不会有问题。</li>
-</ol>
-
-<ol class="art-list">
-<li>就算是输入全血，也因为红细胞占比超过98%，只有极少量的白细胞被输入，所以并不会引发很严重的反应。</li>
-</ol>
-
-<ol class="art-list">
-<li>输血为什么要看血型？因为A型血有A抗原和抗B抗体；B型血有B抗原和抗A抗体；AB型血有A抗原和B抗原，不带任何抗体；O型血不带任何抗原，带抗B抗体和抗A抗体；不能让A抗原接触抗A抗原，也不能让B抗原接触抗B抗原，所以要看血型。</li>
-</ol>
-
-<ol class="art-list">
-<li>世界上99.7%的人的血是Rh阳性，所以Rh阴性的人输血非常难配。</li>
-</ol>
-
-<p class="art-p">5</p>
-
-<p class="art-p">双胞胎也会互相吞噬</p>
-
-<ol class="art-list">
-<li>一对夫妻通过试管婴儿得到了一个健康宝宝，结果发现血型对不上。二人怀疑是检查结果有误，第二次DNA检测给出了更详细的结果：小孩应该是叔叔的。但爸爸是独生子，没有兄弟。夫妻俩继续在两个不同机构复查了2次，结论都相同：是叔叔的孩子。</li>
-</ol>
-
-<ol class="art-list">
-<li>最终某个医生想起曾经在论文中见过这样奇怪的事情，那就是“嵌合体”胚胎。也就是30年前爸爸并不是独生子，而是双胞胎中的一个，但受精卵发育过程中爸爸竟然把兄弟吞噬掉了，两个胚胎合成了一个。这种情况下被吞噬一方会发育成某一个器官。在这次事件中，爸爸的兄弟最终发育成了生殖器。</li>
-</ol>
-
-<ol class="art-list">
-<li>医生后来采集了爸爸精子、口腔上皮细胞、皮肤细胞，发现确实不是一个人的，精子中的DNA是那个被吞噬掉的兄弟的DNA，和宝宝的DNA相符，爸爸身上其他细胞是爸爸自己的。</li>
-</ol>
-
-<p class="art-p">6</p>
-
-<p class="art-p">免疫力过分的强会怎样？</p>
-
-<ol class="art-list">
-<li>免疫工作的强度突然提高的后果就是B细胞开始胡乱释放抗体，杀手T细胞开始胡乱杀死正常体细胞。</li>
-</ol>
-
-<ol class="art-list">
-<li>红斑狼疮就是一种非常凶险的免疫力过分提高后的疾病，这种病人最初可能是在皮肤上有一些创伤，之后会在大部分内脏中都出现免疫系统攻击正常细胞的情况，肾、心脏、肝、脑、肺都会逐渐受损，直到衰竭。</li>
-</ol>
-
-<ol class="art-list">
-<li>重症肌无力也是免疫系统攻击肌肉细胞上的神经，最终让肌肉无法收缩的疾病。风湿性关节炎，就是免疫系统攻击关节部位的结缔组织，造成类似发炎一样的现象。Ⅰ型糖尿病也是免疫系统攻击胰岛细胞造成的。</li>
-</ol>
-
-<p class="art-p">7</p>
-
-<p class="art-p">过敏是怎么回事？</p>
-
-<ol class="art-list">
-<li>哮喘和荨麻疹有一个共同的病因：不明物质刺激了肥大细胞，释放了组织胺，导致血管壁通透性增加，组织液外溢，皮肤、粘膜隆起，隆起发生在气管上就是哮喘，隆起发生在皮肤上就是严重的瘙痒，鼻粘膜隆起就是过敏性鼻炎。如果发生在脑部血管，就是组织液外溢刺激到硬脑膜上的神经造成偏头疼。一些过敏体质的人容易头疼就是这个道理。</li>
-</ol>
-
-<ol class="art-list">
-<li>吃抗组胺药物可以抑制过敏。药物的原理就是通过人为方式设计一种分子，它和组织胺长得很像，会首先和粘膜上的H1受体结合，结合后却不发生过敏反应，点位被占据后就不会在和真正的组胺结合了，过敏的过程就被扼制住了。</li>
-</ol>
-
-<ol class="art-list">
-<li>组织胺是细胞间化学信号的传递物质，所以最初的抗组胺药穿过血脑屏障后也会抑制脑神经的信号传递，最终造成嗜睡的副作用，不过后来的药物已经添加了带电成分，不会再通过血脑屏障了。</li>
-</ol>
-
-<ol class="art-list">
-<li>开瑞坦是先灵葆雅这家美国药企做出来的，效果很好，但专利保护期已过了，仿制药的药效很多不如原研药，尤其在药物溶出特性上和原研药相差比较远。对开瑞坦的仿制药来说，最好在吃饭的时候吃，因为测试中发现仿制药只有在胃酸环境下和原研药溶出曲线相似。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-4">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">一滴血能检测癌症，是真的吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">华华：</p>
-<p class="art-p">最近出了一个新闻说一滴血就能检查出来是不是患了癌症，卓老板说说这可靠吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：夏天来了，怎么防蚊？”。</p>
-
-
-<p class="art-p">有好几个听众最近都在问，一滴血可以检测癌症了，是不是真的？</p>
-
-<p class="art-p">我先是建议大家以后想弄清一个新闻怎么回事，或者想判断真实性的时候，自己搜搜，只需要找出3篇不同来源的报道，看完就基本有数了。但可能真的很少人能做到这一点。那针对这个问题，直接回答呢就是：</p>
-
-<p class="art-p">这个技术确实一直在研究，但可靠性从前不太好，现在逐渐提高了，到前不久获得了欧盟的准入许可，所以一下被媒体抓住亮点，大肆渲染，把一种辅助判断手段吹上了大天，说成可以检测癌症了。</p>
-
-<p class="art-p">具体来说呢，检测是不是有癌症，必须有好几种证据结合，最可靠的就是在B超或者X光中看到肿瘤组织，对怀疑是癌症的部位取一些组织样本做分析，这样确诊。</p>
-
-<p class="art-p">而新闻里说的那种检测方法不是这样的，它属于肿瘤标志物检查。</p>
-
-<p class="art-p">这是依据一个什么原理呢？就是癌细胞最终可以发展成癌症需要进化出很多能力才可以，比如细胞可以突破边界继续生长的能力，每次分裂端粒可以自己修补上一截，分泌一些刺激血管生长的因子，等等。经过十几年时间终于长成，它在这么久的时间里虽然跟大部分细胞长得都很一样，但因为要展现这些异常能力，它们新陈代谢时分泌出的东西多少和正常细胞还是有差别的。</p>
-
-<p class="art-p">那么从前呢，是针对不同的癌症，有不同分泌物，这种物质含量非常低，但它们和癌症的存在有密切相关性，比如乳腺癌的标志物是ER和HER-2，直肠癌是EGFR和KRAS，白血病是CD20和CD30TPMT，肺癌是ALK，等等。</p>
-
-<p class="art-p">有时候不同癌症的标志物是有重叠的，它们浓度达到一定值以后就和肿瘤的存在有高度相关性了。注意，是高度相关性。就像我们一次体检结果显示转氨酶偏高，那可能是因为头天晚上你熬夜，或者酗酒来着，并不能因此就判断你有肝炎。</p>
-
-<p class="art-p">所以癌症也是这样，通常诊断癌症的做法是先在医学影像里看到肿瘤，然后再做一个肿瘤标志物的检测，如果同时显示是恶性肿瘤，可能还要再取一些活体组织分析，最后下判断。仅凭一个肿瘤标志物是不能下诊断的，这只是一个帮助医生判断的辅助手段。不光是这次罗永章团队做的90α热休克蛋白标志物是这样，刚刚念到的其他标志物检查也一样只是辅助手段。</p>
-
-<p class="art-p">有这样一组数据，比如传统的肺癌的肿瘤标志物CEA，这个检测能到多少呢？如果这人真的是肺癌，大约有54%的概率可以查出这个标志物。从反面说，如果标志物CEA被检测出阳性了，那这人真的是肺癌的概率是66%。肝癌的标志物是AFP，如果这人真的是肝癌，那有53%的人可以查出AFP阳性，在所有AFP阳性的人里，有74%的人是真正的肝癌。这就是传统肿瘤标志物检测的情况，所以必须要配合传统诊断才行，否则误诊漏诊一大片的。</p>
-
-<p class="art-p">所以媒体宣传中的那些一滴血检测出癌症，全都是夸大了事实，多少有一些误导。</p>
-
-<p class="art-p">让人以为从此以后凭一滴血就可以知道是不是患了十几种高发癌症中的一种，那是不可能的，今后这项检测依然还是在有B超观察出肿瘤后配合使用的检测技术。</p>
-
-<p class="art-p">新闻中报道的罗永章团队，他们找到了一种新的标志物，叫热休克蛋白90α，检测时不但需要的血液量少，而且灵敏度高，比如刚刚咱们举的那些百分比数字到了90α这里，大都可以提高百分之十几到百分之二十几。尤其是对肝癌，两个数字都超过90%了，所以今后肝癌患者在手术和治疗之后，每个疗程后效果怎么样，可以抽血化验90α，又省事，准确率又高，不用再每次做CT了。这就是它的价值所在。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-5">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">杀死癌细胞之化学疗法</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">癌症治疗：从染料里找药物</p>
-
-<ol class="art-list">
-<li>1850年英国纺织业崛起，当时出现了一种很不平衡的现象，就是布料的生产技术太棒了，但是给布料染色的技术太差了。那时候的染色剂都是从容易腐烂的带颜色的植物中提取的，然后还要经过很多步骤才能给布料染色完成，这种方法效率超低。</li>
-</ol>
-
-<ol class="art-list">
-<li>染色技术在苯胺紫被发现后突飞猛进。苯胺紫是一种容易带很多侧链的物质，除了紫色，还可以轻松改成红色和绿色，并且价格便宜，颜色稳定。化学工业染色剂的发展促进了化学的发展，德国也因此成为欧洲化学的第一名。</li>
-</ol>
-
-<ol class="art-list">
-<li>苯胺紫给分歧杆菌染色时发现只能让细胞里的一部分染色，这是人们第一次发现化学试剂对细胞的“特异性”，如果这种特异性可以起到杀灭作用，也许可以用在治疗疾病上。</li>
-</ol>
-
-<p class="art-p">癌症治疗：从化学武器中找灵感</p>
-
-<ol class="art-list">
-<li>芥子气曾经广泛用于一战，不少幸存者在一两年后出现了严重的贫血症，白细胞几乎找不到，极容易感染。后来人们发现芥子气对杀灭白细胞效果非常明显，这种有害的特性用在癌症上，反而可以杀灭白血病患者中血液里的癌细胞。</li>
-</ol>
-
-<ol class="art-list">
-<li>受到芥子气的启发，更多化学物质投入到癌症药物的研发中，癌症化学疗法国民服务中心的研究机构，就试验了83000种化学试剂，11.5万发酵产品和17000种植物的提取物。这些试验中，一共有1000万只小鼠为此做了牺牲。</li>
-</ol>
-
-<p class="art-p">癌症治疗：引入双盲实验</p>
-
-<ol class="art-list">
-<li>药物的双盲实验是一种过程复杂、耗时久的验证，但这是确认疗效唯一有效的方法。</li>
-</ol>
-
-<ol class="art-list">
-<li>双盲指的是，对医生是“盲”的，他不知道谁吃了药，谁吃了安慰剂；对病人也是“盲”的，他不知道自己吃的是药还是安慰剂。</li>
-</ol>
-
-<ol class="art-list">
-<li>双盲实验可以滤掉医生和病人主观偏见、心理暗示造成的对药效的影响。</li>
-</ol>
-
-<ol class="art-list">
-<li>针对癌症的第一次大规模双盲实验，是对联合用药的统计。在双盲实验后可以得到定量的结果：单独用药有效率17%，联合用药的有效率45%。</li>
-</ol>
-
-<p class="art-p">癌症治疗的新途径：参加临床实验</p>
-
-<ol class="art-list">
-<li>癌症患者去美国参加临床实验，需要专业知识，选中项目后提交简历，并签署知情同意书，临床实验只免药费，化验费和住院费依然收费。</li>
-</ol>
-
-<ol class="art-list">
-<li>美国食品药品管理局对知情同意书的审核很严格，如果判断参加者语言能力不够，会寄送中文版本，签名后会把中文版本翻译回英文，判断和原版英文是否一致，一致才能继续邀请。</li>
-</ol>
-
-<ol class="art-list">
-<li>如果去美国接受正规癌症治疗也可以，费用200万保证金，多退少补。</li>
-</ol>
-
-<ol class="art-list">
-<li>在中国也可以参加药物临床试验，这些药物的安全性和有效性都非常好，因为这些药物都已经通过美国食品药品管理局审核，只不过需要在中国再走一遍过场。</li>
-</ol>
-
-<ol class="art-list">
-<li>参加临床实验也有风险，其中最大的一个风险就是是被分到对照组，这样就不会吃到真正的药。</li>
-</ol>
-
-<p class="art-p">化疗史上第一批治愈的人</p>
-
-<ol class="art-list">
-<li>美国癌症研究所里有一位逃兵役的中国助理医生李敏求，他尝试给一些看似“痊愈”的病人继续大剂量使用化学毒素，希望把绒毛促性腺素完全降到零。这种激素在胎盘癌病人中含量很高，即便接受了放疗和化疗，激素含量大都也只是水平很低，不会完全消失。</li>
-</ol>
-
-<ol class="art-list">
-<li>李敏求给这批貌似痊愈的病人大剂量注射毒素后，被研究所领知道，因为违反了医学伦理道德：擅自拿人体做实验，于是立即被开除。</li>
-</ol>
-
-<ol class="art-list">
-<li>那些看似痊愈的病人出院几个月后，有一大批又回来了，因为他们的癌症复发了，唯独经历过李敏求超剂量治疗的那几位患者，终生没有服药也没有复发。这就是最早一批通过化疗完全治愈的癌症患者，也说明李敏求被冤枉了。</li>
-</ol>
-
-<ol class="art-list">
-<li>使用VAMP疗法给白血病儿童治疗，绝大部分儿童血液和骨髓中的癌细胞会完全消失，但这些儿童中有95%都出现了癌细胞转移，甚至转移到了神经系统中。这是因为有血脑屏障的存在，使化疗药物无法通过。只有5%的儿童可以幸免于难，彻底治愈。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-6">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">杀死癌细胞之放射治疗</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">所有动物都会得癌症</p>
-
-<ol class="art-list">
-<li>多细胞动物的发育会导致不同细胞出现分化，那么多的细胞分裂、死亡就必然会出现癌细胞，但绝大多数癌细胞会被体内免疫系统杀灭，只有少数会发展成癌症。</li>
-</ol>
-
-<ol class="art-list">
-<li>癌症大都从40岁后出现，因为人体是一个十几万年前设计的机器，这部机器的设计寿命是30年，虽然不一定过了30年就报废，但起码我们还没进化出一副清除30岁以后体内癌细胞的机制。</li>
-</ol>
-
-<ol class="art-list">
-<li>癌症的根源是我们的进化，现代生活下的环境、食物、压力只是癌症高发的诱因。</li>
-</ol>
-
-<p class="art-p">最初治疗癌症，越切越多</p>
-
-<ol class="art-list">
-<li>二战前女性最主要的癌症是乳腺癌，男性最主要的癌症是胃癌，但后来变成了肺癌，这主要是因为吸烟造成的。</li>
-</ol>
-
-<ol class="art-list">
-<li>最初治疗癌症的手段是外科手术，1840年左右就实施过肿瘤切除手术，那个年代离抗生素大量使用还差100年，外科手术只有麻醉和消毒术。</li>
-</ol>
-
-<ol class="art-list">
-<li>最初手术只切掉病变部分的组织，但是很容易复发，后来为了治疗乳腺癌就越切越多。到了1907年乳腺癌患者手术后把整个乳房、锁骨，胸小肌、胸大肌、腋窝锁骨窝的淋巴都切除。</li>
-</ol>
-
-<ol class="art-list">
-<li>接受大面积切除的病人就算治好了乳腺癌，也留下了严重的身体残疾。质疑声不断，但医生们依然采用这种激进的方法。</li>
-</ol>
-
-<p class="art-p">X射线在物理学上的进展推动了癌症治疗</p>
-
-<ol class="art-list">
-<li>X射线在1896年发现，特斯拉虽然两次错过了发现它的机会，与诺贝尔奖失之交臂，但他最早注意到它对人体的危害，并写了论文发表了。</li>
-</ol>
-
-<ol class="art-list">
-<li>就在当年芝加哥医学院的一名学生格拉注意到X射线与人体危害的论文，认为X射线有杀灭细胞的作用，于是找来一名晚期乳腺癌患者做了人类第一次放射治疗。</li>
-</ol>
-
-<ol class="art-list">
-<li>虽然第一次试验很粗糙，效果也非常有限，但这启发了无数医院和公司。</li>
-</ol>
-
-<p class="art-p">居里夫人推动了γ射线治疗</p>
-
-<ol class="art-list">
-<li>居里夫妇发现镭，提纯镭的故事为许多人所知，但这个科研项目对他们的副作用并没有太多人注意。皮埃尔居里因为胸前口袋放了几十毫克的镭，在前胸就出现了永久的疤痕。居里夫人中年后患了白血病。</li>
-</ol>
-
-<ol class="art-list">
-<li>第一个做放疗的格拉比因为一辈子研究放射疗法，他的手指在中年后接连被截肢，脸上也长了肿瘤，被切除的面目全非，最后在1960年死于癌症扩散。</li>
-</ol>
-
-<ol class="art-list">
-<li>X光、γ射线、FM广播信号、WIFI信号、可见光、紫外光、红外光都是电磁波，唯一的不同是他们的波长。每一个都有自己的波长范围，并不是一个固定波长。</li>
-</ol>
-
-<ol class="art-list">
-<li>最弱的X光是最强的可见光强度的四十多倍。最弱的γ射线强度和最强X光强度相同，都是最强可见光的四千多倍。而让居里夫妇受伤的γ射线是最弱γ射线强度的150倍。</li>
-</ol>
-
-<ol class="art-list">
-<li>因为比X射线能量高，γ射线，甚至中子束、线性加速器等设备也用在了放射疗法中，原本这些东西都是粒子物理的实验设施。</li>
-</ol>
-
-<ol class="art-list">
-<li>放射疗法之所以有效，是因为正常细胞比肿瘤细胞的DNA的修复能力更强，肿瘤细胞对DNA的损伤更敏感，所以采用间歇性的放射疗法，健康细胞恢复更快。连续治疗下肿瘤细胞就会被更多的杀灭。</li>
-</ol>
-
-<p class="art-p">质子放疗、重离子放疗</p>
-
-<ol class="art-list">
-<li>这是目前放疗中最先进的方法，也是最昂贵的。在日本最便宜的一个疗程20次放疗20万元人民币，上海已经建成中国第一座质子疗法设备，一个疗程接近28万人民币。设备本身10-15亿人民币，年维护费用一千多万。</li>
-</ol>
-
-<ol class="art-list">
-<li>质子疗法的优势在于他打入身体后只有指定深处的组织会受到最大的能量，沿途被杀灭的无辜正常细胞比较少。</li>
-</ol>
-
-<ol class="art-list">
-<li>质子疗法比传统放疗对中度、高危病人的效果更好，他还会配合其他疗法，不是单独的治疗方案。</li>
-</ol>
-
-<ol class="art-list">
-<li>质子疗法之所以能出现是因为1940年后量子力学的成熟，人们可以计算出质子射入人体后出现的各种情况。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-7">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">癌症免疫疗法与莆田系医院</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">免疫疗法种类繁多，但不一定都有效</p>
-
-<ol class="art-list">
-<li>免疫疗法包括LAK、CIK、CIK-DC、CAR-T、PD-1、CTLA-4等等，其中前三个是被淘汰了的，后三个是经过FDA（美国食品药品管理局）批准比较有前景的疗法和药物。</li>
-</ol>
-
-<ol class="art-list">
-<li>CIK和CIK-DC的治疗方式是抽血，利用诱导物质刺激病人血液中的淋巴细胞，在体外培养一段时间，再把增多的激活了的淋巴细胞重新注射回病人体内，这种方法属于无差别杀伤，身体受损会很严重。</li>
-</ol>
-
-<p class="art-p">CIK-DC疗法曾经有一段和诺贝尔奖有关的故事</p>
-
-<ol class="art-list">
-<li>2011年诺贝尔生理学医学奖得主拉尔夫·斯坦曼从1973年开始研究DC（树突状细胞），在2011年9月30日去世，而当时的诺贝尔奖是10月3日公布的，由于不知道去世的消息，奖项宣布后才知道获奖人已经去世，但诺奖委员会还是把奖颁给了他。</li>
-</ol>
-
-<ol class="art-list">
-<li>斯坦曼在2007年被诊断为胰腺癌晚期，胰腺癌的分类有几十种，但其中只有1、2种治愈率较高，其他分类几乎不可能治愈。一年生存率4%，五年生存率几乎为零，斯坦曼利用自己的身体做实验，使生命延长了4.5年，成为业内的奇迹。但是因为斯坦曼的人体尝试没有对照组，所以谈不上疗效，只是个案，不能因此说明DC（树突状细胞）对治疗癌症有疗效。</li>
-</ol>
-
-<p class="art-p">出现在中国的无效免疫疗法</p>
-
-<ol class="art-list">
-<li>魏则西采用的CIK-DC疗法在PubMed论文库查一共73篇论文，其中71篇的作者是中国人。</li>
-</ol>
-
-<ol class="art-list">
-<li>在临床试验数据库查CIK-DC，招募中、试验中、完成的一共登记了40个实验，其中35个在中国，5个在泰国，医学发达的国家对CIK的研究和试验几乎没有。</li>
-</ol>
-
-<ol class="art-list">
-<li>CIK相关疗法虽然可以临时减少肿瘤的严重程度，但对1年生存率、5年生存率几乎没有提升。</li>
-</ol>
-
-<p class="art-p">几种有效的癌症免疫疗法</p>
-
-<ol class="art-list">
-<li>魏则西事件中，魏则西患的滑膜肉瘤在国际上有一种免疫疗法TCR-T，这是一种经过FDA（美国食品药品管理局）批准的治疗方法，对已经到晚期的滑膜肉瘤患者的治疗效果能达到3年生存率38%，5年生存率14%。但因为这种方法需要高水平的医学知识和设备，而中国没有达到这个标准，所以TCR-T在中国不存在。</li>
-</ol>
-
-<ol class="art-list">
-<li>还有一种免疫疗法的思路是针对癌细胞削弱免疫细胞这个功能的，专业名词叫：免疫检查点抑制。免疫细胞自己也存在抑制自己杀伤行为的能力，它自己会释放一种蛋白质防止自己杀红了眼，癌细胞在进化过程中也出现了这种功能，很多肿瘤都可以分泌此种蛋白质抑制免疫系统。</li>
-</ol>
-
-<ol class="art-list">
-<li>如果用一种药把抑制免疫系统的过程终止或者削弱，肿瘤就会好转，这个新思路现在已经得到了验证，有4款免疫检查点抑制药物通过FDA（美国食品药品管理局）审核已经上市。主要分两类：PD-1和CTLA-4。他们和CAR-T一起可以算作是有效的免疫疗法。</li>
-</ol>
-
-<p class="art-p">莆田系医院和魏则西事件</p>
-
-<ol class="art-list">
-<li>魏则西在北京市武警总队第二医院就医，这是一家三甲医院。魏则西在这家医院开设的生物免疫治疗中心接受CIK-DC治疗，这个治疗中心是医院与上海柯莱逊生物技术有限公司合作开设的。</li>
-</ol>
-
-<ol class="art-list">
-<li>上海柯莱逊生物技术有限公司的最大股东陈某某是莆田人，陈某某的哥哥也是莆田人，是几家民营医疗集团的董事长，其实他们就是莆田民营医院四大家族：陈、詹、林、黄，中的陈家。</li>
-</ol>
-
-<ol class="art-list">
-<li>魏则西被百度搜索结果推荐到这家治疗中心，临终前他在知乎上《你认为人性最大的‘恶’是什么？》下回帖讲述了被骗经历，此事被网友传遍中国。</li>
-</ol>
-
-<p class="art-p">莆田系医院的来历</p>
-
-<ol class="art-list">
-<li>莆田医生最早出自1960年代的赤脚医生，在缺医少药的年代我国曾经鼓励过一段时间赤脚医生，以缓解城市和农村医疗资源不平衡的矛盾。但这批无证医生数量众多，1977年统计数字是150万，现在中国执业医师总是才202万人。</li>
-</ol>
-
-<ol class="art-list">
-<li>赤脚医生一直没有得到正规管理，直到经过几十年后的2004年，我国才推出了乡村医生从业管理条例。莆田系医生最初就是从这批赤脚医生中走出来的。在90年代他们主要经营模式就是在电线杆上贴广告，治疗性病、皮肤病、狐臭、鼻炎、风湿为主。但大都是疗效甚微的骗术。</li>
-</ol>
-
-<ol class="art-list">
-<li>1995年国家开放公立医院科室承包，第一批莆田系医生开始与医院合作，赚钱和经营模式更加稳定，但民众很难知道给他们看病的是承包出去的科室还是医院内部的科室。这时莆田系医院在广播、电视、报纸上大量做广告，并且聘用一些有医师资格的人坐堂，但看的病和从前电线杆子上的差不多。他们给医院上交份子钱的同时盈利状况非常好，还会买贵重医疗设备和医院分享检测费用。</li>
-</ol>
-
-<ol class="art-list">
-<li>在2004年卫生部意识到这种问题，下令公立医院不得把科室承包给个人，但这条禁令效果很差，莆田系医生都跑到武警、军队、消防系统的医院去了，这些医院虽然挂名医院，但不归卫生部管理，而由军队、武警、消防系统的后勤部管理。</li>
-</ol>
-
-<ol class="art-list">
-<li>2002年卫生部开放民营医院牌照，一批最富有的莆田系医生有机会洗白，注册成民营医院后，转身和从前的医院合作承包科室，这种承包就不是个人身份了，而是医院间的合作，卫生部之前的禁令形同虚设。</li>
-</ol>
-
-<p class="art-p">癌症免疫疗法无效，为什么中国没人管</p>
-
-<ol class="art-list">
-<li>免疫疗法刚出现后不久，我国就发布了《人体细胞治疗研究技术指导原则》，一共5家医院可以实施，因为是临床试验，所以都是免费的，这个阶段管理很正规。</li>
-</ol>
-
-<ol class="art-list">
-<li>管理的混乱起始于2005年，那一年食品药品总监局局长郑筱萸被抓，因为大量批准假药上市，造成大量民众伤残和死亡，从前对免疫疗法的管理权就移交给卫生部（后来的卫计委）。</li>
-</ol>
-
-<ol class="art-list">
-<li>食药监局局长的玩忽职守直接影响了国产药质量，2012年国务院开展了对郑筱萸在位前审批过的药的再次审核，这项工作2015年12月底才完成。</li>
-</ol>
-
-<ol class="art-list">
-<li>卫生部接手免疫疗法管理后四年才为其制订了一些规章制度，2009年开通审批通道，但实际并未进行审核，几千家机构材料送上去几年也没有回信。就连2009年定下的5家有资格审核的单位的资质都在2013年一并过期，并且此后再也没有更新过，没有任何一家企业通过审批，卫计委也没有禁止这种治疗，所以遍地民营企业遍纷纷上马这项费用不菲的治疗。甚至在很多地方，CIK疗法进入了地方医保报销范围。</li>
-</ol>
-
-<ol class="art-list">
-<li>直到2016年魏则西事件发生后1个月，卫计委才全面禁止各种免疫疗法，但为时已晚。</li>
-</ol>
-
-<p class="art-p">百度与莆田系医院</p>
-
-<ol class="art-list">
-<li>百度2015年财报中营收总额664亿元，其中莆田系医院带来的广告占总营收很大比例，据百度新兴业务对外合作总负责人的说法是35%，按2013年莆田市委书记的讲话看占比20%。所以莆田系医院是百度得罪不起的大客户。</li>
-</ol>
-
-<ol class="art-list">
-<li>莆田系医院主要通过百度竞价排名系统给百度缴纳广告费，在患者搜索疾病名称时，第一页所有结果都是莆田系医院的链接。搜索结果前3名，一次有效点击，莆田系医院需要交给百度200元-300元左右。这大幅增加了百度的收入和莆田系医院成本，羊毛都会出在患者身上。</li>
-</ol>
-
-<ol class="art-list">
-<li>谷歌也有医疗广告，但谷歌并不进行人为干预，只要求医疗机构提供美国药房协会NABP和美国食药监局FDA的认证即可。FDA对药品的严格把控是其他机构可以信任药品广告与销售的基础。</li>
-</ol>
-
-<ol class="art-list">
-<li>FDA审核药品的人数在4000左右，每年有20款药物可以获批；中国的食药监局审核药品的人员120名（含各级领导），每年有上千款药物可以获批，两国药品监管力度可以一比。</li>
-</ol>
-
-<ol class="art-list">
-<li>许多小国对药品的管理直接信任FDA的结果，FDA审核过的药品只要在自己国家登记后就可以直接使用、销售。而中国食药监局对每种药品还要求再次审核，包括FDA已经审核过的。</li>
-</ol>
-
-<p class="art-p">魏则西事件谁之过？</p>
-
-<p class="art-p">如果我们把百度推到矛盾的风口浪尖，我国医疗、药品管理会变好吗？</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-8">
-      <div class="art-header">
-        <span class="art-chapter">Ch.79</span>
-        <h3 class="art-title">癌症筛查值得做吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本期你将听到↓↓↓</p>
-
-<p class="art-p">第一个被治愈的癌症是什么？</p>
-
-<p class="art-p">癌症筛查应该做吗？</p>
-
-<p class="art-p">对癌症最常见的3个误解是什么？</p>
-
-<p class="art-p">本期知识清单↓↓↓</p>
-
-<p class="art-p">1</p>
-
-<p class="art-p">第一个可治愈的癌症</p>
-
-<ol class="art-list">
-<li>霍奇金是医院管理标本的，他把标本按器官分类后，注意到一批胸腺肿大的病人。经过仔细的解剖和分类后，把他们定名为霍奇金淋巴病，并写了论文，但70年中并未被人注意到。</li>
-</ol>
-
-<ol class="art-list">
-<li>霍奇金淋巴病是一种温和的癌症，它的扩散只沿着淋巴结发展，并不像其他癌症扩散那么凶险，但这种病会和胸腺癌，甲状腺癌混淆，确认病症是治疗的前提。</li>
-</ol>
-
-<ol class="art-list">
-<li>治疗霍奇金淋巴病采用扩大化放疗，为了防止癌细胞入侵血脑屏障，还需要向脊髓中注射化学药物，并对颅脑进行高剂量放疗。</li>
-</ol>
-
-<ol class="art-list">
-<li>通过2年左右的放化疗，霍奇金淋巴病这种最温和的癌症有可能达到5年生存率80%，长期无病存活率50%的程度。不过，在这期间需要耗费了大量的医疗资源。</li>
-</ol>
-
-<p class="art-p">2</p>
-
-<p class="art-p">癌症筛查大都是过度医疗</p>
-
-<ol class="art-list">
-<li>主流医学界给出的癌症筛查建议非常琐碎，针对癌症种类和易感人群，内容繁杂，生词多，外加医院排队，工作忙，几乎没可能执行。这些程序之所以复杂是因为它都是基于活体组织的检查。</li>
-</ol>
-
-<ol class="art-list">
-<li>最近几年出现了一些新的检查，比如PET-CT，（正电子发射与计算机断层扫描）这是利用了癌细胞对葡萄糖代谢快的特点，通过带有放射性的元素氟18标记位置实现的。</li>
-</ol>
-
-<ol class="art-list">
-<li>氟18会衰变成氧18、正电子、中微子。PET-CT就是靠追踪其中的正电子与身体组织中电子的湮灭发现癌细胞聚集处的。这项检查分辨率高、灵敏度好。</li>
-</ol>
-
-<ol class="art-list">
-<li>PET-CT虽然先进，但这只适合给已经诊断出癌症的患者使用，尤其是判断他们癌细胞转移的情况下，判断省时间、准确度高，对一般人来说，辐射剂量太高。属于过度医疗。</li>
-</ol>
-
-<ol class="art-list">
-<li>一次PET-CT的辐射量是15mSv，一次胸透的量是0.02mSv，让无数人讨论担心的双流机场的“弱光子检测仪”的辐射量是0.00025mSv。人年平均接收辐射剂量是2.5mSv，但各地数值不同，广东阳江地区是中国较高的，人年平均接收辐射6.4mSv，但从1979年的统计以来，阳江地区癌症发病率、死亡率和全国平均数字比较，没有统计学上的差异。</li>
-</ol>
-
-<ol class="art-list">
-<li>造成辐射的因素还有很多，空气中的氡元素，大理石中的矿物质，坐飞机时接收到的宇宙射线都会增加辐射量。对比地面，三万英尺天空的宇宙辐射会强200倍，做一趟10小时的远途飞机，会接收到0.02mSv的辐射，和做一次胸透差不多。所以担心安检仪的人应该首先担心坐飞机。</li>
-</ol>
-
-<ol class="art-list">
-<li>医疗服务机构和旅游机构联手搞“日本健康之旅”，其中项目有PET-CT、肿瘤标记物筛查、癌症基因筛查。其中肿瘤标记物筛查也属于过度医疗，这些检查都是针对已经通过影像学看到肿块后判断良性、恶性才需要做的。</li>
-</ol>
-
-<ol class="art-list">
-<li>基因筛查虽然并不伤害身体，但很多癌症易感基因并不意味着癌症高发，可能只会让你患上癌症的几率从万分之五，增加到万分之九，如果不明白这些含义，基因筛查结果会让人很不安，进而在“健康之旅”中购买更多检查服务，更多保健品。</li>
-</ol>
-
-<p class="art-p">3</p>
-
-<p class="art-p">对癌症最常见的3个误解</p>
-
-<ol class="art-list">
-<li>仔细检查，找出癌症：</li>
-</ol>
-
-<p class="art-p">人们身体中存在癌细胞是大概率事件，解剖学发现，40岁-60岁的男子，平均1/3的人有前列腺癌，到85岁的时候75%的男子有前列腺癌，80岁以上女性67%的人有乳腺癌。他们没有查出来，只是因为没有影响到生活质量。</p>
-
-<ol class="art-list">
-<li>早点查出癌症，有助于延长寿命：</li>
-</ol>
-
-<p class="art-p">美国预防服务工作组评估从1986年到2005年这20年里，因为在PSA筛查中发现自己有前列腺癌症，进而去接受手术，化疗，还有因为手术导致严重并发症比如精液中有红细胞，或者丧失生育能力的人越来越多。有100万男性因检查结果是阳性去做各种治疗，而这些治疗导致了5000人死于手术，1.7万人有严重的手术后的并发症。平均来看，PSA检测并不能延长整体人群的寿命，和前列腺癌对人体的损害是差不多大的，而且还平添了治疗的痛苦和费用。</p>
-
-<ol class="art-list">
-<li>主动查问题，针对病症治疗：</li>
-</ol>
-
-<p class="art-p">我们应该调整思路，把“不健康，身体有问题”，做为一种常态来接受。我们身体的图纸是十几万年前留下来的，使用寿命30年，现在因为科技发展，一下都要奔着80年使用，所以后面50年必然要面对各种问题。如果过度担心问题出现，检查和治疗可能会降低生活质量。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-9">
-      <div class="art-header">
-        <span class="art-chapter">Ch.86</span>
-        <h3 class="art-title">伤口愈合与组织再生</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本期你将听到↓↓↓</p>
-
-<p class="art-p">出血的伤口怎么愈合？</p>
-
-<p class="art-p">动物界愈合再生能力排名榜；</p>
-
-<p class="art-p">在纳米尺寸下还有哪些生命迹象？</p>
-
-<p class="art-p">本期知识清单↓↓↓</p>
-
-<p class="art-p">1</p>
-
-<p class="art-p">有丝分裂中的小马达</p>
-
-<p class="art-p">教科书中总是说有丝分裂中染色体是被纺锤丝拉开到细胞两侧的，其实纺锤丝根本不提供动力，让染色体运动的是染色体中心的中节，那里有动力蛋白，会顺着纺锤丝运动。</p>
-
-<p class="art-p">2</p>
-
-<p class="art-p">有丝分裂下的疾病：唐氏综合征</p>
-
-<ol class="art-list">
-<li>唐氏综合征患者就是在人类第21号染色体做减数分裂时出了错，没有分开，最终导致细胞中第21号染色体有3条，而正常人是2条。</li>
-</ol>
-
-<ol class="art-list">
-<li>患病的孩子有60%会流产，但还是有40%会生下来，他们不但智力发育缓慢，而且免疫系统极弱，非常容易生病，患白血病的概率是普通人的30倍，30岁之后还会出现神经性退行疾病。</li>
-</ol>
-
-<ol class="art-list">
-<li>我们听说过的指挥家周周就是唐氏患者，他在最近几年已经很少露面，主要是因为身体健康问题，他和他的家庭在之前能演出、指挥，都做了非常大的努力和牺牲。</li>
-</ol>
-
-<p class="art-p">3</p>
-
-<p class="art-p">出血的伤口怎么愈合？</p>
-
-<ol class="art-list">
-<li>止血时血小板是重要角色。它里面没有细胞核，曾经一度被当做血液中的杂质，直到1882年才被意大利医生确定功能，并定名。</li>
-</ol>
-
-<ol class="art-list">
-<li>血小板是由骨髓中的巨核细胞爆裂后形成的，一个巨核细胞的直径可以达到0.1毫米，爆裂后可以形成2000-7000个血小板，血小板的直径只有2微米。</li>
-</ol>
-
-<ol class="art-list">
-<li>血小板含有肌动蛋白，这个蛋白只有接触到血管外的胶原蛋白，才会被激活，然后就可以到处爬行了。边爬还边伸出触手抓住周围的血小板并激活它们，形成网状。</li>
-</ol>
-
-<ol class="art-list">
-<li>还有血纤维蛋白也会在胶原蛋白的激活下长出长长的纤维，形成网状，把血液中的血小板固定住，所以血痂就形成了。</li>
-</ol>
-
-<p class="art-p">4</p>
-
-<p class="art-p">对抗血小板的就是抗凝血成分</p>
-
-<ol class="art-list">
-<li>血管中的胆固醇沉积也会引发血小板、血纤维蛋白被激活形成血痂或者血栓。</li>
-</ol>
-
-<ol class="art-list">
-<li>产妇和骨折的人也会不断产生血痂，所以产妇产后24小时要下床活动，防止血栓形成，骨盆和股骨骨折的患者需要服用抗凝血药，防止血栓形成。</li>
-</ol>
-
-<ol class="art-list">
-<li>蛇毒中有一类毒素就是抗凝血成分，在科莫多巨蜥的唾液中也有抗凝血成分，它们捕捉比自己身体大很多倍的水牛时会咬一口，然后耐心的等上一个礼拜，水牛在失血多天，伤口严重感染的情况下就会死亡，然后它们再饱餐一顿。</li>
-</ol>
-
-<p class="art-p">5</p>
-
-<p class="art-p">伤口痊愈中的生长因子</p>
-
-<ol class="art-list">
-<li>能激活细胞重新复制自己的信号分子就是生长因子。它在细胞体内的含量非常少，第一次分离是意大利女生物学家从蛇毒里找到的，后来在唾液中也发现了生长因子。她也因此获得了1985年的诺贝尔生理学医学奖。</li>
-</ol>
-
-<ol class="art-list">
-<li>生长因子到现在已经发现了几十种，有些可以帮助肝脏和肾脏恢复功能，有些可以加快皮肤和伤口的愈合，也有可能今后会出现让牙周组织重生的技术。</li>
-</ol>
-
-<p class="art-p">6</p>
-
-<p class="art-p">再生能力在物种间的差距很大</p>
-
-<ol class="art-list">
-<li>哺乳类动物、鸟类是再生能力最差的动物，它们的体内只有皮肤、血液、肝脏可以完全再生。</li>
-</ol>
-
-<ol class="art-list">
-<li>爬行、两栖动物四肢和尾巴断掉后一般可以再生出完整的尾巴。</li>
-</ol>
-
-<ol class="art-list">
-<li>棘皮动物中，海星把5个角都切下来，那这6块组织都可以再生出6个完整的海星。</li>
-</ol>
-
-<ol class="art-list">
-<li>扁形动物中涡虫有10cm长，切成200段，会再生成200条完整的涡虫。</li>
-</ol>
-
-<ol class="art-list">
-<li>海绵是历史最古老的生命，它们只要还残留一个细胞，这个细胞就可以再生成完整的一块海绵体。</li>
-</ol>
-
-<p class="art-p">7</p>
-
-<p class="art-p">无处不在的生命迹象</p>
-
-<ol class="art-list">
-<li>生命的迹象在各个尺寸下都能被观察到，动物自不必说，动物的残肢可以再生成完整的个体也是生命的迹象。</li>
-</ol>
-
-<ol class="art-list">
-<li>高级动物的单个体细胞也有生命的迹象，可以在培养液中单独的存活、复制、新陈代谢。</li>
-</ol>
-
-<ol class="art-list">
-<li>细胞内部，在10nm的尺寸下，还可以发现各种主动运动的生命迹象，这些生命迹象已经发生在量子效应可以出现的尺寸上了。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-10">
-      <div class="art-header">
-        <span class="art-chapter">Ch.86</span>
-        <h3 class="art-title">癌症与生命终结</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本期你将听到↓↓↓</p>
-
-<p class="art-p">化学物质对人体的害处是因人而异的；</p>
-
-<p class="art-p">基因可以自己修复，细胞癌变也并非易事；</p>
-
-<p class="art-p">我们找到了癌症的开关：P53基因。</p>
-
-<p class="art-p">本期知识清单↓↓↓</p>
-
-<p class="art-p">1</p>
-
-<p class="art-p">化学物质对人体的害处因人而异</p>
-
-<ol class="art-list">
-<li>一些化学元素本来是无害的，它是通过间接方式导致癌症的。</li>
-</ol>
-
-<ol class="art-list">
-<li>酒精在身体里的代谢过程是从乙醇到乙醛，再到乙酸，而其中在乙醇脱氢酶的作用下从乙醇变成乙醛后危害最大，如果有人只有这部分酶，没有把乙醛变成乙酸的话，这个人就很容易因酒精而受伤。</li>
-</ol>
-
-<ol class="art-list">
-<li>烟草中的苯并芘也是无害的，但是在人体内经过微粒体环氧化物水解酶作用，最终在苯并芘加了很多修饰和羟基，成了强烈致癌物。</li>
-</ol>
-
-<p class="art-p">2</p>
-
-<p class="art-p">基因可以自己修复</p>
-
-<ol class="art-list">
-<li>在细胞核里有酶专门负责修复基因。原理是DNA为双链，而损失一般只来自其中一条链，于是修复酶可以依照另一条链上的信息发现错误，并重新合成这段基因。</li>
-</ol>
-
-<ol class="art-list">
-<li>修复需要时间，如果还没修复完就开始进行有丝分裂，就有可能造成问题链被继续复制下去，而且它也没有能力知道正确版本是什么样。</li>
-</ol>
-
-<ol class="art-list">
-<li>着色性干皮病患者就是皮肤细胞失去了DNA修复能力，患者在阳光下暴露皮肤时间稍长就会出现水泡，就会出现大量雀斑和斑点，甚至皮肤萎缩，通常20岁以前就会死亡，欧洲的吸血鬼形象很可能来自这类病人。</li>
-</ol>
-
-<ol class="art-list">
-<li>因为修复功能异常导致的癌症，估计大约占所有癌症的20%。</li>
-</ol>
-
-<p class="art-p">3</p>
-
-<p class="art-p">形成癌细胞，并非易事</p>
-
-<ol class="art-list">
-<li>DNA中90%以上的区域都是空白区，不表达成蛋白质。那些可以表达成蛋白质的25000个基因中绝大多已经锁住了，所以那些有害因素，造成变异的因素如果施加在那些不表达，或者已经锁住的地方，都不会危害健康。</li>
-</ol>
-
-<ol class="art-list">
-<li>就算真的造成了活跃区域基因的受损，后果大都是造成细胞死亡而不是细胞疯狂的复制。癌症的诞生需要10年以上时间。</li>
-</ol>
-
-<ol class="art-list">
-<li>吸烟造成的肺癌需要10-20年，广岛长崎的原子弹造成的白血病高发是在爆炸后5年开始，8年达到高峰的。</li>
-</ol>
-
-<ol class="art-list">
-<li>苯巴比妥是让肝癌细胞出现后更顺利成长的环境，肺癌细胞出现后如果同时有焦油的存在，那它们长得就更快更好了。过量的雌激素也会让乳腺癌细胞和卵巢癌细胞长的更好。</li>
-</ol>
-
-<p class="art-p">4</p>
-
-<p class="art-p">福岛核事故后，食品还安全吗？</p>
-
-<ol class="art-list">
-<li>对核辐射的谣言很多来自于五十年代，我国的民兵手册里对核辐射防护的描述。虽然原子弹爆炸后放射性微粒散布到各处，但洗脸洗澡也有助于清理这些微粒。</li>
-</ol>
-
-<ol class="art-list">
-<li>封装好的食物，无论怎么辐射，都不会让食物变成致癌物，因为食物只会发生分子结构的变化。我们做饭煮面条煮饺子也一样，只让食物分子大幅度改变。</li>
-</ol>
-
-<ol class="art-list">
-<li>不要过度担心日本食品，比起多吃糖，挑食来说，福岛的食物根本算不上危险。</li>
-</ol>
-
-<p class="art-p">5</p>
-
-<p class="art-p">P53基因：癌症的开关</p>
-
-<ol class="art-list">
-<li>有50%的癌症细胞中，是P53基因发生了变异。这个基因会调控细胞周期的进程，会监督细胞在修复完成之后再做有丝分裂，还能在DNA损失过于严重后引导细胞自杀。</li>
-</ol>
-
-<ol class="art-list">
-<li>P53基因出问题的患者都是癌症高发的人群，科学家也利用这个道理研究P53药物。</li>
-</ol>
-
-<ol class="art-list">
-<li>把P53基因植入无害的病毒，再注射到人体，有助于抑制癌症细胞分裂，现在已经有两款药物上市，美国的Advexin和中国的今又生（重组人P53腺病毒注射液）。</li>
-</ol>
-
-<ol class="art-list">
-<li>黄曲霉素专门破坏肝细胞上P53基因的第249个点位，所以不要心疼发霉的油炸食物和粮食，该扔就扔。</li>
-</ol>
-
-<p class="art-p">6</p>
-
-<p class="art-p">恶性肿瘤细胞需要再次进化</p>
-
-<ol class="art-list">
-<li>肿瘤细胞需要进化出促进血管再生的能力，这些能力原本是写在DNA中，只不过从胚胎发育完成后，这个功能就被锁住了。成人后只有伤口愈合的时候才能再次打开血管再生的能力。</li>
-</ol>
-
-<ol class="art-list">
-<li>恶性肿瘤细胞会分泌酶，把血管打穿，然后顺着血管去身体各处，它们在狭窄的位置里也会释放很多酶，把空间清理出来。</li>
-</ol>
-
-<p class="art-p">[图片: 恐龙化石上的癌细胞]</p>
-
-<p class="art-p">7</p>
-
-<p class="art-p">癌症与生命</p>
-
-<ol class="art-list">
-<li>癌细胞比普通细胞生存能力更强，这在恐龙时代就出现了。</li>
-</ol>
-
-<ol class="art-list">
-<li>2003年的时候，俄亥俄州东北医科大学放射科的科学家和古生物学家一起对10个博物馆里700多只恐龙身上的1万块骨骼做了X光断层扫描，就发现血管瘤是恐龙身体里最常见的肿瘤，但大都是良性的，恶性的主要是骨膜软骨瘤。</li>
-</ol>
-
-<ol class="art-list">
-<li>多细胞动物的体细胞平均在50次有丝分裂后就会死亡，少的仅15次，多的有120次。</li>
-</ol>
-
-<ol class="art-list">
-<li>分裂次数有限可能是因为分裂产生了无法消化、代谢的脂褐素，当它积累到足够多时，就会诱发细胞死亡。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-11">
-      <div class="art-header">
-        <span class="art-chapter">Ch.87</span>
-        <h3 class="art-title">微波炉的辐射危险吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">wanling:卓老板，可以讲一下微波炉究竟可不可以用吗？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第18期“大科学家薛定谔是情圣？！”。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-12">
-      <div class="art-header">
-        <span class="art-chapter">Ch.87</span>
-        <h3 class="art-title">方方面面聊辐射</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本期你将听到↓↓↓</p>
-
-<p class="art-p">X光、CT到底要不要拍？</p>
-
-<p class="art-p">手机被列为2B致癌物是怎么回事？</p>
-
-<p class="art-p">其他家用电器辐射厉害吗？</p>
-
-<p class="art-p">本期知识清单↓↓↓</p>
-
-<p class="art-p">1</p>
-
-<p class="art-p">X光、CT到底要不要拍？</p>
-
-<ol class="art-list">
-<li>医学影像拍摄遵循2个原则：合理性和最优原则。不能在没有必要时拍照；能选辐射剂量低的就选低的；在此基础上病人需要拍多少次就拍多少次，并没有次数的上限。</li>
-</ol>
-
-<ol class="art-list">
-<li>孕妇如果需要拍照，也遵循100mSv的原则，只要不超过，都可以拍，实际医学影像中最高剂量的骨盆CT也只有25mSv，都是安全的。但现在医院为了怕担责任，所以几乎不会让孕妇拍的。</li>
-</ol>
-
-<ol class="art-list">
-<li>骨折部位拍摄，还有胸片的剂量最低，只有0.01毫西弗，腹部的、腰椎的、骨盆的能到1.4-1.7毫西弗。医学影像辐射远低于100mSv，儿童需要拍照时也不要躲。</li>
-</ol>
-
-<ol class="art-list">
-<li>治疗癌症时进行的放疗就不用遵循剂量了，大都会在保证生命的情况下尽量用较大剂量。凡是说不用放化疗，不用手术可以治疗癌症的，一概都是骗子。</li>
-</ol>
-
-<p class="art-p">2</p>
-
-<p class="art-p">手机辐射不危险</p>
-
-<ol class="art-list">
-<li>手机代表了：能量辐射出去的电路设计（天线电路）。手机中有很多天线：3G/4G天线、WIFI天线、蓝牙天线、GPS天线，其中很多已经合并了，最高发射功率很少超过1.5瓦。</li>
-</ol>
-
-<ol class="art-list">
-<li>手机发出的电磁波有害无害，除了功率外，还要看频率，因为光的最小能量份是由频率决定的，X光最低频率比手机中频率最高的信号还要高1亿倍，可见光中最低频率也比手机频率高十万倍。</li>
-</ol>
-
-<ol class="art-list">
-<li>手机电磁波的安规测试标准是“比吸收率”，它也是反映身体组织吸收热量的单位，欧洲和中国的标准是不超过1.6毫瓦/克体重，美国是2.0毫瓦/克体重。</li>
-</ol>
-
-<ol class="art-list">
-<li>手机辐射对人体健康的影响目前医学证据只有加热的影响，其他影响还没有足够多的依据，所以不做考量。</li>
-</ol>
-
-<p class="art-p">3</p>
-
-<p class="art-p">手机被列为2B致癌物又是怎么回事？</p>
-
-<ol class="art-list">
-<li>在2011年世界卫生组织把手机辐射定位为2B致癌物，造成很多媒体的渲染，让不少人恐慌，实际这是一个严重的误读。</li>
-</ol>
-
-<ol class="art-list">
-<li>致癌物分类一共4个等级，1级是有确切证据致癌的，2级中的2A是动物实验中有确切证据，对人致癌的在理论上存在，但还需要进一步研究。其中有甲醛、丙烯酰胺、65℃以上的热饮、牛羊肉等红肉。2B类是对人致癌只有一些迹象，这里有手机辐射、治疗甲亢的药物、治疗艾滋病的药物、泡菜，曾经咖啡也是2B致癌物，但最近降到3级了。</li>
-</ol>
-
-<ol class="art-list">
-<li>2A和2B的致癌是媒体对“Probably/ possibly carcinogenic to humans”句子的解读。实际2B的Possibly只是说明可能性大于零而已。</li>
-</ol>
-
-<ol class="art-list">
-<li>不要把煲电话粥1小时后脸发热，玩儿了3个小时手机游戏后头晕眼花当做辐射，那是因为你该休息了。</li>
-</ol>
-
-<p class="art-p">4</p>
-
-<p class="art-p">微波炉的辐射比手机大吗？</p>
-
-<ol class="art-list">
-<li>微波炉功率虽然比手机高，但所有电磁波都被囚禁在腔体里，六个面只有一面是透明的，又因为有密网做法拉第笼，所以把电磁波关在里面。</li>
-</ol>
-
-<ol class="art-list">
-<li>国家标准是距离微波炉5cm的地方，辐射的能量要低于5mW/平方厘米，因为这是一种极为成熟的产品，实测中几乎都低于1mW/平方厘米，一部分甚至低于0.5mW。这比手机的辐射功率还低50%，辐射强度大约是冬季阴天时阳光的1/40。</li>
-</ol>
-
-<ol class="art-list">
-<li>刚刚的辐射还只是距离微波炉5cm上测到的，如果距离30cm后，强度还会继续降低到原来的1/5到1/10。</li>
-</ol>
-
-<ol class="art-list">
-<li>电磁炉的辐射大致和微波炉类似，为了吃火锅，水蒸气蒸发，给身体造成的加热的效果远比电磁炉辐射造成的加热，也不用担心。</li>
-</ol>
-
-<p class="art-p">5</p>
-
-<p class="art-p">其他家用电器辐射厉害吗？</p>
-
-<ol class="art-list">
-<li>另外大部分电器使用的电路叫做“集总电路”，这种电路就是以“能量只在电子元器件内传递”为最大前提的，所以几乎没有任何辐射泄露。</li>
-</ol>
-
-<ol class="art-list">
-<li>对它们形成的电磁场强度，微波炉是20uT，笔记本大约10uT，手机大约5uT，电动车内部大约是0.02-0.2T，之所以这么低就是因为它是集总电路，即便总功率是手机的几万倍，最终释放出来的辐射强度也可能只有手机的百分之一。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-13">
-      <div class="art-header">
-        <span class="art-chapter">Ch.90</span>
-        <h3 class="art-title">以面食为主的饮食习惯好不好？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">noasquare：《谷物大脑》里面讲的吃面粉和谷物得糖尿病的概率如果很大的话，那北方人岂不是都躺枪？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“胰岛素传奇”。</p>
-
-
-<p class="art-p">其实我在8月1日那期回复听众里已经说过特别火热的《谷物大脑》这本书是不是靠谱了，但在后续两个月中至少又有十多人问过我类似问题，而正好，就在前几天方舟子也仔细评价了这本书，所以为了回答大家的疑问，我转述给各位，这个分析比我的之前回答的那个细化太多了。</p>
-
-<p class="art-p">看过这本书的人都知道，这里面说谷物会对大脑造成永久的损害，导致阿尔茨海默症，慢性头痛，失眠，焦虑，抑郁，癫痫，运动障碍，精神分裂，注意力缺乏，这些都是和大脑关系紧密的疾病。而且不光是谷物，水果和碳水化合物也有这样伤害大脑的效果。坏处还不止这些，还有加快身体老化，让人肥胖，得关节炎，糖尿病，其他慢性疾病。然后书里给出了一套健康饮食的标准，就是每天只吃非常非常少的碳水化合物，具体来说就是不超60克，然后多多地吃植物油和肉，让这些东西成为主要食物。这么吃就对大脑有益处。</p>
-
-<p class="art-p">方舟子评论，首先一点不合理就是这些饮食建议和主流医学界推荐的均衡饮食大相径庭，这个在我8月1号回复听众的那期说了，然后说了一个小问题，就是按照书里建议的方式吃会出现明显的酮体中毒的现象，酮体是在脂肪分解过程中产生的，血液中如果含量高就会感觉恶心，头疼和口臭，同时又缺少葡萄糖的话，大脑得不到糖的能量，身体就会分解更多脂肪产生酮体，这对身体是有害的。而书里建议的高饱和脂肪酸饮食，会增加心血管疾病，这在医学界是公认的极不健康的饮食。应该怎么吃才健康，别想那些旁门左道了，就是按居民膳食指南吃就最健康。</p>
-
-<p class="art-p">方舟子的辟谣更有力的来自于对作者的深挖，David Perlmutter 是作者，1981年获得迈阿密大学医学院博士学位，专业是神经外科。1987年获得行医执照后开私人诊所。从1996年起开始以营养对神经病症的内容频繁做演讲，出畅销书。一个神经外科医生当然可以转行营养学，但能不能被学术界认可，主要看你在营养学领域的研究成果是不是被同行高度认可。他在介绍自己学术成就中，列了四份刊物，《神经外科杂志》《神经学档案》《南方医学杂志》《应用营养学杂志》，其中最后那个《应用营养学杂志》早已停刊，而且没停刊时也没有被收录在正规学术期刊中，算是一本水平较差的期刊。而在另外三个和神经相关的杂志，他所说的发表论文，实际上都是在他学生时代的内容，也就是1982年到1987年的文章了。没有一篇和营养相关。基本都是外科手术的内容。</p>
-
-<p class="art-p">在他的履历中，他还介绍自己发表了23篇期刊论文。方舟子帮他挨篇统计了，其中10篇是当学生时写的神经外科的内容。8篇是发表在专门推销另类医学的非学术期刊的杂志上，2篇是新闻访谈，1篇是读者来信，只有2篇是和营养相关的， 发表在和营养学有关的期刊上，就是那本水平比较差，而且早就停刊的杂志。所以可以这么说，这个人在营养学上没有学术成就，但如果你作为医生，推荐大家按照膳食指南吃，这不需要什么学术背景，这是医学界公认的健康饮食。但现在的问题是你提出的论点是和主流医学界完全背离的，特别的主张你就得有特别的证据支撑，可他在营养学上又没有什么学术背景可言。所以这是疑点之一。</p>
-
-<p class="art-p">疑点之二是，他在拿到行医执照后，唯一做过的论文是2009年发表的，那篇文章是通过注射一种肽来治疗帕金森病的初步研究，离开学术界22年，之所以又发了一篇论文，其实背景是，他在2009年曾经鼓吹那种肽可以治疗帕金森病。不过他在那篇论文中作者顺序排第三。也就是比较次要的位置。当时在履历里他把自己列成第一了。更可笑的是，这项研究的结论是，这种肽对治疗帕金森根本无效，连初步的有效性都看不到。这和他鼓吹的观点正好相反。这位作者帕尔玛特从2000年起陆续出健康养生的书，比如大脑复原.com，主要内容方向就是制造一些阴谋论，比如，主流医学界的研究都受到了企业资助，有利益关联。在那本书里他的观点是，饱和脂肪酸、动物脂肪、胆固醇才是大脑的杀手，应该尽量避免，提倡最好的饮食是素食加鱼肉。这和他这两年畅销的《谷物大脑》正好相反。</p>
-
-<p class="art-p">所以结论是这人不可靠，和每年风靡的各种养生大师没太大区别。他们的方式都是宣扬跟主流医学界建议格格不入的标新立异的饮食观念。目的呢？您看看《谷物大脑》这本书背后那几十页的各种饮食推荐菜单就知道了。</p>
-
-<p class="art-p">如果您有耐心，也可以像我似的，看看故意列上去的那十几页的参考文献，虽然数量极多，但都和他书里的主要观点无关。都是一些不痛不痒的陈述中提到的医学结论。也有人听到方舟子这三个字就恶心反胃，咱们抛开他的性格，处事风格。单就他在科学问题上的辟谣和打假，可以这么说，没有不准的。保持科学思考方式就是抑制感性的过程。一个可以验证真伪的问题，就看具体验证内容就足够了，是谁说的不重要。关于《谷物大脑》这书可靠不可靠，相信您完全知道了，这个问题就回答到这里。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-14">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">HPV疫苗管用吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">何羞走：请卓老板谈谈HPV疫苗！</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第15期“无人驾驶汽车是更安全了，还是更危险了？”。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-15">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">中国人为什么坐月子？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">饼干：坐月子的时候，嗑了不少红糖，敢情唯一功能就是贴膘。话说老板能说说，为什么中国人就好坐月子，但是同为黄种人的日本人就不坐呢？好像全世界就中国人体质最弱。</p>
-
-<p class="art-p">新起点鼓校~王俊：聊聊头发吧！看你的头发也不多了！这个是不是世纪顽症啊？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》-“我问卓老板——红糖补血吗？”和“中秋礼物——你不了解的月亮”</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-16">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">中药在美国批准上市了？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">鼠鼠不怕猫：想请卓老板聊一下天士力、复方丹参滴丸通过美国食品药品管理局认证，在美国上市销售这一事。身边有朋友在聊天时谈到，认为这一事件说明中药的科学性。</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：为什么三星note7会爆炸？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">有听众鼠鼠不怕猫听身边朋友说复方丹参滴丸通过了FDA认证，在美国上市销售了，想问问这是不是证明中医药的科学性。其实这背后是有一段故事的，那是在1996年的时候，现在的科技部，从前的国家科委提出的“敲开FDA大门”这个口号，当时选了不到10种药物一起申报FDA审核，临床实验对大部分药物是3期，少部分癌症的药物是2期。现在中国通过了二期临床试验的药有3个，天士力集团的复方丹参滴丸，绿叶集团的血脂康胶囊，还有一个是上海现代中医药股份的扶正化瘀片。但目前还没有一款中国产的药通过了三期临床试验，您身边朋友的消息有误，它只通过了二期，在8月份完成了三期实验，就像考试把卷子写完交上去了，能不能及格那还得等分数下来。如果从概率上看，平均18款通过2期临床试验的药，最终会有一款通过第三期实验上市，所以现在猜这款药最终没有被批准上市，正确率是94%。</p>
-
-<p class="art-p">从1996年到现在已经20年过去，虽然时间够久的，但这并不能说明这款中药无效，毕竟还在验证阶段，其他国家药物上市也不是轻易可以过关的。有统计数据，您可以记住两个数，一个是10，就是说十年前的统计数据是这样的，一款药物从申报，到最终上市平均需要花费10年和10亿美元各种费用。另一个数字是6000，就是从最初申报到最后上市，6000种药物只有1款可以最终上市。所以FDA并不是拿现代科学标准为难中医药，它也一样为难自己国家的药企，它的标准是不变的，谁通过都极为困难。其实FDA非但没有特意为难复方丹参滴丸，反而因为它在中国已经使用多年了，还免去它做临床一期实验这个环节，因为这个环节是验证安全性的，直接认可了这一点。</p>
-
-<p class="art-p">我们之所以在1996年提出了口号要“敲开FDA大门”，是因为在1995年FDA对药物审批做了重大改革，从前FDA坚持两个凡是，凡是化学结构不明确的不受理，凡是药物作用原理不明确的不受理。但后来他们放弃了这2个原则，还是以实际疗效做最终依据，你申报的时候说不清里面什么成分，解释不了药物如何起效的也没关系，能证明效果好就可以。这个政策后来在2004年又得到放宽，FDA公布了《植物药研制指导原则》，设定了更多和化学药不一样的审核标准，其实更有利于植物药上市，但这个大门开放后，2006年就有一款治疗痦子的茶多酚上市了，2012年又一款植物药是从秘鲁巴豆树的汁液提取的药物，专门针对艾滋病人拉肚子的药上市了。但到现在中国的草药也没有一款通过审核。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">我们就假设11月份 突然传来消息，复方丹参滴丸通过FDA三期临床试验，批准上市了，那也只是这一款药物有效，证明不了中医药的科学性，证明一个体系具有科学性那是另一件更复杂的事情。比如有一只没电了，指针不动的手表，它一天也会有2次正确显示了时间，但仅凭这两次正确是说明不了手表可以计时的。审核过程不久就会出现，我们随时关注。好了，这个问题就回答到这里。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-17">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">为什么人会上火？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">@Matrix：</p>
-<p class="art-p">想问个跟耳机无关的问题，上火是怎么回事？吃辣椒为什么会上火？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“入耳式耳机对听力有损伤吗？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">其实现代医学上压根儿就没有“上火”这个说法。</p>
-
-
-<p class="art-p">有听众问，能不能说说上火，为什么吃辣椒会上火？</p>
-
-<p class="art-p">辣椒是刺激性食物，辣椒素会刺激粘膜上的受体，进而刺激神经，产生灼烧的感觉，但实际上并不存在高温，这和我们吃薄荷糖，感觉凉，而并不存在低温的道理是一样的。原因是一种化学元素欺骗了我们的大脑，又因为灼烧感很强烈，大脑按照正常规律运行，会分泌一些缓解疼痛的物质，比如多巴胺，这也会附带产生一些愉快的感觉，所以很多人爱吃刺激性食物。</p>
-
-<p class="art-p">但食物残渣如果残留在嘴里，里面还含有辣椒素的话，比如在牙龈里，会持续刺激粘膜，再加上没太注意口腔卫生，就会有牙龈发炎的情况，我猜大伙儿管这叫上火吧。</p>
-
-<p class="art-p">实际上，现代医学的手册里根本就没有上火的概念，它只存在于替代医学里，或者养生保健里，但又因为后两者在实际生活里呈现的面貌都很严重的违背科学准则，所以也不被各国主流科学界接纳。 如果硬要往现代医学上贴，牙龈炎、牙周炎、龋齿、咽部感染，甚至各种原因引起的便秘、结膜炎、各种唇炎，身体上各种疱疹病毒感染，身体缺水等等一切，全都被冠名上火。这是一种过于笼统的说法，上火几乎等同于感觉不舒服。</p>
-
-<p class="art-p">这么一说我想起自己前一阵子了，也“上火”了。我养成了一个坏毛病，边看书边嗑瓜子，大家一定常听说过瓜子上火吧，我的情况是，连嗑了2天后，喉咙就开始肿，疼，甚至有点头疼，体温37度多，我能隐隐察觉到就是瓜子造成的，而且我还能大概猜出什么原因，就是瓜子太脏了，我每次嗑完瓜子，右边脸上都有一片黑，第一次我还以为是我做笔记时签字笔的笔油不小心蹭上去的，但后来发现不是，就是当我嗑开每个瓜子时都有一小股灰尘崩到我脸上，那就可想而知了，必然也有不少崩到我咽喉部分，我甚至都被呛得咳嗽。</p>
-
-<p class="art-p">解决办法也有，把瓜子洗干净，我爱人呢就帮我洗，我好奇，跟旁边看着，一袋瓜子的水洗出来跟黄河水一样，洗三遍后才干净，然后再给焙干，这样再吃，连手都是干净的，再吃多少，喉咙都没有不舒服，吃完以后再注意漱口，就都解决了。</p>
-
-<p class="art-p">所以，瓜子又被冤枉了，是太脏了引起细菌感染导致的，不信你买那种纯的剥好的瓜子吃吃，绝对不会难受。话说我买的也算是大牌子的瓜子了，都还这么脏，商家对产品的态度也真是很不认真了。</p>
-
-<p class="art-p">为了避免各种不舒服，怎么做最有效呢？</p>
-
-<p class="art-p">你只要避免身体的粘膜不接触脏东西，差不多就可以几年都健健康康的，比如下楼拿了快递上来，进门洗手，敲完键盘后不抠耳朵，去街边小店买过东西，手碰过零钱了，就不要再碰头部的任何区域了，手机屏幕每几天用湿纸巾擦擦，这些都是好办法。</p>
-
-<p class="art-p">但就因为上火被传的那么广，喝牛奶上火，吃麦当劳上火，炒股上火，所以去火就好像成了每个人的需求，那些没有经过验证的保健品和不合格的药就来了，比如像牛黄解毒片里的雄黄，成分就是四硫化四砷，而且中国药典要求这个成分的含量不得低于90%，可是砷化物不论里面的砷是不是容易发生反应，都不应该以任何方式入口，况且雄黄去火，这放在现代科学范畴等同于雄黄治疗各种不舒服。世界上有一种药有这么神么？</p>
-
-<p class="art-p">砷化物不但无效，反而有害。有害的量咱们之前说大米中含砷的时候就说过，普通人一天不要超过120微克砷，但要是吃牛黄解毒片的话，一片药的砷含量就是300000微克了，超过上限2500倍。对方的解释是，没事的，我们这雄黄里的四硫化四砷中的砷是非常非常稳定的，在人体内，哪怕是胃酸里都不会分解，所以真正流出去的砷几乎没有。</p>
-
-<p class="art-p">超标这个咱们不提，就看这个解释也说不通啊，既然这个成分这么霸气的稳定，和谁都不发生反应，怎么吃下去就怎么排出去，那为什么要加这种东西进去呢？吃它干什么用呢？所以今后我们再遇到“上火”二字，注意务实的找原因解决，随便吃去火的药不但没用，反而有害。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-18">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">人为什么会发烧？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">王良：</p>
-<p class="art-p">卓克，你好，我经常听你的节目。最近，我的孩子感冒了，并伴有发烧，我不明白为什么感冒还伴有发烧？之前有人说发烧是身体提高体温，使得病毒或细菌不适合生存，然后免疫系统把它们干掉，不知道是不是这样？如果是这样就盖被子捂着，发汗，但医生说不让捂着，还要喝冰水降温，我彻底糊涂了，我不知道该信谁？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“免疫系统怎么保护我们”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">发烧是一个几乎涉及每个人的话题，我详细说一下发烧的原理和治疗方法。</p>
-
-
-<p class="art-p">听众王良的孩子感冒了，还有些发烧，他想问问为什么会发烧呢？他听说发烧是身体提高体温，使病毒或者细菌不适合生存，然后有利于免疫系统干掉它们，不知道是不是这样。然后又问，如果这样的话，盖被子捂着，让孩子出汗会不会更好？可是医生说，不要捂着，温度高的时候还可以喝冰水降温，这两种矛盾的说法都把他弄糊涂了，不知道该信谁。</p>
-
-<p class="art-p">因为这是一个几乎涉及每个人的话题，所以我详细说一下发烧。发烧不是病，只是症状，可能有各种原因造成。如果以感冒为例，一般是病毒导致的，你听说的那种，发烧的高体温会让细菌、病毒活的更不自在，有助于身体免疫系统干掉细菌、病毒，这个说法是大致符合医学观点的。</p>
-
-<p class="art-p">发烧的具体过程是病原体进入血液里，遇到巨噬细胞，这种白细胞会释放一些介素，介素还会引发一系列反应，其中一个种反应会促进各种前列腺素的生成，其中有一种叫E2前列腺素的东西随着血液流动，流到脑部的时候，会给视丘下部发出信号。视丘下部是负责调控体温的，它收到这个刺激后，会把原来默认的人体正常体温给往上调。比如自从感冒后，视丘下部就以为39℃才是正常体温了，所以凡是身体温度低于39℃，就启动温度调控机制，更频繁的肌肉收缩，多消耗能量，减少排汗，这样我们就发烧了。</p>
-
-<p class="art-p">发烧的时候是整个人，从里到外全都热起来了，比如消化道的温度，脏器的温度都比平时高，一些只在36.5℃才有活性的蛋白质工作效率就大大降低，本该在体内发生的很多化学反应的产物的量就少多了。一个正常环境就被打破了，失去了平衡，而病毒和细菌很多是适应不了剧烈改变的，所以身体用高温做了一些牺牲，但也给病原体造成了一定压力，削弱它们繁殖。</p>
-
-<p class="art-p">这就是发烧也会对病情恢复有好处的原因，如果孩子已经7、8岁以上了，39℃维持3、4天是不用太担心的。只有超过41℃才需要特别降温。</p>
-
-<p class="art-p">然后再说发烧时捂被子的做法。这是一个典型的传统医学中观察到的现象，一个人高烧不退，出了一身大汗，终于退烧了，痊愈了，所以要想好，就捂着他，让他出汗。但如果你听懂刚刚发烧的道理就知道了，这么做就是把因果颠倒了。</p>
-
-<p class="art-p">我们出汗是因为退烧了，血液里没有E2前列腺素刺激视丘下部了。为什么不刺激了，因为白细胞不再分泌介素产生化学反应生产E2前列腺素了。白细胞为什么不在分泌介素了，那是因为病原体消失了。所以退烧是因为痊愈了。</p>
-
-<p class="art-p">可在刚刚痊愈的时候，视丘下部温度设定值已经从39℃降到37℃了，但体内积存了多余的2℃对应的热量还在啊，怎么办？得释放出去，怎么释放，就是通过排汗啊。所以我们会出一场大汗是因为已经痊愈了，需要把多余热量释放出去。</p>
-
-<p class="art-p">而那种传统医学的观点就是因果颠倒了，以为排汗能痊愈。所以给正在发高烧的患者捂着被子，闷着，只会让他们更受煎熬，而且这么做基本不会让他们体内温度继续升高，他们只会在被子里出更多的汗，好让体温不会升更高，等你把被子掀起来，他们自然降温后，体温依然还会维持在39℃。因为体内的病原体还在，所以病还没好。</p>
-
-<p class="art-p">医生给的建议是对的，孩子发烧难受时，可以给他降温，喝点冰水，往身上擦凉水，吹风，尽快蒸发掉，这就相当于人工排汗了，尤其是温度很高，比如41℃的时候，来不及送去医院，就要把衣服都退下来，全身擦冰水，电风扇对着吹，水一干再继续擦水，继续吹干，这么做会很快把体温降低到38℃左右，保护好内脏。像有些贴额头的降温贴，其实作用远不如冰水反复擦全身大，一个不如巴掌大的贴，能吸收多少热呢，大致算一下也能知道。</p>
-
-<p class="art-p">退烧药的起效原理也是利用我刚刚介绍的过程，只要阻断其中一个环节，就可以让视丘下部不再把39℃定位正常体温，比如常用的阿司匹林就是阻止前列腺素的生成。但是刚刚我说过，前列腺素有很多种，阿司匹林会一视同仁的抑制它们，可是有一种前列腺素是用来合成胃粘膜的，所以阿司匹林的副作用就是导致肠胃不舒服，严重的会有胃出血。</p>
-
-<p class="art-p">现在比较好的退烧药就是布洛芬，它虽然也会抑制胃粘膜的修复，但是副作用要小很多。前列腺素不但会参与调高体温，也是各种炎症反应中造成疼痛感的物质，所以缓解各种炎症反应中的疼痛，比如过敏导致的偏头疼，用布洛芬也是可以的。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-19">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">入耳式耳机对听力有损伤吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">@橙子：</p>
-<p class="art-p">卓老板，我同事说入耳式耳塞，对耳朵伤害比较大，这个有科学依据吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“力的传播速度”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">应该很多人都这个问题感到困惑，其实用对了耳机，对听力是有保护作用的。</p>
-
-
-<p class="art-p">橙子问了一个问题，他听说入耳式耳机对听力的损伤比较大，问是不是真的这样。</p>
-
-<p class="art-p">这个问题很有代表性，因为咱们节目就是听的，不知道大家平时都是用耳机听，还是用外放听的。这个问题简单回答，看你用的是不是得法，如果用对了入耳式耳机更保护听力。</p>
-
-<p class="art-p">具体来说呢，听力的自然衰减是每个人从出生开始就不断发生的不可逆的变化，这种损伤其实就是内耳中的耳蜗里的听毛细胞的损伤，是它最终把振动转化成电信号给大脑的，而听毛细胞不可再生，出生时多少，总数就那么多了，死一个就少一个，过大的音量，药物等等都会造成它的死亡。</p>
-
-<p class="art-p">它死亡后不但听不到高音，震动小的音量也听不到了。比如说10岁的孩子，可以听到2万赫兹频率的声音，但是我自己试过，好像1万2以上我就完全没感觉了。不过大家也不用担心，因为语音这类最核心的声音信号，几乎不会超过1500Hz，女高音能唱出的最高频率也就5000Hz，所以即便我们7、80岁了，只能听到6000Hz的声音了，也不会妨碍语言交流。</p>
-
-<p class="art-p">为什么说入耳式耳机用对了更保护耳朵呢？</p>
-
-<p class="art-p">因为它可以隔绝外界噪音，而我们使用耳机的时候往往是坐公交，坐地铁的时候，这时候外界噪音本来就很大，大到面对面说话都不一定能听清，这种环境噪音本来就在损害听毛细胞，这时候你塞上入耳式耳塞，就算什么音乐都不放，都是对听力的保护。</p>
-
-<p class="art-p">我们经常有这样的体验，下班时坐地铁听歌的音量，临睡前再戴上准备睡前听听歌睡，结果就发现音量大的吓人，在嘈杂环境中为了把噪音压过去，只好开更大音量，这对听力损伤就大了，入耳式耳机隔绝了外界噪音，你即便听音乐也不会像用平头耳机时把音量开那么大，所以从这个角度说，入耳式耳机更保护耳朵。</p>
-
-<p class="art-p">另外一个要说的是听的内容是什么影响也很大，音乐对耳朵的损害大于语音，因为音乐中从40Hz-10000Hz的频率都有丰富的表现，但听音乐时环境噪音会干扰到某些频段，尤其是低音部分，所以你可能为了更清晰的体会低频，会把音量开特别大。</p>
-
-<p class="art-p">但如果你听的是我这种语音节目，我的嗓音可没有那么丰富的变化，各位又更多关注的是说的内容而不是嗓音本身，所以即便我嗓音中不少低频损失了，你也不在意，于是音量就会小很多。</p>
-
-<p class="art-p">戴耳机时，只把音量调整合适还不够，耳机还会带来一个副作用，就是耳道内的出汗，细菌增生，这个影响对咱们中国人还轻一些，因为咱们分泌的都是干耳屎，咱们有了ABC11的基因突变。</p>
-
-<p class="art-p">但欧美人90%还是油性耳屎，所以入耳式耳机一戴上，汗液再多，更容易滋生细菌。所以首先要选好合适的胶套，然后准备好正经的医用棉签，不用什么金属的耳挖勺，甚至用钥匙掏耳朵。</p>
-
-<p class="art-p">不过我们也不要以为耳朵是那么脆弱的，如果就按iPhone6的音量输出功率看，用它的默认耳机，用最大音量输出，在100秒内，耳朵是安全的。不过我手头也没示波器，看不到iPhone6耳机音量对应的输出功率的变化，比如说我把音量调整到一半，输出功率是降到一半呢，还是分贝值降到一半呢。</p>
-
-<p class="art-p">最后再补充另外两种耳机，一个是头戴式耳机，这个就几乎避免了耳道内的细菌增生，也营造了一个比较隔音的环境，只是携带不方便，有些人习惯在电脑前听点什么，那我就推荐头戴式耳机，它唯一的坏处就是夏天戴着热。</p>
-
-<p class="art-p">另外一个要说的是骨传导耳机，这种耳机是利用颅骨的震动接收声音信号的，比如我们自己说话听着和录音就差别很大，差就差在我们自己说话时，不但听到空气传播到耳朵中的震动，同时也叠加了颅骨震动的部分，而听录音回放时只有空气震动的部分，所以听着就那么不同。</p>
-
-<p class="art-p">骨传导耳机并不塞到耳朵里，所以也没有耳道细菌滋生问题，而且也不像头戴式那样，捂着耳朵特别热，所以挺适合运动时带，这种耳机和耳朵后面的头骨贴紧，当然这也一样涉及音量的问题，不要开太大，不过我试过，这种耳机听音乐根本谈不上音质，改变太大了。所以更适合语言类节目。</p>
-
-<p class="art-p">好，最后总结一下，音量是产生伤害的关键，听歌时注意耳道清洁，担心耳朵健康可以试试其他形态的耳机。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-20">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">关于心脏移植手术</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">热云：</p>
-<p class="art-p">最近有一个公益广告，一个婴儿在哭闹，好几个人把他抱在怀里，怎么哄都不管用，但最后一个中年男人把他抱起来，这时音效里突显出心脏怦怦跳的声音，这个小宝宝一下安静了下来。字幕这时候打出来，说这个男人的心脏是孩子母亲移植给这个男人的，宝宝听到了熟悉的心跳声找到了安全感。我想问问卓老板，对于婴儿来说真的可以通过感觉分辨出母亲的心脏的跳动吗？这时婴儿的听觉系统和记忆功能真的发育全了吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“专题丨最受欢迎的文章 TOP10”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">婴儿其实还没有发育到能听出母亲心跳的程度来，不过这个问题倒让我想起了以前看过的一部胸外科手术的纪录片，给大家讲讲。</p>
-
-
-<p class="art-p">最近有一个公益广告的细节引起了听众·热云·的兴趣，就是一个婴儿在哭闹，好几个人把他抱在怀里，怎么哄都不管用，但最后一个中年男人把他抱起来，这时音效里突显出心脏怦怦跳的声音，这个小宝宝一下安静了下来。字幕这时候打出来，说这个男人的心脏是孩子母亲移植给这个男人的，宝宝听到了熟悉的心跳声找到了安全感。热云想问问，对于婴儿来说真的可以通过感觉分辨出母亲的心脏的跳动吗？而且他也怀疑婴儿听觉系统和记忆功能真的发育全了吗？</p>
-
-<p class="art-p">说说婴儿，他的平均发育进度是这样的：在怀孕25周的时候他的听觉系统已经发育完成，所以也就是说在妈妈肚子里，他已经可以听到很多声音了，这也是很多人说要胎教的理由。</p>
-
-<p class="art-p">不过婴儿的神经系统可远没有听力进展这么快，在妈妈肚子里时，不管是放《道德经》，还是放“般若波罗蜜”都没什么区别，他们听觉器官后面的神经系统并不能处理。我觉得最大的好处就是多疼媳妇，让媳妇每天美滋滋的，她心情愉快的时候各种内源性激素都会给胎儿形成良好的环境，我就见过一些研究是孕妇长期快乐的心情会让孩子体内也产生同样的内源性激素的分泌，这些是让孩子更健康发育的关键。而让他什么时候背单词，背唐诗，那都是很次要的东西了。</p>
-
-<p class="art-p">胎儿3个月的时候就能分辨父母的声音，也能分辨声音的方向了。那个公益广告里可以听到去世妈妈移植后的心脏的跳动只是广告里的一个情节而已，是不可能的。婴儿在妈妈怀里可以得到安慰，心跳也许是一个因素，但更多的是母亲抱他的手法，母亲身上带着的他熟悉的味道，还有他熟悉的母亲的嗓音。</p>
-
-<p class="art-p">我第一次看到这广告稍微震了一下，因为这实际上意味着母亲是在婴儿刚出生就去世了，而且通常来说心脏移植的供体很多都是在急性事故中身亡的，比如交通事故，所以这个小婴儿以后长大了也没了妈妈。</p>
-
-<p class="art-p">我回答这个问题其实还想说说心脏移植手术的事儿，这是人类医学的一项伟大的成就。谁都知道心脏是生命的关键，比如战场上一刀捅在心脏上那就死定了，但在1896年还是有一位医生第一次把一个心脏外伤的病人缝合上，就这样，竟然没有死掉，从此医生们开始试着拯救心脏。</p>
-
-<p class="art-p">现实中，第一次成功的心脏移植手术是直到1967年才实现的，最早在没有人工心脏的时候，这个手术要求时间配合点非常好，也就是那个心脏衰竭的人需要把开胸手术都做了，敞着口等着，然后供体也恰好就在旁边刚刚死亡，然后把健康的心脏取出来，才能移植给受捐助人。</p>
-
-<p class="art-p">我看过一个心脏移植的纪录片，供体就是来自车祸，当时母女两个人都遇难了，母亲当场死亡，但是25岁的女儿丹尼斯，只是脑死亡，心脏还在跳，正好医生已经准备好做移植手术，一直在等供体，跟丈夫商量，我们这还有一个濒危的男人，如果您授权让我们用您女儿的心脏，那就还可以挽救一个人的性命。丈夫当时的回答让医生都惊讶了，他说，如果你们不能救活我女儿，那就试试挽救那个男人吧。</p>
-
-<p class="art-p">手术时两个身体里的供血都要搭建体外循环，一个维持健康心脏继续跳动，一个维持病人身体正常供血。丹尼斯的心脏被切下来放在冰盆里从隔壁手术室运过来，而这边病人的胸腔已经打开了，空荡荡的，因为病变的心脏已经切下来了。那个冰盆里的健康心脏只要一模，它还会砰砰砰的跳，这一跳连手术的医生都跟着紧张。</p>
-
-<p class="art-p">开胸过程中，大出血，饮水机水桶一样多的血都不够用，血涌的连心脏都看不到。医生破釜沉舟，用冰水代替血液输入血管中给身体降温到接近0摄氏度，切下心脏。半个小时里，你也可以说，躺在手术台上的是一具尸体，已经满足临床死亡的条件了，无脉搏、血压、但是这段时间里医生们争分夺秒，保证尸体是鲜活的，保证捐赠的心脏没有失效，该连的部分连好，然后用电极在那个缝上去的心脏表面，刺激几次，心脏就开始跳动了。这不需要复杂的背景知识，咱们菜市场也买过猪心，手术场景真的就像那个买回来的猪心接好了血管后，电极抹过几次，就开始跳了。而且病人几个小时后就醒过来了。</p>
-
-<p class="art-p">任凭谁看了这个片子都会困惑，是什么维持着生命，竟然还能重启？</p>
-
-<p class="art-p">最早心移植手术后很难活过2年，现在已经有移植后，活过22年的人了，所以大概率说，如果你我还只是40岁以下，真有可能寿命超过90-100。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-21">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">减脂，该不该吃减肥药？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">最安全的减肥药：奥利司他</p>
-
-<ol class="art-list">
-<li>奥利司他在欧洲很多国家是唯一的非处方减肥药，它是通过减少肠道对脂肪的吸收来达到减肥的目的。</li>
-</ol>
-
-<ol class="art-list">
-<li>吃进肚子里的奥利司他会先和脂肪裂解酶结合，这样就减少了30%左右脂肪的吸收，效果明显，而且对身体没有伤害。</li>
-</ol>
-
-<ol class="art-list">
-<li>奥利司他也有副作用，主要是：大便失禁。因为油脂会从肠道排出，难以控制。只要吃油脂类食物就会这样，这种尴尬反而会促使人们选择无油脂的食物，养成好习惯。</li>
-</ol>
-
-<ol class="art-list">
-<li>奥利司他是小分子药物的典型代表，这也是传统药品研发的高水平。</li>
-</ol>
-
-<p class="art-p">抑制食欲的减肥药大都不安全</p>
-
-<ol class="art-list">
-<li>最早人们通过吸毒品的人群，发现这东西有减肥的效果，如果能把瘾去掉，只保留减轻体重的效果就可以开发出减肥药。</li>
-</ol>
-
-<ol class="art-list">
-<li>芬佛拉明就是安非他明（毒品）的衍生物，去掉了瘾的部分，但是减肥效果并不理想。后续发现芬佛拉明如果和芬特明合用，减肥效果增加5倍，于是芬-芬组合成了减肥药中的明星。但在1997年，相关研究发现芬-芬组合对心脏瓣膜有损伤，还造成了很多肺动脉高压死亡的事故，于是被禁。</li>
-</ol>
-
-<ol class="art-list">
-<li>抑制食欲的减肥药实际是作用于五羟色胺受体的，这方面目前安全的药很少，氯卡色林是一个，但是中国没有上市。</li>
-</ol>
-
-<p class="art-p">调整基础代谢减肥可行吗？</p>
-
-<ol class="art-list">
-<li>基础代谢指的是维持体温、血液循环，细胞复制、合成等活动必须消耗的能量。这部分能耗占了人体总能耗的60%以上。</li>
-</ol>
-
-<ol class="art-list">
-<li>虽然基础代谢活动并不受意识控制，但几乎所有基础代谢活动都不能轻易碰，否则就会造成严重后果，只有一点例外：褐色脂肪。</li>
-</ol>
-
-<ol class="art-list">
-<li>褐色脂肪不存储能量，只高效消耗白色脂肪。褐色脂肪在婴儿体内含量高，随年龄增长减少，成年人体内只有50克左右，它们分布在脖子、锁骨、肩膀部位。</li>
-</ol>
-
-<p class="art-p">治疗尿频、小便失禁的药能减肥？</p>
-
-<ol class="art-list">
-<li>这个只是有可能，因为膀胱括约肌内有一种肾上腺受体和褐色脂肪中的受体一模一样，所以吃米拉贝隆治疗尿频，同时也会激发褐色脂肪活跃起来，产生减肥的副作用。</li>
-</ol>
-
-<ol class="art-list">
-<li>利用褐色脂肪减肥的方法还在研发，很多药品还不成熟，米拉贝隆也不能直接用来减肥。</li>
-</ol>
-
-<p class="art-p">胆固醇与降脂药</p>
-
-<ol class="art-list">
-<li>胆固醇的口碑在一百多年中几次反转。1900年时代，胆固醇被发现除了合成胆汁，合成各种性激素外，还是组成细胞膜的重要物质，那时对它的评价是：重要身体组成部分。</li>
-</ol>
-
-<ol class="art-list">
-<li>1960年代后，人们逐渐发现，高血脂的人胆固醇含量都很高，这引起了很多人的重视。接着，人们又发现了胆固醇会在血管中沉积，还会造成冠心病，从此胆固醇名声败落。</li>
-</ol>
-
-<ol class="art-list">
-<li>1990年以后，人们又逐渐发现胆固醇绝大部分是由人体自己合成的，食物摄取的只占少部分，吃的多也没什么影响，它们不会被吸收的，所以胆固醇的名声逐渐恢复。</li>
-</ol>
-
-<p class="art-p">降脂药的诞生：小分子药物最后的辉煌</p>
-
-<ol class="art-list">
-<li>1970年代，日本第三一共制药公司内部奖励科研人员远藤章任选世界上的一所研究机构访问学习，一切费用公司承担，并且在他学成回公司后支持他任选一个领域研究，远藤章最终选择研发一款降脂药。</li>
-</ol>
-
-<ol class="art-list">
-<li>远藤章认为多种细菌生活在一起会出现激烈的竞争，很可能有些细菌在竞争中就会出现抑制其他细菌细胞膜生成的手段。而细菌的细胞膜是胆固醇组成的，所以这样就等于找到了胆固醇合成的抑制剂。</li>
-</ol>
-
-<ol class="art-list">
-<li>在寻找了一年后，远藤章终于找到了这种物质，它就是后来大名鼎鼎的降脂药，洛伐他汀的原型。后续美国默克公司和第三一共合作开发了洛伐他汀，商品名“美降脂”，这款药的药效非常好。</li>
-</ol>
-
-<ol class="art-list">
-<li>美降脂从上市到专利保护期过期总共经历14年，在这14年里两家公司赚了大钱，但专利到期后降脂药的市占率，从100%悬崖跌落到0.5%，这也反映了小分子药物公司的困境。</li>
-</ol>
-
-<ol class="art-list">
-<li>小分子药物的研发耗时非常久，失败率非常高，药方完全公开，仿制门槛低，研发阶段就会抓力注册，所以销售时间往往只有十多年，专利保护期过期后就难以盈利。这让以小分子药物为主力的药业公司负担沉重，也给研发大分子蛋白质药物的公司提供了新的机会。</li>
-</ol>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-22">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">初春的禽流感有多危险？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">@缘来缘去：</p>
-<p class="art-p">卓老师，你好。能不能讲讲现在的禽流感预防？是不是现在我们就不能吃鸡肉了呢？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：红皮鸡蛋更有营养？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">咱们国家现在正在经历一场比较严重的禽流感疫情，但是也没什么必要恐慌。</p>
-
-
-<p class="art-p">有听众问到禽流感了，这个问题比较紧急，咱们国家现在正在经历一场比较严重的禽流感疫情。</p>
-
-<p class="art-p">这次的流感是H7N9，历史上在2014年是最高峰，那一年感染了330人，但是这次的疫情最近两个月的感染人数达到：</p>
-
-<p class="art-p">去年12月份106人，今年1月份192人。</p>
-
-<p class="art-p">如果真照这个趋势发展下去，2月份一个月感染的人数甚至有可能超过历史最高值，一年的感染量。</p>
-
-<p class="art-p">当然，咱们有关部门已经注意到这个问题，不少省市的活禽宰杀场所已经关闭了。我们也不用恐慌过度，比如不吃肉了，不买鸡蛋了，如果真这样，那咱们这节目听了大半年，我的努力也都白费了。</p>
-
-<p class="art-p">1月份突然这么高的发病率和春节有关，因为这时候会有大量的活禽宰杀需求，而流感会随着温度升高下降，所以大概率说2月份的统计数据出来，不会比1月高，如果控制得当，甚至可能低于去年12月。</p>
-
-<p class="art-p">H7N9和其他流感病毒一样，H代表血凝素的类型，N代表神经氨酸酶的类型。</p>
-
-<p class="art-p">这种病毒可以感染鸟类的体细胞，鸟感染H7N9后的症状不是很严重，大都不影响正常生活，但是对人类就不一样了。</p>
-
-<p class="art-p">从中国2012年起到现在感染的H7N9病例来看，死亡率大约39%，这个死亡率远高于最常见的流感，甲流，也就是N1H1流感，患它的死亡率只有1.84%。</p>
-
-<p class="art-p">当然，死亡率也都是针对人群说的，比如听咱们节目的人大都集中在20-40岁之间，所以一旦感染，幸存的几率会高很多。疾病总是对孩子和老人的威胁最大。</p>
-
-<p class="art-p">那咱们普通人怎么避免呢？</p>
-
-<p class="art-p">首先是别养鸽子，北京好像从非典、奥运后，鸽子就很少了。</p>
-
-<p class="art-p">然后就是不接触活禽和它们的粪便。现在绝大多数感染者都是禽类养殖行业的人。我们的皮肤也不是吃素的，只要没有破损，还戴着口罩和手套，接触禽类也都是很安全的。就算是没有戴手套，真的抓了或者杀了染上H7N9鸡的人也不一定会感染，要感染还得满足很多不幸的条件。</p>
-
-<p class="art-p">再然后就是在公共场所戴口罩，手不揉眼睛，进门第一件事就是洗手。洗手时要用正确的方式：把手指尖，手指肚内外侧，手背都洗到。</p>
-
-<p class="art-p">要真有吃手、揉眼睛、挖耳朵的习惯，也要把手清理干净再弄。在超市或者菜市场不要接触活鸡。已经都真空包装的鸡，麦当劳的鸡块，这些都是没问题的。</p>
-
-<p class="art-p">对于鸡蛋，稳妥起见，可以洗干净再保存，不论蛋壳上有没有鸡屎或者羽毛，摸完后都洗手，不吃生鸡蛋，或者是用开水冲的鸡蛋花儿，都要煮熟，禽流感在100℃的环境需要1分钟才能灭活，就算是65℃也需要十分钟才可以，所以简单烫一下并不能杀死。</p>
-
-<p class="art-p">现在对H7N9的研究只发现了一种感染方式，就是人与禽类接触，人与人之间的感染还没有确凿证据。但是也不排除今后病毒变异，拥有像甲型流感那样的传染能力。</p>
-
-<p class="art-p">这种感冒一旦传染上，最开始的症状和流感差不多，发烧、咳嗽、流鼻涕、全身疼，但是5-7天后会严重化，体温一直维持在40℃。之后再发展成肺炎，呼吸困难，这就很危险了，可能会导致胸腔积液，然后窒息死亡。</p>
-
-<p class="art-p">这种病现在并没有特效药，针对流感目前最好的就是达菲。</p>
-
-<p class="art-p">这和普通感冒药完全不一样，普通感冒药主要是缓解症状，让人不那么难受，没有一丁点杀灭病毒的作用，反而还会让病毒存活更久。</p>
-
-<p class="art-p">但是达菲就是针对流感病毒的H和N的结构做设计的抗病毒药物。这个药简单说是阻断病毒继续繁殖的能力，所以用药越早效果越好，一旦持续40℃高烧好几天时，其实呼吸道里已经充满了数十亿的病毒，这时的药效已经谈不上好了，只是对儿童和老年人的死亡率降低有效果。</p>
-
-<p class="art-p">但是，感冒初期我们也不知道病毒到底是什么类型，也很少有人有闲心去机构化验鼻粘膜上感染的病毒是什么类型，所以达菲对严重化的病人效果也不理想。</p>
-
-<p class="art-p">在密集的城市中生活，难免遇到各种疫情，希望大家保重。</p>
-
-<p class="art-p">禽流感，并不代表不能吃鸡。↓↓↓</p>
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-23">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">新刊：口腔护理是伪需求吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">口腔护理是硬需求。</p>
-
-
-<p class="art-p">有听众评论说，刷牙这件事是卖牙膏的人硬造出来的概念，结果现在却成了保护牙齿的必要功课，也许流行、科学和时代就是这么发展的。</p>
-
-<p class="art-p">这还真不是这位朋友想的那样，我专门查了查这方面的资料，关于古代人的牙齿健康状况，大致有这么一个规律：</p>
-
-<p class="art-p">对于龋齿病来说，公元2000年之前的人龋齿病比现在低很多，这可能跟他们吃的食物粗糙，几乎没有游离糖有关。公元1000年前人类就有一部分完全摆脱了游牧的生活方式，采用定居的农业生活方式，这时龋齿开始增加。</p>
-
-<p class="art-p">现代人龋齿率大约比2000年前的人增加了80%，但是评价牙齿的健康程度还有另外两个重要指标，就是牙齿磨损和牙周病。牙齿磨损是越早的人越严重，这种严重的磨损在距今4000年时就存在，是因为吃的东西太粗糙了，但现在食物供给已经比从前多了，人类的寿命也有所增加，但是牙不耐用了。</p>
-
-<p class="art-p">牙齿磨损到中心的髓腔都暴露出来，接着就是髓腔炎，继而引发根尖炎。牙槽骨遭侵蚀常有发生，有不少是上下颌骨都穿孔的。</p>
-
-<p class="art-p">现代人是龋齿造成髓腔暴露，然后髓腔发炎，根尖发炎，是这个顺序。</p>
-
-<p class="art-p">牙周病也是高发病。公元前2000年的西亚、南亚地区的考察标本中，42%有牙周病。还有在英国发现的504个人的颅骨牙齿标本，时间从公元前几万年覆盖到公元前1000年，全部都有牙龈炎和牙周炎。还有对南斯拉夫人2000年前的颅骨分析，535个颅骨加98个颌骨，也都是全部有牙周病。</p>
-
-<p class="art-p">生前牙齿因为牙周病脱落是100%的事，凭借刷牙改善牙齿健康程度也不是生造出来的概念，这是一个自从人类食物丰富度增加，寿命延长后，一万年来一直存在的硬需求，谁能解决，谁就少受罪。</p>
-
-<p class="art-p">自从中国有文字记录以来，就有对牙齿的描述，比如诗经里形容女子的美就有一条，“齿如瓠犀”，就是说牙齿白净就是美；礼记中也有记载，“鸡初鸣，咸盥漱”，就是说早上公鸡打鸣的时候用盐水漱口。</p>
-
-<p class="art-p">距今3000多年前人们就在维护牙齿健康了。最早的牙膏配方是记录在石碑上，距今1500多年前，原料是皂角、生姜、麻蜀、地黄、早莲等等，用青盐煅烧。唐朝也有了跟现在很像的牙刷，就跟现在鞋刷子的样子差不多，但是小很多，用的猪鬃毛。</p>
-
-<p class="art-p">牙齿健康这件事确实是3分天注定，7分靠保养。3分天注定和基因有关系，这些基因决定着颌骨空间的大小，颅骨面部骨骼的形状，还有牙齿萌发的方向。有些人遗传的，牙就是容易歪着长出来，或者是多生牙，正常情况是32颗牙齿，他33颗，或者更多。</p>
-
-<p class="art-p">还有就是天生缺牙，这些只能通过后天矫正，从8-9岁恒牙都长出来了以后就做矫正，到了上中学前就可以摘掉了，今后就是上下两排弧面平整的牙齿，没有缝隙让细菌往下钻。</p>
-
-<p class="art-p">有人对电动牙刷的效果也有疑问，你想它一秒钟振动100多次，有的还是左右加前后的方式，手都不用改变角度，虽然用传统牙刷每次刷的力度比电动牙刷强，但是人家是靠次数取胜的，你刷1下，人家刷了40下，总能比你效果好。</p>
-
-<p class="art-p">但也因为频率太快，有时候你感觉不出它在刷，只要刷完后用舌尖舔舔牙面，就能感受到两者的差别。所以我还是在推荐电动牙刷。</p>
-
-<p class="art-p">刷牙刷哪里？如果非要选一个最重要的区域，那就是牙龈和牙齿接触的那部分，那里是刷牙的重中之重，因为牙冠上其他位置都很容易刷到，不会错过，所以我要着重提醒一下这个位置，如果一直没有牙菌斑能在这个交界处往下深入，你的牙龈、牙槽骨就一直生活在健康安全的环境中。</p>
-
-<p class="art-p">用电动牙刷刷这个区域时一般会感觉痒痒的，那是因为频率太高，从前又没体验过，这只能忍一忍了，它对牙龈和牙齿都有好处，这不就是广告中所谓的按摩牙龈嘛。</p>
-
-<p class="art-p">在评论里还有人提到牙线太粗，我猜你可能用的是那种牙线棒，就是一头是一个带尖尖的牙签，另一头是一个小叉子，小叉子中间绷着一束线，这种牙线棒上的线确实很粗，是很多股线绷在一起的，有些牙齿间隙小的人想把牙线塞进牙缝很费劲，再拽出来更费劲，甚至有拔出的时候角度不对，伤到牙齿的。</p>
-
-<p class="art-p">所以我还是推荐你用那种像卷尺一样的牙线。一卷50米，用多少就拉出多少，也细很多。用牙线除了可以清除塞牙的东西，也可以用来清洁牙侧面，动作就是用它去勒牙齿的侧面，勒一勒，刮一刮。</p>
-
-<p class="art-p">上年纪的人可能已经有一些牙槽骨被侵蚀了，牙齿间缝隙加大了，吃饭时食物残渣非常容易留在缝里，有时候缝大得卡一粒儿米饭都可以，这时候还需要用到牙缝刷。</p>
-
-<p class="art-p">牙缝刷的样子和专门刷窄口瓶子的那种刷子有点像，细细的钢丝上有刷毛，捅进牙缝里再拔出来就把缝隙里的食物残渣带出来了。牙缝刷也分大、中、小号，最小是0.8mm，最大是1.5mm，你如果不确定自己用什么合适，第一次就每一种买几个，这个不能勉强，如果你是0.8mm的很小的缝，用1.5mm的硬往里塞，很容易戳伤牙龈出血，引发感染，适得其反。</p>
-
-<p class="art-p">和这个功能类似的还有水牙线，有的叫做冲牙器，就是用一股特别细的水流冲走牙齿缝隙的脏东西，这个清洁单颗牙齿的能力没有牙线强，但是全面清洁的效果更好。</p>
-
-<p class="art-p">还有人说，洗牙后觉得牙齿缝隙变大了，这其实是一种典型的误解。有时候牙周病比较严重，牙龈发炎红肿很厉害，牙齿根部也都包裹了厚厚的牙结石，让你感觉牙没有缝隙的原因就是这些发炎，甚至发脓的牙龈，还有牙缝里填充的牙结石。这些东西只能让牙周的状况变得更差，牙槽骨吸收更快。消炎，消肿，清除结石后当然会有缝隙了，但这时才是牙齿真实的状况，也就是说如果有人洗牙后觉得牙缝变大了，实际上那才是牙的真实状态。</p>
-
-<p class="art-p">有这种感觉也算是个提示，就是这些人的牙齿状况已经不太好了，并不是洗牙造成的，洗牙只是把真实情况暴露出来了。如果牙周病比较重的时候洗牙就不光是清洁牙龈上的结石了，还会清理牙龈下侧的结石，用一种刮刀探入牙龈袋内，健康人的牙龈袋深度只有2mm，但是牙周炎患者的可能有7-8mm，甚至1cm，刮刀在下面刮掉一些牙菌斑和结石。这种治疗还会出一些血。为了避免后续感染，医生还会围着牙龈给病人上一圈抗菌的药，比如像派力奥。</p>
-
-<p class="art-p">普通的洗牙，医生有时也会建议你做一下抛光，就是用类似牙膏一样的东西，用抛光头把牙齿打磨光滑。这并不是变相多收费，其实一次完整的洗牙应该包括抛光，因为牙菌斑、牙结石之所以能附着在牙齿上，就是因为牙齿的坑点多，凹槽多，适合附着。洗牙把结石和牙菌斑去掉了，但这里的物理光滑程度依然没有改善，洗完后不过了几天细菌还是从这些地方开始附着，反反复复。</p>
-
-<p class="art-p">抛光是把牙齿上不平整的地方都磨掉，这样能让洗牙的效果维持更久。抛光的轻柔有点像给车漆上光打蜡，抛光头都是橡胶质地的，不会伤牙。除了抛光外还有牙齿增白服务，这就属于锦上添花了，对牙齿健康不会有提升，只是让颜色变白一些，是可选项。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-24">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">用什么办法可以解决过敏？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">vitam15496100：卓老板，对于过敏采用的激素治疗是什么原理呢？谢谢！</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“发胖不一定因为又懒又馋”。</p>
-
-
-
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">有听众问到，对已经出现过敏体质的人怎么治疗呢，比如激素治疗或者脱敏治疗。其实从前20多期说的主要是基础学科的知识和故事，那时候评论里讨论数学和物理的比较多，但自从最近8期说的和生物、健康有关的内容，猛地一看评论还以为进了好大夫在线的网站呢，每天有大量的求医问药的评论，只有少数和节目内容有关的我选了出来，还有一部分问题，说了自己的病情问怎么治，或者说了一个药名，问药效好不好，这些问题其实应该问医生，他有检查的数据，他有专业知识和治疗经验，另外久病成医这句话有道理，得了病，受苦最深的就是患者本人，自身利益直接受损，肯定没有别人比自己更花心思在这个病上，所以他就会比其他人更了解这个病的方方面面，甚至顶半个医生了。</p>
-
-<p class="art-p">所以多和医生沟通，多查资料，多和病友沟通应该是效果最好了。但是既然问到激素治疗和脱敏治疗了，我也借这个机会和大家说说，现在过敏症最常见的就是哮喘，主流医学对这个病的看法是无法彻底治愈，最有效的缓解方法就是吸入糖皮质激素，让过激的反应停下来，等到下次再出现过激反应时再吸入。</p>
-
-<p class="art-p">大部分人听到激素二字就紧张，好像沾到激素就是三条腿的青蛙，四岁女孩来月经那么恐怖，但其实，凡是主流医学界的主流治疗方法都是经过最顶尖科学家的验证，可以保证用这种方法治疗得到的好处远大于这种方法带来的副作用。</p>
-
-<p class="art-p">您相信这一点就不会被更多琐碎的，自己没精力掌握的细节绊倒，比如是不是我得知道糖皮质激素是怎么在免疫反应中起效的，用在哮喘中安全不安全啊，长期用会不会长出第三条腿来之类的；您认准这一点也能抵御外界博眼球的伪科学微信文章。</p>
-
-<p class="art-p">您也相信，正经医院医生给的治疗方法大概率说就是最可靠的，如果不按照主流医学界的建议，自己选择其他方法，其实大部分时候也不会太危险，这个原因并不是因为那些方法有效，而是因为大部分疾病是可以自愈的。但对哮喘可能就要受罪了，一个不留神就会窒息。</p>
-
-<p class="art-p">刚刚的问题里也提到了脱敏治疗，这确实也是主流医学界认可的一种治疗方法，但并不是处理哮喘的常用手段。其方法就是，先确定过敏原是外部的物质造成的，而不是我们身体内免疫系统调节的问题。然后把过敏原制成提取液，分成很多种不同浓度，最先用最最稀的浓度让患者接触，可能第一次接触你有明显的过敏，等到第10次接触，已经没有任何反应了，这时候再换第二瓶浓度高一级的，再来10次接触，患者大都也是从敏感到不敏感。最终一瓶和患者平时最常接触到的真实过敏原的浓度一样高，这样训练过后人体对这种物质就不再过敏了。但您一听就知道，这个治疗过程会非常长，比如针对花粉过敏的哮喘，可能需要1年半才能完成脱敏治疗，如果治疗效果好，可能4至5年里不会出问题，但之后还会回到对花粉过敏的状态。这是效果好的情况，如果效果不好，说不定半年后就退回去了。</p>
-
-<p class="art-p">好，这就是这个问题的回答，大家关于具体疾病和药的问题还是多问主治医生。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-25">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">电子烟有害处吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">青出于蓝：《烟草业的罪》听的我触目惊心，先吸口电子烟压压惊。这电子烟总没什么害处吧？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“烟草业的罪”。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">听众青出于蓝听了烟草行业的罪后调侃道，“听得我触目惊心，先吸口电子烟压压惊”。但其实您知道吗，电子烟也可能有危害。这其实又是一段故事，简单来说，香烟在欧美国家从20世纪80年代后就走入了衰落，媒体宣传和香烟有关的99%以上都是危害和如何戒烟。这时候电子烟出现了，它能营造吞云吐雾的效果，而且各个厂家研发思路不同，有的是希望烟民能通过电子烟逐渐降低对真香烟的依赖。他们怎么做呢，就是用丙二醇来模拟吸入嘴里和嗓子的时候那股辣和呛的感觉，用尼古丁来满足身体成瘾的需要，用甘油营造吞云吐雾的视觉效果，用化学香料模拟各种味道，用电加热的方式让这些成分挥发。</p>
-
-<p class="art-p">丙二醇以湿纸巾那样的方式涂抹在皮肤上，那个量不会有害处，但是加热吸入后对呼吸道黏膜是有刺激作用的，这是有害的。尼古丁更不用说了，市面销售的电子烟的说法是逐步降低身体对尼古丁的需求，有一瓶含12mg的、9mg的、6mg的及3mg的，也有完全不含尼古丁的。但这种初衷是不是能达到戒烟的效果是存疑的，电子烟现在被FDA和各国食品药品部门监管留意的，比较混乱的部分在于香料的成分，这些都是各家按照自己的规范配制的，但这些成分在加热雾化吸入后是否安全，没有什么医学证据，也就是说现在暂时无法证明这些添加物是安全的，所以肯定不能销售。所以现在FDA对电子烟的监管是趋于越来越紧的。这是以戒烟为目的的销售。</p>
-
-<p class="art-p">可以销售的电子烟都是成分明确的，但这是在美国，在中国没有监管，厂商就可以跟进自己需要勾兑各种口味，比如薄荷、水蜜桃、苹果，或者模拟中华烟、中南海烟，这些香烟的味道。实话说我自己买了一支电子烟，我是不会抽烟的，所以选的不含尼古丁的烟油，按理说薄荷应该是最清凉的，可实际我吸的感觉，在3种口味中，薄荷的刺激性最大，最呛。所以我敢说，那些模拟其他香烟口味的烟油，味道也很难正宗，各种口味添加的烟油成分安全不安全还真说不准。</p>
-
-<p class="art-p">另一种目的是电子烟厂商只是打着戒烟的口号，最终目的是让烟民停留在电子烟持续消费上，这种目的制作出的烟油成分可能会有更多不标注成分的东西。</p>
-
-<p class="art-p">除了这些，还有一方面导致电子烟有可能被大力管制的是目前有很多研究显示，电子烟的出现会让本来不吸烟的群体培养出吸香烟的习惯，这个比例不同研究数字不同，从20%-50%，这些证据一旦最终在研究综述中被采纳，可能电子烟的监管会更严。</p>
-
-<p class="art-p">那最后说说我自己的看法，电子烟，危害大概率说至少比香烟小，具体小多少，不知道。它没能赶上好时机，比它害处大多了的香烟能大行其道地销售，但它却在发展中遭到更严格的监管，也只能怪命不好。如果您本来是烟民，通过电子烟能戒掉，那还是受益的，如果本来不吸烟，像我这样，因好奇去抽电子烟，最后好奇心重到试了香烟，还上了瘾，那就得不偿失了。</p>
-
-<p class="art-p">好了，这个问题就回答到这里。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-26">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">美容保健水真能美容吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">#我问卓老板</p>
-
-<p class="art-p">周周：对了，卓老板，我想请教您一个问题，现在流行喝水素水，日本的水素杯超好卖的，说可以去除自由基，真的那么有效吗？作为女生，美容是毕生事业，您可不可以做一期关于怎样有效去除自由基的科普呀。先谢谢啦。</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》第2期“人们眼中的世界为什么不一样”。</p>
-
-
-      </div>
-    </article>
-
-    <article class="art-card" id="art-27">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">聊聊植发的事儿</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-<p class="art-p">植发可以很好的掩盖秃顶的事实，但其实全世界男人50岁以后，70%有明显秃顶，所以这也不是病，不需要治疗，秃顶有秃顶的魅力。</p>
-
-
-<p class="art-p">上次我说了秃顶和白发的问题，很多人问植发的效果怎么样？那我再补充一下，植发是一种美容手术。之所以秃顶了，就是因为毛囊萎缩了，萎缩到完全失去功能了，但是这部分完全没法长出头发的地方一般只集中在额头和头顶，大约占整个头可覆盖头发区域的10%，所以植发的原理就是拔出你毛发比较浓密地方的毛囊，然后种在毛囊萎缩的地方。</p>
-
-<p class="art-p">用的都是自己的毛囊，所以不存在什么排异反应，而且也只能用自己的毛囊，为了多长点头发还要吃抗排异药那就得不偿失了。一般来说是把一些后脑勺部位的毛囊种在缺头发的位置，有时候后脑勺的毛囊也很少，甚至会用到胡须的毛囊。至于取走哪部分毛囊，那是需要手术前医生做检测的，选最密的区域，尤其是那些每平方厘米毛囊密度在120个以上的地方。</p>
-
-<p class="art-p">一般来说，明显秃顶的人都需要取走1500-2000个毛囊。你可能担心，那后脑勺就没头发了吧？其实因为这里密度高，所以即便均匀的取走2000个也一点都看不出来。</p>
-
-<p class="art-p">植发手术的时候都打麻药，而且整个过程比较长，可能几个大夫一起操作，用的工具是植发笔，插入头皮中，挖出带着头发的毛囊后，整整齐齐放在培养皿里，那样子就是一根头发后半截裹着一些头皮上的肉，就那个样子。</p>
-
-<p class="art-p">但没有经验的医生在取毛囊时会弄不好角度，伤到毛囊，一般来说98%的毛囊都能存活。取毛囊过程大约1个半小时，然后就是种在缺头发的地方，这个时间可能要3个小时，这对病床上的人是个考验，对医生也是体力上的考验，而且最终植发的效果好坏，就要看他们下手的分寸了，这有点像让我们给细胞质点点儿似的，比如说一共就2000个点，你在某些区域点太密了，其他区域就只能点得很疏，但最后看起来的效果就不均匀，所以这只能依赖医生的经验。</p>
-
-<p class="art-p">因为毛囊笔只插到真皮层，所以不会破坏血管也不会伤到神经，但是因为插了几千个小窟窿，所以会出一些血，只要配合消炎药大都没有危害。如果衡量危害大小的话，比垫鼻子，拉双眼皮的风险低很多。</p>
-
-<p class="art-p">取毛囊和种毛囊的过程都会打麻醉，起码手术中不会感觉任何疼痛，只是第一次打麻药时有点疼。也因为手术时间特别长，有的地方会给准备一些音乐听，还有给患者弄个支架，让他看电影的。</p>
-
-<p class="art-p">手术以后十几天，血痂就差不多都掉了，新植入的头发也已经牢固了。然后植入的新毛囊会进入一个脱发期，就是原本毛囊上的头发会掉下来，但不要担心，马上会重新长出来的。</p>
-
-<p class="art-p">植发的效果因人而异，有些人就是满头满脸的出油，当年毛囊萎缩也是因为油浸泡的，所以在从前秃顶的位置也依然是今后毛囊快速萎缩的地方，也许效果好能在秃顶位置上发挥余热十几二十年，但也可能几年后就因为溢脂性脱发，继续萎缩。</p>
-
-<p class="art-p">一旦植发的部分也萎缩了，那差不多你的头上就没有什么多余的毛囊做下一次植发了，也就面对现实吧。所以对脸上头上油特多的人来说，我估计听咱们节目的不少听众都是中学生，你们如果是这样的话，要想今后不要20出头就秃顶，最好留短发，比如6mm-9mm的圆寸，每个月剃发一次，让它老保持短短的，每天找机会就用去油的洗发水洗洗头上的油，头发短，洗发水也省的很，你除油勤快，今后毛囊寿命就长。</p>
-
-<p class="art-p">最后说说花费，手术是每个毛囊10-12块钱，你要是植入2000个，就是2万到2.4万，然后之前需要做血液检查，毛囊检查，要吃消炎药，有的机构还给你开我上次说的米诺地尔，连续吃半年多，大约2500块钱，其实只是为了让头发更快的出现，不吃也无所谓。所以要是2000个毛囊，大约需要2.3万到2.7万元的价格。如果你真的打算植发，那在手术前，最好保持清淡饮食，维持好一个良好的头皮环境，不要满头都是挤破的青春痘和包，让头皮也保持清新。</p>
-
-<p class="art-p">但我还是想补充一下，全世界男人50岁以后，70%有明显秃顶，所以这不是病，也不需要治疗，秃顶有秃顶的魅力。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-28">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">肚脐眼会暗藏什么健康危机吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">我问卓老板</p>
-<p class="art-p">哈哈：肚子眼特别不起眼，但好像暗藏了很多健康危机，卓老板能聊聊肚脐眼吗？</p>
-
-<p class="art-p">问题来自“得到”订阅产品《卓老板聊科技》“减脂，该不该吃减肥药？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">有听众问肚脐眼是不是暗藏了什么健康危机，这问题对新生儿父母可能比较有用，因为肚脐是人生第一个伤口，出生前这里连在婴儿的脐血管、脐尿管上，但是剪断后这些东西都没用了，它们在后续几年里会腹膜化，简单说就是和腹膜融为一体，成了增厚的腹膜。出生的时候脐带是护士给处理的，一般有两种方法：用脐带夹和用气门芯结扎。说到这儿，您可以掀开衣服看看，如果肚脐眼的形状是压扁的，高出皮肤1至2cm的，那就是当年护士用的脐带夹止血的。如果是内陷进去的，当年护士就是用气门芯结扎的。两种不同的形状没有好坏之分。</p>
-
-<p class="art-p">问题中说的健康危机，绝大部分指的是出生前一个月，因为虽然脐带完全封闭了，但是里面的血管和尿管的腔体结构还在。如果在医院处理过程中不小心有致病菌感染，大都是脐炎，就是脐带剪断的这部分发炎，用常规的杀菌手段处理就可以，极少数严重的会导致腹腔的感染。这种情况发生比例非常低。大多数新生儿肚脐上的血痂一掉就差不多没什么问题了，也就是在出生后20天左右的时候。这20多天里需要注意的就是注意干燥，不要让这里碰水，别把尿布包到这个位置，因为一旦尿液涌上来，容易糊住，感染。也不要人为地清理还没自然脱落的血痂。</p>
-
-<p class="art-p">孩子到了两三岁后好奇心重，会对自己或者小伙伴的身体好奇，你怎么有小JJ啊，我怎么没有，你的肚脐怎么鼓出来的，我的怎么凹进去，然后就用手抠，抠得比较狠时会弄破，感染，成年人也有手闲不下来的，甚至用什么镊子，耳挖勺抠的，最后一不留神，结局都是脐炎，就是肚脐眼发炎啊。治疗方法也还是跟传统治疗细菌感染一样。肚脐眼不是人体一个特殊位置，不是什么练功的罩门，也不暗藏什么健康危机。平时洗澡可以用水冲冲，不特意清理一辈子也不会有问题。而且不少腹腔镜手术是从这里把器械扎进去的，这样做的好处是，可以不用在病人身上另外钻窟窿眼了。</p>
-
-<p class="art-p">好，这个问题就回答到这。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-29">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">胰岛素传奇</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">本期你将听到↓↓↓</p>
-
-<p class="art-p">血液中的糖是怎么释放的？</p>
-
-<p class="art-p">古代医学中的糖尿病和现代医学中的糖尿病</p>
-
-<p class="art-p">与胰岛素有关的诺贝尔奖</p>
-
-<p class="art-p">本期知识清单↓↓↓</p>
-
-<p class="art-p">1</p>
-
-<p class="art-p">血液中的糖是怎么释放的</p>
-
-<ol class="art-list">
-<li>胰岛素就像是一个交警，糖是车辆，胰岛素交警专门指挥所有糖分进入肌肉和脂肪，并且给肝脏下令：停止制造葡萄糖。胰高血糖素也可以比喻成另一种警察，他下达的命令和胰岛素正好相反，他命令肌肉释放糖原中的糖，命令肝脏大量地制造葡萄糖。</li>
-</ol>
-
-<ol class="art-list">
-<li>葡萄糖在血液中有时候会被装在蛋白质内运输，当运输到胰腺内部后，在胰腺beta细胞中发生反应，这种反应会刺激胰腺大量分泌胰岛素降糖。</li>
-</ol>
-
-<ol class="art-list">
-<li>血糖除了受胰岛素信号的控制，更直接的控制来自于胰岛素的受体，受体是最终执行指令的单元。</li>
-</ol>
-
-<p class="art-p">2</p>
-
-<p class="art-p">I型糖尿病和II型糖尿病</p>
-
-<ol class="art-list">
-<li>I型糖尿病只占糖尿病的10%以下，他们大都是免疫系统有问题的孩子，在出生后免疫系统会攻击自身的胰腺beta细胞，此后这类细胞不断减少，最终消失，再往后胰腺就不会再分泌胰岛素了。但至于为什么免疫系统会攻击胰腺beta细胞？现在还不知道。</li>
-</ol>
-
-<ol class="art-list">
-<li>II型糖尿病一般发生在老年，尤其是饮食过量、身体肥胖的老年人。他们的问题在于身体对胰岛素不敏感了，也就是受体不听胰岛素指挥了，所以他们体内胰岛素甚至还偏高，但血糖就是降不下来。至于为什么受体会不敏感？现在也还不知道。</li>
-</ol>
-
-<p class="art-p">3</p>
-
-<p class="art-p">古代医学中的糖尿病</p>
-
-<ol class="art-list">
-<li>最早记录糖尿病的是古埃及3500年前的《埃伯斯纸草文稿》，那里除了糖尿病外，其他内容和各国古代医学何其相似。</li>
-</ol>
-
-<ol class="art-list">
-<li>中国也曾在古代医学中记录过糖尿病的症状和治疗，【此肥美之所发也,此人必数食甘美而多肥也。肥者令人内热,甘者令人中满,故其气上溢,转为消渴。治之以兰，除陈气也。】</li>
-</ol>
-
-<p class="art-p">4</p>
-
-<p class="art-p">现代医学中胰腺和糖尿病的研究</p>
-
-<ol class="art-list">
-<li>在1902年闵可夫斯基阐述过胰腺的功能：降糖。这位仁兄是爱因斯坦的数学老师的哥哥，他的研究让人们第一次知道胰腺和血糖有关系。</li>
-</ol>
-
-<ol class="art-list">
-<li>三位科学家用狗做各种胰腺的实验，切除胰腺，结扎胰腺导管，杀死胰腺腺泡细胞，用胰腺细胞打碎的提取物注射回狗体内，观察血糖变化，这些试验都非常复杂。</li>
-</ol>
-
-<ol class="art-list">
-<li>随后实验逐渐简化到从屠宰场买牛的胰腺，这时也不用再给狗做胰腺切除、胰腺导管结扎的手术了，直接用动物胰腺提取，主要用的动物是猪和牛。</li>
-</ol>
-
-<ol class="art-list">
-<li>胰岛素的提取在1922年才初具规模，通过化学手段提纯到了可以应用在临床的程度。第一个临床应用拯救了一个11岁的小女孩，随后的病人纷纷治愈，1923年胰岛素的发现就获诺贝尔奖了。</li>
-</ol>
-
-<ol class="art-list">
-<li>1973年胰岛素成功实现了转基因细菌制造。从此人类胰岛素的大批量、高纯度的制造就容易了。</li>
-</ol>
-
-<p class="art-p">5</p>
-
-<p class="art-p">胰岛素和诺贝尔奖</p>
-
-<p class="art-p">很多人都认为1965年中国用人工方法合成了牛胰岛素应该获得诺贝尔奖，实际上利用化学手段复制大分子蛋白质是一种效率低到无以复加的方法，更多是运气和体力的付出。同年份下美国已经利用基因测序找到了合成胰岛素的那段DNA序列，为今后转基因细菌制造胰岛素奠定了基础，这种突破性工作都没获奖，人工手段低效合成就更没戏了。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-30">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">脱发怎么办？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">SKY：</p>
-<p class="art-p">卓老板，我最近脱发特别严重，有什么方法可以治疗脱发吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“专题丨最受欢迎的文章 TOP10”。</p>
-
-<p class="art-p">卓克</p>
-<p class="art-p">面对脱发坦然一点，如果一定要治，就用有效的药物，平时注意健康饮食，不要盲目相信商家宣传。</p>
-
-
-<p class="art-p">有不少听众问治疗脱发和白头发的问题，我们先说说脱发要不要治。</p>
-
-<p class="art-p">脱发是男性共有的特征，统计规律是这样的，35岁时大约66%的男人都存在程度不一的脱发，50岁时85%的男人严重脱发。一个半以上的人都有的现象，要不要治疗？这就很是问题了。</p>
-
-<p class="art-p">如果你存在脱发，最好用平常心看待，这就好像有人问，年龄增加需不需要治疗一样。不过要究其原因，还是因为新生的头发不如掉落的头发多，为什么会这样呢？因为一些头皮的毛囊渐渐丧失功能了。为什么毛囊会丧失功能呢？因为雄性激素有一种叫做二氢睾酮，它和雄性激素受体结合后会产生毛囊萎缩的效果。那为什么脱发都是在头顶呢？就是因为二氢睾酮在头顶分布最多，所以那里的毛囊萎缩最严重，头发会越来越细，最后细到肉眼都不可见了，就不再长头发了。</p>
-
-<p class="art-p">其实二氢睾酮在人体还有一个地方分布多，就是前列腺，凡是这里和受体大量结合，就会造成前列腺肥大，所以最早治疗脱发的药物本来是打算研发用来治疗前列腺的。</p>
-
-<p class="art-p">如果秃顶了怎么办呢？</p>
-
-<p class="art-p">曾经我们说过，只有两种药是效果可靠的，通过了FDA（美国食药监局）认证，外敷的叫做米诺地尔。其实它也是治疗高血压的，不过治疗高血压是吃下去的，治疗脱发是外敷的。它之所以可以治疗高血压就是因为可以促进血管扩张，扩张的同时也对头部毛囊附近供血提供了更好的条件，所以头发会长出来一些。这个药在临床上的有效率大约是50%，还有一个内服的药叫非那雄胺，非那雄胺的有效率超过85%，不过临床试验中一部分人反映非那雄胺影响性功能，当然，这只是对少部分人，大多数人没有这个副作用。这两种药都是安全有效的。</p>
-
-<p class="art-p">如果真想缓解脱发，就用它们，而且是边吃边起效的，停了药就还会回到从前的秃顶状态。除了这两种药以外，其他的，尤其是国内厂商推出的生发、防脱发产品，如果是涂抹的，90%是加了米诺地尔，如果是吃的90%是加了非那雄胺，但他们很可能不标注出来，而且价格比这两种正式药物贵很多。虽然有效但是伤钱。</p>
-
-<p class="art-p">还有另外10%号称可以治疗脱发的，用一些精血不足需要补肾的理论给人吃何首乌，有不少要治疗脱发和白发的人信了这个。其实何首乌根本没有效果，还含有蒽醌类毒素，对肝有伤害，所以这部分人就属于伤钱又伤身了。</p>
-
-<p class="art-p">原则上我建议秃顶的人坦然接受这个现状，在我看来这并不是什么病，我自己也是从25岁以后开始秃顶的，现状头顶已经可以看见肉了，这没什么不好的，如果你爱看动物节目会发现黑猩猩群的头领大都是已经秃顶的家伙，人类社会里掌握权力和财富的人也有很多是秃顶的，这是一种成熟的标志。</p>
-
-<p class="art-p">另外还有听众问白头发是怎么回事，头发之所以黑是因为它含有黑色素，所以当人体不再合成黑色素的时候头发就会白。现代医学证明在有些特殊情况下，即便人还很年轻，黑色素分泌也会停止，比如精神高度紧张的时候，还有免疫系统出问题的时候，黑色素细胞之所以罢工，是因为酪氨酸合成少的原因。哪些食物里有酪氨酸呢？一般肉类和鸡蛋里就很充足了，只要不是严重挑食，是不会因为酪氨酸摄入不足导致白发的。</p>
-
-<p class="art-p">头发的生长速度一天大约半毫米，所以一个月能长出1.5-2厘米的长度，如果身体真的不再合成黑色素了，也是要经过2个月才会出现满头白发的情况，这不会一蹴而就，如果年纪轻轻，几个月就满头白发了，这时候更重要的问题不是治疗白发，他肯定遇到了更严重的问题需要解决。</p>
-
-<p class="art-p">市场上销售的洗发水对治疗白发没有什么用，洗发水最大的作用也就是对头发的清洁，头发自从长出来以后就不再有活的细胞了，所以根本谈不上滋养头发。</p>
-
-<p class="art-p">所以最终总结一下，坦然面对脱发，如果一定要治，就用有效的药物，平时注意健康饮食，不盲目相信商家宣传。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-31">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">请把这10条健康问答，转给你最关心的人</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">No.1  中国人为什么坐月子？</p>
-
-<p class="art-p">丨2016.9.21</p>
-
-<p class="art-p">生孩子以后需要恢复，需要格外注意感染，所以中医理论套在这样一个大前提下，就诞生了“坐月子”。坐月子禁忌非常多，到现在我们已经可以轻松识别，不能洗澡、不能洗头、不能刷牙，这些是胡扯。但是不能碰凉水，不能吃凉性的东西，不能吹风，这些好像大家觉得有那么点道理，其实这些一样是胡扯，这只是中医套用了食物温凉寒热的那套理论。</p>
-
-<p class="art-p">No.2  水土不服是怎么回事？</p>
-
-<p class="art-p">丨2017.3.29</p>
-
-<p class="art-p">水土不服主要是因为消化道微生物菌群的变化导致的。我们消化道可能有好几百种细菌，它们的种类和占比分配每个人都不同，来源主要是两个：一个是刚刚出生时吞下的母亲产道的酸性溶液里带的菌群和最开始母亲口中的微生物；另一个是后天吃的食物在消化道形成的环境适于哪些微生物生长，就有哪些微生物。</p>
-
-<p class="art-p">而母亲传给我们的微生物也由母亲的母亲和母亲平时吃什么决定的，所以这就是一方水土养一方人。当你更换生活环境时，肠道微生物不适应，自然就会出现拉肚子等水土不服的现象。</p>
-
-<p class="art-p">No.3  所谓“辟谷”的好处？</p>
-
-<p class="art-p">丨2017.3.27</p>
-
-<p class="art-p">辟谷就是指一周7天里有5天按正常习惯吃饭，另外两天每天只吃正常量的1/4，在科学研究里管这种吃法叫轻断食。</p>
-
-<p class="art-p">最稳妥的来看轻断食或者辟谷应该只能算作一种减肥方式，在健康上的其他益处有一些迹象，但是不是如此？还需要更强的证据。当前不建议给孩子、老人、病人试。</p>
-
-<p class="art-p">No.4  得不得癌症是靠运气吗？</p>
-
-<p class="art-p">丨2017.4.3</p>
-
-<p class="art-p">《科学》期刊上刊登了一篇论文，结论说的是引发癌症的突变里有66%是随机突变导致的，29%是环境因素导致的，5%是遗传导致的。这些研究对科研人员是有意义的，它至少提示了科学家要重视随机错误对癌症发生的研究。</p>
-
-<p class="art-p">但同时，这项研究是一个庞大的平均值，必然有一些突变更受随机因素影响，另外一些更受环境影响。哪些更受环境影响才突变呢，很不幸，抽烟导致的肺癌，喝酒导致的肝癌，胡吃海塞导致的结肠癌，不注意防护导致的皮肤癌都是更受环境因素影响的癌症。所以不要因为一篇权威期刊，就放心不管理自己的生活。</p>
-
-<p class="art-p">No.5  藿香正气水能治中暑吗？</p>
-
-<p class="art-p">丨2016.7.14</p>
-
-<p class="art-p">中暑的本质是因为身体缺水缺的太多了，导致身体没有多余的水分可以用来调节体温。这时候喝一个非常刺激的液体，多少会让神经兴奋度提高一些，但是藿香正气水绝不会对中暑的人有好处。</p>
-
-<p class="art-p">因为藿香正气水会继续耗费身体水分的，或者甚至是起到脱水作用，喝它只会加重病情。</p>
-
-<p class="art-p">No.6  大脑的耗能有多少？</p>
-
-<p class="art-p">丨2017.2.8</p>
-
-<p class="art-p">人类的大脑占体重的2%，它耗氧量占到全身的20%，消耗葡萄糖量占全身的25%。大脑需要的能量，平均1小时是5克葡萄糖，一天就是120克。如果一天吃120克葡萄糖，都消化了以后是480千卡能量。所以大脑一天消耗480千卡能量。</p>
-
-<p class="art-p">No.7  电子烟有害处吗？</p>
-
-<p class="art-p">丨2016.11.2</p>
-
-<p class="art-p">各个厂家对电子烟的研发思路大都是希望烟民能通过电子烟逐渐降低对真香烟的依赖。他们怎么做呢，就是用丙二醇来模拟吸入嘴里和嗓子的时候那股辣和呛的感觉；用尼古丁来满足身体成瘾的需要；用甘油营造吞云吐雾的视觉效果；用化学香料模拟各种味道；用电加热的方式让这些成分挥发。</p>
-
-<p class="art-p">总的说电子烟的危害至少比香烟小，但具体小多少，没有一个明确有效的测试。</p>
-
-<p class="art-p">No.8  入耳式耳机对听力有损伤吗？</p>
-
-<p class="art-p">丨2017.3.8</p>
-
-<p class="art-p">如果入耳式耳机的使用方法正确，其实更保护听力，因为入耳式耳机可以隔绝外界噪音。我们使用耳机的时候往往是坐公交，坐地铁的时候，这时候外界噪音本来就很大，大到面对面说话都不一定能听清，这种环境噪音本来就在损害听毛细胞，这时候你塞上入耳式耳塞，就算什么音乐都不放，都是对听力的保护。</p>
-
-<p class="art-p">No.9  该不该买电动牙刷？</p>
-
-<p class="art-p">丨2017.1.25</p>
-
-<p class="art-p">不一定非得买电动牙刷，如果用普通牙刷，只要你掌握巴氏刷牙法，效果也能很好。这个方法大致就是你刷牙时不把重点放在牙面上，而是更多的放在牙齿根部和牙龈上，所以刷的时候，牙刷一半盖住牙齿的部分，另一半盖住牙龈的部分。清洁时，每次牙刷覆盖两颗牙齿，反复刷上4秒钟，然后换到另外两颗牙齿上，内侧和外侧都刷到。</p>
-
-<p class="art-p">这样刷完最少也得需要3分钟，实际情况是很少有人能保持正确方式刷这么长时间。即便是这些人知道巴氏刷牙法，知道时长对效果的巨大影响，也还是如此。所以基于这种现状，电动牙刷还是值得推荐的。</p>
-
-<p class="art-p">No.10  美容保健水真能美容吗？</p>
-
-<p class="art-p">丨2016.7.11</p>
-
-<p class="art-p">人体从食物中获取的营养物质是最主要的，如果要把“最主要”这三个字按比例严格规定一下，至少要超过99.9%这个比重。所以不管是美容保健水，还是养生水，花样再多营养成分也是微乎其微的。比如，日本的水素水杯卖得很贵，那它主要卖的就是这个瓶子的钱跟广告费。</p>
-
-<p class="art-p">丨提示：</p>
-
-
-<p class="art-p">上周六的《专题丨最受欢迎的文章TOP10》里还包含了另外5个高价值问题，为了避免内容重复，本期没有提及，欢迎大家回看《专题丨最受欢迎的文章TOP10》：</p>
-
-
-<p class="art-p">问答：吃燕窝对身体有益吗？丨2017-03-02</p>
-<p class="art-p">问答：为什么人会上火？丨2017-03-16</p>
-<p class="art-p">讨论：雾霾口罩你选对了吗？丨2017-01-02</p>
-<p class="art-p">问答：初春的禽流感有多危险？丨2017-02-20</p>
-<p class="art-p">问答：如何挑选空气净化器？丨2017-01-11</p>
-
-<p class="art-p">致1917小组成员：</p>
-
-<p class="art-p">大到风俗习惯，小到生活起居，你想问的问题都能在这里找到答案。点击红包，将这些内容分享给你的朋友，邀他们一起听《卓老板聊科技》，给生活中大大小小的问题找个答案。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-32">
-      <div class="art-header">
-        <span class="art-chapter">Ch.92</span>
-        <h3 class="art-title">防蓝光眼镜有必要买吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">Emma：</p>
-<p class="art-p">卓老板，最近防蓝光护眼眼镜很火，你能讲讲有必要买吗？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“专题丨最受欢迎的文章 TOP10”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">这个问题先说我的建议，不买，然后再听音频讲为什么不买。</p>
-
-
-<p class="art-p">最近问蓝光眼镜或者蓝光护眼产品的听众越来越多了，所以这期我们说说防蓝光。先说结论，蓝光护眼产品的宣传中忽悠成分占比80%，但还有20%是有一些较弱证据的。</p>
-
-<p class="art-p">你可以看所有蓝光护眼产品的宣传，第一条都是蓝光会造成视网膜黄斑变性，然后才是什么缓解视觉疲劳，防眩光之类的。</p>
-
-<p class="art-p">黄斑是视网膜后部一个视神经高度密集的地方，人眼对光线的感知很大程度都依赖于黄斑区域的视神经。黄斑变性导致的失明是所有失明原因中占最大头的，在美国甚至比青光眼、白内障、糖尿病性视网膜病变这3种原因导致失明的总数还多。所以把这条搬出来说效果应该比较突出，但实际上蓝色光对造成黄斑变性只有一些动物实验有迹象，而且还都得是高强度的情况下才能观察出这些迹象。所以“蓝光会造成视网膜黄斑变性”属于证据不足的非主流科学结论，不能当结论采纳。</p>
-
-<p class="art-p">这样的结论还很多，比如就有研究发现完全去除蓝光会加深近视，那如果什么都信的话就只能干脆闭眼了。所以如果你要是为了这个目的买了产品就属于被忽悠到了。这个道理大家应该好理解，地球生物就是生活在日光下的，可见光就是400-700nm的波长，如果在白天活动的生物会被日光中某个波段的电磁波造成失明，那它早就该在进化过程中淘汰掉或者演化出夜行性的生活习惯了。</p>
-
-<p class="art-p">人类的眼睛并不是最近几万年才演化出来的，我们哺乳类动物的眼睛从几千万年前就是这套结构了，太阳在这段时间也处于稳定期，照来的光也没有什么变化，所以进化的过程也保证了我们不是一种可以被蓝光轻易致盲的生物。这就是蓝光护眼产品中80%是忽悠的部分。</p>
-
-<p class="art-p">但还有20%是有一些证据的，那就是源于蓝色光会影响睡眠，这倒是一个证据比较充分的部分，这个原理就是蓝色和绿色光可以调节人脑中松果体分泌褪黑激素的量，所以白天沐浴在阳光下可以精神更好，但临睡前最好不要接触太多蓝绿光，否则大脑总是接收到还没到睡觉时间的信号。</p>
-
-<p class="art-p">也正是基于这一点的科学证据，iPhone也有一个所谓的防蓝光功能，当然，人家不会用这么缺乏科学精神的词，他们这个选项叫night shift，也就是夜间模式，但这个功能实际上就是在减少屏幕中蓝色光的成分，用户在睡前还要看手机的话，刺激会小一些，不会让他们继续兴奋，尽量减少睡前看手机对的睡眠的不利影响。当然，最好的方式就是根本一眼都不看，可是很难有人做到，那就只好折中，给你们弄出一个夜间模式出来。</p>
-
-<p class="art-p">大厂跟进的还有谁呢，蔡司，他们出了不少防蓝光镜片和膜，总的来说只是响应市场需求，既然是一个已经被忽悠起来的消费需求，而且起码说把蓝光截掉20%-50%，虽然对健康没有什么好处，但起码对安全没也有什么害处，那干嘛不卖呢。</p>
-
-<p class="art-p">蓝光产品现在可以分成发光类的和防护类的，发光类的就是减少一部分蓝光的成分，防护类的就是阻挡蓝光。比如LED灯，这是一个已经成熟的行业，所以行业规范也有对人体安全的内容，并没有专门针对蓝光强度的规定，但是有对光源前度的规定，那就是只要灯具发光表面的亮度小于10万cd/m^2，对眼睛就是安全的，这是经过大规模医学统计得到的结论。</p>
-
-<p class="art-p">所以不论什么颜色光超过这个才真正谈得上伤害，而这就要谈到我们之前说的防辐射的套路上了，先找有害物是什么，蓝色光，波长大约450nm；第二步找权威机构的安规，那就是10万cd/m^2；第三步找我们应用场景下的剂量是多少。手机屏幕和电脑屏幕实测，大约也就是250-400cd/m2，离10万还差的太远。</p>
-
-<p class="art-p">我再举几个日常会碰到的光产品，比如大功率的射灯，大约能有几百万，这个直视会根本睁不开眼，睁不开眼就是人体的自我保护了，还有家里30、40瓦的吊灯，大约3000，所以家用产品很难在剂量上超标。</p>
-
-<p class="art-p">那蓝光产品到底买不买呢？我的意见是不用买，你要觉得那至少对睡眠有改善，那就把手机亮度调暗，或者养成一个睡觉就不玩儿手机的习惯，这比任何防蓝光产品都强。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-33">
-      <div class="art-header">
-        <span class="art-chapter">Ch.99</span>
-        <h3 class="art-title">夏天来了，怎么防蚊？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">J.DW：</p>
-<p class="art-p">卓老板，最近蚊子多了，晚上睡觉就翻出去年没用完的电蚊香液。查了下里面对人体有害的是菊酯类化合物，安全线是多少没查到，使用的空间大小和时间长短不同的话好像情况很复杂，想麻烦你讲一期这类灭蚊杀虫剂应该如何正确的看待和使用，孩子和孕妇需不需要特别的注意？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“防蓝光眼镜有必要买吗？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">这个时间讲讲防蚊的方法，很有必要。</p>
-
-
-<p class="art-p">4月份虽然北方还不那么热，但南方已经有人开始挨蚊子咬了，这期我们赶在蚊子大军到来之前说说怎么防蚊。</p>
-
-<p class="art-p">蚊子之所以能找到我们靠的是二氧化碳的味道。你可能觉得二氧化碳没味儿，那是对你，在蚊子那二氧化碳就是味道浓烈的，充满食物的香味。但这一步我们几乎没法避免，因为我们时刻在呼出二氧化碳。蚊子通过它做大致定位，然后再通过皮肤上汗水的味道定位哪儿可以下嘴。</p>
-
-<p class="art-p">其实新鲜的汗水是没有味道的，但只要停留在身上时间久了，细菌就开始在汗水中繁殖，繁殖过程中会产生味道，即便味道很弱，对蚊子也是很明显的。它们就是通过汗水的味道判断哪儿可以下嘴。</p>
-
-<p class="art-p">蚊子还倾向于往温度稍高的地方去，所以什么人最招蚊子呢，就是那种傍晚刚打完篮球的男生，他们呼出二氧化碳的量大，体温高，浑身还都是汗水。蚊子找准目标开始吸血，快的时候只要20秒就可以完成一次吸食，一次吸的量也不会很多，但是经常会肿起很大的包来。</p>
-
-<p class="art-p">你要是仔细听过免疫系统的那一系列节目就知道为什么会起包，那些是蚊子的唾液引起的免疫反应。它们吸食血液时会分泌十几种蛋白注入血管，就是为了防止血液凝固，另外还会扩张血管，但这种陌生的蛋白质被免疫系统认出来后，身体会启动防御机制，分泌大量组织胺，然后血管壁通透性增加，不少血浆就涌出来到被吸食的部位，所以才会肿胀。</p>
-
-<p class="art-p">这一肿胀就挤压刺激了神经，就会发痒，所以即便你用力挤，挤出来的也都是组织液，而不是蚊子的唾液。</p>
-
-<p class="art-p">不同的蚊子唾液成分不同，所以起的包严重程度也不一样，有些刚被咬1分钟就肿起来，有些甚至几个小时后才有反应。一般来说在住家附近的蚊子咬了包以后反应会轻一些，因为我们的免疫系统经常遇到这种侵袭，有些适应了。出差去别的地方，或者刚刚搬家到其他国家，那前几个月被咬肿起来的程度都比较严重，因为蚊子唾液毕竟不是自身的蛋白质，所以一般都会引起免疫反应把它清除掉，所以都会起个包。</p>
-
-<p class="art-p">这就是蚊子找到你和咬你的过程，防御方法有两种，物理的和化学的。</p>
-
-<p class="art-p">物理方法就是蚊帐和长袖长裤。奥运会时巴西人看到咱们代表团的蚊帐都惊了，这些东西效果很好，咱们不多提。家具和墙上的纹路也尽量不选深色的，不选有细碎花纹的，这样更容易发现蚊子。物理防御的那些所谓灭蚊灯效果并不明显，蚊子并不会被吸引进去送死，如果放在户外，反而会吸引很多趋光性的虫飞进去，蚊子并不是主力。</p>
-
-<p class="art-p">化学手段防蚊。美国疾病预防控制中心曾经推荐过四种防蚊产品，这时你要注意，这就是主流科学观点了，它是一个科研机构通过大规模实验的统计得到的结论。</p>
-
-<p class="art-p">第一种是DEET，中文名字叫避蚊胺，中国市场80%的蚊子水用的都是这个，只是含量上的差异，最低的3%，其实这么低就没什么用，最高的有50%以上的，不是太好买到，浓度高防范效果好，保持时间长，但是抹上黏糊糊的，感受不好。</p>
-
-<p class="art-p">DEET你要是淘宝一搜，都是各种宣传不含DEET的，都说这个有毒，其实这跟卖保健品的忽悠人说药品有毒一样。DEET有毒的说法是因为现在凡是声称可以防蚊驱蚊的化学品要按农药来管理，咱们国家农药管理条例第2条第5款规定，这类产品除了必须要取得农药登记证号，还得在包装上标注有毒性才能销售，但是毒性等级有剧毒、高毒、中毒、低毒、微毒，这五种，是没有无毒这一类的，所以即便DEET是安全的也只能按最低的标成微毒。</p>
-
-<p class="art-p">如果你有含DEET的花露水，还是正经牌子的，你可以看看，包装上确实是这样标注的，结果就导致很多人误以为有毒。其实是规章制度相对不完善导致的。大品牌没办法只能标注，但如果较真的话，那些小品牌，宣传不含DEET的花露水，只要宣称自己可以驱蚊了，一样也应该按照刚刚说的第2条第5款，去拿农药登记证，标上微毒才可以销售，但是小品牌和不正规牌子是不会这么做的。</p>
-
-<p class="art-p">FDA（美国食药监局）对DEET的测试是，浓度为24%的时候平均可以保持5小时的药效，所以其实放眼看中国市场的各种驱蚊花露水，我从没见过浓度超15%的，更多是浓度只有7%的时候宣传驱蚊8小时，这种宣传也是夸大了非常多的，其实大约也就是2个小时的有效性。在美亚上可以买到100%浓度的，不过也就是在野外生存时能用上，这东西涂上感觉黏糊糊不好受。</p>
-
-<p class="art-p">除了DEET，有效的驱蚊成分还有伊默宁，英文缩写是IR3535，中文名是驱蚊酯。这个在中国市场不如DEET广泛，效果在浓度超过20%以后和DEET差不多，但是低浓度时的防护效果就差很多，比如7%浓度的防护效果只有20多分钟。</p>
-
-<p class="art-p">第三种有效的化学成分是艾卡瑞丁，这个是1980几年拜耳药业出品的，效果比刚刚说的都好，只不过更难买到。优势在于涂上以后还有清凉的感觉，不像DEET，跟糊了一身油那样。</p>
-
-<p class="art-p">第四种有效的是柠檬桉树油，听着好像很自然吧，但是防蚊效果是最差的，不论多浓，顶多2个小时。但是占了便宜，因为它有挥发性，让人感觉味道出来了，就是有效果，而且还凉凉的。</p>
-
-<p class="art-p">以上说的这些都是主流科学界对防蚊产品的观点，安全并且有效，而且只推荐了这几种，其他就算有效果也不如这几种了。另外，蚊香用的菊酯类产品也是安全的，但是防护效果要比驱蚊液低一个数量级。</p>
-
-<p class="art-p">如果这些防蚊方法核算成分数呢，满分100分的话，物理防御贡献55分，驱蚊水防御40分，蚊香贡献5分。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-34">
-      <div class="art-header">
-        <span class="art-chapter">Ch.100</span>
-        <h3 class="art-title">科技可以用在找男友上吗？</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">Joy：</p>
-<p class="art-p">卓老板您好，关于爱情有一个问题想请教。不知道爱情、择偶能不能用科技来解答，科技的发展是为了改变和提高人生的体验，应该不仅仅限于物质，择偶应该超越所有物质，也是对人生最重大的“科技”之一。我正值26，到了普遍择偶的年纪，身边多多少少也有可以进行选择的男生。我也看到了很多因为选对或者选错了对象，对往后自己的家人的人生有着非常重大的改变。关于这个问题我也非常困惑，请问在这个方面，该如何投资自己的人生？</p>
-
-<p class="art-p">留言来自“得到”订阅产品《卓老板聊科技》“问答：人为什么会上火？”。</p>
-
-
-<p class="art-p">卓克</p>
-<p class="art-p">我们专栏终于有人问情感问题了，我用理科那一套思路来解答一下。</p>
-
-<p class="art-p">节目播了这么久，听众提问越来越像求医问药了，终于迎来一位问感情问题的了。</p>
-
-<p class="art-p">Joy说，不知道爱情择偶能不能用科技解答，既然科技的发展是为了改变和提高人生体验，应该不仅仅限于物质，择偶应该超越所有物质，也是对人生的最重要的科技之一，我已经到了择偶年龄，身边多少有可以选择的男生，同时我也看到了很多因为选对或者选错了对象，对往后自己的家人和人生有非常重大改变的例子，所以很困惑这个问题，这个方面，如何投资自己的人生？</p>
-
-<p class="art-p">这方面的科技还真有，但是你必须集中精力听，因为我要介绍两个已经研究得很透彻的数学模型了，第一个是多对恋人的配对组合，是否存在稳定关系。</p>
-
-<p class="art-p">比如说100个男，100个女，每个女生都对每个男生的基本情况有了解，而且心中有一个排序的先后，谁是最爱的，谁是最不爱的，男生也是这样。好，现在他们开始相亲，稳定关系指的是，当这100对男女全部配对结束后，不存两个在非伴侣关系的异性对彼此的评价比各自已经配对的伴侣要高，也就是说我选的就是最好的。</p>
-
-<p class="art-p">我在重复一次，为什么达到这个要求就算是100对伴侣是稳定的呢？这很好理解，因为这样就保证了，也许有男人更喜欢另外的女人，但可惜，凡是他更喜欢的女人全都更喜欢她们自己的老公，而这个男的排不上号。对女生也是这个道理，所以一个巴掌拍不响，就不会让2个非伴侣的异性出现劈腿。</p>
-
-<p class="art-p">这个数学问题就是，存不存在一种配对方法，形成这样的稳定组合呢，如果存在，应该怎么配呢？</p>
-
-<p class="art-p">数学家不是吃素的，这个答案是存在，而且也把配对方法也找到了，咱们不细说。咱们对应现实说说，实际生活中，男女配对确实都是在往这个方向努力的，谁都希望自己和自己认识的人里最好的那个异性配对。所以人群中的配对过程也倾向于接近稳定配对生成的方式。但是这个方式有一个弊病，就是对女人不利。虽然同意不同意，点头的是女方说了算，但最终的结果是这样选下去，男人虽然得不到他的女神，但依然可以得到所有看得上他的女人中在男人心中排位最靠前的。而女人得到的却是所有看得上她的男人中，在女生心中排位最靠后的。</p>
-
-<p class="art-p">刚好中国女生在配对中就是倾向于被选择，所以结局往往令女生更失望，所以你的问题是，科技能不能指导恋爱，那么第一个指导方案就是，用男人选女人的方式选择男友，你要主动出击才能和看得上你的男神中选在你心中排位最靠前的。而且如果从你所说投资的角度，一旦你心中第一个不行，最有效率的方式就是马上去征询排位第二的男生的意见。</p>
-
-<p class="art-p">那么第二个指导方案就是37%法则了，这也是经过数学验证的，简单来说就是在选男友的时候，前37%的人不论有多好，都不选，从第38%开始，只要遇到了一个比之前那37%的男友们里最好的还要好的，就选择他。如果一直没有遇到更好的，就选择最后一个。</p>
-
-<p class="art-p">有人用计算机大规模模拟过，在1万次这样类似于招聘选择中，每次从30个人里选一个，每次这30个优秀程度不同的人是随机排序，结果有4200多次选中了30个人里最出色的那个，也就是命中率42%，但如果是随机选的话，命中率只有可怜的3.3%了。</p>
-
-<p class="art-p">可能大家说了，这不可能，我怎么可能有30个男朋友，但标准放宽点嘛，不是非得接吻才算。喜欢的，可以交往的都划进来，你自己心里比量一下嘛。</p>
-
-<p class="art-p">以上呢就是两个科学对选择上的帮助，第一个，主动出击，第二个37%法则。</p>
-
-<p class="art-p">不过生活中的细节太多，往往会打破这些数学规律，或者让真正的道理中只有一部分是数学规律发挥了作用。尤其我们刚刚说的规律都更关注统计规律，而不是单个个体就会怎样，只不过会增加你选对的概率。</p>
-
-<p class="art-p">另外决定恋爱幸福的因素就是你怎么给可选的男生排序了，你的规则是什么，是什么决定他排第一，排第二呢？还有脱不花（罗辑思维CEO）每天写的小纸条里也有这样一句，就是当你恋爱的时候，脑中浮现的形象是今后孩子他爸爸，当前这个人，你觉得是不是可以胜任这个形象，也有助于做出更好的判断。</p>
-
-<p class="art-p">当然，年轻的时候，遇到真爱，拼命爱上一场，把结婚、房子都抛开对大部分人都是有条件的，现在生活优越了，敢爱敢恨的代价小了，错了也不会伤筋动骨。最后希望这些建议能帮到你。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-35">
-      <div class="art-header">
-        <span class="art-chapter">Ch.102</span>
-        <h3 class="art-title">专题丨5个知识点，弄懂减肥这件事儿</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">——请把这5条转给你身边正在减肥的人——</p>
-
-<p class="art-p">No.1  身体质量指数BMI</p>
-
-<p class="art-p">丨2016.10.4</p>
-
-<p class="art-p">1997年世界卫生组织提出了一个判断肥胖的标准，衡量的参数叫做身体质量指数，body mass index，简称BMI，这个指数是体重除以身高的平方，体重单位公斤，身高单位米。</p>
-
-<p class="art-p">世界卫生组织还给了两条标准线，第一条叫超重线，超过BMI超25就算超重；第二条线叫肥胖症线，超过30就算肥胖症。</p>
-
-<p class="art-p">这个指数其实挺粗糙的，比如它对亚洲人来说就过于宽松了。所以对待亚洲人，两道线的指标要调整一下，一个从25降到24，一个从30降到28。</p>
-
-<p class="art-p">说它粗糙，还因为它只适合测试成年人。小孩子和老年人，还有职业运动员都不符合，这些人要不就是身体指标在剧烈变化，要不就是肌肉含量超高，体重明显沉。</p>
-
-<p class="art-p">No.2  增重和减重的核心因素</p>
-
-<p class="art-p">丨2016.10.4</p>
-
-<p class="art-p">每天把减肥挂在嘴边的人，其实对减肥的理解有很多误区。首先我们要了解增重和减重的核心因素。</p>
-
-<p class="art-p">增重的就一个，就是我们吃进肚的食物，但吃下的食物不一定全都变成能量，有很多还没来得及吸收就排出体外了，影响吸收效率的因素非常多，甚至我们肠道内的细菌都起了重要的作用。</p>
-
-<p class="art-p">再看消耗的部分，最大的误区来自于很多人认为稍微体育锻炼可以消耗大量热量，消耗掉大量脂肪。其实不是，正常人，就是那些身体情况和运动量均值差不多的人，他们在此基础上增加运动量，比如每天通过运动燃烧450千卡的热量，坚持一个月，而且在这一个月里饮食习惯不能改变，坚持下来后，这些热量核算成1.5公斤脂肪燃烧。</p>
-
-<p class="art-p">每天要耗费450千卡的热量相当于什么概念呢？也就是商业楼宇的30层爬两个来回。一个人，平常生活的好好的，现在突然让他每天从1层爬30层，来回两趟后他不会食欲大开吗？吃得更多，甚至有时候比运动量增加的还多。所以增加运动量对减肥的人来说，是意志和体能的双重考验，对一般的人效果不会很明显。</p>
-
-<p class="art-p">其实我们一天消耗的总能量里有60%以上属于基础代谢。什么叫基础代谢呢，比如我们是恒温动物，维持体温恒定就是耗能最大的项目，还要维持血液循环，维持细胞内各种物质合成，虽然这些活动都进入不了我们的意识，它们的功耗也不高，但因为24小时一刻不停，所以耗能总量超过人体一天的60%。如果把有意识的运动，和不得不做的运动，比如上下班路上、走路、站立，敲键盘、思考这些都算在一起，只占一天耗能的20%-30%。还有一部分叫做消化耗能，就是分解食物需要的能耗。</p>
-
-<p class="art-p">No.3  减肥手术</p>
-
-<p class="art-p">丨2016.10.4</p>
-
-<p class="art-p">这里的手术减肥不是抽脂这类的美容手术。</p>
-
-<p class="art-p">比如最极端的减少摄入的手术，把胃做一个旁路手术，让胃的前部和小肠的后部连在一起，食物没经过消化和吸收就排出去了。或者把胃切除一部分，容积小了，一吃就饱。通常这种方法要求BMI指数在40以上的人才可以批准做。</p>
-
-<p class="art-p">No.4  减肥激素</p>
-
-<p class="art-p">丨2016.10.4</p>
-
-<p class="art-p">激素减肥，只对先天激素分泌不足的人有效。</p>
-
-<p class="art-p">除了手术减肥效果明显，还有利用激素减肥的，这种激素叫瘦素。</p>
-
-<p class="art-p">瘦素一经发现就被美国的安进公司买下专利，开发减肥药。而药物上市需要得到FDA（美国食品药品管理局）的审批，这款减肥药从1994年开始申报。</p>
-
-<p class="art-p">到了1997年第一期临床试验结束，能通过FDA审核的药片都要经过3期临床实验。按顺序，第一期要做的并不是疗效如何，而是安不安全，能不能给人用。而且初期的效果看，瘦素对健康的普通人，也有明显的减轻体重的效果。这让很多安进的大股东欣喜若狂。</p>
-
-<p class="art-p">但2年后不好的消息传来了，在二期临床实验中发现瘦素开始是有效的，但后期减重的效果马上消失了，反弹明显，而且对肥胖造成的并发症，比如糖尿病、脂肪肝、动脉硬化、高血压都没有任何改善。安进不甘心，反复实验，希望能找到突破口，但是经过了又7年的努力，还是毫无进展，最终在2006年把瘦素的专利低价出售了。</p>
-
-<p class="art-p">No.5  减肥药</p>
-
-<p class="art-p">丨2016.10.7</p>
-
-<p class="art-p">这里说的减肥药，不是减肥保健品，比如减肥茶、减肥胶囊……</p>
-
-<p class="art-p">想靠吃药减肥，还没有副作用，太难了，这关系到基本的生命活动。到现在为止，还没有被下架的非处方减肥药是奥利司他。</p>
-
-<p class="art-p">在很多欧洲国家，这也是唯一一款非处方的减肥药，它的作用原理是减少肠道对脂肪的吸收。本质上是把你吃的油腻的东西中的油直接排出去，这一排，就难免超级尴尬，所以有人为了避免尴尬，吃饭时就特别注意少吃油脂。其实也就养成了一种饮食的好习惯。</p>
-
-<p class="art-p">现在真正能做到排油的，就是这种药。其他什么秘方排油，那都是忽悠。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-36">
-      <div class="art-header">
-        <span class="art-chapter">Ch.102</span>
-        <h3 class="art-title">专题丨关于癌症你该知道的事儿</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">卓克</p>
-
-
-<p class="art-p">在写发刊词草稿的时候，写到了国内某些医疗机构和旅游机构联手搞的“日本健康之旅”，就是去日本做PET-CT，这其实是一种只适合给癌症患者做的肿瘤筛查，全下来要花几万元。</p>
-
-
-<p class="art-p">今天这篇内容，我就来给你说说“关于癌症你该知道的事儿”。</p>
-
-<p class="art-p">一、癌症增多的真正原因</p>
-
-<p class="art-p">各国的癌症统计都呈现一个规律，那就是40岁以上患者大幅增加。这实际上是因为我们人类进化出的身体还没有适应“长寿”。实际上，人类的平均寿命超过40岁的时间，最多只占人类历史的千分之一。</p>
-
-<p class="art-p">如果将人类的身体比喻成一台复杂的机器，它当初设计的寿命就是30年。超出寿命部分的运转，真的还不能保证没问题。虽然直到今天，网上很多文章都说是吸烟，酗酒，雾霾，生活压力，二恶英等等导致人们患上癌症，但其实从统计规律上看，不能说现代生活的改变没有增加癌症发生率，但癌症之所以发生，那些只是诱因，最最主要的原因是， 我们的进化没有跟上寿命的提升 。</p>
-
-<p class="art-p">癌症是所有复杂的多细胞动物老了以后的高发病。不论是人类，还是老鼠，或者保健品市场最爱吹的鲨鱼都是如此。</p>
-
-<p class="art-p">二、癌症与生命</p>
-
-<ol class="art-list">
-<li>癌症在恐龙时代就出现了。</li>
-</ol>
-
-<p class="art-p">2003年的时候，美国俄亥俄州东北医科大学放射科的科学家和古生物学家一起对10个博物馆里的700多只恐龙身上的1万块骨骼做了X光断层扫描，就发现血管瘤是恐龙身体里最常见的肿瘤，但大都是良性的，恶性的主要是骨膜软骨瘤。</p>
-
-<ol class="art-list">
-<li>癌细胞比普通细胞生存能力更强。</li>
-</ol>
-
-<p class="art-p">多细胞动物的体细胞平均在50次有丝分裂后就会死亡，少的仅15次，多的有120次，这是因为DNA复制的时候端粒每复制一次就会减少一点，最后次数到了就没法再分裂下去。另外，分裂次数有所不同可能是因为分裂产生了无法消化、代谢的脂褐素，当它积累到足够多时，就会诱发细胞死亡。而癌细胞的不同在于，它突变出了在复制到最后时补充一段端粒上去的功能，干这活儿的“工人”叫端粒酶，其实这个功能在每个DNA上都写着，只不过是一直处于锁死状态，只有在产生精子或者卵细胞的减数分裂时开启，但是在癌细胞进化过程中锁被打开了。</p>
-
-<ol class="art-list">
-<li>恶性肿瘤细胞是如何生长的？</li>
-</ol>
-
-<p class="art-p">如果做B超时可见的那种一块的肿瘤，也就是通常直径1cm以上的东西，其中的肿瘤细胞的数量已经有1亿左右的规模了，但是，它们依然是良性肿瘤，因为它们还只是一团稳定成长的细胞，还没有发展出侵略的技能。</p>
-
-<p class="art-p">想要发展成恶性肿瘤，还需要几个层次的能力：</p>
-
-<p class="art-p">首先为了解决氧气和养分的问题，恶性的肿瘤细胞会释放让血管重新生长的信号。血管的再生能力原本是写在DNA中的，只不过从胚胎发育完成后，这个功能就被锁住了。成人后只有伤口愈合的时候才能再次打开血管再生的能力，而恶性肿瘤细胞会打开这个功能。</p>
-
-<p class="art-p">然后，恶性肿瘤细胞会边生长边分泌可以溶解细胞膜的酶，把血管打穿，然后顺着血液去身体各处，一旦适合繁殖，就定居在那个地方，它们还会在狭窄的位置释放很多酶，把空间清理出来。</p>
-
-<p class="art-p">所以，现在为了抑制恶性肿瘤的发展，有些药物的原理就是阻断新生血管的生长。</p>
-
-<p class="art-p">三、对癌症的3个误解</p>
-
-<ol class="art-list">
-<li>仔细检查，找出癌症。</li>
-</ol>
-
-<p class="art-p">人们身体中存在癌细胞是大概率事件，解剖学发现，40岁-60岁的男子，平均1/3的人有前列腺癌，到85岁的时候75%的男子有前列腺癌，80岁以上女性67%的人有乳腺癌。他们没有查出来，只是因为没有影响到生活质量。</p>
-
-<ol class="art-list">
-<li>早点查出癌症，有助于延长寿命？</li>
-</ol>
-
-<p class="art-p">美国预防服务工作组评估从1986年到2005年这20年里，因为在PSA筛查中发现自己有前列腺癌症，进而去接受手术、化疗，结果因为手术导致严重并发症，比如精液中有红细胞、丧失生育能力的人越来越多。有100万男性因检查结果是阳性去做各种治疗，而这些治疗导致了5000人死于手术，1.7万人有严重的手术后的并发症。平均来看，PSA检测并不能延长整体人群的寿命，和前列腺癌对人体的损害是差不多大的，而且还平添了治疗的痛苦和费用。</p>
-
-<ol class="art-list">
-<li>主动查问题，针对病症治疗。</li>
-</ol>
-
-<p class="art-p">我们应该调整思路，把“不健康，身体有问题”作为一种常态来接受。我们身体的图纸是十几万年前留下来的，使用寿命30年，现在因为科技发展，一下都要奔着80年，甚至100年使用，所以后面50年多必然要面对各种问题。如果过度担心问题出现，检查和治疗可能会降低生活质量。</p>
-
-<p class="art-p">四、癌症筛查大都是过度医疗</p>
-
-<p class="art-p">医疗服务机构和旅游机构联手搞“日本健康之旅”，其中项目有PET-CT、肿瘤标记物筛查、癌症基因筛查。</p>
-
-<p class="art-p">PET-CT虽然先进，但这只适合给已经诊断出癌症的患者使用，尤其是在判断他们癌细胞转移的情况下，省时间、准确度高。但对一般人来说，辐射剂量太高，一次PET-CT的辐射量是15mSv，要知道一次胸透的量是0.02mSv（相当于坐一趟10小时的远途飞机），让无数人讨论担心的成都双流机场的“弱光子检测仪”的辐射量是0.00025mSv，而“个人年平均接收辐射剂量”是2.5mSv。一般人做PET-CT，属于典型的过度医疗。</p>
-<p class="art-p">肿瘤标记物筛查也属于过度医疗，它是在已经通过影像学看到肿块，判断良性、恶性后才需要做的。</p>
-<p class="art-p">基因筛查虽然并不伤害身体，但拥有很多癌症易感基因并不意味着癌症高发，可能只会让你患上癌症的几率从万分之五，增加到万分之九，如果不明白这些含义，基因筛查结果会让人很不安，进而在“健康之旅”中购买更多检查服务，更多保健品。</p>
-
-<p class="art-p">其实深究起来，现代社会传递给大家的一个概念是，任何不健康的都是危险，这点需要纠正。</p>
-
-<p class="art-p">2004年加州大学伯克利分校出版社了一本书叫《我们应该筛查癌症吗？》，那里给出了一个更有参考意义的统计数据，就是如果美国没有任何癌症了，美国人口平均寿命可以提高4岁，从78岁提升到82岁。在全球治疗癌症效果最好的国家是这样，如果放在其它国家，提升的效果肯定更弱。</p>
-
-<p class="art-p">所以对健康人来说，针对癌症的检查是没必要做的。你只要每年认真完成体检就可以了。</p>
-      </div>
-    </article>
-
-    <article class="art-card" id="art-37">
-      <div class="art-header">
-        <span class="art-chapter">Ch.102</span>
-        <h3 class="art-title">关于发烧、手脚冰凉和上火的清单</h3>
-      </div>
-      <div class="art-body">
-        <p class="art-p">No.1 关于发烧的清单</p>
-
-<ol class="art-list">
-<li>发烧不是病，只是症状。造成发烧的原因有很多，如果以感冒为例，就是身体被病菌感染后，刺激大脑以为39°才是正常体温，所以身体就调节体温到39℃了。</li>
-</ol>
-
-<ol class="art-list">
-<li>发烧时，一个正常的体内环境被打破，失去了平衡，而病毒和细菌很多是适应不了剧烈改变的，所以身体用高温做了一些牺牲，但也给病原体造成了一定压力，削弱它们繁殖，这就是发烧也会对病情恢复有好处的原因。</li>
-</ol>
-
-<ol class="art-list">
-<li>如果孩子发烧，已经7、8岁以上了，39℃维持3、4天是不用太担心的。只有超过41℃才需要特别降温。</li>
-</ol>
-
-<ol class="art-list">
-<li>孩子发烧难受时，可以给他降温，喝点冰水；往身上擦温水，再吹风，尽快蒸发掉，这就相当于人工排汗了。尤其是温度很高，比如41℃的时候，来不及送去医院，就要把衣服都脱下来，全身擦温水，电风扇对着吹，水一干再继续擦水，继续吹干，这么做会很快把体温降低到38℃左右，保护好内脏。</li>
-</ol>
-
-<ol class="art-list">
-<li>发烧时捂被子的做法是非常错误的。这是一个典型的传统医学中观察到的现象，一个人高烧不退，出了一身大汗，就痊愈了，所以要想好，就捂着他，让他出汗。但其实这么做就是把因果颠倒了，我们是退烧了才出汗的。在刚刚痊愈时，大脑的温度设定值已经从39℃降到37℃了，但体内积存的多余的2℃的热量还在，就通过排汗的方式把多余的热量释放出去。</li>
-</ol>
-
-<p class="art-p">No.2 关于手脚冰凉的清单</p>
-
-<ol class="art-list">
-<li>女性比男性容易感到手脚冰凉。因为女性身体结构不同，她们的身体会优先把热量供给内脏，忽略四肢一些。所以，女性内脏温度就是比男性高，四肢的温度就是比男性低，这是一个规律。</li>
-</ol>
-
-<ol class="art-list">
-<li>容易手脚冰凉的人，最大的可能性就是太瘦了。因为体内脂肪少，保温效果就差；又因为身体里细胞数量少，所以发热少。</li>
-</ol>
-
-<ol class="art-list">
-<li>血液流不到的地方就会感觉冷，所以血液循环不好，即便胖也一样会觉得冷。</li>
-</ol>
-
-<ol class="art-list">
-<li>香烟里的烟碱会使四肢的血管收缩，所以经常抽烟的人会比不抽烟的人感觉冷。</li>
-</ol>
-
-<ol class="art-list">
-<li>肌肉量的多少也会影响体温，我们冷的时候会发抖，其实是肌肉在产热，所以肌肉总量比较多，也不容易冷。</li>
-</ol>
-
-<ol class="art-list">
-<li>还有一些疾病和营养缺乏也会导致冷，比如甲状腺功能减退的人，缺铁和缺维生素B12的人都更容易感觉冷。</li>
-</ol>
-
-<ol class="art-list">
-<li>还有一种情况是感觉冷，但温度并不低。比如糖尿病人，他们会有周围神经的病变，这时手脚传往大脑的信号会有问题。</li>
-</ol>
-
-<ol class="art-list">
-<li>水是地球上比热最大的物质，想变暖和，就多喝热水，500ml，60℃热水喝下去，可以暖和好一阵子。</li>
-</ol>
-
-<p class="art-p">No.3 关于上火的清单</p>
-
-<ol class="art-list">
-<li>实际上，现代医学的手册里没有上火的概念，它只存在于替代医学里，或者养生保健里。如果硬要往现代医学上靠，牙龈炎、牙周炎、龋齿、咽部感染，甚至各种原因引起的便秘、结膜炎、各种唇炎，身体上各种疱疹病毒感染，身体缺水等等一切，全都被冠名上火。这是一种过于笼统的说法，上火几乎等同于感觉不舒服。</li>
-</ol>
-
-<ol class="art-list">
-<li>牛黄解毒片并不是去火的神药。牛黄解毒片的成分是四硫化四砷，而且中国药典要求这个成分的含量不得低于90%。但其实砷化物不但无效，反而有害。不过，四硫化四砷中的砷是非常非常稳定的，在人体内，哪怕是胃酸里都不会分解，所以真正流出去的砷几乎没有，它可以吃，但不一定有效。</li>
-</ol>
-
-<p class="art-p">温馨提示：点击右下角“红包”，能将本文分享给关心的朋友。</p>
-
-      </div>
-    </article>
-  </main>
+  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
+  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
 </div>
-
-<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
-
-<footer class="footer">
-  <p>卓老板聊科技 · 最小知识集（MKS）</p>
-  <p>298 篇文章 · 7 个专题 · 32 个原章节</p>
-  <p>
-    <a href="index.html">← 返回科学客厅</a> ·
-    <a href="concepts.svg" target="_blank">🗺️ 知识星系图</a> ·
-    <a href="quiz.html">📝 科学素养自测</a>
-  </p>
-</footer>
-
+<div class="tab-panel" id="panel2">
+  <div class="section-title">题库系统</div>
+  <div style="text-align:center;margin-bottom:20px;">
+    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
+    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
+  </div>
+  <div id="quizContainer"></div>
+  <div id="staticQuiz" style="display:none"></div>
+</div>
+<div class="tab-panel" id="panel3">
+  <div class="section-title">考试模式</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
+  <div style="text-align:center;margin-bottom:20px;">
+    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
+    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
+  </div>
+  <div id="examContainer"></div>
+  <div id="examResult" style="display:none;text-align:center;padding:20px;">
+    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
+    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
+    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+  </div>
+</div>
+<div class="tab-panel" id="panel4">
+  <div class="section-title">复习模式</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
+  <div id="reviewContainer">
+    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
+    <div id="reviewWeakAreas"></div>
+  </div>
+  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
+</div>
+<div class="tab-panel" id="panel5">
+  <div class="section-title">思维导图</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
+  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">身体的真相——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
+</div>
+<div class="tab-panel" id="panel6">
+  <div class="section-title">深度追问</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
+  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
+</div>
+<div class="tab-panel" id="panel7">
+  <div class="section-title">案例分析</div>
+  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
+  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
+</div>
+<div class="tab-panel" id="panel8">
+  <div class="section-title">实战决策</div>
+  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const concepts = [{"id": "c1", "name": "癌症进化本质", "def": "癌症不是外来入侵，而是体内细胞在分裂中积累突变后'叛变'为自私的'作弊者'——多细胞协作体系的内部瓦解，是生命复杂性的必然代价。", "analogy": "像一家运转良好的公司，某个员工开始疯狂复制工位、抢占资源、无视指令——不是外部黑客入侵，是内部失控。", "example": "所有动物都会得癌症。佩托悖论：大象细胞更多但癌症率更低——因为它们进化出了更多肿瘤抑制基因副本(TP53有20个拷贝，人类仅1个)。", "counter": "不是所有肿瘤都是癌症。良性肿瘤不转移、不侵犯周围组织。癌症三大特征：无限分裂、逃避凋亡、转移。"}, {"id": "c2", "name": "风险-收益权衡", "def": "任何医疗干预都同时带来风险和收益——理性的医疗决策是权衡两者，而非追求'零风险'。", "analogy": "过马路有被撞风险但不能永远不出门。戴口罩防雾霾也影响呼吸——每次决策都是概率空间的权衡。", "example": "乳腺X光筛查1000名女性10年→避免1例乳腺癌死亡+100+例假阳性（不必要的活检焦虑）。值不值得取决于个人价值观。", "counter": "紧急情况不适用权衡。急性阑尾炎→手术唯一选择。慢性/预防性医疗决策才有权衡空间。"}, {"id": "c3", "name": "相关≠因果", "def": "两个变量统计相关不意味一个导致另一个——这是健康新闻中最容易被忽略的区分。", "analogy": "公鸡打鸣和太阳升起高度相关——杀了公鸡太阳照样升起。混淆相关和因果是人类认知中最顽固的偏误。", "example": "红酒+地中海饮食悖论：法国人高脂饮食但心脏病少→被归因'喝红酒'。可能是整体饮食模式+社会支持系统——孤立出'神奇成分'是营销非科学。", "counter": "相关是因果必要不充分条件。通过RCT排除混杂变量确立因果。观察性研究只能产生假说。"}, {"id": "c4", "name": "剂量-毒性曲线", "def": "任何物质在高剂量下都有毒，任何物质在足够低剂量下都无害——'有毒'和'安全'不是非黑即白。", "analogy": "水适量维持生命，极端过量导致水中毒。'无毒'≠'随便吃'，'有毒'≠'碰不得'。关键永远是剂量。", "example": "中国焖饭比欧美捞饭保留更多砷但含量仍在安全范围——不是'全民服毒'但改变烹饭方式可降低风险。", "counter": "剂量-毒性曲线非线性的。有些物质有安全阈值，有些没有（任何剂量都有概率性风险如致癌物）。不同物质曲线形状不同。"}, {"id": "c5", "name": "免疫记忆机制", "def": "疫苗训练免疫系统预先制造针对特定病原体的记忆B/T细胞——第二次遇到同一敌人时闪电反击。", "analogy": "不是给军队吃补品，而是给军队看通缉令——让他们提前知道要抓谁。疫苗就是那张'通缉令'。", "example": "天花被疫苗彻底消灭（1980年WHO宣布）。牛痘病毒与天花病毒携带同一抗原→交叉免疫保护。人类唯一彻底消灭的人类传染病。", "counter": "疫苗不能预防所有感染。流感变异快→每年需新配方。HIV变异更快+攻击免疫本身→至今无有效疫苗。"}, {"id": "c6", "name": "循证医学金字塔", "def": "医学证据从专家意见(最弱)到RCT系统综述(最强)呈金字塔分布。临床决策应基于最高质量证据。", "analogy": "刑侦：目击证人'我觉得'=专家意见；DNA检测=RCT。法庭判决要以DNA而非'我觉得'为依据。", "example": "传统医学声称'被验证上千年'≈上千年质量极低的观察性研究。一个设计良好的双盲RCT胜过一千年粗放经验。", "counter": "RCT非万能。伦理限制、罕见病、超长期随访无法做RCT。证据金字塔是决策框架非教条。"}, {"id": "c7", "name": "代谢能量方程", "def": "体重变化=能量摄入-消耗，但身体会通过降低基础代谢和增加食欲来'补偿'运动消耗。", "analogy": "家庭收支：如工资减少→自动削减娱乐支出(代偿)→存款变化不大。身体调节远比简单减法复杂。", "example": "日运动450千卡=30层楼来回2趟。但基础代谢可能下降+食欲增加→月净减重远小于理论值。运动对健康好处远超减重。", "counter": "能量守恒在物理成立但在人体中'摄入'和'消耗'非独立变量。改变一端另一端自动调整——这是稳态机制。"}, {"id": "c8", "name": "辐射双面性", "def": "辐射既是癌症诱因（高剂量全身）又是治疗工具（精确放疗）——同一物理现象因剂量、靶向、时机不同而角色相反。", "analogy": "火可烧毁房屋也可锻造钢铁——区别在控制。广岛原子弹全身辐射→癌症；精确质子束→肿瘤消融。", "example": "朱诺号木星探测器面临2000万eV辐射→钛合金罩(180kg)将危害降至1/800。同样辐射：对人体致命，对探测器是工程挑战。", "counter": "非所有辐射都危险。日常背景辐射(~3mSv/年)不增可测量癌症风险。辐射恐惧可能比低剂量辐射更有害。"}, {"id": "c9", "name": "科学传播信噪比", "def": "健康新闻中的'突破''奇迹'往往只是初步研究或动物实验——从论文到媒体报道经多层放大扭曲，信噪比极低。", "analogy": "传话游戏：第一人说'细胞实验小鼠肿瘤缩小30%'→五次转述后变'科学家发现治愈癌症'。每层传播增加噪声去除限定条件。", "example": "'一滴血检测癌症'：实际是肿瘤标志物检测获欧盟准入——辅助判断手段（假阳性率极高）远不能替代活检确诊。", "counter": "传播不只媒体责任。科学家发新闻稿应谨慎措辞。读者也需科学素养——'如有疑问找原始论文'。"}, {"id": "c10", "name": "安慰剂效应的实质", "def": "安慰剂效应包括统计回归均值、自然病程、期望效应和真实神经生物学机制（内啡肽释放）——是心身互动的科学现象，非'假药有效'。", "analogy": "车发出异响开去修车厂——刚到门口异响消失。不是修车厂有魔力。相信治疗有效→大脑释放内源镇痛物质→真实痛觉减轻。", "example": "fMRI显示安慰剂镇痛时大脑疼痛区活动确实减弱+内源性阿片系统被激活。纳洛酮(阿片拮抗剂)可阻断安慰剂镇痛——证明其生化机制。", "counter": "安慰剂效应不能治愈器质性疾病。改善主观症状(疼痛、疲劳)但不能缩小肿瘤清除病毒。声称效果全归因于安慰剂≠替代疗法等于真正治疗。"}];
+const mcqAll = [{"q": "癌症的本质是什么？", "opts": ["体内细胞突变后'叛变'为自私作弊者——多细胞协作体系的内部瓦解", "外来病原体入侵", "环境毒素直接破坏", "病毒感染导致"], "answer": 0}, {"q": "为什么大象细胞更多但癌症率更低(佩托悖论)？", "opts": ["进化出更多肿瘤抑制基因副本(如TP53有20个拷贝vs人类1个)", "大象细胞不分裂", "大象寿命太短", "大象吃素"], "answer": 0}, {"q": "天花为什么能被人类彻底消灭？", "opts": ["只感染人类+疫苗终身免疫+全球协作接种", "天花自然消失", "抗生素杀死天花病毒", "隔离政策控制"], "answer": 0}, {"q": "循证医学最强证据是什么？", "opts": ["随机双盲对照试验的系统综述/Meta分析", "专家意见", "病例报告", "动物实验"], "answer": 0}, {"q": "放疗治癌但高剂量辐射也致癌——这矛盾吗？", "opts": ["不矛盾——辐射效应取决于剂量、靶向和时机：精确聚焦高剂量杀癌细胞，非靶向全身暴露增突变", "矛盾说明放疗不安全", "放疗已过时", "只有低剂量辐射才致癌"], "answer": 0}, {"q": "为什么'每天运动就能减肥'不完全准确？", "opts": ["基础代谢占60%+，运动消耗有限且身体通过降基础代谢+增食欲补偿", "运动完全没用", "运动会让人更胖", "只有节食才能减肥"], "answer": 1}, {"q": "癌症化疗灵感最早来自哪里？", "opts": ["中药", "芥子气——一战幸存者严重白细胞减少启发用化学武器原理杀癌细胞", "抗生素", "维生素"], "answer": 1}, {"q": "中国人焖饭比欧美捞饭摄入更多砷的原因？", "opts": ["中国大米含砷更高", "焖饭(2:1水米)砷残留84%，捞饭(5:1水米)残留43%——水量和烹任方式决定砷溶解", "中国人吃米更多", "中国土壤污染更严重"], "answer": 1}, {"q": "肿瘤标志物检测为什么不能替代活检？", "opts": ["完全没用", "假阳性率极高+不能确定肿瘤位置类型——只是筛查辅助非确诊", "价格太贵", "只有中国不能做"], "answer": 1}, {"q": "减肥手术为什么比节食运动更有效？", "opts": ["手术后不需控制饮食", "改变肠道激素(饥饿素下降+GLP-1上升)→不仅物理限制还生化重置体重设定点", "手术永久损害消化", "代谢率永久提高"], "answer": 1}, {"q": "HPV疫苗为什么推荐在性行为前接种？", "opts": ["性行为后完全无效", "疫苗预防未来感染——已感染后无法清除已有感染，暴露前效果最佳", "疫苗对成人有害", "药企营销策略"], "answer": 2}, {"q": "为什么入耳式耳机可能损伤听力？", "opts": ["耳机发射辐射", "任何耳机>85分贝长时间使用都损伤毛细胞——入耳式隔音好反可让人在更安全音量听", "入耳式就是更危险", "听力损伤是遗传的"], "answer": 2}, {"q": "人体基础代谢占每日总能耗多少？", "opts": ["约10%", "约30%", "约60-70%——维持体温心跳细胞运作的能耗远超运动和消化", "约90%"], "answer": 2}, {"q": "体脂率最准确的测量方法？", "opts": ["智能体重秤", "皮脂钳", "水下称重法——利用脂肪和非脂肪组织密度差", "目测"], "answer": 2}, {"q": "为什么医学不推荐常规全身PET-CT体检？", "opts": ["价格太贵", "辐射本身致癌", "低风险人群假阳性率极高→不必要侵入性检查+辐射风险。收益不抵风险", "设备不够"], "answer": 2}, {"q": "微波炉辐射危险吗？", "opts": ["非常危险会致癌", "微波是非电离辐射只能加热不能破坏分子键——炉门完好泄漏远低于安全标准", "比核辐射更危险", "只有门破损危险"], "answer": 3}, {"q": "防蓝光眼镜对保护视力有帮助吗？", "opts": ["绝对必须佩戴", "证据不足——无高质量RCT证明日常屏幕蓝光致永久眼损伤。眼疲劳主因是近距离用眼非蓝光", "蓝光可致失明", "只儿童需防蓝光"], "answer": 3}, {"q": "坐月子的性质是什么？", "opts": ["纯粹科学", "源自古代产后护理——部分内容(休息营养)有合理基础但很多禁忌(不洗澡不通风)与现代证据冲突", "完全无价值", "中国独有习俗"], "answer": 3}, {"q": "BMI在亚洲为什么需下调标准？", "opts": ["亚洲人更矮", "亚洲人体内脂肪比例较高——相同BMI下体脂率更高，糖尿病风险在更低BMI上升", "亚洲人更瘦", "只是统计误差"], "answer": 3}, {"q": "安慰剂效应的神经生物学基础是什么？", "opts": ["纯粹心理作用无生物学基础", "fMRI显示安慰剂镇痛时大脑疼痛区活动减弱+内源性阿片系统激活——有真实神经化学机制", "统计误差", "病人装的"], "answer": 3}];
+const saqAll = [{"q": "用'癌症进化本质'解释为什么癌症主要在中老年发病。", "hint": "人体'设计寿命'约30年(演化视角)→30岁后抗癌机制不再有强选择压力→突变累积→免疫清除效率下降"}, {"q": "为什么'某物质有害'新闻标题通常不可全信？用剂量-毒性和信噪比解释。", "hint": "剂量决定毒性→新闻常不说剂量只谈'含有'；信噪比→从实验室到媒体报道经多层放大扭曲，初步研究≠确定结论"}, {"q": "简述RCT三大要素并说明为什么'上千年验证'不能替代RCT。", "hint": "随机分组+双盲+对照。千年观察=无对照+无盲法+发表偏倚→质量极低。量的累积≠质的提升"}, {"q": "为什么运动对减重直接效果有限但健康益处巨大？", "hint": "基础代谢占60%+→运动能耗占比小→身体代偿。但运动改善心血管+增胰岛素敏感性+提心理健康→价值远超体重秤"}, {"q": "疫苗如何工作？为什么流感疫苗需每年接种而乙肝一次就够？", "hint": "疫苗=训练免疫系统识别特定抗原→制记忆B/T细胞。流感抗原变异快→每年新配方。乙肝抗原稳定→终身保护"}, {"q": "简述医学证据金字塔层级并举例高级别证据推翻低级别证据。", "hint": "金字塔：病例报告→系列→队列→病例对照→RCT→系统综述。例：HRT预防心脏病(观察)→RCT发现HRT增加心脏病风险"}, {"q": "用'风险-收益权衡'框架分析癌症筛查困境。", "hint": "收益：早期发现→降死亡率。风险：假阳性→不必要活检焦虑；过度诊断→治疗惰性癌。净收益取决于癌种和基线风险"}, {"q": "解释辐射双面性：为什么高剂量致癌而精确放疗治癌？", "hint": "辐射损伤DNA→随机突变→低概率癌变。癌细胞分裂更快→对DNA损伤更敏感→精确高剂量优先杀癌细胞"}, {"q": "为什么医学不推荐常规全身PET-CT体检？", "hint": "低风险人群假阳性率极高→不必要侵入性检查+辐射暴露也是风险。筛查只针对有明确证据的癌种和高风险人群"}, {"q": "用具体例子解释安慰剂效应如何被重新认识为真实神经生物学现象。", "hint": "fMRI：安慰剂→前额叶→导水管周围灰质→内源性阿片肽释放→疼痛通路抑制。纳洛酮(阿片拮抗剂)可阻断→证明生化机制"}];
+const SK = 'mks_1';
+let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
+let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
+let currentCardIdx = 0;
+function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
+function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
+function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
+function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
+function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
+function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
+function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
+function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
+document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
+function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
+function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
+function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
+function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
+function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
+let et=null,el=1800,eq=[],ea={};
+function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
+function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
+function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
+function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
+function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
+function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
+setCard(0);updateProgress();
+</script>
 </body>
 </html>
