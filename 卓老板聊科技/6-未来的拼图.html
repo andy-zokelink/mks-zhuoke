@@ -2,222 +2,464 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>未来的拼图 — 卓老板聊科技 MKS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>未来的拼图 · 卓老板聊科技</title>
 <style>
-/* ===== 未来的拼图 — 设计语言 =====
- * 本质洞察：未来不是预测出来的——是一块一块拼出来的
- * 情感基调：期待与审慎 — 对未来技术既有希望也有清醒
- * 叙事锚点：拼图桌 — 碎片散落，有些已经拼上，有些还不知该放哪里
- * 视觉策略：深青灰+信号蓝 — 科技前沿的冷峻与不确定
- */
-:root { --bg:#f5f8fa; --card:#fafcfd; --accent:#2a6a7a; --accent2:#4a8a9a; --gold:#c47820; --gold-light:#d8c0a0; --success:#4a7c5e; --text:#1a242a; --text-light:#3a5058; --border:#c8d4d8; --shadow:0 2px 14px rgba(26,36,42,.06); --radius:12px; --nav-bg:#0a1a24; --nav-text:#f5f8fa; }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Serif SC','Source Han Serif SC',Georgia,serif; background:var(--bg); color:var(--text); line-height:1.8; padding-top:56px; font-size:16px; }
-.container { max-width:980px; margin:0 auto; padding:0 20px; }
-.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; box-shadow:0 2px 12px rgba(0,0,0,.3); }
-.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; }
-.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.85rem; padding:6px 16px; border:1px solid rgba(255,255,255,.25); border-radius:20px; font-family:'Noto Sans SC',sans-serif; transition:all .2s; }
-.top-bar .home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--accent2); color:var(--gold-light); }
-.tab-bar { display:flex; flex-wrap:wrap; gap:6px; padding:14px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:24px; }
-.tab-btn { padding:8px 16px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .25s; white-space:nowrap; font-family:'Noto Sans SC',sans-serif; }
-.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
-.tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .4s ease; }
-.tab-panel.active { display:block; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
-.hero { position:relative; overflow:hidden; background:linear-gradient(175deg,#f5f8fa 0%,#d8e4e8 35%,#a0c0c8 60%,#2a6a7a 82%,#0a1a24 100%); border-radius:var(--radius); margin-bottom:32px; min-height:370px; display:flex; align-items:center; justify-content:center; }
-.hero-svg { width:100%; max-width:900px; height:auto; display:block; }
-.hero-caption { position:absolute; bottom:36px; left:0; right:0; text-align:center; color:#f5f8fa; font-size:1.15rem; letter-spacing:2px; font-family:'Noto Serif SC',serif; opacity:.85; text-shadow:0 1px 8px rgba(0,0,0,.5); }
-.narrative-block { background:linear-gradient(135deg,#fafcfd,#f5f8fb); border-left:4px solid var(--accent); padding:28px 32px; margin:28px 0; border-radius:0 var(--radius) var(--radius) 0; box-shadow:var(--shadow); }
-.narrative-block .lead { font-size:1.2rem; color:var(--accent); font-weight:600; margin-bottom:12px; }
-.narrative-block p { color:var(--text-light); font-size:.95rem; line-height:1.9; margin-bottom:8px; }
+/* ============================================================
+   未来的拼图 — MKS v4 沉浸叙事版
+   本质洞察：未来不是预测出来的 — 是一块一块拼凑出来的
+   情感基调：期待与审慎 — 有些拼图真的在成形，有些“确定性”是假的
+   叙事锚点：拼图桌 — 33块碎片散落，拼凑现在已有的线索
+   视觉策略：信号蓝+深青灰 — 科技前沿的冷静感，不是炫酷是审慎
+   ============================================================ */
+:root {
+  --bg-deep: #0f172a; --bg-mid: #1a2332; --bg-card: #1e293b; --bg-elevated: #253449;
+  --text-primary: #e2e8f0; --text-secondary: #94a3b8; --text-muted: #64748b;
+  --signal: #2563eb; --signal-bright: #3b82f6; --signal-glow: #60a5fa; --signal-dim: #1d4ed8;
+  --sky: #38bdf8; --amber: #f59e0b; --amber-mid: #d97706;
+  --emerald: #10b981; --emerald-dim: #059669; --rose: #f43f5e; --violet: #8b5cf6;
+  --radius: 12px; --radius-sm: 8px; --radius-lg: 20px;
+  --ease: 0.3s cubic-bezier(0.4,0,0.2,1);
+  --font-display: "PingFang SC","Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  --font-body: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);background:var(--bg-deep);color:var(--text-primary);line-height:1.75;overflow-x:hidden}
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(15,23,42,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(100,116,139,0.12);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nav-home{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.85rem;transition:color var(--ease)}
+.nav-home:hover{color:var(--signal-glow)}
+.nav-home svg{width:17px;height:17px;flex-shrink:0}
+.nav-label{font-size:.78rem;color:var(--text-muted);letter-spacing:.06em}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-canvas{position:absolute;inset:0;z-index:0}
+.hero-content{position:relative;z-index:1;text-align:center;padding:0 28px;max-width:700px}
+.hero-eyebrow{font-size:.7rem;letter-spacing:.22em;color:var(--signal-glow);text-transform:uppercase;margin-bottom:22px}
+.hero h1{font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.6rem);font-weight:700;line-height:1.22;margin-bottom:26px;background:linear-gradient(135deg,#e2e8f0 0%,#60a5fa 45%,#94a3b8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-family:var(--font-display);font-size:clamp(1rem,2vw,1.15rem);color:var(--text-secondary);line-height:1.9;max-width:540px;margin:0 auto 36px}
+.hero-desc em{color:var(--sky);font-style:normal}
+.hero-scroll{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-muted);font-size:.7rem;letter-spacing:.12em;animation:float 2.6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0);opacity:.4}50%{transform:translateX(-50%) translateY(10px);opacity:1}}
+.hero-scroll svg{width:18px;height:18px}
+.section{max-width:960px;margin:0 auto;padding:80px 24px}
+.section-label{font-size:.68rem;letter-spacing:.2em;color:var(--signal-glow);text-transform:uppercase;margin-bottom:14px}
+.section h2{font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2rem);font-weight:700;margin-bottom:14px;color:var(--text-primary)}
+.section-intro{color:var(--text-secondary);font-size:.95rem;max-width:580px;margin-bottom:50px;line-height:1.85}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-.puzzle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:20px 0; }
-.puzzle-piece { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); border-left:3px solid var(--accent); }
-.puzzle-piece .certainty { float:right; font-size:.7rem; padding:2px 8px; border-radius:10px; }
-.certainty.high { background:rgba(74,124,94,.1); color:#4a7c5e; }
-.certainty.medium { background:rgba(196,120,32,.1); color:#c47820; }
-.certainty.low { background:rgba(192,57,43,.1); color:#c0392b; }
-.puzzle-piece h3 { color:var(--accent); font-size:.95rem; margin-bottom:6px; font-family:'Noto Sans SC',sans-serif; }
-.puzzle-piece p { font-size:.84rem; color:var(--text-light); line-height:1.7; }
+/* Spectrum */
+.spectrum-wrap{padding:20px 0}
+.spectrum-bar{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--emerald) 0%,var(--signal-bright) 32%,var(--amber) 62%,var(--rose) 100%);margin:0 8px 10px}
+.spectrum-ticks{display:flex;justify-content:space-between;padding:0 8px}
+.spectrum-tick{font-size:.68rem;letter-spacing:.06em}
+.spectrum-tick:nth-child(1){color:var(--emerald)}
+.spectrum-tick:nth-child(2){color:var(--signal-glow)}
+.spectrum-tick:nth-child(3){color:var(--amber)}
+.spectrum-tick:nth-child(4){color:var(--rose)}
+.spectrum-clusters{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.spec-cluster{flex:1 1 220px;min-width:200px;max-width:260px;background:var(--bg-card);border-radius:var(--radius);border:1px solid rgba(100,116,139,0.12);padding:20px;cursor:pointer;transition:all var(--ease)}
+.spec-cluster:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,0.3)}
+.spec-cluster.selected{border-color:var(--signal-bright);box-shadow:0 0 0 2px rgba(59,130,246,0.25)}
+.spec-cluster .sc-icon{font-size:1.6rem;margin-bottom:10px}
+.spec-cluster .sc-label{font-size:.7rem;letter-spacing:.08em;margin-bottom:8px}
+.spec-cluster .sc-count{font-size:1.3rem;font-weight:700;margin-bottom:6px}
+.spec-cluster .sc-desc{font-size:.78rem;color:var(--text-muted);line-height:1.6}
+.spec-cluster[data-level="clear"]{border-left:3px solid var(--emerald)}
+.spec-cluster[data-level="clear"] .sc-label{color:var(--emerald)}
+.spec-cluster[data-level="emerging"]{border-left:3px solid var(--signal-bright)}
+.spec-cluster[data-level="emerging"] .sc-label{color:var(--signal-glow)}
+.spec-cluster[data-level="uncertain"]{border-left:3px solid var(--amber)}
+.spec-cluster[data-level="uncertain"] .sc-label{color:var(--amber)}
+.spec-cluster[data-level="distant"]{border-left:3px solid var(--rose)}
+.spec-cluster[data-level="distant"] .sc-label{color:var(--rose)}
+.spec-detail-panel{margin-top:28px;padding:28px;border-radius:var(--radius-lg);background:var(--bg-card);border:1px solid rgba(100,116,139,0.14);display:none}
+.spec-detail-panel.active{display:block}
+.spec-detail-panel h4{font-size:1rem;margin-bottom:10px;color:var(--sky)}
+.spec-detail-panel p{color:var(--text-secondary);font-size:.88rem;line-height:1.8}
+.article-chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.article-chip{font-size:.73rem;padding:5px 12px;border-radius:20px;background:rgba(37,99,235,0.12);color:var(--signal-glow);border:1px solid rgba(37,99,235,0.15)}
 
-.article-excerpt { background:var(--card); border-radius:var(--radius); padding:18px; margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border); }
-.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
-.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; }
-.svg-stage { background:var(--card); border-radius:var(--radius); padding:20px; margin:28px 0; box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
-.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
-.socratic-panel { background:linear-gradient(135deg,#f5f8fb,#fafcfd); border:1px dashed var(--accent); border-radius:var(--radius); padding:24px; margin:20px 0; }
-.socratic-panel .q-a { margin-bottom:20px; }
-.socratic-panel .question { font-weight:600; color:var(--accent); margin-bottom:6px; font-size:.95rem; }
-.socratic-panel .answer { color:var(--text-light); font-size:.9rem; padding-left:16px; border-left:2px solid var(--gold-light); }
-.mindmap { margin:16px 0; }
-.mindmap .node { margin-bottom:6px; }
-.mindmap .node-header { display:flex; align-items:center; gap:8px; cursor:pointer; padding:10px 14px; background:var(--card); border-radius:8px; border:1px solid var(--border); transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
-.mindmap .node-header:hover { border-color:var(--accent); }
-.mindmap .node-header .toggle { font-size:.7rem; transition:transform .3s; color:var(--accent); width:16px; text-align:center; }
-.mindmap .node-header .toggle.open { transform:rotate(90deg); }
-.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
-.mindmap .node-body.open { display:block; }
-.mindmap .leaf { padding:6px 12px; margin:4px 0; font-size:.85rem; color:var(--text-light); border-left:2px solid var(--gold-light); }
-.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
-.boundary-table th { background:var(--accent); color:#fff; padding:12px 16px; text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500; }
-.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
-.boundary-table tr:nth-child(even) td { background:var(--card); }
-.level-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; }
-.level-core { background:var(--accent); color:#fff; }
-.level-understand { background:var(--accent2); color:#fff; }
-.level-know { background:#ddd; color:#555; }
-.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
-.q-option { display:block; width:100%; text-align:left; padding:10px 16px; margin:6px 0; border:1px solid var(--border); border-radius:8px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.88rem; font-family:inherit; }
-.q-option:hover { border-color:var(--accent); }
-.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
-.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
-.q-option:disabled { cursor:default; }
-.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
-.sa-input { width:100%; min-height:100px; padding:14px; font-family:inherit; font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg); resize:vertical; }
-.sa-reveal { background:var(--card); padding:16px; border-radius:var(--radius); margin-top:10px; display:none; border:1px dashed var(--accent); font-size:.9rem; line-height:1.8; }
-.decision-scene { background:linear-gradient(135deg,#f5f8fb,#e8f0f4); border-radius:var(--radius); padding:24px; margin:20px 0; border:1px solid var(--gold-light); }
-.decision-scene .scenario { background:var(--card); padding:18px; border-radius:8px; margin-bottom:14px; border-left:3px solid var(--accent); }
-.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
-.decision-scene .choice-btn { text-align:left; padding:10px 16px; border:1px solid var(--border); border-radius:8px; background:var(--card); cursor:pointer; transition:all .2s; font-family:inherit; font-size:.88rem; }
-.decision-scene .choice-btn:hover { border-color:var(--accent); }
-.score-bar { text-align:center; padding:16px; font-size:1.1rem; font-weight:600; color:var(--accent); }
-.progress-bar { width:100%; height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .5s ease; }
-.section-title { font-size:1.25rem; color:var(--accent); margin:32px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border); font-family:'Noto Sans SC',sans-serif; letter-spacing:1px; }
-.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
-.btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
-.btn-outline:hover { background:var(--accent); color:#fff; }
-.footer { text-align:center; padding:32px 20px; margin-top:40px; border-top:1px solid var(--border); color:var(--text-light); font-size:.82rem; }
-.footer a { color:var(--accent); text-decoration:none; }
+/* Timeline */
+.domain-section{margin-bottom:90px}
+.timeline-path{position:relative;padding-left:44px}
+.timeline-path::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(59,130,246,0.6) 0%,rgba(59,130,246,0.4) 40%,rgba(245,158,11,0.3) 100%);border-radius:1px}
+.tl-node{position:relative;margin-bottom:32px;padding:20px 22px;background:var(--bg-card);border-radius:var(--radius);border:1px solid rgba(100,116,139,0.1);transition:all var(--ease)}
+.tl-node:hover{border-color:rgba(59,130,246,0.3);transform:translateX(4px)}
+.tl-node::before{content:'';position:absolute;left:-34px;top:28px;width:14px;height:14px;border-radius:50%;background:var(--signal-bright);border:3px solid var(--bg-deep);box-shadow:0 0 0 4px rgba(37,99,235,0.25)}
+.tl-node.milestone::before{background:var(--emerald);box-shadow:0 0 0 4px rgba(16,185,129,0.25)}
+.tl-year{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:var(--signal-glow);margin-bottom:4px}
+.tl-title{font-size:.95rem;font-weight:600;margin-bottom:6px}
+.tl-desc{font-size:.83rem;color:var(--text-secondary);line-height:1.75}
+.tl-ref{display:inline-block;margin-top:10px;font-size:.72rem;color:var(--text-muted)}
+
+/* Tension */
+.tension-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:start}
+.tension-col{padding:24px;border-radius:var(--radius-lg);border:1px solid rgba(100,116,139,0.1);background:var(--bg-card)}
+.tension-col.achieve{border-top:3px solid var(--emerald)}
+.tension-col.risk{border-top:3px solid var(--rose)}
+.tc-label{font-size:.7rem;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(100,116,139,0.1)}
+.tension-col.achieve .tc-label{color:var(--emerald)}
+.tension-col.risk .tc-label{color:var(--rose)}
+.tc-item{padding:14px 0;border-bottom:1px solid rgba(100,116,139,0.06)}
+.tc-item:last-child{border-bottom:none}
+.tc-item h5{font-size:.88rem;margin-bottom:3px;font-weight:600}
+.tc-item p{font-size:.78rem;color:var(--text-muted);line-height:1.6}
+.tension-divider{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:40px;color:var(--text-muted);font-size:.68rem;letter-spacing:.1em}
+.tension-line{width:2px;height:100px;background:linear-gradient(180deg,var(--emerald),var(--rose));border-radius:1px}
+
+/* Question Spiral */
+.q-list{counter-reset:qi}
+.q-item{margin-bottom:10px;border-radius:var(--radius);background:var(--bg-card);border:1px solid rgba(100,116,139,0.08);overflow:hidden;transition:all var(--ease)}
+.q-item.open{border-color:rgba(139,92,246,0.3)}
+.q-trigger{width:100%;padding:18px 22px;display:flex;align-items:center;gap:14px;background:none;border:none;color:var(--text-primary);font-size:.92rem;font-weight:500;cursor:pointer;text-align:left;font-family:var(--font-body);transition:background var(--ease)}
+.q-trigger:hover{background:rgba(139,92,246,0.04)}
+.q-trigger::before{counter-increment:qi;content:"Q" counter(qi);font-size:.7rem;color:var(--violet);font-weight:700;flex-shrink:0;width:24px}
+.q-arrow{margin-left:auto;transition:transform var(--ease);color:var(--text-muted);font-size:.7rem;flex-shrink:0}
+.q-item.open .q-arrow{transform:rotate(180deg)}
+.q-answer{max-height:0;overflow:hidden;transition:max-height .45s ease,padding .45s ease;padding:0 22px 0 60px;font-size:.84rem;color:var(--text-secondary);line-height:1.85}
+.q-item.open .q-answer{max-height:400px;padding:0 22px 22px 60px}
+
+/* Split Comparison */
+.split-panel{display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(100,116,139,0.12)}
+.split-side{padding:30px}
+.split-side.expect{background:rgba(245,158,11,0.04);border-right:1px solid rgba(100,116,139,0.08)}
+.split-side.reality{background:rgba(16,185,129,0.04)}
+.ss-header{font-size:.7rem;letter-spacing:.14em;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(100,116,139,0.1);font-weight:600}
+.split-side.expect .ss-header{color:var(--amber)}
+.split-side.reality .ss-header{color:var(--emerald)}
+.ss-point{display:flex;gap:10px;margin-bottom:14px;font-size:.84rem;color:var(--text-secondary);line-height:1.6}
+.ss-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:7px}
+.split-side.expect .ss-dot{background:var(--amber)}
+.split-side.reality .ss-dot{background:var(--emerald)}
+
+/* Layer Reveal */
+.layer-card{padding:22px 24px;margin-bottom:10px;border-radius:var(--radius);background:var(--bg-card);border:1px solid rgba(100,116,139,0.08);cursor:pointer;transition:all var(--ease);position:relative}
+.layer-card:hover{border-color:rgba(56,189,248,0.25)}
+.layer-card.expanded{border-color:rgba(56,189,248,0.45);box-shadow:0 4px 28px rgba(56,189,248,0.06)}
+.layer-level{font-size:.63rem;letter-spacing:.2em;color:var(--sky);margin-bottom:6px}
+.layer-card h4{font-size:.95rem;margin-bottom:4px}
+.layer-hint{font-size:.8rem;color:var(--text-muted)}
+.layer-body{max-height:0;overflow:hidden;transition:max-height .5s ease,margin .5s ease;font-size:.84rem;color:var(--text-secondary);line-height:1.8}
+.layer-card.expanded .layer-body{max-height:400px;margin-top:16px}
+.layer-indicator{position:absolute;right:24px;top:26px;font-size:1rem;line-height:1;color:var(--text-muted);transition:transform var(--ease)}
+.layer-card.expanded .layer-indicator{transform:rotate(45deg)}
+
+/* Ethics */
+.ethics-axis-bar{height:5px;border-radius:3px;margin-bottom:36px;background:linear-gradient(90deg,var(--emerald) 0%,var(--amber-mid) 48%,var(--rose) 100%)}
+.ethics-axis-labels{display:flex;justify-content:space-between;margin-bottom:36px;font-size:.7rem;letter-spacing:.06em}
+.ethics-axis-labels span:nth-child(1){color:var(--emerald)}
+.ethics-axis-labels span:nth-child(2){color:var(--amber)}
+.ethics-axis-labels span:nth-child(3){color:var(--rose)}
+.ethics-row{display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start;padding:20px;border-radius:8px;border:1px solid rgba(100,116,139,0.06);margin-bottom:10px;transition:background var(--ease)}
+.ethics-row:hover{background:rgba(37,99,235,0.03)}
+.ethics-badge{font-size:.68rem;letter-spacing:.08em;padding:4px 14px;border-radius:20px;text-align:center;font-weight:600}
+.ethics-badge.here{background:rgba(16,185,129,0.12);color:var(--emerald)}
+.ethics-badge.soon{background:rgba(37,99,235,0.12);color:var(--signal-glow)}
+.ethics-badge.maybe{background:rgba(245,158,11,0.12);color:var(--amber)}
+.ethics-badge.remote{background:rgba(244,63,94,0.12);color:var(--rose)}
+.ethics-info h5{font-size:.9rem;margin-bottom:4px}
+.ethics-info p{font-size:.82rem;color:var(--text-muted);line-height:1.7}
+.ethics-info strong{color:var(--text-primary)}
+
+/* Mosaic */
+.mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.mosaic-piece{aspect-ratio:1/1;border-radius:5px;background:var(--bg-elevated);border:1.5px solid rgba(100,116,139,0.12);cursor:pointer;position:relative;overflow:hidden;transition:all var(--ease);display:flex;align-items:center;justify-content:center;padding:12px 10px;text-align:center}
+.mosaic-piece:hover{transform:scale(1.06);z-index:2;border-color:var(--signal-bright);box-shadow:0 8px 32px rgba(37,99,235,0.18)}
+.mosaic-piece.placed{border-color:rgba(16,185,129,0.35);background:rgba(16,185,129,0.06)}
+.mosaic-piece.fuzzy{border-style:dashed;border-color:rgba(245,158,11,0.25)}
+.mosaic-piece .mp-num{position:absolute;top:8px;right:10px;font-size:.6rem;color:var(--text-muted);font-weight:700}
+.mosaic-piece .mp-title{font-size:.68rem;line-height:1.45;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.mosaic-tooltip{position:fixed;z-index:2000;padding:16px 20px;background:var(--bg-card);border:1px solid var(--signal-bright);border-radius:var(--radius);max-width:300px;font-size:.82rem;color:var(--text-primary);line-height:1.6;box-shadow:0 14px 44px rgba(0,0,0,0.55);pointer-events:none;opacity:0;transition:opacity .2s}
+.mosaic-tooltip.show{opacity:1}
+
+/* Narrative Art */
+.narrative-art{max-width:780px;margin:0 auto}
+.narrative-art svg{width:100%;height:auto;display:block}
+
+/* Sample Carousel */
+.sample-strip{display:flex;gap:16px;overflow-x:auto;padding:8px 0 24px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--bg-elevated) transparent}
+.sample-strip::-webkit-scrollbar{height:4px}
+.sample-strip::-webkit-scrollbar-thumb{background:var(--bg-elevated);border-radius:2px}
+.sample-card{flex:0 0 300px;scroll-snap-align:start;background:var(--bg-card);border-radius:var(--radius);border:1px solid rgba(100,116,139,0.1);padding:24px;transition:all var(--ease)}
+.sample-card:hover{border-color:rgba(59,130,246,0.3);transform:translateY(-2px)}
+.sample-card .sc-domain{font-size:.65rem;letter-spacing:.12em;margin-bottom:10px}
+.sample-card h4{font-size:.9rem;margin-bottom:8px;line-height:1.5}
+.sample-card blockquote{font-size:.8rem;color:var(--text-muted);line-height:1.75;border-left:2px solid var(--signal-dim);padding-left:14px;font-style:italic}
+
+/* Picker */
+.certainty-picker-btn-wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:32px}
+.cp-btn{padding:10px 22px;border-radius:24px;border:1px solid rgba(100,116,139,0.18);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:.82rem;font-family:var(--font-body);transition:all var(--ease)}
+.cp-btn:hover{border-color:var(--signal-bright);color:var(--text-primary)}
+.cp-btn.active{background:var(--signal-dim);border-color:var(--signal-bright);color:#fff}
+.cp-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.cp-card{background:var(--bg-card);border-radius:8px;border:1px solid rgba(100,116,139,0.08);padding:18px;transition:all var(--ease)}
+.cp-card:hover{border-color:rgba(59,130,246,0.25)}
+.cp-card .cp-title{font-size:.86rem;font-weight:600;margin-bottom:6px}
+.cp-card .cp-excerpt{font-size:.78rem;color:var(--text-muted);line-height:1.7}
+
+/* Closing */
+.closing{text-align:center;padding:90px 24px 70px}
+.closing-quote{font-family:var(--font-display);font-size:clamp(1.1rem,2.5vw,1.5rem);line-height:1.7;color:var(--text-secondary);max-width:620px;margin:0 auto 30px}
+.closing-quote strong{color:var(--sky);font-weight:600}
+.closing-meta{font-size:.8rem;color:var(--text-muted)}
+.closing-meta a{color:var(--signal-glow);text-decoration:none;transition:color var(--ease)}
+.closing-meta a:hover{color:var(--sky)}
+
+@media (max-width:768px){
+  .section{padding:60px 16px}
+  .tension-wrap{grid-template-columns:1fr}
+  .tension-divider{flex-direction:row}
+  .tension-line{width:100px;height:2px}
+  .split-panel{grid-template-columns:1fr}
+  .split-side.expect{border-right:none;border-bottom:1px solid rgba(100,116,139,0.08)}
+  .ethics-row{grid-template-columns:1fr;gap:10px}
+  .mosaic-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}
+  .timeline-path{padding-left:36px}
+  .timeline-path::before{left:14px}
+  .tl-node::before{left:-28px;width:10px;height:10px}
+  .sample-card{flex:0 0 260px}
+  .spec-cluster{flex:1 1 140px;min-width:140px}
+}
+@media (max-width:480px){
+  .hero h1{font-size:1.6rem}
+  .hero-desc{font-size:.9rem}
+  .mosaic-grid{grid-template-columns:repeat(3,1fr);gap:5px}
+  .mosaic-piece .mp-title{font-size:.6rem}
+  .cp-results{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<nav class="top-bar"><span class="title">🤖 未来的拼图</span><a href="index.html" class="home-btn">← 返回课程首页</a></nav>
-<div class="container">
 
-<div class="hero">
-<svg class="hero-svg" viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg">
-  <rect width="900" height="370" fill="none" rx="12"/>
-  <!-- Puzzle pieces scattered on a table -->
-  <g opacity=".5">
-    <rect x="120" y="110" width="100" height="60" rx="6" fill="#2a6a7a"/><text x="170" y="145" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">AI与自动化</text>
-    <rect x="300" y="80" width="100" height="60" rx="6" fill="#4a8a9a"/><text x="350" y="115" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">量子计算</text>
-    <rect x="500" y="110" width="100" height="60" rx="6" fill="#2a6a7a"/><text x="550" y="145" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">新能源</text>
-    <rect x="680" y="80" width="100" height="60" rx="6" fill="#4a8a9a"/><text x="730" y="115" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">虚拟现实</text>
-    <rect x="200" y="210" width="100" height="60" rx="6" fill="#3a7a8a"/><text x="250" y="245" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">自动驾驶</text>
-    <rect x="420" y="200" width="100" height="60" rx="6" fill="#2a6a7a"/><text x="470" y="235" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">虚拟货币</text>
-    <rect x="600" y="210" width="100" height="60" rx="6" fill="#4a8a9a"/><text x="650" y="245" fill="#f5f8fa" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle">海水淡化</text>
-  </g>
-  <!-- Missing piece outline -->
-  <rect x="340" y="280" width="100" height="60" rx="6" fill="none" stroke="#c47820" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/><text x="390" y="315" fill="#c47820" font-size="9" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" opacity=".7">？</text>
-  <text x="450" y="28" fill="#f5f8fa" font-size="15" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="6" opacity=".8">未来的拼图</text>
-  <text x="450" y="360" fill="#f5f8fa" font-size="11" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="3" opacity=".7">有些碎片已经拼上了，有些还不知道该放在哪里</text>
-</svg>
-<div class="hero-caption">33篇文章，拼凑一个正在成型的明日世界</div>
-</div>
+<nav class="nav-top">
+  <a href="../index.html" class="nav-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    首页
+  </a>
+  <span class="nav-label">卓老板聊科技 · 未来的拼图</span>
+</nav>
 
-<div class="tab-bar" id="tabBar">
-  <button class="tab-btn active" data-tab="t0">🧩 拼图桌</button>
-  <button class="tab-btn" data-tab="t1">🤖 核心概念</button>
-  <button class="tab-btn" data-tab="t2">🗺️ 技术图谱</button>
-  <button class="tab-btn" data-tab="t3">💡 深度追问</button>
-  <button class="tab-btn" data-tab="t4">🧭 思维导图</button>
-  <button class="tab-btn" data-tab="t5">⚠️ 知识边界</button>
-  <button class="tab-btn" data-tab="t6">📝 题库系统</button>
-  <button class="tab-btn" data-tab="t7">🎯 未来决策</button>
-</div>
-
-<div class="tab-panel active" id="t0">
-  <div class="narrative-block"><div class="lead">未来不是预言——是一块一块拼出来的</div><p>卓老板用33篇文章，带我们看正在成型的明天：AlphaGo赢了围棋、比特币从极客玩具变成金融资产、电动车从边缘进入主流、虚拟现实从科幻变成产品。这些不是孤立的新闻——它们是同一幅拼图的碎片。有些已经严丝合缝（AI的实用化），有些还没找到位置（量子计算的商业化），有些我们甚至不知道形状（通用人工智能）。</p></div>
-  <div class="article-excerpt"><div class="excerpt-title">《AlphaGo和李世石的对决中，谁的耗能高？》</div><p>李世石的大脑功耗约20瓦，AlphaGo约1兆瓦——是人类的5万倍。但AlphaGo赢了。能耗差距告诉我们：<strong>AI的"智能"和人类的"智能"在底层机制上完全不同</strong>——它不是用更高效的方式做人类做的事，而是用完全不同（且极其低效）的方式达成类似的结果。</p></div>
-  <div class="article-excerpt"><div class="excerpt-title">《你怎么就敢推荐比特币？》</div><p>比特币本质上是一个去中心化的账本——通过工作量证明（PoW）共识机制来防止双重支付，无需银行或政府背书。它的价值不是在"挖矿"中创造出来的——而是在人们对其稀缺性和不可篡改性的共识中产生的。</p></div>
-  <div class="article-excerpt"><div class="excerpt-title">《无人驾驶汽车更安全了吗？》</div><p>人类司机每年造成约130万人死亡。无人驾驶不需要完美——只需要比人类更好。目前Waymo等公司的数据显示，自动驾驶在处理常规路况时已经优于人类，但在极端边缘场景（长尾问题）仍需要更多数据。</p></div>
-  <div class="article-excerpt"><div class="excerpt-title">《新能源车为什么火了？》</div><p>电池成本的指数级下降（每年约降低15%）是电动车起飞的底层推动力。当电池组成本低于100美元/kWh时，电动车的总拥有成本开始低于燃油车——这个临界点已在2020年代到来。</p></div>
-</div>
-
-<div class="tab-panel" id="t1">
-  <div class="section-title">十个核心概念 — 未来的拼图碎片</div>
-  <div class="puzzle-grid">
-    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>① 深度学习</h3><p>AlphaGo/Master的核心——多层神经网络通过反向传播从数据中学习模式。它不是"编程"出来的——是"训练"出来的。已从游戏扩展到翻译、医疗影像、蛋白质折叠预测。</p></div>
-    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>② 区块链与共识</h3><p>去中心化账本的底层逻辑：工作量证明（PoW）解决了"拜占庭将军问题"——在不可信的网络中达成共识。比特币是第一个成功的应用，但不是唯一的应用（智能合约、DeFi、NFT）。</p></div>
-    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>③ 自动驾驶等级</h3><p>L0-L5分级。L2（辅助驾驶）已普及，L4（限定区域无人驾驶）在测试中，L5（全场景无人驾驶）仍需解决长尾场景。核心挑战不是"正常驾驶"——是处理从未见过的极端边缘情况。</p></div>
-    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>④ 电池技术曲线</h3><p>锂离子电池成本从2010年~1200美元/kWh降至2024年~100美元/kWh——降幅>90%。能量密度在同步提升。电池成本是电动车、储能、消费电子三大产业的共同基础。</p></div>
-    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>⑤ 量子计算</h3><p>量子比特利用叠加和纠缠实现并行计算——对特定问题（因子分解、量子化学模拟）有指数级加速。量子货币的理论可能性来自不可克隆定理。但容错量子计算机仍在实验室阶段。</p></div>
-    <div class="puzzle-piece"><span class="certainty low">未知形状</span><h3>⑥ 通用人工智能(AGI)</h3><p>与专用AI（如下围棋）不同——AGI需要跨领域学习、推理、适应。我们目前不知道实现AGI需要什么突破——是更大的模型？新的架构？还是全新的理论？能耗差距（人脑20W vs 数据中心1MW）暗示可能需要根本性创新。</p></div>
-    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>⑦ VR/AR/MR</h3><p>虚拟现实提供了完全沉浸的数字体验，增强现实在真实世界上叠加信息。Quest等设备已让VR进入消费市场，但"杀手级应用"尚未出现。核心瓶颈：分辨率、延迟、晕动症、续航。</p></div>
-    <div class="puzzle-piece"><span class="certainty high">已就位</span><h3>⑧ 可再生能源</h3><p>光伏和风电的度电成本已在多数地区低于化石能源。海水淡化技术（反渗透膜）的能耗已降至~3kWh/m³。能源转型的最大障碍不再是技术成本——是储能和电网基础设施。</p></div>
-    <div class="puzzle-piece"><span class="certainty medium">拼接中</span><h3>⑨ 石墨烯与新材</h3><p>单层碳原子的二维材料——强度是钢的200倍，导电性超越铜。但大规模生产仍是瓶颈。"石墨烯电池"的新闻标题常言过其实——实验室成果到量产之间隔着巨大的工程鸿沟。</p></div>
-    <div class="puzzle-piece"><span class="certainty low">未知形状</span><h3>⑩ 脑机接口</h3><p>Neuralink等公司正在开发植入式脑机接口——读取神经元信号来控制外部设备。初步应用瞄准瘫痪患者的辅助交流。长期愿景（意识上传、记忆存储）目前仍属于科幻而非科学预测。</p></div>
+<section class="hero" id="hero">
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-content">
+    <div class="hero-eyebrow">The Future · 33 Fragments</div>
+    <h1>未来的拼图</h1>
+    <p class="hero-desc">
+      未来不是一扇等你推开的门——<br>
+      它是<em>散落在地上的拼图</em>。<br>
+      33篇文章，33块碎片：有些已经拼到位了，<br>
+      有些形状模糊，有些可能根本不是你以为的那块。
+    </p>
   </div>
-</div>
-
-<div class="tab-panel" id="t2">
-  <div class="section-title">未来技术关系图谱</div>
-  <div class="svg-stage"><svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><defs><filter id="s6"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#1a242a" flood-opacity=".08"/></filter></defs><rect width="880" height="400" fill="#fafcfd" rx="12"/><g filter="url(#s6)"><rect x="80" y="60" width="160" height="44" rx="22" fill="#2a6a7a"/><text x="160" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">AI与深度学习</text><rect x="340" y="60" width="160" height="44" rx="22" fill="#2a6a7a"/><text x="420" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">量子计算</text><rect x="640" y="60" width="160" height="44" rx="22" fill="#2a6a7a"/><text x="720" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">区块链</text><rect x="80" y="300" width="160" height="44" rx="22" fill="#4a8a9a"/><text x="160" y="327" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">新能源汽车</text><rect x="340" y="300" width="160" height="44" rx="22" fill="#4a8a9a"/><text x="420" y="327" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">可再生能源</text><rect x="640" y="300" width="160" height="44" rx="22" fill="#4a8a9a"/><text x="720" y="327" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">VR/AR</text><rect x="340" y="180" width="200" height="50" rx="25" fill="#c47820"/><text x="440" y="210" fill="#fff" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">计算的未来</text></g><g stroke="#4a8a9a" stroke-width=".8" fill="none" opacity=".4"><line x1="200" y1="104" x2="340" y2="205"/><line x1="480" y1="104" x2="460" y2="180"/><line x1="640" y1="104" x2="540" y2="205"/><line x1="200" y1="300" x2="340" y2="230"/><line x1="500" y1="300" x2="480" y2="230"/><line x1="680" y1="300" x2="540" y2="230"/></g><text x="440" y="25" fill="#2a6a7a" font-size="14" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">明日技术生态系统</text></svg></div>
-</div>
-
-<div class="tab-panel" id="t3">
-  <div class="section-title">深度追问</div>
-  <div class="socratic-panel">
-    <div class="q-a"><div class="question">AlphaGo赢李世石——是AI"理解"了围棋吗？</div><div class="answer">不是。AlphaGo不"理解"围棋——它通过数百万局自我对弈，学到了哪些走法更可能通向胜利。这和人学习围棋有本质区别：人可以用语言解释策略（"这里要围空"），而AlphaGo的"知识"编码在数百万个浮点参数中——无法被翻译成人类语言。它比人类强，但它不知道自己为什么强。</div></div>
-    <div class="q-a"><div class="question">比特币是货币还是资产？</div><div class="answer">从设计初衷看，比特币是"点对点的电子现金系统"——一种货币。但它的价格波动性（年化波动率常>50%）让它作为记账单位和交易媒介不实用。目前它更多被当作一种数字资产（"数字黄金"）——具有稀缺性（2100万上限）、不可篡改性、去中心化这些特征。至于是货币还是资产，市场仍在定义中。</div></div>
+  <div class="hero-scroll">
+    <span>探索碎片</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
   </div>
-</div>
+</section>
 
-<div class="tab-panel" id="t4">
-  <div class="section-title">思维导图</div>
-  <div class="mindmap" id="mm6"><div class="node"><div class="node-header" onclick="toggleM6(this)" style="background:var(--accent);color:#fff;"><span class="toggle open">▶</span> 未来的拼图</div><div class="node-body open">
-    <div class="node"><div class="node-header" onclick="toggleM6(this)"><span class="toggle">▶</span> 人工智能</div><div class="node-body"><div class="leaf">深度学习：从数据中学习模式</div><div class="leaf">AlphaGo/AlphaZero：自我博弈训练</div><div class="leaf">专用AI vs AGI：窄vs宽</div><div class="leaf">能耗对比：人脑20W vs AI数MW</div></div></div>
-    <div class="node"><div class="node-header" onclick="toggleM6(this)"><span class="toggle">▶</span> 数字资产</div><div class="node-body"><div class="leaf">区块链：去中心化共识账本</div><div class="leaf">比特币：PoW+稀缺性</div><div class="leaf">量子货币：基于不可克隆定理</div></div></div>
-    <div class="node"><div class="node-header" onclick="toggleM6(this)"><span class="toggle">▶</span> 交通与能源</div><div class="node-body"><div class="leaf">电动车：电池成本下降90%</div><div class="leaf">自动驾驶：L2普及/L4测试中/L5遥远</div><div class="leaf">新能源：光伏风电已低于化石能源成本</div></div></div>
-  </div></div></div>
-</div>
+<section class="section reveal" id="certainty">
+  <div class="section-label">01 · 拼图的全貌</div>
+  <h2>确定性的光谱</h2>
+  <p class="section-intro">把 33 块拼图摊开来看——有些形状清晰、边缘吻合；有些模糊不清、可能根本不属于这幅画。这不是预言，是整理线索。</p>
+  <div class="spectrum-wrap">
+    <div class="spectrum-bar"></div>
+    <div class="spectrum-ticks">
+      <span class="spectrum-tick">已经拼上</span><span class="spectrum-tick">正在成形</span><span class="spectrum-tick">形状模糊</span><span class="spectrum-tick">可能不是这块</span>
+    </div>
+    <div class="spectrum-clusters" id="specClusters"></div>
+    <div class="spec-detail-panel" id="specDetailPanel">
+      <h4 id="specDetailTitle"></h4><p id="specDetailDesc"></p>
+      <div class="article-chips" id="specDetailChips"></div>
+    </div>
+  </div>
+</section>
 
-<div class="tab-panel" id="t5">
-  <div class="section-title">知识边界</div>
-  <table class="boundary-table"><thead><tr><th>知识条目</th><th>程度</th><th>理由</th></tr></thead><tbody>
-    <tr><td>深度学习的基本原理</td><td><span class="level-tag level-core">核心</span></td><td>理解AI能力的来源和局限</td></tr>
-    <tr><td>区块链去中心化共识</td><td><span class="level-tag level-core">核心</span></td><td>理解数字货币和Web3</td></tr>
-    <tr><td>电池成本下降曲线</td><td><span class="level-tag level-understand">理解</span></td><td>理解电动车革命的经济驱动力</td></tr>
-    <tr><td>自动驾驶L0-L5分级</td><td><span class="level-tag level-understand">理解</span></td><td>判断新闻中的技术进展</td></tr>
-    <tr><td>量子计算具体算法</td><td><span class="level-tag level-know">知道</span></td><td>需要量子力学和计算机科学背景</td></tr>
-    <tr><td>神经网络反向传播数学</td><td><span class="level-tag level-know">知道</span></td><td>需要微积分和线性代数</td></tr>
-  </tbody></table>
-</div>
+<section class="section domain-section reveal" id="domain-ai">
+  <div class="section-label">02 · 深度聚焦</div>
+  <h2>智能的进化线</h2>
+  <p class="section-intro">AI 不是一夜之间出现的。从下围棋到证数学定理，每一步都在把一块拼图放到它该在的位置。这条路有里程碑，也有岔路口。</p>
+  <div class="timeline-path" id="tlAI"></div>
+</section>
 
-<div class="tab-panel" id="t6">
-  <div class="section-title">题库 — 20题</div>
-  <div class="score-bar" id="qs6">已答：0 / 20</div><div class="progress-bar"><div class="progress-fill" id="qp6" style="width:0%"></div></div>
-  <div id="qc6"></div><button class="btn btn-outline" onclick="resetQ6()" style="margin-top:16px;">🔄 重新作答</button>
-  <div class="section-title">简答</div>
-  <div class="quiz-card"><p class="q-text">🖊️ AlphaGo下围棋比人类强——这是否意味着AI"理解"了围棋？为什么？</p><textarea class="sa-input" id="sa6"></textarea><button class="btn btn-outline" onclick="showSA6()" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR6">AlphaGo不"理解"围棋——它的"知识"编码在数百万个浮点参数中，无法转化为人类可理解的语言解释。它通过数百万局自我对弈学到了哪些走法统计上更可能通向胜利，但这和人类棋手的"策略理解"在认知层面完全不同。AlphaGo不知道自己为什么强——这恰恰是当前AI的根本局限：<strong>模式匹配≠理解</strong>。</div></div>
-</div>
+<section class="section domain-section reveal" id="domain-space">
+  <h2>向上的代价</h2>
+  <p class="section-intro">每一次“飞向太空”的背后，都有一个“可能回不来”。航天不是浪漫的——它是靠概率、预案和牺牲堆出来的。</p>
+  <div class="tension-wrap">
+    <div class="tension-col achieve" id="tensionAchieve"></div>
+    <div class="tension-divider"><span>成</span><span>就</span><div class="tension-line"></div><span>风</span><span>险</span></div>
+    <div class="tension-col risk" id="tensionRisk"></div>
+  </div>
+</section>
 
-<div class="tab-panel" id="t7">
-  <div class="section-title">未来决策模拟</div>
-  <div class="decision-scene"><h3>场景：朋友问"比特币现在还能买吗？"</h3><div class="scenario">朋友看到比特币价格波动大，想投一笔钱进去"搏一把"。你基于对区块链原理的理解，会怎么回应？</div><div class="choice-btn" onclick="evalD6(this,'a')">A) 加密货币有投资价值——推荐All in</div><div class="choice-btn" onclick="evalD6(this,'b')">B) 解释比特币的基本原理、价格波动风险和"只投你能承受全部损失的钱"原则</div><div class="choice-btn" onclick="evalD6(this,'c')">C) 比特币是骗局——坚决反对</div><div id="dfb6" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div></div>
-</div>
+<section class="section domain-section reveal" id="domain-crypto">
+  <h2>金钱的信仰战</h2>
+  <p class="section-intro">比特币是货币还是泡沫？量子货币会诞生吗？这些问题没有一个标准答案——只有一层层剥开的问题。点击每个问题展开。</p>
+  <div class="q-list" id="qList"></div>
+</section>
 
-<div class="footer"><p>🤖 未来的拼图 — 卓老板聊科技 MKS</p><p>33篇文章 · 10核心概念</p><p><a href="index.html">← 返回课程首页</a></p></div>
-</div>
+<section class="section domain-section reveal" id="domain-energy">
+  <h2>能源的两种叙事</h2>
+  <p class="section-intro">新能源车的爆发是真的，但“换电池像加油一样快”可能不是。石墨烯是革命还是噱头？我们把市场的叙事和工程的现实分成两栏。</p>
+  <div class="split-panel">
+    <div class="split-side expect" id="splitExpect"></div>
+    <div class="split-side reality" id="splitReality"></div>
+  </div>
+</section>
+
+<section class="section domain-section reveal" id="domain-quantum">
+  <h2>量子的面纱</h2>
+  <p class="section-intro">量子通信、量子密钥、量子计算、量子货币——每揭开一层，下面还有一层。点击每一层，看看我们知道什么、还不知道什么。</p>
+  <div id="layerCards"></div>
+</section>
+
+<section class="section domain-section reveal" id="domain-bio">
+  <h2>生命的边界线</h2>
+  <p class="section-intro">从基因编辑到人体冷冻，从意识到永生——技术在推，伦理在拉。每一项技术都带着一道道德问题。</p>
+  <div class="ethics-axis-bar"></div>
+  <div class="ethics-axis-labels"><span>已成熟落地</span><span>争议中前行</span><span>遥远的承诺</span></div>
+  <div id="ethicsRows"></div>
+</section>
+
+<section class="section reveal" id="mosaic">
+  <div class="section-label">03 · 全部碎片</div>
+  <h2>拼图桌</h2>
+  <p class="section-intro">33 块碎片全部摊开。绿色边框的是已经拼上的，虚线边框的是形状还不确定的。悬停查看详情。</p>
+  <div class="mosaic-grid" id="mosaicGrid"></div>
+</section>
+
+<section class="section reveal" id="art">
+  <div class="section-label">04 · 视觉叙事</div>
+  <h2>拼图的隐喻</h2>
+  <div class="narrative-art" id="narrativeArt"></div>
+</section>
+
+<section class="section reveal" id="samples">
+  <div class="section-label">05 · 原文触感</div>
+  <h2>来自文章的声音</h2>
+  <p class="section-intro">横向滑动，直接阅读来自 33 篇文章的片段。第一手接触感——这不是总结，是原文本身。</p>
+  <div class="sample-strip" id="sampleStrip"></div>
+</section>
+
+<section class="section reveal" id="picker">
+  <div class="section-label">06 · 自己判断</div>
+  <h2>你来归类</h2>
+  <p class="section-intro">我们给每项技术打了标签：已拼上 / 成形中 / 模糊 / 可能不是这块。但你同意吗？点击下方按钮，按你自己的标准重新看这些碎片。</p>
+  <div class="certainty-picker-btn-wrap" id="cpButtons"></div>
+  <div class="cp-results" id="cpResults"></div>
+</section>
+
+<section class="closing reveal" id="closing">
+  <p class="closing-quote">
+    有些拼图<strong>真的在成形</strong>：AI 能写代码，电动车在路上跑，量子卫星在天上飞。<br><br>
+    但更多的<strong>“确定性”是假的</strong>：自动驾驶什么时候来？比特币是货币还是泡沫？火星殖民要多久？<br><br>
+    我们不是在预言未来——我们是在<strong>拼凑现在已有的线索</strong>。<br>
+    而最诚实的态度是：承认我们不知道盒子盖上画的是什么。
+  </p>
+  <p class="closing-meta">33 篇文章 · 卓老板聊科技 · <a href="../index.html">返回首页</a></p>
+</section>
+
+<div class="mosaic-tooltip" id="mosaicTooltip"></div>
+
+<script type="application/json" id="articles-data">
+[{"id": 0, "title": "从“人体冷冻”到细胞", "domain": "bio", "certainty": "distant", "summary": "人体冷冻尚未成功一例。但细胞冷冻技术本身是成熟的——抗冻剂防止大冰晶刺穿细胞膜。ATCC 是全球最大的细胞银行，海拉细胞系是“永生”的现实版。花 30 万美元买的是一个昂贵的墓地，不是一张未来的船票。", "excerpt": "目前世界上有3家比较大的人体冷冻公司，两个在美国，一个在俄罗斯。服务分两种，一种是冷冻脑神经，一种是冷冻整个身体，费用前者是几万美元，后者是20-30万美元。这些服务在学术界的名声很差，大部分学者对此是持否定态度的，因为到目前为止没有出现任何一个成功的人体冷冻、解冻案例。"}, {"id": 1, "title": "货币防伪的极限——量子货币会诞生吗？", "domain": "crypto", "certainty": "distant", "summary": "大面额钞票各国相继取消——增加犯罪门槛。牛顿在铸币局用科学手段大幅改进防伪。量子货币利用“量子态不可克隆”实现理论上无法伪造——但离实际应用还很远。", "excerpt": "美国在1969年之前使用过单张500美元的钞票，当时这张1克重的纸币可以兑换404克黄金，价值兑换落差太大。一百美元纸币印制成本为0.64-0.96美元，如果就按印制成本是面额1%来计算，人民币如果推出500元面额纸币，造假币的人成本降低80%。"}, {"id": 2, "title": "量子卫星大揭秘", "domain": "quantum", "certainty": "emerging", "summary": "墨子号量子卫星主攻量子通讯科学实验。光量子态在光纤中最多传 200 公里就衰减到无法辨识——量子信号不能放大。潘建伟团队已实现 97 公里量子态传输。", "excerpt": "墨子号量子卫星的主要任务是做量子通讯的科学实验，就目前而言，量子通讯离实际应用还比较远。光量子态在光纤中最多可以传播200公里，之后衰减到无法辨识，而光量子又没法放大。地球大气层传播光信号的衰减过程主要集中在近地面20公里以内高度。"}, {"id": 3, "title": "人工智能与黎曼的较量", "domain": "ai", "certainty": "emerging", "summary": "黎曼猜想 160 年未解。AI 开始挑战纯数学的圣杯——不是替代数学家，而是探索“机器能否发现人类未发现的数学规律”。方向令人期待，但离证明还很远。", "excerpt": "1925年后黎曼猜想的进展就卡在了已计算出的138个非平凡零点上，此后的发展举步维艰，这时候有人们就把关注点放在了黎曼的手稿上。"}, {"id": 4, "title": "40% 的黎曼猜想", "domain": "ai", "certainty": "emerging", "summary": "从哈代到计算机辅助证明——黎曼猜想的进展故事。将连续问题离散化后计算机能处理约 40% 的相关命题。这暗示了 AI 与纯数学深度结合的可能路径。", "excerpt": "哈代最初接触黎曼猜想是计划找出一个反例，推翻这个猜想，后来态度转变，倾向于承认这个猜想，并证明了有无穷多零点在临界线上。"}, {"id": 5, "title": "解读 2016 年诺贝尔化学奖“分子机器”", "domain": "bio", "certainty": "emerging", "summary": "在纳米尺度上制造能执行任务的机器——三位科学家分别贡献了设计合成、旋转马达和分子电梯。2016 年诺贝尔化学奖实至名归。为未来纳米医疗和智能材料铺了路。", "excerpt": "分子机器是在分子尺度上设计制造的机械装置，能对外部刺激做出响应并产生可控运动。三位获奖者分别贡献了分子机器的设计合成、旋转马达和分子电梯等关键突破。"}, {"id": 6, "title": "基因编辑未来的应用是什么？", "domain": "bio", "certainty": "emerging", "summary": "CRISPR-Cas9 可以像“分子剪刀”一样精准剪切 DNA。治疗遗传病、改良农作物、控制病媒昆虫——技术已经在路上，但设计婴儿的伦理争议远未解决。", "excerpt": "CRISPR-Cas9系统可以像‘分子剪刀’一样精准剪切DNA。应用前景包括：治疗遗传性疾病、改良农作物、控制病媒昆虫。但设计婴儿和基因增强引发了巨大的伦理争议——技术能力跑在了伦理共识前面。"}, {"id": 7, "title": "计算机如何模拟进化？", "domain": "ai", "certainty": "clear", "summary": "约翰·霍兰德是世界上第一位计算机科学博士，他开创的遗传算法让计算机模拟自然选择——种群→选择→交叉→变异→迭代。这条 AI 路线比深度学习早了几十年。", "excerpt": "约翰·霍兰德是世界上第一位计算机科学博士，毕业于密歇根大学，他的老师是计算机工程师巴克斯，巴克斯曾经协助冯·诺依曼建造EDVAC，这台计算机是世界上第一台计算机ENIAC的改进版，采用的是二进制。"}, {"id": 8, "title": "网络思维与复杂性", "domain": "ai", "certainty": "clear", "summary": "蚁群没有中央指挥却能建造复杂蚁窝。网络思维的核心洞察：简单规则 × 大量个体 = 复杂行为。这是理解 AI 社会、互联网和神经系统的钥匙。", "excerpt": "蚁后是雌蚁，它们从蚁窝中飞出，以千分之几的存活率在其他地方开辟新的蚁窝，自己也从普通雌蚁变成了蚁后，拥有超过30年的寿命，而工蚁的寿命只有3-5年。"}, {"id": 9, "title": "计算机如何模拟进化（续）", "domain": "ai", "certainty": "clear", "summary": "续上期——听众用代码自己模拟了进化过程。遗传算法的美妙之处：你只设定规则和评价标准，让“进化”自己找到答案。", "excerpt": "其中评论里我就发现好几位听众甚至编了一段小程序模拟了一下这个过程，有这种动手能力和好奇心，估计您平日在朋友圈中应该也是众人心中的牛人。"}, {"id": 10, "title": "海水淡化是未来趋势吗？", "domain": "energy", "certainty": "emerging", "summary": "中水系统（再生水）代表水系统 4.0。海水淡化主流技术是反渗透膜，目前约 3-4 度电/吨水。技术在进步，但浓盐水排放的环境影响仍是瓶颈。", "excerpt": "‘中水’这个词对应的英语是再生水，它采用单独的管道运输，水质处于上水与下水之间，也就是说，它既不是能喝的自来水，也不是肮脏的污水。"}, {"id": 11, "title": "太空行走意外身亡怎么办？", "domain": "space", "certainty": "clear", "summary": "阿波罗计划时期的标准流程：同伴出舱意外死亡？切断连接绳，让遗体留在太空。不是冷血——拖拽一个失去行动能力的宇航员会让两人都丧命。太空规则是用生命写的。", "excerpt": "在美国阿波罗计划末期，曾经有记者采访宇航员：如果你的同伴出舱行走时意外死亡，应该如何处理？标准回答是：把他的连接绳切断，让他的身体留在太空中。这不但是标准流程也是太空条件下唯一的选择。"}, {"id": 12, "title": "飞船爆炸还有救吗？", "domain": "space", "certainty": "clear", "summary": "阿波罗 13 号——人类航天史上最伟大的失败。服务舱氧气罐爆炸，三名宇航员用登月舱当“救生艇”绕过月球返回。NASA 地面团队在几天内解决了无数“不可能”。", "excerpt": "阿波罗13号的飞船指令长是Jim Lovell，他差一点就入选了第一次登月，这次作为第三次登月的指令长终于如愿。指令舱驾驶员在上天之前3天患了麻疹，遗憾退出，由Jack Swigert接替。"}, {"id": 13, "title": "提前坠落的太空实验室", "domain": "space", "certainty": "clear", "summary": "苏联礼炮计划 vs 美国天空实验室——两个超级大国在近地轨道上竞争。天空实验室 1979 年提前坠入大气层，碎片散落澳大利亚。但科学成果至今仍被引用。", "excerpt": "苏联在1964年彻底放弃了登月计划，之后通过‘礼炮计划’实现了空间站的建设。美国动手比较晚，在1972年底才开始进行空间站的规划，之所以这样做，是因为NASA的经费大幅削减了。"}, {"id": 14, "title": "航天飞机大爆炸", "domain": "space", "certainty": "clear", "summary": "挑战者号 1986 年起飞 73 秒后爆炸，7 名宇航员全部遇难。根因是一个 O 型密封圈在低温下失效。NASA 让火箭重复使用的雄心没错，但技术上还没准备好。", "excerpt": "因为美国在之后有一系列太空任务，包括商业发射的卫星和美国的空间站。每次太空任务都浪费一个火箭，费用就会很高，而这个费用主要贵在火箭的发动机。所以如果有一种方法可以保留发动机，那就会大幅度降低发射成本。"}, {"id": 15, "title": "火星殖民的成功率有多大？", "domain": "space", "certainty": "distant", "summary": "SpaceX 说猎鹰 9 号能重复发射 1000 次、成本从 6000 万降到 6 万——但这是给投资人说的。火星无磁场、大气稀薄、平均温度 -60°C——不是靠降低发射成本就能住的。", "excerpt": "‘使用猎鹰9号火箭能降低发射成本，可以重复发射1000次，单次发射成本从6000万下降到6万’。但不要太乐观，这些话是给投资人说的。"}, {"id": 16, "title": "预告：大脑的永生", "domain": "bio", "certainty": "distant", "summary": "大脑死亡不是瞬间的——缺血后神经细胞可存活数分钟到数小时。低温可延长这个窗口。但即使保存了结构，意识能否恢复完全是未知。我们对意识本质还知之甚少。", "excerpt": "有听众张帮友说，能不能讲一期关于宇宙起源演化、地球生命起源演化的节目？"}, {"id": 17, "title": "神经细胞的 5 次升级", "domain": "bio", "certainty": "clear", "summary": "从原始神经网到人类大脑皮层——神经网→集中神经节→脑→大脑皮层→新皮层→前额叶扩大。每一次升级都对应一种全新的能力。这是进化史上最激动人心的故事。", "excerpt": "细胞演化过程中的5次升级分别是什么？从原始神经网到人类大脑皮层，每一次升级都对应着一种新的能力。"}, {"id": 18, "title": "意识，没事儿别轻易聊", "domain": "bio", "certainty": "uncertain", "summary": "意识的“困难问题”：为什么物理的神经活动会产生主观体验？主流科学观点认为意识是足够复杂的信息处理系统产生的涌现现象——但目前离真正的科学解释还很远。", "excerpt": "听完这期，你就知道为什么我不轻易聊‘意识’。意识的‘困难问题’是：为什么物理的神经活动会产生主观的体验？"}, {"id": 19, "title": "无人驾驶汽车是更安全了，还是更危险了？", "domain": "ai", "certainty": "uncertain", "summary": "特斯拉自动驾驶第一起致命事故——车辆和驾驶员都没发现横穿的白色拖挂车。自动驾驶在 95% 场景中安全，但那 5% 的边缘场景（白色卡车、逆光、施工区）才是关键。", "excerpt": "第一起与特斯拉自动驾驶功能有关的致命交通事故被曝光。事件发生在半封闭高速道路上，驾驶员和特斯拉的自动驾驶功能没有发现一辆冲过来的拖挂车，导致发生撞击。"}, {"id": 20, "title": "哪些虚拟货币值得投资？", "domain": "crypto", "certainty": "uncertain", "summary": "雷达币、珍宝币用直销模式推广——几乎全是骗局。虚拟货币领域鱼龙混杂：有真正的技术创新，也有纯粹的庞氏骗局。老年人成为主要受害群体。", "excerpt": "关于虚拟货币，现在有很多。我身边有许多朋友买雷达币和珍宝币，说什么技术达到比特币而且高于比特币的水平，购买方式是直销形式的，特别是珍宝币几乎都是老年人买，希望您给讲讲。"}, {"id": 21, "title": "你怎么就敢推荐比特币？", "domain": "crypto", "certainty": "uncertain", "summary": "卓克被听众灵魂拷问：“赚了没你什么事，赔了骂你全家”——你还敢推荐比特币？这暴露了所有“预测未来”的核心困境：区分技术和炒作太难了。", "excerpt": "卓老板，面临‘赚了没你什么事，赔了骂你全家’的风险，你确信要推荐比特币？听众不给咨询费，你敢就这么推荐币种了？（偷笑）"}, {"id": 22, "title": "新能源车为什么火了？", "domain": "energy", "certainty": "clear", "summary": "锂电池能量密度（约 0.3 kWh/kg）确实远低于成品油（约 12 kWh/kg），但内燃机热效率只有 25-35%，电机效率超 90%。整体能效电动车反而更高。", "excerpt": "卓老板，听说锂电池的能量密度比成品油低一个数量级，能解答下为什么新能源车近几年火起来了？氢燃料电池未来有可能替代锂电池么？"}, {"id": 23, "title": "新能源车为什么不靠换电池来实现充电呢？", "domain": "energy", "certainty": "emerging", "summary": "换电模式听起来美好——像加油站一样换电池。但各车企电池规格不统一、安全认证、频繁插拔的风险、电池衰减后责任归属——都是巨大障碍。", "excerpt": "锂电池驱动的汽车，为什么不能靠快速更换电池组的方式实现充电？就是像加油站一样，来一个电池站。汽车到了电池站地盘升高直接换电池。"}, {"id": 24, "title": "石墨烯产品该不该买？", "domain": "energy", "certainty": "uncertain", "summary": "石墨烯是神奇的材料——单层碳原子、超高强度、超强导电。但市面上的“石墨烯产品”大多用的是石墨微片或氧化石墨烯，跟真正的单层石墨烯没太大关系。", "excerpt": "市面上的‘石墨烯产品’大多是营销噱头。真正单层石墨烯的制备成本极高，量产难度大。这种‘实验室奇迹→商业炒作’的模式在新材料领域反复出现。"}, {"id": 25, "title": "人工智能技术是怎么回事？", "domain": "ai", "certainty": "clear", "summary": "理解 AI 要从信息论的源头开始——香农。AI 不是魔法，有扎实的数学根基：符号主义→连接主义→统计学习→深度学习。每一波都有理论支撑。", "excerpt": "卓老板，能不能讲讲香农，人工智能这么火，我们有必要从源头看看信息技术。"}, {"id": 26, "title": "聊聊华为的石墨烯电池", "domain": "energy", "certainty": "emerging", "summary": "华为的石墨烯电池实际是石墨烯辅助散热的锂离子电池——石墨烯充当散热材料而非电极材料。确实提升了性能，但不是化学体系的根本变革。", "excerpt": "华为宣称的石墨烯电池实际是石墨烯辅助散热的锂离子电池——石墨烯在其中充当散热材料而非电极材料。这确实能提升电池性能，但不是化学体系的根本变革。"}, {"id": 27, "title": "Master 团灭人类围棋", "domain": "ai", "certainty": "clear", "summary": "Master（AlphaGo 升级版）在弈城上 60 连胜，人类顶尖棋手无一幸免。这不仅是比赛——围棋变化数超过宇宙原子数。AI 学会了“直觉”：什么棋形好、什么棋形差。", "excerpt": "关于Master在弈城上下棋这件事必须得说说了，也有听众催我赶紧说。Master是AlphaGo的升级版本，在2016年底到2017年初以60:0横扫人类顶尖棋手。"}, {"id": 28, "title": "虚拟现实的实际体验", "domain": "quantum", "certainty": "emerging", "summary": "卓克春节体验 VR：沉浸感确实惊人，但分辨率、延迟、内容生态都还在早期。14 年后虚拟与现实的边界会模糊吗？当前三大瓶颈：纱窗效应、眩晕、缺内容。", "excerpt": "从今天开始到周五，我们就开始春节体验节目了。当前VR的三大瓶颈：分辨率不够（纱窗效应）、延迟导致眩晕、优质内容稀缺。但每代产品都比上一代好很多。"}, {"id": 29, "title": "AlphaGo 和李世石的对决中，谁的耗能高？", "domain": "ai", "certainty": "clear", "summary": "人脑 ≈ 20 瓦（一盏节能灯），AlphaGo 分布式系统 > 100 千瓦（5000 倍）。但人脑同时在管理身体、处理感官、维持意识——两者不能简单对比。", "excerpt": "希望卓老板讲一下人类大脑的能耗相对于人工智能的能耗的比值。人脑功耗约20瓦，AlphaGo的分布式系统功耗超100千瓦。但两者任务完全不同。"}, {"id": 30, "title": "今后的水和能源", "domain": "energy", "certainty": "emerging", "summary": "从超市排水系统看现代化程度——水处理和能源的未来不在技术本身，而在政策选择和社会接受度。太阳能成本十年降了 90%，但推广不只取决于成本。", "excerpt": "从一个超市的排水系统，可以看出它的现代化程度。太阳能成本在过去十年下降了90%，但一个城市是否采用这些技术不完全取决于技术可行性——政策、投资、公众接受度同样重要。"}, {"id": 31, "title": "飞出太阳系还怎么和地球保持联系？", "domain": "space", "certainty": "clear", "summary": "旅行者 1 号距离地球超 200 亿公里，信号衰减到初始强度的万亿亿分之一。NASA 深空网络用 70 米直径天线接收——数据速率已降到每秒几百比特。", "excerpt": "请问飞行器飞出太阳系是怎样和地球保持联系的？旅行者1号距离地球超过200亿公里，信号需要20多小时才能到达。NASA的深空网络使用70米直径天线接收信号。"}, {"id": 32, "title": "逃离地球时你带什么走？", "domain": "space", "certainty": "distant", "summary": "如果 2600 万年一次的灭绝周期突然缩短到 2 年，你被选中移居其他星球——飞船容量有限，你只能带最重要的东西。这个思想实验在问：文明的最小知识集是什么？", "excerpt": "如果是《物种灭绝的周期》中提到的，真的存在2600万年一次的灭绝周期，我们距离下一次还有2000万年的时间。假如不是2000万年，而是还有2年时间了，各位就是被选中移居到其他星球避难的。"}]
+</script>
 
 <script>
-(function(){var t=document.querySelectorAll('#tabBar .tab-btn'),p=document.querySelectorAll('.tab-panel'),s=localStorage.getItem('mks-future-tab');t.forEach(function(b){b.addEventListener('click',function(){t.forEach(function(x){x.classList.remove('active');});p.forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');localStorage.setItem('mks-future-tab',this.getAttribute('data-tab'));});});if(s){var b=document.querySelector('[data-tab="'+s+'"]');if(b)b.click();}})();
-function toggleM6(h){var t=h.querySelector('.toggle'),b=h.parentElement.querySelector('.node-body');if(b){b.classList.toggle('open');t.classList.toggle('open');}}
+var A = JSON.parse(document.getElementById('articles-data').textContent);
 
-var q6=[{q:'AlphaGo与李世石对弈时的能耗对比是？', opts:['人脑约20W，AlphaGo约1MW（5万倍）','两者相当','人脑更高','AlphaGo更低'], ans:0, expl:'李世石大脑功耗~20W，AlphaGo~1MW（1,000,000W）——是人类的5万倍。这揭示了AI和人类智能在底层机制上的巨大差异。'},{q:'比特币防止双重支付的核心机制是什么？', opts:['银行担保','工作量证明(PoW)共识','政府监管','密码保护'], ans:1, expl:'比特币通过PoW共识机制——矿工竞争计算哈希值，最长链被视为有效链。攻击者需要控制>51%的算力才能双重支付——成本极高。'},{q:'推动电动车普及的最关键经济因素是什么？', opts:['政府补贴','环保意识','电池成本下降超过90%','油价上涨'], ans:2, expl:'锂离子电池成本从2010年~1200美元/kWh降至2024年~100美元/kWh——降幅>90%。当电池成本<100美元/kWh时，电动车总拥有成本开始低于燃油车。'},{q:'自动驾驶L4级别的定义是什么？', opts:['完全无人驾驶，任何地方','没有自动化','辅助驾驶','限定区域内的无人驾驶，无需人类接管'], ans:3, expl:'L4=限定区域/条件下的无人驾驶，系统在特定区域内完全负责驾驶，无需人类接管。Waymo在凤凰城的Robotaxi服务就是L4级别的。L5=任何地方、任何条件下全无人驾驶。'},{q:'量子计算机相对于经典计算机的理论优势是什么？', opts:['对特定问题（如因子分解）有指数级加速','所有计算都更快','更省电','更便宜'], ans:0, expl:'量子计算机并不对所有任务更快——对特定问题（大数因子分解→破解RSA加密、量子化学模拟）利用叠加和纠缠实现指数级加速。通用计算仍以经典计算机为主。'},{q:'深度学习与人类学习的根本区别是什么？', opts:['没有区别','深度学习通过大量标注数据训练，不"理解"所学内容','深度学习更聪明','人类学习不需要数据'], ans:1, expl:'深度学习从数据中学习统计模式——但它不"理解"。AlphaGo不知道围棋的"策略"是什么——它的知识是数百万个无法解释的浮点参数。人类可以用语言解释，AI不能。'},{q:'目前实现通用人工智能(AGI)的最大障碍是什么？', opts:['资金不足','硬件不够','我们不知道需要什么突破','没人研究'], ans:2, expl:'当前AI是"窄AI"——每个系统只做一件事（下棋/翻译/识别）。AGI需要跨领域学习和推理，实现路径尚不明确——更大的模型？新架构？新理论？这是根本的未知。'},{q:'VR技术进入消费市场的主要瓶颈不包括以下哪项？', opts:['分辨率与延迟','晕动症','电池续航','价格已经足够便宜'], ans:3, expl:'Quest等设备已将价格降至消费级。主要瓶颈仍然是：分辨率/纱窗效应、延迟导致的晕动症、电池续航短。"杀手级应用"的缺失是另一大挑战。'},{q:'"石墨烯电池"的新闻报道需要谨慎对待，为什么？', opts:['实验室成果到量产之间有巨大的工程鸿沟','石墨烯不存在','电池不需要改进','石墨烯太贵'], ans:0, expl:'石墨烯的许多"突破"仍在实验室阶段——毫克级别的样品。大规模生产（吨级）仍面临成本和质量控制的巨大挑战。从论文到产品通常需要10-20年。'},{q:'海水淡化(反渗透膜)的能耗现已降至约多少？', opts:['10kWh/m³','3kWh/m³','50kWh/m³','20kWh/m³'], ans:1, expl:'反渗透海水淡化能耗已降至~3kWh/m³——这是巨大的技术进步。作为参考，普通家庭每天用水约0.3m³，淡化能耗仅~1kWh——约0.5元电费。'},{q:'为什么说"量子货币"在理论上是不可伪造的？', opts:['因为有政府背书','因为加密更强','基于量子不可克隆定理——未知量子态无法完美复制','因为使用量子计算机'], ans:2, expl:'量子不可克隆定理：任意未知量子态不能被完美复制。这是量子力学的基本原理，不是技术限制。如果可以用量子态来编码货币，它将是物理上不可伪造的——目前仍是理论概念。'},{q:'自动驾驶的最大技术挑战是？', opts:['高速行驶','正常道路行驶','停车','长尾问题——从未见过的极端边缘场景'], ans:3, expl:'长尾问题：自动驾驶系统在99.9%的常见场景中表现出色，但那0.1%的罕见极端场景（施工现场异常标志、动物突然窜出、信号灯故障）需要海量真实路测数据来覆盖。'},{q:'AlphaGo的"棋力"来自什么？', opts:['数百万局自我对弈中学习的统计模式','程序员写的规则','从人类棋谱中背诵的','随机猜测'], ans:0, expl:'AlphaGo通过强化学习——数百万局自我对弈——学到了哪些走法统计上通向胜利。初始版本学习了人类棋谱，AlphaZero完全从零开始自我博弈——不依赖人类棋谱。'},{q:'比特币的总量上限是多少？', opts:['1000万','2100万','1亿','无限'], ans:1, expl:'比特币协议规定总量上限为2100万枚——通过每4年减半的区块奖励机制逐步释放。预计最后一枚比特币将在2140年左右被挖出。这个稀缺性是比特币价值主张的核心。'},{q:'光伏发电的度电成本在过去十年发生了什么变化？', opts:['上升了','不变','下降了约90%','下降了10%'], ans:2, expl:'光伏电力成本在过去十年下降约90%——在许多地区已低于化石能源。这是全球能源转型最根本的经济驱动力。'},{q:'"锂离子电池"的发明获得了哪年的诺贝尔化学奖？', opts:['2016年','2015年','2020年','2019年'], ans:3, expl:'2019年诺贝尔化学奖颁给了约翰·古迪纳夫、斯坦利·惠廷厄姆和吉野彰——以表彰他们在锂离子电池开发中的贡献。这是史上最高龄的诺贝尔奖得主（古迪纳夫97岁）。'},{q:'关于电动车换电模式，以下哪项是正确的？', opts:['标准化困难和基础设施成本高导致普及有限','已广泛普及','比充电更好','只在欧洲有'], ans:0, expl:'换电模式（如蔚来）提供了3分钟换电的便利——但面临电池标准化（不同品牌/车型电池不同）和换电站建设成本高的挑战。充电和换电不是替代关系——是互补。'},{q:'Waymo（谷歌自动驾驶）目前在哪些城市有商业无人出租车服务？', opts:['全球','凤凰城、旧金山等','仅北京','仅东京'], ans:1, expl:'Waymo在凤凰城（亚利桑那州）提供完全无人驾驶的出租车服务（L4级别），并已扩展到旧金山等地。这是目前全球商业化运营最成熟的自动驾驶服务。'},{q:'虚拟货币"挖矿"的实质是什么？', opts:['真的在挖','创造货币','竞争计算哈希值来打包交易并获得奖励','破解密码'], ans:2, expl:'挖矿是通过竞争计算SHA-256哈希值来获得下一个区块的打包权——成功的矿工获得区块奖励（新生成的比特币）+交易手续费。这个过程同时保障了网络的安全性和去中心化。'},{q:'对"未来技术预测"，最理性的态度是什么？', opts:['所有预测都会成真','所有预测都不准','不需要关注未来','技术发展有迹可循但充满不确定性——保持审慎乐观'], ans:3, expl:'技术发展遵循某些规律（摩尔定律、莱特定律等），但突破性创新难以预测。最理性的态度：理解底层趋势、对具体预测保持怀疑、为多种可能性做好准备。'}];
-var qa6=0,qc6=0;
-function renderQ6(){var c=document.getElementById('qc6'),h='';q6.forEach(function(item,idx){h+='<div class="quiz-card" id="q6'+idx+'"><div class="q-text">'+(idx+1)+'. '+item.q+'</div>';var l=['A','B','C','D'];item.opts.forEach(function(o,oi){h+='<button class="q-option" id="q6'+idx+'o'+oi+'" onclick="answerQ6('+idx+','+oi+')">'+l[oi]+'. '+o+'</button>';});h+='<div class="q-feedback" id="q6'+idx+'fb"></div></div>';});c.innerHTML=h;var s=localStorage.getItem('mks-future-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){var ob=document.getElementById('q6'+st.i+'o'+st.c);if(ob){ob.classList.add(st.ok?'correct':'wrong');ob.disabled=true;}var fb=document.getElementById('q6'+st.i+'fb');fb.style.display='block';fb.innerHTML=st.ok?'✅ 正确！'+q6[st.i].expl:'❌ 错误。'+q6[st.i].expl;fb.style.background=st.ok?'#d4edda':'#f8d7da';for(var oi=0;oi<4;oi++){var o2=document.getElementById('q6'+st.i+'o'+oi);if(o2)o2.disabled=true;}}});up6();}}
-function answerQ6(i,c){var it=q6[i],ok=c===it.ans;if(ok)qc6++;qa6++;var fb=document.getElementById('q6'+i+'fb');document.getElementById('q6'+i+'o'+c).classList.add(ok?'correct':'wrong');if(!ok)document.getElementById('q6'+i+'o'+it.ans).classList.add('correct');for(var oi=0;oi<4;oi++){var ob=document.getElementById('q6'+i+'o'+oi);if(ob)ob.disabled=true;}fb.style.display='block';fb.innerHTML=ok?'✅ 正确！'+it.expl:'❌ 错误。'+it.expl;fb.style.background=ok?'#d4edda':'#f8d7da';up6();save6();}
-function up6(){document.getElementById('qs6').textContent='已答：'+qa6+' / '+q6.length+' | 正确：'+qc6;document.getElementById('qp6').style.width=(qa6/q6.length*100)+'%';}
-function save6(){var st=[];for(var i=0;i<q6.length;i++){for(var oi=0;oi<4;oi++){var ob=document.getElementById('q6'+i+'o'+oi);if(ob&&(ob.classList.contains('correct')||ob.classList.contains('wrong'))){st.push({i:i,c:oi,ok:oi===q6[i].ans,d:true});break;}}}localStorage.setItem('mks-future-quiz',JSON.stringify(st));}
-function resetQ6(){qa6=0;qc6=0;localStorage.removeItem('mks-future-quiz');renderQ6();}
-function showSA6(){var r=document.getElementById('saR6');r.style.display=r.style.display==='block'?'none':'block';}
-function evalD6(el,ch){var fb=el.parentElement.querySelector('[id^="dfb6"]');var bs=el.parentElement.querySelectorAll('.choice-btn');bs.forEach(function(b){b.disabled=true;});if(ch==='b'){fb.innerHTML='✅ <strong>理性的回应。</strong>比特币是一个有趣的技术实验——去中心化账本的创新。但它的价格波动性极大，没有任何人能预测走势。铁律：只投你完全能承受损失的钱。不要借钱投资、不要用生活费投资、不要让FOMO（害怕错过）驱动你的决策。';fb.style.background='#d4edda';}else if(ch==='a'){fb.innerHTML='❌ "All in"任何单一资产都是极端冒险——尤其是波动性如此之大的加密货币。分散投资、只投能承受损失的钱——这些原则不会因为是新技术就失效。';fb.style.background='#f8d7da';}else{fb.innerHTML='⚠️ "骗局"是一个过于简化的标签。比特币是一个真实存在的技术系统——但它的市场充满投机、操纵和泡沫。理解技术≠推荐投资。保持中立、提供信息、让对方自己做决定。';fb.style.background='#fff3cd';}fb.style.display='block';}
-document.addEventListener('DOMContentLoaded',function(){renderQ6();var s=localStorage.getItem('mks-future-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.d){qa6++;if(st.ok)qc6++;}});up6();}});
+// Hero Canvas
+(function(){
+  var c=document.getElementById('heroCanvas'),x=c.getContext('2d'),p=[],w,h;
+  function rs(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
+  rs();window.addEventListener('resize',rs);
+  function cr(){p=[];for(var i=0;i<33;i++)p.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.35,vy:(Math.random()-0.5)*0.35,size:Math.random()*22+10,opacity:Math.random()*0.35+0.1,color:Math.random()<0.35?'#3b82f6':(Math.random()<0.5?'#60a5fa':'#64748b'),rot:Math.random()*Math.PI*2,rotV:(Math.random()-0.5)*0.006,links:[]});
+    for(var i=0;i<10;i++){var a=Math.floor(Math.random()*33),b=Math.floor(Math.random()*33);while(b===a)b=Math.floor(Math.random()*33);p[a].links.push(b)}}
+  cr();
+  function dr(){x.clearRect(0,0,w,h);
+    p.forEach(function(pk,i){pk.links.forEach(function(j){var q=p[j],d=Math.hypot(pk.x-q.x,pk.y-q.y);if(d<320){x.beginPath();x.moveTo(pk.x,pk.y);x.lineTo(q.x,q.y);x.strokeStyle='rgba(59,130,246,'+(0.1*(1-d/320))+')';x.lineWidth=0.8;x.stroke()}})});
+    p.forEach(function(pk){x.save();x.translate(pk.x,pk.y);x.rotate(pk.rot);var s=pk.size;
+      x.fillStyle=pk.color.replace(')','').replace('rgb','rgba').replace('a(','(')+','+pk.opacity+')';
+      x.strokeStyle=pk.color.replace(')','').replace('rgb','rgba').replace('a(','(')+','+(pk.opacity+0.12)+')';x.lineWidth=0.5;
+      x.beginPath();if(x.roundRect)x.roundRect(-s/2,-s/2,s,s,s*0.18);else x.rect(-s/2,-s/2,s,s);x.fill();x.stroke();x.restore()})}
+  function up(){p.forEach(function(pk){pk.x+=pk.vx;pk.y+=pk.vy;pk.rot+=pk.rotV;if(pk.x<-60)pk.x=w+60;if(pk.x>w+60)pk.x=-60;if(pk.y<-60)pk.y=h+60;if(pk.y>h+60)pk.y=-60})}
+  function an(){up();dr();requestAnimationFrame(an)}an()})();
+
+// Spectrum
+(function(){
+  var cats=[{id:'clear',label:'已经拼上',icon:'\ud83d\udfe2',color:'#10b981',desc:'这些技术已经落地，我们清楚它们能做什么、不能做什么。不是猜测，是总结。'},{id:'emerging',label:'正在成形',icon:'\ud83d\udd35',color:'#3b82f6',desc:'方向对了，技术路径清晰，但还在完善中。拼图的边缘已经能看清了。'},{id:'uncertain',label:'形状模糊',icon:'\ud83d\udfe1',color:'#f59e0b',desc:'核心问题未解决，或者我们可能搞错了问题的本质。这块拼图可能不是这个形状。'},{id:'distant',label:'可能不是这块',icon:'\ud83d\udd34',color:'#f43f5e',desc:'听起来很美好，但科学或工程上还有根本性的障碍。可能属于另一幅拼图。'}];
+  var cc=document.getElementById('specClusters'),dp=document.getElementById('specDetailPanel'),dt=document.getElementById('specDetailTitle'),dd=document.getElementById('specDetailDesc'),dc=document.getElementById('specDetailChips');
+  cats.forEach(function(cat){var items=A.filter(function(a){return a.certainty===cat.id}),div=document.createElement('div');div.className='spec-cluster';div.setAttribute('data-level',cat.id);div.innerHTML='<div class="sc-icon">'+cat.icon+'</div><div class="sc-label">'+cat.label+'</div><div class="sc-count">'+items.length+' 块</div><div class="sc-desc">'+cat.desc+'</div>';div.addEventListener('click',function(){document.querySelectorAll('.spec-cluster').forEach(function(c){c.classList.remove('selected')});div.classList.add('selected');dp.classList.add('active');dt.textContent=cat.label+' · '+items.length+' 篇文章';dd.textContent=cat.desc;dc.innerHTML=items.map(function(a){return '<span class="article-chip">'+a.title.slice(0,22)+'</span>'}).join('')});cc.appendChild(div)});
+  var f=cc.querySelector('.spec-cluster');if(f)f.click()})();
+
+// AI Timeline
+(function(){
+  var tl=[{year:'1948',cls:'',title:'信息论诞生',desc:'香农发表《通信的数学理论》，定义了信息、熵、信道容量。这些概念至今仍是 AI 的数学语言。理解 AI 要从这里开始——它不是魔法，是数学。',ref:'人工智能技术是怎么回事？'},{year:'1970s',cls:'milestone',title:'遗传算法问世',desc:'约翰·霍兰德——世界上第一位计算机科学博士——提出遗传算法。种群→选择→交叉→变异：让计算机模仿自然选择来“进化”出解决方案。这条路比深度学习早了几十年。',ref:'计算机如何模拟进化？'},{year:'2016.03',cls:'milestone',title:'AlphaGo 击败李世石',desc:'AI 首次在围棋上击败人类顶级棋手。但有趣的是：AlphaGo 的能耗是人脑的 5000 倍——可它在做一件和人脑完全不同的事。效率不在于能耗，在于架构。',ref:'AlphaGo和李世石的对决中，谁的耗能高？'},{year:'2016.10',cls:'milestone',title:'Master 60 连胜',desc:'升级版 AlphaGo 在弈城上以 60:0 横扫人类棋手。这不是靠穷举——围棋变化数超过宇宙中的原子数。AI 学会了“直觉”：什么棋形好、什么棋形差。',ref:'Master团灭人类围棋'},{year:'2016-',cls:'',title:'AI × 黎曼猜想',desc:'AI 开始挑战纯数学的圣杯。将黎曼猜想离散化为可判定命题，计算机能处理约 40%。不是替代数学家——而是探索“机器能否发现人类未发现的规律”。',ref:'人工智能与黎曼的较量'},{year:'Now',cls:'',title:'自动驾驶的 5%',desc:'特斯拉自动驾驶第一起致命事故——白色卡车横穿，人机都没发现。自动驾驶在 95% 的场景中已经很安全。但那 5% 的边缘场景，解决难度可能超过前面的 95% 加起来。',ref:'无人驾驶汽车是更安全了，还是更危险了？'}];
+  var c=document.getElementById('tlAI');tl.forEach(function(t){var n=document.createElement('div');n.className='tl-node'+(t.cls?' '+t.cls:'');n.innerHTML='<div class="tl-year">'+t.year+'</div><div class="tl-title">'+t.title+'</div><div class="tl-desc">'+t.desc+'</div><span class="tl-ref">→ '+t.ref+'</span>';c.appendChild(n)})})();
+
+// Space Tension
+(function(){
+  var sA=A.filter(function(a){return a.domain==='space'}),ach=sA.filter(function(a){return a.certainty==='clear'||a.certainty==='emerging'}),risk=sA.filter(function(a){return a.certainty==='uncertain'||a.certainty==='distant'});
+  document.getElementById('tensionAchieve').innerHTML='<div class="tc-label">↙ 成就与突破</div>'+ach.map(function(a){return '<div class="tc-item"><h5>'+a.title+'</h5><p>'+a.summary.slice(0,90)+'...</p></div>'}).join('');
+  document.getElementById('tensionRisk').innerHTML='<div class="tc-label">风险与未知 ↘</div>'+risk.map(function(a){return '<div class="tc-item"><h5>'+a.title+'</h5><p>'+a.summary.slice(0,90)+'...</p></div>'}).join('')})();
+
+// Crypto Questions
+(function(){
+  var qs=[{q:'比特币是货币还是泡沫？',a:'这个问题本身就有问题——货币和泡沫不是互斥的。1637 年的郁金香是泡沫，但花卉交易至今存在。比特币的价值不在于它“是”什么，在于有多少人相信它的叙事。区块链技术是真实的创新，但市场价格由共识驱动——而共识可以在瞬间崩塌。'},{q:'量子货币会取代传统货币吗？',a:'量子货币利用量子态不可克隆原理实现理论上无法伪造的货币——任何窃听都会改变量子态从而被发现。但量子态的保持极其困难，需要接近绝对零度的环境。它不是“下一代货币”，而是“下一代防伪理论”——可能需要几十年基础研究才能判断可行性。'},{q:'为什么各国取消大面额钞票？',a:'不是为了方便支付——是增加犯罪门槛。100 万美元用 1 美元钞票重 1 吨，用 500 欧元钞票只有 2.2 公斤。取消大面额钞票让毒贩和洗钱者的现金物流成本暴增。牛顿在 300 年前就懂这个逻辑——货币设计从来不只是经济学问题。'},{q:'推荐比特币的人不怕被骂吗？',a:'当然怕。“赚了没你什么事，赔了骂你全家”——这是所有预测未来的人面临的困境。卓克的态度是：区分技术和炒作。区块链的去中心化信任机制是有价值的创新。这不需要比特币涨到天价来证明——技术的价值不等于价格。'}];
+  var c=document.getElementById('qList');qs.forEach(function(item){var d=document.createElement('div');d.className='q-item';d.innerHTML='<button class="q-trigger">'+item.q+'<span class="q-arrow">▼</span></button><div class="q-answer">'+item.a+'</div>';d.querySelector('.q-trigger').addEventListener('click',function(){d.classList.toggle('open')});c.appendChild(d)});
+  var f=c.querySelector('.q-item');if(f)f.classList.add('open')})();
+
+// Energy Split
+(function(){
+  document.getElementById('splitExpect').innerHTML='<div class="ss-header">📢 市场的叙事</div><div class="ss-point"><span class="ss-dot"></span><span>锂电池能量密度太低，新能源车没前途</span></div><div class="ss-point"><span class="ss-dot"></span><span>石墨烯将彻底改变电池技术</span></div><div class="ss-point"><span class="ss-dot"></span><span>换电模式很快会像加油站一样普及</span></div><div class="ss-point"><span class="ss-dot"></span><span>氢燃料电池才是新能源的终极方案</span></div>';
+  document.getElementById('splitReality').innerHTML='<div class="ss-header">🔬 工程的现实</div><div class="ss-point"><span class="ss-dot"></span><span>电驱动效率是内燃机的 3-4 倍，整体能效反而更高</span></div><div class="ss-point"><span class="ss-dot"></span><span>真正的单层石墨烯量产极难，市面上的“石墨烯产品”多是营销</span></div><div class="ss-point"><span class="ss-dot"></span><span>各车企电池规格不统一，换电站前期投资巨大</span></div><div class="ss-point"><span class="ss-dot"></span><span>氢燃料制备、储存、运输的成本远高于电池充电</span></div>'})();
+
+// Quantum Layers
+(function(){
+  var ls=[{level:'表层 · 已有实物',title:'量子通信卫星',hint:'墨子号已经在天上飞了——但这是实验，不是服务',body:'潘建伟团队已实现 97 公里量子态传输，墨子号在近地轨道运行。但这是科学实验，不是通信服务。量子通信离商业化还需要解决卫星组网、地面站覆盖、量子密钥中继等一系列工程问题。'},{level:'中层 · 理论完美，工程艰难',title:'量子密钥分发',hint:'BB84 协议理论保证绝对安全——但实际系统有漏洞',body:'BB84 协议在数学上保证：任何窃听都会改变量子态而被发现。但实际系统中，探测器效率不完美、光源有噪声、信道有损耗。理论和工程之间的鸿沟正在被一步步填平——这是真正的“正在成形”的拼图。'},{level:'深层 · 如果实现，一切重写',title:'量子计算',hint:'Shor 算法可以在多项式时间内分解大整数——RSA 加密体系将被彻底破解',body:'量子计算利用叠加态和纠缠态实现指数级加速。Shor 算法一旦在足够大的量子计算机上运行，现有的 RSA 公钥加密体系将完全失效。但通用量子计算机需要数千个逻辑量子比特，目前只有几十个物理量子比特——中间隔着几道硬科学屏障。'},{level:'未知层 · 理论上的终极方案',title:'量子货币',hint:'利用量子态不可克隆——每一张“量子钞票”都是独特的量子态',body:'量子货币是防伪理论的终极形态。但维持量子态需要接近绝对零度的环境——这比量子通信难几个数量级。它可能不是“下一代货币”，而是一个需要几十年基础研究才能判断是否可行的方向。'}];
+  var c=document.getElementById('layerCards');ls.forEach(function(l){var card=document.createElement('div');card.className='layer-card';card.innerHTML='<div class="layer-level">'+l.level+'</div><h4>'+l.title+'</h4><div class="layer-hint">'+l.hint+'</div><div class="layer-body">'+l.body+'</div><div class="layer-indicator">+</div>';card.addEventListener('click',function(){card.classList.toggle('expanded')});c.appendChild(card)})})();
+
+// Bio Ethics
+(function(){
+  var rs=[{badge:'here',label:'已成熟落地',title:'细胞冷冻与保存',desc:'ATCC 保存着世界上最多的细胞样本——<strong>细胞冷冻技术已成熟</strong>。但人体冷冻完全不同：零成功案例，学术界普遍否定。花 30 万美元买的是一个昂贵的墓地。'},{badge:'here',label:'已在用',title:'基因编辑（CRISPR）',desc:'<strong>治疗遗传病</strong>的临床试验正在进行。但设计婴儿的伦理问题尚无社会共识。技术能力跑在了规范前面。'},{badge:'soon',label:'探索中',title:'分子机器（2016 诺贝尔化学奖）',desc:'在纳米尺度制造能执行任务的机器——<strong>已获得科学界最高认可</strong>。但应用场景（靶向药物、智能材料）还在非常早期的阶段。'},{badge:'soon',label:'争议中',title:'脑机接口与意识研究',desc:'神经科学的进步让我们<strong>越来越接近理解意识</strong>。但“大脑永生”可能永远是一个无法证伪的命题——科学与玄学的边界在这里模糊了。'},{badge:'maybe',label:'伦理未定',title:'神经细胞的 5 次升级',desc:'从神经网到人类大脑皮层——<strong>这是进化的事实，不是伦理的选择</strong>。但如果有一天我们能人为加速这个过程呢？'},{badge:'remote',label:'遥远',title:'人体冷冻与复活',desc:'目前<strong>没有任何成功案例</strong>。冷冻过程本身会造成不可逆的细胞损伤。这不是“未来的船票”，是对科学的不切实际的期待。'},{badge:'remote',label:'遥远',title:'意识上传与永生',desc:'我们对意识本质的了解还停留在哲学阶段——<strong>谈不上工程实现</strong>。卓克说：没事儿别轻易聊“意识”——这不是傲慢，是诚实。'}];
+  document.getElementById('ethicsRows').innerHTML=rs.map(function(r){return '<div class="ethics-row"><div class="ethics-badge '+r.badge+'">'+r.label+'</div><div class="ethics-info"><h5>'+r.title+'</h5><p>'+r.desc+'</p></div></div>'}).join('')})();
+
+// Mosaic
+(function(){
+  var g=document.getElementById('mosaicGrid'),tt=document.getElementById('mosaicTooltip');
+  A.forEach(function(a){var p=document.createElement('div');p.className='mosaic-piece';if(a.certainty==='clear'||a.certainty==='emerging')p.classList.add('placed');if(a.certainty==='uncertain'||a.certainty==='distant')p.classList.add('fuzzy');p.innerHTML='<span class="mp-num">#'+(a.id+1)+'</span><span class="mp-title">'+a.title.slice(0,18)+'</span>';
+    function st(){tt.innerHTML='<strong>#'+(a.id+1)+' '+a.title+'</strong><br><small style="color:var(--text-muted)">'+a.summary.slice(0,110)+'...</small>';tt.classList.add('show');var r=p.getBoundingClientRect();tt.style.left=(r.left+r.width/2)+'px';tt.style.top=(r.top-12)+'px';tt.style.transform='translate(-50%, -100%)'}
+    function ht(){tt.classList.remove('show')}
+    p.addEventListener('mouseenter',st);p.addEventListener('mouseleave',ht);
+    p.addEventListener('touchstart',function(e){e.preventDefault();st();setTimeout(ht,2000)});
+    g.appendChild(p)})})();
+
+// Narrative SVG
+(function(){
+  var c=document.getElementById('narrativeArt'),n='http://www.w3.org/2000/svg',s=document.createElementNS(n,'svg');s.setAttribute('viewBox','0 0 800 480');s.setAttribute('aria-label','拼图的隐喻');
+  var d=document.createElementNS(n,'defs');d.innerHTML='<radialGradient id="bgGlow" cx="45%" cy="35%" r="65%"><stop offset="0%" stop-color="#1a3050" stop-opacity="0.5"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0"/></radialGradient><linearGradient id="linkGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#10b981" stop-opacity="0.5"/><stop offset="50%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.15"/></linearGradient><filter id="softGlow"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>';s.appendChild(d);
+  var bg=document.createElementNS(n,'rect');bg.setAttribute('width','800');bg.setAttribute('height','480');bg.setAttribute('fill','url(#bgGlow)');s.appendChild(bg);
+  [{x:130,y:130,w:62,h:50},{x:196,y:125,w:55,h:55},{x:130,y:185,w:55,h:48},{x:190,y:185,w:60,h:42},{x:130,y:238,w:58,h:46},{x:193,y:232,w:57,h:50},{x:130,y:290,w:60,h:48},{x:195,y:287,w:50,h:50}].forEach(function(p){var r=document.createElementNS(n,'rect');r.setAttribute('x',p.x);r.setAttribute('y',p.y);r.setAttribute('width',p.w);r.setAttribute('height',p.h);r.setAttribute('rx','5');r.setAttribute('ry','5');r.setAttribute('fill','rgba(16,185,129,0.12)');r.setAttribute('stroke','rgba(16,185,129,0.4)');r.setAttribute('stroke-width','1.5');s.appendChild(r)});
+  var al=document.createElementNS(n,'text');al.setAttribute('x','162');al.setAttribute('y','105');al.setAttribute('text-anchor','middle');al.setAttribute('fill','#10b981');al.setAttribute('font-size','11');al.setAttribute('font-family','sans-serif');al.textContent='已拼上的碎片';s.appendChild(al);
+  [{x:520,y:100,w:48,h:44,r:10},{x:640,y:90,w:42,h:48,r:-7},{x:560,y:170,w:50,h:40,r:14},{x:660,y:165,w:38,h:50,r:-8},{x:530,y:240,w:48,h:44,r:6},{x:610,y:250,w:44,h:40,r:-11},{x:690,y:240,w:50,h:46,r:12},{x:560,y:310,w:42,h:44,r:-9},{x:640,y:320,w:48,h:42,r:8},{x:710,y:310,w:40,h:44,r:-6},{x:510,y:370,w:46,h:42,r:5},{x:600,y:380,w:44,h:40,r:-10}].forEach(function(p){var g=document.createElementNS(n,'g');g.setAttribute('transform','translate('+p.x+','+p.y+') rotate('+p.r+')');var r=document.createElementNS(n,'rect');r.setAttribute('x',-p.w/2);r.setAttribute('y',-p.h/2);r.setAttribute('width',p.w);r.setAttribute('height',p.h);r.setAttribute('rx','4');r.setAttribute('ry','4');r.setAttribute('fill','rgba(245,158,11,0.06)');r.setAttribute('stroke','rgba(245,158,11,0.25)');r.setAttribute('stroke-width','1');r.setAttribute('stroke-dasharray','5,3');g.appendChild(r);s.appendChild(g)});
+  var sl=document.createElementNS(n,'text');sl.setAttribute('x','610');sl.setAttribute('y','68');sl.setAttribute('text-anchor','middle');sl.setAttribute('fill','#f59e0b');sl.setAttribute('font-size','11');sl.setAttribute('font-family','sans-serif');sl.textContent='形状还不确定';s.appendChild(sl);
+  [{x1:260,y1:150,x2:520,y2:120},{x1:260,y1:210,x2:560,y2:200},{x1:250,y1:270,x2:530,y2:270},{x1:250,y1:320,x2:560,y2:340}].forEach(function(l){var ln=document.createElementNS(n,'line');ln.setAttribute('x1',l.x1);ln.setAttribute('y1',l.y1);ln.setAttribute('x2',l.x2);ln.setAttribute('y2',l.y2);ln.setAttribute('stroke','url(#linkGrad)');ln.setAttribute('stroke-width','1.2');ln.setAttribute('stroke-dasharray','7,5');s.appendChild(ln);var q=document.createElementNS(n,'text');q.setAttribute('x',(l.x1+l.x2)/2);q.setAttribute('y',(l.y1+l.y2)/2-5);q.setAttribute('text-anchor','middle');q.setAttribute('fill','rgba(148,163,184,0.5)');q.setAttribute('font-size','12');q.setAttribute('font-family','serif');q.textContent='?';s.appendChild(q)});
+  var bq=document.createElementNS(n,'text');bq.setAttribute('x','400');bq.setAttribute('y','435');bq.setAttribute('text-anchor','middle');bq.setAttribute('fill','rgba(96,165,250,0.22)');bq.setAttribute('font-size','44');bq.setAttribute('font-family','serif');bq.setAttribute('filter','url(#softGlow)');bq.textContent='盒子盖上画的是什么？';s.appendChild(bq);
+  var ft=document.createElementNS(n,'text');ft.setAttribute('x','400');ft.setAttribute('y','468');ft.setAttribute('text-anchor','middle');ft.setAttribute('fill','#64748b');ft.setAttribute('font-size','10');ft.setAttribute('font-family','sans-serif');ft.textContent='33 块碎片 · 6 个领域 · 我们不预言未来，我们拼凑线索';s.appendChild(ft);
+  c.appendChild(s)})();
+
+// Sample Strip
+(function(){var strip=document.getElementById('sampleStrip'),dom={ai:'#3b82f6',space:'#f43f5e',crypto:'#8b5cf6',energy:'#f59e0b',quantum:'#38bdf8',bio:'#10b981'},dn={ai:'AI与计算',space:'太空探索',crypto:'货币与加密',energy:'新能源',quantum:'量子与VR',bio:'生命科学'};A.filter(function(a){return a.excerpt&&a.excerpt.length>80}).slice(0,8).forEach(function(a){var card=document.createElement('div');card.className='sample-card';card.innerHTML='<div class="sc-domain" style="color:'+(dom[a.domain]||'#94a3b8')+'">'+(dn[a.domain]||'')+'</div><h4>'+a.title+'</h4><blockquote>'+a.excerpt.slice(0,180)+'...</blockquote>';strip.appendChild(card)})})();
+
+// Picker
+(function(){var btns=document.getElementById('cpButtons'),res=document.getElementById('cpResults'),lvs=[{id:'all',label:'全部'},{id:'clear',label:'✓ 已拼上'},{id:'emerging',label:'成形中'},{id:'uncertain',label:'形状模糊'},{id:'distant',label:'可能不是这块'}];
+  function rn(fid){var fl=fid==='all'?A:A.filter(function(a){return a.certainty===fid});res.innerHTML=fl.map(function(a){return '<div class="cp-card"><div class="cp-title">#'+(a.id+1)+' '+a.title+'</div><div class="cp-excerpt">'+a.summary.slice(0,100)+'...</div></div>'}).join('')}
+  lvs.forEach(function(l){var btn=document.createElement('button');btn.className='cp-btn'+(l.id==='all'?' active':'');btn.textContent=l.label+' ('+(l.id==='all'?A.length:A.filter(function(a){return a.certainty===l.id}).length)+')';btn.addEventListener('click',function(){document.querySelectorAll('.cp-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');rn(l.id)});btns.appendChild(btn)});rn('all')})();
+
+// Intersection Observer
+(function(){var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(function(el){o.observe(el)});setTimeout(function(){document.querySelectorAll('.reveal').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<window.innerHeight)el.classList.add('visible')})},300)})();
+
+console.log('🧩 未来的拼图 · 33 Fragments · Ready');
 </script>
 </body>
 </html>
