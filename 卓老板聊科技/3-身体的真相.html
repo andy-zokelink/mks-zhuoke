@@ -5,562 +5,365 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>身体的真相 — 卓老板聊科技 MKS</title>
 <style>
-:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+/* ===== 身体的真相 — 设计语言 =====
+ * 本质洞察：你的身体是一台设计寿命30年的机器——理解它才能用好它
+ * 情感基调：祛魅与安心 — 读着带着对自身健康的清晰理解离开
+ * 叙事锚点：诊室对话 — 读者坐在卓老板对面，一问一答间破除迷思
+ * 视觉策略：暖陶土色+米白 — 诊室的温暖灯光，不是冰冷的手术室
+ * 与Topic1宇宙深酒红、Topic2有机绿的差异化：这里是切近身体的人间温度
+ */
+:root {
+  --bg: #fdf8f4; --card: #fffaf7; --accent: #c45b5b;
+  --accent2: #d4846a; --gold: #b8863a; --gold-light: #e8c8a0;
+  --success: #5a9e6f; --text: #2a1f1a; --text-light: #5c4030;
+  --border: #e0c8b0; --shadow: 0 2px 14px rgba(42,31,26,.06);
+  --radius: 12px; --nav-bg: #2a1a14; --nav-text: #fdf8f4;
+  --warm-bg: rgba(196,91,91,.05);
+}
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
-.container { max-width:960px; margin:0 auto; padding:0 16px; }
-.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
-.top-bar .title { font-size:1.05rem; font-weight:600; }
-.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
-.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
-.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
-.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
+body { font-family:'Noto Serif SC','Source Han Serif SC',Georgia,serif; background:var(--bg); color:var(--text); line-height:1.8; padding-top:56px; font-size:16px; }
+.container { max-width:980px; margin:0 auto; padding:0 20px; }
+.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; box-shadow:0 2px 12px rgba(0,0,0,.3); }
+.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; }
+.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.85rem; padding:6px 16px; border:1px solid rgba(255,255,255,.25); border-radius:20px; font-family:'Noto Sans SC',sans-serif; transition:all .2s; }
+.top-bar .home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--accent2); color:var(--gold-light); }
+.tab-bar { display:flex; flex-wrap:wrap; gap:6px; padding:14px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:24px; }
+.tab-btn { padding:8px 16px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .25s; white-space:nowrap; font-family:'Noto Sans SC',sans-serif; }
+.tab-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--warm-bg); }
 .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel { display:none; animation:fadeIn .4s ease; }
 .tab-panel.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
-.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
-.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
-.skeleton-list { list-style:none; padding:0; }
-.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
-.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
-.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
-.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
-.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* Hero */
+.hero { position:relative; overflow:hidden; background:linear-gradient(175deg, #fdf8f4 0%, #f5e8dc 35%, #e8c8b0 60%, #c45b5b 82%, #2a1a14 100%); border-radius:var(--radius); margin-bottom:32px; min-height:380px; display:flex; align-items:center; justify-content:center; }
+.hero-svg { width:100%; max-width:900px; height:auto; display:block; }
+.hero-caption { position:absolute; bottom:36px; left:0; right:0; text-align:center; color:#fdf8f4; font-size:1.15rem; letter-spacing:2px; font-family:'Noto Serif SC',serif; opacity:.85; text-shadow:0 1px 8px rgba(0,0,0,.5); }
+
+/* Narrative */
+.narrative-block { background:linear-gradient(135deg,#fffbf8,#fef7f0); border-left:4px solid var(--accent); padding:28px 32px; margin:28px 0; border-radius:0 var(--radius) var(--radius) 0; box-shadow:var(--shadow); }
+.narrative-block .lead { font-size:1.2rem; color:var(--accent); font-weight:600; margin-bottom:12px; }
+.narrative-block p { color:var(--text-light); font-size:.95rem; line-height:1.9; margin-bottom:8px; }
+
+/* ===== Myth Buster Cards — unique to this topic ===== */
+.myth-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
+@media(max-width:600px){.myth-grid{grid-template-columns:1fr;}}
+.myth-card { background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); cursor:pointer; }
+.myth-myth { background:linear-gradient(135deg,#fef0f0,#fdf8f4); padding:18px; font-size:.85rem; }
+.myth-myth::before { content:'🔊 常见说法：'; color:var(--accent); font-weight:600; font-size:.78rem; }
+.myth-fact { background:#f0f8f4; padding:18px; font-size:.85rem; display:none; }
+.myth-fact.show { display:block; }
+.myth-fact::before { content:'🔬 科学事实：'; color:var(--success); font-weight:600; font-size:.78rem; }
+.myth-card:hover .myth-myth { background:linear-gradient(135deg,#fde8e8,#fdf8f4); }
+
+/* Article excerpts */
+.article-excerpt { background:var(--card); border-radius:var(--radius); padding:18px; margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border); position:relative; }
+.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
+.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; }
+
+/* Concept panels */
+.concept-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0; }
+@media(max-width:600px){.concept-row{grid-template-columns:1fr;}}
+.concept-card { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); border-top:3px solid var(--accent); }
+.concept-card h3 { color:var(--accent); margin-bottom:8px; font-family:'Noto Sans SC',sans-serif; font-size:.95rem; }
+.concept-card p { font-size:.85rem; color:var(--text-light); line-height:1.7; }
+.concept-card .source { font-size:.72rem; color:var(--gold); margin-top:6px; }
+
+/* SVG */
+.svg-stage { background:var(--card); border-radius:var(--radius); padding:20px; margin:28px 0; box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
+.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
+
+/* Socratic */
+.socratic-panel { background:linear-gradient(135deg,#fef7f0,#fdf8f4); border:1px dashed var(--accent); border-radius:var(--radius); padding:24px; margin:20px 0; }
+.socratic-panel .q-a { margin-bottom:20px; }
+.socratic-panel .question { font-weight:600; color:var(--accent); margin-bottom:6px; font-size:.95rem; }
+.socratic-panel .question::before { content:'问：'; color:var(--accent2); }
+.socratic-panel .answer { color:var(--text-light); font-size:.9rem; padding-left:16px; border-left:2px solid var(--gold-light); }
+.socratic-panel .answer::before { content:'答：'; color:var(--success); font-weight:600; }
+
+/* Mindmap */
+.mindmap { margin:16px 0; }
+.mindmap .node { margin-bottom:6px; }
+.mindmap .node-header { display:flex; align-items:center; gap:8px; cursor:pointer; padding:10px 14px; background:var(--card); border-radius:8px; border:1px solid var(--border); transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
+.mindmap .node-header:hover { border-color:var(--accent); background:var(--warm-bg); }
+.mindmap .node-header .toggle { font-size:.7rem; transition:transform .3s; color:var(--accent); width:16px; text-align:center; }
+.mindmap .node-header .toggle.open { transform:rotate(90deg); }
+.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
+.mindmap .node-body.open { display:block; }
+.mindmap .leaf { padding:6px 12px; margin:4px 0; font-size:.85rem; color:var(--text-light); border-left:2px solid var(--gold-light); }
+
+/* Boundary */
+.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
+.boundary-table th { background:var(--accent); color:#fff; padding:12px 16px; text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500; }
+.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
 .boundary-table tr:nth-child(even) td { background:var(--card); }
-.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
-.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
-.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
-.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
-.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
-.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
-.flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
-.flip-front { background:var(--card); }
-.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
-.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
-.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
+.level-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; }
+.level-core { background:var(--accent); color:#fff; }
+.level-understand { background:var(--gold); color:#fff; }
+.level-know { background:#ddd; color:#555; }
+
+/* Quiz */
+.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
+.q-option { display:block; width:100%; text-align:left; padding:10px 16px; margin:6px 0; border:1px solid var(--border); border-radius:8px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.88rem; font-family:inherit; }
+.q-option:hover { border-color:var(--accent); background:var(--warm-bg); }
+.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
+.q-option.wrong { background:#f8d7da; border-color:var(--accent); color:#721c24; }
+.q-option:disabled { cursor:default; }
+.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
+
+.sa-input { width:100%; min-height:100px; padding:14px; font-family:inherit; font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg); resize:vertical; }
+.sa-reveal { background:var(--card); padding:16px; border-radius:var(--radius); margin-top:10px; display:none; border:1px dashed var(--accent); font-size:.9rem; line-height:1.8; }
+
+.decision-scene { background:linear-gradient(135deg,#fef7f0,#f7eee0); border-radius:var(--radius); padding:24px; margin:20px 0; border:1px solid var(--gold-light); }
+.decision-scene h3 { color:var(--accent); margin-bottom:12px; }
+.decision-scene .scenario { background:var(--card); padding:18px; border-radius:8px; margin-bottom:14px; border-left:3px solid var(--accent); }
+.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-scene .choice-btn { text-align:left; padding:10px 16px; border:1px solid var(--border); border-radius:8px; background:var(--card); cursor:pointer; transition:all .2s; font-family:inherit; font-size:.88rem; }
+.decision-scene .choice-btn:hover { border-color:var(--accent); background:var(--warm-bg); }
+
+.score-bar { text-align:center; padding:16px; font-size:1.1rem; font-weight:600; color:var(--accent); }
+.progress-bar { width:100%; height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .5s ease; }
+.section-title { font-size:1.25rem; color:var(--accent); margin:32px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border); font-family:'Noto Sans SC',sans-serif; letter-spacing:1px; }
+.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
 .btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
 .btn-outline:hover { background:var(--accent); color:#fff; }
-.btn-success { background:var(--success); color:#fff; }
-.btn-sm { padding:5px 12px; font-size:.8rem; }
-.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
-.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
-.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
-.q-option:hover { border-color:var(--accent); background:#fff5f5; }
-.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
-.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
-.q-option:disabled { cursor:default; }
-.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
-.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
-.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
-.mindmap { padding:10px 0; }
-.mindmap .node { margin:4px 0 4px 20px; }
-.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
-.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
-.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
-.mindmap .node-title.open::before { transform:rotate(90deg); }
-.mindmap .node-body { display:none; }
-.mindmap .node-body.open { display:block; }
-.inquiry-item { margin-bottom:12px; }
-.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
-.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
-.inquiry-q.open::after { content:' \25B2'; }
-.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.inquiry-a.open { display:block; }
-.case-item { margin-bottom:14px; }
-.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.case-title:hover { border-color:var(--accent); background:#fff5f5; }
-.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
-.case-title.open::after { content:' \25B2'; }
-.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.case-body.open { display:block; }
-.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.d-scenario { margin-bottom:16px; }
-.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
-.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
-.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
-.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
-.svg-wrap svg { max-width:100%; height:auto; }
-.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
-.toast.show { opacity:1; }
-@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
+.footer { text-align:center; padding:32px 20px; margin-top:40px; border-top:1px solid var(--border); color:var(--text-light); font-size:.82rem; }
+.footer a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
-<div class="top-bar"><span class="title">🫀 身体的真相</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+
+<nav class="top-bar"><span class="title">🫀 身体的真相</span><a href="index.html" class="home-btn">← 返回课程首页</a></nav>
 <div class="container">
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
-  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
-  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
-  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
-  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
-  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
-  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
-  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
-  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+
+<!-- HERO -->
+<div class="hero">
+<svg class="hero-svg" viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bodyGlow" cx="50%" cy="40%" r="50%"><stop offset="0%" stop-color="#fdf8f4" stop-opacity=".9"/><stop offset="60%" stop-color="#e8c8b0" stop-opacity=".4"/><stop offset="100%" stop-color="#c45b5b" stop-opacity=".1"/></radialGradient>
+    <filter id="gl"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+  <rect width="900" height="380" fill="none" rx="12"/>
+  <!-- Abstract body silhouette — illuminated zones -->
+  <g opacity=".4">
+    <ellipse cx="450" cy="180" rx="180" ry="140" fill="none" stroke="#e8c8b0" stroke-width="1"/>
+    <ellipse cx="450" cy="180" rx="120" ry="90" fill="url(#bodyGlow)" stroke="#c45b5b" stroke-width=".5"/>
+  </g>
+  <!-- Illuminated zones — where science reveals truth -->
+  <g filter="url(#gl)" opacity=".5">
+    <circle cx="350" cy="120" r="30" fill="url(#bodyGlow)" stroke="#c45b5b" stroke-width=".8"/><text x="350" y="124" fill="#c45b5b" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">癌症</text>
+    <circle cx="550" cy="120" r="30" fill="url(#bodyGlow)" stroke="#c45b5b" stroke-width=".8"/><text x="550" y="124" fill="#c45b5b" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">免疫</text>
+    <circle cx="300" cy="220" r="28" fill="url(#bodyGlow)" stroke="#c45b5b" stroke-width=".8"/><text x="300" y="224" fill="#c45b5b" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">辐射</text>
+    <circle cx="600" cy="220" r="28" fill="url(#bodyGlow)" stroke="#c45b5b" stroke-width=".8"/><text x="600" y="224" fill="#c45b5b" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">疫苗</text>
+    <circle cx="450" cy="170" r="25" fill="url(#bodyGlow)" stroke="#c45b5b" stroke-width=".8"/><text x="450" y="174" fill="#c45b5b" font-size="9" text-anchor="middle" font-family="'Noto Sans SC',sans-serif">代谢</text>
+  </g>
+  <!-- Connecting lines — the body as a system -->
+  <g stroke="#e8c8b0" stroke-width=".5" opacity=".4" stroke-dasharray="3,3">
+    <line x1="350" y1="150" x2="450" y2="195"/>
+    <line x1="550" y1="150" x2="450" y2="195"/>
+    <line x1="300" y1="248" x2="450" y2="195"/>
+    <line x1="600" y1="248" x2="450" y2="195"/>
+  </g>
+  <text x="450" y="30" fill="#fdf8f4" font-size="15" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="6" opacity=".8">身体的真相</text>
+  <text x="450" y="370" fill="#fdf8f4" font-size="11" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="3" opacity=".7">一台设计寿命30年的机器——理解它，才能用好它</text>
+</svg>
+<div class="hero-caption">你对自己的身体了解多少？</div>
 </div>
-<div class="tab-panel active" id="panel0">
-  <div class="section-title">核心目标</div>
-  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
-  <div class="section-title">核心概念</div>
-  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
-<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
-<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
-<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
-<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
-<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
-<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
-<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
-<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
-<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
-  <div class="section-title">最小知识集（骨架中的骨架）</div>
-  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
-<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
-<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
-<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
-  <div class="section-title">概念关系图</div>
-  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
- viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
-<title>G</title>
-<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
-<g id="clust1" class="cluster">
-<title>cluster_legend</title>
-<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
-<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
-</g>
-<!-- root -->
-<g id="node1" class="node">
-<title>root</title>
-<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
-<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">身体的真相——物理定律的层级结构</text>
-</g>
-<!-- qm -->
-<g id="node2" class="node">
-<title>qm</title>
-<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
-<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
-</g>
-<!-- root&#45;&gt;qm -->
-<g id="edge1" class="edge">
-<title>root&#45;&gt;qm</title>
-<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
-<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
-<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- gr -->
-<g id="node3" class="node">
-<title>gr</title>
-<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
-<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
-</g>
-<!-- root&#45;&gt;gr -->
-<g id="edge2" class="edge">
-<title>root&#45;&gt;gr</title>
-<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
-<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
-<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- th -->
-<g id="node4" class="node">
-<title>th</title>
-<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
-<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
-</g>
-<!-- root&#45;&gt;th -->
-<g id="edge3" class="edge">
-<title>root&#45;&gt;th</title>
-<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
-<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
-<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- u -->
-<g id="node5" class="node">
-<title>u</title>
-<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
-<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
-</g>
-<!-- qm&#45;&gt;u -->
-<g id="edge4" class="edge">
-<title>qm&#45;&gt;u</title>
-<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
-<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
-<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
-</g>
-<!-- w -->
-<g id="node6" class="node">
-<title>w</title>
-<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
-<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
-</g>
-<!-- qm&#45;&gt;w -->
-<g id="edge5" class="edge">
-<title>qm&#45;&gt;w</title>
-<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
-<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
-<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
-</g>
-<!-- v -->
-<g id="node7" class="node">
-<title>v</title>
-<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
-<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
-</g>
-<!-- qm&#45;&gt;v -->
-<g id="edge6" class="edge">
-<title>qm&#45;&gt;v</title>
-<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
-<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
-<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
-</g>
-<!-- sy -->
-<g id="node8" class="node">
-<title>sy</title>
-<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
-<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
-</g>
-<!-- qm&#45;&gt;sy -->
-<g id="edge7" class="edge">
-<title>qm&#45;&gt;sy</title>
-<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
-<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
-<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
-</g>
-<!-- st -->
-<g id="node9" class="node">
-<title>st</title>
-<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
-<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
-</g>
-<!-- gr&#45;&gt;st -->
-<g id="edge8" class="edge">
-<title>gr&#45;&gt;st</title>
-<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
-<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
-<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
-</g>
-<!-- bh -->
-<g id="node10" class="node">
-<title>bh</title>
-<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
-<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
-</g>
-<!-- gr&#45;&gt;bh -->
-<g id="edge9" class="edge">
-<title>gr&#45;&gt;bh</title>
-<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
-<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
-<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
-</g>
-<!-- co -->
-<g id="node11" class="node">
-<title>co</title>
-<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
-<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
-</g>
-<!-- gr&#45;&gt;co -->
-<g id="edge10" class="edge">
-<title>gr&#45;&gt;co</title>
-<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
-<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
-<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
-</g>
-<!-- en -->
-<g id="node12" class="node">
-<title>en</title>
-<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
-<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
-</g>
-<!-- th&#45;&gt;en -->
-<g id="edge11" class="edge">
-<title>th&#45;&gt;en</title>
-<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
-<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
-<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
-</g>
-<!-- u&#45;&gt;v -->
-<g id="edge14" class="edge">
-<title>u&#45;&gt;v</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
-<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
-<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
-</g>
-<!-- ob -->
-<g id="node19" class="node">
-<title>ob</title>
-<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
-</g>
-<!-- w&#45;&gt;ob -->
-<g id="edge20" class="edge">
-<title>w&#45;&gt;ob</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
-<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
-<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
-</g>
-<!-- hr -->
-<g id="node14" class="node">
-<title>hr</title>
-<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
-<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
-<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
-<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
-</g>
-<!-- v&#45;&gt;hr -->
-<g id="edge12" class="edge">
-<title>v&#45;&gt;hr</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
-<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
-<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
-</g>
-<!-- sm -->
-<g id="node16" class="node">
-<title>sm</title>
-<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
-<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
-<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
-<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
-</g>
-<!-- sy&#45;&gt;sm -->
-<g id="edge16" class="edge">
-<title>sy&#45;&gt;sm</title>
-<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
-<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
-<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
-</g>
-<!-- gp -->
-<g id="node15" class="node">
-<title>gp</title>
-<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
-<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
-<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
-<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
-</g>
-<!-- st&#45;&gt;gp -->
-<g id="edge15" class="edge">
-<title>st&#45;&gt;gp</title>
-<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
-<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
-<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
-</g>
-<!-- bh&#45;&gt;hr -->
-<g id="edge13" class="edge">
-<title>bh&#45;&gt;hr</title>
-<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
-<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
-<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
-</g>
-<!-- nu -->
-<g id="node13" class="node">
-<title>nu</title>
-<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
-<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
-</g>
-<!-- en&#45;&gt;nu -->
-<g id="edge18" class="edge">
-<title>en&#45;&gt;nu</title>
-<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
-<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
-<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
-</g>
-<!-- it -->
-<g id="node17" class="node">
-<title>it</title>
-<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
-<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
-<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
-<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
-</g>
-<!-- en&#45;&gt;it -->
-<g id="edge17" class="edge">
-<title>en&#45;&gt;it</title>
-<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
-<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
-<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
-</g>
-<!-- se -->
-<g id="node18" class="node">
-<title>se</title>
-<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
-<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
-<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
-<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
-</g>
-<!-- nu&#45;&gt;se -->
-<g id="edge19" class="edge">
-<title>nu&#45;&gt;se</title>
-<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
-<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
-<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
-</g>
-<!-- hr&#45;&gt;bh -->
-<g id="edge21" class="edge">
-<title>hr&#45;&gt;bh</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
-<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
-<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
-<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
-</g>
-<!-- l1 -->
-<g id="node20" class="node">
-<title>l1</title>
-<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
-<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
-</g>
-<!-- l2 -->
-<g id="node21" class="node">
-<title>l2</title>
-<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
-<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
-</g>
-<!-- l1&#45;&gt;l2 -->
-<!-- l3 -->
-<g id="node22" class="node">
-<title>l3</title>
-<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
-<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
-</g>
-<!-- l2&#45;&gt;l3 -->
-<!-- l4 -->
-<g id="node23" class="node">
-<title>l4</title>
-<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
-<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
-<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
-<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
-</g>
-<!-- l3&#45;&gt;l4 -->
-<!-- l5 -->
-<g id="node24" class="node">
-<title>l5</title>
-<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
-<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
-</g>
-</g>
-</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
-  <div class="section-title">边界知识表</div>
-  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
-  <div class="section-title">学习路径</div>
-  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
-<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
-<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
-<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
-<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
-  <div class="section-title">学习进度</div>
-  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+
+<!-- TABS -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="t0">🩺 诊室对话</button>
+  <button class="tab-btn" data-tab="t1">🧬 核心概念</button>
+  <button class="tab-btn" data-tab="t2">🗺️ 关系图谱</button>
+  <button class="tab-btn" data-tab="t3">❌ 破除迷思</button>
+  <button class="tab-btn" data-tab="t4">🔬 深度追问</button>
+  <button class="tab-btn" data-tab="t5">🧭 思维导图</button>
+  <button class="tab-btn" data-tab="t6">⚠️ 知识边界</button>
+  <button class="tab-btn" data-tab="t7">📝 题库系统</button>
+  <button class="tab-btn" data-tab="t8">🎯 健康决策</button>
 </div>
-<div class="tab-panel" id="panel1">
-  <div class="section-title">知识卡片</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
-  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
-  <div class="flip-nav">
-    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
-    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
-    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
+
+<!-- TAB 0: 诊室对话 -->
+<div class="tab-panel active" id="t0">
+  <div class="narrative-block">
+    <div class="lead">你好，请坐。让我们聊聊你的身体</div>
+    <p>卓老板用37篇文章回答了一个根本问题：<strong>为什么我们的身体会出问题，以及我们能做什么？</strong>答案既不是"多吃保健品"也不是"什么都不敢吃"——而是理解这台机器的设计逻辑。你的身体是一台设计寿命约30年的机器，而现代人的平均寿命接近80岁。<strong>后面50年，是靠着维护和运气在运行。</strong></p>
   </div>
-  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
+  <div class="section-title">从卓老板的诊室里，听几段对话</div>
+  <div class="article-excerpt"><div class="excerpt-title">《发胖不一定因为又懒又馋》</div><p>体脂率是比体重更有意义的健康指标。专业运动员体脂率4-8%，普通人一般到了30%就挺胖的了。肥胖被世界卫生组织定义为一种疾病——不是"不自律"，是身体的代谢系统出了问题。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《癌症筛查值得做吗？》</div><p>癌症增多的真正原因不是环境污染——是<strong>我们活得太久了</strong>。人类的平均寿命超过40岁的时间最多只占人类历史的千分之一。癌症从40岁后大幅增加，因为身体这部机器的原始设计寿命只有30年。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《方方面面聊辐射》</div><p>医学影像遵循两个原则：合理性和最优原则。能选辐射剂量低的就选低的；需要拍多少次就拍多少次——<strong>并没有次数上限</strong>。孕妇只要不超过100mSv（骨盆CT只有25mSv）也是安全的。但医院为了怕担责任，几乎不让孕妇拍。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《中国人为什么坐月子？》</div><p>坐月子是一个文化传统，不是一个医学建议。同为黄种人的日本人不坐月子——不是因为体质不同，而是因为文化不同。红糖不补血（含铁量极低），坐月子期间的饮食禁忌多数没有科学依据。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《关于发烧、手脚冰凉和上火的清单》</div><p>发烧不是病，只是症状。身体被感染后刺激大脑以为39°C才是正常体温。发烧对病情恢复有好处——很多病毒和细菌适应不了高温。7-8岁以上的孩子39°C持续3-4天一般不用担心。只有超过41°C才需要特别降温。</p></div>
+  <div class="article-excerpt"><div class="excerpt-title">《HPV疫苗管用吗？》</div><p>HPV疫苗是目前唯一能预防癌症的疫苗。它预防的是人乳头瘤病毒感染——而HPV是宫颈癌的主要病因。疫苗的安全性和有效性经过了数十万人参与的临床试验验证。</p></div>
 </div>
-<div class="tab-panel" id="panel2">
-  <div class="section-title">题库系统</div>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
-    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
-  </div>
-  <div id="quizContainer"></div>
-  <div id="staticQuiz" style="display:none"></div>
-</div>
-<div class="tab-panel" id="panel3">
-  <div class="section-title">考试模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
-    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
-  </div>
-  <div id="examContainer"></div>
-  <div id="examResult" style="display:none;text-align:center;padding:20px;">
-    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
-    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
-    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+
+<!-- TAB 1: 核心概念 -->
+<div class="tab-panel" id="t1">
+  <div class="section-title">十个核心概念 — 身体维护手册</div>
+  <div class="narrative-block"><p>这些概念不是教科书条目——是你理解自己身体的<strong>维护手册</strong>。</p></div>
+  <div class="concept-row">
+    <div class="concept-card"><h3>① BMI与体脂率</h3><p>身体质量指数=体重/身高²。超重线25（亚洲24），肥胖线30（亚洲28）。但BMI粗糙——运动员肌肉重、老年人肌肉少都会误判。体脂率更准确：水下称重法最可靠，皮脂钳次之，体脂秤仅供参考。</p><div class="source">📻 《5个知识点弄懂减肥》《瘦下来的手术和药》</div></div>
+    <div class="concept-card"><h3>② 癌症的进化根源</h3><p>多细胞动物必然产生癌细胞——这是细胞分裂的副产品。癌症从40岁后大幅增加，因为人类的原始设计寿命约30年。环境、饮食、压力是诱因，但根源是<strong>我们还没进化出清除中老年癌细胞的高效机制</strong>。</p><div class="source">📻 《关于癌症你该知道的事儿》《癌症筛查》</div></div>
+    <div class="concept-card"><h3>③ 三层免疫防线</h3><p>第一道：皮肤+粘膜→第二道：先天免疫（巨噬细胞、炎症）→第三道：适应性免疫（T/B细胞、抗体）。发烧、红肿都是免疫系统在工作——不是"生病了"，是身体在战斗。疫苗是训练第三道防线。</p><div class="source">📻 《免疫系统怎么保护我们？》《过敏与过敏药》</div></div>
+    <div class="concept-card"><h3>④ 辐射的双面性</h3><p>辐射分实物粒子（电子/质子/氦核，无论剂量多小都有害）和电磁波（可见光/红外无害，紫外以上才有害）。手机辐射不致癌（非电离辐射）。医学影像远低于100mSv安全限——需要就拍，不要躲。</p><div class="source">📻 《方方面面聊辐射》《微波炉的辐射》</div></div>
+    <div class="concept-card"><h3>⑤ P53基因：癌症开关</h3><p>P53是人体最重要的抑癌基因——监测DNA损伤，决定修复还是让细胞自杀。超过一半的人类癌症中P53基因发生了突变。理解P53，就理解了为什么癌细胞能绕开人体的安全机制。</p><div class="source">📻 《癌症与生命终结》</div></div>
+    <div class="concept-card"><h3>⑥ 抗生素：精准与滥用</h3><p>抗生素通过4种方式杀死细菌：干扰细胞壁形成、干扰蛋白质生成、干扰叶酸合成、干扰核酸合成。但感冒是病毒——抗生素对病毒无效。一个人40岁前平均接受30次抗生素治疗，其中大量是不必要的。</p><div class="source">📻 《人类与抗生素的大乱斗》</div></div>
+    <div class="concept-card"><h3>⑦ 疫苗原理</h3><p>疫苗是"模拟演习"——给免疫系统看敌人的"通缉令"而不必真的打一仗。天花已在1980年被人类消灭。HPV疫苗是目前唯一能预防癌症的疫苗。疫苗不是100%有效，但大幅降低重症和传播风险。</p><div class="source">📻 《过敏与过敏药》《HPV疫苗管用吗？》</div></div>
+    <div class="concept-card"><h3>⑧ 代谢与减重</h3><p>运动对减重效果微弱——每天450千卡的运动持续一个月理论上只燃烧1.5公斤脂肪的热量，且实际远达不到。最安全的减肥药奥利司他减少30%脂肪吸收（副作用：大便失禁）。减重的关键是饮食结构而非单纯运动。</p><div class="source">📻 《瘦下来的手术和药》《减脂该不该吃减肥药》</div></div>
+    <div class="concept-card"><h3>⑨ 胰岛素与糖尿病</h3><p>胰岛素像交警——指挥血糖进入肌肉和脂肪，命令肝脏停止制造葡萄糖。I型糖尿病是胰腺不产胰岛素（占10%），II型是胰岛素受体不敏感（占90%，与肥胖密切相关）。</p><div class="source">📻 《胰岛素传奇》</div></div>
+    <div class="concept-card"><h3>⑩ 伤口愈合与再生</h3><p>有丝分裂中染色体移动的动力来自中节上的动力蛋白（非纺锤丝）。人类再生能力远弱于蝾螈——我们能愈合伤口但不能再生肢体。唐氏综合征就是第21号染色体减数分裂时没有分开。</p><div class="source">📻 《伤口愈合与组织再生》</div></div>
   </div>
 </div>
-<div class="tab-panel" id="panel4">
-  <div class="section-title">复习模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
-  <div id="reviewContainer">
-    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
-    <div id="reviewWeakAreas"></div>
+
+<!-- TAB 2: 关系图谱 -->
+<div class="tab-panel" id="t2">
+  <div class="section-title">身体真相关系图谱</div>
+  <div class="narrative-block"><p>从进化根源到日常决策——身体真相的知识网络。</p></div>
+  <div class="svg-stage">
+    <svg viewBox="0 0 880 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#2a1f1a" flood-opacity=".08"/></filter>
+        <marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#c45b5b"/></marker>
+      </defs>
+      <rect width="880" height="520" fill="#fffaf7" rx="12"/>
+      <!-- Center: 进化设计寿命 -->
+      <g filter="url(#s)">
+        <rect x="320" y="230" width="240" height="52" rx="26" fill="#c45b5b"/><text x="440" y="261" fill="#fff" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">身体设计寿命≈30年</text>
+      </g>
+      <!-- Nodes around center -->
+      <g filter="url(#s)">
+        <rect x="80" y="60" width="180" height="44" rx="22" fill="#8b3a3a"/><text x="170" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">癌症进化根源</text>
+        <rect x="620" y="60" width="180" height="44" rx="22" fill="#8b3a3a"/><text x="710" y="87" fill="#fff" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">P53抑癌基因</text>
+        <rect x="80" y="180" width="150" height="44" rx="22" fill="#b85a3a"/><text x="155" y="207" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">免疫三层防线</text>
+        <rect x="650" y="180" width="150" height="44" rx="22" fill="#b85a3a"/><text x="725" y="207" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">辐射与安全</text>
+        <rect x="80" y="410" width="150" height="44" rx="22" fill="#d4846a"/><text x="155" y="437" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">疫苗原理</text>
+        <rect x="300" y="410" width="150" height="44" rx="22" fill="#d4846a"/><text x="375" y="437" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">代谢与减重</text>
+        <rect x="520" y="410" width="150" height="44" rx="22" fill="#d4846a"/><text x="595" y="437" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">抗生素精用</text>
+        <rect x="680" y="410" width="140" height="44" rx="22" fill="#d4846a"/><text x="750" y="437" fill="#fff" font-size="11" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">胰岛素调控</text>
+      </g>
+      <!-- Connections -->
+      <g stroke="#c45b5b" stroke-width="1" fill="none" marker-end="url(#ar)" opacity=".5">
+        <path d="M170,104 Q300,180 320,250"/><path d="M710,104 Q580,180 560,250"/>
+        <path d="M155,224 Q240,250 320,256"/><path d="M725,224 Q640,250 560,256"/>
+        <path d="M155,410 Q240,340 320,282"/><path d="M375,410 Q400,340 440,282"/>
+        <path d="M595,410 Q530,340 500,282"/><path d="M750,410 Q700,340 560,282"/>
+      </g>
+      <text x="440" y="25" fill="#c45b5b" font-size="14" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">身体真相知识网络</text>
+    </svg>
   </div>
-  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
 </div>
-<div class="tab-panel" id="panel5">
-  <div class="section-title">思维导图</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
-  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">身体的真相——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
+
+<!-- TAB 3: 破除迷思 — UNIQUE to this topic -->
+<div class="tab-panel" id="t3">
+  <div class="section-title">破除迷思 — 点击翻转，看看真相</div>
+  <div class="narrative-block"><p>以下每个"常见说法"在中文社交媒体上都被广泛传播。点击它，看看卓老板用科学证据给出的回答。</p></div>
+  <div class="myth-grid">
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">红糖补血，坐月子要多喝红糖水</div><div class="myth-fact">红糖的铁含量极低（每100g约含2mg铁，且是非血红素铁吸收率极低）。补血需要的是铁元素+蛋白质，红糖基本只能补糖——发胖是真的，补血是假的。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">一滴血就能检测癌症</div><div class="myth-fact">癌症诊断需要多种证据结合——B超/X光看到肿瘤组织是最可靠的方法。血液检测只作为辅助筛查手段，不能替代影像学和组织病理学检查。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">微波炉的辐射会致癌</div><div class="myth-fact">微波是非电离辐射——能量远不足以破坏DNA分子。微波炉的电磁屏蔽确保了使用安全。真正有害的是电离辐射（紫外线以上频段的电磁波，以及实物粒子辐射）。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">吃燕窝/螺旋藻能美容养颜</div><div class="myth-fact">燕窝的主要成分是蛋白质和碳水化合物——和你吃一个鸡蛋喝一杯牛奶没有本质区别。螺旋藻的"神奇功效"缺乏大样本随机对照临床试验证据——市面上的健康宣称大多属于营销。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">坐月子不能洗头洗澡</div><div class="myth-fact">这是前现代卫生条件下的经验（没有热水、没有吹风机、没有暖气）。在现代卫生条件下，产后保持清洁对预防感染有益。且同为东亚人的日本女性没有坐月子的传统——这说明坐月子是文化而非生理需求。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">防蓝光眼镜能保护眼睛</div><div class="myth-fact">目前没有确凿的科学证据表明日常屏幕使用中的蓝光会对眼睛造成永久损伤。眼睛疲劳的主要原因是用眼时间过长和眨眼频率降低——定时休息比防蓝光眼镜更有效。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">入耳式耳机会损伤听力</div><div class="myth-fact">损害听力的不是耳机的类型，而是<strong>音量</strong>和<strong>使用时长</strong>。85分贝以上持续暴露会损伤听力——入耳、头戴、音箱都一样。入耳式耳机因为隔音好，反而可能让你把音量调得更低。</div></div>
+    <div class="myth-card" onclick="this.querySelector('.myth-fact').classList.toggle('show')"><div class="myth-myth">中药在美国获批上市=中医药被科学认可</div><div class="myth-fact">复方丹参滴丸等中医药通过了FDA二期临床试验，但关键的三期临床试验和最终审批仍在进行中。FDA审批的是具体药物的安全性和有效性——不审批"理论体系"。"通过FDA认证上市"和"获批做临床试验"是两个完全不同的概念。</div></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel6">
+
+<!-- TAB 4: 深度追问 -->
+<div class="tab-panel" id="t4">
   <div class="section-title">深度追问</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
-  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
+  <div class="socratic-panel">
+    <div class="q-a"><div class="question">如果身体设计寿命只有30年，为什么有人能活到100岁？</div><div class="answer">"设计寿命30年"是一个统计性的说法——意味着在原始环境下，超过30岁后身体出问题的概率大幅上升。但个体差异巨大——基因、生活方式、医疗条件都能延长（或缩短）这个年限。活到100岁的人通常具备：①长寿基因（家族长寿史）②低炎症状态 ③良好的细胞修复机制 ④现代医学的维护（疫苗、抗生素、慢性病管理）。<strong>本质上是基因好+维护好+运气好。</strong></div></div>
+    <div class="q-a"><div class="question">运动不能减肥——那为什么还要运动？</div><div class="answer">运动对体重秤上的数字确实影响微弱——但运动改变的是体成分（脂肪↓肌肉↑）和代谢健康。即便体重不变，每周150分钟中等强度运动可以：降低心血管疾病风险30%、改善胰岛素敏感性、减少内脏脂肪（最危险的那种）、改善情绪和睡眠。减重的关键是饮食，但<strong>健康的关键是运动</strong>——不要把两者混淆。</div></div>
+    <div class="q-a"><div class="question">为什么现代医学对"上火"没有对应的概念？</div><div class="answer">"上火"是一组症状的民间统称——口腔溃疡、牙龈肿痛、喉咙痛、便秘等。现代医学将这些视为不同病因的不同症状（病毒感染、细菌感染、维生素缺乏、脱水等），而非单一"火气"导致。"上火"是一个有用的日常沟通词汇，但它不是一个医学术语——每一种"上火"症状都有其具体病因，需要针对性处理。</div></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel7">
-  <div class="section-title">案例分析</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
-  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
+
+<!-- TAB 5: 思维导图 -->
+<div class="tab-panel" id="t5">
+  <div class="section-title">思维导图 — 身体真相知识架构</div>
+  <div class="mindmap" id="mm3">
+    <div class="node"><div class="node-header" onclick="toggleM(this)" style="background:var(--accent);color:#fff;"><span class="toggle open">▶</span> 身体的真相</div><div class="node-body open">
+      <div class="node"><div class="node-header" onclick="toggleM(this)"><span class="toggle">▶</span> 癌症与细胞</div><div class="node-body"><div class="leaf">癌症进化根源：设计寿命30年</div><div class="leaf">P53抑癌基因：DNA损伤监测者</div><div class="leaf">化疗/放疗/免疫疗法三大武器</div><div class="leaf">癌症筛查：合理性与最优原则</div><div class="leaf">一滴血检测癌症？只是辅助筛查</div></div></div>
+      <div class="node"><div class="node-header" onclick="toggleM(this)"><span class="toggle">▶</span> 免疫与感染</div><div class="node-body"><div class="leaf">三层防线：皮肤→先天免疫→适应性免疫</div><div class="leaf">发烧：身体的防御策略，不是敌人</div><div class="leaf">过敏：免疫系统攻击无害物质</div><div class="leaf">疫苗：让免疫系统提前认识敌人</div><div class="leaf">抗生素：杀细菌不杀病毒，滥用筛选耐药菌</div></div></div>
+      <div class="node"><div class="node-header" onclick="toggleM(this)"><span class="toggle">▶</span> 代谢与体重</div><div class="node-body"><div class="leaf">BMI：粗糙但有用的筛查工具</div><div class="leaf">体脂率：比体重更重要的指标</div><div class="leaf">运动对减重微弱，对健康关键</div><div class="leaf">奥利司他：减少30%脂肪吸收</div><div class="leaf">胰岛素：血糖的交警</div></div></div>
+      <div class="node"><div class="node-header" onclick="toggleM(this)"><span class="toggle">▶</span> 辐射与安全</div><div class="node-body"><div class="leaf">电离vs非电离：只有前者有害</div><div class="leaf">医学影像：远低于100mSv安全限</div><div class="leaf">手机辐射：非电离，不致癌</div><div class="leaf">微波炉：屏蔽安全，放心使用</div></div></div>
+      <div class="node"><div class="node-header" onclick="toggleM(this)"><span class="toggle">▶</span> 常见迷思</div><div class="node-body"><div class="leaf">坐月子：文化传统非医学建议</div><div class="leaf">上火：多种症状的民间统称</div><div class="leaf">红糖补血：铁含量极低</div><div class="leaf">蓝光眼镜：缺乏证据支持</div><div class="leaf">辟谷：没有科学依据支持健康益处</div></div></div>
+    </div></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel8">
-  <div class="section-title">实战决策</div>
-  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
+
+<!-- TAB 6: 知识边界 -->
+<div class="tab-panel" id="t6">
+  <div class="section-title">知识边界</div>
+  <table class="boundary-table">
+    <thead><tr><th>知识条目</th><th>掌握程度</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>癌症的进化根源</td><td><span class="level-tag level-core">核心掌握</span></td><td>消除"癌症是现代病"的误解</td></tr>
+      <tr><td>免疫系统三层防御</td><td><span class="level-tag level-core">核心掌握</span></td><td>理解发烧、疫苗、过敏的基础</td></tr>
+      <tr><td>电离辐射vs非电离辐射</td><td><span class="level-tag level-core">核心掌握</span></td><td>消除对日常电器的辐射恐惧</td></tr>
+      <tr><td>BMI与体脂率的关系</td><td><span class="level-tag level-understand">理解即可</span></td><td>健康自我管理的基本工具</td></tr>
+      <tr><td>疫苗的作用机制</td><td><span class="level-tag level-understand">理解即可</span></td><td>做出明智的疫苗接种决策</td></tr>
+      <tr><td>抗生素的适用范围</td><td><span class="level-tag level-understand">理解即可</span></td><td>避免主动要求"开抗生素"</td></tr>
+      <tr><td>P53基因的详细分子机制</td><td><span class="level-tag level-know">知道存在</span></td><td>需要分子生物学专业背景</td></tr>
+      <tr><td>各类化疗药物的具体作用靶点</td><td><span class="level-tag level-know">知道存在</span></td><td>属于肿瘤药理学专业领域</td></tr>
+      <tr><td>CAR-T疗法的细胞工程细节</td><td><span class="level-tag level-know">知道存在</span></td><td>前沿免疫治疗，仍在临床研究中</td></tr>
+      <tr><td>FDA药品审批的全部流程</td><td><span class="level-tag level-know">知道存在</span></td><td>复杂法规体系，知道有三期临床即可</td></tr>
+    </tbody>
+  </table>
 </div>
+
+<!-- TAB 7: 题库 -->
+<div class="tab-panel" id="t7">
+  <div class="section-title">题库系统 — 20题</div>
+  <div class="score-bar" id="qs3">已答：0 / 20</div>
+  <div class="progress-bar"><div class="progress-fill" id="qp3" style="width:0%"></div></div>
+  <div id="qc3"></div>
+  <button class="btn btn-outline" onclick="resetQ3()" style="margin-top:16px;">🔄 重新作答</button>
+  <div class="section-title">简答</div>
+  <div class="quiz-card"><p class="q-text">🖊️ 为什么卓克说"癌症增多的真正原因是人类活得太久了"？</p><textarea class="sa-input" id="sa3_1" placeholder="写下你的理解..."></textarea><button class="btn btn-outline" onclick="showSA3(1)" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR3_1">从进化角度看，人类身体的设计寿命约30年——在原始环境中，大多数人活不过40岁。癌症主要从40岁后开始高发——因为身体没有进化出高效清除中老年癌细胞的机制。现代人平均寿命接近80岁——后面50年身体在"超期服役"。不是现代生活制造了更多癌症（虽然环境因素确实有影响），而是<strong>我们活到了能得癌症的年龄</strong>。各国的癌症统计都呈现40岁以上患者大幅增加这一规律。</div></div>
+  <div class="quiz-card"><p class="q-text">🖊️ "发烧是好事还是坏事"——用免疫系统的知识分析这个问题。</p><textarea class="sa-input" id="sa3_2" placeholder="写下你的理解..."></textarea><button class="btn btn-outline" onclick="showSA3(2)" style="margin-top:8px;">查看参考答案</button><div class="sa-reveal" id="saR3_2">发烧本身不是疾病而是免疫反应。身体感知到感染后，主动将体温调高——因为很多病原体在高温下繁殖效率降低。39°C持续3-4天对7-8岁以上的孩子一般不用太担心。但发烧消耗能量、让人不适。所以答案是：<strong>轻度发烧（<41°C）是免疫系统正常工作的表现，不需要"扑灭"；超过41°C或孩子精神状态很差时，需要降温</strong>。关键不是看温度计数字，而是看病人整体状态。</div></div>
 </div>
-<div class="toast" id="toast"></div>
+
+<!-- TAB 8: 健康决策 -->
+<div class="tab-panel" id="t8">
+  <div class="section-title">健康决策模拟</div>
+  <div class="decision-scene"><h3>场景一：朋友推荐你去做"全身PET-CT癌症筛查"</h3><div class="scenario"><strong>情境：</strong>体检中心推出"日本健康之旅"——全身PET-CT扫描，号称能"一次性检测全身癌症"，价格几万元。你的选择？</div><div class="choices">
+    <button class="choice-btn" onclick="evalD3(this,'a')">A) 马上去——早发现早治疗总是好的</button>
+    <button class="choice-btn" onclick="evalD3(this,'b')">B) 不去——PET-CT辐射剂量高，只适合已确诊癌症患者做分期评估，不适合健康人做全身筛查</button>
+    <button class="choice-btn" onclick="evalD3(this,'c')">C) 咨询医生后再决定</button>
+  </div><div id="dfb3_1" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div></div>
+  <div class="decision-scene"><h3>场景二：孩子发烧39°C第三天</h3><div class="scenario"><strong>情境：</strong>8岁孩子发烧39°C持续第三天，精神还可以但吃得少。老人坚持要打退烧针。</div><div class="choices">
+    <button class="choice-btn" onclick="evalD3b(this,'a')">A) 立即去医院打退烧针</button>
+    <button class="choice-btn" onclick="evalD3b(this,'b')">B) 观察精神状态，多喝水，物理降温，超过41°C或精神萎靡再去医院</button>
+  </div><div id="dfb3_2" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div></div>
+</div>
+
+<div class="footer"><p>🫀 身体的真相 — 卓老板聊科技 MKS</p><p style="margin-top:4px;">37篇文章 · 10核心概念 · 基于刘雪峰最小知识集理论</p><p style="margin-top:4px;"><a href="index.html">← 返回课程首页</a></p></div>
+</div>
+
 <script>
-const concepts = [{"id": "c1", "name": "癌症进化本质", "def": "癌症不是外来入侵，而是体内细胞在分裂中积累突变后'叛变'为自私的'作弊者'——多细胞协作体系的内部瓦解，是生命复杂性的必然代价。", "analogy": "像一家运转良好的公司，某个员工开始疯狂复制工位、抢占资源、无视指令——不是外部黑客入侵，是内部失控。", "example": "所有动物都会得癌症。佩托悖论：大象细胞更多但癌症率更低——因为它们进化出了更多肿瘤抑制基因副本(TP53有20个拷贝，人类仅1个)。", "counter": "不是所有肿瘤都是癌症。良性肿瘤不转移、不侵犯周围组织。癌症三大特征：无限分裂、逃避凋亡、转移。"}, {"id": "c2", "name": "风险-收益权衡", "def": "任何医疗干预都同时带来风险和收益——理性的医疗决策是权衡两者，而非追求'零风险'。", "analogy": "过马路有被撞风险但不能永远不出门。戴口罩防雾霾也影响呼吸——每次决策都是概率空间的权衡。", "example": "乳腺X光筛查1000名女性10年→避免1例乳腺癌死亡+100+例假阳性（不必要的活检焦虑）。值不值得取决于个人价值观。", "counter": "紧急情况不适用权衡。急性阑尾炎→手术唯一选择。慢性/预防性医疗决策才有权衡空间。"}, {"id": "c3", "name": "相关≠因果", "def": "两个变量统计相关不意味一个导致另一个——这是健康新闻中最容易被忽略的区分。", "analogy": "公鸡打鸣和太阳升起高度相关——杀了公鸡太阳照样升起。混淆相关和因果是人类认知中最顽固的偏误。", "example": "红酒+地中海饮食悖论：法国人高脂饮食但心脏病少→被归因'喝红酒'。可能是整体饮食模式+社会支持系统——孤立出'神奇成分'是营销非科学。", "counter": "相关是因果必要不充分条件。通过RCT排除混杂变量确立因果。观察性研究只能产生假说。"}, {"id": "c4", "name": "剂量-毒性曲线", "def": "任何物质在高剂量下都有毒，任何物质在足够低剂量下都无害——'有毒'和'安全'不是非黑即白。", "analogy": "水适量维持生命，极端过量导致水中毒。'无毒'≠'随便吃'，'有毒'≠'碰不得'。关键永远是剂量。", "example": "中国焖饭比欧美捞饭保留更多砷但含量仍在安全范围——不是'全民服毒'但改变烹饭方式可降低风险。", "counter": "剂量-毒性曲线非线性的。有些物质有安全阈值，有些没有（任何剂量都有概率性风险如致癌物）。不同物质曲线形状不同。"}, {"id": "c5", "name": "免疫记忆机制", "def": "疫苗训练免疫系统预先制造针对特定病原体的记忆B/T细胞——第二次遇到同一敌人时闪电反击。", "analogy": "不是给军队吃补品，而是给军队看通缉令——让他们提前知道要抓谁。疫苗就是那张'通缉令'。", "example": "天花被疫苗彻底消灭（1980年WHO宣布）。牛痘病毒与天花病毒携带同一抗原→交叉免疫保护。人类唯一彻底消灭的人类传染病。", "counter": "疫苗不能预防所有感染。流感变异快→每年需新配方。HIV变异更快+攻击免疫本身→至今无有效疫苗。"}, {"id": "c6", "name": "循证医学金字塔", "def": "医学证据从专家意见(最弱)到RCT系统综述(最强)呈金字塔分布。临床决策应基于最高质量证据。", "analogy": "刑侦：目击证人'我觉得'=专家意见；DNA检测=RCT。法庭判决要以DNA而非'我觉得'为依据。", "example": "传统医学声称'被验证上千年'≈上千年质量极低的观察性研究。一个设计良好的双盲RCT胜过一千年粗放经验。", "counter": "RCT非万能。伦理限制、罕见病、超长期随访无法做RCT。证据金字塔是决策框架非教条。"}, {"id": "c7", "name": "代谢能量方程", "def": "体重变化=能量摄入-消耗，但身体会通过降低基础代谢和增加食欲来'补偿'运动消耗。", "analogy": "家庭收支：如工资减少→自动削减娱乐支出(代偿)→存款变化不大。身体调节远比简单减法复杂。", "example": "日运动450千卡=30层楼来回2趟。但基础代谢可能下降+食欲增加→月净减重远小于理论值。运动对健康好处远超减重。", "counter": "能量守恒在物理成立但在人体中'摄入'和'消耗'非独立变量。改变一端另一端自动调整——这是稳态机制。"}, {"id": "c8", "name": "辐射双面性", "def": "辐射既是癌症诱因（高剂量全身）又是治疗工具（精确放疗）——同一物理现象因剂量、靶向、时机不同而角色相反。", "analogy": "火可烧毁房屋也可锻造钢铁——区别在控制。广岛原子弹全身辐射→癌症；精确质子束→肿瘤消融。", "example": "朱诺号木星探测器面临2000万eV辐射→钛合金罩(180kg)将危害降至1/800。同样辐射：对人体致命，对探测器是工程挑战。", "counter": "非所有辐射都危险。日常背景辐射(~3mSv/年)不增可测量癌症风险。辐射恐惧可能比低剂量辐射更有害。"}, {"id": "c9", "name": "科学传播信噪比", "def": "健康新闻中的'突破''奇迹'往往只是初步研究或动物实验——从论文到媒体报道经多层放大扭曲，信噪比极低。", "analogy": "传话游戏：第一人说'细胞实验小鼠肿瘤缩小30%'→五次转述后变'科学家发现治愈癌症'。每层传播增加噪声去除限定条件。", "example": "'一滴血检测癌症'：实际是肿瘤标志物检测获欧盟准入——辅助判断手段（假阳性率极高）远不能替代活检确诊。", "counter": "传播不只媒体责任。科学家发新闻稿应谨慎措辞。读者也需科学素养——'如有疑问找原始论文'。"}, {"id": "c10", "name": "安慰剂效应的实质", "def": "安慰剂效应包括统计回归均值、自然病程、期望效应和真实神经生物学机制（内啡肽释放）——是心身互动的科学现象，非'假药有效'。", "analogy": "车发出异响开去修车厂——刚到门口异响消失。不是修车厂有魔力。相信治疗有效→大脑释放内源镇痛物质→真实痛觉减轻。", "example": "fMRI显示安慰剂镇痛时大脑疼痛区活动确实减弱+内源性阿片系统被激活。纳洛酮(阿片拮抗剂)可阻断安慰剂镇痛——证明其生化机制。", "counter": "安慰剂效应不能治愈器质性疾病。改善主观症状(疼痛、疲劳)但不能缩小肿瘤清除病毒。声称效果全归因于安慰剂≠替代疗法等于真正治疗。"}];
-const mcqAll = [{"q": "癌症的本质是什么？", "opts": ["体内细胞突变后'叛变'为自私作弊者——多细胞协作体系的内部瓦解", "外来病原体入侵", "环境毒素直接破坏", "病毒感染导致"], "answer": 0}, {"q": "为什么大象细胞更多但癌症率更低(佩托悖论)？", "opts": ["进化出更多肿瘤抑制基因副本(如TP53有20个拷贝vs人类1个)", "大象细胞不分裂", "大象寿命太短", "大象吃素"], "answer": 0}, {"q": "天花为什么能被人类彻底消灭？", "opts": ["只感染人类+疫苗终身免疫+全球协作接种", "天花自然消失", "抗生素杀死天花病毒", "隔离政策控制"], "answer": 0}, {"q": "循证医学最强证据是什么？", "opts": ["随机双盲对照试验的系统综述/Meta分析", "专家意见", "病例报告", "动物实验"], "answer": 0}, {"q": "放疗治癌但高剂量辐射也致癌——这矛盾吗？", "opts": ["不矛盾——辐射效应取决于剂量、靶向和时机：精确聚焦高剂量杀癌细胞，非靶向全身暴露增突变", "矛盾说明放疗不安全", "放疗已过时", "只有低剂量辐射才致癌"], "answer": 0}, {"q": "为什么'每天运动就能减肥'不完全准确？", "opts": ["基础代谢占60%+，运动消耗有限且身体通过降基础代谢+增食欲补偿", "运动完全没用", "运动会让人更胖", "只有节食才能减肥"], "answer": 1}, {"q": "癌症化疗灵感最早来自哪里？", "opts": ["中药", "芥子气——一战幸存者严重白细胞减少启发用化学武器原理杀癌细胞", "抗生素", "维生素"], "answer": 1}, {"q": "中国人焖饭比欧美捞饭摄入更多砷的原因？", "opts": ["中国大米含砷更高", "焖饭(2:1水米)砷残留84%，捞饭(5:1水米)残留43%——水量和烹任方式决定砷溶解", "中国人吃米更多", "中国土壤污染更严重"], "answer": 1}, {"q": "肿瘤标志物检测为什么不能替代活检？", "opts": ["完全没用", "假阳性率极高+不能确定肿瘤位置类型——只是筛查辅助非确诊", "价格太贵", "只有中国不能做"], "answer": 1}, {"q": "减肥手术为什么比节食运动更有效？", "opts": ["手术后不需控制饮食", "改变肠道激素(饥饿素下降+GLP-1上升)→不仅物理限制还生化重置体重设定点", "手术永久损害消化", "代谢率永久提高"], "answer": 1}, {"q": "HPV疫苗为什么推荐在性行为前接种？", "opts": ["性行为后完全无效", "疫苗预防未来感染——已感染后无法清除已有感染，暴露前效果最佳", "疫苗对成人有害", "药企营销策略"], "answer": 2}, {"q": "为什么入耳式耳机可能损伤听力？", "opts": ["耳机发射辐射", "任何耳机>85分贝长时间使用都损伤毛细胞——入耳式隔音好反可让人在更安全音量听", "入耳式就是更危险", "听力损伤是遗传的"], "answer": 2}, {"q": "人体基础代谢占每日总能耗多少？", "opts": ["约10%", "约30%", "约60-70%——维持体温心跳细胞运作的能耗远超运动和消化", "约90%"], "answer": 2}, {"q": "体脂率最准确的测量方法？", "opts": ["智能体重秤", "皮脂钳", "水下称重法——利用脂肪和非脂肪组织密度差", "目测"], "answer": 2}, {"q": "为什么医学不推荐常规全身PET-CT体检？", "opts": ["价格太贵", "辐射本身致癌", "低风险人群假阳性率极高→不必要侵入性检查+辐射风险。收益不抵风险", "设备不够"], "answer": 2}, {"q": "微波炉辐射危险吗？", "opts": ["非常危险会致癌", "微波是非电离辐射只能加热不能破坏分子键——炉门完好泄漏远低于安全标准", "比核辐射更危险", "只有门破损危险"], "answer": 3}, {"q": "防蓝光眼镜对保护视力有帮助吗？", "opts": ["绝对必须佩戴", "证据不足——无高质量RCT证明日常屏幕蓝光致永久眼损伤。眼疲劳主因是近距离用眼非蓝光", "蓝光可致失明", "只儿童需防蓝光"], "answer": 3}, {"q": "坐月子的性质是什么？", "opts": ["纯粹科学", "源自古代产后护理——部分内容(休息营养)有合理基础但很多禁忌(不洗澡不通风)与现代证据冲突", "完全无价值", "中国独有习俗"], "answer": 3}, {"q": "BMI在亚洲为什么需下调标准？", "opts": ["亚洲人更矮", "亚洲人体内脂肪比例较高——相同BMI下体脂率更高，糖尿病风险在更低BMI上升", "亚洲人更瘦", "只是统计误差"], "answer": 3}, {"q": "安慰剂效应的神经生物学基础是什么？", "opts": ["纯粹心理作用无生物学基础", "fMRI显示安慰剂镇痛时大脑疼痛区活动减弱+内源性阿片系统激活——有真实神经化学机制", "统计误差", "病人装的"], "answer": 3}];
-const saqAll = [{"q": "用'癌症进化本质'解释为什么癌症主要在中老年发病。", "hint": "人体'设计寿命'约30年(演化视角)→30岁后抗癌机制不再有强选择压力→突变累积→免疫清除效率下降"}, {"q": "为什么'某物质有害'新闻标题通常不可全信？用剂量-毒性和信噪比解释。", "hint": "剂量决定毒性→新闻常不说剂量只谈'含有'；信噪比→从实验室到媒体报道经多层放大扭曲，初步研究≠确定结论"}, {"q": "简述RCT三大要素并说明为什么'上千年验证'不能替代RCT。", "hint": "随机分组+双盲+对照。千年观察=无对照+无盲法+发表偏倚→质量极低。量的累积≠质的提升"}, {"q": "为什么运动对减重直接效果有限但健康益处巨大？", "hint": "基础代谢占60%+→运动能耗占比小→身体代偿。但运动改善心血管+增胰岛素敏感性+提心理健康→价值远超体重秤"}, {"q": "疫苗如何工作？为什么流感疫苗需每年接种而乙肝一次就够？", "hint": "疫苗=训练免疫系统识别特定抗原→制记忆B/T细胞。流感抗原变异快→每年新配方。乙肝抗原稳定→终身保护"}, {"q": "简述医学证据金字塔层级并举例高级别证据推翻低级别证据。", "hint": "金字塔：病例报告→系列→队列→病例对照→RCT→系统综述。例：HRT预防心脏病(观察)→RCT发现HRT增加心脏病风险"}, {"q": "用'风险-收益权衡'框架分析癌症筛查困境。", "hint": "收益：早期发现→降死亡率。风险：假阳性→不必要活检焦虑；过度诊断→治疗惰性癌。净收益取决于癌种和基线风险"}, {"q": "解释辐射双面性：为什么高剂量致癌而精确放疗治癌？", "hint": "辐射损伤DNA→随机突变→低概率癌变。癌细胞分裂更快→对DNA损伤更敏感→精确高剂量优先杀癌细胞"}, {"q": "为什么医学不推荐常规全身PET-CT体检？", "hint": "低风险人群假阳性率极高→不必要侵入性检查+辐射暴露也是风险。筛查只针对有明确证据的癌种和高风险人群"}, {"q": "用具体例子解释安慰剂效应如何被重新认识为真实神经生物学现象。", "hint": "fMRI：安慰剂→前额叶→导水管周围灰质→内源性阿片肽释放→疼痛通路抑制。纳洛酮(阿片拮抗剂)可阻断→证明生化机制"}];
-const SK = 'mks_1';
-let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
-let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
-let currentCardIdx = 0;
-function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
-function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
-function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
-function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
-function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
-function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
-function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
-function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
-document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
-function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
-function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
-function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
-function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
-function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
-let et=null,el=1800,eq=[],ea={};
-function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
-function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
-function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
-function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
-function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
-function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
-setCard(0);updateProgress();
+(function(){var t=document.querySelectorAll('#tabBar .tab-btn');var p=document.querySelectorAll('.tab-panel');var s=localStorage.getItem('mks-body-tab');t.forEach(function(b){b.addEventListener('click',function(){t.forEach(function(x){x.classList.remove('active');});p.forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');localStorage.setItem('mks-body-tab',this.getAttribute('data-tab'));});});if(s){var b=document.querySelector('[data-tab="'+s+'"]');if(b)b.click();}})();
+
+function toggleM(h){var t=h.querySelector('.toggle');var b=h.parentElement.querySelector('.node-body');if(b){b.classList.toggle('open');t.classList.toggle('open');}}
+
+var q3=[{q:'世界卫生组织将肥胖定义为疾病的年份是？', opts:['1997年','1980年','2005年','2010年'], ans:0, expl:'1997年世界卫生组织正式将肥胖定义为一种疾病，诊断指标是BMI。'},{q:'人体免疫系统的第一道防线是什么？', opts:['T细胞和B细胞','皮肤和粘膜','抗体','骨髓'], ans:1, expl:'第一道防线是物理屏障：皮肤+粘膜+肺。它们是阻止微生物进入身体的首道关卡。'},{q:'正常成人的体脂率大约在什么范围？', opts:['男性5-8%，女性10-15%','所有人都低于5%','男性10-20%，女性20-30%','30-40%'], ans:2, expl:'专业运动员体脂率4-8%，普通人一般到了30%就算挺胖了。正常健康范围男性约10-20%，女性约20-30%。'},{q:'癌症发病率从哪个年龄段开始大幅增加？', opts:['20岁','30岁','60岁','40岁'], ans:3, expl:'各国的癌症统计都显示40岁以上患者大幅增加。这与人类身体的进化设计寿命（约30年）密切相关。'},{q:'以下哪种辐射对人体有害？', opts:['紫外线','可见光','手机辐射','红外线'], ans:0, expl:'只有电离辐射（紫外线以上频段）才有害。可见光、红外线、手机辐射（微波频段）都是非电离辐射，不直接破坏DNA。'},{q:'医学影像中剂量最高的是哪种检查？', opts:['胸部X光','骨盆CT','牙科X光','B超'], ans:1, expl:'骨盆CT剂量约25mSv，是医学影像中剂量最高的之一。胸部X光仅0.01mSv。但25mSv仍远低于100mSv的安全限。'},{q:'抗生素通过几种方式杀死细菌？', opts:['1种','2种','4种','3种'], ans:2, expl:'抗生素通过4种方式：干扰细胞壁形成、干扰蛋白质生成、干扰叶酸合成、干扰核酸合成。'},{q:'一个人40岁前平均接受多少次抗生素治疗？', opts:['5次','15次','50次','30次'], ans:3, expl:'统计显示一个人40岁前平均接受30次抗生素治疗，其中大量是不必要的——尤其是针对病毒感染的处方。'},{q:'以下哪种食物铁含量最高（最补血）？', opts:['动物肝脏','红枣','红糖','菠菜'], ans:0, expl:'动物肝脏含丰富的血红素铁（吸收率高）。红糖和红枣的铁含量低且是非血红素铁（吸收率极低），不能有效补血。'},{q:'HPV疫苗能预防什么？', opts:['所有癌症','宫颈癌（及其他HPV相关癌症）','感冒','艾滋病'], ans:1, expl:'HPV疫苗预防人乳头瘤病毒感染——HPV是宫颈癌的主要病因。这是目前唯一能预防癌症的疫苗。'},{q:'天花在哪一年被宣布在全球消灭？', opts:['1970年','1990年','1980年','2000年'], ans:2, expl:'世界卫生组织在1980年宣布人类已经完全消灭了天花病毒。天花只在人类中存在——最后一个病例是1978年。'},{q:'奥利司他（减肥药）的作用机制是什么？', opts:['抑制食欲','燃烧脂肪','加速代谢','减少肠道对脂肪的吸收约30%'], ans:3, expl:'奥利司他是通过减少肠道对脂肪的吸收来减肥——和脂肪裂解酶结合，减少约30%的脂肪吸收。副作用是大便失禁（油脂直接排出）。'},{q:'I型糖尿病和II型糖尿病的主要区别是什么？', opts:['I型占10%（胰腺不产胰岛素），II型占90%（胰岛素受体不敏感）','没有区别','I型比II型更常见','II型是遗传的'], ans:0, expl:'I型糖尿病是免疫系统攻击胰腺beta细胞导致不产胰岛素。II型是胰岛素受体不敏感——与肥胖密切相关，占糖尿病的90%。'},{q:'以下关于坐月子的说法正确的是？', opts:['只有中国人需要坐月子','坐月子是一个文化传统，不是医学建议','日本人也坐月子','坐月子绝对不能洗头'], ans:1, expl:'坐月子是文化传统而非医学建议。同为东亚人的日本女性没有坐月子传统——这说明它是文化现象，不是生理必需。现代卫生条件下产后保持清洁更有利于预防感染。'},{q:'PET-CT全身癌症筛查适合健康人吗？', opts:['是的，每个人都应该做','适合50岁以上人群','不适合——辐射剂量高，只适合已确诊癌症患者做分期','取决于价格'], ans:2, expl:'PET-CT辐射剂量高，且对健康人假阳性率高。它主要用于已确诊癌症患者的分期评估，不推荐用于健康人的常规癌症筛查。'},{q:'电子烟的潜在风险是什么？', opts:['完全无害','能帮助所有人戒烟','比传统香烟更危险','可能含有有害化学物质，且尼古丁仍然成瘾'], ans:3, expl:'电子烟可能含有丙二醇加热产生的有害物质，且尼古丁仍然成瘾。它的长期健康影响仍在研究中。部分产品被用于帮助戒烟，但不等同于"无害"。'},{q:'口腔溃疡/牙龈肿痛在民间被统称为什么？', opts:['上火','发炎','感染','过敏'], ans:0, expl:'上火是一组症状（口腔溃疡、牙龈肿痛、喉咙痛等）的民间统称。现代医学将它们视为不同病因的不同症状。'},{q:'BMI指数对以下哪类人群最不适用？', opts:['成年人','职业运动员','青少年','老年人'], ans:1, expl:'职业运动员肌肉含量极高——肌肉比脂肪重，所以BMI会误判为超重。儿童、老年人（肌肉流失）也不适用BMI。'},{q:'人体伤口愈合时，染色体移动的动力来自哪里？', opts:['纺锤丝','细胞膜','中节上的动力蛋白','线粒体'], ans:2, expl:'教科书中常说纺锤丝拉开染色体——实际上纺锤丝不提供动力。真正的动力来自染色体中节上的动力蛋白，它沿着纺锤丝"行走"。'},{q:'关于发烧的正确态度是？', opts:['发烧就要立即退烧','发烧必须打针','发烧绝对无害','39°C持续3-4天对7-8岁孩子一般不用太担心'], ans:3, expl:'发烧是免疫系统正常工作的表现。39°C持续3-4天对孩子一般安全。只有超过41°C或精神状态很差时才需要特别降温处理。'}];
+
+var qa3=0,qc3=0;
+function renderQ3(){var c=document.getElementById('qc3');var h='';q3.forEach(function(item,idx){h+='<div class="quiz-card" id="q3'+idx+'"><div class="q-text">'+(idx+1)+'. '+item.q+'</div>';var l=['A','B','C','D'];item.opts.forEach(function(o,oi){h+='<button class="q-option" id="q3'+idx+'o'+oi+'" onclick="answerQ3('+idx+','+oi+')">'+l[oi]+'. '+o+'</button>';});h+='<div class="q-feedback" id="q3'+idx+'fb"></div></div>';});c.innerHTML=h;var s=localStorage.getItem('mks-body-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.done){var ob=document.getElementById('q3'+st.i+'o'+st.c);if(ob){ob.classList.add(st.ok?'correct':'wrong');ob.disabled=true;}var fb=document.getElementById('q3'+st.i+'fb');fb.style.display='block';fb.innerHTML=st.ok?'✅ 正确！'+q3[st.i].expl:'❌ 错误。'+q3[st.i].expl;fb.style.background=st.ok?'#d4edda':'#f8d7da';for(var oi=0;oi<4;oi++){var o2=document.getElementById('q3'+st.i+'o'+oi);if(o2)o2.disabled=true;}}});up3();}}
+function answerQ3(i,c){var it=q3[i],ok=c===it.ans;if(ok)qc3++;qa3++;var fb=document.getElementById('q3'+i+'fb');document.getElementById('q3'+i+'o'+c).classList.add(ok?'correct':'wrong');if(!ok)document.getElementById('q3'+i+'o'+it.ans).classList.add('correct');for(var oi=0;oi<4;oi++){var ob=document.getElementById('q3'+i+'o'+oi);if(ob)ob.disabled=true;}fb.style.display='block';fb.innerHTML=ok?'✅ 正确！'+it.expl:'❌ 错误。'+it.expl;fb.style.background=ok?'#d4edda':'#f8d7da';up3();save3();}
+function up3(){document.getElementById('qs3').textContent='已答：'+qa3+' / '+q3.length+' | 正确：'+qc3;document.getElementById('qp3').style.width=(qa3/q3.length*100)+'%';}
+function save3(){var st=[];for(var i=0;i<q3.length;i++){for(var oi=0;oi<4;oi++){var ob=document.getElementById('q3'+i+'o'+oi);if(ob&&(ob.classList.contains('correct')||ob.classList.contains('wrong'))){st.push({i:i,c:oi,ok:oi===q3[i].ans,done:true});break;}}}localStorage.setItem('mks-body-quiz',JSON.stringify(st));}
+function resetQ3(){qa3=0;qc3=0;localStorage.removeItem('mks-body-quiz');renderQ3();}
+function showSA3(i){var r=document.getElementById('saR3_'+i);r.style.display=r.style.display==='block'?'none':'block';}
+
+function evalD3(el,ch){var fb=el.parentElement.parentElement.querySelector('[id^="dfb3"]');var bs=el.parentElement.querySelectorAll('.choice-btn');bs.forEach(function(b){b.disabled=true;});if(ch==='b'){fb.innerHTML='✅ <strong>正确。</strong>PET-CT辐射剂量高，对健康人假阳性率高——可能检测出"可疑"结果导致不必要的焦虑和侵入性检查。它只适合已确诊癌症患者做分期评估。常规癌症筛查应遵循针对性原则（肺癌低剂量CT、乳腺癌钼靶、宫颈癌巴氏涂片等），而非"全身扫一遍"。';fb.style.background='#d4edda';}else if(ch==='c'){fb.innerHTML='👍 咨询医生是个好习惯。医生会告诉你：PET-CT对健康人做全身癌症筛查不推荐。针对性筛查（年龄、性别、家族史决定）才是科学的方式。';fb.style.background='#fff3cd';}else{fb.innerHTML='❌ PET-CT不是设计给健康人做癌症筛查的工具。它的高辐射和高假阳性率会让健康人承受不必要的风险。';fb.style.background='#f8d7da';}fb.style.display='block';}
+function evalD3b(el,ch){var fb=el.parentElement.parentElement.querySelector('[id^="dfb3_2"]');var bs=el.parentElement.querySelectorAll('.choice-btn');bs.forEach(function(b){b.disabled=true;});if(ch==='b'){fb.innerHTML='✅ <strong>理性的选择。</strong>39°C持续3-4天对8岁孩子一般安全。发烧是免疫系统在工作的表现——它能削弱病原体的繁殖能力。关键是观察精神状态：如果孩子仍然能喝水、有一定活力，继续观察；如果精神萎靡、拒绝喝水、超过41°C，立即就医。';fb.style.background='#d4edda';}else{fb.innerHTML='⚠️ 退烧针虽然能快速降温，但发烧本身是免疫防御——退烧可能延长病程。对于精神状态尚可的8岁孩子，39°C持续3天属于可以观察的范畴。当然，任何时候家长不放心都应该咨询医生。';fb.style.background='#fff3cd';}fb.style.display='block';}
+
+document.addEventListener('DOMContentLoaded',function(){renderQ3();var s=localStorage.getItem('mks-body-quiz');if(s){JSON.parse(s).forEach(function(st){if(st.done){qa3++;if(st.ok)qc3++;}});up3();}});
 </script>
 </body>
 </html>
