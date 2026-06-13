@@ -8,12 +8,12 @@
 /* ============================================================
    科技参考3 · MKS 知识主板
    设计：白底 + 琥珀色(#F59E0B)强调 + 卡片式布局
-   纯 HTML/CSS，移动端响应式
+   9标签 MKS 交互页面
    ============================================================ */
 
 :root {
   --bg: #fafbfc;
-  --card-bg: #ffffff;
+  --card: #ffffff;
   --accent: #F59E0B;
   --accent-dark: #D97706;
   --accent-light: #FEF3C7;
@@ -28,24 +28,27 @@
   --radius: 12px;
   --radius-sm: 8px;
   --transition: 0.2s ease;
+  --red: #dc2626;
+  --blue: #2563eb;
+  --green: #059669;
+  --purple: #7c3aed;
+  --orange: #ea580c;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "SimSun", serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.75;
+  line-height: 1.8;
   min-height: 100vh;
 }
 
 a { color: var(--accent-dark); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--accent); }
 
-/* ============================================================
-   TOP NAV BAR
-   ============================================================ */
+/* Top Nav */
 .top-nav {
   position: sticky; top: 0; z-index: 100;
   background: rgba(255,255,255,0.92);
@@ -75,854 +78,1500 @@ a:hover { color: var(--accent); }
   font-size: 13px; color: var(--text-light);
 }
 
-/* ============================================================
-   MAIN CONTAINER
-   ============================================================ */
-.container {
+/* Tab Navigation */
+.tab-nav {
+  position: sticky; top: 48px; z-index: 99;
+  display: flex; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  padding: 0;
+  margin-bottom: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.tab-btn {
+  flex: 1; min-width: 70px;
+  padding: 10px 6px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.78);
+  cursor: pointer;
+  font-size: 12.5px; font-weight: 600;
+  transition: all 0.3s;
+  position: relative;
+  white-space: nowrap;
+}
+.tab-btn:hover, .tab-btn.active {
+  color: #fff;
+  background: rgba(255,255,255,0.14);
+}
+.tab-btn.active::after {
+  content: '';
+  position: absolute; bottom: 0; left: 10%; width: 80%; height: 3px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+/* Tab Section */
+.tab-section {
+  display: none;
+  padding: 24px 20px;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 24px 20px 60px;
+  animation: fadeIn 0.5s;
+}
+.tab-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: clamp(1.4rem, 2.8vw, 2rem); color: var(--accent-dark); text-align: center; margin: 16px 0 8px; }
+h2 { font-size: clamp(1.15rem, 2vw, 1.5rem); color: var(--accent-dark); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin: 20px 0 14px; }
+h3 { font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--text); margin: 14px 0 8px; }
+
+/* Overview */
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin: 16px 0; }
+.overview-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); }
+.overview-card h3 { color: var(--accent-dark); margin-bottom: 10px; }
+
+.goal-box {
+  background: linear-gradient(135deg, #fffbeb, var(--accent-light));
+  border-left: 4px solid var(--accent);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 12px 0;
 }
 
-/* ============================================================
-   INDEX PAGE — HERO
-   ============================================================ */
-.hero {
-  text-align: center;
-  padding: 40px 16px 32px;
-}
-.hero .icon-row {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-.hero h1 {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: 0.04em;
-  margin-bottom: 8px;
-}
-.hero h1 .accent {
-  color: var(--accent-dark);
-}
-.hero .subtitle {
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
-  color: var(--text-light);
-  margin-bottom: 4px;
-}
-.hero .meta {
-  font-size: 0.8rem;
-  color: var(--text-lighter);
-}
-
-/* Divider */
-.divider {
-  display: flex; align-items: center; gap: 16px;
-  margin: 0 auto 40px;
-  max-width: 600px;
-}
-.divider::before, .divider::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-}
-.divider .dot {
-  width: 8px; height: 8px;
-  background: var(--accent);
-  border-radius: 50%;
-}
-
-/* ============================================================
-   INDEX — TOPIC CARDS GRID
-   ============================================================ */
-.topics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
-
-.topic-card {
-  display: flex; flex-direction: column;
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  padding: 28px 24px 24px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-.topic-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-  border-radius: 0 0 2px 2px;
-}
-.topic-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--accent);
-}
-.topic-card .card-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
-}
-.topic-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.topic-card .card-subtitle {
-  font-size: 0.82rem;
-  color: var(--accent-dark);
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-.topic-card .card-desc {
-  font-size: 0.88rem;
-  color: var(--text-light);
-  line-height: 1.65;
-  flex: 1;
-}
-.topic-card .card-count {
-  margin-top: 14px;
-  font-size: 0.78rem;
-  color: var(--text-lighter);
-  display: flex; align-items: center; gap: 6px;
-}
-.topic-card .card-count .badge {
-  display: inline-block;
-  background: var(--accent-light);
-  color: var(--accent-dark);
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-/* ============================================================
-   TOPIC PAGE — HEADER
-   ============================================================ */
-.topic-header {
-  text-align: center;
-  padding: 30px 16px 24px;
-}
-.topic-header .topic-icon {
-  font-size: 44px;
-  margin-bottom: 8px;
-}
-.topic-header h2 {
-  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-  font-weight: 900;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.topic-header .topic-subtitle {
-  font-size: 0.95rem;
-  color: var(--accent-dark);
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-.topic-header .topic-desc {
-  font-size: 0.88rem;
-  color: var(--text-light);
-  max-width: 680px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
-
-/* Stats row */
-.stats-row {
-  display: flex; gap: 12px; flex-wrap: wrap;
-  justify-content: center;
-  margin: 20px 0;
-}
+.stats-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 16px 0; }
 .stat-badge {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 16px;
-  background: var(--card-bg);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 24px;
   font-size: 0.82rem;
   color: var(--text-light);
 }
-.stat-badge .num {
-  font-weight: 700;
-  color: var(--accent-dark);
-  font-size: 1rem;
-}
+.stat-badge .num { font-weight: 700; color: var(--accent-dark); font-size: 1rem; }
 
-/* ============================================================
-   ARTICLE CARDS
-   ============================================================ */
-.articles-list {
-  display: flex; flex-direction: column;
-  gap: 14px;
-  margin-top: 20px;
-}
-
-.article-card {
-  background: var(--card-bg);
+/* Graph */
+.graph-container {
+  background: var(--card);
   border-radius: var(--radius);
+  padding: 16px;
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-  transition: all var(--transition);
-  border-left: 4px solid transparent;
+  text-align: center;
+  overflow-x: auto;
 }
-.article-card:hover {
-  box-shadow: var(--shadow);
-  border-left-color: var(--accent);
+.graph-container svg { max-width: 100%; height: auto; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 12px 0; font-size: 13px; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* Progress */
+.progress-bar { height: 10px; background: var(--border); border-radius: 5px; margin: 12px 0; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 5px; transition: width 0.5s; }
+
+/* Flip Cards */
+.flip-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; margin: 16px 0; }
+.flip-card{perspective:1000px;height:clamp(220px,40vw,280px);margin-bottom:14px}
+.flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+.flip-inner.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; border-radius: 10px;
+  padding: clamp(16px, 3vw, 24px);
 }
-.article-card .art-num {
-  display: inline-block;
-  font-size: 0.7rem;
-  color: var(--text-lighter);
-  background: var(--border-light);
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-bottom: 6px;
-  font-family: monospace;
+.flip-front {
+  background: var(--card);
+  border: 2px solid var(--border);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
 }
-.article-card h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-  line-height: 1.4;
+.flip-front .concept-icon { font-size: 44px; margin-bottom: 8px; }
+.flip-front .concept-name { font-size: 18px; font-weight: 700; color: var(--accent-dark); }
+.flip-front .concept-hint { font-size: 12.5px; color: var(--text-lighter); margin-top: 6px; }
+.flip-back {
+  background: var(--card);
+  border: 2px solid var(--accent);
+  transform: rotateY(180deg);
+  overflow-y: auto;
+  font-size: 13.5px;
+  line-height: 1.7;
 }
-.article-card .art-summary {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  line-height: 1.65;
-  margin-bottom: 8px;
-}
-.article-card .art-insights {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.article-card .insight-tag {
-  font-size: 0.75rem;
+.flip-back h4 { color: var(--accent-dark); font-size: 15px; margin-bottom: 6px; }
+.flip-back .label { display: inline-block; background: var(--accent); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-right: 4px; font-weight: 600; }
+
+.card-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+.card-nav button {
+  padding: 6px 16px;
+  border: 2px solid var(--accent);
+  background: #fff;
   color: var(--accent-dark);
-  background: var(--accent-light);
-  padding: 2px 10px;
-  border-radius: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 13px;
 }
+.card-nav button:hover { background: var(--accent); color: #fff; }
+.card-nav .card-idx { font-size: 13px; color: var(--text-light); min-width: 50px; text-align: center; }
 
-/* ============================================================
-   KEY CONCEPTS section
-   ============================================================ */
-.section-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 40px 0 20px;
-  padding-bottom: 10px;
-  border-bottom: 3px solid var(--accent);
-  display: inline-block;
-}
-.concepts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
-  margin-top: 16px;
-}
-.concept-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
-  padding: 16px 20px;
-  transition: all var(--transition);
-}
-.concept-card:hover {
-  box-shadow: var(--shadow);
-  border-color: var(--accent);
-}
-.concept-card .concept-num {
-  display: inline-block;
-  width: 28px; height: 28px; line-height: 28px;
-  text-align: center;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.concept-card h5 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-.concept-card p {
-  font-size: 0.82rem;
-  color: var(--text-light);
-  line-height: 1.6;
-}
+.card-learned { opacity: 0.5; }
+.card-learned .flip-front { border-color: #ccc; }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.footer {
-  text-align: center;
-  padding: 32px 20px 16px;
-  color: var(--text-lighter);
-  font-size: 0.72rem;
-  border-top: 1px solid var(--border-light);
-  margin-top: 48px;
+/* Quiz */
+.quiz-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.quiz-controls button {
+  padding: 8px 18px;
+  border: 2px solid var(--accent);
+  background: #fff;
+  color: var(--accent-dark);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 13px;
 }
+.quiz-controls button:hover { background: var(--accent); color: #fff; }
+
+.quiz-item { background: var(--card); border-radius: 10px; padding: 16px; margin: 12px 0; border: 1px solid var(--border); }
+.quiz-item h4 { color: var(--accent-dark); margin-bottom: 10px; }
+.quiz-item label { display: block; padding: 8px 12px; margin: 4px 0; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+.quiz-item label:hover { background: var(--accent-light); }
+.quiz-item input[type="radio"] { margin-right: 8px; }
+
+.quiz-feedback { margin-top: 10px; padding: 10px; border-radius: 6px; font-weight: 600; display: none; }
+.quiz-feedback.correct { background: #d4edda; color: #155724; display: block; }
+.quiz-feedback.wrong { background: #f8d7da; color: #721c24; display: block; }
+
+.sa-item { background: var(--card); border-radius: 10px; padding: 16px; margin: 12px 0; border: 1px solid var(--border); }
+.sa-item textarea { width: 100%; min-height: 80px; border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-family: inherit; resize: vertical; margin: 8px 0; }
+.sa-item .show-answer { background: var(--accent-light); padding: 10px; border-radius: 6px; margin-top: 8px; display: none; font-size: 13px; }
+
+.static-quiz{display:none}
+
+/* Exam */
+.exam-timer { font-size: 24px; font-weight: 700; color: var(--accent-dark); text-align: center; margin: 16px 0; }
+.exam-score { font-size: 20px; font-weight: 700; text-align: center; margin: 12px 0; }
+
+/* Review */
+.review-list { list-style: none; margin: 16px 0; }
+.review-list li { padding: 10px 16px; margin: 6px 0; background: var(--card); border-radius: 8px; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; }
+.review-list li:hover { border-color: var(--accent); }
+.review-list li.reviewed { opacity: 0.5; text-decoration: line-through; }
+
+/* Deep Q */
+.dq-item { background: var(--card); border-radius: 10px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--accent); }
+.dq-item .dq-question { font-weight: 700; color: var(--accent-dark); cursor: pointer; }
+.dq-item .dq-answer { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 14px; }
+
+/* Cases */
+.case-card { background: var(--card); border-radius: 10px; padding: 20px; margin: 12px 0; border: 1px solid var(--border); }
+.case-card .case-title { font-weight: 700; color: var(--accent-dark); font-size: 18px; }
+.case-card .case-meta { font-size: 13px; color: var(--text-light); margin: 6px 0; }
+.case-steps { margin: 12px 0; padding-left: 20px; }
+.case-steps li { margin: 6px 0; }
+
+/* Decision */
+.decision-scenario { background: var(--card); border-radius: 10px; padding: 20px; margin: 16px 0; border: 1px solid var(--border); }
+.decision-scenario h4 { color: var(--accent-dark); }
+.decision-scenario select, .decision-scenario button { margin: 8px 4px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-family: inherit; }
+.decision-scenario button { background: var(--accent); color: #fff; cursor: pointer; border: none; font-weight: 600; }
+.decision-output { background: var(--accent-light); padding: 16px; border-radius: 8px; margin-top: 12px; display: none; font-size: 14px; }
+
+/* Toast */
+.toast { position: fixed; top: 20px; right: 20px; background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 8px; z-index: 999; animation: slideIn 0.3s; font-size: 14px; }
+@keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Mind Map */
+.mindmap-container { text-align: center; margin: 16px 0; }
+.mindmap-container svg { max-width: 100%; height: auto; }
+
+/* Footer */
+.footer { text-align: center; padding: 32px 20px 16px; color: var(--text-lighter); font-size: 0.72rem; border-top: 1px solid var(--border-light); margin-top: 40px; }
 .footer a { color: var(--accent-dark); }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 768px) {
-  .topics-grid {
-    grid-template-columns: 1fr;
-  }
-  .container {
-    padding: 16px 12px 40px;
-  }
-  .article-card {
-    padding: 16px;
-  }
-  .hero {
-    padding: 24px 12px 20px;
-  }
-  .top-nav {
-    padding: 8px 12px;
-    gap: 10px;
-  }
-  .concepts-grid {
-    grid-template-columns: 1fr;
-  }
+  .tab-btn { font-size: 11px; padding: 8px 4px; min-width: 55px; }
+  .tab-section { padding: 16px 10px; }
+  .overview-grid, .flip-container { grid-template-columns: 1fr; }
+  .top-nav { padding: 8px 12px; }
 }
-
 @media (max-width: 480px) {
-  .topics-grid,
-  .concepts-grid {
-    grid-template-columns: 1fr;
-  }
-  .topic-card {
-    padding: 20px 16px;
-  }
-  .article-card h4 {
-    font-size: 0.92rem;
-  }
+  .flip-container { grid-template-columns: 1fr; }
+  .tab-btn { font-size: 10px; padding: 6px 2px; min-width: 45px; }
 }
-
 </style>
 </head>
 <body>
 
+<!-- TOP NAV -->
 <div class="top-nav">
   <a href="index.html" class="home-btn">← 科技参考3 主板</a>
-  <span class="breadcrumb">消费品评测与避坑 · 47 篇文章</span>
+  <span class="breadcrumb">消费品评测与避坑 · 47 篇文章 · MKS 最小知识集</span>
 </div>
 
-<div class="container">
-  <div class="topic-header">
-    <div class="topic-icon">🛒</div>
-    <h2>消费品评测与避坑</h2>
-    <p class="topic-subtitle">科技消费品的理性选购指南</p>
-    <p class="topic-desc">电动车、手机、家电、眼镜、降噪耳机……科技消费品琳琅满目，智商税无处不在。47篇文章提供基于科学原理与工程逻辑的选购方法论，帮你避开消费陷阱。</p>
+<!-- TAB NAV -->
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="overview">知识集总览</button>
+  <button class="tab-btn" data-tab="cards">知识卡片</button>
+  <button class="tab-btn" data-tab="quiz">题库系统</button>
+  <button class="tab-btn" data-tab="exam">考试模式</button>
+  <button class="tab-btn" data-tab="review">复习模式</button>
+  <button class="tab-btn" data-tab="mindmap">思维导图</button>
+  <button class="tab-btn" data-tab="deepask">深度追问</button>
+  <button class="tab-btn" data-tab="cases">案例分析</button>
+  <button class="tab-btn" data-tab="decision">实战决策</button>
+</nav>
+
+<!-- ============================================================
+     TAB 0: 知识集总览
+     ============================================================ -->
+<section class="tab-section active" id="tab-overview">
+<h1>🛒 消费品评测与避坑</h1>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">科技消费品的理性选购指南 | 47 篇文章 · 2023-2024</p>
+
+<div class="goal-box">
+  <strong>核心目标：</strong>在消费主义浪潮中，建立基于科学原理与工程逻辑的选购方法论——不被"石墨烯""远红外""负离子"等营销话术迷惑，也不被"一分钱一分货"的朴素信念误导，用第一性原理穿透消费品的技术本质，避开智商税陷阱。
+</div>
+
+<div class="stats-row">
+  <div class="stat-badge"><span class="num">47</span> 篇文章</div>
+  <div class="stat-badge">📅 2023-2024</div>
+  <div class="stat-badge">🎯 10 核心概念</div>
+  <div class="stat-badge">🧠 4 层架构</div>
+</div>
+
+<!-- 概念关系图 -->
+<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
+  <h3>📊 概念关系图 — 消费品评测的四层架构</h3>
+  <div class="graph-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 650" style="max-width:100%;height:auto">
+  <defs>
+    <filter id="gshadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/></marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#059669"/></marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#ea580c"/></marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/></marker>
+  </defs>
+  <rect width="1100" height="650" fill="#fafbfc" rx="8"/>
+
+  <!-- 图例 -->
+  <text x="860" y="32" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700" fill="#1f2937">图例</text>
+  <rect x="860" y="42" width="14" height="14" rx="3" fill="#dc2626"/><text x="882" y="55" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">硬件/参数层</text>
+  <rect x="860" y="62" width="14" height="14" rx="3" fill="#2563eb"/><text x="882" y="75" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">技术/原理层</text>
+  <rect x="860" y="82" width="14" height="14" rx="3" fill="#059669"/><text x="882" y="95" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">使用/实践层</text>
+  <rect x="860" y="102" width="14" height="14" rx="3" fill="#ea580c"/><text x="882" y="115" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">营销/辨别层</text>
+  <rect x="860" y="122" width="14" height="14" rx="3" fill="#7c3aed"/><text x="882" y="135" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">认知/方法论</text>
+  <line x1="860" y1="148" x2="920" y2="148" stroke="#9ca3af" stroke-dasharray="6,3" stroke-width="1.5"/>
+  <text x="882" y="163" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#9ca3af">虚线：反馈迭代</text>
+
+  <!-- Layer 0: 核心 -->
+  <ellipse cx="550" cy="590" rx="130" ry="36" fill="#F59E0B" filter="url(#gshadow)"/>
+  <text x="550" y="584" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="15" font-weight="700" fill="#fff">消费品科学评测体系</text>
+  <text x="550" y="602" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">第一性原理驱动的消费决策</text>
+
+  <!-- Layer 1: 四大维度 -->
+  <!-- 参数解读 -->
+  <rect x="80" y="400" width="200" height="56" rx="10" fill="#dc2626" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="180" y="422" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="14" font-weight="700" fill="#fff">📏 参数解读</text>
+  <text x="180" y="442" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">含绒量/充绒量/蓬松度/电池度数</text>
+
+  <!-- 技术原理 -->
+  <rect x="320" y="400" width="200" height="56" rx="10" fill="#2563eb" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="420" y="422" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="14" font-weight="700" fill="#fff">🔬 技术原理</text>
+  <text x="420" y="442" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">RO膜/热泵/半固态电池/降噪算法</text>
+
+  <!-- 使用科学 -->
+  <rect x="560" y="400" width="200" height="56" rx="10" fill="#059669" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="660" y="422" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="14" font-weight="700" fill="#fff">🏠 使用科学</text>
+  <text x="660" y="442" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">空调/加湿器/风扇/眼镜护理</text>
+
+  <!-- 营销辨别 -->
+  <rect x="800" y="400" width="200" height="56" rx="10" fill="#ea580c" filter="url(#gshadow)" opacity="0.92"/>
+  <text x="900" y="422" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="14" font-weight="700" fill="#fff">🚫 营销辨别</text>
+  <text x="900" y="442" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">石墨烯/远红外/隔空充电/负离子</text>
+
+  <!-- Layer 2: 具体概念 -->
+  <!-- 参数解读下 -->
+  <rect x="20" y="230" width="160" height="52" rx="8" fill="#ef4444" filter="url(#gshadow)"/>
+  <text x="100" y="252" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">羽绒服三参数</text>
+  <text x="100" y="270" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">含绒量·充绒量·蓬松度</text>
+
+  <rect x="200" y="230" width="160" height="52" rx="8" fill="#ef4444" filter="url(#gshadow)"/>
+  <text x="280" y="252" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">电动车续航指标</text>
+  <text x="280" y="270" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">NEDC/CLTC/电池度数·真实续航</text>
+
+  <!-- 技术原理下 -->
+  <rect x="380" y="230" width="160" height="52" rx="8" fill="#3b82f6" filter="url(#gshadow)"/>
+  <text x="460" y="252" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">净水器RO膜</text>
+  <text x="460" y="270" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">通量·脱盐率·废水比</text>
+
+  <rect x="560" y="230" width="160" height="52" rx="8" fill="#3b82f6" filter="url(#gshadow)"/>
+  <text x="640" y="252" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">热泵干衣机</text>
+  <text x="640" y="270" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">压缩机·能效比·冷凝器</text>
+
+  <!-- 使用科学下 -->
+  <rect x="200" y="155" width="160" height="52" rx="8" fill="#10b981" filter="url(#gshadow)"/>
+  <text x="280" y="177" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">空调使用误区</text>
+  <text x="280" y="195" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">35℃以上风扇脱水·细菌滋生</text>
+
+  <rect x="380" y="155" width="160" height="52" rx="8" fill="#10b981" filter="url(#gshadow)"/>
+  <text x="460" y="177" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">不粘锅涂层</text>
+  <text x="460" y="195" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">特氟龙·陶瓷·划痕安全性</text>
+
+  <!-- 营销辨别下 -->
+  <rect x="680" y="230" width="160" height="52" rx="8" fill="#f97316" filter="url(#gshadow)"/>
+  <text x="760" y="252" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">石墨烯电池骗局</text>
+  <text x="760" y="270" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">单原子层·二级科淆</text>
+
+  <rect x="860" y="230" width="160" height="52" rx="8" fill="#f97316" filter="url(#gshadow)"/>
+  <text x="940" y="252" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#fff">隔空充电夸大</text>
+  <text x="940" y="270" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">SAR安全限值·物理天花板</text>
+
+  <!-- 认知方法论层 -->
+  <rect x="350" y="70" width="360" height="48" rx="8" fill="#7c3aed" filter="url(#gshadow)"/>
+  <text x="530" y="92" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="14" font-weight="700" fill="#fff">🧠 消费认知方法论</text>
+  <text x="530" y="109" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">第一性原理→参数拆解→技术原理→识别伪科学→科学使用</text>
+
+  <!-- Edges: Layer 2 → Layer 1 (实线箭头+中文标签) -->
+  <!-- 羽绒服 → 参数解读 -->
+  <line x1="100" y1="282" x2="150" y2="400" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="130" y="340" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#dc2626">量化指标</text>
+
+  <!-- 电动车续航 → 参数解读 -->
+  <line x1="280" y1="282" x2="220" y2="400" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="260" y="340" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#dc2626">测试标准</text>
+
+  <!-- RO膜 → 技术原理 -->
+  <line x1="460" y1="282" x2="440" y2="400" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="440" y="340" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#2563eb">膜分离</text>
+
+  <!-- 热泵 → 技术原理 -->
+  <line x1="640" y1="282" x2="560" y2="400" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="600" y="340" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#2563eb">逆卡诺循环</text>
+
+  <!-- 空调误区 → 使用科学 -->
+  <line x1="280" y1="207" x2="480" y2="400" stroke="#059669" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="360" y="300" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#059669">正确操作</text>
+
+  <!-- 不粘锅 → 使用科学 -->
+  <line x1="460" y1="207" x2="620" y2="400" stroke="#059669" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="560" y="300" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#059669">安全使用</text>
+
+  <!-- 石墨烯 → 营销辨别 -->
+  <line x1="760" y1="282" x2="820" y2="400" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="790" y="340" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#ea580c">伪科学识别</text>
+
+  <!-- 隔空充电 → 营销辨别 -->
+  <line x1="940" y1="282" x2="930" y2="400" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="955" y="340" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#ea580c">物理极限</text>
+
+  <!-- Edges: Layer 1 → 核心 -->
+  <line x1="180" y1="456" x2="440" y2="560" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <line x1="420" y1="456" x2="500" y2="555" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <line x1="660" y1="456" x2="600" y2="555" stroke="#059669" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <line x1="900" y1="456" x2="660" y2="560" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+
+  <!-- 认知方法论 → 四大维度 -->
+  <line x1="450" y1="118" x2="180" y2="230" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowPurple)"/>
+  <line x1="530" y1="118" x2="460" y2="230" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowPurple)"/>
+  <line x1="600" y1="118" x2="640" y2="155" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowPurple)"/>
+  <line x1="650" y1="118" x2="760" y2="230" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowPurple)"/>
+
+  <!-- 虚线回环：使用科学 → 参数解读 (反馈迭代) -->
+  <path d="M 660 400 Q 750 480 400 500 Q 180 510 180 456" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowRed)"/>
+  <text x="430" y="515" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#9ca3af">实践反馈→修正参数认识</text>
+
+  <!-- 虚线回环：营销辨别 → 技术原理 -->
+  <path d="M 900 400 Q 980 350 940 280 Q 900 220 800 282" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowBlue)"/>
+  <text x="960" y="310" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#9ca3af">辨别伪科学→加深原理理解</text>
+
+  <!-- 标题 -->
+  <text x="550" y="18" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#1f2937">消费品评测与避坑 · 概念关系图（四层架构）</text>
+</svg>
   </div>
+</div>
 
-  <div class="stats-row">
-    <div class="stat-badge"><span class="num">47</span> 篇文章</div>
-    <div class="stat-badge">📅 2023-2024</div>
-    <div class="stat-badge">🎯 MKS 最小知识集</div>
+<!-- 创意图：消费决策树 -->
+<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
+  <h3>🎨 创意图 — 消费品"智商税雷达图"</h3>
+  <p style="text-align:center;color:var(--text-light);font-size:13px;margin-bottom:12px">六维度扫描：你购买的消费品在哪个维度踩中了智商税？</p>
+  <div class="graph-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 600" style="max-width:100%;height:auto">
+  <defs>
+    <filter id="cs"><feDropShadow dx="0.5" dy="1" stdDeviation="1.5" flood-opacity="0.1"/></filter>
+  </defs>
+  <rect width="700" height="600" fill="#fafbfc" rx="8"/>
+
+  <!-- 雷达网格 -->
+  <g transform="translate(350,300)">
+    <!-- 同心六边形 -->
+    <polygon points="0,-220 190,-110 190,110 0,220 -190,110 -190,-110" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+    <polygon points="0,-165 143,-83 143,83 0,165 -143,83 -143,-83" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+    <polygon points="0,-110 95,-55 95,55 0,110 -95,55 -95,-55" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+    <polygon points="0,-55 48,-28 48,28 0,55 -48,28 -48,-28" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+
+    <!-- 轴线 -->
+    <line x1="0" y1="0" x2="0" y2="-240" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="0" x2="208" y2="-120" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="0" x2="208" y2="120" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="0" x2="0" y2="240" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="0" x2="-208" y2="120" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="0" x2="-208" y2="-120" stroke="#e5e7eb" stroke-width="1"/>
+
+    <!-- 智商税数据区域 (半透明填充) -->
+    <polygon points="0,-180 120,-60 200,100 50,180 -130,80 -170,-80" fill="#F59E0B" opacity="0.15" stroke="#F59E0B" stroke-width="2.5" filter="url(#cs)"/>
+    <!-- 数据点 -->
+    <circle cx="0" cy="-180" r="5" fill="#dc2626"/>
+    <circle cx="120" cy="-60" r="5" fill="#ea580c"/>
+    <circle cx="200" cy="100" r="5" fill="#F59E0B"/>
+    <circle cx="50" cy="180" r="5" fill="#059669"/>
+    <circle cx="-130" cy="80" r="5" fill="#2563eb"/>
+    <circle cx="-170" cy="-80" r="5" fill="#7c3aed"/>
+
+    <!-- 标签 -->
+    <text x="0" y="-250" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#dc2626">伪科学概念</text>
+    <text x="0" y="-232" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#dc2626">石墨烯/远红外/负离子</text>
+
+    <text x="225" y="-115" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#ea580c">参数虚标</text>
+    <text x="228" y="-97" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#ea580c">NEDC/CLTC续航</text>
+
+    <text x="225" y="125" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#F59E0B">过度营销</text>
+    <text x="228" y="143" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#F59E0B">概念包装/恐吓式营销</text>
+
+    <text x="0" y="260" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#059669">使用误区</text>
+    <text x="0" y="278" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#059669">空调/风扇错误使用方法</text>
+
+    <text x="-225" y="125" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#2563eb">技术替代</text>
+    <text x="-228" y="143" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#2563eb">护眼仪/视力矫正器</text>
+
+    <text x="-225" y="-115" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" font-weight="700" fill="#7c3aed">成本错位</text>
+    <text x="-228" y="-97" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="9" fill="#7c3aed">品牌溢价/渠道加价</text>
+  </g>
+
+  <!-- 底部说明 -->
+  <text x="350" y="595" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#6b7280">六维度雷达扫描 → 越靠外的维度，"智商税风险"越高</text>
+</svg>
   </div>
+  <p style="text-align:center;color:var(--text-light);font-size:12px;margin-top:8px">💡 视觉隐喻：每个消费品都是一次"六维"考验——参数是否真实？技术是否有用？营销是否诚实？使用是否科学？</p>
+</div>
 
-  <!-- Key Concepts -->
-  <div class="section-title">核心概念</div>
-  <div class="concepts-grid">
-    
-      <div class="concept-card">
-        <div class="concept-num">1</div>
-        <h5>特大暴雨越来越频繁，怎么办</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">2</div>
-        <h5>怎么擦眼镜</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">3</div>
-        <h5>新冠后续进展+怎么配眼镜</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">4</div>
-        <h5>人性中的暴力是怎么削弱的</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">5</div>
-        <h5>预防近视中的智商税</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">6</div>
-        <h5>孩子到底要不要午睡</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">7</div>
-        <h5>睡觉应该朝哪边</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">8</div>
-        <h5>扁桃体阑尾的用处是什么</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">9</div>
-        <h5>冬天为什么更容易感冒</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">10</div>
-        <h5>冬天皮肤瘙痒怎么办</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">11</div>
-        <h5>美国什么时候载人登月</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-      <div class="concept-card">
-        <div class="concept-num">12</div>
-        <h5>唱歌为什么跑调</h5>
-        <p>相关文章 1 篇</p>
-      </div>
-  </div>
+<!-- 学习进度 -->
+<div class="overview-card" style="grid-column:1/-1">
+  <h3>📈 全站学习进度</h3>
+  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
+  <p style="text-align:center;font-size:13px;color:var(--text-light)">已掌握 <strong id="learnedCount">0</strong> / 10 核心概念</p>
+</div>
+</section>
 
-  <!-- Article List -->
-  <div class="section-title">全部文章</div>
-  <div class="articles-list">
-    
-      <div class="article-card">
-        <span class="art-num">#7</span>
-        <h4>特大暴雨越来越频繁，怎么办？</h4>
-        <div class="art-summary">尽管距离2023年的夏天已经有段时间了，但是由于这个夏天出现了几场历史级别的特大暴雨，而且这类极端天气在今后会越来越频繁的出现，所以这期《科技参考》，我们还是来说一说。</div>
-        <div class="art-insights"><span class="insight-tag">尽管距离2023年的夏天已经有段时间了，但是由于这个夏天出现了几场历史级别的特大暴雨，而且这类极端天气在今后会越来越频繁的出现，所以这期《科技参考》，我们还是来说一说</span>
-<span class="insight-tag">9月7日-8日，强热带风暴“海葵”给香港带来了创纪录的降雨，打破了自1884年有历史记录以来的最高值</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#14</span>
-        <h4>怎么擦眼镜？</h4>
-        <div class="art-summary">天气凉了，从温暖的室内一步迈出门外，眼镜上一片雾气，或者戴口罩的时候，喷出的湿气让眼镜起雾，然后我们就揪起衣服角擦了擦眼镜，再戴上，发现眼镜片上又粘了一点衣服上的毛，再抻抻袖子，继续擦，把镜片彻底擦干净了。</div>
-        <div class="art-insights"><span class="insight-tag">如果凝结的水分特别的多，最后在镜片上会形成一层均匀的水膜，于是就避免了起雾的效果</span>
-<span class="insight-tag">防雾产品主要有4种——防雾眼镜布、防雾喷剂、防雾湿巾、防雾镜片，它们的原理都是一样的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#21</span>
-        <h4>问答：新冠后续进展+怎么配眼镜？</h4>
-        <div class="art-summary">首先，很多同学听了《怎么擦眼镜》这期节目后，问怎么配眼镜最讲究、最科学，想让我按怎么擦眼镜那种较真的劲儿说说配眼镜，</div>
-        <div class="art-insights"><span class="insight-tag">又到了周末问答！
+<!-- ============================================================
+     TAB 1: 知识卡片
+     ============================================================ -->
+<section class="tab-section" id="tab-cards">
+<h2>🃏 知识卡片</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">点击卡片翻转查看完整知识 | 8 张核心概念卡</p>
 
+<div class="flip-container" id="flipContainer"></div>
 
-首先，很多同学听了《怎么擦眼镜》这期节目后，问怎么配眼镜最讲究、最科学，想让我按怎么擦眼镜那种较真的劲儿说说配眼镜，
-因为配一副数据准确的眼镜远比擦干净更重要</span>
-<span class="insight-tag">散瞳是让控制眼睛晶状体的肌肉松弛下来，让肌肉无法调节晶状体，所以散瞳后测得的是眼睛完全放松下的视力状况</span>
+<div class="card-nav">
+  <button id="prevCard">◀ 上一张</button>
+  <span class="card-idx" id="cardIndex">1/8</span>
+  <button id="nextCard">下一张 ▶</button>
+  <button id="markLearned" style="background:var(--accent);color:#fff">✓ 标记已学</button>
 </div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#29</span>
-        <h4>人性中的暴力是怎么削弱的</h4>
-        <div class="art-summary">达尔文1859年出版《物种起源》时，留下的最大遗憾就是证据不足。也就是说，他论述的是地球上N多种生物的演化规律，但第一手资料又是哪些呢？主要来自1831年-1836年他随着“小猎犬号”环球航行时收集的动植物标本和地质方面的材料，再加上一些他在爱丁堡大学和剑桥大学念书期间去野外上博物学课的素材。</div>
-        <div class="art-insights"><span class="insight-tag">达尔文1859年出版《物种起源》时，留下的最大遗憾就是证据不足</span>
-<span class="insight-tag">但是，你要谈论的可是演化，至少要持续观察N多种动物在若干代繁衍历程中出现的变化，才能总结出所谓的规律吧？实际上，当时没条件做到</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#37</span>
-        <h4>问答：预防近视中的智商税</h4>
-        <div class="art-summary">墨水屏护眼效果怎么样？现在的彩色墨水屏今后发展有很大改进和提升吗？</div>
-        <div class="art-insights"><span class="insight-tag">墨水屏护眼效果怎么样？现在的彩色墨水屏今后发展有很大改进和提升吗？
+<div class="progress-bar"><div class="progress-fill" id="cardProgressBar" style="width:0%"></div></div>
+<p style="text-align:center;font-size:13px;color:var(--text-light)">已掌握 <strong id="cardLearned">0</strong> / 8</p>
+</section>
 
+<!-- ============================================================
+     TAB 2: 题库系统
+     ============================================================ -->
+<section class="tab-section" id="tab-quiz">
+<h2>📝 题库系统</h2>
+<div class="quiz-controls">
+  <button id="randomMCQ">🎲 随机抽15道选择题</button>
+  <button id="randomSA">🎲 随机抽8道简答题</button>
+  <button id="resetQuiz">🔄 重置</button>
+</div>
+<div id="quizContainer" style="margin-top:16px"></div>
+<div class="static-quiz" id="staticQuiz"></div>
+</section>
 
-对于近视和护眼的误解，其实这个问题就很有代表性</span>
-<span class="insight-tag">最典型的误解就是，凡是屏幕发出的光，都像小刀子一样射向孩子的眼睛，所以是伤眼的</span>
+<!-- ============================================================
+     TAB 3: 考试模式
+     ============================================================ -->
+<section class="tab-section" id="tab-exam">
+<h2>⏱ 考试模式</h2>
+<p style="text-align:center;color:var(--text-light)">15 选择题 + 5 简答题 · 30 分钟</p>
+<div class="exam-timer" id="examTimer">30:00</div>
+<div style="text-align:center;margin:12px 0">
+  <button id="startExam" style="padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer">开始考试</button>
+  <button id="submitExam" style="padding:10px 24px;background:var(--accent-dark);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-left:8px">提交交卷</button>
 </div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#38</span>
-        <h4>孩子到底要不要午睡？</h4>
-        <div class="art-summary">很多幼儿园开学已经有一阵子了，不知道孩子们适应的如何。其中最容易出问题的就是两个环节——分离焦虑和不睡午觉。</div>
-        <div class="art-insights"><span class="insight-tag">午睡也是很大的问题，因为全班十几个孩子，如果有1个不睡，而且还哭闹的话，其他孩子也可能会跟着哭闹</span>
-<span class="insight-tag">因为孩子今后必然要经历从父母亲人照顾到集体生活的转变，只要上了幼儿园，后面就是漫长的集体学习生活了，开始不适应，晚半年也会适应</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#39</span>
-        <h4>问答：睡觉应该朝哪边？扁桃体阑尾的用处是什么？</h4>
-        <div class="art-summary">先补充一下OpenAI宫廷大戏的最新进展，可能也是大结局：</div>
-        <div class="art-insights"><span class="insight-tag">先补充一下OpenAI宫廷大戏的最新进展，可能也是大结局：
-美国当地时间11月21日晚间OpenAI宣布，已经原则上达成协议，山姆·阿尔特曼（Sam Altman）重返公司担任CEO，“并组建新的董事会”</span>
-<span class="insight-tag">”
-微软CEO纳德拉则表示，对OpenAI董事会的变化感到鼓舞，这是更稳定的OpenAI治理的关键第一步</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#40</span>
-        <h4>问答：冬天为什么更容易感冒？</h4>
-        <div class="art-summary">这期答疑开始前，我先说一个关于提问的建议，就是大家在提问前，可以先用搜索功能在App里查查关键字。我在后台看到的问题，大约一半左右从前都回答过。没回答过的，而且记录在我问题积累的小本本中的，我都会给提问的人回复一个“收录一下”。</div>
-        <div class="art-insights"><span class="insight-tag">这期答疑开始前，我先说一个关于提问的建议，就是大家在提问前，可以先用搜索功能在App里查查关键字</span>
-<span class="insight-tag">但由于问题增加的速度大于解答的速度，所以并不是每个回复了“收录一下”的同学都能马上得到回复</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#52</span>
-        <h4>问答：冬天皮肤瘙痒怎么办？美国什么时候载人登月？</h4>
-        <div class="art-summary">我生活在北方，为什么冬天一到，身上就开始搔痒，尤期是腿上？这是身体的什么信号呢？怎样做才能让它不要一年一痒呢？</div>
-        <div class="art-insights"><span class="insight-tag">我生活在北方，为什么冬天一到，身上就开始搔痒，尤期是腿上？这是身体的什么信号呢？怎样做才能让它不要一年一痒呢？
+<div class="exam-score" id="examScore"></div>
+<div id="examContainer"></div>
+</section>
 
+<!-- ============================================================
+     TAB 4: 复习模式
+     ============================================================ -->
+<section class="tab-section" id="tab-review">
+<h2>📖 复习模式</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">错题重做 · 核心概念复习</p>
+<div style="text-align:center;margin:12px 0">
+  <button id="startReview" style="padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer">开始复习</button>
+  <button id="exportWrong" style="padding:10px 18px;background:#fff;color:var(--accent-dark);border:2px solid var(--accent);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-left:8px">📤 导出错题</button>
+</div>
+<ul class="review-list" id="reviewList"></ul>
+</section>
 
-除去疾病的因素外，冬季皮肤瘙痒最主要的原因就是空气变得太干燥了，干燥的空气让皮肤最外层的角质层失水翘起</span>
-<span class="insight-tag">所以，当角质层翘起来后，更多的深层组织会暴露在外，受到外界的刺激，传达到神经末梢就会痒痒</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#57</span>
-        <h4>问答：唱歌为什么跑调？测血糖手表是智商税吗？</h4>
-        <div class="art-summary">这周一的参考里我留了一个问题：一个人平时唱歌就走调，或者一个人平时唱歌就特别好听、特别准，这个区别是什么原因造成的？</div>
-        <div class="art-insights"><span class="insight-tag">这周一的参考里我留了一个问题：一个人平时唱歌就走调，或者一个人平时唱歌就特别好听、特别准，这个区别是什么原因造成的？
-我看很多人都说是耳朵的原因，就是因为听不准才唱不准</span>
-<span class="insight-tag">实际上，
-科学研究发现，主要原因还是缺少训练，真正天生耳朵不行、分辨不出来音高上微小差异的人占比是很少的，大约只占全部人群的1.5%</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#60</span>
-        <h4>取暖器里的智商税</h4>
-        <div class="art-summary">最近一段时间，北半球终于进入了寒冷状态，随之而来的就是取暖问题。</div>
-        <div class="art-insights"><span class="insight-tag">最近一段时间，北半球终于进入了寒冷状态，随之而来的就是取暖问题</span>
-<span class="insight-tag">空调取暖效率秒杀电暖器
-按工作方式分，冬季取暖设备就只有两类：第一类是把电能直接转化为热能，最典型的就是150块钱到450块钱为主的电暖器</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#61</span>
-        <h4>电暖器应该怎么买？</h4>
-        <div class="art-summary">上期我们详细说了，电暖器产热效率不如空调但取暖效果并不输空调的原因，以及电暖器销售中普遍存在的两个夸大的卖点——远红外加热和石墨烯材料。</div>
-        <div class="art-insights"><span class="insight-tag">上期我们详细说了，电暖器产热效率不如空调但取暖效果并不输空调的原因，以及电暖器销售中普遍存在的两个夸大的卖点——远红外加热和石墨烯材料</span>
-<span class="insight-tag">这种长条状的暖气沿着踢脚线摆放，并不单独占据一定的面积，节省空间，所以凡是家里做了一定装修的，都爱选这款</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#68</span>
-        <h4>加湿器应该怎么买？</h4>
-        <div class="art-summary">上周在北方温度狂降的时候我们谈了电暖器的智商税和选购要点，大家觉得非常实用，很多人希望我再用同样的逻辑说说加湿器。这确实也是北方冬天特别受关注的家电。</div>
-        <div class="art-insights"><span class="insight-tag">对于加湿器来说，尽管加湿量和噪音这两项指标特别显眼，但在实际的长时间使用中，这两个指标反而是最不影响使用体验的</span>
-<span class="insight-tag">最影响使用体验的其实是长期使用中是不是省心，其中会不会发酸发臭和会不会漏水</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#69</span>
-        <h4>问答：怎么看董宇辉事件？暖手宝安全吗？</h4>
-        <div class="art-summary">我在这次董宇辉和东方小孙的矛盾中才仔细看了董宇辉不同时期的临场发挥。之前直播火爆时，我以为那些出色的发挥都是百里挑一的。但这次发现，人家就是口才好，有观众缘，哪怕面对挑衅和攻击，也都厚道的自己忍了。从能力到品格，都非常让人欣赏。</div>
-        <div class="art-insights"><span class="insight-tag">我生活中观察，那些优秀的人，在做人生重大选择时有两种风格：一种就是自身确实有一项特长，但他瞄准的目标还需要99项他不具备的条件，于是孤注一掷，一项项的搞定，最后事情干成了</span>
-<span class="insight-tag">在之后四五年里，因为他特长的发挥，那99项条件有几项他慢慢也能自己完成了</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#70</span>
-        <h4>小米汽车SU7发布会看点</h4>
-        <div class="art-summary">本来今天安排的是周末答疑，不过由于小米首款汽车在12月28日发布了，所以咱们临时插播一期小米汽车的内容，这期答疑向后顺延播出。</div>
-        <div class="art-insights"><span class="insight-tag">本来今天安排的是周末答疑，不过由于小米首款汽车在12月28日发布了，所以咱们临时插播一期小米汽车的内容，这期答疑向后顺延播出</span>
-<span class="insight-tag">如果你感兴趣可以点开屏幕看看，不看也不影响理解，因为我会挑其中几个要点来说说</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#74</span>
-        <h4>除湿机应该怎么买？</h4>
-        <div class="art-summary">讲了电暖器、加湿器应该怎么买之后，很多同学继续提问，除湿机应该怎么买？3000多块钱的电吹风是不是智商税？买独立式的烘干机还是买洗烘一体的？微蒸烤箱、水波炉值不值得买？抽油烟机怎么买？等等问题。</div>
-        <div class="art-insights"><span class="insight-tag">讲了电暖器、加湿器应该怎么买之后，很多同学继续提问，除湿机应该怎么买？3000多块钱的电吹风是不是智商税？买独立式的烘干机还是买洗烘一体的？微蒸烤箱、水波炉值不值得买？抽油烟机怎么买？等等问题</span>
-<span class="insight-tag">所以我也打算做一个系列，专门讲家用电器的选购，主要结合最近几年新出现的功能</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#75</span>
-        <h4>问答：元旦为什么是1月1日？</h4>
-        <div class="art-summary">为什么把元旦定在1月1号，而不是冬至、秋分、夏至之类的地球和太阳有明显位置关系的日子？或者说，元旦这天地球和太阳存在什么样的特殊关系呢？</div>
-        <div class="art-insights"><span class="insight-tag">而这个距今2000多年的儒略历，其实更接近今天99%以上的人对历法的认知</span>
-<span class="insight-tag">就是一年365.25天，所以每四年，积累4个0.25天后，需要加1天，于是有了闰2月</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#87</span>
-        <h4>问答：微型核电池是新方向吗？光速为什么不变？</h4>
-        <div class="art-summary">看到一个新闻说，中国微型核电池即将量产，硬币大小，手机50年都不用充电，这是不是电池发展的新方向？</div>
-        <div class="art-insights"><span class="insight-tag">介绍中说，它们的放射性同位素电池，原理是将核同位素衰变释放的能量转化为电能</span>
-<span class="insight-tag">因为担心病人死后火化时出现放射性物质的泄漏，于是后来换用了镍氢镍镉的充电电池和后续的锂电池，后续换上的电池一颗可以用10年左右，给心脏起搏器换电池时还需要动手术</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#99</span>
-        <h4>问答：暗物质是什么+羽绒服怎么洗？</h4>
-        <div class="art-summary">暗物质是不是不发光的天体，或者类似黑洞一样的用电磁波无法直接观测到的物体？</div>
-        <div class="art-insights"><span class="insight-tag">并不是因为我们用望远镜观测不到，就把它们定义成暗的、黑的，而是额外定义出一种奇特的物质</span>
-<span class="insight-tag">和因为太远或者光线太弱，用望远镜看不到的那些天体和暗物质是有本质不同的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#105</span>
-        <h4>问答：特斯拉自动驾驶水平如何+护眼仪怎么买？</h4>
-        <div class="art-summary">现在是特斯拉的自动驾驶技术最强吗？不知道纯视觉方案的特斯拉，在现在动辄3颗激光雷达的车型里，还能不能做到最强？</div>
-        <div class="art-insights"><span class="insight-tag">现在是特斯拉的自动驾驶技术最强吗？不知道纯视觉方案的特斯拉，在现在动辄3颗激光雷达的车型里，还能不能做到最强？
+<!-- ============================================================
+     TAB 5: 思维导图
+     ============================================================ -->
+<section class="tab-section" id="tab-mindmap">
+<h2>🧠 思维导图 — 消费品选购知识体系</h2>
+<div class="mindmap-container" id="mindMapContainer">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" style="max-width:100%;height:auto">
+  <defs>
+    <filter id="mmshadow"><feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-opacity="0.12"/></filter>
+  </defs>
+  <rect width="1000" height="720" fill="#fafbfc" rx="8"/>
 
+  <!-- 中心节点 -->
+  <ellipse cx="500" cy="360" rx="100" ry="42" fill="#F59E0B" filter="url(#mmshadow)"/>
+  <text x="500" y="352" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700">消费品科学评测</text>
+  <text x="500" y="374" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="Noto Sans SC,sans-serif" font-size="11">第一性原理消费框架</text>
 
-简单说，特斯拉的方案和所有其他家都不一样，而且研发模式也不一样</span>
-<span class="insight-tag">从当前国内外的最新实际驾驶评测来看，特斯拉纯视觉的方案和使用激光雷达的方案，应该是旗鼓相当的水平</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#107</span>
-        <h4>苹果Vision Pro的领先与不足</h4>
-        <div class="art-summary">苹果在2024年1月19日晚开启了头戴式设备Vision Pro的抢购，售价3499美元-3899美元，合人民币大约2.5万-2.8万。但5分钟之内，服务器就被挤爆了，又过了10分钟，显示已售罄。而代购价格普遍超过4万元人民币。</div>
-        <div class="art-insights"><span class="insight-tag">首先，它应该叫VR（虚拟现实）还是MR（混合现实）呢？其实这两种功能都有，所以就用它的原名Vision Pro称呼它才是最恰当的</span>
-<span class="insight-tag">戴好Vision Pro后，如果不打开电源，你看到的其实是一片漆黑，和戴上黑色眼罩是一样的，只有启动以后才能看到周围的环境</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#123</span>
-        <h4>问答：怎么看苹果取消造车和李一舟事件？</h4>
-        <div class="art-summary">苹果造车的进展，我们曾经在过往几季的《科技参考》中说过3期，但苹果自己没有一次主动透露过相关消息。</div>
-        <div class="art-insights"><span class="insight-tag">而我们知道，哪怕今天自动驾驶最强的特斯拉，自动驾驶也只有L3+的水平</span>
-<span class="insight-tag">所以，一套完全匹配L5级自动驾驶的车辆，与之相配的硬件就没法确定</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#129</span>
-        <h4>半固态电池算固态电池吗？</h4>
-        <div class="art-summary">好几年前，很多车企都在宣传自家车要用上固态电池了。但几年过去了，业内又一直在说固态电池要再过5-10年量产。于是发现，车企宣传的其实并不是固态电池，而是半固态电池。</div>
-        <div class="art-insights"><span class="insight-tag">内卷的最大特征就是，在技术没有本质提升的情况下，竞争谁的售价更低</span>
-<span class="insight-tag">1、提升能量密度
-今天锂离子电池提高能量密度的主流方式就是在负极加入硅，让硅构建出可容纳锂离子的众多房间，理论计算中，最大值可以接近4200mAh/g</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#131</span>
-        <h4>问答：宝石的其他问题+MH370是怎么消失的？</h4>
-        <div class="art-summary">为什么后来结婚都送钻石，而不是送蓝宝石、红宝石和祖母绿？</div>
-        <div class="art-insights"><span class="insight-tag">在戴比尔斯1867年发现南非大钻石矿之前，红宝石、蓝宝石、绿宝石、钻石这4种贵重宝石的地位和产量其实是相当的</span>
-<span class="insight-tag">但本质原因，还是因为在地壳储量上，钻石远远多于蓝宝石、红宝石和祖母绿，
-于是发现大的钻石矿坑的概率远远高于发现其他宝石的矿坑</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#134</span>
-        <h4>降噪耳机水准还会大幅升级</h4>
-        <div class="art-summary">这期《科技参考》，我给大家介绍一个不久之后就会广泛应用在各耳机产品中的新技术——语义听觉（semantic hearing）。</div>
-        <div class="art-insights"><span class="insight-tag">但是2017年之后的演讲，杨振宁先生就再也不用别人在耳边复述了，因为他配了一个新的助听器</span>
-<span class="insight-tag">有一次，还因为一个问题和台下距离他七八米的小同学你一句、我一句争了起来</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#165</span>
-        <h4>热水器应该怎么买？</h4>
-        <div class="art-summary">这期《科技参考》，我们来说说热水器怎么买。</div>
-        <div class="art-insights"><span class="insight-tag">原因是，天然气燃烧时，给水加热的功率大约有30千瓦，远远大于家庭用电单个插座能提供的上限3.5千瓦</span>
-<span class="insight-tag">所以，燃气热水器哪怕是在冬天，只要气不断、水不断，就可以一直提供热水，哪怕把水流开到最大，哪怕要求温度超过50℃，也没有问题</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#169</span>
-        <h4>干衣机应该怎么买（上）</h4>
-        <div class="art-summary">继续我们的“家用电器怎么买”系列内容。今天说说能大幅改善生活体验的家用电器——干衣机。由于这类产品的种类很多，需求各异，价格从两三百元到两三万元不等，所以我们把内容分成（上）（下）两期。第一期说说各类不同干衣机的大致功能和适用人群，第二期详细介绍其中最主要的独立式热泵干衣机。</div>
-        <div class="art-insights"><span class="insight-tag">由于这类产品的种类很多，需求各异，价格从两三百元到两三万元不等，所以我们把内容分成（上）（下）两期</span>
-<span class="insight-tag">第一期说说各类不同干衣机的大致功能和适用人群，第二期详细介绍其中最主要的独立式热泵干衣机</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#170</span>
-        <h4>干衣机应该怎么买（下）</h4>
-        <div class="art-summary">上一期我们详细介绍了四种干衣机。虽然性能差异很大，但是价格差异也很大，能从低到高适应不同的人群。今天这一期，我们着重介绍性能最理想、设计最成熟、适合3-6个人家庭长期使用的那种热泵式干衣机。</div>
-        <div class="art-insights"><span class="insight-tag">今天这一期，我们着重介绍性能最理想、设计最成熟、适合3-6个人家庭长期使用的那种热泵式干衣机</span>
-<span class="insight-tag">市面上体积和洗衣机大小类似的烘干机，最小的容量大约是8公斤，上面还有9公斤、10公斤、12公斤等等</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#178</span>
-        <h4>高不可攀的新款 iPad Pro</h4>
-        <div class="art-summary">2024年5月8日，苹果突然开了一场只有38分钟的发布会。虽然外界早就知道下一代iPad要发布了，但谁都没想到，这次发布会里的iPad Pro实在有点太高端了，不但与之前产品没有衔接，而且也没有给之后留出升级的余地。</div>
-        <div class="art-insights"><span class="insight-tag">13英寸的顶配，纳米纹理玻璃屏幕+2TB的存储容量，带上一根最新的Apple Pencil，价格要23000多块钱</span>
-<span class="insight-tag">最重要的产品自然是iPhone，每年的销售额占苹果总销售额的1/2到2/3</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#190</span>
-        <h4>问答：纯电动车真实续航最远多少公里？</h4>
-        <div class="art-summary">现在的纯电动汽车，在能买到的型号里，真实续航里程最远的能跑多远？</div>
-        <div class="art-insights"><span class="insight-tag">现在的纯电动汽车，在能买到的型号里，真实续航里程最远的能跑多远？
-这当然要外加很多限定条件了</span>
-<span class="insight-tag">我们按影响实际续航的因素，从大往小了说：
-最重要因素就是电池电量</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#204</span>
-        <h4>问答：吹空调为什么肩膀疼？为什么压缩即智能？</h4>
-        <div class="art-summary">夏天被空调冷风从头顶向下吹，就会肩膀疼。用热帖捂热着，能减轻疼痛。这是怎么回事？</div>
-        <div class="art-insights"><span class="insight-tag">为什么会出现退行性变化呢？
-绝大部分人都是因为衰老导致的，该补充上的软骨和滑液没有能力补充了</span>
-<span class="insight-tag">在关节退行性变化的初期，比如四五十岁的时候，其实还不是很严重，于是当我们正常活动的时候，这些不断产生的炎症因子会被血流带走，在关节局部积累的浓度并不高，所以不感觉疼</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#209</span>
-        <h4>问答：智能驾驶今天怎么样了？一箱油可以续航2000公里吗？</h4>
-        <div class="art-summary">简单地说，已经量产的车上，实际道路上使用的最高水平，已经可以减轻一半以上的驾驶疲劳感了。</div>
-        <div class="art-insights"><span class="insight-tag">现在的智能驾驶智能到什么程度了？
-简单地说，已经量产的车上，实际道路上使用的最高水平，已经可以减轻一半以上的驾驶疲劳感了</span>
-<span class="insight-tag">具体来说，智能驾驶受到训练的影响很大，所以别看特斯拉的FSD V12在油管上有很多试驾，表现出很高的水平，但这种算法直接拿到中国还是会水土不服</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#210</span>
-        <h4>2024全球开发者大会：苹果都发布了什么？</h4>
-        <div class="art-summary">6月11日凌晨，苹果举办了2024年度的全球开发者大会（WWDC2024）。这次发布会是许多年来苹果第一次完全没有硬件产品的发布会，由于全部都是软件，所以非常细碎和杂乱。</div>
-        <div class="art-insights"><span class="insight-tag">这次发布会是许多年来苹果第一次完全没有硬件产品的发布会，由于全部都是软件，所以非常细碎和杂乱</span>
-<span class="insight-tag">如果用最简短的话概括，
-这次苹果发布会上露面的是6条产品线的操作系统的更新细节，缺少自主创新，主要创新是把AI功能集成到操作系统中</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#215</span>
-        <h4>问答：孩子多大可以看电视？怎么看姜萍的数学成绩？</h4>
-        <div class="art-summary">宝宝多大以后可以看电视？看很多文章说必须18个月之后，也有说是2岁前禁止看，还有说是3岁前的。到底哪个是对的？</div>
-        <div class="art-insights"><span class="insight-tag">到底哪个是对的？
-具体来说，各国或者各种研究的结论不一样，再加上解读人的理解不同，就造成了这样的差异</span>
-<span class="insight-tag">如果从各种机构中挑一个来采纳，我觉得就用世界卫生组织给的建议，这个相对是最保守的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#221</span>
-        <h4>问答：听得到能提升成绩吗？矿泉水瓶子改装空调？</h4>
-        <div class="art-summary">我写这期答疑前一天下午，突然有好几个同学和同学家长都和我说，今年北京中考英语阅读第三篇就是你那期</div>
-        <div class="art-insights"><span class="insight-tag">我一看，这篇文章发布的时间正好在考试前10天，所以如果孩子平时习惯听《科技参考》的话，大约能帮忙提高个一两分</span>
-<span class="insight-tag">因为顶多就涉及3个选择题，6分而已，完全没听过《科技参考》，就算文章没看太懂，瞎猜也能拿到其中4分，所以《科技参考》顶多帮你多拿2分</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#225</span>
-        <h4>洗碗机怎么买？</h4>
-        <div class="art-summary">有一些家用电器是很成熟，但有很多家庭没有配备的。</div>
-        <div class="art-insights"><span class="insight-tag">但由于常年以来的习惯，大家一直觉得这些家用电器不实用，所以哪怕是家里大装修，都没把它们列入其中</span>
-<span class="insight-tag">扫地机其实没有什么可说，因为产品体积很小，并不用花心思为它预留空间，接水接电接管道，只要在大的电商平台搜搜购买排名前5的，随便买一款都会是合适的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#226</span>
-        <h4>问答：日本食人菌危险吗？骁龙轻薄本能买吗？电梯球怎么形成？</h4>
-        <div class="art-summary">日本的食人菌感染，死亡率有30%，48小时内就会死亡，很恐怖。这是怎么回事？中国有没有这种细菌的传播？</div>
-        <div class="art-insights"><span class="insight-tag">我们之前专门用一期节目
-《从链球菌看致病微生物的演化》
-说过链球菌，这是一种比较危险的细菌，因为它对抗人体免疫的能力有很多，并且还有比较高的变异性来适应不同环境，比如皮肤表面，疫苗也只是针对肺炎链球菌有</span>
-<span class="insight-tag">细菌感染到肌肉组织都会有这个症状，但是M1型的尤其严重，而M1UK子分支比M1还要严重，因为它分泌的猩红热毒素比M1高出5倍</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#232</span>
-        <h4>问答：为什么最近1万年才出现农业？怎么用好风扇？</h4>
-        <div class="art-summary">智人的历史有10万年，为什么只有最近1万年才开始从事农业？</div>
-        <div class="art-insights"><span class="insight-tag">智人的历史有10万年，为什么只有最近1万年才开始从事农业？
-简单回答，主要是气候和人口总数共同决定的，气候原因占比最大</span>
-<span class="insight-tag">通过上面这张最近15万年全球气温变化图
-我们可以看到，相比公元1000年的中世纪的全球平均气温来说，过去10万年温度一直很低，比中世纪低了2-9℃</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#244</span>
-        <h4>问答：新型超导体是什么？巴黎奥运会要自带空调？</h4>
-        <div class="art-summary">中国发现了新型超导体的新闻，能不能说说？是不是又和之前各种高温超导一样是骗人的？</div>
-        <div class="art-insights"><span class="insight-tag">最早的40年时间主要用各种单质或者简单的化合物寻找超导更高的临界温度</span>
-<span class="insight-tag">从1986年开始，超导研究进入了一个炼金术士式的模式，因为已经没有理论了，大家就靠猜和撞大运</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#254</span>
-        <h4>纹身是一生的负担</h4>
-        <div class="art-summary">我在后台经常遇到用户问我，能不能说说纹身对身体的影响？所以这期《科技参考》，我就来仔细说说。</div>
-        <div class="art-insights"><span class="insight-tag">我在后台经常遇到用户问我，能不能说说纹身对身体的影响？所以这期《科技参考》，我就来仔细说说</span>
-<span class="insight-tag">在2015年的最新研究中，科学家又发现了8个之前在奥兹冰人身上没有记录过的纹身，于是这个猎人身上到现在为止一共发现了61处纹身</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#269</span>
-        <h4>问答：汉朝比今天更热吗？怎么看待知网禁止秘塔搜索？</h4>
-        <div class="art-summary">记得好几位老师说过，汉朝比现在的气候还要温暖，中国史书上也有记载，北方能生产热带的植物，四川能生产荔枝等等。有没有可能现在的变暖和汉朝时的变暖差不多呢？</div>
-        <div class="art-insights"><span class="insight-tag">具体的说：
-地球最近1万年的历史中确实出现过六七次快速且大幅度的变暖</span>
-<span class="insight-tag">因为比较扎实的证据其实是19年后才有的，也就是格陵兰岛上取得的冰芯</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#273</span>
-        <h4>不粘锅有划痕了需要换吗？</h4>
-        <div class="art-summary">我们经常听到一种说法，“不粘锅出现了划痕就必须换掉，因为它使用一种含氟的涂层，这是剧毒物质”。今天我们就来仔细说说这个问题。</div>
-        <div class="art-insights"><span class="insight-tag">我们经常听到一种说法，“不粘锅出现了划痕就必须换掉，因为它使用一种含氟的涂层，这是剧毒物质”</span>
-<span class="insight-tag">尽管大多数情况下我们都把使用了特氟龙涂层的锅叫作不粘锅，但如果综合市面上所有称为“不粘锅”的产品，一捋就会发现，其实除了使用特氟龙的不粘锅外，还有使用陶瓷不粘层和硅不粘层的锅</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#277</span>
-        <h4>净水器该怎么买？</h4>
-        <div class="art-summary">这期《科技参考》，我们说说净水器怎么买。这是咱们各种技术含量较高的家用电器中大家呼声很高的家用电器。</div>
-        <div class="art-insights"><span class="insight-tag">但实际上，你如果习惯了水壶倒水的速度的话，800G通量的净水器可能就是你接受的下限，比这个还低的，你就会觉得净水器出水实在太慢了</span>
-<span class="insight-tag">十多年前的市场中，RO膜净水器还是非常高端的产品，所以当时不是主流</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#280</span>
-        <h4>问答：双黄蛋是科技与狠活吗？固态电池又有突破了？</h4>
-        <div class="art-summary">前几天，我爸爸在家附近的生鲜超市买了一袋鸡蛋，我发现里面的每一个都是双黄蛋。如果一个两个还可以理解，但是一袋子都是双黄的，我都有点不敢吃了。</div>
-        <div class="art-insights"><span class="insight-tag">有时这个过程会出错，就是相隔很近的时间，比如几十分钟内排了2个卵子出来，而后续加工过程不能把2个卵子区别对待，于是用蛋白包裹的过程、碳酸钙沉积的过程都是围绕2个卵子为核心一起进行的，这就是双黄蛋了</span>
-<span class="insight-tag">一只蛋鸡的一生是这样度过的：
-破壳出生后，最初3个月逐渐长大，这时候它不下蛋</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#282</span>
-        <h4>微信 vs 苹果，二选一？</h4>
-        <div class="art-summary">最近一周，苹果和腾讯因为苹果税交不交的问题打了起来。今天的《科技参考》，我们就来解读这个事件，并给出预测。</div>
-        <div class="art-insights"><span class="insight-tag">这次之所以闹到众人皆知，主要是因为这样的传言多了起来：iOS升级到18.2后，iPhone将不能使用微信了，到时候二选一，你选谁呢？这消息还是有点吓人的，毕竟全中国有2.5亿人通过iPhone使用微信，这要是不能用，实在不方便</span>
-<span class="insight-tag">游戏里的内购，两个平台也大致类似，因为安卓应用商店对游戏类软件的内购也收一笔渠道费用</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#284</span>
-        <h4>半固态电池能买吗？电池容量反向虚标？</h4>
-        <div class="art-summary">这期《科技参考》，我们来说说纯电动新能源汽车。</div>
-        <div class="art-insights"><span class="insight-tag">尽管各个车企喊固态电池已经很久了，但最终只有少数几家车企推出了实际上只能算是半固态电池的产品</span>
-<span class="insight-tag">再考虑到纯电动汽车价格一直猛降，很多人就开始动心思，干脆就一步到位，选续航里程最长的</span>
-</div>
-      </div>
-      <div class="article-card">
-        <span class="art-num">#287</span>
-        <h4>问答：iPhone16值得买吗？中国足球为什么退步大？</h4>
-        <div class="art-summary">简单回答，如果到了明年3月份还没有落实中文的Apple Intelligence的话，就干脆直接等17代iPhone就好。</div>
-        <div class="art-insights"><span class="insight-tag">iPhone 16 值不值得买？
-简单回答，如果到了明年3月份还没有落实中文的Apple Intelligence的话，就干脆直接等17代iPhone就好</span>
-<span class="insight-tag">具体来说，因为这一代iPhone是从硬件配置到操作系统全面适配AI的一代，所以AI功能如果暂时还不能用，那这一代最大的亮点就完全用不上</span>
-</div>
-      </div>
-  </div>
+  <!-- 分支1: 家电选购 → 右上 -->
+  <ellipse cx="710" cy="180" rx="85" ry="32" fill="#dc2626" filter="url(#mmshadow)"/>
+  <text x="710" y="176" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">🏠 家电选购</text>
+  <text x="710" y="194" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">空调·加湿器·净水器·干衣机·洗碗机</text>
+  <line x1="590" y1="340" x2="630" y2="200" stroke="#dc2626" stroke-width="2.5"/>
 
-  <footer class="footer">
-    <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS</p>
-  </footer>
+  <rect x="820" y="100" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="118" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">空调用电效率COP</text>
+  <line x1="780" y1="170" x2="825" y2="110" stroke="#dc2626" stroke-width="1.5"/>
+
+  <rect x="820" y="140" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="158" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">RO膜通量/脱盐率</text>
+  <line x1="780" y1="178" x2="825" y2="150" stroke="#dc2626" stroke-width="1.5"/>
+
+  <rect x="820" y="180" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="198" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">热泵式 vs 冷凝式</text>
+  <line x1="780" y1="186" x2="825" y2="190" stroke="#dc2626" stroke-width="1.5"/>
+
+  <rect x="820" y="220" width="140" height="26" rx="5" fill="#ef4444" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="238" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">加湿器不发酸秘诀</text>
+  <line x1="780" y1="195" x2="825" y2="230" stroke="#dc2626" stroke-width="1.5"/>
+
+  <!-- 分支2: 数码电子 → 右下 -->
+  <ellipse cx="710" cy="540" rx="85" ry="32" fill="#2563eb" filter="url(#mmshadow)"/>
+  <text x="710" y="536" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">📱 数码电子</text>
+  <text x="710" y="554" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">手机·平板·降噪耳机·Vision Pro</text>
+  <line x1="590" y1="380" x2="630" y2="520" stroke="#2563eb" stroke-width="2.5"/>
+
+  <rect x="820" y="460" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="478" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">Apple Silicon能效比</text>
+  <line x1="780" y1="530" x2="825" y2="470" stroke="#2563eb" stroke-width="1.5"/>
+
+  <rect x="820" y="500" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="518" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">降噪耳机语义听觉</text>
+  <line x1="780" y1="538" x2="825" y2="510" stroke="#2563eb" stroke-width="1.5"/>
+
+  <rect x="820" y="540" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="558" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">Vision Pro VST技术</text>
+  <line x1="780" y1="547" x2="825" y2="550" stroke="#2563eb" stroke-width="1.5"/>
+
+  <rect x="820" y="580" width="140" height="26" rx="5" fill="#3b82f6" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="890" y="598" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">iPhone更新节奏判断</text>
+  <line x1="780" y1="557" x2="825" y2="590" stroke="#2563eb" stroke-width="1.5"/>
+
+  <!-- 分支3: 汽车出行 → 左下 -->
+  <ellipse cx="290" cy="540" rx="85" ry="32" fill="#059669" filter="url(#mmshadow)"/>
+  <text x="290" y="536" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">🚗 汽车出行</text>
+  <text x="290" y="554" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">电动车·自动驾驶·氢燃料·换电</text>
+  <line x1="410" y1="380" x2="370" y2="520" stroke="#059669" stroke-width="2.5"/>
+
+  <rect x="40" y="460" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="478" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">真实续航=电池度数判断</text>
+  <line x1="220" y1="530" x2="175" y2="470" stroke="#059669" stroke-width="1.5"/>
+
+  <rect x="40" y="500" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="518" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">换电 vs 快充成本分析</text>
+  <line x1="220" y1="538" x2="175" y2="510" stroke="#059669" stroke-width="1.5"/>
+
+  <rect x="40" y="540" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="558" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">半固态≠固态电池</text>
+  <line x1="220" y1="547" x2="175" y2="550" stroke="#059669" stroke-width="1.5"/>
+
+  <rect x="40" y="580" width="140" height="26" rx="5" fill="#10b981" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="598" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">FSD纯视觉vs激光雷达</text>
+  <line x1="220" y1="557" x2="175" y2="590" stroke="#059669" stroke-width="1.5"/>
+
+  <!-- 分支4: 生活日用 → 左上 -->
+  <ellipse cx="290" cy="180" rx="85" ry="32" fill="#ea580c" filter="url(#mmshadow)"/>
+  <text x="290" y="176" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="13" font-weight="700">👕 生活日用</text>
+  <text x="290" y="194" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Noto Sans SC,sans-serif" font-size="9">羽绒服·取暖器·不粘锅·罐头</text>
+  <line x1="410" y1="340" x2="370" y2="200" stroke="#ea580c" stroke-width="2.5"/>
+
+  <rect x="40" y="80" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="98" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">羽绒服三参数法则</text>
+  <line x1="220" y1="170" x2="175" y2="90" stroke="#ea580c" stroke-width="1.5"/>
+
+  <rect x="40" y="120" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="138" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">取暖器两大夸大卖点</text>
+  <line x1="220" y1="178" x2="175" y2="130" stroke="#ea580c" stroke-width="1.5"/>
+
+  <rect x="40" y="160" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="178" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">不粘锅划痕≠必换</text>
+  <line x1="220" y1="186" x2="175" y2="170" stroke="#ea580c" stroke-width="1.5"/>
+
+  <rect x="40" y="200" width="140" height="26" rx="5" fill="#f97316" opacity="0.85" filter="url(#mmshadow)"/>
+  <text x="110" y="218" text-anchor="middle" fill="#fff" font-family="Noto Sans SC,sans-serif" font-size="10">罐头保质期真相</text>
+  <line x1="220" y1="195" x2="175" y2="210" stroke="#ea580c" stroke-width="1.5"/>
+
+  <!-- 中心到各分支的标签 -->
+  <text x="640" y="260" font-family="Noto Sans SC,sans-serif" font-size="10" fill="#dc2626">效率·科学使用</text>
+  <text x="640" y="470" font-family="Noto Sans SC,sans-serif" font-size="10" fill="#2563eb">性能·避免过气</text>
+  <text x="360" y="470" font-family="Noto Sans SC,sans-serif" font-size="10" fill="#059669">续航·技术路线</text>
+  <text x="360" y="260" font-family="Noto Sans SC,sans-serif" font-size="10" fill="#ea580c">参数·避智商税</text>
+
+  <!-- 交叉虚线 -->
+  <line x1="350" y1="210" x2="500" y2="360" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="650" y1="210" x2="500" y2="360" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="650" y1="510" x2="500" y2="360" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="350" y1="510" x2="500" y2="360" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+</svg>
 </div>
+</section>
+
+<!-- ============================================================
+     TAB 6: 深度追问
+     ============================================================ -->
+<section class="tab-section" id="tab-deepask">
+<h2>💬 深度追问</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">点击问题展开深度思考</p>
+<div id="deepAskContainer"></div>
+</section>
+
+<!-- ============================================================
+     TAB 7: 案例分析
+     ============================================================ -->
+<section class="tab-section" id="tab-cases">
+<h2>📋 案例分析</h2>
+<div id="caseContainer"></div>
+</section>
+
+<!-- ============================================================
+     TAB 8: 实战决策
+     ============================================================ -->
+<section class="tab-section" id="tab-decision">
+<h2>⚔️ 实战决策</h2>
+<p style="text-align:center;color:var(--text-light);margin-bottom:16px">模拟真实消费场景，做出你的选择</p>
+<div id="decisionContainer"></div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS 最小知识集</p>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function(){
+'use strict';
+
+// ============================================================
+// TAB SWITCHING (hash routing)
+// ============================================================
+var tabBtns = document.querySelectorAll('.tab-btn');
+tabBtns.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var target = this.getAttribute('data-tab');
+    tabBtns.forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.tab-section').forEach(function(s){ s.classList.remove('active'); });
+    var el = document.getElementById('tab-' + target);
+    if(el) el.classList.add('active');
+    window.location.hash = target;
+    if(target === 'exam') { initExam(); }
+    if(target === 'mindmap') { renderMindMap(); }
+  });
+});
+
+function restoreTab(){
+  var hash = window.location.hash.replace('#','');
+  if(hash){
+    var btn = document.querySelector('.tab-btn[data-tab="'+hash+'"]');
+    if(btn) btn.click();
+  }
+}
+restoreTab();
+window.addEventListener('hashchange', restoreTab);
+
+// ============================================================
+// DATA: Concepts (8 cards)
+// ============================================================
+var concepts = [
+  {
+    icon: '🧥', name: '羽绒服三参数',
+    hint: '含绒量·充绒量·蓬松度',
+    def: '选购羽绒服的核心量化指标：含绒量≥50%（户外≥70%）、充绒量（温和150g/严寒500g）、蓬松度（日常650-800/极端800-1000）。',
+    analogy: '就像买车看发动机排量+马力+扭矩三个维度一样，羽绒服的保暖性能也需要三个维度完整评估，只看任何一个都不够。',
+    example: '一件标注"90%白鸭绒"但充绒量仅80g的轻薄羽绒服，保暖性远不如含绒量70%但充绒量300g的厚款。',
+    counter: '含绒量并非越高越好——100%纯绒无法形成空气隔热层，反而需要少量羽片支撑蓬松结构。'
+  },
+  {
+    icon: '🚗', name: '电动车续航虚标',
+    hint: 'NEDC/CLTC/电池度数',
+    def: '电动车标称续航普遍虚高，因为NEDC/CLTC测试条件宽松（室温、无空调、轻柔加减速）。最靠谱的判断指标是电池总度数（kWh）：80-100kWh对应真实400km+。',
+    analogy: '就像手机的"理论待机时间"是在信号完美的实验室测出来的，电动车的理论续航也是在理想条件下测的——你永远开不出那个数字。',
+    example: '一辆标称NEDC续航600km的车，在冬季高速实际续航可能只有300km——因为低温+暖风+高速+载重同时作用。',
+    counter: '电池度数也不是万能的——车重、风阻系数、电机效率共同决定实际能耗。同样80kWh电池，SUV比轿车续航短20%+。'
+  },
+  {
+    icon: '🔋', name: '石墨烯电池骗局',
+    hint: '二级科淆·单原子层',
+    def: '石墨烯的特殊性质（超强导电/导热）只有在单原子层薄膜状态下才成立。任何市售"石墨烯电池"产品，石墨烯在其中只是导电添加剂（石墨粉），并非真正的石墨烯电极。',
+    analogy: '就像说"这瓶水里含钻石成分"——钻石是碳，但你把木炭粉末加到水里不能叫钻石水。石墨烯和石墨粉的关系也是如此。',
+    example: '某手机品牌宣传的"石墨烯散热"，实际上是在散热膜中加入了石墨微片，与单层石墨烯的性能差了十万八千里。华为在石墨烯电池宣传上就非常谨慎，从未声称使用了真正的石墨烯电极。',
+    counter: '石墨烯在实验室中确实有真实应用（如传感器）。辨别方法：看产品是否声称"基于单原子层石墨烯"——如果不是，就是石墨粉。'
+  },
+  {
+    icon: '💧', name: '净水器RO膜选购',
+    hint: '通量·脱盐率·废水比',
+    def: 'RO膜净水器核心参数：通量（GPD，≥600G体验良好）、脱盐率（≥97%）、废水比（1:1~1:3）。800G是大多数用户接受的下限，低于此出水太慢。',
+    analogy: '通量就像水龙头的出水量——你习惯了水壶倒水的速度，出水量太小会让你觉得"太慢"。脱盐率就像滤网的目数——目数越高过滤越干净。',
+    example: '十年前的RO净水器通量只有50-100G，接一杯水要等半分钟。今天800G以上通量的RO膜，接水速度和自来水龙头差不多。',
+    counter: '通量越大废水比可能越高，需要在节水与速度间权衡。另外RO膜需要定期更换（通常2-3年），否则细菌在膜表面滋生。'
+  },
+  {
+    icon: '❄️', name: '空调使用误区',
+    hint: '风扇脱水·细菌滋生·空调病',
+    def: '35℃以上高温使用风扇反而加速脱水（高速气流带走体表水分）。"空调病"的真实原因是空调内部细菌滋生，而非温差。空调滤网+散热片需要每1-2月清洗一次，每2-3年专业深度清洗。',
+    analogy: '高温天吹风扇就像用吹风机吹一块湿海绵——水分蒸发得越快，干得越快。人体就像那块海绵，脱水风险比凉爽时更高。',
+    example: '欧洲人不装空调不是因为节能环保，而是安装总成本高（一台650欧的空调安装费可能高达1350欧）。欧洲热浪中很多老人因没有降温手段死亡。',
+    counter: '风扇在35℃以下仍然是经济有效的降温手段。关键是判断当日最高温度是否超过人体自调节上限。'
+  },
+  {
+    icon: '🍳', name: '不粘锅涂层安全性',
+    hint: '特氟龙·陶瓷涂层·划痕',
+    def: '特氟龙（PTFE）涂层在260℃以下完全稳定，烹饪温度通常不超过这个温度。划痕释放的涂层颗粒在人体内不分解、不吸收，直接排出。真正危险是超过350℃时释放的有毒气体。',
+    analogy: '吸入特氟龙涂层碎片就像吃了几粒沙子——肠胃不吸收，原样排出。但把空锅烧到冒烟就像在吸塑料燃烧的烟雾——那才是有毒的。',
+    example: '美国环保署研究显示，特氟龙涂层锅在正常烹饪温度（200-250℃）下无有害物质释放。但有报告显示空锅干烧超过7分钟可达400℃，此时释放有害气体。',
+    counter: '陶瓷涂层和硅涂层的不粘锅不需要特氟龙，但耐久性较差（1-2年即失效），需要更频繁更换。综合来看特氟龙锅性价比最高。'
+  },
+  {
+    icon: '🥫', name: '罐头食品保质期',
+    hint: '杀菌工艺·不添加防腐剂',
+    def: '罐头食品不需要防腐剂——135℃高温杀菌+真空密封即可实现3年以上保质。未膨胀的罐头即使过期多年仍可安全食用（口感可能变差）。"保质期"主要标注的是风味最佳期而非安全临界点。',
+    analogy: '罐头就像时间胶囊——只要密封完好，里面的东西就被"暂停"了。五年后的罐头营养可能略降、口感可能变差，但细菌进不去，就不会坏。',
+    example: 'Napoleon在1804年悬赏12000法郎寻求食物长期保存方法，催生了罐头工艺。研究发现，密封完好的50年前的罐头食物仍然无菌可食。',
+    counter: '胀罐（罐体膨胀）说明内部产生气体，必定有微生物活动——绝对不可食用。酸性食物（番茄/水果罐头）会缓慢腐蚀罐体，保质期相对更短。'
+  },
+  {
+    icon: '⚡', name: '隔空充电物理极限',
+    hint: 'SAR安全限值·能量衰减',
+    def: '所谓"5W隔空数米充电"违反电磁辐射安全法规（SAR限值）。按物理计算，数米距离可实现的接收功率<0.1W，远不足以给手机有效充电。144天线阵列+5GHz频率的硬件成本约2000-3000元。',
+    analogy: '隔空充电就像想让洒水车的水精准地只浇你家花盆，还不许洒到邻居家——电磁波是发散的，能量随距离平方衰减，数米外能收到的能量微乎其微。',
+    example: '2021年某厂商展示的"隔空充电"需要144根天线组成相控阵列，体积类似一台小型冰箱。即便这样，接收功率也仅有几毫瓦——比5W差了三个数量级。',
+    counter: '真正的近场无线充电（Qi标准，<5cm距离）已经成熟。毫米波定向能量传输在特定工业场景（如传感器供电）有实际应用价值。'
+  }
+];
+
+// ============================================================
+// DATA: MCQ Bank (20 questions, 15 randomly selected)
+// ============================================================
+var mcqBank = [
+  {
+    q: '选购羽绒服时，以下哪项不是判断保暖性能的核心参数？',
+    opts: ['含绒量', '充绒量', '蓬松度', '面料防水指数'],
+    ans: 3,
+    explain: '面料防水指数影响防风防潮，但不是保暖性能的直接参数。核心三参数是含绒量、充绒量和蓬松度。'
+  },
+  {
+    q: '电动车的NEDC续航与实际续航差距最大可达多少？',
+    opts: ['40-50%', '20-30%', '10%', '60-70%'],
+    ans: 0,
+    explain: '冬季高速开暖风场景下，NEDC续航的40-50%都可能在极端条件下"消失"——冬季实际续航常只有标称的一半左右。正确答案A。'
+  },
+  {
+    q: '为什么"石墨烯电池"大多是智商税？',
+    opts: ['石墨烯太贵无法量产', '石墨烯在电池中只是石墨粉导电添加剂', '石墨烯电池被政府禁止销售', '石墨烯已被证明不是好导体'],
+    ans: 1,
+    explain: '石墨烯的特殊性质只在单原子层薄膜状态下成立。市售产品中的"石墨烯"实际上是微米级的石墨微片，用作导电添加剂，性能与单层石墨烯天差地别。'
+  },
+  {
+    q: 'RO膜净水器通量800G意味着什么？',
+    opts: ['每天产水800加仑', '每小时产水800升', '每分钟产水800毫升', '膜面积800平方厘米'],
+    ans: 0,
+    explain: 'G代表GPD（加仑每天），800G通量意味着每天可产水约800加仑（约3028升），对于家庭来说接水速度可与自来水龙头媲美。'
+  },
+  {
+    q: '"空调病"的真正原因是什么？',
+    opts: ['空调内部细菌滋生', '室内外温差过大', '空调氟利昂泄漏', '吹风导致关节受凉'],
+    ans: 0,
+    explain: '"空调病"的核心原因是空调内部滤网和散热片上滋生的细菌被吹入室内空气（正确答案A），而非温度变化本身。定期清洗滤网和散热片可有效预防。'
+  },
+  {
+    q: '特氟龙不粘锅在什么温度下是安全的？',
+    opts: ['50℃以下', '100℃以下', '400℃以下', '260℃以下'],
+    ans: 3,
+    explain: '正确答案D：特氟龙在260℃以下完全稳定，正常烹饪温度通常不超过250℃。但如果空锅干烧超过350℃，涂层可能释放有毒气体。'
+  },
+  {
+    q: '罐头食品能长期保存的主要原理是什么？',
+    opts: ['添加食品防腐剂', '辐照处理', '低温冷藏', '高温杀菌+真空密封'],
+    ans: 3,
+    explain: '正确答案D：罐头通过135℃高温杀死所有微生物，然后真空密封防止外部细菌进入。绝大多数罐头不需要添加任何防腐剂。'
+  },
+  {
+    q: '关于"隔空充电"技术，以下说法正确的是？',
+    opts: ['可以在10米外给手机充满电', '使用了量子隧穿技术', '已进入大规模商用阶段', '受限于SAR电磁安全法规，远距离接收功率<0.1W'],
+    ans: 3,
+    explain: '正确答案D：根据电磁辐射安全法规（SAR限值）和物理衰减定律，数米距离可实现的接收功率远低于有效充电所需的最低功率。'
+  },
+  {
+    q: '判断电动车真实续航最可靠的方法是什么？',
+    opts: ['看厂商标称的NEDC续航', '看电池总度数(kWh)+车重+风阻', '看CLTC标准续航', '看媒体评测的最高续航'],
+    ans: 1,
+    explain: '电池度数是最客观的指标。80-100kWh的电池对应真实400km+续航。结合车重和风阻系数可以更精确计算。'
+  },
+  {
+    q: '以下哪种取暖方式是能效比最高的？',
+    opts: ['电暖器（电热丝）', '油汀取暖器', '踢脚线取暖器', '空调（热泵模式）'],
+    ans: 3,
+    explain: '正确答案D：空调热泵模式利用逆卡诺循环，从室外搬运热量而非直接产生热量，能效比（COP）可达3-5，远高于电热丝取暖的1:1转换。'
+  },
+  {
+    q: '热泵干衣机相比冷凝式干衣机的核心优势是什么？',
+    opts: ['价格更便宜', '烘干温度更高', '能效更高（压缩机回收热量）', '体积更小'],
+    ans: 2,
+    explain: '热泵式使用压缩机回收烘干过程产生的热量循环利用，能效比冷凝式高约50%，且烘干温度更低不伤衣物，但价格也更贵。'
+  },
+  {
+    q: '碳水阻断剂（白芸豆提取物）的减肥效果如何？',
+    opts: ['FDA确认有效', '临床证明可阻断50%碳水', 'FDA审查认为无减肥功效证据', '中国药监局批准为减肥药'],
+    ans: 2,
+    explain: 'FDA审查结论：没有证据表明白芸豆提取物具有减肥功效。体外实验有效不等于体内有效。真正有效的减肥药是司美格鲁肽等处方药，但价格昂贵。'
+  },
+  {
+    q: '加湿器选购中最容易被忽视但最影响体验的因素是什么？',
+    opts: ['是否发酸发臭和漏水', '运行噪音', '最大加湿量', '外观设计'],
+    ans: 0,
+    explain: '正确答案A：加湿量和噪音是显性指标，但长期使用中真正影响体验的是水箱/滤芯是否容易发酸发臭、机器是否容易漏水。这两个问题直接决定你愿不愿意继续使用。'
+  },
+  {
+    q: '关于半固态电池，以下说法正确的是？',
+    opts: ['与固态电池是同一技术', '是液态电池到固态电池的过渡产品', '已经完全不使用液体电解液', '宁德时代已量产全固态电池'],
+    ans: 1,
+    explain: '半固态电池仍含有少量液体电解液，是液态锂离子电池到全固态电池之间的过渡形态。全固态电池仍处于研发阶段，量产还需5-10年。'
+  },
+  {
+    q: '洗碗机选购中最关键的考量因素是什么？',
+    opts: ['预留安装空间+水电管道预留', '品牌知名度', '洗涤程序数量', '外观颜色'],
+    ans: 0,
+    explain: '正确答案A：洗碗机需要在装修阶段预留空间、上下水和电源。如果家里已装修完毕却没有预留，安装成本可能远超洗碗机本身。'
+  },
+  {
+    q: '当气温超过35℃时，为什么使用风扇反而危险？',
+    opts: ['风扇会吹坏电路', '高速气流加速体表水分蒸发导致脱水', '风扇噪音影响听力', '风扇耗电量太大'],
+    ans: 1,
+    explain: '高温天气下人体依靠出汗散热，风扇的高速气流加速汗液蒸发，看似凉快，实际上加速水分流失。超过35℃时应优先使用空调降温。'
+  },
+  {
+    q: '降噪耳机"语义听觉"技术的核心能力是什么？',
+    opts: ['完全隔绝所有外界声音', '增强音乐的低音效果', '在降噪的同时保留语音频段', '自动翻译外语对话'],
+    ans: 2,
+    explain: '语义听觉（semantic hearing）是新一代降噪技术，能够在消除环境噪音的同时，保留人声频段，让你在嘈杂环境中清晰听到对话——就像杨振宁先生用的高端助听器一样。'
+  },
+  {
+    q: '关于近视预防，以下哪个是真正的智商税？',
+    opts: ['每天户外活动2小时', '使用低浓度阿托品滴眼液', '墨水屏护眼贴膜', '保持正确读写距离'],
+    ans: 2,
+    explain: '墨水屏本身不主动发光，确实比LCD/OLED屏幕对眼睛刺激小，但"护眼贴膜"并没有改变屏幕的光学特性——它只是加了一层磨砂膜降低反光，对预防近视无实质性作用。'
+  },
+  {
+    q: '干衣机容量8kg、9kg、10kg应如何选择？',
+    opts: ['越大越好', '与洗衣机容量匹配即可', '8kg足够所有人用', '看外观哪个好看'],
+    ans: 1,
+    explain: '干衣机容量应与洗衣机的洗涤容量匹配。如果洗了9kg的衣服，却只有8kg容量的干衣机，就需要分批烘干，非常不便。3-6人家庭建议10kg。'
+  },
+  {
+    q: '判断一个消费品是否存在智商税，最有效的方法论是什么？',
+    opts: ['看网红是否推荐', '看价格是否最贵', '用第一性原理拆解：参数→技术原理→物理极限→营销话术', '看销量排名'],
+    ans: 2,
+    explain: '第一性原理是穿透营销迷雾的最有效工具：分解产品的核心参数→理解底层技术原理→判断物理极限是否支持宣传→识别营销话术中的伪科学。这比任何KOL推荐都可靠。'
+  }
+];
+
+// ============================================================
+// DATA: SA Bank (10 questions, 8 randomly selected)
+// ============================================================
+var saBank = [
+  {
+    q: '请用自己的话解释羽绒服"三参数"各代表什么意思，以及为什么三个参数缺一不可？',
+    answer: '含绒量：绒子占总填充物的百分比，决定"纯不纯"（最低50%）。充绒量：填充的总重量，决定"厚不厚"（150g-500g）。蓬松度：单位重量羽绒占据的体积，决定"蓬不蓬"（650-1000蓬）。三者缺一不可——高含绒量但充绒量少不保暖，高充绒量但蓬松度低也保暖差。就像看车不能只看排量不看马力和扭矩。'
+  },
+  {
+    q: '为什么NEDC/CLTC测试标准会严重虚标电动车续航？描述至少三个导致虚标的原因。',
+    answer: '三个主要原因：1)测试在室内恒温（25℃）进行，不开启空调/暖风，而冬季暖风消耗大量电能（占总能耗20-30%）；2)测试采用非常轻柔的加减速（模拟欧洲悠闲驾驶风格），实际驾驶风格更激进；3)测试中的空气密度设定偏低（模拟海平面），实际行驶风阻更大。此外，测试不模拟载重、不爬坡、使用低滚阻轮胎等因素共同导致NEDC续航比实际高40-50%。'
+  },
+  {
+    q: '举例说明如何用"第一性原理"辨别一个消费品是否存在智商税？',
+    answer: '以"远红外加热取暖器"为例：第一性原理分析——所有物体都在发出红外辐射，电暖器的电热丝本身就产生远红外；任何物体加热到一定温度都会发出远红外，这不是什么特殊功能。所以"远红外加热"只是把电热丝的物理特性包装成营销概念，没有增加任何新的加热机制。真正影响取暖效果的是功率（瓦数），与是否"远红外"无关。'
+  },
+  {
+    q: '为什么不粘锅涂层有划痕不等于必须扔掉？从特氟龙材料的化学性质和安全剂量角度解释。',
+    answer: '特氟龙（PTFE）是一种极其稳定的聚合物，具有以下特性：1)化学惰性——不与胃酸反应，不被消化道吸收；2)摄入后原样排出体外，无生物累积性；3)正常烹饪温度（200-250℃）下完全不分解。即使划痕释放了微小涂层碎片进入食物，这些碎片就像吃了几粒细沙，对人体无害。真正危险的情况是空锅干烧超过350℃使涂层分解产生有毒气体，但这种情况极其罕见且与划痕无关。'
+  },
+  {
+    q: '空调热泵和电暖器都是取暖设备，但能效比差别巨大。请解释其物理原理。',
+    answer: '电暖器是将电能直接转化为热能：1度电→1度热（能效比=1）。空调热泵原理不同：利用逆卡诺循环，用电驱动压缩机搬运室外热量到室内。即使室外只有0℃，空气中仍然含有大量热量。热泵消耗1度电可以"搬运"3-5度热到室内（能效比=3-5）。这就是为什么热泵取暖比电暖器高效3-5倍。极限情况：室外温度极低（<-20℃）时热泵效率下降，需要辅助加热。'
+  },
+  {
+    q: '罐头食品为什么可以不添加防腐剂却保存多年？描述其杀菌工艺和密封原理。',
+    answer: '罐头通过以下工艺实现长保：1)食品先装入罐体并密封；2)送入高压灭菌锅加热至121-135℃，维持足够时间（30分钟到数小时，取决于食品种类和罐体大小）；3)高温杀死所有微生物和芽孢（商业无菌）；4)真空密封防止外部细菌进入。因为罐头内部已经是无菌状态且密封完好，没有微生物可以生长，自然不需要防腐剂。"保质期"主要标注风味最佳期——密封未损坏的过期罐头仍然安全可食，只是口感和营养可能略有下降。'
+  },
+  {
+    q: '半固态电池和固态电池有什么区别？为什么车企总是用"固态电池"来宣传半固态产品？',
+    answer: '液态锂离子电池使用液体电解液，全固态电池使用固体电解质（陶瓷或聚合物），完全不含液体。半固态电池是过渡产品——大部分是固体电解质但仍含少量（5-15%）液体电解液。车企用"固态电池"宣传半固态产品是因为：1)全固态是行业公认的终极方向，更有营销吸引力；2)技术上"半固态"听起来不够颠覆；3)消费者难以区分两者的本质差异。但半固态确实在能量密度和安全性上有提升——只是远没到"革命性"的程度。'
+  },
+  {
+    q: '在"隔空充电"的物理限制中，为什么SAR（电磁辐射安全法规）是最大的硬天花板？',
+    answer: 'SAR（比吸收率）是衡量人体吸收电磁波能量的安全标准，中国标准为任意10g组织平均SAR≤2.0W/kg。要进行远距离无线充电，必须在空间中以电磁波形式传输能量。但电磁波是发散的（随距离平方衰减），要保证数米外接收端有5W功率，发射功率需要高达数百瓦——这远超SAR安全限值。换句话说，"隔空5W充电"在满足安全法规的前提下物理上不可能实现。这就是为什么真正的无线充电（Qi标准）都限制在厘米级距离。'
+  },
+  {
+    q: '如何判断一个家用电器是否值得购买？从TCO（总拥有成本）的角度分析。',
+    answer: 'TCO（Total Cost of Ownership）=购买成本+使用成本+维护成本+寿命。以干衣机为例：廉价排气式干衣机（300-800元）购买成本低但耗电量大（电费高）、烘干温度高伤衣物（衣物寿命缩短的隐形成本）；热泵式干衣机（3000-8000元）购买成本高但耗电省50%（电费低）、烘干温度低不伤衣、使用寿命更长。3-5年使用周期下来，热泵式的TCO可能更低。另外，干衣机节省的时间成本（不用晾晒、不收衣物）也应计入价值考量。'
+  },
+  {
+    q: '关于净水器选购，为什么RO膜通量是最容易被忽视却又最影响使用体验的参数？',
+    answer: 'RO膜通量（单位GPD，加仑每天）决定出水速度。低通量（50-100G）接一杯水需要等30秒以上——像老式饮水机；高通量（800-1200G）接水速度和自来水龙头无异。大部分人在选购时更关注"过滤精度""废水比"等参数，但实际使用中，出水速度是每天几十次接水时最直观的体验——水龙头打开等半分钟才接满一壶水，长期使用会让人烦躁到放弃使用净水器。800G是大多数用户"不会后悔"的下限。'
+  }
+];
+
+// ============================================================
+// DATA: Deep Questions (5)
+// ============================================================
+var deepQuestions = [
+  {
+    q: '如果"一分钱一分货"在消费品市场不完全成立，那么在哪些品类中价格与质量存在最强相关，哪些品类最弱？',
+    a: '强相关品类：技术参数明确且可独立验证的产品——如CPU（跑分）、相机传感器（DxOMark）、汽车（碰撞测试/NEDC）。这些产品的质量可以被客观量化，高价通常对应高性能。<br><br>弱相关品类：1)保健品/减肥产品（功效难以验证+安慰剂效应）；2)奢侈服装/包袋（品牌溢价>>物料成本，500元的包和50000元的包可能在功能上没有区别）；3)"科技概念"产品（石墨烯/量子/纳米等标签加持的消费品，其技术含量往往与价格无关）。<br><br>关键洞察：价格-质量相关性取决于信息不对称程度——信息越不对称的市场，智商税空间越大。'
+  },
+  {
+    q: '当电动车厂商宣传"NEDC续航700公里"时，消费者如何不被这个数字误导？能否推导出一套快速估算真实续航的公式？',
+    a: '快速估算真实续航的公式：<br><strong>冬季高速真实续航 ≈ 0.5 × NEDC续航</strong>（最保守估计）<br><strong>春秋城市真实续航 ≈ 0.8 × NEDC续航</strong>（较乐观）<br><br>更精确的判断方法不看续航数字，而看电池度数：<br><strong>百公里真实能耗 ≈ 15-20kWh</strong>（冬季高速20-25kWh）<br><strong>真实续航 = 电池度数 ÷ 百公里能耗</strong><br>例如：80kWh电池 ÷ 20kWh/100km = 400km真实续航（冬季高速条件下）。<br><br>这个公式的妙处在于：电池度数无法虚标（可独立测量），而NEDC续航可以。'
+  },
+  {
+    q: '从经济学的"柠檬市场"理论出发，为什么消费品市场中的"智商税"产品能长期存在，而不是被市场自然淘汰？',
+    a: '"柠檬市场"（The Market for Lemons）由阿克洛夫提出：当买家无法区分产品质量时，劣质品（柠檬）会驱逐优质品（桃子）。<br><br>智商税产品能长期存在的机制：<br>1)<strong>信息不对称</strong>：石墨烯/远红外/量子等概念超出普通消费者的知识边界，卖家知道是假的，买家不知道；<br>2)<strong>单次博弈</strong>：智商税产品通常不是复购品（如取暖器几年才买一次），卖家不需要回头客；<br>3)<strong>安慰剂效应</strong>：部分"智商税"产品确实给用户带来主观改善（因为信念效应），用户主动为其辩护；<br>4)<strong>社交信号</strong>：高价购买本身就传递了"我买得起""我懂科技"的信号，产品功效反倒是次要的。<br><br>破解之道：第三方独立检测+消费者教育，本质上是降低信息不对称。'
+  },
+  {
+    q: '为什么中国消费者特别容易相信"石墨烯""量子""纳米"这些科技概念包装的产品？这与中国的科学教育有什么关系？',
+    a: '这涉及"二级科淆"现象——卓克在节目中提出的概念：<br><br>一级科淆：完全不懂科学，容易被任何"听起来很科技"的话唬住。<br>二级科淆：有一点科学知识但不深入，知道这些词"很厉害"，但无法判断它们在该产品中是否真的有实质作用。<br><br>中国的科学教育培养了大量的"二级科淆"消费者——他们听说过石墨烯得了诺贝尔奖、量子计算机很厉害、纳米材料是前沿，因此对带这些标签的产品天然有好感。但教育体系没有培养"批判性科学思维"——即用第一性原理追问"这个技术在这个产品中的作用机制是什么？物理上可能吗？"。<br><br>换句话说，我们教了科学是什么，但没教如何用科学思考。'
+  },
+  {
+    q: '在AI时代（如ChatGPT、AI搜索），消费者的"信息不对称"弱势地位是增强了还是削弱了？AI能帮我们彻底避开智商税吗？',
+    a: '这是双重效应：<br><br><strong>积极面</strong>：AI可以快速聚合产品评测数据、对比技术参数、解释专业术语、识别营销话术中的伪科学。以前需要花几个小时搜索研究的事情，AI可以在几秒内给出初步判断。这确实降低了信息获取的门槛。<br><br><strong>消极面</strong>：1)AI的训练数据中包含大量营销内容和虚假信息，可能无意中为智商税产品"背书"；2)商家也可以利用AI生成大量虚假好评和"专业评测"，制造信息噪音；3)AI的"幻觉"问题——当你问"石墨烯电池好用吗"，AI可能生成一份看起来很专业但实际上基于错误信息的回答。<br><br><strong>结论</strong>：AI是工具而非答案。最终还是要靠消费者的第一性原理思维——追问"这个产品的工作原理是什么？物理上可能吗？有什么独立证据？"。AI可以帮你更快找到答案，但不能代替你思考。'
+  }
+];
+
+// ============================================================
+// DATA: Case Studies (3)
+// ============================================================
+var cases = [
+  {
+    title: '案例一：小米SU7发布会——如何穿透发布会营销看产品本质？',
+    meta: '涉及概念：参数解读、营销辨别、第一性原理 | 对应文章：#70',
+    content: '<p><strong>背景：</strong>2023年12月28日，小米首款汽车SU7正式发布。发布会上展示了大量参数——零百加速2.78秒、CLTC续航800公里、101kWh电池、一体化压铸车身……每一页PPT都让人热血沸腾。</p>'+
+      '<p><strong>MKS分析框架：</strong></p>'+
+      '<ol class="case-steps">'+
+      '<li><strong>参数脱敏：</strong>CLTC续航800公里→推算真实续航→101kWh电池÷约18kWh/100km（轿车偏低能耗）≈560km（温和条件）。冬季高速→101÷22≈460km。这个数字仍然不错，但不再是"800公里"的惊艳感。</li>'+
+      '<li><strong>技术辨别：</strong>"一体化压铸"减少零件数量和制造成本——这确实是一项真正的制造创新，直接降低了生产成本，不是营销噱头。"CTB电池车身一体化"同样是真实的技术进步。</li>'+
+      '<li><strong>竞争定位：</strong>SU7定价21.59万-29.99万，放在同级别电动车中参数确实有竞争力。但小米的优势在软件生态（澎湃OS），这需要时间来验证。</li>'+
+      '<li><strong>购车决策建议：</strong>第一代产品等6个月再买——让早期用户帮你做"质量检测"。小白鼠阶段的bug（软件+硬件）不可避免。</li>'+
+      '</ol>'+
+      '<p><strong>核心启示：</strong>发布会是精心设计的说服场景。MKS方法论教你在最短时间内剥掉"PPT滤镜"，看到产品的工程本质。</p>'
+  },
+  {
+    title: '案例二：电暖器"远红外加热"与"石墨烯材料"——双料智商税的解剖',
+    meta: '涉及概念：伪科学概念识别、技术原理、营销话术 | 对应文章：#60, #61',
+    content: '<p><strong>背景：</strong>冬天买电暖器时，很多产品宣传"远红外加热技术，深入皮下组织""石墨烯涂层，升温快3倍"。这些听起来很科技的话术，让消费者宁愿多花200-500元买这些"高科技"型号。</p>'+
+      '<p><strong>MKS拆解：</strong></p>'+
+      '<ol class="case-steps">'+
+      '<li><strong>"远红外加热"</strong>——所有温度高于绝对零度的物体都在发出红外辐射。电热丝加热到200-500℃时，发出的辐射峰值恰好落在远红外波段。这不是特殊技术，这是物理定律。任何电暖器都是"远红外加热器"。</li>'+
+      '<li><strong>"深入皮下组织"</strong>——远红外确实有一定穿透力（类似晒太阳感到"骨头暖"），但这种穿透深度只有几毫米，远达不到"深入组织"的程度。而且所有电暖器的远红外穿透深度都一样，取决于温度而不取决于"技术"。</li>'+
+      '<li><strong>"石墨烯涂层"</strong>——"石墨烯"在这里是石墨微片（微米级），不是单原子层石墨烯。它的作用就是普通的热传导涂层，与石墨粉没有本质区别。升温速度完全由功率（瓦数）决定，与有没有"石墨烯"涂层无关。</li>'+
+      '<li><strong>实际购买建议：</strong>选电暖器只看三样——功率（瓦数）、加热方式（对流/辐射/油汀哪种适合你的使用场景）、安全认证（3C）。价格超过500元的部分基本都是在为营销话术买单。</li>'+
+      '</ol>'
+  },
+  {
+    title: '案例三：碳中和驱动的电动车电池——技术路线选择的投资视角',
+    meta: '涉及概念：电池技术路线、半固态vs固态、换电vs快充 | 对应文章：#37, #129, #284',
+    content: '<p><strong>背景：</strong>一位消费者准备购买人生第一辆电动车，面临三个核心决策：换电还是快充？现在买还是等固态电池？选磷酸铁锂还是三元锂？</p>'+
+      '<p><strong>MKS决策框架：</strong></p>'+
+      '<ol class="case-steps">'+
+      '<li><strong>换电 vs 快充：</strong>换电优势是3分钟满电（媲美加油），但前提是你住在换电站附近（≤5公里）且你的车型有换电支持（目前仅蔚来和少数品牌）。换电站建设成本约50万美元/个，网络密度短期内不会太高。快充（800V平台）在充电桩覆盖足够的情况下更实用——15分钟充到80%。<strong>结论：</strong>没有家充桩→优先考虑换电品牌；有家充桩→快充车型更好（每天回家插上即可）。</li>'+
+      '<li><strong>等固态电池还是现在买：</strong>全固态电池至少还需5-10年。半固态电池（如蔚来150kWh半固态电池包）已经量产，能量密度确实有提升（约360Wh/kg vs 三元锂约260Wh/kg），但价格远高于普通电池。如果你不着急且预算充足，等2-3年半固态价格下降后再买是合理的。如果你现在就需要用车，磷酸铁锂或三元锂完全够用。</li>'+
+      '<li><strong>磷酸铁锂 vs 三元锂：</strong>磷酸铁锂更便宜、寿命更长（充放电循环3000+次）、更安全（热稳定性更好），但能量密度略低。三元锂能量密度更高、充电速度更快（特别是800V高压平台），但价格更贵。<strong>结论：</strong>日常通勤→磷酸铁锂足够；经常长途→三元锂更合适。</li>'+
+      '<li><strong>核心原则：</strong>不要在技术过渡期投入过多——今天的"顶配电池"5年后可能就是"老技术"。根据自己的实际出行需求选择，而非追求纸面参数。</li>'+
+      '</ol>'
+  }
+];
+
+// ============================================================
+// DATA: Decision Scenarios (3)
+// ============================================================
+var decisionScenarios = [
+  {
+    title: '场景一：选购一台净水器',
+    q: '你搬入新家，水质偏硬（TDS≈350），想买一台净水器。家居卖场里从500元到8000元的产品都有。你会如何选择？',
+    opts: [
+      'A. 买最贵的8000元进口品牌，一分钱一分货',
+      'B. 买500元的超滤净水器，够用就好',
+      'C. 选800G以上通量RO膜净水器（1500-3000元），关注TDS脱盐率和换芯成本',
+      'D. 不买净水器，烧开水喝就行'
+    ],
+    ans: 2,
+    explain: 'TDS≈350属于偏硬水质，超滤（选项B）无法去除水垢（钙镁离子），烧开水（选项D）也不能去除水垢。最合理选择是RO膜净水器（选项C），它可以去除95%+的溶解性固体。注意要关注换芯成本（年均300-500元），一些进口品牌（选项A）虽然机器贵但换芯价格更贵，TCO不一定更高。800G以上通量确保出水速度不会让你用着烦躁。'
+  },
+  {
+    title: '场景二：冬季购买取暖设备',
+    q: '你在南方城市居住（无集中供暖），冬天室温约8-12℃，想在卧室取暖。预算1500元。以下哪种方案最合理？',
+    opts: [
+      'A. 买带"远红外+石墨烯"功能的高端电暖器（1200元）',
+      'B. 买普通踢脚线电暖器（400元），剩下的钱交电费',
+      'C. 安装一台1.5匹冷暖空调（1500元），冬天制热夏天制冷',
+      'D. 买两台便宜的暖风机（各150元），卧室和客厅各一台'
+    ],
+    ans: 2,
+    explain: '空调制热的能效比（COP）约为3-4，即1度电搬运3-4度热，而电暖器是1:1。同样花1元电费，空调能产生3-4倍的热量。南方城市无集中供暖，空调是最经济的长期取暖方案——投资1500元的空调，一个冬天就能从电费上省回来。选项A是典型的"双料智商税"（远红外+石墨烯都是营销话术），选项D暖风机噪音大不适合卧室，且同样耗电。'
+  },
+  {
+    title: '场景三：电动车"半固态电池"选择题',
+    q: '你看中了一款新发布的电动车，有标准版（三元锂电池，80kWh，CLTC续航650km，售价18万）和高配版（半固态电池，100kWh，CLTC续航900km，售价25万）。你每天通勤40km，偶尔周末自驾200km。你会怎么选？',
+    opts: [
+      'A. 买高配半固态版，续航焦虑一劳永逸',
+      'B. 买标准版，80kWh足够日常使用，省下7万元可以充20年的电',
+      'C. 等全固态电池出来再买电动车',
+      'D. 买高配版，因为二手残值更高'
+    ],
+    ans: 1,
+    explain: '每天通勤40km，80kWh电池的真实续航（约400-500km）每周只需充电一次，周末自驾200km往返400km也在续航范围内。7万元的差价按0.6元/kWh充电成本可以充约11.6万度电，按百公里15kWh能耗算可以开约77万公里——远超一辆车的使用寿命。选项C的"等固态电池"是无限等待陷阱（全固态至少还需5-10年）。选项D的"二手残值"不确定——新技术贬值可能更快。实用主义的选择是买够用的标准版。'
+  }
+];
+
+// ============================================================
+// LOCALSTORAGE KEYS
+// ============================================================
+var LS_LEARNED = 'consume_learned_cards';
+var LS_WRONG = 'consume_wrong_answers';
+var LS_EXAM = 'consume_exam_results';
+var LS_CURRENT_CARD = 'consume_current_card';
+
+// ============================================================
+// FLIP CARDS
+// ============================================================
+var learnedCards = JSON.parse(localStorage.getItem(LS_LEARNED) || '[]');
+var currentCardIdx = parseInt(localStorage.getItem(LS_CURRENT_CARD) || '0');
+
+function updateProgress(){
+  var pct = Math.round(learnedCards.length / concepts.length * 100);
+  document.getElementById('cardLearned').textContent = learnedCards.length;
+  document.getElementById('cardProgressBar').style.width = pct + '%';
+  document.getElementById('overallProgress').style.width = pct + '%';
+  document.getElementById('learnedCount').textContent = learnedCards.length;
+}
+
+function renderCards(){
+  var container = document.getElementById('flipContainer');
+  var html = '';
+  concepts.forEach(function(c, i){
+    var isLearned = learnedCards.indexOf(i) !== -1;
+    html += '<div class="flip-card' + (isLearned ? ' card-learned' : '') + '" id="card-' + i + '">';
+    html += '<div class="flip-inner" id="flipInner-' + i + '">';
+    html += '<div class="flip-front">';
+    html += '<div class="concept-icon">' + c.icon + '</div>';
+    html += '<div class="concept-name">' + c.name + '</div>';
+    html += '<div class="concept-hint">' + c.hint + '</div>';
+    html += '</div>';
+    html += '<div class="flip-back">';
+    html += '<h4>' + c.icon + ' ' + c.name + '</h4>';
+    html += '<p><span class="label">定义</span> ' + c.def + '</p>';
+    html += '<p style="margin-top:4px"><span class="label">类比</span> ' + c.analogy + '</p>';
+    html += '<p style="margin-top:4px"><span class="label">示例</span> ' + c.example + '</p>';
+    html += '<p style="margin-top:4px"><span class="label">边界</span> ' + c.counter + '</p>';
+    html += '</div></div></div>';
+  });
+  container.innerHTML = html;
+
+  concepts.forEach(function(c, i){
+    var inner = document.getElementById('flipInner-' + i);
+    if(inner){
+      inner.addEventListener('click', function(){
+        this.classList.toggle('flipped');
+        currentCardIdx = i;
+        document.getElementById('cardIndex').textContent = (i + 1) + '/' + concepts.length;
+        localStorage.setItem(LS_CURRENT_CARD, String(currentCardIdx));
+      });
+    }
+  });
+  document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
+}
+
+document.getElementById('prevCard').addEventListener('click', function(){
+  if(currentCardIdx > 0) currentCardIdx--;
+  var inner = document.getElementById('flipInner-' + currentCardIdx);
+  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
+  document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
+  localStorage.setItem(LS_CURRENT_CARD, String(currentCardIdx));
+});
+
+document.getElementById('nextCard').addEventListener('click', function(){
+  if(currentCardIdx < concepts.length - 1) currentCardIdx++;
+  var inner = document.getElementById('flipInner-' + currentCardIdx);
+  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
+  document.getElementById('cardIndex').textContent = (currentCardIdx + 1) + '/' + concepts.length;
+  localStorage.setItem(LS_CURRENT_CARD, String(currentCardIdx));
+});
+
+document.getElementById('markLearned').addEventListener('click', function(){
+  var idx = learnedCards.indexOf(currentCardIdx);
+  if(idx === -1){
+    learnedCards.push(currentCardIdx);
+  } else {
+    learnedCards.splice(idx, 1);
+  }
+  localStorage.setItem(LS_LEARNED, JSON.stringify(learnedCards));
+  var card = document.getElementById('card-' + currentCardIdx);
+  if(card) card.classList.toggle('card-learned');
+  updateProgress();
+  showToast(idx === -1 ? '✓ 已标记为已学' : '已取消标记');
+});
+
+// ============================================================
+// QUIZ SYSTEM
+// ============================================================
+function renderMCQ(questions){
+  var container = document.getElementById('quizContainer');
+  var html = '<h3>选择题（共 ' + questions.length + ' 题）</h3>';
+  questions.forEach(function(item, i){
+    html += '<div class="quiz-item" id="mcq-' + i + '">';
+    html += '<h4>' + (i + 1) + '. ' + item.q + '</h4>';
+    item.opts.forEach(function(opt, j){
+      html += '<label><input type="radio" name="mcq' + i + '" value="' + j + '"> ' + String.fromCharCode(65 + j) + '. ' + opt + '</label>';
+    });
+    html += '<button data-mcq-idx="' + i + '" data-mcq-ans="' + item.ans + '" data-mcq-explain="' + item.explain.replace(/"/g, '&quot;') + '">核对答案</button>';
+    html += '<div class="quiz-feedback" id="fb-' + i + '"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('button[data-mcq-idx]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(this.dataset.mcqIdx);
+      var ans = parseInt(this.dataset.mcqAns);
+      var radios = document.getElementsByName('mcq' + idx);
+      var fb = document.getElementById('fb-' + idx);
+      var selected = -1;
+      for(var k = 0; k < radios.length; k++){
+        if(radios[k].checked){ selected = parseInt(radios[k].value); break; }
+      }
+      if(selected === -1){ fb.textContent = '请先选择一个选项'; fb.className = 'quiz-feedback wrong'; return; }
+      if(selected === ans){
+        fb.innerHTML = '✅ 正确！' + this.dataset.mcqExplain;
+        fb.className = 'quiz-feedback correct';
+      } else {
+        fb.innerHTML = '❌ 错误。正确答案是 ' + String.fromCharCode(65 + ans) + '。' + this.dataset.mcqExplain;
+        fb.className = 'quiz-feedback wrong';
+        // Record wrong answer
+        var wrongs = JSON.parse(localStorage.getItem(LS_WRONG) || '[]');
+        wrongs.push({q: questions[idx].q, correct: questions[idx].opts[ans], user: questions[idx].opts[selected], time: new Date().toISOString()});
+        localStorage.setItem(LS_WRONG, JSON.stringify(wrongs));
+      }
+    });
+  });
+}
+
+function renderSA(questions){
+  var container = document.getElementById('quizContainer');
+  var html = '<h3>简答题（共 ' + questions.length + ' 题）</h3>';
+  questions.forEach(function(item, i){
+    html += '<div class="sa-item">';
+    html += '<h4>' + (i + 1) + '. ' + item.q + '</h4>';
+    html += '<textarea placeholder="在此输入你的回答..."></textarea>';
+    html += '<button class="sa-show-btn">显示参考答案</button>';
+    html += '<div class="show-answer"><strong>参考答案：</strong>' + item.answer + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.sa-show-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var ansDiv = this.nextElementSibling;
+      ansDiv.style.display = ansDiv.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+}
+
+document.getElementById('randomMCQ').addEventListener('click', function(){
+  var shuffled = mcqBank.slice().sort(function(){ return Math.random() - 0.5; });
+  renderMCQ(shuffled.slice(0, 15));
+});
+
+document.getElementById('randomSA').addEventListener('click', function(){
+  var shuffled = saBank.slice().sort(function(){ return Math.random() - 0.5; });
+  renderSA(shuffled.slice(0, 8));
+});
+
+document.getElementById('resetQuiz').addEventListener('click', function(){
+  document.getElementById('quizContainer').innerHTML = '';
+});
+
+// ============================================================
+// EXAM MODE
+// ============================================================
+var examSeconds = 1800;
+var examInterval = null;
+
+function updateExamTimer(){
+  var m = Math.floor(examSeconds / 60);
+  var s = examSeconds % 60;
+  document.getElementById('examTimer').textContent = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+}
+
+function initExam(){
+  document.getElementById('examContainer').innerHTML = '';
+  document.getElementById('examScore').textContent = '';
+  document.getElementById('examTimer').textContent = '30:00';
+  if(examInterval) clearInterval(examInterval);
+}
+
+document.getElementById('startExam').addEventListener('click', function(){
+  var allMCQ = mcqBank.slice().sort(function(){ return Math.random() - 0.5; }).slice(0, 15);
+  var allSA = saBank.slice().sort(function(){ return Math.random() - 0.5; }).slice(0, 5);
+  var container = document.getElementById('examContainer');
+  var html = '<h3>选择题部分（' + allMCQ.length + ' 题）</h3>';
+  allMCQ.forEach(function(item, i){
+    html += '<div class="quiz-item"><h4>' + (i + 1) + '. ' + item.q + '</h4>';
+    item.opts.forEach(function(opt, j){
+      html += '<label><input type="radio" name="exmcq' + i + '" value="' + j + '"> ' + String.fromCharCode(65 + j) + '. ' + opt + '</label>';
+    });
+    html += '</div>';
+  });
+  html += '<h3>简答部分（' + allSA.length + ' 题）</h3>';
+  allSA.forEach(function(item, i){
+    html += '<div class="sa-item"><h4>' + (allMCQ.length + i + 1) + '. ' + item.q + '</h4>';
+    html += '<textarea placeholder="在此输入你的回答..."></textarea></div>';
+  });
+  container.innerHTML = html;
+  examSeconds = 1800;
+  updateExamTimer();
+  if(examInterval) clearInterval(examInterval);
+  examInterval = setInterval(function(){
+    examSeconds--;
+    updateExamTimer();
+    if(examSeconds <= 0){
+      clearInterval(examInterval);
+      alert('⏰ 时间到！请提交答卷。');
+      document.getElementById('submitExam').click();
+    }
+  }, 1000);
+  window._examMcqs = allMCQ;
+  window._examSas = allSA;
+});
+
+document.getElementById('submitExam').addEventListener('click', function(){
+  clearInterval(examInterval);
+  var correct = 0;
+  var mcqs = window._examMcqs || mcqBank.slice(0, 15);
+  var totalMCQ = mcqs.length;
+  for(var i = 0; i < totalMCQ; i++){
+    var radios = document.getElementsByName('exmcq' + i);
+    if(radios.length === 0) continue;
+    for(var j = 0; j < radios.length; j++){
+      if(radios[j].checked && parseInt(radios[j].value) === mcqs[i].ans) correct++;
+    }
+  }
+  var pct = Math.round(correct / totalMCQ * 100);
+  var passed = pct >= 60;
+  document.getElementById('examScore').innerHTML = 'MCQ得分：' + correct + '/' + totalMCQ + '（' + pct + '%） — ' + (passed ? '✅ 通过' : '❌ 未通过') + '<br><small>简答题需手动对照参考答案评分</small>';
+
+  // Save exam result
+  var examResults = JSON.parse(localStorage.getItem(LS_EXAM) || '[]');
+  examResults.push({
+    date: new Date().toISOString(),
+    score: pct,
+    correct: correct,
+    total: totalMCQ
+  });
+  localStorage.setItem(LS_EXAM, JSON.stringify(examResults));
+});
+
+// ============================================================
+// REVIEW MODE
+// ============================================================
+document.getElementById('startReview').addEventListener('click', function(){
+  var list = document.getElementById('reviewList');
+  var html = '';
+
+  // Add wrong answers review
+  var wrongs = JSON.parse(localStorage.getItem(LS_WRONG) || '[]');
+  if(wrongs.length > 0){
+    html += '<li style="font-weight:700;color:var(--accent-dark);font-size:15px">📝 错题回顾（' + wrongs.length + ' 题）</li>';
+    wrongs.slice(-20).forEach(function(w, i){
+      html += '<li class="review-item-click" id="rev-wrong-' + i + '">❌ ' + w.q + ' <span style="color:var(--accent-dark);font-size:12px">（你选了：' + w.user + '，正确答案：' + w.correct + '）</span></li>';
+    });
+  }
+
+  // Add concept review
+  html += '<li style="font-weight:700;color:var(--accent-dark);font-size:15px;margin-top:12px">📚 核心概念复习</li>';
+  concepts.forEach(function(c, i){
+    html += '<li class="review-item-click" id="rev-' + i + '">' + c.icon + ' ' + c.name + ' — ' + c.hint + '</li>';
+  });
+
+  // Add exam history
+  var examResults = JSON.parse(localStorage.getItem(LS_EXAM) || '[]');
+  if(examResults.length > 0){
+    html += '<li style="font-weight:700;color:var(--accent-dark);font-size:15px;margin-top:12px">📊 考试记录</li>';
+    examResults.slice(-5).forEach(function(e){
+      var d = new Date(e.date);
+      var dateStr = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+      html += '<li class="review-item-click">📅 ' + dateStr + ' — 得分：' + e.score + '%（' + e.correct + '/' + e.total + '）</li>';
+    });
+  }
+
+  list.innerHTML = html;
+  list.querySelectorAll('.review-item-click').forEach(function(li){
+    li.addEventListener('click', function(){ this.classList.toggle('reviewed'); });
+  });
+});
+
+document.getElementById('exportWrong').addEventListener('click', function(){
+  var wrongs = JSON.parse(localStorage.getItem(LS_WRONG) || '[]');
+  if(wrongs.length === 0){ alert('暂无错题记录'); return; }
+  var text = '消费品评测与避坑 · 错题导出\n' + new Date().toLocaleDateString() + '\n\n';
+  wrongs.forEach(function(w, i){
+    text += (i + 1) + '. ' + w.q + '\n  你的答案：' + w.user + '\n  正确答案：' + w.correct + '\n\n';
+  });
+  var blob = new Blob([text], {type: 'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '消费品评测错题_' + new Date().toISOString().slice(0, 10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+// ============================================================
+// DEEP QUESTIONS
+// ============================================================
+function renderDeepQuestions(){
+  var container = document.getElementById('deepAskContainer');
+  var html = '';
+  deepQuestions.forEach(function(item, i){
+    html += '<div class="dq-item">';
+    html += '<div class="dq-question">' + (i + 1) + '. ' + item.q + '</div>';
+    html += '<div class="dq-answer">' + item.a + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.dq-question').forEach(function(q){
+    q.addEventListener('click', function(){
+      var ans = this.nextElementSibling;
+      ans.style.display = ans.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+}
+
+// ============================================================
+// CASE STUDIES
+// ============================================================
+function renderCases(){
+  var container = document.getElementById('caseContainer');
+  var html = '';
+  cases.forEach(function(c){
+    html += '<div class="case-card">';
+    html += '<div class="case-title">' + c.title + '</div>';
+    html += '<div class="case-meta">' + c.meta + '</div>';
+    html += c.content;
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+// ============================================================
+// DECISION SCENARIOS
+// ============================================================
+function renderDecision(){
+  var container = document.getElementById('decisionContainer');
+  var html = '';
+  decisionScenarios.forEach(function(s, i){
+    html += '<div class="decision-scenario">';
+    html += '<h4>' + s.title + '</h4>';
+    html += '<p>' + s.q + '</p>';
+    s.opts.forEach(function(opt, j){
+      html += '<label style="display:block;padding:6px 12px;margin:4px 0;border-radius:6px;cursor:pointer"><input type="radio" name="dec' + i + '" value="' + j + '"> ' + opt + '</label>';
+    });
+    html += '<button class="dec-submit" data-idx="' + i + '" data-ans="' + s.ans + '" data-explain="' + s.explain.replace(/"/g, '&quot;') + '">提交决策</button>';
+    html += '<div class="decision-output" id="decOut-' + i + '"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.dec-submit').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(this.dataset.idx);
+      var ans = parseInt(this.dataset.ans);
+      var radios = document.getElementsByName('dec' + idx);
+      var out = document.getElementById('decOut-' + idx);
+      var selected = -1;
+      for(var k = 0; k < radios.length; k++){
+        if(radios[k].checked){ selected = parseInt(radios[k].value); break; }
+      }
+      if(selected === -1){ out.style.display = 'block'; out.textContent = '⚠️ 请先选择一个选项'; return; }
+      out.style.display = 'block';
+      if(selected === ans){
+        out.innerHTML = '<strong>✅ 最佳选择：' + String.fromCharCode(65 + ans) + '</strong><br>' + this.dataset.explain;
+        out.style.background = '#d4edda';
+        out.style.color = '#155724';
+      } else {
+        out.innerHTML = '<strong>你的选择：' + String.fromCharCode(65 + selected) + ' | 最佳答案：' + String.fromCharCode(65 + ans) + '</strong><br>' + this.dataset.explain;
+        out.style.background = '#f8d7da';
+        out.style.color = '#721c24';
+      }
+    });
+  });
+}
+
+// ============================================================
+// MIND MAP
+// ============================================================
+function renderMindMap(){
+  // Mind map is already inline SVG in the HTML — no-op
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg){
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderCards();
+updateProgress();
+renderDeepQuestions();
+renderCases();
+renderDecision();
+})();
+</script>
 
 </body>
 </html>
