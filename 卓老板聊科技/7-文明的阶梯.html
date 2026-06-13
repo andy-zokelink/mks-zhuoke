@@ -286,7 +286,7 @@ body {
 }
 
 /* ===== Presentation 5: Folding Socratic Questions ===== */
-.socratic-set { margin: 32px 0; }
+.socratic-set { margin: 28px 0 8px; }
 .socratic-item {
   border: 1px solid var(--border);
   border-radius: var(--radius); margin-bottom: 12px;
@@ -347,7 +347,7 @@ body {
   font-family: var(--font-ui);
 }
 .excerpt-card p {
-  font-size: .82rem; color: var(--text-muted);
+  font-size: .82rem; color: var(--text-light);
   line-height: 1.7; display: -webkit-box;
   -webkit-line-clamp: 3; -webkit-box-orient: vertical;
   overflow: hidden;
@@ -409,6 +409,11 @@ body {
 .builder-brick .brick-era {
   font-size: .65rem; opacity: .6; margin-top: 4px;
 }
+
+/* ===== Socratic → River transition fix ===== */
+#socratic { padding-bottom: 20px; }
+#river { padding-top: 30px; }
+.excerpt-river { padding: 10px 0; }
 
 /* ===== Interactive: Where Are You ===== */
 .you-are-here {
@@ -499,6 +504,84 @@ body {
   .top-bar .title { font-size: .8rem; }
   .section-title { font-size: 1.3rem; }
   .hero-overlay h1 { font-size: 1.6rem; letter-spacing: 2px; }
+}
+
+/* ===== 3D Isometric Spiral Staircase ===== */
+.spiral-scene {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  height: 500px;
+  margin: 0 auto;
+  perspective: 700px;
+  perspective-origin: 50% 42%;
+}
+.spiral-step {
+  position: absolute;
+  border-radius: 8px;
+  border: 2px solid #b89860;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backface-visibility: hidden;
+  box-shadow: 0 4px 16px rgba(42,34,24,.15);
+  transition: all .35s cubic-bezier(.4,0,.2,1);
+  font-family: var(--font-ui);
+}
+.spiral-step .s-icon { font-size: 1.6rem; margin-bottom: 1px; line-height: 1; }
+.spiral-step .s-label { font-size: .72rem; font-weight: 700; color: #3a2010; text-align: center; line-height: 1.2; }
+.spiral-step .s-sub { font-size: .58rem; color: #6b5040; text-align: center; line-height: 1.2; }
+.spiral-step .s-person {
+  position: absolute;
+  right: -14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem; opacity: .75;
+  transition: all .3s;
+}
+.spiral-step:hover {
+  filter: brightness(1.18);
+  box-shadow: 0 8px 32px rgba(138,106,58,.5);
+  z-index: 999 !important;
+  border-color: var(--gold);
+}
+.spiral-step:hover .s-person {
+  opacity: 1; font-size: 1.3rem;
+}
+.s-step-1 { left:0; top:73%; width:50%; height:17%; transform:translateZ(0px); background:linear-gradient(135deg,#a89878,#887058); z-index:5; }
+.s-step-2 { left:6%; top:54%; width:44%; height:16%; transform:translateZ(35px); background:linear-gradient(135deg,#b8a888,#988068); z-index:4; }
+.s-step-3 { left:16%; top:36%; width:40%; height:15%; transform:translateZ(70px); background:linear-gradient(135deg,#c8b898,#a89068); z-index:3; }
+.s-step-4 { left:27%; top:19%; width:37%; height:15%; transform:translateZ(105px); background:linear-gradient(135deg,#d8ccb8,#b8a070); z-index:2; }
+.s-step-5 { left:37%; top:3%; width:35%; height:14%; transform:translateZ(140px); background:linear-gradient(135deg,#e8dcc8,#c8b080); z-index:1; }
+.spiral-path-svg {
+  position: absolute; top:0; left:0; width:100%; height:100%;
+  pointer-events: none; opacity: .3;
+}
+.spiral-question {
+  text-align: center;
+  padding-top: 8px;
+}
+.spiral-question p {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent-deep);
+  font-style: italic;
+}
+@media (max-width: 768px) {
+  .spiral-scene { height: 380px; perspective: 550px; }
+  .spiral-step .s-icon { font-size: 1.2rem; }
+  .spiral-step .s-label { font-size: .62rem; }
+  .spiral-step .s-sub { font-size: .52rem; }
+  .spiral-step .s-person { font-size: .8rem; right: -10px; }
+  .spiral-step:hover .s-person { font-size: 1rem; }
+}
+@media (max-width: 480px) {
+  .spiral-scene { height: 300px; perspective: 450px; }
+  .spiral-step .s-icon { font-size: 1rem; }
+  .spiral-step .s-label { font-size: .55rem; }
+  .spiral-step .s-sub { font-size: .48rem; }
+  .spiral-step .s-person { font-size: .65rem; right: -8px; }
 }
 </style>
 </head>
@@ -656,98 +739,53 @@ body {
     <div class="section-desc">每一级台阶都是一代人的全部努力——你在哪一级？</div>
   </div>
 
-  <div class="svg-canvas">
-    <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#1a3050"/>
-          <stop offset="100%" stop-color="#c8b890"/>
-        </linearGradient>
-        <linearGradient id="earthGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#c8b890"/>
-          <stop offset="50%" stop-color="#8a6a3a"/>
-          <stop offset="100%" stop-color="#2a1a08"/>
-        </linearGradient>
-        <linearGradient id="stepGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#e8dcc8"/>
-          <stop offset="100%" stop-color="#c8b080"/>
-        </linearGradient>
-        <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-
-      <!-- Background -->
-      <rect width="900" height="620" fill="url(#skyGrad)" opacity="0.15"/>
-      <rect y="280" width="900" height="340" fill="url(#earthGrad)" opacity="0.12"/>
-
-      <!-- Horizon line -->
-      <line x1="0" y1="310" x2="900" y2="310" stroke="#c8b080" stroke-width="1" stroke-dasharray="8,4" opacity="0.4"/>
-
-      <!-- Title -->
-      <text x="450" y="45" text-anchor="middle" font-family="serif" font-size="22" fill="#6b4f28" letter-spacing="4">人类文明的阶梯</text>
-      <text x="450" y="70" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#a08050" letter-spacing="2">盘旋而上，每一步都踩在前一步的肩膀上</text>
-
-      <!-- Spiral staircase from bottom to top -->
-      <!-- Step 1: Underground - Water systems -->
-      <rect x="60" y="530" width="180" height="36" rx="6" fill="url(#stepGrad)" stroke="#b89860" stroke-width="1.5" opacity="0.9"/>
-      <text x="150" y="553" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#4a3020">🏛️ 公元前 · 城市水系统</text>
-      <text x="150" y="585" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#8a7a60">罗马水道 · 公共卫生</text>
-
-      <!-- Connection line 1→2 -->
-      <path d="M240,548 Q300,540 280,470" stroke="#b88820" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.5"/>
-
-      <!-- Step 2: Science & Culture -->
-      <rect x="240" y="440" width="190" height="36" rx="6" fill="url(#stepGrad)" stroke="#b89860" stroke-width="1.5" opacity="0.9"/>
-      <text x="335" y="463" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#4a3020">📚 1600s · 科学革命</text>
-      <text x="335" y="495" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#8a7a60">望远镜 · 印刷术 · 科学方法</text>
-
-      <!-- Connection 2→3 -->
-      <path d="M430,458 Q480,450 500,380" stroke="#b88820" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.5"/>
-
-      <!-- Step 3: Cities & Industry -->
-      <rect x="460" y="350" width="200" height="36" rx="6" fill="url(#stepGrad)" stroke="#b89860" stroke-width="1.5" opacity="0.9"/>
-      <text x="560" y="373" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#4a3020">🏭 1800s · 工业城市</text>
-      <text x="560" y="405" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#8a7a60">下水道系统 · 公共卫生觉醒</text>
-
-      <!-- Connection 3→4 -->
-      <path d="M660,368 Q710,350 700,270" stroke="#b88820" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.5"/>
-
+  <div class="svg-canvas" id="spiralStairContainer">
+    <div class="spiral-scene">
+      <!-- Step 1: Ancient (bottom, largest, closest) -->
+      <div class="spiral-step s-step-1">
+        <span class="s-icon">🏛️</span>
+        <span class="s-label">公元前·城市水系统</span>
+        <span class="s-sub">罗马水道</span>
+        <span class="s-person">🏺</span>
+      </div>
+      <!-- Step 2: Science Revolution -->
+      <div class="spiral-step s-step-2">
+        <span class="s-icon">📚</span>
+        <span class="s-label">1600s·科学革命</span>
+        <span class="s-sub">望远镜·印刷术</span>
+        <span class="s-person">🔭</span>
+      </div>
+      <!-- Step 3: Industrial -->
+      <div class="spiral-step s-step-3">
+        <span class="s-icon">🏭</span>
+        <span class="s-label">1800s·工业城市</span>
+        <span class="s-sub">下水道·公共卫生</span>
+        <span class="s-person">👷</span>
+      </div>
       <!-- Step 4: Environment -->
-      <rect x="590" y="240" width="210" height="36" rx="6" fill="url(#stepGrad)" stroke="#b89860" stroke-width="1.5" opacity="0.9"/>
-      <text x="695" y="263" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#4a3020">🌍 1900s · 环保觉醒</text>
-      <text x="695" y="295" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#8a7a60">DDT · 臭氧层 · 气候意识</text>
-
-      <!-- Connection 4→5 -->
-      <path d="M800,258 Q830,240 780,160" stroke="#b88820" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.5"/>
-
-      <!-- Step 5: Space -->
-      <rect x="640" y="130" width="200" height="36" rx="6" fill="url(#stepGrad)" stroke="#b89860" stroke-width="1.5" opacity="0.9" filter="url(#glow)"/>
-      <text x="740" y="153" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#4a3020">🚀 1969 · 登上月球</text>
-      <text x="740" y="185" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#8a7a60">阿波罗 · 哈勃 · 火星殖民</text>
-
-      <!-- Moon -->
-      <circle cx="740" cy="105" r="14" fill="#e8dcc8" stroke="#c8b080" stroke-width="1" opacity="0.7"/>
-      <circle cx="736" cy="102" r="3" fill="#c8b080" opacity="0.5"/>
-      <circle cx="744" cy="108" r="2" fill="#c8b080" opacity="0.4"/>
-
-      <!-- Stars -->
-      <circle cx="100" cy="80" r="1.5" fill="#e8dcc8" opacity="0.6"/>
-      <circle cx="250" cy="50" r="1" fill="#e8dcc8" opacity="0.5"/>
-      <circle cx="400" cy="100" r="1.5" fill="#e8dcc8" opacity="0.4"/>
-      <circle cx="550" cy="70" r="1" fill="#e8dcc8" opacity="0.5"/>
-      <circle cx="820" cy="40" r="1.5" fill="#e8dcc8" opacity="0.6"/>
-      <circle cx="180" cy="130" r="1" fill="#e8dcc8" opacity="0.3"/>
-      <circle cx="480" cy="55" r="1.2" fill="#e8dcc8" opacity="0.4"/>
-
-      <!-- Ground base -->
-      <rect x="30" y="560" width="840" height="45" rx="8" fill="#3a2a15" opacity="0.25"/>
-
-      <!-- Labels: Above / Below horizon -->
-      <text x="830" y="280" text-anchor="end" font-family="serif" font-size="11" fill="#1a3050" font-style="italic" opacity="0.5">"仰望的部分"</text>
-      <text x="830" y="340" text-anchor="end" font-family="serif" font-size="11" fill="#5a3a20" font-style="italic" opacity="0.5">"扎根的部分"</text>
-
-      <!-- Question at bottom -->
-      <text x="450" y="605" text-anchor="middle" font-family="serif" font-size="13" fill="#6b4f28" font-style="italic">你站在哪一级？下一步往哪踩？</text>
-    </svg>
+      <div class="spiral-step s-step-4">
+        <span class="s-icon">🌍</span>
+        <span class="s-label">1900s·环保觉醒</span>
+        <span class="s-sub">DDT·臭氧层</span>
+        <span class="s-person">👩‍🔬</span>
+      </div>
+      <!-- Step 5: Space (top, farthest) -->
+      <div class="spiral-step s-step-5">
+        <span class="s-icon">🚀</span>
+        <span class="s-label">1969·登上月球</span>
+        <span class="s-sub">阿波罗·哈勃·火星</span>
+        <span class="s-person">🧑‍🚀</span>
+      </div>
+      <!-- Spiral connecting path -->
+      <svg class="spiral-path-svg" viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
+        <path d="M160,420 C260,400 320,390 300,340 C280,290 340,270 310,210 C280,160 340,140 300,80 C270,40 320,30 290,8" stroke="#b88820" stroke-width="2.5" fill="none" stroke-dasharray="8,5" opacity="0.5"/>
+        <path d="M160,420 C260,400 320,390 300,340 C280,290 340,270 310,210 C280,160 340,140 300,80 C270,40 320,30 290,8" stroke="#d4c080" stroke-width="6" fill="none" opacity="0.15"/>
+      </svg>
+    </div>
+    <!-- Bottom question -->
+    <div class="spiral-question">
+      <p>你站在哪一级？下一步往哪踩？</p>
+    </div>
   </div>
 </section>
 
