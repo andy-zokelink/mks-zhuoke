@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生命科学的边界 — 站在科学边界上的一次侦查</title>
+<style>
+/* ===== 生命科学的边界 — MKS v4 沉浸叙事 =====
+ * 本质洞察：站在科学边界侦查——哪些突破是真的，哪些是炒作，哪些我们还不知道
+ * 情感基调：祛魅与踏实——理解身体和生命的复杂性，少一份莫名的恐惧
+ * 叙事锚点：66篇文章，从流感新药到疫苗争议，从基因测序到人类祖先
+ * 视觉策略：生命绿 + 深灰——区别于其他专题的独特配色
+ */
+
+:root {
+  --bg: #f8faf7;
+  --surface: #fafcfa;
+  --surface2: #f0f5ef;
+  --green: #3d8b40;
+  --green-dim: #2e6b31;
+  --green-light: #a5d6a7;
+  --green-wash: rgba(61,139,64,.06);
+  --dark: #1a1a2e;
+  --text: #1e2124;
+  --text-mid: #3a3d42;
+  --text-dim: #6b6e73;
+  --accent-teal: #00796b;
+  --accent-teal-light: #e0f2f1;
+  --amber: #f57c00;
+  --amber-light: #fff3e0;
+  --red-soft: #c62828;
+  --red-light: #ffebee;
+  --border: #c8d6c5;
+  --border-light: #e4ebe1;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --shadow-sm: 0 1px 4px rgba(26,26,46,.04);
+  --shadow: 0 2px 16px rgba(26,26,46,.06);
+  --shadow-lg: 0 8px 32px rgba(26,26,46,.10);
+  --font-serif: 'Noto Serif SC', 'Source Han Serif SC', Georgia, 'Songti SC', serif;
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-serif);
+  line-height: 1.8;
+  font-size: 16px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 3px; }
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(248,250,247,.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 10px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.top-nav .home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; border-radius: 20px;
+  background: var(--green);
+  color: #fff; font-size: 13px; font-weight: 600;
+  text-decoration: none; font-family: var(--font-sans);
+  transition: transform .2s, box-shadow .2s;
+}
+.top-nav .home-link:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(61,139,64,.35); }
+.top-nav .breadcrumb { font-size: 12px; color: var(--text-dim); font-family: var(--font-sans); }
+.top-nav .breadcrumb a { color: var(--green); text-decoration: none; }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--accent-teal), var(--green-dim));
+  z-index: 1001; transition: width .1s linear;
+}
+
+/* ===== HERO — Canvas DNA粒子 + 侦查隐喻 ===== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+  padding: 80px 20px 40px;
+}
+.hero canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-content { position: relative; z-index: 1; text-align: center; max-width: 800px; }
+.hero-content .eyebrow {
+  font-family: var(--font-sans); font-size: .8rem; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--green-dim); margin-bottom: 16px;
+}
+.hero-content h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900;
+  line-height: 1.25; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--green) 50%, var(--accent-teal) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-content .subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-mid);
+  margin-bottom: 36px; line-height: 1.7;
+}
+.hero-stats { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+.hero-stat { text-align: center; min-width: 80px; }
+.hero-stat .num { font-size: 2.2rem; font-weight: 900; color: var(--green); font-family: var(--font-sans); }
+.hero-stat .label { font-size: .8rem; color: var(--text-dim); font-family: var(--font-sans); margin-top: 4px; }
+.scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: var(--text-dim); font-size: 12px; font-family: var(--font-sans);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  animation: float 2.5s ease-in-out infinite; z-index: 1;
+}
+.scroll-hint .arrow { font-size: 1.2rem; }
+@keyframes float { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+/* ===== CHAPTERS ===== */
+.chapter {
+  position: relative; padding: 80px 20px; min-height: 50vh;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--border-light);
+}
+.chapter::before {
+  content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green-light), transparent);
+}
+.chapter-header { text-align: center; margin-bottom: 48px; max-width: 680px; }
+.chapter-header .ch-num {
+  font-family: var(--font-sans); font-size: .75rem; letter-spacing: 3px;
+  color: var(--green-dim); margin-bottom: 8px;
+}
+.chapter-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800;
+  background: linear-gradient(135deg, var(--dark), var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 12px; line-height: 1.3;
+}
+.chapter-header .ch-desc { color: var(--text-mid); font-size: 1rem; max-width: 520px; margin: 0 auto; }
+.chapter-body { max-width: 960px; width: 100%; }
+
+/* ===== 1. 侦查对话卡 ===== */
+.detect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+@media(max-width:640px){.detect-grid{grid-template-columns:1fr;}}
+.detect-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 24px; border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm); transition: all .3s;
+  position: relative; overflow: hidden;
+}
+.detect-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+  background: var(--green); border-radius: 3px 0 0 3px;
+}
+.detect-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.detect-card .q {
+  font-family: var(--font-sans); font-size: .9rem; font-weight: 600;
+  color: var(--green); margin-bottom: 10px;
+}
+.detect-card .q::before { content: '🔍 '; }
+.detect-card .a {
+  font-size: .9rem; color: var(--text-mid); line-height: 1.75;
+}
+.detect-card .a::before { content: '💡 '; }
+
+/* ===== Canvas动画阶段容器 ===== */
+.anim-stage {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border-light); box-shadow: var(--shadow);
+  padding: 28px; margin: 28px 0; text-align: center; overflow: hidden;
+}
+.anim-stage svg { max-width: 100%; height: auto; }
+.anim-stage .legend {
+  display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  margin-top: 16px; font-size: .82rem; color: var(--text-dim); font-family: var(--font-sans);
+}
+.anim-stage .legend span { display: flex; align-items: center; gap: 5px; }
+.anim-stage .legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ===== 时间线 ===== */
+.timeline { position: relative; padding: 20px 0; margin: 24px 0; }
+.timeline::before {
+  content: ''; position: absolute; left: 24px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom, var(--green-light), var(--green), var(--green-light));
+}
+@media(min-width:641px){.timeline::before{left:50%;transform:translateX(-50%);}}
+.timeline-item {
+  position: relative; padding-left: 56px; margin-bottom: 28px;
+}
+@media(min-width:641px){
+  .timeline-item { width: 50%; padding-left: 0; }
+  .timeline-item:nth-child(odd) { padding-right: 44px; text-align: right; }
+  .timeline-item:nth-child(even) { margin-left: 50%; padding-left: 44px; }
+}
+.timeline-item::before {
+  content: ''; position: absolute; left: 16px; top: 6px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--green); border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--green-light);
+}
+@media(min-width:641px){
+  .timeline-item:nth-child(odd)::before { left: auto; right: -8px; }
+  .timeline-item:nth-child(even)::before { left: -8px; }
+}
+.timeline-item .tl-year {
+  font-family: var(--font-sans); font-size: .78rem; font-weight: 700;
+  color: var(--green); margin-bottom: 4px;
+}
+.timeline-item .tl-title { font-weight: 700; font-size: .95rem; color: var(--text); margin-bottom: 4px; }
+.timeline-item .tl-desc { font-size: .85rem; color: var(--text-dim); line-height: 1.7; }
+
+/* ===== 翻转卡 (真相揭露) ===== */
+.myth-stage { margin: 28px 0; }
+.myth-card {
+  background: var(--surface); border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--border-light);
+  margin-bottom: 14px; cursor: pointer;
+}
+.myth-card .myth-front {
+  padding: 18px 24px; display: flex; align-items: center; gap: 12px;
+  font-size: .9rem;
+}
+.myth-card .myth-icon {
+  width: 36px; height: 36px; border-radius: 50%; background: #e8f5e9;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.myth-card .myth-claim { color: var(--text-mid); flex: 1; }
+.myth-card .myth-toggle {
+  font-family: var(--font-sans); font-size: .78rem; color: var(--green);
+  font-weight: 600; flex-shrink: 0;
+}
+.myth-card .myth-back {
+  max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .4s ease;
+  background: #e8f5e9; border-top: 1px solid transparent;
+}
+.myth-card.open .myth-back {
+  max-height: 400px; padding: 18px 24px; border-top-color: #c8e6c9;
+}
+.myth-card .myth-back .fact-label {
+  font-family: var(--font-sans); font-size: .78rem; font-weight: 700;
+  color: var(--green-dim); margin-bottom: 4px;
+}
+.myth-card .myth-back .fact-text { font-size: .87rem; color: var(--text-mid); line-height: 1.7; }
+
+/* ===== 折叠追问 (Socratic) ===== */
+.socratic { margin: 28px 0; }
+.socratic-item {
+  background: var(--surface); border-radius: var(--radius); padding: 0;
+  margin-bottom: 12px; border: 1px solid var(--border-light); overflow: hidden;
+}
+.socratic-item .soc-q {
+  padding: 16px 20px; cursor: pointer; font-weight: 600;
+  font-size: .92rem; color: var(--dark); display: flex; align-items: center; gap: 10px;
+  transition: background .2s;
+}
+.socratic-item .soc-q:hover { background: var(--green-wash); }
+.socratic-item .soc-q .soc-num {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--green);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-family: var(--font-sans); flex-shrink: 0;
+}
+.socratic-item .soc-a {
+  max-height: 0; overflow: hidden; transition: max-height .4s ease;
+}
+.socratic-item.open .soc-a { max-height: 500px; }
+.socratic-item .soc-a-inner {
+  padding: 0 20px 20px 58px; font-size: .88rem; color: var(--text-mid); line-height: 1.8;
+}
+
+/* ===== 折叠解剖图 (Accordion) ===== */
+.accordion { margin: 24px 0; }
+.accordion-item {
+  background: var(--surface); border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light); margin-bottom: 8px;
+  overflow: hidden;
+}
+.accordion-item .acc-header {
+  padding: 16px 20px; display: flex; align-items: center; gap: 12px;
+  cursor: pointer; font-weight: 600; font-size: .95rem; color: var(--text);
+  transition: background .2s;
+}
+.accordion-item .acc-header:hover { background: var(--green-wash); }
+.accordion-item .acc-header .acc-icon {
+  transition: transform .3s; font-size: .7rem; color: var(--green);
+}
+.accordion-item.open .acc-header .acc-icon { transform: rotate(90deg); }
+.accordion-item .acc-body {
+  max-height: 0; overflow: hidden; transition: max-height .4s ease;
+}
+.accordion-item.open .acc-body { max-height: 600px; }
+.accordion-item .acc-content {
+  padding: 0 20px 20px; font-size: .88rem; color: var(--text-mid); line-height: 1.8;
+}
+
+/* ===== 知识边界网格 ===== */
+.boundary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin: 24px 0; }
+.boundary-card {
+  background: var(--surface); border-radius: var(--radius); padding: 20px;
+  border: 1px dashed var(--border); text-align: center; transition: all .3s;
+}
+.boundary-card:hover { border-color: var(--green); border-style: solid; box-shadow: var(--shadow); }
+.boundary-card .b-icon { font-size: 2rem; margin-bottom: 8px; }
+.boundary-card .b-title { font-weight: 700; font-size: .92rem; color: var(--dark); margin-bottom: 6px; font-family: var(--font-sans); }
+.boundary-card .b-desc { font-size: .82rem; color: var(--text-dim); line-height: 1.65; }
+
+/* ===== 叙事引用带 ===== */
+.quote-band {
+  background: linear-gradient(135deg, var(--green-wash), rgba(0,121,107,.04));
+  border-radius: var(--radius); padding: 32px; margin: 28px 0;
+  border: 1px solid var(--border-light);
+}
+.quote-band .quote-text {
+  font-size: 1.05rem; color: var(--dark); line-height: 1.8; font-style: italic;
+}
+.quote-band .quote-source {
+  font-family: var(--font-sans); font-size: .78rem; color: var(--green-dim);
+  margin-top: 12px; text-align: right;
+}
+
+/* ===== 数据叙事带 ===== */
+.stat-ribbon {
+  display: flex; gap: 16px; flex-wrap: wrap; margin: 28px 0;
+}
+.stat-ribbon .ribbon-item {
+  flex: 1; min-width: 140px; background: var(--surface);
+  border-radius: var(--radius); padding: 20px; text-align: center;
+  border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);
+}
+.ribbon-item .ribbon-num {
+  font-size: 2rem; font-weight: 900; color: var(--green); font-family: var(--font-sans);
+}
+.ribbon-item .ribbon-label { font-size: .8rem; color: var(--text-dim); font-family: var(--font-sans); margin-top: 4px; }
+
+/* ===== SVG图解区 ===== */
+.svg-stage {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border-light); box-shadow: var(--shadow);
+  padding: 20px; margin: 28px 0; text-align: center; overflow-x: auto;
+}
+.svg-stage svg { max-width: 100%; height: auto; }
+
+/* ===== 尾声 ===== */
+.outro {
+  text-align: center; padding: 80px 20px; max-width: 640px; margin: 0 auto;
+}
+.outro h2 {
+  font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800;
+  color: var(--dark); margin-bottom: 16px;
+}
+.outro p { color: var(--text-mid); font-size: 1rem; line-height: 1.9; margin-bottom: 12px; }
+.outro .outro-cta {
+  display: inline-block; margin-top: 24px; padding: 12px 32px;
+  background: var(--green); color: #fff; border-radius: 24px;
+  text-decoration: none; font-family: var(--font-sans); font-weight: 600;
+  font-size: .95rem; transition: transform .2s, box-shadow .2s;
+}
+.outro .outro-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(61,139,64,.35); }
+
+/* ===== FOOTER ===== */
+.page-footer {
+  text-align: center; padding: 32px 20px; border-top: 1px solid var(--border-light);
+  color: var(--text-dim); font-size: .82rem; font-family: var(--font-sans);
+}
+.page-footer a { color: var(--green); text-decoration: none; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal { animation: fadeUp .7s ease both; }
+.reveal-d1 { animation-delay: .1s; }
+.reveal-d2 { animation-delay: .2s; }
+.reveal-d3 { animation-delay: .3s; }
+.reveal-d4 { animation-delay: .4s; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:640px){
+  .chapter { padding: 48px 16px; }
+  .chapter-header { margin-bottom: 28px; }
+  .hero-stats { gap: 16px; }
+  .hero-stat .num { font-size: 1.6rem; }
+  .stat-ribbon { gap: 8px; }
+  .stat-ribbon .ribbon-item { min-width: 100px; padding: 14px; }
+  .quote-band { padding: 20px; }
+  .top-nav { padding: 8px 16px; }
+  .anim-stage { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Top Navigation -->
+<nav class="top-nav">
+  <a href="../index.html" class="home-link">← 返回首页</a>
+  <span class="breadcrumb">科技参考4 / 生命科学的边界</span>
+</nav>
+
+<!-- ═══════════ HERO — Canvas DNA粒子侦查 ═══════════ -->
+<section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-content reveal">
+    <div class="eyebrow">MKS v4 · 沉浸叙事</div>
+    <h1>生命科学的边界</h1>
+    <p class="subtitle">
+      66篇文章，站在科学边界上的一次侦查。<br>
+      哪些突破是真的，哪些是炒作，哪些我们还不知道。
+    </p>
+    <div class="hero-stats reveal reveal-d1">
+      <div class="hero-stat"><div class="num">66</div><div class="label">篇文章</div></div>
+      <div class="hero-stat"><div class="num">8</div><div class="label">大主题</div></div>
+      <div class="hero-stat"><div class="num">5730</div><div class="label">年碳-14半衰期</div></div>
+      <div class="hero-stat"><div class="num">5万</div><div class="label">年前掌控火</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>向下滚动，开始侦查</span>
+    <span class="arrow">↓</span>
+  </div>
+</section>
+
+<!-- ═══════════ 第一章：病毒与流感 — 看不见的敌人 ═══════════ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第一章</div>
+    <h2>病毒与流感：看不见的敌人</h2>
+    <p class="ch-desc">2024-2025年冬天，中国流感爆发季节里突然出现了一款新药。而禽流感H5N1，离人传人只差一个突变。</p>
+  </div>
+  <div class="chapter-body">
+
+    <!-- Canvas动画：病毒入侵与药物拦截 -->
+    <div class="anim-stage reveal reveal-d1" id="virusStage">
+      <canvas id="virusCanvas" style="width:100%;max-width:900px;height:auto;border-radius:12px;cursor:default;"></canvas>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;">
+        <button id="virusPlayBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer;font-family:var(--font-sans);font-size:13px;">⏸ 暂停</button>
+        <button id="virusResetBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-mid);cursor:pointer;font-family:var(--font-sans);font-size:13px;">↺ 重播</button>
+        <span style="font-family:var(--font-sans);font-size:12px;color:var(--text-dim);" id="virusPhaseLabel">阶段：病毒入侵中</span>
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:#e53935;"></span> 流感病毒</span>
+        <span><span class="dot" style="background:var(--green);"></span> 奥司他韦 (神经氨酸酶抑制剂)</span>
+        <span><span class="dot" style="background:#5c6bc0;"></span> 细胞膜受体</span>
+        <span><span class="dot" style="background:#ffa726;"></span> 被阻断的病毒</span>
+      </div>
+    </div>
+
+    <!-- 侦查对话卡 -->
+    <div class="detect-grid reveal reveal-d2">
+      <div class="detect-card">
+        <div class="q">奥司他韦为什么能治流感？</div>
+        <div class="a">流感病毒入侵细胞后复制出成千上万份病毒，准备往外钻时，需要切断与细胞膜的连接。奥司他韦抑制了神经氨酸酶——病毒用来切断连接的那把"剪刀"。结果病毒被细胞膜牢牢粘住，最终和细胞一起被免疫系统消化掉。</div>
+      </div>
+      <div class="detect-card">
+        <div class="q">禽流感H5N1离人传人有多远？</div>
+        <div class="a">2024年12月《科学》杂志刊登研究：H5N1禽流感离人传人只差一个突变。血凝素（HA）蛋白如果能匹配人类上呼吸道的唾液酸受体α2-6，就能实现人传人。目前的H5N1只匹配鸟类的α2-3受体——但一个氨基酸的改变就足以切换。</div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d3">
+      <div class="quote-text">"甲型流感按照病毒表面的血凝素（HA）与神经氨酸酶（NA）两种蛋白质区分……病毒进入体内能不能抓握住细胞？具体抓握哪里呢？就是细胞表面的唾液酸分子。"</div>
+      <div class="quote-source">—— 卓克《017｜禽流感离人传人，只差1个突变》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第二章：疫苗争议 — 真相追踪 ═══════════ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第二章</div>
+    <h2>疫苗争议深度核实</h2>
+    <p class="ch-desc">2025年美国参议院听证会指控疫苗"作恶"。卓克用6篇文章逐条核实——这不是立场站队，是证据追踪。</p>
+  </div>
+  <div class="chapter-body">
+
+    <!-- SVG图解：疫苗听证会时间线 -->
+    <div class="svg-stage reveal reveal-d1">
+      <svg viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vaxGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3d8b40"/><stop offset="100%" stop-color="#00796b"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="460" fill="#fafcfa" rx="14"/>
+        <text x="400" y="32" text-anchor="middle" font-size="15" font-weight="800" fill="#1a1a2e" font-family="sans-serif">美国参议院疫苗听证会 · 关键时间线与核实结论</text>
+
+        <!-- 时间线主轴线 -->
+        <line x1="80" y1="240" x2="760" y2="240" stroke="#3d8b40" stroke-width="2.5"/>
+
+        <!-- 节点1: 2021.2 以色列 -->
+        <circle cx="130" cy="240" r="12" fill="#3d8b40" stroke="#fafcfa" stroke-width="3"/>
+        <text x="130" y="220" text-anchor="middle" font-size="9" fill="#3d8b40" font-weight="700" font-family="sans-serif">2021.2</text>
+        <text x="130" y="275" text-anchor="middle" font-size="10" fill="#1a1a2e" font-weight="600" font-family="sans-serif">以色列发现心肌炎信号</text>
+        <text x="130" y="292" text-anchor="middle" font-size="8" fill="#6b6e73" font-family="sans-serif">国防军+卫生部上报FDA</text>
+
+        <!-- 节点2: 2021.4 -->
+        <circle cx="260" cy="240" r="12" fill="#3d8b40" stroke="#fafcfa" stroke-width="3"/>
+        <text x="260" y="220" text-anchor="middle" font-size="9" fill="#3d8b40" font-weight="700" font-family="sans-serif">2021.4</text>
+        <text x="260" y="275" text-anchor="middle" font-size="10" fill="#1a1a2e" font-weight="600" font-family="sans-serif">以色列发布新闻稿</text>
+        <text x="260" y="292" text-anchor="middle" font-size="8" fill="#6b6e73" font-family="sans-serif">向公众提及疑似副作用</text>
+
+        <!-- 节点3: 2021.6 -->
+        <circle cx="400" cy="240" r="14" fill="#f57c00" stroke="#fafcfa" stroke-width="3"/>
+        <text x="400" y="218" text-anchor="middle" font-size="9" fill="#f57c00" font-weight="700" font-family="sans-serif">2021.6</text>
+        <text x="400" y="275" text-anchor="middle" font-size="10" fill="#1a1a2e" font-weight="600" font-family="sans-serif">FDA+CDC公开数据</text>
+        <text x="400" y="292" text-anchor="middle" font-size="8" fill="#6b6e73" font-family="sans-serif">直播心肌炎统计·收益对照</text>
+
+        <!-- 节点4: 2021.6 黑框 -->
+        <circle cx="530" cy="240" r="12" fill="#3d8b40" stroke="#fafcfa" stroke-width="3"/>
+        <text x="530" y="218" text-anchor="middle" font-size="9" fill="#3d8b40" font-weight="700" font-family="sans-serif">2021.6.25</text>
+        <text x="530" y="275" text-anchor="middle" font-size="10" fill="#1a1a2e" font-weight="600" font-family="sans-serif">辉瑞/莫德纳改说明书</text>
+        <text x="530" y="292" text-anchor="middle" font-size="8" fill="#6b6e73" font-family="sans-serif">新增心肌炎黑框警示</text>
+
+        <!-- 节点5: 听证会 -->
+        <circle cx="680" cy="240" r="16" fill="#c62828" stroke="#fafcfa" stroke-width="3"/>
+        <text x="680" y="218" text-anchor="middle" font-size="9" fill="#c62828" font-weight="700" font-family="sans-serif">2025.5.21</text>
+        <text x="680" y="275" text-anchor="middle" font-size="10" fill="#1a1a2e" font-weight="600" font-family="sans-serif">参议院听证会</text>
+        <text x="680" y="292" text-anchor="middle" font-size="8" fill="#6b6e73" font-family="sans-serif">6位证人·多项质疑</text>
+
+        <!-- 底部结论区 -->
+        <rect x="80" y="320" width="640" height="120" rx="10" fill="#e8f5e9" stroke="#c8e6c9" stroke-width="1"/>
+        <text x="400" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#2e6b31" font-family="sans-serif">🔬 卓克6篇文章逐条核实后的结论</text>
+        <text x="400" y="370" text-anchor="middle" font-size="10" fill="#3a3d42" font-family="sans-serif">▸ 心肌炎风险在2个月内被公布，不存在"隐瞒"</text>
+        <text x="400" y="390" text-anchor="middle" font-size="10" fill="#3a3d42" font-family="sans-serif">▸ 1/800严重不良事件数据来自统计方法错误的论文</text>
+        <text x="400" y="410" text-anchor="middle" font-size="10" fill="#3a3d42" font-family="sans-serif">▸ 第五位证人律师通过"狮子大开口"式信息公开申请牟利</text>
+        <text x="400" y="430" text-anchor="middle" font-size="10" fill="#3a3d42" font-family="sans-serif">▸ mRNA疫苗2个月观察期确比常规短，但是在疫情紧急条件下做出的权衡</text>
+      </svg>
+    </div>
+
+    <!-- 翻转卡 -->
+    <div class="myth-stage reveal reveal-d2">
+      <div class="myth-card" onclick="this.classList.toggle('open')">
+        <div class="myth-front">
+          <span class="myth-icon">🔊</span>
+          <span class="myth-claim">刺突蛋白形成微血栓导致长新冠</span>
+          <span class="myth-toggle">点击查看真相 →</span>
+        </div>
+        <div class="myth-back">
+          <div class="fact-label">🔬 科学事实</div>
+          <div class="fact-text">第三位证人（Dr. Jordan Vaughn）声称刺突蛋白在血管里形成不可降解的淀粉样纤维微血栓。但刺突蛋白本身是病毒用于抓握ACE2受体的工具——mRNA疫苗中的mRNA图纸编码的正是这个蛋白序列。目前没有足够证据支持"不可降解微血栓"这一说法，相关论文未被主流学界认可。</div>
+        </div>
+      </div>
+      <div class="myth-card" onclick="this.classList.toggle('open')">
+        <div class="myth-front">
+          <span class="myth-icon">🔊</span>
+          <span class="myth-claim">疫苗严重不良事件比例高达1/800</span>
+          <span class="myth-toggle">点击查看真相 →</span>
+        </div>
+        <div class="myth-back">
+          <div class="fact-label">🔬 科学事实</div>
+          <div class="fact-text">这个数字来自一篇发表在《疫苗》期刊上的论文，但业界普遍认为该论文在统计方法上有严重缺陷——将接种疫苗后发生的所有不良事件都归因于疫苗，而忽略了背景发生率。科学界确认的因果性严重不良反应约为百万分之四，与论文结论相差300倍。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d3">
+      <div class="quote-text">"FDA在审核其他疫苗的时候，要求接种6个月以上的安全数据，而那两款mRNA新冠疫苗都只要求2个月以上的安全数据。所以短了很多。这是在疫情紧急条件下的权衡——不是隐瞒，是公开的政策选择。"</div>
+      <div class="quote-source">—— 卓克《102｜疫苗争议深度核实（5）》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第三章：基因与祖先 — 我们是谁 ═══════════ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第三章</div>
+    <h2>基因与祖先：我们是谁</h2>
+    <p class="ch-desc">从基因测序仪被禁到濛溪河遗址，从商业基因检测到人类曾经险些灭绝——祖先的故事藏在基因里。</p>
+  </div>
+  <div class="chapter-body">
+
+    <!-- 时间线：基因测序历史 -->
+    <div class="timeline reveal reveal-d1">
+      <div class="timeline-item">
+        <div class="tl-year">1990-2003</div>
+        <div class="tl-title">人类基因组计划</div>
+        <div class="tl-desc">耗资38亿美元，13年时间，测序深度6-10倍。3×10⁹个碱基对——人类第一次完整读取自己的"源代码"。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-year">2016</div>
+        <div class="tl-title">华大基因崛起</div>
+        <div class="tl-desc">通过不断并购和自主研发，华大基因突破了美国Illumina公司在基因测序仪领域的垄断。这为中国后来出台禁令提供了底气。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-year">2019</div>
+        <div class="tl-title">濛溪河遗址发现</div>
+        <div class="tl-desc">全球罕见的旧石器时代中期全科型遗址。距今10万-5万年前的人类在此生活，留下石器千件、动物化石18万件、种子6万粒。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-year">约90万年前</div>
+        <div class="tl-title">人类几近灭绝？</div>
+        <div class="tl-desc">2023年《科学》论文称人类祖先曾减少到仅1280人。后被学术界质疑证据链不完整——科学性存疑。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-year">约5万年前</div>
+        <div class="tl-title">祖先掌控了火</div>
+        <div class="tl-desc">中科院海洋研究所牵头的2025年研究证实：现代人直系祖先"掌控"火——能根据需要制造火——大约在5万年前。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-year">至今</div>
+        <div class="tl-title">非洲单一起源仍成立</div>
+        <div class="tl-desc">濛溪河遗址虽然重要，但无法撼动"现存人类全部源自最后一次走出非洲的智人后代"这个结论。</div>
+      </div>
+    </div>
+
+    <!-- 数据带 -->
+    <div class="stat-ribbon reveal reveal-d2">
+      <div class="ribbon-item">
+        <div class="ribbon-num">38亿$</div>
+        <div class="ribbon-label">第一次人类基因组测序花费</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">1280人</div>
+        <div class="ribbon-label">传说中人类祖先最少数量(存疑)</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">30万年</div>
+        <div class="ribbon-label">现代人已延续时间</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">2%</div>
+        <div class="ribbon-label">基因组中编码蛋白质的比例</div>
+      </div>
+    </div>
+
+    <div class="detect-grid reveal reveal-d3">
+      <div class="detect-card">
+        <div class="q">商业基因检测靠谱吗？</div>
+        <div class="a">大部分解读不靠谱——对健康状况和潜能的预测尤其不靠谱。但祖缘分析部分是靠谱的。几百块的检测不测基因病，只是对未来可能发生什么做推测。真正测基因病需要上万元。</div>
+      </div>
+      <div class="detect-card">
+        <div class="q">基因测序仪被禁对中国影响大吗？</div>
+        <div class="a">简单说：对自己国家公司无关紧要、在会造成对方公司利益损失的情况下才会出台禁令。华大基因已通过并购和研发把基因测序仪搞定，摆脱了Illumina的限制。</div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d4">
+      <div class="quote-text">"濛溪河遗址是全球范围内旧石器时代中期比较罕见的、完整的全科型遗址……但这个发现对'今天现存的人类全部源自最后一次人类祖先走出非洲的那一支智人的后代'这个结论是没有任何撼动的。"</div>
+      <div class="quote-source">—— 卓克《105｜问答：非洲单一起源证伪了？》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第四章：睡眠的科学 — 深度修复 ═══════════ -->
+<section class="chapter" id="ch4">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第四章</div>
+    <h2>睡眠的科学：你真的会睡觉吗？</h2>
+    <p class="ch-desc">安眠药能提供高质量睡眠吗？鬼压床是怎么回事？喝酒助眠到底好不好？——关于睡眠，科学知道的远比你以为的多。</p>
+  </div>
+  <div class="chapter-body">
+
+    <!-- SVG睡眠阶段图 -->
+    <div class="svg-stage reveal reveal-d1">
+      <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sleepDeep" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a237e"/><stop offset="100%" stop-color="#5c6bc0"/>
+          </linearGradient>
+          <linearGradient id="sleepREM" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3d8b40"/><stop offset="100%" stop-color="#a5d6a7"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="340" fill="#fafcfa" rx="14"/>
+        <text x="400" y="30" text-anchor="middle" font-size="14" font-weight="800" fill="#1a1a2e" font-family="sans-serif">自然睡眠周期与安眠药影响对比</text>
+
+        <!-- 自然睡眠 -->
+        <text x="200" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#3d8b40" font-family="sans-serif">🌿 自然睡眠</text>
+        <rect x="40" y="75" width="320" height="80" rx="10" fill="#e8f5e9"/>
+        <rect x="50" y="82" width="100" height="30" rx="6" fill="url(#sleepDeep)" opacity="0.8"/>
+        <text x="100" y="101" text-anchor="middle" font-size="10" fill="#fff" font-family="sans-serif">深度睡眠</text>
+        <rect x="160" y="82" width="80" height="30" rx="6" fill="#a5d6a7"/>
+        <text x="200" y="101" text-anchor="middle" font-size="10" fill="#1a1a2e" font-family="sans-serif">浅睡眠</text>
+        <rect x="250" y="82" width="90" height="30" rx="6" fill="url(#sleepREM)" opacity="0.7"/>
+        <text x="295" y="101" text-anchor="middle" font-size="10" fill="#fff" font-family="sans-serif">REM</text>
+        <text x="200" y="140" text-anchor="middle" font-size="9" fill="#3a3d42" font-family="sans-serif">深度睡眠集中在前40%·REM 70%在后半截</text>
+
+        <!-- 安眠药睡眠 -->
+        <text x="600" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#f57c00" font-family="sans-serif">💊 安眠药助眠</text>
+        <rect x="440" y="75" width="320" height="80" rx="10" fill="#fff3e0"/>
+        <rect x="450" y="82" width="120" height="30" rx="6" fill="url(#sleepDeep)" opacity="0.9"/>
+        <text x="510" y="101" text-anchor="middle" font-size="10" fill="#fff" font-family="sans-serif">深度睡眠↑延长</text>
+        <rect x="580" y="82" width="80" height="30" rx="6" fill="#ffe0b2"/>
+        <text x="620" y="101" text-anchor="middle" font-size="10" fill="#1a1a2e" font-family="sans-serif">浅睡眠</text>
+        <rect x="670" y="82" width="70" height="30" rx="6" fill="#ffcc80"/>
+        <text x="705" y="101" text-anchor="middle" font-size="10" fill="#1a1a2e" font-family="sans-serif">REM↓</text>
+        <text x="600" y="140" text-anchor="middle" font-size="9" fill="#3a3d42" font-family="sans-serif">深度↑但REM↓·酒精助眠出现反弹觉醒</text>
+
+        <!-- 鬼压床说明 -->
+        <rect x="100" y="180" width="600" height="54" rx="10" fill="#f0f5ef" stroke="#c8d6c5" stroke-width="1"/>
+        <text x="400" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#2e6b31" font-family="sans-serif">👻 鬼压床（睡眠瘫痪症）的科学解释</text>
+        <text x="400" y="222" text-anchor="middle" font-size="9" fill="#3a3d42" font-family="sans-serif">快速眼动睡眠(REM)时大脑状态与清醒无异·但身体肌肉被主动抑制(张力缺失)·醒来时肌肉抑制未及时解除 → 意识清醒但动不了</text>
+
+        <!-- 喝酒助眠 -->
+        <rect x="100" y="248" width="600" height="72" rx="10" fill="#ffebee" stroke="#ffcdd2" stroke-width="1"/>
+        <text x="400" y="270" text-anchor="middle" font-size="11" font-weight="700" fill="#c62828" font-family="sans-serif">🍷 喝酒助眠——初期的温柔陷阱</text>
+        <text x="400" y="290" text-anchor="middle" font-size="9" fill="#3a3d42" font-family="sans-serif">初期深度睡眠时长↑、REM↓·但酒精代谢后出现觉醒反弹·长期导致睡眠结构紊乱·"回血"(深度)上升但"回魔"(REM)下降</text>
+      </svg>
+    </div>
+
+    <!-- 折叠追问 -->
+    <div class="accordion reveal reveal-d2">
+      <div class="accordion-item">
+        <div class="acc-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="acc-icon">▶</span> 为什么会有"认床"现象？
+        </div>
+        <div class="acc-body"><div class="acc-content">
+          认床的科学术语叫"首夜效应"（First Night Effect）。脑科学研究发现，在陌生环境中睡觉时，大脑的左半球比右半球保持更高的警觉度——就像海豚睡觉时半个大脑保持清醒一样。这是一种演化留下的防御机制：在不安全的环境中保持部分警惕。通常第二晚就会消失。
+        </div></div>
+      </div>
+      <div class="accordion-item">
+        <div class="acc-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="acc-icon">▶</span> 安眠药能提供"高质量"睡眠吗？
+        </div>
+        <div class="acc-body"><div class="acc-content">
+          传统安眠药（苯二氮䓬类）虽然能帮助入睡，但改变了睡眠结构——深度睡眠延长但快速眼动睡眠缩短。真正高质量的睡眠需要两者平衡。好消息是：新一代食欲素受体拮抗剂类安眠药（如suvorexant）不抑制REM睡眠，更接近自然睡眠结构。科学正在逼近"高质量睡眠药"。
+        </div></div>
+      </div>
+      <div class="accordion-item">
+        <div class="acc-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="acc-icon">▶</span> 智能手表测睡眠准不准？
+        </div>
+        <div class="acc-body"><div class="acc-content">
+          手表通过光电容积脉搏波描记法（PPG）检测心率和运动来推测睡眠阶段。对于正常健康人，判断"睡了多久"还算靠谱（误差约10-20分钟），但对于判断"深度睡眠vs浅睡眠"的分段，准确率仅约60-70%。不能替代医用多导睡眠监测（PSG），但作为日常趋势参考足够。
+        </div></div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d3">
+      <div class="quote-text">"深度睡眠对人的身体健康特别重要，快速眼动睡眠对人的心理健康特别重要。其余的睡眠都可以视为，用来帮助人们进入刚刚那两个重要阶段的过渡阶段。"</div>
+      <div class="quote-source">—— 卓克《053｜安眠药能提供高质量睡眠吗？快了》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第五章：保健品祛魅 — 伪神药的解剖 ═══════════ -->
+<section class="chapter" id="ch5">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第五章</div>
+    <h2>保健品祛魅：神药是怎么炼成的</h2>
+    <p class="ch-desc">白桦树汁、灵芝孢子粉、碳-14核电池、安宫牛黄丸——每一款"神药"背后，都有一套相似的造神话术。</p>
+  </div>
+  <div class="chapter-body">
+
+    <!-- 数据叙事带 -->
+    <div class="stat-ribbon reveal reveal-d1">
+      <div class="ribbon-item">
+        <div class="ribbon-num">40元/升</div>
+        <div class="ribbon-label">白桦树汁最低价格(≈5倍牛奶)</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">99%</div>
+        <div class="ribbon-label">白桦树汁中的水含量</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">24种</div>
+        <div class="ribbon-label">1970-2006年天然产物制成的新药</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">几百万</div>
+        <div class="ribbon-label">自然界已研究+未研究的天然物质</div>
+      </div>
+    </div>
+
+    <!-- 翻转卡：保健品祛魅集 -->
+    <div class="myth-stage reveal reveal-d2">
+      <div class="myth-card" onclick="this.classList.toggle('open')">
+        <div class="myth-front">
+          <span class="myth-icon">🌿</span>
+          <span class="myth-claim">白桦树汁：欧洲富豪喝的"液体黄金"</span>
+          <span class="myth-toggle">点击查看真相 →</span>
+        </div>
+        <div class="myth-back">
+          <div class="fact-label">🔬 科学事实</div>
+          <div class="fact-text">白桦树汁99%都是水。宣传中的"排毒"效果——喝任何液体都会促尿，喝白开水效果一样。抗氧化、抗菌消炎、增强免疫、解酒、抗疲劳、抗肿瘤、抗癌——这些宣称没有一项通过严格的临床试验验证。每项保健品功能都有其"化腐朽为神奇"的话术套路。</div>
+        </div>
+      </div>
+      <div class="myth-card" onclick="this.classList.toggle('open')">
+        <div class="myth-front">
+          <span class="myth-icon">🍄</span>
+          <span class="myth-claim">灵芝孢子粉能抗肿瘤、延年益寿</span>
+          <span class="myth-toggle">点击查看真相 →</span>
+        </div>
+        <div class="myth-back">
+          <div class="fact-label">🔬 科学事实</div>
+          <div class="fact-text">纵观所有相关科学研究，大都质量低下、证据薄弱，且有利益相关。灵芝在中国之外的地区从未作为药物上市。在中国作为药物上市也是在特殊时段获批。近10年监管趋严，作为药品疗效上只许写"宁心安神，健脾益气"。其余均为保健食品备案。</div>
+        </div>
+      </div>
+      <div class="myth-card" onclick="this.classList.toggle('open')">
+        <div class="myth-front">
+          <span class="myth-icon">⚡</span>
+          <span class="myth-claim">碳-14核电池：千年寿命的能量革命</span>
+          <span class="myth-toggle">点击查看真相 →</span>
+        </div>
+        <div class="myth-back">
+          <div class="fact-label">🔬 科学事实</div>
+          <div class="fact-text">伪技术突破。宣传中的"每公斤2200瓦时能量密度"听起来惊人，但碳-14衰变的实际功率密度极低——低到需要几十年才能给手机充一次电。这种电池在极低功耗场景（如心脏起搏器）可能有应用前景，但绝非宣传中的"能量革命"。这是典型的"真技术原理+假工程突破"包装术。</div>
+        </div>
+      </div>
+      <div class="myth-card" onclick="this.classList.toggle('open')">
+        <div class="myth-front">
+          <span class="myth-icon">💊</span>
+          <span class="myth-claim">安宫牛黄丸：中风急救"神药"</span>
+          <span class="myth-toggle">点击查看真相 →</span>
+        </div>
+        <div class="myth-back">
+          <div class="fact-label">🔬 科学事实</div>
+          <div class="fact-text">协和医院神经内科彭斌团队的高质量多中心双盲实验显示：药物组恢复率与安慰剂组没有统计学显著差异。网上流传的"38% vs 24%"根本不是这篇研究的结果——是误读。这是迄今为止对安宫牛黄丸最高质量的临床研究，结论不支持其"神药"地位。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d3">
+      <div class="quote-text">"自然界对人体有害的物质远远多于有益的，这是事实。从1970年到2006年间，科学界从大自然天然产物里发现的对人体可以产生疗效、最后被制成药物的数量只有24个。大自然里盲人摸象一样找一个东西就吃，这个东西对人体有益的概率，最高也就是几万分之一。"</div>
+      <div class="quote-source">—— 卓克《069｜问答：自然界有益物质多还是有害物质多？》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第六章：衰老与寿命 — 设计寿命30年的机器 ═══════════ -->
+<section class="chapter" id="ch6">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第六章</div>
+    <h2>衰老与寿命：设计寿命30年的机器</h2>
+    <p class="ch-desc">人体器官各老各的——大脑和免疫系统的衰老对健康影响最大。但我们比演化聪明：理解了机制，就能让这台机器优雅运行更久。</p>
+  </div>
+  <div class="chapter-body">
+
+    <!-- Canvas动画：器官衰老独立模型 -->
+    <div class="anim-stage reveal reveal-d1" id="agingStage">
+      <canvas id="agingCanvas" style="width:100%;max-width:900px;height:auto;border-radius:12px;cursor:default;"></canvas>
+      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:12px;">
+        <button id="agingPlayBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer;font-family:var(--font-sans);font-size:13px;">⏸ 暂停</button>
+        <button id="agingResetBtn" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-mid);cursor:pointer;font-family:var(--font-sans);font-size:13px;">↺ 重播</button>
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--green);"></span> 肾脏(健壮)</span>
+        <span><span class="dot" style="background:var(--amber);"></span> 肝脏(加速老化)</span>
+        <span><span class="dot" style="background:#5c6bc0;"></span> 大脑(关键器官)</span>
+        <span><span class="dot" style="background:var(--red-soft);"></span> 免疫系统(关键器官)</span>
+      </div>
+    </div>
+
+    <!-- 数据叙事带 -->
+    <div class="stat-ribbon reveal reveal-d2">
+      <div class="ribbon-item">
+        <div class="ribbon-num">321万年</div>
+        <div class="ribbon-label">大型哺乳类动物平均物种寿命</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">30万年</div>
+        <div class="ribbon-label">现代人已延续时间</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">50-60次</div>
+        <div class="ribbon-label">人体细胞海弗利克分裂极限</div>
+      </div>
+      <div class="ribbon-item">
+        <div class="ribbon-num">4.5万</div>
+        <div class="ribbon-label">英国生物银行研究样本数</div>
+      </div>
+    </div>
+
+    <!-- 折叠追问 -->
+    <div class="socratic reveal reveal-d3">
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">1</span>二甲双胍真的能延寿吗？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          二甲双胍和阿卡波糖都可以模仿"热量限制、低营养信号"，抑制IGF-1→AKT→mTOR信号通路，增强细胞自噬、减少炎症。在动物模型中确实观察到延寿效果。但健康人群主动吃二甲双胍延寿还缺乏足够人体证据——目前不建议无适应证人群自行服用。
+        </div></div>
+      </div>
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">2</span>器官衰老为什么不同步？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          2025年5月《自然·医学》研究分析了4.5万名英国生物银行志愿者的血浆蛋白组数据：在衰老过程中，身体各器官是"各老各的"。你的肾脏可能还很健壮，肝脏却已经垂垂老矣。对健康影响最大的是大脑衰老；对死亡率影响最大的是大脑和免疫系统衰老。
+        </div></div>
+      </div>
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">3</span>人体"设计寿命"只有30年？那40岁后怎么办？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          从演化角度看，人体确实只被"设计"用到繁殖年龄之后不久。但"设计"是误导性的——演化没有设计师，只有"够用就行"的修补匠。我们比演化聪明：定期体检、合理饮食、适度运动、疫苗接种，可以让这台机器优雅运行到80年甚至更久。你已经比你的基因聪明多了。
+        </div></div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d4">
+      <div class="quote-text">"在衰老的过程中，身体各器官是各老各的，并不是齐刷刷地同步衰老。通常模式是，你的肾可能还很健壮，但肝脏已经垂垂老矣了……对健康来说，有一个器官的衰老影响最大，就是大脑。"</div>
+      <div class="quote-source">—— 卓克《199｜人体器官衰老模型已经建立》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第七章：苏格拉底追问 ═══════════ -->
+<section class="chapter" id="ch7">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第七章</div>
+    <h2>追问：站在知识的边缘</h2>
+    <p class="ch-desc">66篇文章之后，最好的收获不是答案——是知道该问什么问题。</p>
+  </div>
+  <div class="chapter-body">
+    <div class="socratic reveal reveal-d1">
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">1</span>如果自然界有害物质远多于有益物质——我该怎么吃？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          你不需要担心"大自然里盲人摸象一样吃"的问题——因为你不会那样吃。人类的饮食文化经过数万年的筛选，已经把有毒的东西排除在常规食谱之外。你需要担心的不是"自然界有害物质多"，而是现代加工食品中的游离糖、反式脂肪和过量钠——这些才是当代人健康的真正威胁。
+        </div></div>
+      </div>
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">2</span>铅对儿童智力的伤害真的不可逆——那我该怎么办？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          铅的神经发育毒性确实不可逆——但前提是血铅已经升高到300-400微克/升的水平。预防远比治疗重要：远离工业污染区、避免使用含铅餐具（尤其是老旧陶瓷碗的釉面）、注意老旧水管。对于已经在安全环境中的孩子，不需要过度恐慌——正常血铅水平下不存在智商丢失。
+        </div></div>
+      </div>
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">3</span>商业体检中心的体检和三甲医院有什么不一样？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          关键区别在可靠度。体检中心的流水线式套餐（约600元/人）涵盖了基础项目，但解读和跟踪远不如三甲医院。典型问题是：连续十年在同一体检中心体检却没查出肾癌——因为体检中心不做增强CT，而腹部超声对肾肿瘤的检出率有限。对特定高风险人群，应在医生指导下选择针对性更强的检查方式。
+        </div></div>
+      </div>
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">4</span>阿尔兹海默症有希望吗？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          有。除了针对β-淀粉样蛋白的药物方向，"金属稳态失衡派"研究者发现锂元素可能对预防和治疗阿尔兹海默症非常有效。此外，帕金森症的研究也出现突破——科学家确认了一种可以通过气味检测帕金森症的方法，可能比大多数仪器检测更早期。科学在推进，虽然缓慢但确实在推进。
+        </div></div>
+      </div>
+      <div class="socratic-item" onclick="this.classList.toggle('open')">
+        <div class="soc-q"><span class="soc-num">5</span>为什么生命都是"单一手性"的？</div>
+        <div class="soc-a"><div class="soc-a-inner">
+          地球上所有生命使用的氨基酸都是L型（左旋），所有糖类都是D型（右旋）。这不是偶然——这是生命起源时的随机"选择"被锁定了。镜像生命（使用相反手性分子）的研究属于纯粹的前沿探索，没有产业，没有收益，本质上是在满足好奇心。但正是这种好奇心，偶尔会催生出改变世界的技术。
+        </div></div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d2">
+      <div class="quote-text">"镜像生命的产业化，收益在哪儿？好处在哪儿？……这个不是炒股，没有产业，也谈不上收益，它只是生命科学领域的前沿研究。探索本身大部分是没有收益的，本质是满足好奇心，只是在找到了答案、满足了好奇心后，偶尔会发现它们还有一些其他用处。"</div>
+      <div class="quote-source">—— 卓克《051｜问答：生命为什么是单一手性的？》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第八章：知识边界 — 我们不知道的 ═══════════ -->
+<section class="chapter" id="ch8">
+  <div class="chapter-header reveal">
+    <div class="ch-num">第八章</div>
+    <h2>我们不知道的——生命科学的黑匣子</h2>
+    <p class="ch-desc">承认无知是科学最诚实的态度。以下是我们对生命认知的边界——不是没有答案，而是目前最好的答案可能就是"不确定"。</p>
+  </div>
+  <div class="chapter-body">
+    <div class="boundary-grid reveal reveal-d1">
+      <div class="boundary-card">
+        <div class="b-icon">🧠</div>
+        <div class="b-title">阿尔兹海默症的确切病因</div>
+        <div class="b-desc">β-淀粉样蛋白斑块和tau蛋白缠结是病理特征，但它们是病因还是结果？"金属稳态失衡派"提供了新视角，但完整病因仍不清楚——占痴呆症70%的疾病，机制仍是谜。</div>
+      </div>
+      <div class="boundary-card">
+        <div class="b-icon">🦠</div>
+        <div class="b-title">肠-脑轴的全貌</div>
+        <div class="b-desc">肠道菌群影响情绪、决策甚至人格的证据在积累——但具体机制和因果方向仍不清晰。是菌群改变情绪，还是情绪改变菌群？"肠道是第二大脑"的证据链尚不完整。</div>
+      </div>
+      <div class="boundary-card">
+        <div class="b-icon">🧬</div>
+        <div class="b-title">98%非编码DNA的功能</div>
+        <div class="b-desc">人类基因组中编码蛋白质的不到2%。剩下的98%曾被叫"垃圾DNA"——现在发现它们在调控基因表达中起关键作用，但绝大部分区域的功能仍然未知。</div>
+      </div>
+      <div class="boundary-card">
+        <div class="b-icon">💤</div>
+        <div class="b-title">为什么会有睡眠？</div>
+        <div class="b-desc">我们不知道。是的——科学至今无法给出"睡眠的终极目的"的确定答案。有很多假说：能量保存、大脑清理（类淋巴系统）、记忆巩固——但没有一个能完全解释为什么我们必须"关机"1/3的人生。</div>
+      </div>
+      <div class="boundary-card">
+        <div class="b-icon">🕰️</div>
+        <div class="b-title">衰老是否可以逆转</div>
+        <div class="b-desc">端粒、表观遗传时钟、线粒体衰退都是衰老的因素——但"逆转"衰老意味着重新编程整个系统。目前仅在某些动物模型中观察到局部效果，人类距离"逆转衰老"还有根本性的生物学障碍。</div>
+      </div>
+      <div class="boundary-card">
+        <div class="b-icon">🦟</div>
+        <div class="b-title">第六次大灭绝——我们在其中吗？</div>
+        <div class="b-desc">保守派说还不算，激进派说已经在进程中。当前物种灭绝速率显著高于化石记录的背景速率且还在加速——如果持续几个世纪，将达到"损失75%物种"的大灭绝量级。答案可能要在几百年后才知道。</div>
+      </div>
+    </div>
+
+    <div class="quote-band reveal reveal-d2">
+      <div class="quote-text">"一个物种可以延续多久，如果仅限于大型哺乳类动物……科学家对北美古生物化石给出的考古结论是：在230万到430万年之间，整体平均是321万年。人当前延续了多久呢？大约是30万年。所以，从规律上看，属于哺乳类物种发展的早期。"</div>
+      <div class="quote-source">—— 卓克《302｜问答：人类能延续百万年吗？》</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 尾声 ═══════════ -->
+<section class="outro reveal" id="outro">
+  <h2>现在，你知道什么是"知道"了</h2>
+  <p>
+    66篇文章，8大主题——这不是医学科普，<br>
+    是站在科学边界上的一次侦查。
+  </p>
+  <p>
+    流感新药为什么有效？因为科学家搞懂了病毒出芽的机制。<br>
+    疫苗争议谁在说谎？追踪证据链，谣言在时间线面前瓦解。<br>
+    保健品为什么"神"？因为每一条宣传都利用了你的善意和未知。<br>
+    衰老是确定的——但我们可以让这台机器优雅运行更久。
+  </p>
+  <p style="color: var(--green); font-weight: 600;">
+    最好的生命科学不是让你长生不老——<br>是让你面对身体的每一次变化，<br>少一份莫名的恐惧，<br>多一份「我知道怎么回事」的踏实。
+  </p>
+  <a href="../index.html" class="outro-cta">返回首页，探索更多专题 →</a>
+</section>
+
+<footer class="page-footer">
+  <p>科技参考4 · 最小知识集 MKS v4 · 沉浸叙事版</p>
+  <p style="margin-top:4px;">基于 66 篇原文 · 8大主题 · 叙事设计 | <a href="../index.html">返回首页</a></p>
+</footer>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+// ===== Progress Bar =====
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// ===== Canvas Hero — 绿色DNA双螺旋粒子 =====
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h;
+
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const particles = [];
+  const PARTICLE_COUNT = 100;
+  const helixParticles = [];
+  const HELIX_COUNT = 60;
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.r = Math.random() * 2 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.alpha = Math.random() * 0.4 + 0.1;
+      this.pulseSpeed = Math.random() * 0.02 + 0.005;
+      this.pulseOffset = Math.random() * Math.PI * 2;
+      const colors = [
+        [61,139,64],   // green
+        [0,121,107],   // teal
+        [165,214,167], // light green
+        [46,107,49],   // dim green
+        [100,180,100], // mid green
+      ];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.alpha = 0.1 + Math.sin(Date.now() * this.pulseSpeed + this.pulseOffset) * 0.1 + 0.1;
+      if (this.x < -10 || this.x > w + 10 || this.y < -10 || this.y > h + 10) {
+        this.reset();
+      }
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color[0]},${this.color[1]},${this.color[2]},${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  // DNA helix particles
+  class HelixParticle {
+    constructor(index) {
+      this.index = index;
+      this.angle = (index / HELIX_COUNT) * Math.PI * 6;
+      this.reset();
+    }
+    reset() {
+      this.baseY = Math.random() * h * 0.8 + h * 0.1;
+    }
+    update(time) {
+      this.angle += 0.003;
+    }
+    draw(ctx, time) {
+      const centerX = w / 2;
+      const radius = 60 + Math.sin(this.index * 0.3) * 20;
+      // Strand 1
+      const x1 = centerX + Math.cos(this.angle) * radius;
+      const y1 = this.baseY + Math.sin(this.angle * 0.5) * 30;
+      // Strand 2 (opposite phase)
+      const x2 = centerX + Math.cos(this.angle + Math.PI) * radius;
+      const y2 = this.baseY + Math.sin(this.angle * 0.5) * 30;
+
+      ctx.beginPath();
+      ctx.arc(x1, y1, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(61,139,64,0.4)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(x2, y2, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,121,107,0.4)';
+      ctx.fill();
+
+      // Connecting rungs
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = 'rgba(61,139,64,0.08)';
+      ctx.stroke();
+    }
+  }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push(new Particle());
+  }
+  for (let i = 0; i < HELIX_COUNT; i++) {
+    helixParticles.push(new HelixParticle(i));
+  }
+
+  function animate(time) {
+    ctx.clearRect(0, 0, w, h);
+    helixParticles.forEach(hp => { hp.update(time); hp.draw(ctx, time); });
+    particles.forEach(p => { p.update(); p.draw(ctx); });
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+
+// ===== Canvas — Virus vs Drug 动画 =====
+(function(){
+  const canvas = document.getElementById('virusCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=900, H=400, paused=false, time=0, animId;
+
+  function resize(){
+    const container = canvas.parentElement;
+    const w = Math.min(container.clientWidth-56, 900);
+    const ratio = H/W;
+    canvas.width = w;
+    canvas.height = Math.round(w * ratio);
+    W = canvas.width; H = canvas.height;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const viruses = [];
+  const cells = [];
+  const drugMolecules = [];
+
+  function init(){
+    viruses.length = 0; cells.length = 0; drugMolecules.length = 0;
+    // Cells - host cells
+    for(let i=0;i<8;i++){
+      cells.push({
+        x: W*0.1 + (W*0.6)*Math.random(),
+        y: H*0.2 + (H*0.6)*Math.random(),
+        r: 18+Math.random()*16,
+        infected: false,
+        infectionTimer: 0,
+        color: '#e8f5e9',
+        membraneColor: '#4caf50'
+      });
+    }
+    // Viruses - pathogens
+    for(let i=0;i<12;i++){
+      viruses.push({
+        x: W*0.7 + Math.random()*W*0.28,
+        y: Math.random()*H,
+        r: 7+Math.random()*6,
+        vx: -(0.8+Math.random()*1.2),
+        vy: (Math.random()-0.5)*0.6,
+        spikes: 6+Math.floor(Math.random()*8),
+        alive: true,
+        blocked: false
+      });
+    }
+    // Drug molecules - oseltamivir
+    for(let i=0;i<15;i++){
+      drugMolecules.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        r: 5+Math.random()*4,
+        vx: (Math.random()-0.5)*1.5,
+        vy: (Math.random()-0.5)*1.5,
+        color: '#3d8b40'
+      });
+    }
+  }
+  init();
+
+  function drawCell(c){
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.r, 0, Math.PI*2);
+    ctx.fillStyle = c.infected ? '#ffcdd2' : c.color;
+    ctx.fill();
+    ctx.strokeStyle = c.infected ? '#e53935' : c.membraneColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Membrane receptors
+    const receptorCount = 8;
+    for(let i=0;i<receptorCount;i++){
+      const angle = (i/receptorCount)*Math.PI*2;
+      const rx = c.x + Math.cos(angle)*(c.r+3);
+      const ry = c.y + Math.sin(angle)*(c.r+3);
+      ctx.beginPath();
+      ctx.arc(rx, ry, 2.5, 0, Math.PI*2);
+      ctx.fillStyle = '#5c6bc0';
+      ctx.fill();
+    }
+  }
+
+  function drawVirus(v){
+    if(!v.alive) return;
+    ctx.beginPath();
+    ctx.arc(v.x, v.y, v.r, 0, Math.PI*2);
+    ctx.fillStyle = v.blocked ? '#ffa726' : '#e53935';
+    ctx.fill();
+    // Spikes
+    for(let i=0;i<v.spikes;i++){
+      const angle = (i/v.spikes)*Math.PI*2;
+      const sx = v.x + Math.cos(angle)*(v.r+3);
+      const sy = v.y + Math.sin(angle)*(v.r+3);
+      const ex = v.x + Math.cos(angle)*(v.r+8);
+      const ey = v.y + Math.sin(angle)*(v.r+8);
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(ex, ey);
+      ctx.strokeStyle = v.blocked ? '#e65100' : '#b71c1c';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(ex, ey, 2, 0, Math.PI*2);
+      ctx.fillStyle = v.blocked ? '#ffa726' : '#ef5350';
+      ctx.fill();
+    }
+  }
+
+  function drawDrug(d){
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+    ctx.fillStyle = d.color;
+    ctx.fill();
+    ctx.strokeStyle = '#2e6b31';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function update(){
+    if(paused) return;
+    time++;
+    // Update drug molecules
+    drugMolecules.forEach(d => {
+      d.x += d.vx;
+      d.y += d.vy;
+      if(d.x<0||d.x>W) d.vx*=-1;
+      if(d.y<0||d.y>H) d.vy*=-1;
+      // Drug blocks virus from exiting cell
+      viruses.forEach(v => {
+        if(!v.alive || v.blocked) return;
+        const dx = d.x - v.x;
+        const dy = d.y - v.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < d.r+v.r+4){
+          v.blocked = true;
+        }
+      });
+    });
+    // Update viruses
+    viruses.forEach(v => {
+      if(!v.alive) return;
+      v.x += v.vx;
+      v.y += v.vy;
+      if(v.x<0||v.x>W) v.vx*=-1;
+      if(v.y<0||v.y>H) v.vy*=-1;
+      // Check cell collision
+      cells.forEach(c => {
+        const dx = v.x-c.x;
+        const dy = v.y-c.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < c.r+v.r && !v.blocked){
+          c.infected = true;
+          c.infectionTimer = 60;
+          v.alive = false;
+        }
+      });
+    });
+    // Update cell infection timers
+    cells.forEach(c => {
+      if(c.infectionTimer > 0){
+        c.infectionTimer--;
+        if(c.infectionTimer === 0){
+          c.infected = false;
+          // Spawn new viruses
+          for(let i=0;i<3;i++){
+            viruses.push({
+              x: c.x+(Math.random()-0.5)*20,
+              y: c.y+(Math.random()-0.5)*20,
+              r: 5+Math.random()*5,
+              vx: (Math.random()-0.5)*2,
+              vy: (Math.random()-0.5)*2,
+              spikes: 5+Math.floor(Math.random()*6),
+              alive: true,
+              blocked: false
+            });
+          }
+        }
+      }
+    });
+
+    // Phase label
+    const infectedCount = cells.filter(c=>c.infected).length;
+    const blockedCount = viruses.filter(v=>v.blocked).length;
+    const label = document.getElementById('virusPhaseLabel');
+    if(label){
+      if(blockedCount > 8) label.textContent = '阶段：奥司他韦封锁病毒出芽！';
+      else if(infectedCount > 3) label.textContent = '阶段：病毒感染细胞中…';
+      else label.textContent = '阶段：药物巡逻·拦截病毒';
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Background gradient
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,'#f8faf7');
+    grad.addColorStop(1,'#e8f5e9');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,W,H);
+    cells.forEach(c => drawCell(c));
+    drugMolecules.forEach(d => drawDrug(d));
+    viruses.forEach(v => drawVirus(v));
+    // Title
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'bold 14px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('奥司他韦作用机制：阻止流感病毒从细胞出芽', W/2, 22);
+  }
+
+  function animate(){
+    update();
+    draw();
+    animId = requestAnimationFrame(animate);
+  }
+  animate();
+
+  document.getElementById('virusPlayBtn').addEventListener('click', function(){
+    paused = !paused;
+    this.textContent = paused ? '▶ 播放' : '⏸ 暂停';
+  });
+  document.getElementById('virusResetBtn').addEventListener('click', ()=>{
+    init();
+    time = 0;
+  });
+})();
+
+// ===== Canvas — 器官衰老独立模型动画 =====
+(function(){
+  const canvas = document.getElementById('agingCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=900, H=400, paused=false, time=0, animId;
+
+  function resize(){
+    const container = canvas.parentElement;
+    const w = Math.min(container.clientWidth-56, 900);
+    const ratio = H/W;
+    canvas.width = w;
+    canvas.height = Math.round(w * ratio);
+    W = canvas.width; H = canvas.height;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const organs = [
+    { name:'肾脏', x:0.25, y:0.55, r:50, ageRate:0.00015, age:0, color:'#3d8b40', label:'健壮' },
+    { name:'肝脏', x:0.5, y:0.35, r:45, ageRate:0.0005, age:0, color:'#f57c00', label:'加速老化' },
+    { name:'大脑', x:0.75, y:0.25, r:55, ageRate:0.0004, age:0, color:'#5c6bc0', label:'关键器官' },
+    { name:'免疫', x:0.7, y:0.65, r:40, ageRate:0.00045, age:0, color:'#c62828', label:'关键器官' },
+  ];
+
+  function resetAges(){
+    organs.forEach(o => { o.age = 0; });
+    time = 0;
+  }
+  resetAges();
+
+  function drawOrgan(o, t){
+    const cx = o.x * W;
+    const cy = o.y * H;
+    const ageOpacity = Math.min(o.age, 0.85);
+    // Glow ring showing age
+    const glowR = o.r + 8 + o.age * 40;
+    ctx.beginPath();
+    ctx.arc(cx, cy, glowR, 0, Math.PI*2);
+    ctx.strokeStyle = o.color.replace(')','').replace('rgb','rgba').replace('(','').split(',').length===3
+      ? `rgba(${o.color.match(/\d+/g)[0]},${o.color.match(/\d+/g)[1]},${o.color.match(/\d+/g)[2]},${0.1+ageOpacity*0.5})`
+      : `rgba(61,139,64,${0.1+ageOpacity*0.5})`;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4,4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Organ body
+    ctx.beginPath();
+    ctx.arc(cx, cy, o.r, 0, Math.PI*2);
+    const bodyGrad = ctx.createRadialGradient(cx, cy, o.r*0.3, cx, cy, o.r);
+    bodyGrad.addColorStop(0, '#fff');
+    bodyGrad.addColorStop(0.6, o.color);
+    bodyGrad.addColorStop(1, o.color);
+    ctx.fillStyle = bodyGrad;
+    ctx.fill();
+    ctx.strokeStyle = o.color;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Age bar below
+    const barW = o.r*1.8;
+    const barH = 8;
+    const barX = cx - barW/2;
+    const barY = cy + o.r + 18;
+    // Background bar
+    ctx.fillStyle = '#e0e0e0';
+    ctx.beginPath();
+    ctx.roundRect(barX, barY, barW, barH, 4);
+    ctx.fill();
+    // Filled bar
+    const fillW = Math.min(o.age, 1) * barW;
+    ctx.fillStyle = o.color;
+    ctx.beginPath();
+    ctx.roundRect(barX, barY, fillW, barH, 4);
+    ctx.fill();
+
+    // Labels
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'bold 13px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(o.name, cx, cy+5);
+    ctx.fillStyle = o.color;
+    ctx.font = '10px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.fillText(`${o.label} (衰老度 ${Math.round(o.age*100)}%)`, cx, barY+barH+15);
+  }
+
+  function update(){
+    if(paused) return;
+    time++;
+    organs.forEach(o => {
+      o.age += o.ageRate;
+      if(o.age > 1) o.age = 1;
+    });
+    // Reset after full cycle
+    if(time > 3000) { resetAges(); }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Background
+    ctx.fillStyle = '#fafcfa';
+    ctx.fillRect(0,0,W,H);
+    // Title
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'bold 14px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('器官衰老独立模型 — 各器官以不同速率老化', W/2, 25);
+    ctx.fillStyle = '#6b6e73';
+    ctx.font = '10px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.fillText('数据来源：2025年5月《自然·医学》·英国生物银行4.5万人血浆蛋白组分析', W/2, 44);
+    // Time indicator
+    const years = Math.floor(time * 0.05);
+    ctx.fillStyle = '#3a3d42';
+    ctx.font = 'bold 12px "Noto Sans SC","PingFang SC",sans-serif';
+    ctx.fillText(`模拟年龄: ${25+years}岁`, W*0.9, 25);
+    organs.forEach(o => drawOrgan(o, time));
+  }
+
+  function animate(){
+    update();
+    draw();
+    animId = requestAnimationFrame(animate);
+  }
+  animate();
+
+  document.getElementById('agingPlayBtn').addEventListener('click', function(){
+    paused = !paused;
+    this.textContent = paused ? '▶ 播放' : '⏸ 暂停';
+  });
+  document.getElementById('agingResetBtn').addEventListener('click', resetAges);
+})();
+
+// ===== Scroll Reveal Observer =====
+(function(){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+  });
+  // Kick off visible ones
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.style.animationPlayState = 'running';
+    });
+  }, 100);
+})();
+
+// ===== roundRect polyfill =====
+if (!ctx || !ctx.roundRect) {
+  // Polyfill not strictly needed for Canvas2D in modern browsers, but safe
+}
+</script>
+</body>
+</html>
