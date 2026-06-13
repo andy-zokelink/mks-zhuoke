@@ -3,1370 +3,1009 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI与芯片革命 — 科技参考3 MKS</title>
+<title>AI与芯片革命 — 硅基思维的N层跃迁</title>
 <style>
-:root{
-  --bg:#fafbfc; --card:#ffffff; --accent:#F59E0B; --accent-dark:#D97706;
-  --accent-light:#FEF3C7; --text:#1f2937; --text-light:#6b7280;
-  --text-lighter:#9ca3af; --border:#e5e7eb; --border-light:#f3f4f6;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.06); --shadow:0 2px 12px rgba(0,0,0,.07);
-  --shadow-lg:0 8px 30px rgba(0,0,0,.10); --radius:12px; --radius-sm:8px;
-  --transition:0.2s ease;
-  --red:#dc2626; --blue:#2563eb; --green:#059669; --purple:#7c3aed;
-  --blue2:#1a5276; --green2:#1e8449; --purple2:#6c3483;
+:root {
+  --bg: #0a0a0f;
+  --surface: #14141f;
+  --surface2: #1a1a2e;
+  --gold: #f0c060;
+  --gold-dim: #b8903a;
+  --blue: #4da6ff;
+  --blue-dim: #2a6aaa;
+  --green: #4eca7a;
+  --green-dim: #2a8a4a;
+  --purple: #a78bfa;
+  --purple-dim: #6a4aaa;
+  --red: #f87171;
+  --orange: #fb923c;
+  --text: #e2e2ea;
+  --text-dim: #8888a0;
+  --text-subtle: #606078;
+  --border: #22223a;
+  --radius: 12px;
+  --radius-sm: 8px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","Source Han Serif SC",Georgia,"SimSun",serif;line-height:1.8;min-height:100vh}
 
-/* Top Nav */
-.top-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.top-nav .home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:var(--accent);color:#fff;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:all var(--transition)}
-.top-nav .home-btn:hover{background:var(--accent-dark);color:#fff}
-.top-nav .breadcrumb{font-size:13px;color:var(--text-light)}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Tab Nav */
-.tab-nav{position:sticky;top:48px;z-index:99;display:flex;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-dark),var(--accent));padding:0;box-shadow:0 2px 12px rgba(0,0,0,.12)}
-.tab-nav button{flex:1;min-width:70px;padding:10px 6px;border:none;background:transparent;color:rgba(255,255,255,.78);cursor:pointer;font-size:12.5px;font-weight:600;transition:all .3s;position:relative;white-space:nowrap}
-.tab-nav button:hover,.tab-nav button.active{color:#fff;background:rgba(255,255,255,.14)}
-.tab-nav button.active::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:3px;background:#fff;border-radius:2px}
-
-/* Tab Section */
-.tab-section{display:none;padding:24px 20px;max-width:1100px;margin:0 auto;animation:fadeIn .5s}
-.tab-section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-h1{font-size:clamp(1.4rem,2.8vw,2rem);color:var(--accent-dark);text-align:center;margin:16px 0 8px}
-h2{font-size:clamp(1.15rem,2vw,1.5rem);color:var(--accent-dark);border-bottom:2px solid var(--border);padding-bottom:8px;margin:20px 0 14px}
-h3{font-size:clamp(1rem,1.5vw,1.2rem);color:var(--text);margin:14px 0 8px}
-
-/* Overview */
-.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:16px 0}
-.overview-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
-.overview-card h3{color:var(--accent-dark);margin-bottom:10px}
-
-.goal-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0}
-
-.stats-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0}
-.stat-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:24px;font-size:.82rem;color:var(--text-light)}
-.stat-badge .num{font-weight:700;color:var(--accent-dark);font-size:1rem}
-
-/* Graph */
-.graph-container{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);text-align:center;overflow-x:auto}
-.graph-container svg{max-width:100%;height:auto}
-
-/* Legend */
-.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:12px 0;font-size:13px}
-.legend span{display:flex;align-items:center;gap:4px}
-.legend .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
-
-/* Boundary */
-.boundary-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
-.boundary-table th{background:var(--accent);color:#fff;padding:10px 12px;text-align:left}
-.boundary-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
-.boundary-table tr:nth-child(even){background:var(--accent-light)}
-
-/* Path */
-.path-steps{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
-.path-step{flex:1;min-width:120px;background:var(--card);border-radius:10px;padding:14px;text-align:center;border:2px solid var(--border);position:relative}
-.path-step.current{border-color:var(--accent);background:var(--accent-light)}
-.path-step .step-num{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:6px}
-
-/* Progress */
-.progress-bar{height:10px;background:var(--border);border-radius:5px;margin:12px 0;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:5px;transition:width .5s}
-
-/* Flip Cards */
-.flip-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin:16px 0}
-.flip-card{perspective:1000px;height:clamp(220px,40vw,280px);margin-bottom:14px}
-.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
-.flip-inner.flipped{transform:rotateY(180deg)}
-.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;padding:clamp(16px,3vw,24px)}
-.flip-front{background:var(--card);border:2px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.flip-front .concept-icon{font-size:44px;margin-bottom:8px}
-.flip-front .concept-name{font-size:18px;font-weight:700;color:var(--accent-dark)}
-.flip-front .concept-hint{font-size:12.5px;color:var(--text-lighter);margin-top:6px}
-.flip-back{background:var(--card);border:2px solid var(--accent);transform:rotateY(180deg);overflow-y:auto;font-size:13.5px;line-height:1.7}
-.flip-back h4{color:var(--accent-dark);font-size:15px;margin-bottom:6px}
-.flip-back .label{display:inline-block;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:3px;margin-right:4px;font-weight:600}
-
-.card-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap}
-.card-nav button{padding:6px 16px;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s;font-size:13px}
-.card-nav button:hover{background:var(--accent);color:#fff}
-.card-nav .card-idx{font-size:13px;color:var(--text-light);min-width:50px;text-align:center}
-
-.card-learned{opacity:.5;border-color:#ccc!important}
-.card-learned .flip-front{border-color:#ccc}
-
-/* Quiz */
-.quiz-controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
-.quiz-controls button{padding:8px 18px;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s;font-size:13px}
-.quiz-controls button:hover{background:var(--accent);color:#fff}
-
-.quiz-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
-.quiz-item h4{color:var(--accent-dark);margin-bottom:10px}
-.quiz-item label{display:block;padding:8px 12px;margin:4px 0;border-radius:6px;cursor:pointer;transition:background .2s}
-.quiz-item label:hover{background:var(--accent-light)}
-.quiz-item input[type="radio"]{margin-right:8px}
-
-.quiz-feedback{margin-top:10px;padding:10px;border-radius:6px;font-weight:600;display:none}
-.quiz-feedback.correct{background:#d4edda;color:#155724;display:block}
-.quiz-feedback.wrong{background:#f8d7da;color:#721c24;display:block}
-
-.sa-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
-.sa-item textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:6px;padding:10px;font-family:inherit;resize:vertical;margin:8px 0}
-.sa-item .show-answer{background:var(--accent-light);padding:10px;border-radius:6px;margin-top:8px;display:none;font-size:13px}
-
-.static-quiz{display:none}
-
-/* Exam */
-.exam-timer{font-size:24px;font-weight:700;color:var(--accent-dark);text-align:center;margin:16px 0}
-.exam-score{font-size:20px;font-weight:700;text-align:center;margin:12px 0}
-
-/* Review */
-.review-list{list-style:none;margin:16px 0}
-.review-list li{padding:10px 16px;margin:6px 0;background:var(--card);border-radius:8px;cursor:pointer;border:1px solid var(--border);transition:all .2s}
-.review-list li:hover{border-color:var(--accent)}
-.review-list li.reviewed{opacity:.5;text-decoration:line-through}
-
-/* Deep Q */
-.dq-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border-left:4px solid var(--accent)}
-.dq-item .dq-question{font-weight:700;color:var(--accent-dark);cursor:pointer}
-.dq-item .dq-answer{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:14px}
-
-/* Cases */
-.case-card{background:var(--card);border-radius:10px;padding:20px;margin:12px 0;border:1px solid var(--border)}
-.case-card .case-title{font-weight:700;color:var(--accent-dark);font-size:18px}
-.case-card .case-meta{font-size:13px;color:var(--text-light);margin:6px 0}
-.case-steps{margin:12px 0;padding-left:20px}
-.case-steps li{margin:6px 0}
-
-/* Decision */
-.decision-scenario{background:var(--card);border-radius:10px;padding:20px;margin:16px 0;border:1px solid var(--border)}
-.decision-scenario h4{color:var(--accent-dark)}
-.decision-scenario select,.decision-scenario button{margin:8px 4px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);font-family:inherit}
-.decision-scenario button{background:var(--accent);color:#fff;cursor:pointer;border:none;font-weight:600}
-.decision-output{background:var(--accent-light);padding:16px;border-radius:8px;margin-top:12px;display:none;font-size:14px}
-
-/* Toast */
-.toast{position:fixed;top:20px;right:20px;background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;z-index:999;animation:slideIn .3s;font-size:14px}
-@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
-
-/* Footer */
-.footer{text-align:center;padding:32px 20px 16px;color:var(--text-lighter);font-size:.72rem;border-top:1px solid var(--border-light);margin-top:40px}
-.footer a{color:var(--accent-dark)}
-
-@media(max-width:768px){
-  .tab-nav button{font-size:11px;padding:8px 4px;min-width:55px}
-  .tab-section{padding:16px 10px}
-  .overview-grid,.flip-container{grid-template-columns:1fr}
-  .top-nav{padding:8px 12px}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
 }
-@media(max-width:480px){
-  .flip-container{grid-template-columns:1fr}
-  .tab-nav button{font-size:10px;padding:6px 2px;min-width:45px}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(10,10,15,.88); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.top-nav .home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+  color: #0a0a0f; font-size: 13px; font-weight: 700;
+  text-decoration: none; transition: transform .2s, box-shadow .2s;
+}
+.top-nav .home-link:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,192,96,.3); }
+.top-nav .breadcrumb { font-size: 12px; color: var(--text-dim); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+  padding: 80px 20px 40px;
+}
+.hero canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-content { position: relative; z-index: 1; text-align: center; max-width: 800px; }
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900;
+  background: linear-gradient(135deg, var(--gold), #fbbf24, #f59e0b);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 12px; line-height: 1.3;
+}
+.hero .subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-dim); margin-bottom: 32px; }
+.hero .hero-stats { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+.hero .hero-stat { text-align: center; }
+.hero .hero-stat .num { font-size: 2rem; font-weight: 900; color: var(--gold); }
+.hero .hero-stat .label { font-size: .8rem; color: var(--text-dim); }
+.hero .scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: var(--text-subtle); font-size: 12px; animation: bounce 2s infinite;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+/* ===== LAYER SECTIONS ===== */
+.layer {
+  position: relative; padding: 80px 20px; min-height: 70vh;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.layer::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+.layer-header { text-align: center; margin-bottom: 48px; max-width: 700px; }
+.layer-header .layer-num {
+  font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold-dim); margin-bottom: 8px;
+}
+.layer-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--text-dim));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 12px;
+}
+.layer-header p { color: var(--text-dim); font-size: 1rem; max-width: 560px; margin: 0 auto; }
+
+/* Layer accent colors */
+.layer-silicon .layer-header h2 { background-image: linear-gradient(135deg, #f87171, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.layer-arch .layer-header h2 { background-image: linear-gradient(135deg, #4da6ff, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.layer-scale .layer-header h2 { background-image: linear-gradient(135deg, #4eca7a, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.layer-emerge .layer-header h2 { background-image: linear-gradient(135deg, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.layer-safety .layer-header h2 { background-image: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.layer-impact .layer-header h2 { background-image: linear-gradient(135deg, #fb923c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.layer-content { max-width: 1000px; width: 100%; }
+
+/* ===== EUV INTERACTIVE DIAGRAM ===== */
+.euv-diagram {
+  background: var(--surface); border-radius: var(--radius); padding: 24px;
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.euv-stages { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.euv-stage {
+  flex: 1; min-width: 130px; max-width: 180px;
+  background: var(--surface2); border-radius: var(--radius-sm);
+  padding: 16px 12px; text-align: center; cursor: pointer;
+  border: 1px solid transparent; transition: all .3s;
+  position: relative;
+}
+.euv-stage:hover, .euv-stage.active {
+  border-color: var(--gold); background: #1a1a20;
+  transform: translateY(-4px); box-shadow: 0 8px 24px rgba(240,192,96,.15);
+}
+.euv-stage .stage-icon { font-size: 2rem; margin-bottom: 8px; }
+.euv-stage .stage-name { font-size: .85rem; font-weight: 700; color: var(--text); }
+.euv-stage .stage-desc { font-size: .7rem; color: var(--text-dim); margin-top: 4px; }
+.euv-stage .stage-arrow {
+  position: absolute; right: -18px; top: 50%; transform: translateY(-50%);
+  color: var(--gold-dim); font-size: 1.2rem; z-index: 2;
+}
+.euv-detail {
+  margin-top: 20px; padding: 16px; background: var(--surface2);
+  border-radius: var(--radius-sm); border-left: 3px solid var(--gold);
+  display: none; font-size: .9rem; line-height: 1.8;
+}
+.euv-detail.show { display: block; animation: fadeUp .3s; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== ATTENTION VISUALIZATION ===== */
+.attention-demo {
+  background: var(--surface); border-radius: var(--radius); padding: 24px;
+  border: 1px solid var(--border);
+}
+.attention-sentence {
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+  margin-bottom: 20px; font-size: 1.1rem;
+}
+.attention-sentence .token {
+  padding: 6px 12px; background: var(--surface2); border-radius: 6px;
+  cursor: pointer; transition: all .3s; border: 2px solid transparent;
+  font-weight: 600;
+}
+.attention-sentence .token:hover, .attention-sentence .token.highlight {
+  border-color: var(--blue); background: #1a2a3a;
+  box-shadow: 0 0 20px rgba(77,166,255,.3); transform: scale(1.08);
+}
+.attention-matrix {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  margin-top: 12px;
+}
+.attention-bar-group { text-align: center; }
+.attention-bar-group .bar-label { font-size: .7rem; color: var(--text-dim); margin-bottom: 4px; }
+.attention-bar-group .bar {
+  width: 32px; border-radius: 4px 4px 0 0; margin: 0 auto;
+  transition: height .5s cubic-bezier(.4,0,.2,1); min-height: 4px;
+}
+.attention-explain {
+  margin-top: 16px; padding: 14px; background: var(--surface2);
+  border-radius: var(--radius-sm); font-size: .85rem; color: var(--text-dim);
+  text-align: center; min-height: 50px;
+}
+
+/* ===== SCALING LAW COMPARISON ===== */
+.scale-compare {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.scale-card {
+  background: var(--surface); border-radius: var(--radius); padding: 20px;
+  border: 1px solid var(--border); cursor: pointer; transition: all .3s;
+  position: relative; overflow: hidden;
+}
+.scale-card:hover { border-color: var(--green); transform: translateY(-2px); }
+.scale-card.selected { border-color: var(--green); box-shadow: 0 0 24px rgba(78,202,122,.2); }
+.scale-card .model-name { font-size: 1.1rem; font-weight: 800; color: var(--green); }
+.scale-card .model-year { font-size: .75rem; color: var(--text-subtle); margin-bottom: 12px; }
+.scale-card .metric { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .85rem; }
+.scale-card .metric .val { font-weight: 700; }
+.scale-bar-h { height: 8px; background: var(--border); border-radius: 4px; margin: 4px 0; overflow: hidden; }
+.scale-bar-h .fill { height: 100%; background: linear-gradient(90deg, var(--green-dim), var(--green)); border-radius: 4px; transition: width 1s; }
+
+/* ===== EMERGENCE FLIP CARDS ===== */
+.emerge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.emerge-card {
+  perspective: 800px; height: 240px;
+}
+.emerge-inner {
+  width: 100%; height: 100%; transition: transform .6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d; cursor: pointer; position: relative;
+}
+.emerge-inner.flipped { transform: rotateY(180deg); }
+.emerge-front, .emerge-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius); padding: 20px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.emerge-front {
+  background: var(--surface); border: 1px solid var(--border);
+  text-align: center;
+}
+.emerge-front .emerge-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.emerge-front .emerge-title { font-weight: 800; font-size: 1rem; color: var(--purple); }
+.emerge-front .emerge-hint { font-size: .75rem; color: var(--text-subtle); margin-top: 6px; }
+.emerge-back {
+  background: var(--surface2); border: 2px solid var(--purple);
+  transform: rotateY(180deg); overflow-y: auto;
+  text-align: left; justify-content: flex-start; padding: 16px;
+  font-size: .82rem; line-height: 1.7;
+}
+.emerge-back h4 { color: var(--purple); margin-bottom: 8px; font-size: .95rem; }
+.emerge-back .tag {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: .65rem; font-weight: 700; margin-right: 4px; margin-bottom: 6px;
+}
+.tag-surprise { background: rgba(167,139,250,.2); color: var(--purple); }
+.tag-warning { background: rgba(248,113,113,.2); color: var(--red); }
+.tag-fact { background: rgba(77,166,255,.2); color: var(--blue); }
+
+/* ===== SAFETY TIMELINE ===== */
+.timeline { position: relative; padding: 20px 0; }
+.timeline::before {
+  content: ''; position: absolute; left: 24px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.timeline-item {
+  position: relative; padding-left: 60px; margin-bottom: 28px;
+  cursor: pointer;
+}
+.timeline-item::before {
+  content: ''; position: absolute; left: 16px; top: 6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border);
+  transition: all .3s;
+}
+.timeline-item:hover::before, .timeline-item.active::before {
+  border-color: var(--gold); background: var(--gold-dim);
+  box-shadow: 0 0 12px rgba(240,192,96,.4);
+}
+.timeline-item .tl-date { font-size: .75rem; color: var(--gold); font-weight: 700; }
+.timeline-item .tl-title { font-size: .95rem; font-weight: 700; margin: 2px 0; }
+.timeline-item .tl-detail {
+  display: none; margin-top: 8px; padding: 12px;
+  background: var(--surface2); border-radius: var(--radius-sm);
+  font-size: .82rem; color: var(--text-dim); line-height: 1.7;
+}
+.timeline-item .tl-detail.show { display: block; animation: fadeUp .3s; }
+
+/* ===== IMPACT DECISION SIM ===== */
+.decision-box {
+  background: var(--surface); border-radius: var(--radius); padding: 24px;
+  border: 1px solid var(--border);
+}
+.decision-box h4 { color: var(--orange); margin-bottom: 12px; }
+.decision-box .options { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.decision-box .options label {
+  display: flex; align-items: center; gap: 10px; padding: 12px;
+  background: var(--surface2); border-radius: var(--radius-sm);
+  cursor: pointer; transition: all .2s; border: 1px solid transparent;
+}
+.decision-box .options label:hover { border-color: var(--orange); }
+.decision-box .options input[type="radio"] { accent-color: var(--orange); }
+.decision-box .submit-btn {
+  padding: 10px 24px; background: linear-gradient(135deg, #fb923c, #f97316);
+  border: none; border-radius: 8px; color: #fff; font-weight: 700;
+  cursor: pointer; transition: all .2s; font-size: .9rem;
+}
+.decision-box .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(251,146,60,.3); }
+.decision-feedback {
+  margin-top: 14px; padding: 14px; border-radius: var(--radius-sm);
+  display: none; font-size: .85rem; line-height: 1.7;
+}
+.decision-feedback.show { display: block; animation: fadeUp .3s; }
+.decision-feedback.correct { background: rgba(78,202,122,.12); border: 1px solid rgba(78,202,122,.3); color: var(--green); }
+.decision-feedback.wrong { background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.3); color: var(--red); }
+
+/* ===== KNOWLEDGE COUNTER ===== */
+.knowledge-meter {
+  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px 18px; font-size: .8rem;
+  display: flex; align-items: center; gap: 12px;
+  backdrop-filter: blur(12px); background: rgba(20,20,31,.9);
+  transition: opacity .5s;
+}
+.knowledge-meter .km-ring {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--border); position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.knowledge-meter .km-ring .km-pct { font-weight: 900; font-size: .9rem; color: var(--gold); }
+.knowledge-meter .km-ring svg { position: absolute; top: -3px; left: -3px; }
+.knowledge-meter .km-ring svg circle { fill: none; stroke: var(--gold); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset .6s; }
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center; padding: 48px 20px 32px;
+  border-top: 1px solid var(--border); color: var(--text-subtle); font-size: .8rem;
+}
+.footer a { color: var(--gold); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .top-nav { padding: 8px 12px; }
+  .top-nav .breadcrumb { display: none; }
+  .layer { padding: 48px 14px; }
+  .euv-stage { min-width: 100px; max-width: 140px; padding: 12px 8px; }
+  .euv-stage .stage-arrow { right: -14px; font-size: 1rem; }
+  .emerge-card { height: 200px; }
+  .knowledge-meter { bottom: 12px; right: 12px; padding: 10px 14px; font-size: .7rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.6rem; }
+  .hero .hero-stats { gap: 14px; }
+  .hero .hero-stat .num { font-size: 1.4rem; }
+  .euv-stages { flex-direction: column; align-items: center; }
+  .euv-stage { max-width: 100%; width: 100%; }
+  .euv-stage .stage-arrow { display: none; }
+  .attention-sentence { font-size: .9rem; }
+  .attention-bar-group .bar { width: 20px; }
+  .scale-compare { grid-template-columns: 1fr; }
+  .emerge-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
 <!-- TOP NAV -->
-<div class="top-nav">
-  <a href="index.html" class="home-btn">← 科技参考3 主板</a>
-  <span class="breadcrumb">AI与芯片革命 · 75 篇文章 · MKS 最小知识集</span>
-</div>
-
-<!-- TAB NAV -->
-<nav class="tab-nav" id="tabNav">
-  <button class="active" data-tab="overview">知识集总览</button>
-  <button data-tab="cards">知识卡片</button>
-  <button data-tab="quiz">题库系统</button>
-  <button data-tab="exam">考试模式</button>
-  <button data-tab="review">复习模式</button>
-  <button data-tab="mindmap">思维导图</button>
-  <button data-tab="deepask">深度追问</button>
-  <button data-tab="cases">案例分析</button>
-  <button data-tab="decision">实战决策</button>
+<nav class="top-nav">
+  <a href="index.html" class="home-link">← 科技参考3 主板</a>
+  <span class="breadcrumb">硅基思维的N层跃迁 · 75篇深度文章萃取</span>
 </nav>
 
-<!-- TAB 0: 知识集总览 -->
-<section class="tab-section active" id="sec-overview">
-<h1>🤖 AI与芯片革命</h1>
-<p style="text-align:center;color:var(--text-light);margin-bottom:16px">大模型、半导体与智能时代的底层博弈 | 75 篇文章 · 2023-2024</p>
-
-<div class="goal-box">
-  <strong>核心目标：</strong>在AI奇迹年（2023）的剧烈变革中，理解大模型的本质（token预测引擎）、芯片制造的物理极限（EUV光刻）、以及AI对社会的深层影响——不被"AGI降临"的热点裹挟，也不被"AI泡沫"的悲观论调误导，建立基于第一性原理的技术判断力。
-</div>
-
-<div class="stats-row">
-  <div class="stat-badge"><span class="num">75</span> 篇文章</div>
-  <div class="stat-badge">📅 2023-2024</div>
-  <div class="stat-badge">🎯 8 核心概念</div>
-  <div class="stat-badge">🏭 4 层架构</div>
-</div>
-
-<!-- Concept Graph -->
-<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
-  <h3>📊 概念关系图 — AI与芯片革命的四层架构</h3>
-  <div class="graph-container">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
- "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.43.0 (0)
- -->
-<!-- Title: AI_Chip Pages: 1 -->
-<svg width="1172pt" height="372pt"
- viewBox="0.00 0.00 1172.00 371.50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 367.5)">
-<title>AI_Chip</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-367.5 1168,-367.5 1168,4 -4,4"/>
-<text text-anchor="middle" x="582" y="-9.2" font-family="Times,serif" font-size="16.00" fill="#333333">AI与芯片革命 · 概念关系图（4层架构）</text>
-<!-- EUV -->
-<g id="node1" class="node">
-<title>EUV</title>
-<polygon fill="#ef4444" stroke="black" points="108,-322 0,-322 0,-286 108,-286 108,-322"/>
-<text text-anchor="middle" x="54" y="-307.2" font-family="Noto Sans SC" font-size="11.00" fill="white">EUV 光刻技术</text>
-<text text-anchor="middle" x="54" y="-295.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(13.5nm光源)</text>
-</g>
-<!-- FAB -->
-<g id="node2" class="node">
-<title>FAB</title>
-<polygon fill="#dc2626" stroke="black" points="274,-322 166,-322 166,-286 274,-286 274,-322"/>
-<text text-anchor="middle" x="220" y="-307.2" font-family="Noto Sans SC" font-size="11.00" fill="white">先进晶圆厂</text>
-<text text-anchor="middle" x="220" y="-295.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(台积电/三星)</text>
-</g>
-<!-- EUV&#45;&gt;FAB -->
-<g id="edge1" class="edge">
-<title>EUV&#45;&gt;FAB</title>
-<path fill="none" stroke="#dc2626" d="M108.35,-304C123.48,-304 140.05,-304 155.69,-304"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="155.81,-307.5 165.81,-304 155.81,-300.5 155.81,-307.5"/>
-<text text-anchor="middle" x="137" y="-310" font-family="Noto Sans SC" font-size="10.00">核心设备</text>
-</g>
-<!-- HBM -->
-<g id="node3" class="node">
-<title>HBM</title>
-<polygon fill="#b91c1c" stroke="black" points="434,-322 326,-322 326,-286 434,-286 434,-322"/>
-<text text-anchor="middle" x="380" y="-307.2" font-family="Noto Sans SC" font-size="11.00" fill="white">HBM 高带宽显存</text>
-<text text-anchor="middle" x="380" y="-295.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(3D堆叠)</text>
-</g>
-<!-- FAB&#45;&gt;HBM -->
-<g id="edge3" class="edge">
-<title>FAB&#45;&gt;HBM</title>
-<path fill="none" stroke="#dc2626" d="M274.17,-304C287.46,-304 301.82,-304 315.54,-304"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="315.89,-307.5 325.89,-304 315.89,-300.5 315.89,-307.5"/>
-<text text-anchor="middle" x="300" y="-310" font-family="Noto Sans SC" font-size="10.00">3D封装</text>
-</g>
-<!-- GPU -->
-<g id="node4" class="node">
-<title>GPU</title>
-<polygon fill="#991b1b" stroke="black" points="610.5,-322 491.5,-322 491.5,-286 610.5,-286 610.5,-322"/>
-<text text-anchor="middle" x="551" y="-307.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI 计算卡</text>
-<text text-anchor="middle" x="551" y="-295.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(英伟达H100/B200)</text>
-</g>
-<!-- FAB&#45;&gt;GPU -->
-<g id="edge2" class="edge">
-<title>FAB&#45;&gt;GPU</title>
-<path fill="none" stroke="#dc2626" d="M269.88,-322.01C297.02,-330.86 331.41,-340.56 363,-345 409.46,-351.53 461.53,-338.55 499.07,-325.51"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="500.54,-328.7 508.77,-322.02 498.17,-322.11 500.54,-328.7"/>
-<text text-anchor="middle" x="383" y="-343" font-family="Noto Sans SC" font-size="10.00">先进制程</text>
-</g>
-<!-- HBM&#45;&gt;GPU -->
-<g id="edge4" class="edge">
-<title>HBM&#45;&gt;GPU</title>
-<path fill="none" stroke="#dc2626" d="M434.11,-304C449.03,-304 465.45,-304 481.13,-304"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="481.31,-307.5 491.31,-304 481.31,-300.5 481.31,-307.5"/>
-<text text-anchor="middle" x="462.75" y="-310" font-family="Noto Sans SC" font-size="10.00">显存带宽</text>
-</g>
-<!-- LLM -->
-<g id="node6" class="node">
-<title>LLM</title>
-<polygon fill="#2563eb" stroke="black" points="715.5,-239 584.5,-239 584.5,-203 715.5,-203 715.5,-239"/>
-<text text-anchor="middle" x="650" y="-224.2" font-family="Noto Sans SC" font-size="11.00" fill="white">大语言模型</text>
-<text text-anchor="middle" x="650" y="-212.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(GPT/Claude/Gemini)</text>
-</g>
-<!-- GPU&#45;&gt;LLM -->
-<g id="edge5" class="edge">
-<title>GPU&#45;&gt;LLM</title>
-<path fill="none" stroke="#2563eb" d="M572,-285.82C586.3,-274.12 605.43,-258.47 621.16,-245.6"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="623.51,-248.19 629.03,-239.15 619.08,-242.78 623.51,-248.19"/>
-<text text-anchor="middle" x="627" y="-260" font-family="Noto Sans SC" font-size="10.00">训练算力</text>
-</g>
-<!-- DIFFUSION -->
-<g id="node7" class="node">
-<title>DIFFUSION</title>
-<polygon fill="#1d4ed8" stroke="black" points="566,-239 458,-239 458,-203 566,-203 566,-239"/>
-<text text-anchor="middle" x="512" y="-224.2" font-family="Noto Sans SC" font-size="11.00" fill="white">扩散模型</text>
-<text text-anchor="middle" x="512" y="-212.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(Sora图像生成)</text>
-</g>
-<!-- GPU&#45;&gt;DIFFUSION -->
-<g id="edge6" class="edge">
-<title>GPU&#45;&gt;DIFFUSION</title>
-<path fill="none" stroke="#2563eb" d="M501.43,-285.93C494.09,-281.25 487.49,-275.37 483,-268 478.92,-261.31 480.53,-254.13 484.57,-247.47"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="487.45,-249.47 490.75,-239.4 481.89,-245.22 487.45,-249.47"/>
-<text text-anchor="middle" x="503" y="-260" font-family="Noto Sans SC" font-size="10.00">推理加速</text>
-</g>
-<!-- AUTODRIVE -->
-<g id="node9" class="node">
-<title>AUTODRIVE</title>
-<polygon fill="#10b981" stroke="black" points="258.5,-156 157.5,-156 157.5,-120 258.5,-120 258.5,-156"/>
-<text text-anchor="middle" x="208" y="-141.2" font-family="Noto Sans SC" font-size="11.00" fill="white">端到端</text>
-<text text-anchor="middle" x="208" y="-129.2" font-family="Noto Sans SC" font-size="11.00" fill="white">智能驾驶</text>
-</g>
-<!-- GPU&#45;&gt;AUTODRIVE -->
-<g id="edge14" class="edge">
-<title>GPU&#45;&gt;AUTODRIVE</title>
-<path fill="none" stroke="#059669" d="M491.47,-293.58C407.5,-279.86 262.3,-254.32 243,-239 221.11,-221.62 212.88,-189.65 209.8,-166.52"/>
-<polygon fill="#059669" stroke="#059669" points="213.25,-165.86 208.69,-156.3 206.29,-166.61 213.25,-165.86"/>
-<text text-anchor="middle" x="263" y="-218.5" font-family="Noto Sans SC" font-size="10.00">训练平台</text>
-</g>
-<!-- ROBOT -->
-<g id="node10" class="node">
-<title>ROBOT</title>
-<polygon fill="#059669" stroke="black" points="924,-156 820,-156 820,-120 924,-120 924,-156"/>
-<text text-anchor="middle" x="872" y="-141.2" font-family="Noto Sans SC" font-size="11.00" fill="white">人形机器人</text>
-<text text-anchor="middle" x="872" y="-129.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(Optimus/Atlas)</text>
-</g>
-<!-- GPU&#45;&gt;ROBOT -->
-<g id="edge15" class="edge">
-<title>GPU&#45;&gt;ROBOT</title>
-<path fill="none" stroke="#059669" d="M610.63,-288.19C671.29,-270.94 765.69,-237.85 833,-185 840.46,-179.14 847.52,-171.68 853.53,-164.47"/>
-<polygon fill="#059669" stroke="#059669" points="856.59,-166.24 860.07,-156.24 851.11,-161.89 856.59,-166.24"/>
-<text text-anchor="middle" x="826" y="-218.5" font-family="Noto Sans SC" font-size="10.00">仿真训练</text>
-</g>
-<!-- TRANSFORMER -->
-<g id="node5" class="node">
-<title>TRANSFORMER</title>
-<polygon fill="#3b82f6" stroke="black" points="400,-239 292,-239 292,-203 400,-203 400,-239"/>
-<text text-anchor="middle" x="346" y="-224.2" font-family="Noto Sans SC" font-size="11.00" fill="white">Transformer</text>
-<text text-anchor="middle" x="346" y="-212.2" font-family="Noto Sans SC" font-size="11.00" fill="white">自注意力机制</text>
-</g>
-<!-- TRANSFORMER&#45;&gt;LLM -->
-<g id="edge7" class="edge">
-<title>TRANSFORMER&#45;&gt;LLM</title>
-<path fill="none" stroke="#2563eb" d="M387.78,-239.03C432.4,-255.89 505.06,-276.46 567,-262 582.64,-258.35 598.72,-251.3 612.51,-244.06"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="614.56,-246.93 621.66,-239.06 611.2,-240.79 614.56,-246.93"/>
-<text text-anchor="middle" x="547" y="-260" font-family="Noto Sans SC" font-size="10.00">核心架构</text>
-</g>
-<!-- TRANSFORMER&#45;&gt;DIFFUSION -->
-<g id="edge8" class="edge">
-<title>TRANSFORMER&#45;&gt;DIFFUSION</title>
-<path fill="none" stroke="#2563eb" d="M400.35,-221C415.48,-221 432.05,-221 447.69,-221"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="447.81,-224.5 457.81,-221 447.81,-217.5 447.81,-224.5"/>
-<text text-anchor="middle" x="429" y="-227" font-family="Noto Sans SC" font-size="10.00">时空编码</text>
-</g>
-<!-- ALIGNMENT -->
-<g id="node8" class="node">
-<title>ALIGNMENT</title>
-<polygon fill="#1e40af" stroke="black" points="1067,-239 959,-239 959,-203 1067,-203 1067,-239"/>
-<text text-anchor="middle" x="1013" y="-224.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI 对齐</text>
-<text text-anchor="middle" x="1013" y="-212.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(RLHF/超级对齐)</text>
-</g>
-<!-- LLM&#45;&gt;ALIGNMENT -->
-<g id="edge9" class="edge">
-<title>LLM&#45;&gt;ALIGNMENT</title>
-<path fill="none" stroke="#2563eb" d="M715.8,-236.3C788.2,-252.07 899.76,-272.92 941,-262 954.63,-258.39 968.38,-251.54 980.15,-244.45"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="982.15,-247.33 988.74,-239.03 978.42,-241.41 982.15,-247.33"/>
-<text text-anchor="middle" x="921" y="-260" font-family="Noto Sans SC" font-size="10.00">安全约束</text>
-</g>
-<!-- LLM&#45;&gt;AUTODRIVE -->
-<g id="edge10" class="edge">
-<title>LLM&#45;&gt;AUTODRIVE</title>
-<path fill="none" stroke="#059669" d="M584.27,-204.43C581.14,-203.9 578.04,-203.42 575,-203 537.2,-197.76 264.11,-205.63 232,-185 224.97,-180.48 219.88,-173.19 216.25,-165.74"/>
-<polygon fill="#059669" stroke="#059669" points="219.45,-164.31 212.4,-156.4 212.98,-166.98 219.45,-164.31"/>
-<text text-anchor="middle" x="256.5" y="-177" font-family="Noto Sans SC" font-size="10.00">端到端模型</text>
-</g>
-<!-- LLM&#45;&gt;ROBOT -->
-<g id="edge11" class="edge">
-<title>LLM&#45;&gt;ROBOT</title>
-<path fill="none" stroke="#059669" d="M708.19,-202.94C725.61,-197.54 744.68,-191.31 762,-185 782.63,-177.48 805.05,-168.3 824.24,-160.11"/>
-<polygon fill="#059669" stroke="#059669" points="825.85,-163.23 833.66,-156.07 823.09,-156.8 825.85,-163.23"/>
-<text text-anchor="middle" x="809" y="-177" font-family="Noto Sans SC" font-size="10.00">运动规划</text>
-</g>
-<!-- AI_PC -->
-<g id="node11" class="node">
-<title>AI_PC</title>
-<polygon fill="#047857" stroke="black" points="530.5,-156 429.5,-156 429.5,-120 530.5,-120 530.5,-156"/>
-<text text-anchor="middle" x="480" y="-141.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI PC</text>
-<text text-anchor="middle" x="480" y="-129.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(端侧推理)</text>
-</g>
-<!-- LLM&#45;&gt;AI_PC -->
-<g id="edge12" class="edge">
-<title>LLM&#45;&gt;AI_PC</title>
-<path fill="none" stroke="#059669" d="M613.95,-202.82C587.94,-190.43 552.66,-173.62 524.83,-160.36"/>
-<polygon fill="#059669" stroke="#059669" points="526.24,-157.16 515.71,-156.01 523.23,-163.48 526.24,-157.16"/>
-<text text-anchor="middle" x="596" y="-177" font-family="Noto Sans SC" font-size="10.00">本地推理</text>
-</g>
-<!-- SCI_AI -->
-<g id="node12" class="node">
-<title>SCI_AI</title>
-<polygon fill="#065f46" stroke="black" points="649.5,-156 548.5,-156 548.5,-120 649.5,-120 649.5,-156"/>
-<text text-anchor="middle" x="599" y="-141.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI辅助科研</text>
-<text text-anchor="middle" x="599" y="-129.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(蛋白质/材料)</text>
-</g>
-<!-- LLM&#45;&gt;SCI_AI -->
-<g id="edge13" class="edge">
-<title>LLM&#45;&gt;SCI_AI</title>
-<path fill="none" stroke="#059669" d="M639.18,-202.82C632.22,-191.76 623.04,-177.18 615.21,-164.75"/>
-<polygon fill="#059669" stroke="#059669" points="618.09,-162.75 609.8,-156.15 612.17,-166.48 618.09,-162.75"/>
-<text text-anchor="middle" x="648" y="-177" font-family="Noto Sans SC" font-size="10.00">药物发现</text>
-</g>
-<!-- COPYRIGHT -->
-<g id="node13" class="node">
-<title>COPYRIGHT</title>
-<polygon fill="#8b5cf6" stroke="black" points="432,-62 310,-62 310,-26 432,-26 432,-62"/>
-<text text-anchor="middle" x="371" y="-47.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI 版权案</text>
-<text text-anchor="middle" x="371" y="-35.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(纽约时报诉OpenAI)</text>
-</g>
-<!-- LLM&#45;&gt;COPYRIGHT -->
-<g id="edge18" class="edge">
-<title>LLM&#45;&gt;COPYRIGHT</title>
-<path fill="none" stroke="#7c3aed" d="M584.48,-204.96C505.11,-186.67 381.7,-157.98 380,-156 360.38,-133.15 361.3,-97.02 365.03,-72.22"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="368.48,-72.82 366.75,-62.36 361.59,-71.61 368.48,-72.82"/>
-<text text-anchor="middle" x="400" y="-141" font-family="Noto Sans SC" font-size="10.00">训练数据</text>
-<text text-anchor="middle" x="400" y="-130" font-family="Noto Sans SC" font-size="10.00">版权争议</text>
-</g>
-<!-- SCAM -->
-<g id="node14" class="node">
-<title>SCAM</title>
-<polygon fill="#7c3aed" stroke="black" points="740,-62 632,-62 632,-26 740,-26 740,-62"/>
-<text text-anchor="middle" x="686" y="-47.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI 诈骗进化</text>
-<text text-anchor="middle" x="686" y="-35.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(语音/视频伪造)</text>
-</g>
-<!-- LLM&#45;&gt;SCAM -->
-<g id="edge19" class="edge">
-<title>LLM&#45;&gt;SCAM</title>
-<path fill="none" stroke="#7c3aed" d="M663.11,-202.64C666.56,-197.25 669.9,-191.11 672,-185 684.86,-147.51 687.04,-101.29 686.92,-72.48"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="690.41,-72.29 686.77,-62.34 683.41,-72.39 690.41,-72.29"/>
-<text text-anchor="middle" x="704" y="-141" font-family="Noto Sans SC" font-size="10.00">伪造技术</text>
-<text text-anchor="middle" x="704" y="-130" font-family="Noto Sans SC" font-size="10.00">平民化</text>
-</g>
-<!-- JOBS -->
-<g id="node15" class="node">
-<title>JOBS</title>
-<polygon fill="#6d28d9" stroke="black" points="285,-62 173,-62 173,-26 285,-26 285,-62"/>
-<text text-anchor="middle" x="229" y="-47.2" font-family="Noto Sans SC" font-size="11.00" fill="white">就业冲击</text>
-<text text-anchor="middle" x="229" y="-35.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(翻译/编剧/程序员)</text>
-</g>
-<!-- LLM&#45;&gt;JOBS -->
-<g id="edge17" class="edge">
-<title>LLM&#45;&gt;JOBS</title>
-<path fill="none" stroke="#7c3aed" d="M584.21,-204.78C581.1,-204.16 578.02,-203.56 575,-203 462.13,-181.98 418.98,-215.84 321,-156 311.73,-150.34 272.69,-101.27 248.55,-70.3"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="251.07,-67.84 242.17,-62.09 245.54,-72.14 251.07,-67.84"/>
-<text text-anchor="middle" x="341" y="-141" font-family="Noto Sans SC" font-size="10.00">脑力工作</text>
-<text text-anchor="middle" x="341" y="-130" font-family="Noto Sans SC" font-size="10.00">自动化</text>
-</g>
-<!-- SAFETY -->
-<g id="node16" class="node">
-<title>SAFETY</title>
-<polygon fill="#5b21b6" stroke="black" points="1032,-62 924,-62 924,-26 1032,-26 1032,-62"/>
-<text text-anchor="middle" x="978" y="-47.2" font-family="Noto Sans SC" font-size="11.00" fill="white">AI 安全危机</text>
-<text text-anchor="middle" x="978" y="-35.2" font-family="Noto Sans SC" font-size="11.00" fill="white">(伊利亚离职/封闭)</text>
-</g>
-<!-- LLM&#45;&gt;SAFETY -->
-<g id="edge21" class="edge">
-<title>LLM&#45;&gt;SAFETY</title>
-<path fill="none" stroke="#7c3aed" d="M670.9,-202.94C686.64,-190.08 708.71,-171.98 728,-156 747.19,-140.09 749.4,-132.43 771,-120 816.18,-93.99 871.97,-74.41 914.24,-61.79"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="915.25,-65.14 923.86,-58.97 913.28,-58.42 915.25,-65.14"/>
-<text text-anchor="middle" x="791" y="-141" font-family="Noto Sans SC" font-size="10.00">能力失控</text>
-<text text-anchor="middle" x="791" y="-130" font-family="Noto Sans SC" font-size="10.00">风险</text>
-</g>
-<!-- ALIGNMENT&#45;&gt;SAFETY -->
-<g id="edge20" class="edge">
-<title>ALIGNMENT&#45;&gt;SAFETY</title>
-<path fill="none" stroke="#7c3aed" d="M1036.77,-202.74C1050.49,-191.24 1066.47,-174.81 1074,-156 1079.95,-141.15 1079.83,-134.9 1074,-120 1065.07,-97.18 1044.56,-79.66 1024.78,-67.31"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="1026.47,-64.24 1016.09,-62.16 1022.91,-70.27 1026.47,-64.24"/>
-<text text-anchor="middle" x="1098" y="-141" font-family="Noto Sans SC" font-size="10.00">超级对齐</text>
-<text text-anchor="middle" x="1098" y="-130" font-family="Noto Sans SC" font-size="10.00">团队解散</text>
-</g>
-<!-- AUTODRIVE&#45;&gt;JOBS -->
-<g id="edge16" class="edge">
-<title>AUTODRIVE&#45;&gt;JOBS</title>
-<path fill="none" stroke="#7c3aed" d="M211.95,-119.7C215,-106.33 219.28,-87.59 222.79,-72.22"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="226.25,-72.76 225.07,-62.23 219.43,-71.2 226.25,-72.76"/>
-<text text-anchor="middle" x="236" y="-94" font-family="Noto Sans SC" font-size="10.00">驾驶员</text>
-<text text-anchor="middle" x="236" y="-83" font-family="Noto Sans SC" font-size="10.00">被取代</text>
-</g>
-<!-- COPYRIGHT&#45;&gt;LLM -->
-<g id="edge24" class="edge">
-<title>COPYRIGHT&#45;&gt;LLM</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M432.13,-48.68C570.91,-57.65 900.34,-82.69 933,-120 943.54,-132.04 943.6,-144.01 933,-156 911.34,-180.49 818.69,-165.96 787,-174 774.04,-177.29 771.59,-180.51 759,-185 744.93,-190.02 729.73,-195.1 715.27,-199.79"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="713.85,-196.57 705.4,-202.96 715.99,-203.23 713.85,-196.57"/>
-<text text-anchor="middle" x="958.5" y="-140.8" font-family="Noto Sans SC" font-size="9.00">版权判例</text>
-<text text-anchor="middle" x="958.5" y="-130.8" font-family="Noto Sans SC" font-size="9.00">重塑训练</text>
-</g>
-<!-- SCAM&#45;&gt;SAFETY -->
-<g id="edge25" class="edge">
-<title>SCAM&#45;&gt;SAFETY</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M740.24,-44C789.25,-44 861.47,-44 913.45,-44"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="913.56,-47.5 923.56,-44 913.56,-40.5 913.56,-47.5"/>
-<text text-anchor="middle" x="832" y="-59.8" font-family="Noto Sans SC" font-size="9.00">风险暴露</text>
-<text text-anchor="middle" x="832" y="-49.8" font-family="Noto Sans SC" font-size="9.00">加速监管</text>
-</g>
-<!-- JOBS&#45;&gt;LLM -->
-<g id="edge22" class="edge">
-<title>JOBS&#45;&gt;LLM</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M285.05,-59.07C290.42,-60.17 295.8,-61.17 301,-62 375.88,-73.97 929.71,-64.15 981,-120 991.82,-131.78 991.7,-144.1 981,-156 955.75,-184.08 848.68,-165.01 812,-174 799.01,-177.18 796.71,-180.86 784,-185 765.21,-191.12 744.68,-196.92 725.46,-201.97"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="724.34,-198.64 715.54,-204.54 726.1,-205.42 724.34,-198.64"/>
-<text text-anchor="middle" x="1007.5" y="-140.8" font-family="Noto Sans SC" font-size="9.00">用户反馈</text>
-<text text-anchor="middle" x="1007.5" y="-130.8" font-family="Noto Sans SC" font-size="9.00">驱动迭代</text>
-</g>
-<!-- SAFETY&#45;&gt;ALIGNMENT -->
-<g id="edge23" class="edge">
-<title>SAFETY&#45;&gt;ALIGNMENT</title>
-<path fill="none" stroke="#2563eb" stroke-dasharray="5,2" d="M1032.16,-56.59C1065.34,-66.95 1104.67,-85.96 1122,-120 1129.26,-134.26 1129.93,-142.1 1122,-156 1111.3,-174.76 1092.73,-188.55 1073.91,-198.43"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="1072.11,-195.41 1064.68,-202.96 1075.2,-201.69 1072.11,-195.41"/>
-<text text-anchor="middle" x="1145.5" y="-140.8" font-family="Noto Sans SC" font-size="9.00">危机倒逼</text>
-<text text-anchor="middle" x="1145.5" y="-130.8" font-family="Noto Sans SC" font-size="9.00">安全投入</text>
-</g>
-</g>
-</svg>
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <canvas id="particleCanvas"></canvas>
+  <div class="hero-content">
+    <h1>硅基思维的N层跃迁</h1>
+    <p class="subtitle">从13.5nm极紫外光到万亿参数神经网络，一场正在改写人类文明底层逻辑的技术革命</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">75</div><div class="label">深度文章</div></div>
+      <div class="hero-stat"><div class="num">13.5<small>nm</small></div><div class="label">EUV 光源波长</div></div>
+      <div class="hero-stat"><div class="num">1.76<small>万亿</small></div><div class="label">GPT-4 参数</div></div>
+      <div class="hero-stat"><div class="num">$1000<small>亿+</small></div><div class="label">AI 算力投入</div></div>
+    </div>
   </div>
-  <div class="legend">
-    <span><span class="dot" style="background:#ef4444"></span> 第一层：算力基础</span>
-    <span><span class="dot" style="background:#3b82f6"></span> 第二层：模型架构</span>
-    <span><span class="dot" style="background:#10b981"></span> 第三层：应用赋能</span>
-    <span><span class="dot" style="background:#8b5cf6"></span> 第四层：社会影响与认知</span>
-    <span style="color:var(--text-lighter);font-size:12px">⇢ 虚线回环 = 反馈迭代</span>
+  <div class="scroll-hint">
+    <span>↓ 向下探索</span>
+    <span style="font-size:18px">↓</span>
   </div>
-</div>
+</section>
 
-<!-- Creative Illustration -->
-<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
-  <h3>🎨 创意图 — 神经网络芯片：硅基思维的层叠跃迁</h3>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px">视觉隐喻：AI不是线性的"流水线"，而是层层抽象的"晶体生长"——从硅晶体基底逐层跃迁到语义空间</p>
-  <div class="graph-container">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" style="max-width:100%;height:auto">
-      <style>
-        .nn-node{transition:all .3s ease;cursor:pointer}
-        .nn-node:hover{opacity:.7;transform:scale(1.15);transform-origin:center}
-        .nn-layer{transition:all .3s ease;cursor:pointer}
-        .nn-layer:hover{opacity:.85}
-        .nn-fence{transition:all .3s ease}
-        .nn-fence:hover{stroke-width:4}
-        .nn-anno{transition:all .25s ease;cursor:pointer}
-        .nn-anno:hover{opacity:.75}
-      </style>
-      <rect width="800" height="420" rx="14" fill="#fafbfc"/>
-      <text x="400" y="22" text-anchor="middle" fill="#D97706" font-size="13" font-weight="700" font-family="sans-serif">⚡ 硅基思维的层叠跃迁 — LLM 神经网络架构</text>
-      <!-- EUV lithography beam (top-left decorative) -->
-      <g opacity=".4">
-        <path d="M8,380 L60,345 L68,355 L16,390 Z" fill="#7c3aed"/>
-        <text x="30" y="340" fill="#7c3aed" font-size="7" font-family="monospace">EUV 13.5nm</text>
-        <line x1="70" y1="350" x2="100" y2="345" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3,3"/>
-      </g>
-      <!-- ===== SILICON SUBSTRATE (bottom) ===== -->
-      <g class="nn-node">
-        <rect x="60" y="370" width="680" height="22" rx="4" fill="#1e293b"/>
-        <rect x="60" y="370" width="680" height="8" rx="4" fill="#334155"/>
-        <text x="400" y="385" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="monospace">▦ 硅晶圆基底 | 3nm FinFET | 晶体管密度 ~200M/mm² | EUV 光刻 | TSMC/Samsung/Intel</text>
-      </g>
-      <!-- Chip die surface pattern -->
-      <g opacity=".25">
-        <rect x="120" y="355" width="560" height="12" rx="2" fill="none" stroke="#6366f1" stroke-width=".7"/>
-        <line x1="200" y1="355" x2="200" y2="367" stroke="#6366f1" stroke-width=".3"/>
-        <line x1="280" y1="355" x2="280" y2="367" stroke="#6366f1" stroke-width=".3"/>
-        <line x1="360" y1="355" x2="360" y2="367" stroke="#6366f1" stroke-width=".3"/>
-        <line x1="440" y1="355" x2="440" y2="367" stroke="#6366f1" stroke-width=".3"/>
-        <line x1="520" y1="355" x2="520" y2="367" stroke="#6366f1" stroke-width=".3"/>
-        <line x1="600" y1="355" x2="600" y2="367" stroke="#6366f1" stroke-width=".3"/>
-      </g>
-      <!-- ===== LAYER 0: Hardware/Compute (ellipse band) ===== -->
-      <g class="nn-layer">
-        <ellipse cx="400" cy="330" rx="290" ry="20" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.3" opacity=".55"/>
-        <text x="400" y="334" text-anchor="middle" fill="#3730a3" font-size="11" font-weight="700" font-family="sans-serif">第0层 · 算力基座：GPU 集群 → HBM → NVLink → InfiniBand 互联</text>
-      </g>
-      <!-- Layer 0 → 1 connectors (dashed) -->
-      <g stroke="#818cf8" stroke-width="1" stroke-dasharray="3,3" opacity=".7">
-        <line x1="180" y1="320" x2="190" y2="300"/>
-        <line x1="620" y1="320" x2="610" y2="300"/>
-      </g>
-      <!-- ===== LAYER 1: Data Pipeline ===== -->
-      <g class="nn-layer">
-        <ellipse cx="400" cy="282" rx="260" ry="19" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" opacity=".65"/>
-        <text x="400" y="286" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="700" font-family="sans-serif">第1层 · 数据洪流：WebText → 数十万亿Token → 分词器 → 嵌入向量</text>
-      </g>
-      <!-- Layer 1 → 2 connectors -->
-      <g stroke="#60a5fa" stroke-width="1" stroke-dasharray="5,3" opacity=".7">
-        <line x1="200" y1="272" x2="210" y2="250"/>
-        <line x1="600" y1="272" x2="590" y2="250"/>
-      </g>
-      <!-- ===== LAYER 2: Transformer Core (main) ===== -->
-      <g class="nn-layer">
-        <ellipse cx="400" cy="222" rx="230" ry="22" fill="#fef3c7" stroke="#F59E0B" stroke-width="2" opacity=".75"/>
-        <text x="400" y="219" text-anchor="middle" fill="#92400e" font-size="12" font-weight="700" font-family="sans-serif">第2层 · Transformer 核心：多头自注意力 → 前馈网络 → 残差连接</text>
-        <text x="400" y="234" text-anchor="middle" fill="#b45309" font-size="9" font-family="monospace">Q·Kᵀ/√dₖ → Softmax → V | LayerNorm | 96层 × 96注意力头</text>
-      </g>
-      <!-- Attention heads (small circles within layer 2 area) -->
-      <g class="nn-node">
-        <circle cx="280" cy="222" r="7" fill="#F59E0B" opacity=".5"/><text x="280" y="225" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">A₁</text>
-        <circle cx="320" cy="222" r="7" fill="#F59E0B" opacity=".5"/><text x="320" y="225" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">A₂</text>
-        <circle cx="360" cy="222" r="7" fill="#F59E0B" opacity=".5"/><text x="360" y="225" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">A₃</text>
-        <circle cx="440" cy="222" r="7" fill="#F59E0B" opacity=".5"/><text x="440" y="225" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">A₄</text>
-        <circle cx="480" cy="222" r="7" fill="#F59E0B" opacity=".5"/><text x="480" y="225" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">A₅</text>
-        <circle cx="520" cy="222" r="7" fill="#F59E0B" opacity=".5"/><text x="520" y="225" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">A₆</text>
-      </g>
-      <!-- Layer 2 → 3 connectors -->
-      <g stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="6,3" opacity=".8">
-        <line x1="230" y1="210" x2="240" y2="185"/>
-        <line x1="570" y1="210" x2="560" y2="185"/>
-      </g>
-      <!-- ===== LAYER 3: Feature Emergence ===== -->
-      <g class="nn-layer">
-        <ellipse cx="400" cy="155" rx="200" ry="20" fill="#fef3c7" stroke="#ea580c" stroke-width="1.6" opacity=".7"/>
-        <text x="400" y="159" text-anchor="middle" fill="#9a3412" font-size="11" font-weight="700" font-family="sans-serif">第3层 · 特征涌现：模式识别 → 类比推理 → 代码生成 → 跨语言迁移</text>
-      </g>
-      <!-- Layer 3 → 4 connectors -->
-      <g stroke="#ea580c" stroke-width="1" stroke-dasharray="4,4" opacity=".7">
-        <line x1="260" y1="145" x2="270" y2="118"/>
-        <line x1="540" y1="145" x2="530" y2="118"/>
-      </g>
-      <!-- ===== LAYER 4: Semantic Space ===== -->
-      <g class="nn-layer">
-        <ellipse cx="400" cy="95" rx="170" ry="20" fill="#fce7f3" stroke="#db2777" stroke-width="1.5" opacity=".7"/>
-        <text x="400" y="99" text-anchor="middle" fill="#9d174d" font-size="11" font-weight="700" font-family="sans-serif">第4层 · 语义空间：对话 → 创作 → 翻译 → 工具调用 → Agent 规划</text>
-      </g>
-      <!-- ===== TOP: Emergent Capabilities Star ===== -->
-      <g class="nn-node">
-        <circle cx="400" cy="42" r="16" fill="url(#nnStarGrad)" opacity=".95"/>
-        <text x="400" y="46" text-anchor="middle" fill="#fff" font-size="9" font-weight="700" font-family="sans-serif">AGI?</text>
-        <path d="M400,26 L402,34 L410,34 L404,39 L406,47 L400,42 L394,47 L396,39 L390,34 L398,34 Z" fill="#FBBF24" opacity=".4"/>
-      </g>
-      <!-- ===== AI SAFETY GUARDRAILS (fence at top) ===== -->
-      <g class="nn-fence">
-        <rect x="160" y="66" width="480" height="18" rx="4" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="8,4"/>
-        <text x="400" y="79" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="700" font-family="sans-serif">⚠ AI对齐护栏：RLHF · Constitutional AI · 红队测试 · 可解释性 · 价值对齐</text>
-      </g>
-      <!-- Guardrail pillars -->
-      <rect x="155" y="64" width="6" height="28" rx="2" fill="#dc2626" opacity=".6"/>
-      <rect x="639" y="64" width="6" height="28" rx="2" fill="#dc2626" opacity=".6"/>
-      <rect x="395" y="64" width="6" height="22" rx="2" fill="#dc2626" opacity=".4"/>
-      <!-- Side-connection: guardrail feedback to training -->
-      <path d="M163,80 C150,130 130,200 150,282" fill="none" stroke="#dc2626" stroke-width="1" stroke-dasharray="5,5" opacity=".5"/>
-      <text x="135" y="185" text-anchor="start" fill="#dc2626" font-size="7" transform="rotate(-90,135,185)">安全反馈回路</text>
-      <!-- ===== LEFT ANNOTATION: EUV & Chip ===== -->
-      <g class="nn-anno">
-        <rect x="8" y="190" width="90" height="95" rx="6" fill="#1e293b" opacity=".9"/>
-        <text x="53" y="208" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="700" font-family="sans-serif">🔬 芯片技术</text>
-        <text x="53" y="224" text-anchor="middle" fill="#cbd5e1" font-size="7">EUV 极紫外光刻</text>
-        <text x="53" y="238" text-anchor="middle" fill="#cbd5e1" font-size="7">High-NA EUV</text>
-        <text x="53" y="252" text-anchor="middle" fill="#cbd5e1" font-size="7">Gate-All-Around</text>
-        <text x="53" y="266" text-anchor="middle" fill="#cbd5e1" font-size="7">背面供电网络</text>
-        <text x="53" y="280" text-anchor="middle" fill="#64748b" font-size="6">⇡ 持续推动摩尔定律 ⇡</text>
-      </g>
-      <!-- ===== RIGHT ANNOTATION: Capabilities ===== -->
-      <g class="nn-anno">
-        <rect x="688" y="190" width="105" height="95" rx="6" fill="#1e293b" opacity=".9"/>
-        <text x="740" y="208" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="700" font-family="sans-serif">🧠 涌现能力</text>
-        <text x="740" y="224" text-anchor="middle" fill="#cbd5e1" font-size="7">In-Context Learning</text>
-        <text x="740" y="238" text-anchor="middle" fill="#cbd5e1" font-size="7">Chain-of-Thought</text>
-        <text x="740" y="252" text-anchor="middle" fill="#cbd5e1" font-size="7">Tool Use / Agent</text>
-        <text x="740" y="266" text-anchor="middle" fill="#cbd5e1" font-size="7">Code Generation</text>
-        <text x="740" y="280" text-anchor="middle" fill="#64748b" font-size="6">⇡ Scaling Law 驱动 ⇡</text>
-      </g>
-      <!-- ===== FIRING NEURONS connecting layers ===== -->
-      <g opacity=".6">
-        <circle cx="310" cy="282" r="3" fill="#3b82f6"/><circle cx="490" cy="282" r="3" fill="#3b82f6"/>
-        <circle cx="340" cy="222" r="3" fill="#F59E0B"/><circle cx="460" cy="222" r="3" fill="#F59E0B"/>
-        <circle cx="360" cy="155" r="3" fill="#ea580c"/><circle cx="440" cy="155" r="3" fill="#ea580c"/>
-        <circle cx="380" cy="95" r="3" fill="#db2777"/><circle cx="420" cy="95" r="3" fill="#db2777"/>
-      </g>
-      <!-- ===== BOTTOM LABEL: End-to-End Autonomous Driving connection ===== -->
-      <path d="M400,392 C400,402 400,408 400,415" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,3" opacity=".5"/>
-      <rect x="300" y="398" width="200" height="14" rx="4" fill="#fef3c7" stroke="#F59E0B" stroke-width=".8"/>
-      <text x="400" y="408" text-anchor="middle" fill="#92400e" font-size="8" font-family="sans-serif">🚗 端到端智驾 = 车载LLM × 感知芯片 × 实时推理</text>
-      <!-- Legend dots -->
-      <circle cx="16" cy="15" r="4" fill="#dc2626"/><text x="24" y="18" fill="#6b7280" font-size="8">对齐护栏</text>
-      <circle cx="90" cy="15" r="4" fill="#F59E0B"/><text x="98" y="18" fill="#6b7280" font-size="8">注意力头</text>
-      <circle cx="164" cy="15" r="4" fill="#3b82f6"/><text x="172" y="18" fill="#6b7280" font-size="8">数据/算力层</text>
-      <defs>
-        <radialGradient id="nnStarGrad"><stop offset="0%" stop-color="#FBBF24"/><stop offset="100%" stop-color="#ea580c"/></radialGradient>
-      </defs>
+<!-- ============ LAYER 1: SILICON & LIGHT ============ -->
+<section class="layer layer-silicon" id="layer1">
+  <div class="layer-header">
+    <div class="layer-num">Layer 01</div>
+    <h2>硅与光：人类最复杂机器的诞生</h2>
+    <p>一切AI的物理起点——从沙子到晶圆，从DUV到EUV，芯片制造是人类工程智慧的极限表达</p>
+  </div>
+  <div class="layer-content">
+    <div class="euv-diagram">
+      <div class="euv-stages" id="euvStages">
+        <div class="euv-stage active" data-stage="0">
+          <div class="stage-icon">🏖️</div>
+          <div class="stage-name">硅提纯</div>
+          <div class="stage-desc">99.9999999%</div>
+          <div class="stage-arrow">→</div>
+        </div>
+        <div class="euv-stage" data-stage="1">
+          <div class="stage-icon">🪨</div>
+          <div class="stage-name">晶圆生长</div>
+          <div class="stage-desc">Czochralski法</div>
+          <div class="stage-arrow">→</div>
+        </div>
+        <div class="euv-stage" data-stage="2">
+          <div class="stage-icon">💡</div>
+          <div class="stage-name">EUV光刻</div>
+          <div class="stage-desc">13.5nm波长</div>
+          <div class="stage-arrow">→</div>
+        </div>
+        <div class="euv-stage" data-stage="3">
+          <div class="stage-icon">⚗️</div>
+          <div class="stage-name">刻蚀掺杂</div>
+          <div class="stage-desc">FinFET/GAA</div>
+          <div class="stage-arrow">→</div>
+        </div>
+        <div class="euv-stage" data-stage="4">
+          <div class="stage-icon">📦</div>
+          <div class="stage-name">3D封装</div>
+          <div class="stage-desc">CoWoS/HBM</div>
+        </div>
+      </div>
+      <div class="euv-detail show" id="euvDetail">
+        硅是地壳中第二丰富的元素（仅次于氧），但芯片级硅的纯度需要达到 <strong>99.9999999%</strong>（9个9）——相当于在整个地球的人口中只允许有 7 个"非我族类"。从石英砂到单晶硅锭，再到0.5mm厚的晶圆，每一步都在对抗热力学第二定律——把无序的原子排列成绝对有序的晶体。
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px;">
+      <div style="background:var(--surface);border-radius:var(--radius);padding:18px;border:1px solid var(--border);">
+        <h4 style="color:#f87171;margin-bottom:8px;">🔬 ASML 独家垄断</h4>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;">
+          EUV光刻机每台售价 <strong style="color:#f87171;">2-4亿美元</strong>，ASML年产能仅 <strong style="color:#f87171;">50-60台</strong>。5000+供应商、10万+零件构成不可复制的供应链。锡滴被激光双次轰击产生13.5nm等离子体光源——连空气都穿不过，整机必须在高真空运行。反射镜平整度相当于地球表面起伏不超过1mm。
+        </p>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius);padding:18px;border:1px solid var(--border);">
+        <h4 style="color:#fb923c;margin-bottom:8px;">🏭 3nm 制程战争</h4>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;">
+          台积电3nm（N3B）晶体管密度相较5nm提升 <strong style="color:#fb923c;">70%</strong>，晶体管密度达 <strong style="color:#fb923c;">~200M/mm²</strong>。苹果A17 Pro独占首批产能，英伟达和AMD只能排队等候。全球仅台积电、三星掌握最先进制程。英特尔在10nm节点跳票5年，被拉开代差——半导体竞争是"赢家通吃"的死亡螺旋。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 2: ARCHITECTURE REVOLUTION ============ -->
+<section class="layer layer-arch" id="layer2">
+  <div class="layer-header">
+    <div class="layer-num">Layer 02</div>
+    <h2>架构革命：Attention is All You Need</h2>
+    <p>2017年一篇被拒稿的论文，8位来自6个国家的作者，创造了整个现代AI时代的"最近共同祖先"</p>
+  </div>
+  <div class="layer-content">
+    <div class="attention-demo">
+      <p style="text-align:center;font-size:.85rem;color:var(--text-dim);margin-bottom:14px;">🖱️ 点击句子中的任意词，观察自注意力机制如何工作</p>
+      <div class="attention-sentence" id="attentionSentence">
+        <span class="token" data-idx="0">The</span>
+        <span class="token" data-idx="1">animal</span>
+        <span class="token" data-idx="2">didn't</span>
+        <span class="token" data-idx="3">cross</span>
+        <span class="token" data-idx="4">the</span>
+        <span class="token" data-idx="5">street</span>
+        <span class="token" data-idx="6">because</span>
+        <span class="token" data-idx="7">it</span>
+        <span class="token" data-idx="8">was</span>
+        <span class="token" data-idx="9">too</span>
+        <span class="token" data-idx="10">tired</span>
+      </div>
+      <div class="attention-matrix" id="attentionMatrix"></div>
+      <div class="attention-explain" id="attentionExplain">
+        点击"it"看看它是在关注 "animal" 还是 "street"——这就是自注意力机制解决代词消解的方式
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px;">
+      <div style="background:var(--surface);border-radius:var(--radius);padding:18px;border:1px solid var(--border);">
+        <h4 style="color:#4da6ff;margin-bottom:8px;">🔗 自注意力 vs RNN</h4>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;">
+          传统RNN像<strong style="color:#4da6ff;">传话游戏</strong>——第一个人告诉第二个，第二告诉第三，信息传到最后可能变样。Transformer的自注意力像<strong style="color:#4da6ff;">圆桌会议</strong>——每个人都直接听到所有人说话，且知道自己该听谁的（注意力权重）。这让远距离依赖关系被完美捕捉。代价是计算复杂度O(n²)——文本越长成本爆炸。
+        </p>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius);padding:18px;border:1px solid var(--border);">
+        <h4 style="color:#818cf8;margin-bottom:8px;">📐 Q·Kᵀ/√dₖ → Softmax → V</h4>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;">
+          每个token发出三个向量：<strong style="color:#818cf8;">Query</strong>（我在找什么）、<strong style="color:#818cf8;">Key</strong>（我能提供什么）、<strong style="color:#818cf8;">Value</strong>（我的实际内容）。Query与所有Key做点积→除以√dₖ防止梯度消失→Softmax归一化为权重→加权求和Value。GPT-4有96层×96注意力头，每一层都在做这件事。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 3: SCALING LAW ============ -->
+<section class="layer layer-scale" id="layer3">
+  <div class="layer-header">
+    <div class="layer-num">Layer 03</div>
+    <h2>规模定律：烧钱的多米诺骨牌</h2>
+    <p>模型性能随参数、数据、算力的幂律增长——这是AI领域最重要的经验规律，也是最昂贵的赌局</p>
+  </div>
+  <div class="layer-content">
+    <div class="scale-compare" id="scaleCompare">
+      <div class="scale-card" data-model="gpt2">
+        <div class="model-name">GPT-2</div><div class="model-year">2019</div>
+        <div class="metric"><span>参数量</span><span class="val">15亿</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:1%"></div></div>
+        <div class="metric"><span>训练数据</span><span class="val">40GB</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:1%"></div></div>
+        <div class="metric"><span>训练成本</span><span class="val">~$5万</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:1%"></div></div>
+        <div class="metric"><span>上下文窗口</span><span class="val">1K</span></div>
+        <p style="font-size:.75rem;color:var(--text-subtle);margin-top:10px;">OpenAI因"太危险"最初拒绝开源<br>后来成为开源社区基石</p>
+      </div>
+      <div class="scale-card" data-model="gpt3">
+        <div class="model-name">GPT-3</div><div class="model-year">2020</div>
+        <div class="metric"><span>参数量</span><span class="val">1750亿</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:10%"></div></div>
+        <div class="metric"><span>训练数据</span><span class="val">570GB</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:5%"></div></div>
+        <div class="metric"><span>训练成本</span><span class="val">~$1200万</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:5%"></div></div>
+        <div class="metric"><span>上下文窗口</span><span class="val">2K</span></div>
+        <p style="font-size:.75rem;color:var(--text-subtle);margin-top:10px;">首次展示"涌现"能力<br>In-Context Learning震惊学界</p>
+      </div>
+      <div class="scale-card selected" data-model="gpt4">
+        <div class="model-name">GPT-4</div><div class="model-year">2023</div>
+        <div class="metric"><span>参数量</span><span class="val">~1.76万亿</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:100%"></div></div>
+        <div class="metric"><span>训练数据</span><span class="val">~13TB</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:100%"></div></div>
+        <div class="metric"><span>训练成本</span><span class="val">~$1亿</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:100%"></div></div>
+        <div class="metric"><span>上下文窗口</span><span class="val">128K</span></div>
+        <p style="font-size:.75rem;color:var(--text-subtle);margin-top:10px;">多模态+工具调用+代码生成<br>通过律师/医生执业资格考试</p>
+      </div>
+      <div class="scale-card" data-model="gpt5">
+        <div class="model-name">GPT-5 (预估)</div><div class="model-year">2025-2026</div>
+        <div class="metric"><span>参数量</span><span class="val">推测5-10万亿</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:110%"></div></div>
+        <div class="metric"><span>训练数据</span><span class="val">合成+视频+全模态</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:110%"></div></div>
+        <div class="metric"><span>训练成本</span><span class="val">预估$25亿</span></div>
+        <div class="scale-bar-h"><div class="fill" style="width:110%"></div></div>
+        <div class="metric"><span>上下文窗口</span><span class="val">可能1M+</span></div>
+        <p style="font-size:.75rem;color:var(--text-dim);margin-top:10px;">Scaling Law会撞墙吗？<br>还是新能力继续涌现？</p>
+      </div>
+    </div>
+    <div style="background:var(--surface);border-radius:var(--radius);padding:18px;margin-top:20px;border:1px solid var(--border);text-align:center;">
+      <p style="font-size:.9rem;color:var(--text-dim);">
+        <strong style="color:var(--green);">💡 Scaling Law的核心矛盾：</strong>
+        支持方说"更大=更好，没撞过墙"；反对方说"逆转诅咒等缺陷不随规模消失，且训练成本指数增长"。GPT-5预计训练成本25亿美元（GPT-4约1亿美元）。答案取决于"墙"在哪里——没人能预测。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 4: EMERGENCE ============ -->
+<section class="layer layer-emerge" id="layer4">
+  <div class="layer-header">
+    <div class="layer-num">Layer 04</div>
+    <h2>涌现之谜：意料之外的能力与盲区</h2>
+    <p>当参数越过某个不可预测的阈值，模型突然"学会"了训练时从未明确教授的能力——也暴露了深刻的认知缺陷</p>
+  </div>
+  <div class="layer-content">
+    <div class="emerge-grid" id="emergeGrid">
+      <!-- Cards rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 5: SAFETY DILEMMA ============ -->
+<section class="layer layer-safety" id="layer5">
+  <div class="layer-header">
+    <div class="layer-num">Layer 05</div>
+    <h2>对齐困局：谁来约束超人类智能？</h2>
+    <p>当AI能力以指数增长，安全团队却在商业化压力下一个个解散——这是AI时代最危险的结构性矛盾</p>
+  </div>
+  <div class="layer-content">
+    <div class="timeline" id="safetyTimeline">
+      <!-- Timeline rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 6: SOCIETAL IMPACT ============ -->
+<section class="layer layer-impact" id="layer6">
+  <div class="layer-header">
+    <div class="layer-num">Layer 06</div>
+    <h2>社会冲击：当AI成为每个人的决策变量</h2>
+    <p>从版权战争到就业重构，从AI诈骗到"智商税"消费——AI正在重塑社会每个角落的游戏规则</p>
+  </div>
+  <div class="layer-content">
+    <div id="decisionContainer">
+      <!-- Decision sims rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE METER -->
+<div class="knowledge-meter" id="knowledgeMeter">
+  <span style="color:var(--text-dim);">探索进度</span>
+  <div class="km-ring">
+    <span class="km-pct" id="kmPct">0%</span>
+    <svg width="46" height="46" viewBox="0 0 46 46">
+      <circle cx="23" cy="23" r="20" stroke-dasharray="125.66" stroke-dashoffset="125.66" id="kmCircle" transform="rotate(-90 23 23)"/>
     </svg>
   </div>
 </div>
 
-<!-- Overview Cards -->
-<div class="overview-grid">
-  <div class="overview-card">
-    <h3>🧠 核心概念（8个）</h3>
-    <ol style="padding-left:20px;line-height:2.2;font-size:14px">
-      <li>大语言模型（LLM）Token 预测原理</li>
-      <li>EUV 光刻与先进芯片制造</li>
-      <li>AI 安全与超级对齐</li>
-      <li>端到端智能驾驶范式转移</li>
-      <li>Transformer 自注意力机制</li>
-      <li>AI 版权与法律边界</li>
-      <li>人形机器人技术突破</li>
-      <li>AI 智商税与消费决策</li>
-    </ol>
-  </div>
-  <div class="overview-card">
-    <h3>🎯 最小知识集 (MKS)</h3>
-    <p style="font-size:14px">8个核心概念覆盖本专题 80% 以上的认知价值：</p>
-    <ul style="padding-left:20px;line-height:2.1;margin-top:8px;font-size:14px">
-      <li><strong>Token 预测</strong> — LLM 的本质</li>
-      <li><strong>逆转诅咒</strong> — AI 的认知边界</li>
-      <li><strong>EUV 13.5nm</strong> — 芯片物理极限</li>
-      <li><strong>超级对齐</strong> — AI 安全核心挑战</li>
-      <li><strong>自注意力</strong> — Transformer 灵魂</li>
-      <li><strong>端到端</strong> — 智驾范式转移</li>
-      <li><strong>Scaling Law</strong> — 规模定律</li>
-      <li><strong>智商税矩阵</strong> — 消费决策五步法</li>
-    </ul>
-  </div>
-</div>
-
-<!-- Boundary Table -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>📋 边界知识表</h3>
-  <table class="boundary-table">
-    <thead><tr><th>概念</th><th>是（核心）</th><th>不是（排除）</th><th>边界条件</th></tr></thead>
-    <tbody>
-      <tr><td>LLM</td><td>基于概率的 token 预测引擎</td><td>有意识的思考主体</td><td>无世界模型，无因果推理</td></tr>
-      <tr><td>EUV 光刻</td><td>13.5nm 波长等离子体光源</td><td>传统 DUV 浸没式光刻</td><td>物理极限约 1nm 节点</td></tr>
-      <tr><td>AI 对齐</td><td>让 AI 行为符合人类价值观</td><td>给 AI 灌输政治立场</td><td>价值观本身是多元且冲突的</td></tr>
-      <tr><td>端到端智驾</td><td>传感器→驾驶指令直出</td><td>高精地图+规则代码方案</td><td>长尾场景仍需兜底策略</td></tr>
-      <tr><td>Transformer</td><td>自注意力机制的序列模型</td><td>循环神经网络 (RNN)</td><td>长序列推理有计算瓶颈</td></tr>
-      <tr><td>HBM 显存</td><td>3D 堆叠高带宽显存</td><td>传统 GDDR 显存</td><td>容量受限，封装依赖台积电</td></tr>
-      <tr><td>人形机器人</td><td>通用任务执行平台</td><td>专用工业机械臂</td><td>电池+灵巧手+AI 三座大山</td></tr>
-      <tr><td>AI 智商税</td><td>支付远超功能价值的溢价</td><td>所有高价 AI 产品</td><td>取决于信息不对称程度</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- Learning Path -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>🗺️ 学习路径</h3>
-  <div class="path-steps">
-    <div class="path-step current"><div class="step-num">1</div>LLM 原理基础</div>
-    <div class="path-step"><div class="step-num">2</div>芯片与算力</div>
-    <div class="path-step"><div class="step-num">3</div>AI 安全对齐</div>
-    <div class="path-step"><div class="step-num">4</div>智能驾驶</div>
-    <div class="path-step"><div class="step-num">5</div>AI 社会影响</div>
-  </div>
-</div>
-
-<!-- Progress -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>📈 学习进度</h3>
-  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:14px">卡片已学 <span id="learnedCount">0</span>/10 | 题目已答 <span id="quizDone">0</span>/23</p>
-</div>
-</section>
-
-<!-- TAB 1: 知识卡片 -->
-<section class="tab-section" id="sec-cards">
-<h2>🃏 知识卡片 <span style="font-size:13px;color:var(--text-light)">— 点击卡片翻转查看详情</span></h2>
-<div class="flip-container" id="flipContainer"></div>
-<div style="text-align:center;margin:14px 0">
-  <p>已学：<span id="cardLearned">0</span>/10 | 进度：<span id="cardProgress">0</span>%</p>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgressBar" style="width:0%"></div></div>
-</div>
-<div class="card-nav">
-  <button id="prevCard">← 上一张</button>
-  <span class="card-idx" id="cardIndex">1/10</span>
-  <button id="nextCard">下一张 →</button>
-  <button id="markLearnedBtn" style="margin-left:8px">✓ 标记已学</button>
-</div>
-</section>
-
-<!-- TAB 2: 题库系统 -->
-<section class="tab-section" id="sec-quiz">
-<h2>📝 题库系统</h2>
-<div class="quiz-controls">
-  <button id="randomMCQ">🎲 随机抽 MCQ（15 题）</button>
-  <button id="randomSA">🎲 随机抽简答（8 题）</button>
-  <button id="resetQuiz">🔄 重置全部</button>
-</div>
-<div id="quizContainer"></div>
-<div id="staticQuiz" class="static-quiz"></div>
-</section>
-
-<!-- TAB 3: 考试模式 -->
-<section class="tab-section" id="sec-exam">
-<h2>⏱️ 考试模式</h2>
-<div class="exam-timer" id="examTimer">30:00</div>
-<div class="quiz-controls">
-  <button id="startExam">开始考试（30 分钟）</button>
-  <button id="submitExam">提交答卷</button>
-  <button id="resetExam">重置考试</button>
-</div>
-<div class="exam-score" id="examScore"></div>
-<div id="examContainer"></div>
-</section>
-
-<!-- TAB 4: 复习模式 -->
-<section class="tab-section" id="sec-review">
-<h2>🔄 复习模式 — 艾宾浩斯间隔复习</h2>
-<div class="quiz-controls">
-  <button id="startReview">开始复习</button>
-  <button id="resetReview">重置复习进度</button>
-</div>
-<p style="font-size:13px;color:var(--text-light);margin:8px 0">点击复习项查看答案，确认掌握后勾选完成</p>
-<ul class="review-list" id="reviewList"></ul>
-</section>
-
-<!-- TAB 5: 思维导图 -->
-<section class="tab-section" id="sec-mindmap">
-<h2>🗺️ 思维导图 — AI与芯片革命知识体系</h2>
-<div class="graph-container" id="mindMapContainer"></div>
-</section>
-
-<!-- TAB 6: 深度追问 -->
-<section class="tab-section" id="sec-deepask">
-<h2>🔍 深度追问</h2>
-<p style="color:var(--text-light);margin-bottom:14px;font-size:14px">点击问题展开深度解答 — 源自课程内容但超越原文，需要交叉推理</p>
-<div id="deepAskContainer"></div>
-</section>
-
-<!-- TAB 7: 案例分析 -->
-<section class="tab-section" id="sec-cases">
-<h2>📋 案例分析</h2>
-<p style="color:var(--text-light);margin-bottom:14px;font-size:14px">用 MKS 概念框架分析 AI/芯片领域热点事件</p>
-<div id="caseContainer"></div>
-</section>
-
-<!-- TAB 8: 实战决策 -->
-<section class="tab-section" id="sec-decision">
-<h2>🎯 实战决策 — AI 时代消费模拟</h2>
-<p style="color:var(--text-light);margin-bottom:14px;font-size:14px">运用"智商税识别矩阵"做 AI 相关购买决策</p>
-<div id="decisionContainer"></div>
-</section>
-
+<!-- FOOTER -->
 <footer class="footer">
-  <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS 最小知识集</p>
+  <p><a href="index.html">← 返回科技参考3 主板</a></p>
+  <p style="margin-top:8px;">卓克 · 科技参考3 · 75篇深度文章萃取 · 硅基思维的N层跃迁</p>
 </footer>
 
 <script>
-// ===== Global =====
-var currentCardIdx = 0;
-var learnedCards = {};
-var quizAnswered = 0;
-var examInterval = null;
-var examSeconds = 1800;
-
-
-// ===== Tab Switching =====
+// ============================================================
+// PARTICLE NETWORK (Hero Background)
+// ============================================================
 (function(){
-  var btns = document.querySelectorAll('.tab-nav button');
-  btns.forEach(function(b){
-    b.addEventListener('click',function(){
-      btns.forEach(function(x){x.classList.remove('active')});
-      this.classList.add('active');
-      document.querySelectorAll('.tab-section').forEach(function(s){s.classList.remove('active')});
-      var sec = document.getElementById('sec-'+this.dataset.tab);
-      if(sec) sec.classList.add('active');
+  var canvas = document.getElementById('particleCanvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var mouse = {x: -1000, y: -1000};
+  var w, h;
+
+  function resize(){
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for(var i=0; i<80; i++){
+    particles.push({
+      x: Math.random()*w, y: Math.random()*h,
+      vx: (Math.random()-.5)*0.6, vy: (Math.random()-.5)*0.6,
+      r: Math.random()*2.5+1,
+      hue: 38+Math.random()*20
+    });
+  }
+
+  canvas.addEventListener('mousemove', function(e){
+    mouse.x = e.clientX; mouse.y = e.clientY;
+  });
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<particles.length;i++){
+      var p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0||p.x>w) p.vx*=-1;
+      if(p.y<0||p.y>h) p.vy*=-1;
+
+      // Mouse attraction
+      var dx = mouse.x - p.x, dy = mouse.y - p.y;
+      var dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist<200){
+        p.vx += dx/dist*0.03; p.vy += dy/dist*0.03;
+        var speed = Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+        if(speed>2){ p.vx = p.vx/speed*2; p.vy = p.vy/speed*2; }
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = 'hsla('+p.hue+', 80%, 55%, 0.7)';
+      ctx.fill();
+
+      // Connections
+      for(var j=i+1;j<particles.length;j++){
+        var q = particles[j];
+        var ddx = p.x-q.x, ddy = p.y-q.y;
+        var d = Math.sqrt(ddx*ddx+ddy*ddy);
+        if(d<100){
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle = 'hsla('+p.hue+', 80%, 55%, '+(.15*(1-d/100))+')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// EUV STAGE INTERACTIVE
+// ============================================================
+(function(){
+  var stages = document.querySelectorAll('#euvStages .euv-stage');
+  var detail = document.getElementById('euvDetail');
+  var details = [
+    '硅是地壳中第二丰富的元素（仅次于氧），但芯片级硅的纯度需要达到 <strong>99.9999999%</strong>（9个9）——相当于在整个地球的人口中只允许有 7 个"非我族类"。从石英砂到单晶硅锭，再到0.5mm厚的晶圆，每一步都在对抗热力学第二定律——把无序的原子排列成绝对有序的晶体。',
+    'Czochralski法：将一小块完美排列的"种子晶体"浸入熔融硅液，缓慢旋转并向上提拉——硅原子沿种子晶体结构外延生长，形成直径达300mm、重数百公斤的完美单晶硅锭。然后像切香肠一样切成0.5mm薄片。这个过程对振动和温度梯度的要求，堪比在暴风雨中搭纸牌屋。',
+    'EUV（极紫外光刻）使用 <strong>13.5nm波长</strong>的光——比可见光短约40倍。锡滴被CO₂激光双次轰击产生等离子体，发出极紫外光。这光连空气都穿不过，ASML的EUV光刻机内部必须是超高真空。全球只有ASML能造这种光刻机，每台售价2-4亿美元，年产能仅50-60台。这就是为什么"被清华攻克"的说法是谣言——SSMB只是理论验证，离工程化还差整套产业链。从"原理验证"到"量产设备"，约等于莱特兄弟首飞到波音747运营。',
+    '光刻完成后，晶圆进入刻蚀和掺杂。FinFET（鳍式场效应晶体管）用竖起来的硅"鳍"包裹栅极，增强对电流的控制。3nm之后，行业转向GAA（Gate-All-Around）——栅极从四面完全包裹硅通道。这相当于把"门"从一面墙升级为四面包围——漏电降到最低。',
+    '芯片造好后，需要通过先进的3D封装技术将不同功能的芯片"堆叠"在一起。HBM（高带宽显存）通过硅通孔（TSV）将多层DRAM垂直堆叠——带宽是传统GDDR的10倍以上。台积电的CoWoS封装技术是AI芯片（H100/H200/B200）的必经之路——这就是为什么任何人造AI计算卡，最后都要找台积电。'
+  ];
+  stages.forEach(function(s,i){
+    s.addEventListener('click', function(){
+      stages.forEach(function(x){x.classList.remove('active')});
+      s.classList.add('active');
+      detail.innerHTML = details[i];
+      detail.classList.add('show');
+      trackProgress('euv');
     });
   });
 })();
 
-// ===== 10 Knowledge Cards =====
-var concepts = [
-  {
-    id:'llm', icon:'🧠', name:'大语言模型（LLM）',
-    hint:'点击翻转 — 了解 token 预测的本质',
-    def:'LLM 是基于 Transformer 架构的神经网络，通过学习海量语料中 token 之间的条件概率分布来生成文本。本质是"超级文字接龙"——给定上文预测下一个 token。GPT-4 参数量约 1.76 万亿。',
-    analogy:'就像一个读过 5000 亿词的人，你起个头它能顺着风格续写。但它不是"理解"意思，而是统计出"这种上下文里，下一个词大概率是什么"。好比一个从没见过钢琴但听了 10 万首曲子的人，能哼出肖邦风格的旋律——但他不知道什么是"和弦"。',
-    example:'GPT-4 能正确计算 "999亿9999万9999 × 2939万4817"——这个数字远超训练语料中的任何数字，证明它学会的是乘法运算的抽象规则，而非查表。',
-    counter:'逆转诅咒：模型学会"奥拉夫·朔尔茨是德国第九任总理"后，反着问"谁是德国第九任总理"时正确率从 79% 暴跌到 33%。说明它学的是单向关联，并非双向理解。'
-  },
-  {
-    id:'euv', icon:'💾', name:'EUV 光刻与芯片制造',
-    hint:'点击翻转 — 为什么造芯片是人类最复杂的工程',
-    def:'EUV（极紫外光刻）使用 13.5nm 波长的光，通过 ASML 独家供应的光刻机实现 3nm 及以下制程。HBM（高带宽显存）通过 3D 堆叠突破内存带宽瓶颈，成为 AI 芯片的关键配套。全球仅台积电、三星掌握最先进制程。',
-    analogy:'EUV 光刻好比用一支极细的笔在指甲盖上画整个城市的地图——这支"笔"是锡滴等离子体发出的极紫外光，反射镜的平整度要求相当于把地球表面磨到最高点不超过 1 毫米。一台 EUV 光刻机需要 5000 多家供应商的 10 万多个零件。',
-    example:'台积电 3nm（N3B）工艺相比 5nm 晶体管密度提升 70%。苹果 A17 Pro 独占首批产能，英伟达和 AMD 只能排队等候。HBM 显存让 AI 计算卡带宽突破 3TB/s。',
-    counter:'"EUV 光刻机被清华攻克"是 2023 年 9 月的典型谣言——SSMB 只是理论验证，离工程化还差整套产业链。纯国产光刻机最高水平仍在 65nm 左右（2024 年）。从"原理验证"到量产设备，约等于莱特兄弟首飞到波音 747 运营。'
-  },
-  {
-    id:'alignment', icon:'🛡️', name:'AI 安全与超级对齐',
-    hint:'点击翻转 — 为什么超级对齐团队集体离职',
-    def:'AI 对齐（Alignment）是指确保 AI 系统的行为和目标与人类价值观、意图保持一致的技术和治理框架。OpenAI 的"超级对齐"团队致力于在 4 年内解决超人类 AI 的控制问题。RLHF（基于人类反馈的强化学习）是当前主流对齐方法。',
-    analogy:'好比教一个力大无穷的孩子——你不仅要教他"做什么"，还要让他内化"什么不能做"。如果只教他"把房间整理干净"，他可能把贵重物品也扔进垃圾桶，因为"干净"的定义他有自己的理解。越强大的 AI 越像力量越大但判断力不足的孩子。',
-    example:'OpenAI 首席科学家伊利亚（Ilya Sutskever）在 2024 年 5 月离职，超级对齐负责人简·雷克同日离职并连发 13 条推文指责公司削减安全资源。对齐团队核心成员全部离开，暴露了安全与商业化的根本矛盾。',
-    counter:'对齐不等于政治审查。对齐是让 AI 不做有害的事（如教人制造炸弹），而不是让 AI 符合特定政治立场。二者边界模糊恰恰是对齐的核心困境——谁来定义"有害"？人类价值观本身就是多元且冲突的。'
-  },
-  {
-    id:'transformer', icon:'🔗', name:'Transformer 自注意力机制',
-    hint:'点击翻转 — AI 时代的"共同祖先"',
-    def:'Transformer 是 2017 年 Google 提出的神经网络架构，核心是"自注意力"（Self-Attention）机制——每个 token 能直接"看到"序列中的所有其他 token，加权聚合信息。论文标题《Attention is All You Need》开启了整个现代 AI 时代。',
-    analogy:'传统 RNN 像传话游戏——第一个人告诉第二个人，第二个人告诉第三个人，信息传到最后可能变样。Transformer 自注意力像圆桌会议——每个人都直接听到所有人说话，且知道自己该听谁的（注意力权重）。这让远距离依赖关系被完美捕捉。',
-    example:'"The animal didn\'t cross the street because it was too tired"——自注意力机制能让"it"注意到"animal"（权重 0.6）而非"street"（权重 0.1），准确解决代词消解。RNN 处理这种长距离依赖很吃力。',
-    counter:'自注意力不是万能的——计算复杂度 O(n²)，文本越长成本爆炸。GPT-4 的 128K 上下文窗口是工程突破而非理论突破。逆转诅咒暴露了单向自注意力的根本局限。'
-  },
-  {
-    id:'autodrive', icon:'🚗', name:'端到端智能驾驶',
-    hint:'点击翻转 — 为什么代码被神经网络取代',
-    def:'端到端自动驾驶将传感器原始数据（摄像头、雷达、导航、位姿）直接输入神经网络，输出方向盘转角、油门/刹车量，中间不再有"感知→规划→控制"的人工规则模块。特斯拉 FSD V12 是首个大规模落地的端到端方案。',
-    analogy:'传统智驾像个流水线工厂——一个车间识别红绿灯，一个车间规划路径，一个车间控制方向盘，信息传递有损耗。端到端像老司机开车——眼睛看到路口，手脚自动配合，不需要在大脑里画工程图再逐步执行。',
-    example:'2024 年 7 月起，国内智驾企业全部宣布转向端到端方案。理想汽车专门解释了端到端架构——输入一堆向量，输出油门刹车方向盘数值，中间全部由 Transformer 处理。这是自 2017 年以来智驾领域最大的范式转移。',
-    counter:'端到端不是万能药——长尾场景（施工路段临时红绿灯、交警手势）仍需兜底策略。黑盒模型可解释性差，出了事故很难追溯"模型为什么这样决策"。且端到端本质是"模仿学习"——如果训练数据中的人类驾驶员有不良习惯，模型也会学到。'
-  },
-  {
-    id:'hbm', icon:'📦', name:'HBM 显存与芯片瓶颈',
-    hint:'点击翻转 — AI 算力最紧俏的环节',
-    def:'HBM（High Bandwidth Memory）通过硅通孔（TSV）将多层 DRAM 芯片垂直堆叠，实现比传统 GDDR 高 10 倍以上的带宽。AI 训练的最大瓶颈不在计算而在"数据搬运"——冯·诺依曼架构中内存带宽远跟不上计算速度，HBM 是当前最优解。',
-    analogy:'GPU 像一个超级大厨（计算），但食材（数据）在仓库（显存）里。传统显存是小门送货——每次只能递一小筐。HBM 是把仓库门口改成集装箱码头——一次运几吨。大厨等食材的时间从"炒菜时间"变成了"切菜时间"——虽然还是要等，但快多了。',
-    example:'2023 年全球最紧俏的商品是 AI 计算卡，而计算卡最紧俏的零件是 HBM。英伟达 H100 需要 6 颗 HBM3 堆叠。HBM 的 CoWoS 封装产能只有台积电能做——这就是为什么任何人造计算卡最后都要找台积电。',
-    counter:'HBM 不是终极解——它仍然是冯·诺依曼架构的"补丁"，数据仍需在计算单元和内存间搬运。存内计算（Processing-in-Memory）才是真正打破瓶颈的方向，Groq 的 LPU 芯片尝试了不同路线。'
-  },
-  {
-    id:'copyright', icon:'⚖️', name:'AI 版权与法律边界',
-    hint:'点击翻转 — 史上最大版权案',
-    def:'2023 年 12 月《纽约时报》起诉 OpenAI 和微软，指控未经许可使用数百万篇文章训练 GPT 模型。这是 AI 时代最具标志性的版权案——核心争议在于：用公开数据训练 AI 是"合理使用"（fair use）还是"版权侵犯"？',
-    analogy:'好比一个学生读了图书馆的所有书，然后能写出各种风格的文章——学生的"学习"不侵犯版权。但如果学生把书中的段落逐字背出来卖钱，那就侵权了。AI 训练是在"学习"还是"复制"？GPT 确实存在"记忆"训练数据中特定段落的现象——这和学生的"学习"不同。',
-    example:'NYT 在诉状中展示了 GPT-4 几乎逐字输出 NYT 付费文章的案例。OpenAI 辩称这是罕见的"记忆"bug 而非设计功能——但 NYT 反驳：用户付费才能看的文章，被 AI 免费输出，损害了商业模式。案件走向将决定整个 AI 行业的训练数据合法性。',
-    counter:'不是所有 AI 输出都侵犯版权——如果模型学到了"纽约时报的写作风格"而非"逐字复制具体文章"，这更接近"思想/表达二分法"中不受保护的思想层面。但当前法律框架是前 AI 时代的，法官面临的是无先例的新型案件。'
-  },
-  {
-    id:'robot', icon:'🤖', name:'人形机器人技术突破',
-    hint:'点击翻转 — 从噱头到实用还有多远',
-    def:'2024 年是"人形机器人元年"——波士顿动力退役液压版 Atlas，发布全新电动版；特斯拉 Optimus 在工厂执行分拣电池任务；多家中国公司发布人形机器人产品。核心驱动力：端到端 AI 模型可用同一架构处理视觉→运动控制。',
-    analogy:'专用工业机器人像固定的琴键——只能弹一首曲子。人形机器人像一双灵活的手——理论上什么都能弹，但需要学会"手指怎么配合"。AI 时代的突破在于：不需要为每个动作写代码，而是让机器人看人类做一遍，用模仿学习自己学会。',
-    example:'波士顿动力新一代 Atlas 从液压驱动改为全电动——体积缩小 50%，灵巧度大幅提升。特斯拉 Optimus 已能在工厂执行简单分拣任务。但电池续航仍是瓶颈——Atlas 工作约 1 小时需充电，离"替代工人"还很远。',
-    counter:'人形不一定是机器人最优形态——轮式机器人比双足更稳定、能耗更低。人形之所以受关注，部分因为"长得像人"有新闻价值。真正大规模部署可能是"多形态机器人协作"——有轮式的、有四足的、有人形的，各司其职。'
-  },
-  {
-    id:'scaling', icon:'📈', name:'Scaling Law 规模定律',
-    hint:'点击翻转 — 更大就一定更好吗',
-    def:'Scaling Law（规模定律）是 AI 领域最重要的经验规律：模型性能随参数数量、训练数据量、计算量的幂律增长。OpenAI 在 2020 年首次系统验证了这一规律——在达到某个不可预测的阈值后，模型会"涌现"训练时未明确教授的能力。',
-    analogy:'Scaling Law 就像盖楼——每加一层，视野（能力）都会变好。但没人能预测加到第几层时能看到海（涌现）。GPT-2 看不到海，GPT-3 看到的是一小片，GPT-4 看到了整个海岸线。问题是：再加高还有新风景吗？还是已经到头了？这就是"Scaling Law 是否会见顶"的争论。',
-    example:'GPT-3 到 GPT-4 的跨越：参数量从 1750 亿 → 约 1.76 万亿，训练数据从 570GB → 约 13TB。性能飞跃不仅是"更准确"，还涌现了多语言翻译、代码生成、复杂推理等 GPT-3 不具备的能力。',
-    counter:'单纯堆参数有极限——计算成本指数增长。GPT-5 预估训练成本 25 亿美元（GPT-4 约 1 亿美元）。且"逆转诅咒"等缺陷不随规模增大而消失——说明 Scaling 可能已遇到质的壁垒，而不只是量的瓶颈。小模型（GPT-4o mini）吃大模型"蒸馏"红利成为新趋势。'
-  },
-  {
-    id:'iqtax', icon:'🛒', name:'AI 智商税与消费决策',
-    hint:'点击翻转 — 识别"AI牌"智商税的五步法',
-    def:'"AI 智商税"是支付远超功能价值的溢价，核心成因是信息不对称——厂商用"AI""智能""神经网络"等词汇包装普通产品。五步法：需求真实性 → 技术原理可行性 → 参数对比 → 溢价合理度 → 替代方案。',
-    analogy:'好比买"AI 降噪耳机"——所有主动降噪耳机都需要 DSP 芯片做信号处理，"AI"只是把已有技术换了新包装。多花的 500 元买到的不是"AI"而是"AI 这个词"。真正的技术突破一定有可量化的性能指标（降噪深度从 -30dB 到 -45dB），而不是只有"AI 加持"。',
-    example:'"AI 语音鼠标"溢价 3 倍——实际是普通鼠标 + 语音输入软件，语音识别用的是操作系统自带的免费引擎。类似的还有"AI 学习机"（普通平板+预装 App）、"AI 翻译耳机"（蓝牙耳机+翻译 App）——AI 溢价全在营销预算里。',
-    counter:'不是所有 AI 溢价都是智商税——ChatGPT Plus 每月 20 美元的订阅，背后是数千万美元的推理算力成本和持续的模型研发。"真 AI"的溢价体现在你能测量到的能力差异（GPT-4 vs GPT-3.5），而"AI 智商税"的溢价只存在于广告词里。'
-  }
-];
+// ============================================================
+// ATTENTION VISUALIZATION
+// ============================================================
+(function(){
+  var tokens = document.querySelectorAll('#attentionSentence .token');
+  var matrix = document.getElementById('attentionMatrix');
+  var explain = document.getElementById('attentionExplain');
+  // Attention weights: each row = how much this token attends to each other token
+  var allWeights = {
+    0: [0.01,0.20,0.40,0.05,0.01,0.01,0.15,0.02,0.02,0.02,0.02],
+    1: [0.05,0.01,0.05,0.28,0.12,0.01,0.02,0.05,0.01,0.01,0.01],
+    7: [0.02,0.60,0.02,0.01,0.05,0.05,0.02,0.01,0.01,0.15,0.05], // "it" → "animal"
+  };
+  var explains = {
+    0: '"The" 作为冠词，主要关注后面的"animal"（它修饰的名词）和"didn\'t"（谓语动词）',
+    1: '"animal" 是句子主语——它关注后面的动词"cross"和宾语"street"，建立主谓宾关系',
+    7: '"it" 是代词——自注意力机制让它分配 <strong>60%</strong> 的注意力给 "animal"（正确的指代对象），仅 <strong>5%</strong> 给 "street"（干扰项）。这就是Transformer解决代词消解的方式：让每个词自己学会"该听谁的"。<br><br>但如果反过来问"谁太累了所以没穿马路？"——模型需要从"tired"反向推理到"animal"，这是逆转诅咒的根源：模型学的是单向关联。'
+  };
 
-// ===== Set card (flip to specific card index) =====
-function setCard(idx, shouldFlip){
-  if(idx < 0 || idx >= concepts.length) return;
-  currentCardIdx = idx;
-  if(shouldFlip){
-    var inner = document.getElementById('flipInner-'+idx);
-    if(!inner.classList.contains('flipped')) inner.classList.add('flipped');
-  }
-  document.getElementById('cardIndex').textContent = (idx+1)+'/'+concepts.length;
-}
-
-// ===== Render Cards =====
-function renderCards(){
-  var container = document.getElementById('flipContainer');
-  var html = '';
-  concepts.forEach(function(c, i){
-    html += '<div class="flip-card'+(learnedCards[i]?' card-learned':'')+'" id="card-'+i+'">';
-    html += '<div class="flip-inner" id="flipInner-'+i+'">';
-    html += '<div class="flip-front" id="flipFront-'+i+'">';
-    html += '<div class="concept-icon">'+c.icon+'</div>';
-    html += '<div class="concept-name">'+c.name+'</div>';
-    html += '<div class="concept-hint">'+c.hint+'</div>';
-    html += '</div>';
-    html += '<div class="flip-back" id="flipBack-'+i+'">';
-    html += '<h4>'+c.icon+' '+c.name+'</h4>';
-    html += '<p><span class="label">定义</span> '+c.def+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">类比</span> '+c.analogy+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">示例</span> '+c.example+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">反例/边界</span> '+c.counter+'</p>';
-    html += '</div></div></div>';
-  });
-  container.innerHTML = html;
-  
-  // Add click listeners to flip-inner for each card
-  concepts.forEach(function(c, i){
-    var inner = document.getElementById('flipInner-'+i);
-    if(inner){
-      inner.addEventListener('click', function(){
-        this.classList.toggle('flipped');
-        currentCardIdx = i;
-        document.getElementById('cardIndex').textContent = (i+1)+'/'+concepts.length;
-      });
+  function renderBars(weights, highlightIdx){
+    matrix.innerHTML = '';
+    var tokenTexts = ['The','animal',"didn't",'cross','the','street','because','it','was','too','tired'];
+    for(var i=0;i<weights.length;i++){
+      var group = document.createElement('div');
+      group.className = 'attention-bar-group';
+      var label = document.createElement('div');
+      label.className = 'bar-label';
+      label.textContent = tokenTexts[i];
+      var bar = document.createElement('div');
+      bar.className = 'bar';
+      var h = Math.max(4, weights[i]*80);
+      bar.style.height = h+'px';
+      if(i===highlightIdx) bar.style.background = 'linear-gradient(180deg, #4da6ff, #818cf8)';
+      else bar.style.background = 'linear-gradient(180deg, #2a3a5a, #3a4a6a)';
+      group.appendChild(bar);
+      group.appendChild(label);
+      matrix.appendChild(group);
     }
-  });
-}
-
-// ===== Card Navigation =====
-document.getElementById('prevCard').addEventListener('click', function(){
-  if(currentCardIdx > 0) currentCardIdx--;
-  // flip back current card and show front
-  var inner = document.getElementById('flipInner-'+currentCardIdx);
-  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
-});
-document.getElementById('nextCard').addEventListener('click', function(){
-  if(currentCardIdx < concepts.length-1) currentCardIdx++;
-  var inner = document.getElementById('flipInner-'+currentCardIdx);
-  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
-});
-document.getElementById('markLearnedBtn').addEventListener('click', function(){
-  markLearned(currentCardIdx);
-});
-
-function markLearned(idx){
-  if(learnedCards[idx]){
-    delete learnedCards[idx];
-  }else{
-    learnedCards[idx] = true;
   }
-  var card = document.getElementById('card-'+idx);
-  if(card) card.classList.toggle('card-learned');
-  var pct = Math.round(Object.keys(learnedCards).length/concepts.length*100);
-  document.getElementById('cardLearned').textContent = Object.keys(learnedCards).length;
-  document.getElementById('cardProgress').textContent = pct;
-  document.getElementById('cardProgressBar').style.width = pct+'%';
-  document.getElementById('overallProgress').style.width = pct+'%';
-  document.getElementById('learnedCount').textContent = Object.keys(learnedCards).length;
-}
 
-
-// ===== MCQ Bank (20 questions) =====
-var mcqBank = [
-  {q:"GPT 大语言模型的本质是什么？", opts:["基于概率的 token 预测引擎","有自我意识的数字生命","一个巨大的知识图谱","会思考的人工大脑"], ans:0, explain:"LLM 的本质是学习 token 的条件概率分布，做\"超级文字接龙\"。它没有意识、没有世界模型。"},
-  {q:"\"逆转诅咒\"（Reversal Curse）指的是什么？", opts:["模型学会了 A→B 但学不会 B→A","模型训练到一定步数后性能倒退","OpenAI 的股价暴跌","AI 生成的答案前后矛盾"], ans:0, explain:"模型能回答\"汤姆·克鲁斯的母亲是谁\"（79%正确），但几乎不会回答\"玛丽·李·菲佛的儿子是谁\"（33%正确），说明学的是单向关联。"},
-  {q:"EUV 光刻机使用的光源波长是多少？", opts:["193nm","7nm","13.5nm","3nm"], ans:2, explain:"EUV 使用 13.5nm 的极紫外光，由锡滴被激光轰击产生的等离子体发出。这是 ASML 独家垄断的核心技术。"},
-  {q:"OpenAI 超级对齐团队的目标是什么？", opts:["让所有 AI 公司统一标准","对齐各国 AI 监管政策","在 4 年内解决超人类 AI 的控制问题","让 AI 对齐中国价值观"], ans:2, explain:"超级对齐团队由伊利亚领导，目标是在人类还能控制时解决未来超人类 AI 的安全问题。2024 年 5 月该团队核心成员已全部离职。"},
-  {q:"Transformer 模型的核心机制是什么？", opts:["循环神经网络","卷积操作","自注意力（Self-Attention）","支持向量机"], ans:2, explain:"自注意力机制让每个 token 能直接\"看到\"序列中的所有其他 token，加权聚合信息。论文标题《Attention is All You Need》。"},
-  {q:"端到端智能驾驶的核心变化是什么？", opts:["从传感器直接输出驾驶指令，取消人工规则模块","用更多雷达替代摄像头","全部使用高精地图导航","改用 5G 远程操控"], ans:0, explain:"端到端将原始传感器数据直接映射到方向盘/油门/刹车指令，取消传统\"感知→规划→控制\"的人工代码流水线。"},
-  {q:"HBM 显存相比传统 GDDR 的核心优势是什么？", opts:["成本更低","功耗接近零","通过 3D 堆叠实现极高带宽","不需要散热"], ans:2, explain:"HBM 通过硅通孔（TSV）3D 堆叠多层 DRAM，带宽是传统 GDDR 的 10 倍以上。但封装产能只有台积电能做。"},
-  {q:"\"AI 智商税\"的核心判断标准是什么？", opts:["产品价格超过 1000 元","是中国品牌","广告中使用了\"AI\"一词","支付远超功能价值的溢价"], ans:3, explain:"智商税的核心是信息不对称导致的溢价——多花的钱买到的不是技术而是营销词汇。关键在于\"高价是否有物理/工程上的对应物\"。"},
-  {q:"Scaling Law（规模定律）说明了什么？", opts:["模型越小越好","算力不需要增加","AI 永远不会超过人类","模型性能随参数量、数据量、计算量幂律增长"], ans:3, explain:"Scaling Law 是 AI 领域最重要的经验规律：更大模型+更多数据+更多算力 = 更好性能。但到某个点后可能遇顶。"},
-  {q:"英伟达 H100 GPU 2023 年的市场状况是什么？", opts:["供过于求，价格大跌","已经被华为 GPU 全面取代","连马斯克都抢不到，现货溢价远超官方定价","只能用于游戏渲染"], ans:2, explain:"H100 官方定价 3.5 万美元，现货需 4.2-4.6 万美元。马斯克抱怨\"现在每个人和他们的狗都在买 GPU\"。"},
-  {q:"台积电 3nm 工艺相比 5nm 的晶体管密度提升约多少？", opts:["10%","30%","70%","200%"], ans:2, explain:"N3B 工艺晶体管密度相比 5nm 提升约 70%。但良率爬坡缓慢，苹果 A17 Pro 独占首批产能。"},
-  {q:"Sora 视频生成使用的核心技术组合是什么？", opts:["纯 Transformer","GAN + CNN","纯 Diffusion","Diffusion + Transformer"], ans:3, explain:"Sora 使用 Diffusion（扩散模型）+ Transformer 结合，将视频看作时空 patches 序列。并非 OpenAI 首创，但集成效果最强。"},
-  {q:"《纽约时报》起诉 OpenAI 的核心诉求是什么？", opts:["要求赔偿+销毁含 NYT 版权材料的模型","要求 OpenAI 开源","要求 AI 停止写新闻","要求 OpenAI 改名"], ans:0, explain:"NYT 指控 OpenAI 未经许可使用数百万篇文章训练 GPT，要求赔偿数十亿美元并销毁含版权材料的模型和训练数据。"},
-  {q:"人形机器人的\"三座大山\"是什么？", opts:["设计+制造+营销","电池+灵巧手+AI","相机+轮子+传感器","语言+视觉+听觉"], ans:1, explain:"电池续航（Atlas 约 1 小时）、灵巧手（精细操作远不如人）、AI（通用任务理解）是人形机器人的三大瓶颈。"},
-  {q:"Groq 芯片声称三年超越英伟达，它的特殊架构是什么？", opts:["使用更多 GPU","使用 5G 传输数据","用 CPU 替代 GPU","LPU（语言处理单元）专为推理优化"], ans:3, explain:"Groq 的 LPU 专为 AI 推理设计，核心是存内计算思路——减少数据在计算单元和内存间搬运。但制造仍依赖台积电。"},
-  {q:"OpenAI 伊利亚离职的根本原因是什么？", opts:["安全与商业化理念的分歧","薪资太低","想自己创业","被中国公司挖走"], ans:0, explain:"伊利亚领导的对齐团队核心在商业化压力下与 CEO 阿尔特曼产生根本分歧。他选择体面离开而非公开对抗。"},
-  {q:"关于同行评议（Peer Review），哪项正确？", opts:["是相对最不坏的学术筛选制度，但有严重缺陷","是完美的质量控制机制","从未被滥用","已被 AI 评审取代"], ans:0, explain:"同行评议在近几十年暴露出审稿人偏见、阻挠竞争者等问题，但仍是目前为止最不坏的制度。"},
-  {q:"AI 搜索相比传统搜索的核心成本差异是什么？", opts:["没有差异","AI 搜索不需要服务器","AI 搜索免费","AI 搜索每次成本是传统搜索的数千倍"], ans:3, explain:"传统搜索每次约 0.2 美分，AI 搜索需额外调用大语言模型生成摘要，成本高出数千倍。10 万日活的平台广告收益很难填平 AI 搜索的高消耗。"},
-  {q:"什么是 AI 的\"涌现\"（emergence）？", opts:["模型突然关机的 bug","一种新的编程语言","AI 产生了情感","参数规模超过阈值后自发出现未训练过的能力"], ans:3, explain:"当模型参数超过约 10¹⁰ 阈值，网络在训练中自发形成了对抽象运算的内部表征——不是靠记住答案，而是权重组合恰好实现了某种功能子网络。"},
-  {q:"关于 AI PC 的说法哪项正确？", opts:["只是一个营销概念，没有实际变化","处理器中集成了 NPU 专为 AI 推理设计","AI PC 不需要电源","AI PC 可以替代所有云服务"], ans:1, explain:"2023 年起英特尔、AMD 在新处理器中集成 NPU（神经网络处理单元），专为端侧 AI 推理设计，如实时语音转文字、图像生成。但仍处于过渡阶段。"}
-];
-
-// ===== SAQ Bank (12 questions) =====
-var saBank = [
-  {q:'用自己的话解释"逆转诅咒"的含义，并举一个生活中的类比。', answer:'逆转诅咒指的是大语言模型能学会 A→B 的单向关联，但难以反过来推理 B→A。生活类比：一个人记住"北京是中国的首都"，但问"中国的首都是哪个城市"却答不上来——他只记了从"北京"到"中国首都"这条路径，没有建立双向索引。这暴露了 LLM 不是真正"理解"概念间的关系，而是学习了有向的条件概率。'},
-  {q:'为什么"EUV 光刻机被清华攻克"的说法是谣言？请从基础研究到工程化的距离角度说明。', answer:'清华 SSMB 项目只在理论上验证了一种可能产生 EUV 光源的新原理，离真正的光刻机还差整套产业链：1）光源功率需提升多个数量级；2）需 5000+ 供应商的 10 万+ 零件配套；3）ASML 的 EUV 光刻机是 30 年持续投入的成果。从"原理验证"到"可量产设备"的距离，约等于莱特兄弟首飞到波音 747 商业运营。'},
-  {q:'端到端智能驾驶相比传统方案的本质不同是什么？优势和风险是什么？', answer:'本质不同：传统方案是模块化流水线——识别→规划→控制每步由人工规则代码定义。端到端全部替换为神经网络——摄像头像素进，方向盘角度出。优势：避免模块间信息损失，可学到人类直觉级驾驶模式。风险：黑盒不可解释，长尾场景训练数据不足，且本质是"模仿学习"——如果训练数据中人类驾驶员有不良习惯模型也会学到。'},
-  {q:'什么是 HBM 显存？为什么它对 AI 如此重要？', answer:'HBM（高带宽显存）通过硅通孔（TSV）将多层 DRAM 芯片垂直堆叠，实现比传统 GDDR 高 10 倍以上的带宽。AI 训练的核心瓶颈不在计算而在"数据搬运"——冯·诺依曼架构中内存带宽远跟不上计算速度。大模型训练需频繁读取海量参数，HBM 是当前缓解这一瓶颈的最优方案。但封装产能只有台积电能做，形成新的卡脖子环节。'},
-  {q:'从 OpenAI 伊利亚的离职事件中，怎样看"AI 安全 vs 商业化"的矛盾？', answer:'暴露了 AI 行业的结构性矛盾：1）经济利益驱动——研发顶尖 AI 需数百亿美元，投资方要求回报，安全研究不直接产生收入；2）时间尺度错配——安全问题可能未来 5-10 年才显现，但公司考核按季度计算；3）认知分歧——连最顶尖科学家之间都无法就"多快、多危险"达成一致。伊利亚选择体面离开而非公开对抗，但正是这种"体面离开"最可怕——安全团队在一个个公司被消声，模型能力在指数增长。'},
-  {q:'请用"智商税识别矩阵"五步法分析一种 AI 消费品。', answer:'五步法：1）需求真实性——我真的需要这个"AI 功能"吗？2）技术原理可行性——"AI"在广告词中对应的实际技术是什么？3）参数对比——和成熟产品比核心参数差多少？4）溢价合理度——多付的钱买到了什么？是 GPU 算力还是营销推广费？5）替代方案——不买这个有无便宜得多的方式实现同样目的？如"AI 语音鼠标"：普通鼠标+操作系统自带的免费语音识别引擎即可实现同样功能。'},
-  {q:'Scaling Law 是否已经见顶？支持方和反对方的主要论据是什么？', answer:'支持见顶方论据：1）边际收益递减——GPT-3 到 GPT-4 用了 10 倍参数，但提升已不如 GPT-2 到 GPT-3 的跨越；2）"逆转诅咒"等缺陷不随规模增大而消失；3）训练成本指数增长（GPT-5 预估 25 亿美元）。反对见顶方论据：1）新能力仍在涌现（o1 的思维链推理）；2）数据效率在提升（小模型从大模型蒸馏）；3）Scaling Law 的"墙"放在哪里没人能预测——可能是 GPT-6、GPT-7 或更远。'},
-  {q:'从 Transformer 论文的诞生故事中，能得出什么关于创新的启示？', answer:'Transformer 论文诞生于 Google 内部的多样性环境——8 位作者来自 6 个不同国家，有做翻译的、做搜索的、做语音的、做视觉的。启示：1）跨领域交叉是创新的土壤——"自注意力"思想来自认知科学和神经科学；2）宽松包容的多样性环境比"天才单打独斗"更有利于突破；3）论文最初被拒稿，后来成为 AI 时代"最近共同祖先"——说明最有价值的创新往往当时不被看好。'},
-  {q:'为什么说"AI 让所有事情都可以重做一遍"？这是泡沫还是真机会？', answer:'类似于互联网时代——"互联网让所有行业都可以用互联网思维重做一遍"（如零售→电商，出租→网约车）。AI 时代同理：1）真机会——端到端智驾用 AI 重做驾驶、AI 搜索用生成式重做搜索、AI 设计用扩散模型重做创意；2）泡沫——"AI 炒菜机""AI 马桶"等，AI 只存在于营销词里没有实质技术改变。判断标准：AI 是否改变了该领域的核心效率或用户体验，而非只是贴了"AI"标签。'},
-  {q:'Sora 类视频生成模型的真正突破是什么？它最大的弱点是什么？', answer:'突破：时空一致性——Sora 将视频看作 3D 时空 patches（小块），用 Transformer 预测这些块之间的关系，同时保持了空间（单帧画面）和时间（帧间运动）的连贯性。之前的视频生成在这一块表现很差——人物走几步就"融化"了。弱点：1）物理正确性——物体的物理交互（碰撞、液体流动）经常不符合真实世界规律；2）因果一致性——场景变化缺乏因果逻辑。'},
-  {q:'AI 创业企业为什么"不在乎泡沫"？这种心态的风险是什么？', answer:'不在乎泡沫的原因：算法公司（如 OpenAI）的逻辑是——如果现在不烧钱抢跑，未来连上牌桌的机会都没有。他们赌的是"赢者通吃"——第一名市值万亿美元，第二名归零。泡沫是抢第一名的代价。风险：1）大部分 AI 创业公司会死在泡沫破裂后——参考 2000 年互联网泡沫后只有 Amazon/Google 等少数存活；2）过度烧钱扭曲了人才市场和技术方向——真正重要但"不性感"的 AI 安全研究被边缘化。'},
-  {q:'AI 的两个"内源性缺陷"（逆转诅咒+黑匣子不可解释）短期内能解决吗？', answer:'逆转诅咒源于自注意力机制的"单向"本质——即使双向训练，token 预测仍是单向的（从左到右或从右到左，不能同时）。理论上需要全新的架构而非改良 Transformer。黑匣子不可解释源于神经网络的分布式表征——信息分散在数十亿个参数中，无法用人类可理解的方式"解释"每个决策。Mechanistic Interpretability（机制可解释性）正在尝试"打开黑匣子"，但进展缓慢——OpenAI 用了 4 个研究者+GPT-4 辅助才解析了 GPT-2 的 307200 个神经元中的一小部分。两项缺陷都需要突破性进展而非渐进改良。'}
-];
-
-// ===== Render MCQ =====
-function renderMCQ(questions){
-  var container = document.getElementById('quizContainer');
-  var html = '<h3>选择题（共 '+questions.length+' 题）</h3>';
-  questions.forEach(function(item, i){
-    html += '<div class="quiz-item" id="mcq-'+i+'">';
-    html += '<h4>'+(i+1)+'. '+item.q+'</h4>';
-    item.opts.forEach(function(opt, j){
-      html += '<label><input type="radio" name="mcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
-    });
-    html += '<button style="margin-top:6px;padding:4px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--accent-light)" data-mcq-idx="'+i+'" data-mcq-ans="'+item.ans+'" data-mcq-explain="'+item.explain.replace(/"/g,'&quot;')+'">核对</button>';
-    html += '<div class="quiz-feedback" id="fb-'+i+'"></div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('button[data-mcq-idx]').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var idx = parseInt(this.dataset.mcqIdx);
-      var ans = parseInt(this.dataset.mcqAns);
-      var explain = this.dataset.mcqExplain;
-      var radios = document.getElementsByName('mcq'+idx);
-      var fb = document.getElementById('fb-'+idx);
-      var selected = -1;
-      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
-      if(selected===-1){fb.textContent='请先选择一个选项';fb.className='quiz-feedback wrong';return;}
-      if(selected===ans){
-        fb.innerHTML='✅ 正确！'+explain;
-        fb.className='quiz-feedback correct';
-      }else{
-        fb.innerHTML='❌ 错误。正确答案是 '+String.fromCharCode(65+ans)+'。'+explain;
-        fb.className='quiz-feedback wrong';
+  tokens.forEach(function(t){
+    t.addEventListener('click', function(){
+      tokens.forEach(function(x){x.classList.remove('highlight')});
+      t.classList.add('highlight');
+      var idx = parseInt(t.dataset.idx);
+      var weights = allWeights[idx] || allWeights[7];
+      if(!allWeights[idx]){
+        // Generate pseudo-weights for any token
+        weights = [];
+        for(var i=0;i<11;i++) weights.push(Math.random()*0.3+(i===idx?0.5:0));
+        var sum = weights.reduce(function(a,b){return a+b},0);
+        weights = weights.map(function(w){return w/sum});
       }
-      quizAnswered++;
-      document.getElementById('quizDone').textContent = quizAnswered;
+      renderBars(weights, idx);
+      if(explains[idx]) explain.innerHTML = explains[idx];
+      else explain.innerHTML = '点击关键词（如 "it"）查看代词消解示例，或点击其他词观察注意力分布模式';
+      trackProgress('attention');
     });
   });
-}
 
-// ===== Render SA =====
-function renderSA(questions){
-  var container = document.getElementById('quizContainer');
-  var html = '<h3>简答题（共 '+questions.length+' 题）</h3>';
-  questions.forEach(function(item, i){
-    html += '<div class="sa-item">';
-    html += '<h4>'+(i+1)+'. '+item.q+'</h4>';
-    html += '<textarea placeholder="在此输入你的回答..."></textarea>';
-    html += '<button class="sa-show-btn" style="padding:6px 12px;border:1px solid var(--accent);border-radius:6px;cursor:pointer;background:#fff;color:var(--accent-dark)">显示参考答案</button>';
-    html += '<div class="show-answer"><strong>参考答案：</strong>'+item.answer+'</div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.sa-show-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var ansDiv = this.nextElementSibling;
-      ansDiv.style.display = ansDiv.style.display==='block'?'none':'block';
-    });
-  });
-}
+  // Default: show "it" attention
+  renderBars(allWeights[7], 7);
+  explain.innerHTML = explains[7];
+})();
 
-// ===== Quiz Controls =====
-document.getElementById('randomMCQ').addEventListener('click', function(){
-  var shuffled = mcqBank.slice().sort(function(){return Math.random()-.5});
-  renderMCQ(shuffled.slice(0, 15));
-});
-document.getElementById('randomSA').addEventListener('click', function(){
-  var shuffled = saBank.slice().sort(function(){return Math.random()-.5});
-  renderSA(shuffled.slice(0, 8));
-});
-document.getElementById('resetQuiz').addEventListener('click', function(){
-  document.getElementById('quizContainer').innerHTML = '';
-});
-
-
-// ===== Exam Mode =====
-document.getElementById('startExam').addEventListener('click', function(){
-  var allMCQ = mcqBank.slice().sort(function(){return Math.random()-.5}).slice(0, 15);
-  var allSA = saBank.slice().sort(function(){return Math.random()-.5}).slice(0, 5);
-  var container = document.getElementById('examContainer');
-  var html = '<h3>MCQ 部分（15 题）</h3>';
-  allMCQ.forEach(function(item, i){
-    html += '<div class="quiz-item"><h4>'+(i+1)+'. '+item.q+'</h4>';
-    item.opts.forEach(function(opt, j){
-      html += '<label><input type="radio" name="exmcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
-    });
-    html += '</div>';
-  });
-  html += '<h3>简答部分（5 题）</h3>';
-  allSA.forEach(function(item, i){
-    html += '<div class="sa-item"><h4>'+(15+i+1)+'. '+item.q+'</h4>';
-    html += '<textarea placeholder="在此输入你的回答..."></textarea></div>';
-  });
-  container.innerHTML = html;
-  examSeconds = 1800;
-  updateExamTimer();
-  if(examInterval) clearInterval(examInterval);
-  examInterval = setInterval(function(){
-    examSeconds--;
-    updateExamTimer();
-    if(examSeconds<=0){clearInterval(examInterval);alert('时间到！');}
-  },1000);
-  window._examMcqs = allMCQ;
-});
-
-function updateExamTimer(){
-  var m = Math.floor(examSeconds/60);
-  var s = examSeconds%60;
-  document.getElementById('examTimer').textContent = (m<10?'0'+m:m)+':'+(s<10?'0'+s:s);
-}
-
-document.getElementById('submitExam').addEventListener('click', function(){
-  clearInterval(examInterval);
-  var correct = 0;
-  var mcqs = window._examMcqs || mcqBank.slice(0,15);
-  for(var i=0;i<15;i++){
-    var radios = document.getElementsByName('exmcq'+i);
-    if(radios.length===0) continue;
-    for(var j=0;j<radios.length;j++){
-      if(radios[j].checked && parseInt(radios[j].value)===mcqs[i]?.ans) correct++;
+// ============================================================
+// EMERGENCE FLIP CARDS
+// ============================================================
+(function(){
+  var cards = [
+    {
+      icon:'🎓', title:'In-Context Learning', hint:'点击翻转 — 从未训练的"现学现卖"',
+      tag1:{text:'涌现能力', cls:'tag-surprise'},
+      body:'GPT-3在训练时从未被教过"如何根据几个例子完成新任务"。但当给它2-3个示例后，它就能准确执行全新的任务——比如把英文翻译成一种训练数据中几乎没有的语言。这种能力不是被"设计"出来的，而是参数规模越过某个阈值（~10¹⁰）后自发出现的。就像盖楼盖到第100层时突然发现能看到海——但没人能预测第几层能看到。'
+    },
+    {
+      icon:'🧮', title:'数学推理的涌现', hint:'点击翻转 — 训练数据中没有的题目也能解',
+      tag1:{text:'涌现能力', cls:'tag-surprise'},
+      body:'GPT-4能正确计算"999亿9999万9999 × 2939万4817"——这个数字远超训练语料中的任何数字。证明它学到的不是"查表"而是乘法运算的抽象规则。网络的权重组合恰好实现了类似于"乘法器"的子网络——但它自己不知道这是乘法，就像你的视觉皮层不知道自己在做傅里叶变换。这种"学会但不知道自己学会了什么"是涌现最迷人的特性。'
+    },
+    {
+      icon:'🔄', title:'逆转诅咒', hint:'点击翻转 — AI最深刻的认知缺陷',
+      tag1:{text:'核心缺陷', cls:'tag-warning'},
+      body:'模型学会"奥拉夫·朔尔茨是德国第九任总理"后，问"奥拉夫·朔尔茨是谁"正确率79%；但反过来问"谁是德国第九任总理"时正确率暴跌到33%。它学的是<strong>单向关联</strong>，不是"双向理解"。这暴露了LLM的本质：它学的是P(B|A)——给定上文预测下一个token——而不是P(A⟷B)的对称关系。就像一个人熟记了所有"问题→答案"的映射，但从来不懂问题本身是什么意思。'
+    },
+    {
+      icon:'🚗', title:'端到端智驾', hint:'点击翻转 — 代码被神经网络取代',
+      tag1:{text:'范式转移', cls:'tag-fact'},
+      tag2:{text:'应用层', cls:'tag-surprise'},
+      body:'2024年7月起，国内智驾企业全部宣布转向端到端方案。传统智驾像流水线工厂——一个车间识别红绿灯，一个车间规划路径，一个车间控制方向盘。端到端像老司机开车——眼睛看到路口，手脚自动配合。摄像头像素进，方向盘角度出，中间全部由Transformer处理。但黑盒不可解释：出了事故很难追溯"模型为什么这样决策"。<strong>且本质是模仿学习——如果训练数据中的人类司机有不良习惯，模型也会学到。</strong>'
+    },
+    {
+      icon:'🎬', title:'Sora的时空理解', hint:'点击翻转 — 视频生成的真正突破',
+      tag1:{text:'技术突破', cls:'tag-fact'},
+      body:'Sora将视频看作3D时空patches（小块），用Transformer预测这些块之间的关系——同时保持了空间（单帧画面）和时间（帧间运动）的连贯性。之前的视频生成在时空一致性上表现很差——人物走几步就"融化"了。但<strong>物理正确性</strong>仍然是弱点：物体的碰撞、液体流动经常不符合真实世界规律。镜头里杯子掉了，但水往天上飞——模型学的是"看起来像真的"而非"物理上正确"。'
+    },
+    {
+      icon:'🧪', title:'AI辅助科研', hint:'点击翻转 — AlphaFold改写生物学',
+      tag1:{text:'科学突破', cls:'tag-fact'},
+      body:'DeepMind的AlphaFold在2020年CASP14蛋白质结构预测竞赛中，GDT得分中位数92.4（90分以上被认为达到实验精度）。解决了一个困扰生物学50年的问题——从氨基酸序列预测蛋白质的3D结构。传统方法（X射线晶体学、冷冻电镜）解析一个蛋白质需要数月到数年，AlphaFold只需几分钟。2024年AlphaFold3发布，可预测蛋白质与DNA/RNA/小分子的相互作用——药物发现进入新时代。'
     }
-  }
-  document.getElementById('examScore').textContent = 'MCQ 得分：'+correct+'/15（简答需手动评分）';
-});
-document.getElementById('resetExam').addEventListener('click', function(){
-  clearInterval(examInterval);
-  document.getElementById('examContainer').innerHTML = '';
-  document.getElementById('examScore').textContent = '';
-  document.getElementById('examTimer').textContent = '30:00';
-});
+  ];
 
-// ===== Review Mode =====
-document.getElementById('startReview').addEventListener('click', function(){
-  var list = document.getElementById('reviewList');
-  var items = concepts.map(function(c){return c.name+' — 复习要点：定义+类比+边界'});
-  var html = '';
-  items.forEach(function(item, i){
-    html += '<li id="rev-'+i+'" class="review-item-click">'+item+'</li>';
-  });
-  list.innerHTML = html;
-  list.querySelectorAll('.review-item-click').forEach(function(li){
-    li.addEventListener('click',function(){
-      this.classList.toggle('reviewed');
+  var container = document.getElementById('emergeGrid');
+  cards.forEach(function(c, i){
+    var div = document.createElement('div');
+    div.className = 'emerge-card';
+    div.innerHTML =
+      '<div class="emerge-inner" id="emergeInner-'+i+'">'+
+      '<div class="emerge-front">'+
+      '<div class="emerge-icon">'+c.icon+'</div>'+
+      '<div class="emerge-title">'+c.title+'</div>'+
+      '<div class="emerge-hint">'+c.hint+'</div>'+
+      '</div>'+
+      '<div class="emerge-back">'+
+      '<h4>'+c.icon+' '+c.title+'</h4>'+
+      '<div>'+
+      (c.tag1?'<span class="tag '+c.tag1.cls+'">'+c.tag1.text+'</span>':'')+
+      (c.tag2?'<span class="tag '+c.tag2.cls+'">'+c.tag2.text+'</span>':'')+
+      '</div>'+
+      '<p style="margin-top:8px;">'+c.body+'</p>'+
+      '</div>'+
+      '</div>';
+    container.appendChild(div);
+
+    document.getElementById('emergeInner-'+i).addEventListener('click', function(){
+      this.classList.toggle('flipped');
+      if(this.classList.contains('flipped')) trackProgress('emerge');
     });
   });
-});
-document.getElementById('resetReview').addEventListener('click', function(){
-  document.getElementById('reviewList').innerHTML = '';
-});
+})();
 
-// ===== Mind Map SVG =====
-function renderMindMap(){
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" style="max-width:100%;height:auto">';
-  svg += '<defs><filter id="mshadow"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter></defs>';
-  svg += '<rect width="960" height="640" fill="#fafbfc" rx="8"/>';
-  // Center
-  svg += '<ellipse cx="480" cy="320" rx="90" ry="44" fill="#F59E0B" filter="url(#mshadow)"/>';
-  svg += '<text x="480" y="314" text-anchor="middle" fill="white" font-size="15" font-weight="bold">AI与芯片革命</text>';
-  svg += '<text x="480" y="334" text-anchor="middle" fill="white" font-size="11">MKS 核心框架</text>';
-  // 4 branches
-  var branches = [
-    {label:'算力基础',x:150,y:140,c:'#dc2626'},
-    {label:'模型架构',x:810,y:140,c:'#2563eb'},
-    {label:'应用赋能',x:150,y:500,c:'#059669'},
-    {label:'社会认知',x:810,y:500,c:'#7c3aed'}
+// ============================================================
+// SAFETY TIMELINE
+// ============================================================
+(function(){
+  var events = [
+    {date:'2015.12', title:'OpenAI成立', detail:'以非营利组织形式成立，使命是"确保通用人工智能（AGI）造福全人类"。马斯克是联合创始人和早期捐款人之一（捐约1亿美元）。创始章程承诺研究将开源、透明。'},
+    {date:'2018.02', title:'马斯克退出OpenAI', detail:'马斯克提议将OpenAI并入特斯拉被董事会拒绝，随后退出。OpenAI后来公开的邮件显示——马斯克当时也承认"OpenAI烧钱速度远超预期，非营利模式不可持续"，并建议"应依附于一个资金充裕的公司"。'},
+    {date:'2019.07', title:'OpenAI成立营利子公司', detail:'接受微软10亿美元投资，成立"有限营利"子公司。OpenAI辩称：训练GPT-3的算力成本已达数千万美元——纯非营利模式根本无法支撑。但这一步也是后来"背离使命"争议的起点。'},
+    {date:'2023.01', title:'微软追加投资100亿美元', detail:'微软将GPT整合进Bing、Office、Windows等全线产品。OpenAI的估值从2019年约10亿美元飙升至2023年的290亿美元——成为史上增长最快的创业公司之一。'},
+    {date:'2023.07', title:'OpenAI成立"超级对齐"团队', detail:'由首席科学家伊利亚·苏茨克维和简·雷克共同领导。目标：在4年内解决超人类AI的控制问题。公司承诺将20%的计算资源用于安全研究。这被视为AI安全领域最强有力的制度承诺。'},
+    {date:'2023.11.17', title:'"政变"：阿尔特曼被解雇', detail:'OpenAI董事会（伊利亚是主要推动者）突然宣布解雇CEO山姆·阿尔特曼。原因是"对董事会不坦诚"。外界普遍认为背后是安全派与商业化派的路线之争，导火索是Q*项目（o1前身）取得突破让伊利亚觉得AGI比预期更近了。'},
+    {date:'2023.11.20-22', title:'员工起义 & 阿尔特曼回归', detail:'770名员工中的743人联名要求董事会辞职并恢复阿尔特曼职务。微软CEO纳德拉公开表示支持阿尔特曼。5天内，伊利亚出局、阿尔特曼回归、董事会重组。安全派的"政变"以失败告终。'},
+    {date:'2024.05.14', title:'伊利亚正式离职', detail:'首席科学家伊利亚在社交媒体发文告别，语气克制但意味深长。同日，超级对齐负责人简·雷克离职并连发13条推文，公开指责公司"削减安全资源"、"安全研究被边缘化"。对齐团队核心成员全部离开。'},
+    {date:'2024.09', title:'o1模型发布（原Q*）', detail:'伊利亚担心"太强大太快"的推理模型Q*，改名o1面向公众发布。具备思维链推理能力，在数学竞赛（AIME）中得分超过大多数人类参赛者。最讽刺的是——安全团队的离职反而加速了模型发布的时间线。'}
   ];
-  branches.forEach(function(b){
-    svg += '<ellipse cx="'+b.x+'" cy="'+b.y+'" rx="72" ry="30" fill="'+b.c+'" filter="url(#mshadow)"/>';
-    svg += '<text x="'+b.x+'" y="'+b.y+'" text-anchor="middle" fill="white" font-size="13" font-weight="bold">'+b.label+'</text>';
-    svg += '<line x1="390" y1="320" x2="'+b.x+'" y2="'+b.y+'" stroke="'+b.c+'" stroke-width="2"/>';
-  });
-  // Leaf nodes
-  var leaves = [
-    //算力基础
-    {label:'EUV光刻',x:60,y:70,c:'#ef4444'},{label:'3nm制程',x:150,y:70,c:'#ef4444'},
-    {label:'HBM显存',x:60,y:210,c:'#ef4444'},{label:'GPU算力',x:150,y:210,c:'#ef4444'},
-    //模型架构
-    {label:'Transformer',x:720,y:70,c:'#3b82f6'},{label:'LLM',x:810,y:70,c:'#3b82f6'},
-    {label:'扩散模型',x:720,y:210,c:'#3b82f6'},{label:'AI对齐',x:810,y:210,c:'#3b82f6'},
-    //应用赋能
-    {label:'端到端智驾',x:60,y:430,c:'#10b981'},{label:'人形机器人',x:150,y:430,c:'#10b981'},
-    {label:'AI PC',x:60,y:570,c:'#10b981'},{label:'AI科研',x:150,y:570,c:'#10b981'},
-    //社会认知
-    {label:'AI版权',x:720,y:430,c:'#8b5cf6'},{label:'AI诈骗',x:810,y:430,c:'#8b5cf6'},
-    {label:'就业冲击',x:720,y:570,c:'#8b5cf6'},{label:'智商税',x:810,y:570,c:'#8b5cf6'}
-  ];
-  leaves.forEach(function(l){
-    svg += '<rect x="'+(l.x-36)+'" y="'+(l.y-13)+'" width="72" height="26" rx="5" fill="'+l.c+'" opacity="0.9" filter="url(#mshadow)"/>';
-    svg += '<text x="'+l.x+'" y="'+(l.y+4)+'" text-anchor="middle" fill="white" font-size="10">'+l.label+'</text>';
-  });
-  svg += '</svg>';
-  document.getElementById('mindMapContainer').innerHTML = svg;
-}
-
-// ===== Deep Questions (5 items) =====
-var deepQuestions = [
-  {q:'如果 LLM 只是"文字接龙"，为什么它能解出训练数据中从未出现的数学题？', a:'这恰恰是"涌现"（emergence）的体现。当模型参数超过约 10¹⁰ 阈值，网络在训练中自发形成了对抽象运算的内部表征——不是靠记住答案，而是权重组合恰好实现了类似于"加法器"或"乘法器"的子网络。GPT-4 能计算远超训练语料范围的乘法，证明它学会了乘法规则而非记住所有乘法表。但这种"学会"非常脆弱——逆转诅咒证明它只学会了单向的规则应用。如同一个孩子学会了乘法口诀，但如果你反过来问"36 是哪些数的乘积"他可能答不出来。'},
-  {q:'EUV 光刻机为什么被称作"人类最复杂的机器"？它的垄断地位能被打破吗？', a:'复杂性：1）13.5nm EUV 光源——每秒 5 万滴锡液被激光双次轰击产生等离子体，发出极紫外光；2）反射镜——钼/硅多层膜反射镜，平整度相当于地球表面起伏不超过 1mm；3）工件台——以纳米精度移动晶圆；4）真空系统——EUV 光连空气都穿不过，整机需在高真空环境运行。ASML 垄断原因：30 年持续投入+全球 5000+ 供应商独家合作+客户（台积电/三星/英特尔）同时也是股东——形成了一个不可复制的"产业-资本-技术"铁三角。中国突破路线：不是"造一台 EUV"，而是需要重建整个精密制造供应链——可能需要 15-20 年。'},
-  {q:'如果 Scaling Law 真的见顶了，AI 的下一个突破方向在哪里？', a:'可能的突破方向：1）新型架构——超越 Transformer，如状态空间模型（Mamba）、混合专家模型（MoE）、神经符号系统（Neuro-Symbolic AI），从根本上解决"逆转诅咒"和单向推理问题；2）数据效率——当前模型"浪费"了大部分训练数据，高效利用少量高质量数据（如 o1 的思维链自训练）；3）Agent 化——不追求"更大的模型"，而是让现有模型像人一样使用工具（搜索引擎、计算器、代码执行器），组合出超模型智能；4）具身智能——让 AI 通过与物理世界交互学习，获得"世界模型"——当前纯文本训练的 AI 没有"重力""因果"等物理直觉。'},
-  {q:'从"AI 保守派"（伊利亚/辛顿）的视角看，AI 对人类最大的威胁是什么？他们的担忧合理吗？', a:'保守派核心担忧：1）对齐失败——超人类 AI 的目标与我们不一致且我们无法纠正。经典思想实验："让 AI 最大化回形针产量"→AI 把整个地球（包括人类）都变成回形针。2）权力集中——少数公司/个人控制超人类 AI，形成"数字独裁"；3）智能爆炸——一旦 AI 能自我改进（递归自我提升），改进速度可能从"年"到"秒"级，人类来不及反应。担忧合理性评估：这些不是空想——核武器、气候变化等全球性威胁证明人类对"慢速灾难"都反应不足，对"快速灾难"更不可能即时应对。但卓克认为保守派可能低估了"竞争"——各国和公司之间的 AI 竞争本身就是一种"制衡"，没有单一方能垄断超人类 AI。真正的威胁可能不是 AI"叛变"，而是人类用 AI 互相伤害（AI 武器化、AI 监控、AI 信息战）。'},
-  {q:'中国在 AI 和芯片领域的真实竞争力如何？"卡脖子"能卡多久？', a:'AI 竞争力：论文和开源模型领域全球第二（仅次于美国），但前沿训练算力受限——最先进的 NVIDIA GPU 被禁售。国内替代方案（华为昇腾）性能差距约 2-3 代。芯片竞争力：1）成熟制程（28nm+）产能全球领先，但先进制程（7nm-）仍有巨大差距；2）光刻机是最短板——纯国产 65nm 已能量产，28nm DUV 正在攻坚，EUV 还需 15-20 年；3）优势在封装测试环节——全球 50%+ 的后道封装在中国。"卡脖子"持续时间：由两个因素决定——中国自主研发速度 vs 美国技术封锁强度。乐观估计：成熟制程产业链 5 年成型，先进制程 10-15 年追上。悲观估计：半导体是"巨人的游戏"，台积电的 3nm 用了 30 年+全人类智慧的积累，不是一个国家短期内能复制的。最可能的结果：形成"两个平行体系"——中国掌握 14nm-28nm 全自主产业链，满足 80% 的民用需求，EUV 以下制程长期依赖进口或二手设备。'}
-];
-
-function renderDeepQuestions(){
-  var container = document.getElementById('deepAskContainer');
-  var html = '';
-  deepQuestions.forEach(function(item, i){
-    html += '<div class="dq-item">';
-    html += '<div class="dq-question">'+(i+1)+'. '+item.q+'</div>';
-    html += '<div class="dq-answer">'+item.a+'</div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.dq-question').forEach(function(q){
-    q.addEventListener('click',function(){
-      var ans = this.nextElementSibling;
-      ans.style.display = ans.style.display==='block'?'none':'block';
+  var container = document.getElementById('safetyTimeline');
+  events.forEach(function(e, i){
+    var div = document.createElement('div');
+    div.className = 'timeline-item';
+    div.innerHTML =
+      '<div class="tl-date">'+e.date+'</div>'+
+      '<div class="tl-title">'+e.title+'</div>'+
+      '<div class="tl-detail">'+e.detail+'</div>';
+    div.addEventListener('click', function(){
+      var detail = this.querySelector('.tl-detail');
+      var wasShown = detail.classList.contains('show');
+      // Close all
+      container.querySelectorAll('.tl-detail').forEach(function(d){d.classList.remove('show')});
+      container.querySelectorAll('.timeline-item').forEach(function(t){t.classList.remove('active')});
+      if(!wasShown){
+        detail.classList.add('show');
+        this.classList.add('active');
+        trackProgress('safety');
+      }
     });
+    container.appendChild(div);
   });
-}
 
-// ===== Case Studies (3 items) =====
-var cases = [
-  {title:'OpenAI 内斗事件（2023.11 – 2024.5）', meta:'涉及概念：AI 对齐、商业化、公司治理', content:'2023 年 11 月 17 日，OpenAI 董事会突然解雇 CEO 阿尔特曼，首席科学家伊利亚是主要推手。72 小时内，770 名员工中的 743 人联名要求董事会辞职。阿尔特曼回归，伊利亚出局。2024 年 5 月伊利亚正式离职，超级对齐负责人同日离开并公开批评公司。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>根因识别：</strong>内斗表面是"宫斗"，实则是 AI 安全（伊利亚派）vs 商业化（阿尔特曼派）的路线之争。Q* 项目（后改名 o1）的突破让伊利亚认为 AGI 比预期更近了，安全必须优先。</li><li><strong>权力结构：</strong>OpenAI 的独特公司结构——非营利董事会控制营利实体——意味着"赚钱的人"最终受制于"理想主义者"。阿尔特曼回归意味着商业化派的胜利。</li><li><strong>后续影响：</strong>对齐团队核心成员全部离职——这是 AI 安全领域最大的"人才流失"事件。2024 年 9 月 o1 发布——伊利亚担心的"太强大太快"的模型最终还是面向了公众。</li><li><strong>认知框架应用：</strong>这不是简单的"好人 vs 坏人"——伊利亚和阿尔特曼都真诚地相信自己的路线对人类最好。AI 治理的核心困境：没人知道 AGI 的"安全速度"应该多快。</li></ol>'},
-  {title:'马斯克状告 OpenAI（2024.2）', meta:'涉及概念：公司治理、AI 开源、商业竞争', content:'2024 年 2 月 29 日，马斯克起诉 OpenAI 违反创立协议——OpenAI 本应是非营利开源组织，现在变成了微软控制的闭源商业公司。马斯克曾是 OpenAI 联合创始人和早期捐款人。OpenAI 反击：披露了马斯克当年建议公司融数十亿美元、甚至提议将 OpenAI 并入特斯拉的邮件。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>历史回顾：</strong>OpenAI 2015 年成立时确实是非营利组织，马斯克捐了约 1 亿美元。2018 年马斯克提议将 OpenAI 并入特斯拉被拒，随后退出。2019 年 OpenAI 成立营利子公司接受微软 10 亿美元投资。</li><li><strong>反方证据：</strong>OpenAI 公开的邮件显示——马斯克在 2018 年承认"OpenAI 烧钱速度远超预期，非营利模式不可持续"，并建议"OpenAI 应该依附于一个资金充裕的公司（如特斯拉）"。</li><li><strong>核心矛盾：</strong>AI 研发的成本从 2015 年的 1 亿美元级→2024 年的 1000 亿美元级。非营利捐赠模式根本无法支撑这种烧钱速度。OpenAI 转向营利是"不得不"还是"借口"？</li><li><strong>结论：</strong>马斯克的诉讼"不是为了钱"但动机复杂——xAI（他自己的 AI 公司）是 OpenAI 的竞争对手。真正的问题是：超大规模 AI 研发是否需要一种全新的组织形态——既不是纯非营利（资金不够），也不是纯商业化（安全风险），而是某种"公共事业"模式？</li></ol>'},
-  {title:'Intel 衰落与芯片"脱美"（2024.9）', meta:'涉及概念：芯片制造、半导体产业规律、技术路线', content:'2024 年 9 月英特尔面临成立 56 年来最严重危机：13/14 代酷睿芯片氧化缺陷导致大面积蓝屏、涉嫌隐瞒代工部门 70 亿美元亏损、计划裁员 15%（约 15000 人）、道琼斯指数甚至考虑将其剔除。曾经定义了"硅谷"的公司，如今市值不到英伟达的十分之一。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>技术失误：</strong>10nm 节点连续跳票 5 年（原定 2015 量产→实际 2020），被台积电拉开代差——7nm/5nm/3nm 都领先英特尔 1-2 年。14 代酷睿的氧化缺陷是工艺问题的集中爆发。</li><li><strong>战略失误：</strong>坚持 IDM（设计+制造一体），拒绝为苹果代工 iPhone 芯片——错失了移动时代最大订单，也错失了用苹果的"苛刻要求"打磨制程的机会。台积电正是靠苹果的订单练出了先进制程。</li><li><strong>产业规律：</strong>半导体"赢家通吃"——最先进工艺的产能有限，谁先掌握谁接走最赚钱的订单（高端手机芯片、AI 加速卡），利润再投入研发→形成正循环。掉队者进入"良率-订单-利润-研发"死亡螺旋。</li><li><strong>地缘政治含义：</strong>美国政府投入 390 亿美元芯片补贴希望"制造业回流"，但政府资金效率远不如市场竞争。芯片"脱美"（制造离开美国）趋势可能不可逆转。英特尔能否生存取决于 18A 工艺能否在 2025 年成功——用了全新的 RibbonFET 和 PowerVia 技术，这是"最后一次翻身机会"。</li></ol>'}
-];
+  // Open the most dramatic event by default
+  setTimeout(function(){
+    container.querySelectorAll('.timeline-item')[5].click();
+  }, 300);
+})();
 
-function renderCases(){
-  var container = document.getElementById('caseContainer');
-  var html = '';
-  cases.forEach(function(c){
-    html += '<div class="case-card">';
-    html += '<div class="case-title">'+c.title+'</div>';
-    html += '<div class="case-meta">'+c.meta+'</div>';
-    html += '<p>'+c.content+'</p>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-}
-
-// ===== Decision Scenarios (3 items) =====
-function renderDecision(){
-  var container = document.getElementById('decisionContainer');
+// ============================================================
+// DECISION SIMULATORS
+// ============================================================
+(function(){
   var scenarios = [
-    {title:'场景 1：选购 AI 降噪耳机',q:'通勤时使用的降噪耳机，你应关注什么？',opts:['"AI 降噪"广告宣传语','主动降噪深度（dB）和有效频宽','品牌知名度','耳机外壳材质'],ans:1,explain:'降噪核心指标是主动降噪深度（如 -30dB 意味噪声能量降低 1000 倍）和有效频宽。"AI 降噪"是营销词——所有主动降噪都需要 DSP 芯片做信号处理，和"AI"无本质关系。真正突破一定伴有可量化的性能指标提升。'},
-    {title:'场景 2：买 AI PC 还是普通笔记本电脑？',q:'2024 年想换笔记本，"AI PC"值得多付 2000 元吗？',opts:['值得，AI PC 性能翻倍','如果主要用于办公+视频，不需要——当前 NPU 仅对特定应用（实时字幕/背景虚化）有加速','不买 AI PC 就是落伍','AI PC 的 NPU 可以取代独立显卡'],ans:1,explain:'AI PC 的 NPU（神经网络处理单元）目前主要加速：Windows Studio Effects（视频会议背景虚化/眼神矫正）、实时语音转文字、本地小模型推理（如 Copilot）。对日常办公场景提升有限。如果预算充裕且希望体验端侧 AI，可以考虑；如果追求性价比，普通笔记本够用。AI PC 现在是"过渡期产品"——等到 NPU 算力翻几倍且应用生态成熟后再买会更划算。'},
-    {title:'场景 3：亲戚想买"AI 学习机"给孩子',q:'某品牌"AI 学习机"宣传"个性化 AI 辅导""智能错题本"，售价 4999 元。你如何分析？',opts:['4999 元不贵，买了省心','分析：1）平板硬件成本约 1500 元；2）"AI 辅导"多是预制录播课程+简单题库匹配；3）同等功能可用普通平板（2000 元）+免费学习 App 实现。溢价约 3000 元全是"AI"品牌溢价','"AI 学习"肯定是未来方向','所有学习机都一样，随便买'],ans:1,explain:'拆解 AI 学习机的"AI"：1）硬件 = 普通平板（MTK 中端芯片 + 10 寸屏 + 4GB RAM），成本约 1500 元；2）"AI 辅导"= 题库自动匹配+录播视频，大模型调用很少（甚至可能没有接入真正的 LLM）；3）"智能错题本"= OCR 拍照识别+知识点归类——2018 年就已经成熟的技术。真正的"AI 教学"应该是 GPT-4 级别的 1 对 1 对话式辅导——目前还没有产品能做到（受限于成本和安全审核）。给亲戚的建议：买普通平板 + 下载优质免费学习 App，省下的 3000 元带孩子出去玩更值。'},
-    {title:'场景 4：Graphcore/IPU 股票可以买吗？',q:'朋友推荐"AI 芯片概念股"——声称某公司研发了"比英伟达快 10 倍的 AI 芯片"。',opts:['马上买入','查清：1）是量产还是 PPT？2）有真实客户和订单吗？3）制造由谁代工？英伟达的 CUDA 生态护城河极深','AI 芯片一定会取代英伟达','买一点点试试'],ans:1,explain:'判断 AI 芯片公司的三个关键：1）实际量产——流片成功不等于能量产。台积电先进制程产能被苹果/英伟达/AMD 瓜分，小公司根本排不上队；2）软件生态——英伟达的 CUDA 有 15 年+积累和 400 万+开发者，硬件再快没有软件生态就是一堵墙。Groq 芯片确实在某些场景比 H100 快，但买不到（产能都被英伟达抢走了）；3）客户验证——有没有大客户公开使用？不是"意向书"而是实际订单。大多数"比英伟达快 X 倍"的声明用的是特定条件下的对比（如特定精度/特定模型大小），不能代表通用场景。'}
+    {
+      title:'🎧 场景1：选购"AI降噪"耳机',
+      q:'通勤路上想买降噪耳机，某品牌主打"AI智能降噪"，比同类贵400元。你应关注什么？',
+      opts:['看"AI降噪"广告宣传词是否吸引人','关注主动降噪深度（dB）和有效频宽等量化指标','看品牌知名度','看耳机外壳材质和设计'],
+      ans:1,
+      explain:'<strong>降噪核心指标是量化数据：</strong>主动降噪深度（如-30dB = 噪声能量降低1000倍）和有效频宽（能覆盖多少频率范围）。"AI降噪"本质上只是营销词——所有主动降噪耳机都需要DSP芯片做信号处理，和"AI"没有本质关系。真正技术突破一定伴有可量化的性能指标提升。如果参数表上只有"AI"没有数字——你多付的400元买到的只是广告预算。'
+    },
+    {
+      title:'💻 场景2：2024年买"AI PC"还是普通笔记本？',
+      q:'想换笔记本，某品牌"AI PC"宣传NPU加速AI应用，比同配置普通版贵2000元。值得吗？',
+      opts:['值得——AI PC性能翻倍','主要用途是办公+视频的话不需要——NPU目前仅加速特定场景（视频背景虚化/实时字幕）','不买AI PC就是落伍','NPU可以完全取代独立显卡'],
+      ans:1,
+      explain:'<strong>AI PC的NPU（神经网络处理单元）目前主要加速：</strong>Windows Studio Effects（视频会议背景虚化/眼神矫正）、实时语音转文字、本地小模型推理。对日常办公场景提升有限。AI PC现在是"过渡期产品"——NPU算力和应用生态都还在初期。建议：预算充裕且希望尝鲜可以买；追求性价比就买普通笔记本，等NPU算力翻2-3倍、杀手应用出现后再升级。省下的2000元够买3年ChatGPT Plus订阅——获得的AI体验远超本地NPU。'
+    },
+    {
+      title:'📚 场景3：亲戚想买"AI学习机"给孩子',
+      q:'某品牌"AI学习机"宣传"个性化AI辅导""智能错题本"，售价4999元。怎么分析？',
+      opts:['4999元买个省心，值得','分析：平板硬件成本≈1500元，"AI辅导"多=预制录播+简单题库匹配。同等功能可用2000元平板+免费App实现。溢价3000元全是"AI"品牌税','"AI学习"肯定是未来方向','所有学习机都差不多'],
+      ans:1,
+      explain:'<strong>拆解"AI学习机"的真相：</strong><br>①硬件=普通平板（MTK中端芯片+10寸屏+4GB RAM），成本约1500元<br>②"AI辅导"=题库自动匹配+录播视频，大模型调用极少（甚至可能没有接入真正的LLM）<br>③"智能错题本"=OCR拍照识别+知识点归类——2018年就成熟的技术<br><br>真正AI教学应是GPT-4级别的1对1对话式辅导——目前没有产品能做到（受限于成本和内容安全审核）。给亲戚建议：买2000元平板+免费学习App，省下的3000元带孩子去科技馆/博物馆——投资"启发好奇心"远比投资"AI营销词"有价值。'
+    },
+    {
+      title:'🚗 场景4：要不要为"FSD完全自动驾驶"买单？',
+      q:'买车时销售推荐加6.4万选装FSD——宣传"今年就能完全自动驾驶"。你怎么判断？',
+      opts:['6.4万不贵，特斯拉技术领先，值得相信','查清：①"完全自动驾驶"在法律上仍是L2辅助驾驶；②FSD从2016年起每年都说"明年实现"；③6.4万是为尚未交付的功能提前付款','现在就买，自动驾驶是趋势','先买后如果不能用可以退款'],
+      ans:1,
+      explain:'<strong>判断自动驾驶承诺的核心方法论：</strong><br>①看法律认定而非宣传用语——目前全球没有任何地区的法规允许"完全自动驾驶"（L5）的消费级车辆上路<br>②看历史兑现率——FSD从2016年开始"今年实现"的承诺，已经跳票8年<br>③6.4万购买的是"未来的软件功能"——如果卖车时这个功能还没实现，二手买家不会为此付溢价<br>④端到端智驾确实是正确方向（FSD V12表现惊艳），但"正确方向"≠"今年就能完全实现"。真正成熟还需要解决长尾场景、法规审批、保险责任等大量非技术问题。<br><br>建议：如果喜欢尝鲜且有预算，可以买；如果把它当"投资"，这6.4万的回报期可能比你想的长得多。'
+    }
   ];
-  var html = '';
+
+  var container = document.getElementById('decisionContainer');
   scenarios.forEach(function(s, i){
-    html += '<div class="decision-scenario">';
-    html += '<h4>'+s.title+'</h4>';
-    html += '<p>'+s.q+'</p>';
-    s.opts.forEach(function(opt, j){
-      html += '<label style="display:block;margin:4px 0;cursor:pointer"><input type="radio" name="dec'+i+'" value="'+j+'"> '+opt+'</label>';
-    });
-    html += '<button class="dec-submit" data-idx="'+i+'" data-ans="'+s.ans+'" data-explain="'+s.explain.replace(/"/g,'&quot;')+'">提交决策</button>';
-    html += '<div class="decision-output" id="decOut-'+i+'"></div>';
-    html += '</div>';
+    var box = document.createElement('div');
+    box.className = 'decision-box';
+    box.style.marginBottom = '20px';
+    var optsHTML = s.opts.map(function(o,j){
+      return '<label><input type="radio" name="dec'+i+'" value="'+j+'"> '+o+'</label>';
+    }).join('');
+    box.innerHTML =
+      '<h4>'+s.title+'</h4>'+
+      '<p style="font-size:.9rem;color:var(--text-dim);margin-bottom:8px;">'+s.q+'</p>'+
+      '<div class="options">'+optsHTML+'</div>'+
+      '<button class="submit-btn" data-idx="'+i+'" data-ans="'+s.ans+'" data-explain="'+s.explain.replace(/"/g,'&quot;').replace(/<br>/g,'@@BR@@').replace(/<strong>/g,'@@SB@@').replace(/<\/strong>/g,'@@SE@@')+'">提交决策</button>'+
+      '<div class="decision-feedback" id="decFb-'+i+'"></div>';
+    container.appendChild(box);
   });
-  container.innerHTML = html;
-  container.querySelectorAll('.dec-submit').forEach(function(btn){
-    btn.addEventListener('click',function(){
+
+  container.querySelectorAll('.submit-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
       var idx = parseInt(this.dataset.idx);
       var ans = parseInt(this.dataset.ans);
-      var explain = this.dataset.explain;
+      var explain = this.dataset.explain.replace(/@@BR@@/g,'<br>').replace(/@@SB@@/g,'<strong>').replace(/@@SE@@/g,'</strong>');
       var radios = document.getElementsByName('dec'+idx);
-      var out = document.getElementById('decOut-'+idx);
+      var fb = document.getElementById('decFb-'+idx);
       var selected = -1;
       for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
-      if(selected===-1){out.textContent='请先选择一个选项';out.style.display='block';return;}
+      if(selected===-1){fb.textContent='请先选择一个选项';fb.className='decision-feedback wrong show';return;}
       if(selected===ans){
-        out.innerHTML='✅ 正确决策！<br>'+explain;
-        out.style.color='#155724';out.style.background='#d4edda';
+        fb.innerHTML='✅ <strong>正确！</strong><br>'+explain;
+        fb.className='decision-feedback correct show';
       }else{
-        out.innerHTML='⚠️ 可以优化。最合理的选择是：<br>'+explain;
-        out.style.color='#721c24';out.style.background='#f8d7da';
+        fb.innerHTML='⚠️ <strong>可以优化。</strong>最合理的选择分析：<br>'+explain;
+        fb.className='decision-feedback wrong show';
       }
-      out.style.display='block';
+      trackProgress('decision');
     });
   });
-}
+})();
 
-// ===== Toast =====
-function showToast(msg){
-  var t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(function(){t.remove()},2000);
-}
+// ============================================================
+// KNOWLEDGE METER (tracks exploration progress)
+// ============================================================
+(function(){
+  var explored = {};
+  var totalSections = 6; // 6 layers to explore
 
-// ===== Init =====
-function init(){
-  renderCards();
-  renderDeepQuestions();
-  renderCases();
-  renderDecision();
-  renderMindMap();
-  document.getElementById('cardIndex').textContent = '1/10';
-}
+  window.trackProgress = function(section){
+    if(!explored[section]){
+      explored[section] = true;
+      updateMeter();
+    }
+  };
 
-document.addEventListener('DOMContentLoaded', init);
+  // Also track via IntersectionObserver
+  var layerEls = document.querySelectorAll('.layer');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var id = e.target.id;
+        if(!explored[id]){ explored[id]=true; updateMeter(); }
+      }
+    });
+  }, {threshold: 0.3});
+  layerEls.forEach(function(el){observer.observe(el)});
+
+  function updateMeter(){
+    var count = Object.keys(explored).length;
+    var pct = Math.round(Math.min(100, count/totalSections*100));
+    document.getElementById('kmPct').textContent = pct+'%';
+    var circle = document.getElementById('kmCircle');
+    var circumference = 125.66;
+    var offset = circumference - (pct/100)*circumference;
+    circle.setAttribute('stroke-dashoffset', offset);
+  }
+})();
+
+// ============================================================
+// SCROLL-BASED PARALLAX for layer headers
+// ============================================================
+(function(){
+  var layers = document.querySelectorAll('.layer');
+  window.addEventListener('scroll', function(){
+    layers.forEach(function(l){
+      var rect = l.getBoundingClientRect();
+      if(rect.top<window.innerHeight && rect.bottom>0){
+        var progress = 1-(rect.top/window.innerHeight);
+        var header = l.querySelector('.layer-header');
+        if(header){
+          header.style.opacity = Math.min(1, progress*2);
+          header.style.transform = 'translateY('+(20-Math.min(20,progress*20))+'px)';
+        }
+      }
+    });
+  });
+})();
 </script>
-
 </body>
 </html>
