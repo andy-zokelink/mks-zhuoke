@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技参考4 · 前沿观测站</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+  :root {
+    --space-black: #0a0c14;
+    --space-deep: #0f111d;
+    --space-card: #141725;
+    --signal-blue: #3291ff;
+    --signal-cyan: #00d4ff;
+    --signal-purple: #7c5ce7;
+    --signal-green: #00e599;
+    --signal-amber: #f5a623;
+    --warning-orange: #ff5e3a;
+    --text-primary: #e8eaed;
+    --text-secondary: #9aa0b4;
+    --text-muted: #5c6178;
+    --border-subtle: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--space-black);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── Starfield background ── */
+  .starfield {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .starfield canvas { display: block; }
+
+  /* ── Top bar ── */
+  .topbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border-subtle);
+    backdrop-filter: blur(12px);
+    background: rgba(15,17,29,0.7);
+  }
+  .topbar .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+  }
+  .topbar .brand strong { color: var(--signal-cyan); font-weight: 400; }
+  .topbar .home-link {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--border-subtle);
+    padding: 6px 16px;
+    border-radius: 20px;
+    transition: all 0.3s;
+  }
+  .topbar .home-link:hover {
+    border-color: var(--signal-blue);
+    color: var(--signal-blue);
+    box-shadow: 0 0 20px rgba(50,145,255,0.15);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    z-index: 2;
+    padding: 70px 28px 40px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--signal-cyan);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-eyebrow .blink {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--warning-orange);
+    border-radius: 50%;
+    margin-right: 10px;
+    animation: pulse-dot 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--warning-orange); }
+    50% { opacity: 0.3; box-shadow: 0 0 16px var(--warning-orange); }
+  }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero h1 .accent { color: var(--signal-blue); }
+  .hero .tagline {
+    font-size: clamp(15px, 2.2vw, 18px);
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 12px;
+    font-weight: 300;
+  }
+  .hero .meta-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .hero .meta-line span { color: var(--signal-cyan); }
+
+  /* ── Radar / Signal ring decoration ── */
+  .radar-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 340px; height: 340px;
+    border: 1px solid rgba(50,145,255,0.12);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: radar-spin 40s linear infinite;
+  }
+  .radar-ring::before {
+    content: '';
+    position: absolute; inset: 30px;
+    border: 1px solid rgba(50,145,255,0.08);
+    border-radius: 50%;
+  }
+  .radar-ring::after {
+    content: '';
+    position: absolute; inset: 70px;
+    border: 1px solid rgba(50,145,255,0.05);
+    border-radius: 50%;
+  }
+  @keyframes radar-spin {
+    from { transform: translate(-50%,-50%) rotate(0deg); }
+    to { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+  .radar-sweep {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 170px; height: 2px;
+    background: linear-gradient(90deg, rgba(50,145,255,0.5), transparent);
+    transform-origin: left center;
+    animation: sweep 8s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  @keyframes sweep {
+    from { transform: translate(0,-50%) rotate(0deg); }
+    to { transform: translate(0,-50%) rotate(360deg); }
+  }
+
+  /* ── Signal dots (radar blips) ── */
+  .signal-blips {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blip {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--signal-cyan);
+    border-radius: 50%;
+    animation: blip-fade 3s ease-in-out infinite;
+  }
+  @keyframes blip-fade {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(2.5); }
+  }
+
+  /* ── Observation deck container ── */
+  .deck {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 28px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .deck-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding-left: 4px;
+  }
+
+  /* ── Shared entry base ── */
+  .entry {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background: var(--space-card);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1),
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+  }
+  .entry:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .entry-inner {
+    display: flex;
+    align-items: stretch;
+    min-height: 160px;
+  }
+  .entry-visual {
+    flex: 0 0 200px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .entry-body {
+    flex: 1;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+  .entry-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+  .entry-title {
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .entry-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    max-width: 520px;
+    font-weight: 300;
+  }
+  .entry-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .entry-arrow {
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+  .entry:hover .entry-arrow {
+    color: var(--signal-cyan);
+    transform: translateY(-50%) translateX(4px);
+  }
+
+  /* ── Entry 1: AI & Digital — Neural grid ── */
+  .entry-ai .entry-visual {
+    background: linear-gradient(135deg, #0d1b3e 0%, #0a0f1f 100%);
+  }
+  .entry-ai:hover { border-color: rgba(50,145,255,0.35); box-shadow: 0 20px 60px rgba(50,145,255,0.08); }
+  .entry-ai .entry-title { color: #5badff; }
+  .neural-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 6px;
+    width: 120px; height: 120px;
+    position: relative;
+  }
+  .neural-node {
+    width: 8px; height: 8px;
+    background: var(--signal-blue);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: node-flicker 2.5s ease-in-out infinite;
+  }
+  .neural-node:nth-child(odd) { animation-delay: 0.4s; }
+  .neural-node:nth-child(3n) { animation-delay: 1.2s; background: var(--signal-cyan); }
+  .neural-node:nth-child(5n+1) { animation-delay: 0.8s; }
+  @keyframes node-flicker {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.9; box-shadow: 0 0 8px currentColor; }
+  }
+
+  /* ── Entry 2: Life Sciences — DNA waveform ── */
+  .entry-life .entry-visual {
+    background: linear-gradient(135deg, #0a1f1a 0%, #0a0f14 100%);
+  }
+  .entry-life:hover { border-color: rgba(0,229,153,0.3); box-shadow: 0 20px 60px rgba(0,229,153,0.06); }
+  .entry-life .entry-title { color: #33e8a8; }
+  .dna-wave {
+    width: 140px; height: 140px;
+    position: relative;
+  }
+  .dna-wave svg { width: 100%; height: 100%; }
+  .dna-wave .strand {
+    fill: none;
+    stroke: var(--signal-green);
+    stroke-width: 1.5;
+    opacity: 0.5;
+    animation: strand-shift 6s ease-in-out infinite;
+  }
+  .dna-wave .strand:nth-child(2) { animation-delay: 1s; opacity: 0.3; }
+  @keyframes strand-shift {
+    0%, 100% { stroke-dashoffset: 0; }
+    50% { stroke-dashoffset: 30; }
+  }
+
+  /* ── Entry 3: Hard Tech — Engine blueprint ── */
+  .entry-hard .entry-visual {
+    background: linear-gradient(135deg, #1f150a 0%, #140f0a 100%);
+  }
+  .entry-hard:hover { border-color: rgba(255,94,58,0.3); box-shadow: 0 20px 60px rgba(255,94,58,0.06); }
+  .entry-hard .entry-title { color: #ff7b5c; }
+  .blueprint-ring {
+    width: 130px; height: 130px;
+    position: relative;
+  }
+  .blueprint-ring svg { width: 100%; height: 100%; }
+  .bp-circle {
+    fill: none;
+    stroke: var(--warning-orange);
+    stroke-width: 1;
+    opacity: 0.3;
+    animation: bp-pulse 3s ease-in-out infinite;
+  }
+  .bp-circle:nth-child(2) { animation-delay: 0.6s; }
+  .bp-circle:nth-child(3) { animation-delay: 1.2s; }
+  @keyframes bp-pulse {
+    0%, 100% { opacity: 0.15; r: 20; }
+    50% { opacity: 0.6; r: 52; }
+  }
+
+  /* ── Entry 4: Scientific Method — Prism ── */
+  .entry-method .entry-visual {
+    background: linear-gradient(135deg, #150a2e 0%, #0f0a1f 100%);
+  }
+  .entry-method:hover { border-color: rgba(124,92,231,0.3); box-shadow: 0 20px 60px rgba(124,92,231,0.06); }
+  .entry-method .entry-title { color: #9b7ef0; }
+  .prism-container {
+    width: 120px; height: 120px;
+    position: relative;
+  }
+  .prism-ray {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 60px; height: 1px;
+    transform-origin: left center;
+    opacity: 0.5;
+    animation: ray-shift 4s ease-in-out infinite;
+  }
+  .prism-ray:nth-child(1) { background: var(--signal-purple); transform: translate(0,-50%) rotate(-20deg); animation-delay: 0s; }
+  .prism-ray:nth-child(2) { background: var(--signal-blue); transform: translate(0,-50%) rotate(-5deg); animation-delay: 0.3s; }
+  .prism-ray:nth-child(3) { background: var(--signal-cyan); transform: translate(0,-50%) rotate(8deg); animation-delay: 0.6s; }
+  .prism-ray:nth-child(4) { background: var(--signal-green); transform: translate(0,-50%) rotate(20deg); animation-delay: 0.9s; }
+  .prism-ray:nth-child(5) { background: var(--signal-amber); transform: translate(0,-50%) rotate(32deg); animation-delay: 1.2s; }
+  @keyframes ray-shift {
+    0%, 100% { opacity: 0.2; width: 60px; }
+    50% { opacity: 0.8; width: 100px; }
+  }
+  .prism-core {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 20px; height: 20px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    transform: translate(-50%,-50%) rotate(45deg);
+  }
+
+  /* ── Entry 5: Society — Constellation grid ── */
+  .entry-society .entry-visual {
+    background: linear-gradient(135deg, #1f1a0a 0%, #140f0a 100%);
+  }
+  .entry-society:hover { border-color: rgba(245,166,35,0.3); box-shadow: 0 20px 60px rgba(245,166,35,0.06); }
+  .entry-society .entry-title { color: #f7b84c; }
+  .constellation {
+    width: 130px; height: 130px;
+    position: relative;
+  }
+  .constellation svg { width: 100%; height: 100%; }
+  .const-line {
+    stroke: var(--signal-amber);
+    stroke-width: 0.8;
+    opacity: 0.2;
+    animation: const-glow 5s ease-in-out infinite;
+  }
+  .const-dot {
+    fill: var(--signal-amber);
+    opacity: 0.4;
+    animation: const-dot-pulse 3s ease-in-out infinite;
+  }
+  @keyframes const-glow {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.5; }
+  }
+  @keyframes const-dot-pulse {
+    0%, 100% { opacity: 0.3; r: 2.5; }
+    50% { opacity: 0.9; r: 4.5; }
+  }
+
+  /* ── Footer signal bar ── */
+  .signal-bar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 28px 60px;
+  }
+  .signal-bar .bar {
+    width: 3px;
+    background: var(--signal-cyan);
+    border-radius: 2px;
+    opacity: 0.25;
+    animation: bar-bounce 1.2s ease-in-out infinite;
+  }
+  @keyframes bar-bounce {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.2; }
+    50% { transform: scaleY(1); opacity: 0.7; }
+  }
+
+  /* ── Footer ── */
+  .site-footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 28px 50px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+  .site-footer a { color: var(--text-secondary); text-decoration: none; }
+  .site-footer a:hover { color: var(--signal-cyan); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .entry-inner { flex-direction: column; }
+    .entry-visual { flex: 0 0 100px; }
+    .entry-body { padding: 20px 24px; }
+    .entry-arrow { right: 20px; top: auto; bottom: 20px; transform: none; }
+    .entry:hover .entry-arrow { transform: translateX(4px); }
+    .hero { padding: 50px 20px 30px; }
+    .deck { padding: 16px 16px 60px; gap: 20px; }
+    .radar-ring { width: 200px; height: 200px; }
+    .radar-sweep { width: 100px; }
+    .deck-label { font-size: 10px; }
+    .entry-title { font-size: 20px; }
+    .entry-desc { font-size: 13px; }
+  }
+  @media (max-width: 480px) {
+    .topbar { padding: 14px 16px; }
+    .hero { padding: 40px 16px 24px; }
+    .hero h1 { font-size: 26px; }
+    .deck { padding: 12px 12px 50px; gap: 16px; }
+    .entry-visual { flex: 0 0 80px; }
+    .entry-body { padding: 16px 18px; }
+    .entry-desc { font-size: 12px; }
+    .entry-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Starfield canvas -->
+<div class="starfield"><canvas id="stars"></canvas></div>
+
+<!-- Top navigation -->
+<nav class="topbar">
+  <span class="brand">MKS · <strong>科技参考4</strong></span>
+  <a href="../index.html" class="home-link">← 返回总导航</a>
+</nav>
+
+<!-- Hero: Observation Deck -->
+<section class="hero">
+  <div class="radar-ring"></div>
+  <div class="radar-sweep"></div>
+  <div class="hero-eyebrow"><span class="blink"></span>前沿观测站 · 信号监测中</div>
+  <h1>科技参考<span class="accent">4</span></h1>
+  <p class="tagline">站在2025年的观测台上，5个屏幕同时亮着——<br>这是卓克一年来追踪的全部信号。</p>
+  <p class="meta-line">318篇文章 · 5个专题 · <span>SIGNAL LOCKED</span></p>
+</section>
+
+<!-- Observation Deck: 5 Screens -->
+<div class="deck">
+  <div class="deck-label">▸ 选一个屏幕，进入观测</div>
+
+  <!-- 1. AI与数字革命 — Neural grid visual -->
+  <a href="1-AI与数字革命.html" class="entry entry-ai">
+    <div class="entry-inner">
+      <div class="entry-visual">
+        <div class="neural-grid">
+          <div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div>
+          <div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div>
+          <div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div>
+          <div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div>
+          <div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div>
+          <div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div><div class="neural-node"></div>
+        </div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-index">SCREEN 01 · 最大信号源</div>
+        <div class="entry-title">AI与数字革命</div>
+        <div class="entry-desc">从DeepSeek到AGI，从诺奖到AI诈骗——这一年最强的信号都来自这里。</div>
+        <div class="entry-meta">113 篇文章 · 10种交互</div>
+      </div>
+      <span class="entry-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- 2. 生命科学的边界 — DNA waveform -->
+  <a href="2-生命科学的边界.html" class="entry entry-life">
+    <div class="entry-inner">
+      <div class="entry-visual">
+        <div class="dna-wave">
+          <svg viewBox="0 0 140 140">
+            <path class="strand" stroke-dasharray="4 3" d="M10,110 Q35,10 70,35 Q105,60 130,25"/>
+            <path class="strand" stroke-dasharray="4 3" d="M10,30 Q35,130 70,105 Q105,80 130,115"/>
+            <line x1="17" y1="98" x2="17" y2="42" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+            <line x1="35" y1="25" x2="35" y2="115" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+            <line x1="52" y1="70" x2="52" y2="70" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+            <line x1="70" y1="35" x2="70" y2="105" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+            <line x1="88" y1="70" x2="88" y2="70" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+            <line x1="105" y1="25" x2="105" y2="115" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+            <line x1="122" y1="42" x2="122" y2="98" stroke="var(--signal-green)" opacity="0.15" stroke-width="0.8"/>
+          </svg>
+        </div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-index">SCREEN 02 · 生物频段</div>
+        <div class="entry-title">生命科学的边界</div>
+        <div class="entry-desc">疫苗争议、基因测序、保健品祛魅——在复杂生命的信号里，找到确定性。</div>
+        <div class="entry-meta">66 篇文章 · 9种交互</div>
+      </div>
+      <span class="entry-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- 3. 硬核科技引擎 — Blueprint concentric -->
+  <a href="3-硬核科技引擎.html" class="entry entry-hard">
+    <div class="entry-inner">
+      <div class="entry-visual">
+        <div class="blueprint-ring">
+          <svg viewBox="0 0 130 130">
+            <circle class="bp-circle" cx="65" cy="65" r="20"/>
+            <circle class="bp-circle" cx="65" cy="65" r="35"/>
+            <circle class="bp-circle" cx="65" cy="65" r="50"/>
+            <line x1="65" y1="15" x2="65" y2="115" stroke="var(--warning-orange)" opacity="0.15" stroke-width="0.6"/>
+            <line x1="15" y1="65" x2="115" y2="65" stroke="var(--warning-orange)" opacity="0.15" stroke-width="0.6"/>
+            <line x1="28" y1="28" x2="102" y2="102" stroke="var(--warning-orange)" opacity="0.08" stroke-width="0.6"/>
+            <line x1="102" y1="28" x2="28" y2="102" stroke="var(--warning-orange)" opacity="0.08" stroke-width="0.6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-index">SCREEN 03 · 工程频段</div>
+        <div class="entry-title">硬核科技引擎</div>
+        <div class="entry-desc">芯片、电池、火箭、量子计算——人类最硬核的工程信号，每一次脉冲都是极限。</div>
+        <div class="entry-meta">33 篇文章 · 10种交互</div>
+      </div>
+      <span class="entry-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- 4. 科学方法解毒剂 — Prism refraction -->
+  <a href="4-科学方法解毒剂.html" class="entry entry-method">
+    <div class="entry-inner">
+      <div class="entry-visual">
+        <div class="prism-container">
+          <div class="prism-ray"></div>
+          <div class="prism-ray"></div>
+          <div class="prism-ray"></div>
+          <div class="prism-ray"></div>
+          <div class="prism-ray"></div>
+          <div class="prism-core"></div>
+        </div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-index">SCREEN 04 · 分析频段</div>
+        <div class="entry-title">科学方法解毒剂</div>
+        <div class="entry-desc">灵芝、安宫牛黄丸、科学思维的武器——用科学方法把噪音分解成光谱。</div>
+        <div class="entry-meta">32 篇文章 · 8种交互</div>
+      </div>
+      <span class="entry-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- 5. 科技重塑社会 — Constellation network -->
+  <a href="5-科技重塑社会.html" class="entry entry-society">
+    <div class="entry-inner">
+      <div class="entry-visual">
+        <div class="constellation">
+          <svg viewBox="0 0 130 130">
+            <line class="const-line" x1="25" y1="25" x2="65" y2="15"/>
+            <line class="const-line" x1="65" y1="15" x2="105" y2="30"/>
+            <line class="const-line" x1="25" y1="25" x2="15" y2="70"/>
+            <line class="const-line" x1="65" y1="15" x2="65" y2="60"/>
+            <line class="const-line" x1="105" y1="30" x2="115" y2="70"/>
+            <line class="const-line" x1="15" y1="70" x2="45" y2="95"/>
+            <line class="const-line" x1="65" y1="60" x2="45" y2="95"/>
+            <line class="const-line" x1="65" y1="60" x2="85" y2="95"/>
+            <line class="const-line" x1="115" y1="70" x2="85" y2="95"/>
+            <line class="const-line" x1="45" y1="95" x2="25" y2="115"/>
+            <line class="const-line" x1="45" y1="95" x2="65" y2="115"/>
+            <line class="const-line" x1="85" y1="95" x2="65" y2="115"/>
+            <line class="const-line" x1="85" y1="95" x2="105" y2="115"/>
+            <circle class="const-dot" cx="25" cy="25" r="2.5"/>
+            <circle class="const-dot" cx="65" cy="15" r="3"/>
+            <circle class="const-dot" cx="105" cy="30" r="2.5"/>
+            <circle class="const-dot" cx="15" cy="70" r="2"/>
+            <circle class="const-dot" cx="65" cy="60" r="3.5"/>
+            <circle class="const-dot" cx="115" cy="70" r="2"/>
+            <circle class="const-dot" cx="45" cy="95" r="2.5"/>
+            <circle class="const-dot" cx="85" cy="95" r="2.5"/>
+            <circle class="const-dot" cx="25" cy="115" r="2"/>
+            <circle class="const-dot" cx="65" cy="115" r="3"/>
+            <circle class="const-dot" cx="105" cy="115" r="2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="entry-body">
+        <div class="entry-index">SCREEN 05 · 社会频段</div>
+        <div class="entry-title">科技重塑社会</div>
+        <div class="entry-desc">职业变革、数字货币、环境与政策——科技如何重新编织人类社会的经纬。</div>
+        <div class="entry-meta">74 篇文章 · 8种交互</div>
+      </div>
+      <span class="entry-arrow">→</span>
+    </div>
+  </a>
+</div>
+
+<!-- Signal bar visual -->
+<div class="signal-bar">
+  <div class="bar" style="height:12px;animation-delay:0s"></div>
+  <div class="bar" style="height:20px;animation-delay:0.15s"></div>
+  <div class="bar" style="height:32px;animation-delay:0.3s"></div>
+  <div class="bar" style="height:48px;animation-delay:0.45s"></div>
+  <div class="bar" style="height:28px;animation-delay:0.6s"></div>
+  <div class="bar" style="height:38px;animation-delay:0.75s"></div>
+  <div class="bar" style="height:22px;animation-delay:0.9s"></div>
+  <div class="bar" style="height:44px;animation-delay:1.05s"></div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p>卓克 · 科技参考4 · 2024–2025 · <a href="../index.html">MKS 知识体系</a></p>
+</footer>
+
+<!-- Starfield script -->
+<script>
+(function() {
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 160;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.008 + 0.003,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const alpha = 0.2 + 0.5 * (0.5 + 0.5 * Math.sin(Date.now() * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(180,200,255,${alpha})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  window.addEventListener('resize', () => {
+    for (const s of stars) {
+      s.x = Math.random() * canvas.width;
+      s.y = Math.random() * canvas.height;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
