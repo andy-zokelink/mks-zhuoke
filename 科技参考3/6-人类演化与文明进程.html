@@ -3,1437 +3,752 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>人类演化与文明进程 — 科技参考3 MKS</title>
+<title>基因时间机器 · 人类演化与文明进程</title>
 <style>
-/* ============================================================
-   科技参考3 · MKS 知识主板
-   设计：白底 + 琥珀色(#F59E0B)强调 + 卡片式布局
-   纯 HTML/CSS，移动端响应式
-   ============================================================ */
-
 :root {
-  --bg: #fafbfc;
-  --card: #ffffff;
-  --accent: #F59E0B;
-  --accent-dark: #D97706;
-  --accent-light: #FEF3C7;
-  --text: #1f2937;
-  --text-light: #6b7280;
-  --text-lighter: #9ca3af;
-  --border: #e5e7eb;
-  --border-light: #f3f4f6;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow: 0 2px 12px rgba(0,0,0,0.07);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.10);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --transition: 0.2s ease;
+  --bg: #0a0c12;
+  --bg2: #0f1119;
+  --cyber-green: #00ff88;
+  --cyber-cyan: #00d4ff;
+  --cyber-amber: #ffb347;
+  --cyber-purple: #a855f7;
+  --cyber-red: #ff4560;
+  --dna-blue: #1e90ff;
+  --dna-pink: #ff6b9d;
+  --text: #c8cdd4;
+  --text-dim: #6b7280;
+  --card-bg: rgba(15, 20, 30, 0.85);
+  --card-border: rgba(0, 255, 136, 0.15);
+  --glow-green: 0 0 30px rgba(0,255,136,0.3);
+  --glow-cyan: 0 0 30px rgba(0,212,255,0.2);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
+html { scroll-behavior:smooth; }
 body {
-  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.75;
-  min-height: 100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+  line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
 
-a { color: var(--accent-dark); text-decoration: none; transition: color var(--transition); }
-a:hover { color: var(--accent); }
-
-/* ============================================================
-   TOP NAV BAR
-   ============================================================ */
-.top-nav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex; align-items: center; gap: 16px;
-  flex-wrap: wrap;
-}
-.top-nav .home-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 16px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 20px;
-  font-size: 13px; font-weight: 600;
-  border: none; cursor: pointer;
-  text-decoration: none;
-  transition: all var(--transition);
-}
-.top-nav .home-btn:hover {
-  background: var(--accent-dark);
-  color: #fff;
-}
-.top-nav .breadcrumb {
-  font-size: 13px; color: var(--text-light);
+/* ── Canvas DNA Background ── */
+#dnaCanvas {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:0; pointer-events:none;
+  opacity:0.35;
 }
 
-/* ============================================================
-   MAIN CONTAINER
-   ============================================================ */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px 20px 60px;
+/* ── Hero Section ── */
+.hero {
+  position:relative; z-index:1;
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:2rem;
+}
+.hero-badge {
+  display:inline-block; padding:0.4rem 1.2rem;
+  border:1px solid rgba(0,255,136,0.4);
+  border-radius:50px; font-size:0.8rem;
+  color:var(--cyber-green); letter-spacing:0.2em;
+  text-transform:uppercase; margin-bottom:1.5rem;
+  backdrop-filter:blur(10px);
+  background:rgba(0,255,136,0.05);
+}
+.hero h1 {
+  font-size:clamp(2rem, 5vw, 4.5rem);
+  font-weight:900; letter-spacing:-0.02em;
+  background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-green), var(--cyber-amber));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:1rem; line-height:1.2;
+}
+.hero-subtitle {
+  font-size:clamp(1rem, 2vw, 1.4rem);
+  color:var(--text-dim); max-width:600px;
+  margin-bottom:2rem;
+}
+.hero-tagline {
+  font-size:0.95rem; color:var(--cyber-cyan);
+  letter-spacing:0.1em; opacity:0.8;
+  border-left:2px solid var(--cyber-green);
+  padding-left:1rem; text-align:left;
+  max-width:500px; line-height:1.6;
+}
+.hero-tagline strong {
+  color:var(--cyber-green); font-weight:700;
+}
+.scroll-hint {
+  position:absolute; bottom:2rem;
+  display:flex; flex-direction:column; align-items:center;
+  gap:0.5rem; animation: float 2s ease-in-out infinite;
+}
+.scroll-hint span { font-size:0.75rem; color:var(--text-dim); letter-spacing:0.15em; }
+.scroll-hint .arrow { width:24px; height:24px; border-right:2px solid var(--cyber-green); border-bottom:2px solid var(--cyber-green); transform:rotate(45deg); opacity:0.6; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+/* ── Home Link ── */
+.home-link {
+  position:fixed; top:1.5rem; left:1.5rem; z-index:100;
+  display:flex; align-items:center; gap:0.5rem;
+  color:var(--text-dim); text-decoration:none;
+  font-size:0.85rem; padding:0.5rem 1rem;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:50px; backdrop-filter:blur(10px);
+  background:rgba(10,12,18,0.7);
+  transition:all 0.3s;
+}
+.home-link:hover { color:var(--cyber-green); border-color:var(--cyber-green); }
+.home-link svg { width:16px; height:16px; }
+
+/* ── Timeline Sections ── */
+.timeline { position:relative; z-index:1; padding:0 1rem 4rem; }
+
+.era-section { margin-bottom:8rem; position:relative; }
+
+.era-header {
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:2.5rem; padding-left:1rem;
+}
+.era-marker {
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0;
+  position:relative;
+}
+.era-marker::after {
+  content:''; position:absolute;
+  width:60px; height:60px; border-radius:50%;
+  border:2px solid currentColor; opacity:0.2;
+  animation: pulse-ring 2.5s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { transform:scale(0.8); opacity:0.4; }
+  100% { transform:scale(1.5); opacity:0; }
+}
+.era-label {
+  font-size:clamp(1.3rem, 3vw, 2rem);
+  font-weight:800; letter-spacing:-0.01em;
+}
+.era-time {
+  font-size:0.8rem; color:var(--text-dim);
+  letter-spacing:0.08em; margin-top:0.2rem;
 }
 
-/* Tab Nav */
-.tab-nav{position:sticky;top:48px;z-index:99;display:flex;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-dark),var(--accent));padding:0;box-shadow:0 2px 12px rgba(0,0,0,.12)}
-.tab-nav button{flex:1;min-width:70px;padding:10px 6px;border:none;background:transparent;color:rgba(255,255,255,.78);cursor:pointer;font-size:12.5px;font-weight:600;transition:all .3s;position:relative;white-space:nowrap}
-.tab-nav button:hover,.tab-nav button.active{color:#fff;background:rgba(255,255,255,.14)}
-.tab-nav button.active::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:3px;background:#fff;border-radius:2px}
-
-/* Tab Section */
-.tab-section{display:none;padding:24px 20px;max-width:1100px;margin:0 auto;animation:fadeIn .5s}
-.tab-section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-h1{font-size:clamp(1.4rem,2.8vw,2rem);color:var(--accent-dark);text-align:center;margin:16px 0 8px}
-h2{font-size:clamp(1.15rem,2vw,1.5rem);color:var(--accent-dark);border-bottom:2px solid var(--border);padding-bottom:8px;margin:20px 0 14px}
-h3{font-size:clamp(1rem,1.5vw,1.2rem);color:var(--text);margin:14px 0 8px}
-
-/* Overview */
-.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:16px 0}
-.overview-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
-.overview-card h3{color:var(--accent-dark);margin-bottom:10px}
-
-.goal-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0}
-
-.stats-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0}
-.stat-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:24px;font-size:.82rem;color:var(--text-light)}
-.stat-badge .num{font-weight:700;color:var(--accent-dark);font-size:1rem}
-
-/* Graph */
-.graph-container{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);text-align:center;overflow-x:auto}
-.graph-container svg{max-width:100%;height:auto}
-
-/* Legend */
-.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:12px 0;font-size:13px}
-.legend span{display:flex;align-items:center;gap:4px}
-.legend .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
-
-/* Boundary */
-.boundary-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
-.boundary-table th{background:var(--accent);color:#fff;padding:10px 12px;text-align:left}
-.boundary-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
-.boundary-table tr:nth-child(even){background:var(--accent-light)}
-
-/* Path */
-.path-steps{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
-.path-step{flex:1;min-width:120px;background:var(--card);border-radius:10px;padding:14px;text-align:center;border:2px solid var(--border);position:relative}
-.path-step.current{border-color:var(--accent);background:var(--accent-light)}
-.path-step .step-num{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:6px}
-
-/* Progress */
-.progress-bar{height:10px;background:var(--border);border-radius:5px;margin:12px 0;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:5px;transition:width .5s}
-
-/* Flip Cards */
-.flip-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin:16px 0}
-.flip-card{perspective:1000px;height:clamp(220px,40vw,280px);margin-bottom:14px}
-.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
-.flip-inner.flipped{transform:rotateY(180deg)}
-.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;padding:clamp(16px,3vw,24px)}
-.flip-front{background:var(--card);border:2px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.flip-front .concept-icon{font-size:44px;margin-bottom:8px}
-.flip-front .concept-name{font-size:18px;font-weight:700;color:var(--accent-dark)}
-.flip-front .concept-hint{font-size:12.5px;color:var(--text-lighter);margin-top:6px}
-.flip-back{background:var(--card);border:2px solid var(--accent);transform:rotateY(180deg);overflow-y:auto;font-size:13.5px;line-height:1.7}
-.flip-back h4{color:var(--accent-dark);font-size:15px;margin-bottom:6px}
-.flip-back .label{display:inline-block;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:3px;margin-right:4px;font-weight:600}
-
-.card-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap}
-.card-nav button{padding:6px 16px;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s;font-size:13px}
-.card-nav button:hover{background:var(--accent);color:#fff}
-.card-nav .card-idx{font-size:13px;color:var(--text-light);min-width:50px;text-align:center}
-
-.card-learned{opacity:.5;border-color:#ccc!important}
-.card-learned .flip-front{border-color:#ccc}
-
-/* Quiz */
-.quiz-controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
-.quiz-controls button{padding:8px 18px;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s;font-size:13px}
-.quiz-controls button:hover{background:var(--accent);color:#fff}
-
-.quiz-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
-.quiz-item h4{color:var(--accent-dark);margin-bottom:10px}
-.quiz-item label{display:block;padding:8px 12px;margin:4px 0;border-radius:6px;cursor:pointer;transition:background .2s}
-.quiz-item label:hover{background:var(--accent-light)}
-.quiz-item input[type="radio"]{margin-right:8px}
-
-.quiz-feedback{margin-top:10px;padding:10px;border-radius:6px;font-weight:600;display:none}
-.quiz-feedback.correct{background:#d4edda;color:#155724;display:block}
-.quiz-feedback.wrong{background:#f8d7da;color:#721c24;display:block}
-
-.sa-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
-.sa-item textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:6px;padding:10px;font-family:inherit;resize:vertical;margin:8px 0}
-.sa-item .show-answer{background:var(--accent-light);padding:10px;border-radius:6px;margin-top:8px;display:none;font-size:13px}
-
-.static-quiz{display:none}
-
-/* Exam */
-.exam-timer{font-size:24px;font-weight:700;color:var(--accent-dark);text-align:center;margin:16px 0}
-.exam-score{font-size:20px;font-weight:700;text-align:center;margin:12px 0}
-
-/* Review */
-.review-list{list-style:none;margin:16px 0}
-.review-list li{padding:10px 16px;margin:6px 0;background:var(--card);border-radius:8px;cursor:pointer;border:1px solid var(--border);transition:all .2s}
-.review-list li:hover{border-color:var(--accent)}
-.review-list li.reviewed{opacity:.5;text-decoration:line-through}
-
-/* Deep Q */
-.dq-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border-left:4px solid var(--accent)}
-.dq-item .dq-question{font-weight:700;color:var(--accent-dark);cursor:pointer}
-.dq-item .dq-answer{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:14px}
-
-/* Cases */
-.case-card{background:var(--card);border-radius:10px;padding:20px;margin:12px 0;border:1px solid var(--border)}
-.case-card .case-title{font-weight:700;color:var(--accent-dark);font-size:18px}
-.case-card .case-meta{font-size:13px;color:var(--text-light);margin:6px 0}
-.case-steps{margin:12px 0;padding-left:20px}
-.case-steps li{margin:6px 0}
-
-/* Concept Cards */
-.section-title{font-size:1.25rem;font-weight:700;color:var(--text);margin:40px 0 20px;padding-bottom:10px;border-bottom:3px solid var(--accent);display:inline-block}
-.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px}
-.concept-card{background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);border:1px solid var(--border-light);padding:16px 20px;transition:all var(--transition)}
-.concept-card:hover{box-shadow:var(--shadow);border-color:var(--accent)}
-.concept-card .concept-num{display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;background:var(--accent);color:#fff;border-radius:50%;font-size:.8rem;font-weight:700;margin-bottom:8px}
-.concept-card h5{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:6px}
-.concept-card p{font-size:.82rem;color:var(--text-light);line-height:1.6}
-
-/* Decision */
-.decision-scenario{background:var(--card);border-radius:10px;padding:20px;margin:16px 0;border:1px solid var(--border)}
-.decision-scenario h4{color:var(--accent-dark)}
-.decision-scenario select,.decision-scenario button{margin:8px 4px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);font-family:inherit}
-.decision-scenario button{background:var(--accent);color:#fff;cursor:pointer;border:none;font-weight:600}
-.decision-output{background:var(--accent-light);padding:16px;border-radius:8px;margin-top:12px;display:none;font-size:14px}
-
-/* Toast */
-.toast{position:fixed;top:20px;right:20px;background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;z-index:999;animation:slideIn .3s;font-size:14px}
-@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
-
-/* Footer */
-.footer{text-align:center;padding:32px 20px 16px;color:var(--text-lighter);font-size:.72rem;border-top:1px solid var(--border-light);margin-top:40px}
-.footer a{color:var(--accent-dark)}
-
-@media(max-width:768px){
-  .tab-nav button{font-size:11px;padding:8px 4px;min-width:55px}
-  .tab-section{padding:16px 10px}
-  .overview-grid,.flip-container{grid-template-columns:1fr}
-  .top-nav{padding:8px 12px}
-  .concepts-grid{grid-template-columns:1fr}
+/* ── Article Cards ── */
+.articles-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+  gap:1.2rem; padding:0 0.5rem;
 }
-@media(max-width:480px){
-  .flip-container{grid-template-columns:1fr}
-  .tab-nav button{font-size:10px;padding:6px 2px;min-width:45px}
-  .concepts-grid{grid-template-columns:1fr}
+.article-card {
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:12px; padding:1.5rem;
+  cursor:pointer; transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+  position:relative; overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+.article-card::before {
+  content:''; position:absolute; top:0; left:0;
+  width:100%; height:2px;
+  background:linear-gradient(90deg, transparent, var(--card-accent, var(--cyber-green)), transparent);
+  opacity:0; transition:opacity 0.3s;
+}
+.article-card:hover {
+  transform:translateY(-4px);
+  border-color:var(--card-accent, var(--cyber-green));
+  box-shadow:0 12px 40px rgba(0,0,0,0.5), var(--card-glow, var(--glow-green));
+}
+.article-card:hover::before { opacity:1; }
+.article-card .card-index {
+  font-size:0.7rem; color:var(--card-accent, var(--cyber-green));
+  letter-spacing:0.15em; margin-bottom:0.6rem;
+  font-family:'Courier New', monospace;
+}
+.article-card h3 {
+  font-size:1rem; font-weight:700; color:#e5e7eb;
+  margin-bottom:0.6rem; line-height:1.4;
+}
+.article-card p {
+  font-size:0.85rem; color:var(--text-dim);
+  line-height:1.6; display:-webkit-box;
+  -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.article-card .card-meta {
+  margin-top:0.8rem; font-size:0.7rem;
+  color:var(--text-dim); opacity:0.6;
+  display:flex; gap:0.8rem;
+}
+
+/* ── Theme Colors ── */
+.theme-prion { --card-accent: var(--cyber-purple); --card-glow: 0 0 30px rgba(168,85,247,0.2); }
+.theme-virus { --card-accent: var(--cyber-red); --card-glow: 0 0 30px rgba(255,69,96,0.2); }
+.theme-chimera { --card-accent: var(--cyber-amber); --card-glow: 0 0 30px rgba(255,179,71,0.2); }
+.theme-migration { --card-accent: #60a5fa; --card-glow: 0 0 30px rgba(96,165,250,0.2); }
+.theme-neanderthal { --card-accent: #fb923c; --card-glow: 0 0 30px rgba(251,146,60,0.2); }
+.theme-brain { --card-accent: var(--cyber-cyan); --card-glow: var(--glow-cyan); }
+.theme-language { --card-accent: #34d399; --card-glow: 0 0 30px rgba(52,211,153,0.2); }
+.theme-civilization { --card-accent: #fbbf24; --card-glow: 0 0 30px rgba(251,191,36,0.2); }
+
+/* ── DNA Section Dividers ── */
+.dna-divider {
+  display:flex; align-items:center; justify-content:center;
+  gap:0.5rem; margin:3rem 0; opacity:0.3;
+}
+.dna-divider .dot { width:6px; height:6px; border-radius:50%; background:var(--cyber-green); }
+.dna-divider .line { width:60px; height:1px; background:linear-gradient(90deg, transparent, var(--cyber-green), transparent); }
+
+/* ── Modal ── */
+.modal-overlay {
+  position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  padding:1.5rem; opacity:0; pointer-events:none;
+  transition:opacity 0.3s;
+}
+.modal-overlay.active { opacity:1; pointer-events:auto; }
+.modal-content {
+  background:var(--bg2); border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px; max-width:680px; width:100%;
+  max-height:85vh; overflow-y:auto; padding:2rem;
+  position:relative;
+}
+.modal-content h3 { font-size:1.4rem; margin-bottom:0.5rem; color:#f1f5f9; }
+.modal-content .modal-course { font-size:0.8rem; color:var(--cyber-green); margin-bottom:1.5rem; letter-spacing:0.05em; }
+.modal-content .modal-body { font-size:0.9rem; color:var(--text); line-height:1.8; }
+.modal-close {
+  position:absolute; top:1rem; right:1rem;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  color:var(--text-dim); cursor:pointer; font-size:1.1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.modal-close:hover { background:rgba(255,69,96,0.2); color:var(--cyber-red); border-color:var(--cyber-red); }
+
+/* ── Side DNA Info ── */
+.dna-fact {
+  position:relative; z-index:1;
+  max-width:700px; margin:0 auto 3rem;
+  padding:1.5rem 2rem;
+  border-left:3px solid var(--cyber-green);
+  background:rgba(0,255,136,0.03);
+  border-radius:0 8px 8px 0;
+}
+.dna-fact .fact-icon { font-size:1.3rem; margin-bottom:0.5rem; }
+.dna-fact p { font-size:0.9rem; color:var(--text-dim); font-style:italic; }
+
+/* ── Progress Bar ── */
+.scroll-progress {
+  position:fixed; top:0; left:0; height:3px;
+  background:linear-gradient(90deg, var(--cyber-green), var(--cyber-cyan));
+  z-index:300; transition:width 0.1s linear;
+}
+
+/* ── Footer ── */
+.footer {
+  position:relative; z-index:1;
+  text-align:center; padding:4rem 1rem;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.footer .glyph {
+  font-size:2rem; margin-bottom:1rem;
+  opacity:0.3;
+}
+.footer p { font-size:0.8rem; color:var(--text-dim); }
+.footer a { color:var(--cyber-cyan); text-decoration:none; }
+
+/* ── Mobile ── */
+@media (max-width:768px) {
+  .hero { min-height:90vh; }
+  .hero h1 { font-size:2rem; }
+  .articles-grid { grid-template-columns:1fr; }
+  .era-header { padding-left:0; }
+  .modal-content { padding:1.5rem; }
+  #dnaCanvas { opacity:0.2; }
+}
+@media (max-width:480px) {
+  .hero { padding:1rem; min-height:85vh; }
+  .articles-grid { gap:0.8rem; }
+  .article-card { padding:1.2rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP NAV -->
-<div class="top-nav">
-  <a href="index.html" class="home-btn">← 科技参考3 主板</a>
-  <span class="breadcrumb">人类演化与文明进程 · MKS 最小知识集</span>
-</div>
+<div class="scroll-progress" id="progressBar"></div>
 
-<!-- TAB NAV -->
-<nav class="tab-nav" id="tabNav">
-  <button class="active" data-tab="overview">知识集总览</button>
-  <button data-tab="cards">知识卡片</button>
-  <button data-tab="quiz">题库系统</button>
-  <button data-tab="exam">考试模式</button>
-  <button data-tab="review">复习模式</button>
-  <button data-tab="mindmap">思维导图</button>
-  <button data-tab="deepask">深度追问</button>
-  <button data-tab="cases">案例分析</button>
-  <button data-tab="decision">实战决策</button>
-</nav>
+<canvas id="dnaCanvas"></canvas>
 
-<!-- TAB 0: 知识集总览 -->
-<section class="tab-section active" id="sec-overview">
-<h1>🧬 人类演化与文明进程</h1>
-<p style="text-align:center;color:var(--text-light);margin-bottom:16px">从非洲起源到现代文明，理解人类演化的驱动力与文明涌现的底层逻辑</p>
+<a href="index.html" class="home-link">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  返回首页
+</a>
 
-<div class="goal-box">
-  <strong>核心目标：</strong>在人类演化与文明进程领域，建立从生物演化到社会演化的完整认知框架——理解自然选择如何塑造智人、战争与秩序如何从简单规则涌现、以及人类活动如何全面改造地球。不被单一学科视角局限，能跨界整合生物学、人类学、社会学与认知科学的知识。
-</div>
-
-<div class="stats-row">
-  <div class="stat-badge"><span class="num">12</span> 核心概念</div>
-  <div class="stat-badge">📅 2023-2024</div>
-  <div class="stat-badge">🎯 4 层架构</div>
-  <div class="stat-badge">🧬 8 张知识卡片</div>
-</div>
-
-<!-- Concept Graph -->
-<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
-  <h3>📊 概念关系图 — 人类演化与文明的四层架构</h3>
-  <div class="graph-container" id="graphContainer">
-<svg width="674pt" height="683pt"
- viewBox="0.00 0.00 673.50 682.76" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 678.76)">
-<title>HumanConcepts</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-678.76 669.5,-678.76 669.5,4 -4,4"/>
-<g id="clust1" class="cluster">
-<title>cluster_legend</title>
-<polygon fill="#fafbfc" stroke="#e5e7eb" points="8,-595.76 8,-666.76 318,-666.76 318,-595.76 8,-595.76"/>
-<text text-anchor="middle" x="163" y="-654.76" font-family="Noto Sans SC" font-size="10.00">图例</text>
-</g>
-<g id="node1" class="node">
-<title>L1</title>
-<polygon fill="#fef3c7" stroke="#f59e0b" points="310,-639.76 248,-639.76 248,-603.76 310,-603.76 310,-639.76"/>
-<text text-anchor="middle" x="279" y="-619.56" font-family="Noto Sans SC" font-size="9.00">演化驱动力</text>
-</g>
-<g id="node2" class="node">
-<title>L2</title>
-<polygon fill="#dbeafe" stroke="#3b82f6" points="230,-639.76 176,-639.76 176,-603.76 230,-603.76 230,-639.76"/>
-<text text-anchor="middle" x="203" y="-619.56" font-family="Noto Sans SC" font-size="9.00">文明机制</text>
-</g>
-<g id="node3" class="node">
-<title>L3</title>
-<polygon fill="#d1fae5" stroke="#10b981" points="158,-639.76 96,-639.76 96,-603.76 158,-603.76 158,-639.76"/>
-<text text-anchor="middle" x="127" y="-619.56" font-family="Noto Sans SC" font-size="9.00">认知与知识</text>
-</g>
-<g id="node4" class="node">
-<title>L4</title>
-<polygon fill="#fee2e2" stroke="#ef4444" points="78,-639.76 16,-639.76 16,-603.76 78,-603.76 78,-639.76"/>
-<text text-anchor="middle" x="47" y="-619.56" font-family="Noto Sans SC" font-size="9.00">约束与限制</text>
-</g>
-<g id="node5" class="node">
-<title>evolution</title>
-<polygon fill="#fef3c7" stroke="#f59e0b" stroke-width="2" points="510.4,-621.76 464.7,-649.28 373.3,-649.28 327.6,-621.76 373.3,-594.24 464.7,-594.24 510.4,-621.76"/>
-<text text-anchor="middle" x="419" y="-625.16" font-family="Noto Sans SC" font-size="12.00">人类演化</text>
-<text text-anchor="middle" x="419" y="-612.16" font-family="Noto Sans SC" font-size="12.00">(Homo Sapiens)</text>
-</g>
-<g id="node6" class="node">
-<title>naturalSelection</title>
-<polygon fill="#fef3c7" stroke="#f59e0b" points="142,-548 86,-548 86,-512 142,-512 142,-548"/>
-<text text-anchor="middle" x="114" y="-527.5" font-family="Noto Sans SC" font-size="10.00">自然选择</text>
-</g>
-<g id="edge1" class="edge">
-<title>evolution->naturalSelection</title>
-<path fill="none" stroke="#f59e0b" stroke-width="1.5" d="M359.36,-602.52C347.1,-599.28 334.2,-596.23 322,-594 279.19,-586.18 160.54,-603.73 127,-576 121.53,-571.47 118.27,-564.8 116.36,-557.97"/>
-<polygon fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5" points="119.78,-557.22 114.43,-548.08 112.92,-558.56 119.78,-557.22"/>
-<text text-anchor="middle" x="145.5" y="-568.8" font-family="Noto Sans SC" font-size="9.00">核心机制</text>
-</g>
-<g id="node7" class="node">
-<title>neanderthal</title>
-<polygon fill="#fef3c7" stroke="#f59e0b" points="298.5,-548 233.5,-548 233.5,-512 298.5,-512 298.5,-548"/>
-<text text-anchor="middle" x="266" y="-533" font-family="Noto Sans SC" font-size="10.00">尼安德特人</text>
-<text text-anchor="middle" x="266" y="-522" font-family="Noto Sans SC" font-size="10.00">竞争与混血</text>
-</g>
-<g id="edge2" class="edge">
-<title>evolution->neanderthal</title>
-<path fill="none" stroke="#f59e0b" d="M368.41,-596.93C355.67,-590.49 342.17,-583.28 330,-576 318.89,-569.35 307.18,-561.41 296.86,-554.07"/>
-<polygon fill="#f59e0b" stroke="#f59e0b" points="298.72,-551.1 288.56,-548.08 294.62,-556.77 298.72,-551.1"/>
-<text text-anchor="middle" x="348.5" y="-568.8" font-family="Noto Sans SC" font-size="9.00">竞争淘汰</text>
-</g>
-<g id="node8" class="node">
-<title>convergentEvo</title>
-<polygon fill="#fef3c7" stroke="#f59e0b" points="373,-548 317,-548 317,-512 373,-512 373,-548"/>
-<text text-anchor="middle" x="345" y="-527.5" font-family="Noto Sans SC" font-size="10.00">趋同演化</text>
-</g>
-<g id="edge3" class="edge">
-<title>evolution->convergentEvo</title>
-<path fill="none" stroke="#f59e0b" d="M393.8,-594.2C388.46,-588.31 382.95,-582.03 378,-576 373.01,-569.92 367.87,-563.18 363.18,-556.8"/>
-<polygon fill="#f59e0b" stroke="#f59e0b" points="365.81,-554.47 357.11,-548.43 360.14,-558.58 365.81,-554.47"/>
-<text text-anchor="middle" x="396.5" y="-568.8" font-family="Noto Sans SC" font-size="9.00">独立路径</text>
-</g>
-<g id="node10" class="node">
-<title>war</title>
-<polygon fill="#dbeafe" stroke="#3b82f6" points="447,-548 391,-548 391,-512 447,-512 447,-548"/>
-<text text-anchor="middle" x="419" y="-527.5" font-family="Noto Sans SC" font-size="10.00">战争起源</text>
-</g>
-<g id="edge7" class="edge">
-<title>evolution->war</title>
-<path fill="none" stroke="#3b82f6" stroke-width="1.2" d="M419,-593.83C419,-582.56 419,-569.48 419,-558.18"/>
-<polygon fill="#3b82f6" stroke="#3b82f6" stroke-width="1.2" points="422.5,-558.02 419,-548.02 415.5,-558.02 422.5,-558.02"/>
-<text text-anchor="middle" x="437.5" y="-568.8" font-family="Noto Sans SC" font-size="9.00">演化根源</text>
-</g>
-<g id="node11" class="node">
-<title>orderEmergence</title>
-<polygon fill="#dbeafe" stroke="#3b82f6" points="528.5,-548 465.5,-548 465.5,-512 528.5,-512 528.5,-548"/>
-<text text-anchor="middle" x="497" y="-533" font-family="Noto Sans SC" font-size="10.00">秩序涌现</text>
-<text text-anchor="middle" x="497" y="-522" font-family="Noto Sans SC" font-size="10.00">(生命游戏)</text>
-</g>
-<g id="edge8" class="edge">
-<title>evolution->orderEmergence</title>
-<path fill="none" stroke="#3b82f6" d="M443.95,-593.99C449.31,-588.11 454.89,-581.89 460,-576 465.5,-569.66 471.32,-562.71 476.68,-556.2"/>
-<polygon fill="#3b82f6" stroke="#3b82f6" points="479.54,-558.23 483.16,-548.27 474.12,-553.8 479.54,-558.23"/>
-<text text-anchor="middle" x="483" y="-568.8" font-family="Noto Sans SC" font-size="9.00">自组织</text>
-</g>
-<g id="node18" class="node">
-<title>brainDesign</title>
-<polygon fill="#fee2e2" stroke="#ef4444" points="665.5,-548 590.5,-548 590.5,-512 665.5,-512 665.5,-548"/>
-<text text-anchor="middle" x="628" y="-527.5" font-family="Noto Sans SC" font-size="10.00">演化脑残设计</text>
-</g>
-<g id="edge4" class="edge">
-<title>evolution->brainDesign</title>
-<path fill="none" stroke="#ef4444" d="M485.08,-606.26C511.66,-599.08 542.08,-589.09 568,-576 579.53,-570.18 591.14,-562.11 601.03,-554.41"/>
-<polygon fill="#ef4444" stroke="#ef4444" points="603.29,-557.08 608.89,-548.08 598.91,-551.62 603.29,-557.08"/>
-<text text-anchor="middle" x="593.5" y="-568.8" font-family="Noto Sans SC" font-size="9.00">遗留</text>
-</g>
-<g id="node9" class="node">
-<title>pathogenEvo</title>
-<polygon fill="#fef3c7" stroke="#f59e0b" points="155.5,-466 90.5,-466 90.5,-430 155.5,-430 155.5,-466"/>
-<text text-anchor="middle" x="123" y="-451" font-family="Noto Sans SC" font-size="10.00">致病微生物</text>
-<text text-anchor="middle" x="123" y="-440" font-family="Noto Sans SC" font-size="10.00">演化</text>
-</g>
-<g id="edge5" class="edge">
-<title>naturalSelection->pathogenEvo</title>
-<path fill="none" stroke="#f59e0b" d="M115.95,-511.64C117.12,-501.3 118.62,-487.94 119.94,-476.22"/>
-<polygon fill="#f59e0b" stroke="#f59e0b" points="123.44,-476.38 121.08,-466.05 116.49,-475.6 123.44,-476.38"/>
-<text text-anchor="middle" x="129.5" y="-486.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
-</g>
-<g id="node20" class="node">
-<title>geneticDrift</title>
-<polygon fill="#fee2e2" stroke="#ef4444" points="259,-466 177,-466 177,-430 259,-430 259,-466"/>
-<text text-anchor="middle" x="218" y="-451" font-family="Noto Sans SC" font-size="10.00">基因限制</text>
-<text text-anchor="middle" x="218" y="-440" font-family="Noto Sans SC" font-size="10.00">(STR遗传标记)</text>
-</g>
-<g id="edge6" class="edge">
-<title>neanderthal->geneticDrift</title>
-<path fill="none" stroke="#ef4444" d="M249.22,-511.71C244.55,-506.32 239.73,-500.16 236,-494 232.57,-488.33 229.54,-481.89 227,-475.69"/>
-<polygon fill="#ef4444" stroke="#ef4444" points="230.25,-474.39 223.41,-466.29 223.71,-476.88 230.25,-474.39"/>
-<text text-anchor="middle" x="254.5" y="-486.8" font-family="Noto Sans SC" font-size="9.00">追踪手段</text>
-</g>
-<g id="edge19" class="edge">
-<title>pathogenEvo->evolution</title>
-<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M133.3,-466.3C149.4,-493.12 179.47,-542.27 187,-548 200.15,-558.01 284.05,-583 347.21,-600.9"/>
-<polygon fill="#059669" stroke="#059669" points="346.57,-604.36 357.15,-603.71 348.48,-597.63 346.57,-604.36"/>
-<text text-anchor="middle" x="205.5" y="-532.8" font-family="Noto Sans SC" font-size="9.00">持续塑造</text>
-<text text-anchor="middle" x="205.5" y="-522.8" font-family="Noto Sans SC" font-size="9.00">免疫系统</text>
-</g>
-<g id="node12" class="node">
-<title>earthTransform</title>
-<polygon fill="#dbeafe" stroke="#3b82f6" points="494.5,-118 429.5,-118 429.5,-82 494.5,-82 494.5,-118"/>
-<text text-anchor="middle" x="462" y="-103" font-family="Noto Sans SC" font-size="10.00">人类对地球</text>
-<text text-anchor="middle" x="462" y="-92" font-family="Noto Sans SC" font-size="10.00">全面改造</text>
-</g>
-<g id="edge10" class="edge">
-<title>war->earthTransform</title>
-<path fill="none" stroke="#3b82f6" d="M390.68,-515.06C351.9,-495.52 287,-461.03 287,-449 287,-449 287,-449 287,-191 287,-131.59 367.76,-111.36 419.55,-104.5"/>
-<polygon fill="#3b82f6" stroke="#3b82f6" points="419.99,-107.97 429.49,-103.3 419.15,-101.02 419.99,-107.97"/>
-<text text-anchor="middle" x="305.5" y="-312.8" font-family="Noto Sans SC" font-size="9.00">技术驱动</text>
-</g>
-<g id="node13" class="node">
-<title>culture</title>
-<polygon fill="#dbeafe" stroke="#3b82f6" points="490,-210 434,-210 434,-174 490,-174 490,-210"/>
-<text text-anchor="middle" x="462" y="-195" font-family="Noto Sans SC" font-size="10.00">文化偏好</text>
-<text text-anchor="middle" x="462" y="-184" font-family="Noto Sans SC" font-size="10.00">(玉/钻石)</text>
-</g>
-<g id="edge20" class="edge">
-<title>orderEmergence->culture</title>
-<path fill="none" stroke="#3b82f6" d="M498.35,-511.85C499.51,-495.66 501,-470.69 501,-449 501,-449 501,-449 501,-273 501,-253.55 491.57,-233.89 481.99,-218.92"/>
-<polygon fill="#3b82f6" stroke="#3b82f6" points="484.6,-216.55 476.08,-210.25 478.82,-220.49 484.6,-216.55"/>
-<text text-anchor="middle" x="515" y="-353.8" font-family="Noto Sans SC" font-size="9.00">涌现为</text>
-</g>
-<g id="node14" class="node">
-<title>math</title>
-<polygon fill="#d1fae5" stroke="#10b981" points="472.5,-466 381.5,-466 381.5,-430 472.5,-430 472.5,-466"/>
-<text text-anchor="middle" x="427" y="-451" font-family="Noto Sans SC" font-size="10.00">数学体系</text>
-<text text-anchor="middle" x="427" y="-440" font-family="Noto Sans SC" font-size="10.00">(证明=社会契约)</text>
-</g>
-<g id="edge9" class="edge">
-<title>orderEmergence->math</title>
-<path fill="none" stroke="#10b981" d="M465.43,-514.6C456.49,-509.22 447.44,-502.35 441,-494 436.93,-488.73 434.04,-482.26 431.98,-475.89"/>
-<polygon fill="#10b981" stroke="#10b981" points="435.34,-474.91 429.39,-466.15 428.58,-476.71 435.34,-474.91"/>
-<text text-anchor="middle" x="464" y="-486.8" font-family="Noto Sans SC" font-size="9.00">形式化表达</text>
-</g>
-<g id="node19" class="node">
-<title>extinction</title>
-<polygon fill="#fee2e2" stroke="#ef4444" points="555,-36 499,-36 499,0 555,0 555,-36"/>
-<text text-anchor="middle" x="527" y="-21" font-family="Noto Sans SC" font-size="10.00">大型动物</text>
-<text text-anchor="middle" x="527" y="-10" font-family="Noto Sans SC" font-size="10.00">灭绝</text>
-</g>
-<g id="edge11" class="edge">
-<title>earthTransform->extinction</title>
-<path fill="none" stroke="#ef4444" d="M476.1,-81.64C485.02,-70.66 496.7,-56.29 506.62,-44.09"/>
-<polygon fill="#ef4444" stroke="#ef4444" points="509.56,-46.02 513.15,-36.05 504.12,-41.6 509.56,-46.02"/>
-<text text-anchor="middle" x="508.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">导致</text>
-</g>
-<g id="edge16" class="edge">
-<title>culture->earthTransform</title>
-<path fill="none" stroke="#3b82f6" d="M462,-173.65C462,-160.82 462,-143.11 462,-128.38"/>
-<polygon fill="#3b82f6" stroke="#3b82f6" points="465.5,-128.3 462,-118.3 458.5,-128.3 465.5,-128.3"/>
-<text text-anchor="middle" x="480.5" y="-148.8" font-family="Noto Sans SC" font-size="9.00">影响消费</text>
-<text text-anchor="middle" x="480.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">与开采</text>
-</g>
-<g id="node15" class="node">
-<title>newton</title>
-<polygon fill="#d1fae5" stroke="#10b981" points="464.5,-374 389.5,-374 389.5,-338 464.5,-338 464.5,-374"/>
-<text text-anchor="middle" x="427" y="-353.5" font-family="Noto Sans SC" font-size="10.00">牛顿《原理》</text>
-</g>
-<g id="edge13" class="edge">
-<title>math->newton</title>
-<path fill="none" stroke="#10b981" d="M427,-429.65C427,-416.82 427,-399.11 427,-384.38"/>
-<polygon fill="#10b981" stroke="#10b981" points="430.5,-384.3 427,-374.3 423.5,-384.3 430.5,-384.3"/>
-<text text-anchor="middle" x="445.5" y="-399.8" font-family="Noto Sans SC" font-size="9.00">巅峰应用</text>
-</g>
-<g id="node16" class="node">
-<title>language</title>
-<polygon fill="#d1fae5" stroke="#10b981" points="371,-374 315,-374 315,-338 371,-338 371,-374"/>
-<text text-anchor="middle" x="343" y="-359" font-family="Noto Sans SC" font-size="10.00">汉语拼音</text>
-<text text-anchor="middle" x="343" y="-348" font-family="Noto Sans SC" font-size="10.00">演化</text>
-</g>
-<g id="edge15" class="edge">
-<title>math->language</title>
-<path fill="none" stroke="#10b981" d="M405.41,-429.97C398.93,-424.49 391.96,-418.22 386,-412 377.18,-402.79 368.35,-391.87 361,-382.19"/>
-<polygon fill="#10b981" stroke="#10b981" points="363.75,-380.01 354.97,-374.08 358.13,-384.19 363.75,-380.01"/>
-<text text-anchor="middle" x="404.5" y="-404.8" font-family="Noto Sans SC" font-size="9.00">符号系统</text>
-<text text-anchor="middle" x="404.5" y="-394.8" font-family="Noto Sans SC" font-size="9.00">并行演化</text>
-</g>
-<g id="node17" class="node">
-<title>firstPrinciple</title>
-<polygon fill="#d1fae5" stroke="#10b981" points="468.5,-292 403.5,-292 403.5,-256 468.5,-256 468.5,-292"/>
-<text text-anchor="middle" x="436" y="-271.5" font-family="Noto Sans SC" font-size="10.00">第一性原理</text>
-</g>
-<g id="edge14" class="edge">
-<title>newton->firstPrinciple</title>
-<path fill="none" stroke="#10b981" d="M428.95,-337.64C430.12,-327.3 431.62,-313.94 432.94,-302.22"/>
-<polygon fill="#10b981" stroke="#10b981" points="436.44,-302.38 434.08,-292.05 429.49,-301.6 436.44,-302.38"/>
-<text text-anchor="middle" x="456" y="-312.8" font-family="Noto Sans SC" font-size="9.00">继承方法论</text>
-</g>
-<g id="edge17" class="edge">
-<title>firstPrinciple->culture</title>
-<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M441.2,-255.87C443.79,-247.45 447,-237.18 450,-228 450.9,-225.25 451.85,-222.39 452.81,-219.54"/>
-<polygon fill="#059669" stroke="#059669" points="456.13,-220.65 456.04,-210.06 449.5,-218.39 456.13,-220.65"/>
-<text text-anchor="middle" x="468.5" y="-230.8" font-family="Noto Sans SC" font-size="9.00">批判审视</text>
-</g>
-<g id="edge18" class="edge">
-<title>brainDesign->evolution</title>
-<path fill="none" stroke="#ef4444" d="M623.91,-548.27C620.8,-557.78 615.55,-569.03 607,-576 580.49,-597.61 545.27,-609.11 512.5,-615.12"/>
-<polygon fill="#ef4444" stroke="#ef4444" points="511.69,-611.71 502.41,-616.82 512.86,-618.61 511.69,-611.71"/>
-<text text-anchor="middle" x="625.5" y="-568.8" font-family="Noto Sans SC" font-size="9.00">约束</text>
-</g>
-<g id="edge12" class="edge">
-<title>extinction->evolution</title>
-<path fill="none" stroke="#059669" stroke-dasharray="5,2" d="M537.49,-36.1C546.14,-51.85 557,-76.16 557,-99 557,-531 557,-531 557,-531 557,-565.86 525.68,-587.87 492.88,-601.37"/>
-<polygon fill="#059669" stroke="#059669" points="491.22,-598.26 483.15,-605.13 493.74,-604.79 491.22,-598.26"/>
-<text text-anchor="middle" x="584.5" y="-312.8" font-family="Noto Sans SC" font-size="9.00">改变选择压力</text>
-</g>
-</g>
-</svg>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">🧬 Homo Sapiens · 40亿年演化史书</div>
+  <h1>基因时间机器</h1>
+  <p class="hero-subtitle">
+    沿着DNA双螺旋向上游航行<br>
+    每解开一段序列，就回到一个演化节点
+  </p>
+  <p class="hero-tagline">
+    演化不是「过去的事」——它刻在你身体的每一个细胞里。尼安德特人的DNA、远古病毒的碎片、朊粒模糊的生命边界……<strong>你的身体，就是一本可以翻阅的40亿年演化史书。</strong>
+  </p>
+  <div class="scroll-hint">
+    <span>向下滚动 · 开启时间航行</span>
+    <div class="arrow"></div>
   </div>
-  <div class="legend">
-    <span><span class="dot" style="background:#f59e0b"></span> 演化驱动力</span>
-    <span><span class="dot" style="background:#3b82f6"></span> 文明机制</span>
-    <span><span class="dot" style="background:#10b981"></span> 认知与知识</span>
-    <span><span class="dot" style="background:#ef4444"></span> 约束与限制</span>
-    <span style="color:var(--text-lighter);font-size:12px">⇢ 虚线回环 = 反馈迭代</span>
-  </div>
-</div>
-
-<!-- Creative Diagram: Tree of Human Evolution -->
-<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
-  <h3>🌳 人类演化树 — 手绘概念图</h3>
-  <div class="graph-container">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" style="max-width:100%;height:auto">
-  <style>
-    .evo-node{transition:all .3s ease;cursor:pointer}
-    .evo-node:hover{opacity:.75;transform:scale(1.12);transform-origin:center}
-    .evo-spiral{transition:all .4s ease}
-    .evo-spiral:hover{stroke-width:5}
-    .evo-label{transition:all .2s ease;cursor:pointer}
-    .evo-label:hover{fill:#D97706;font-weight:700}
-    .evo-branch{transition:all .3s ease}
-    .evo-branch:hover{stroke-width:3}
-  </style>
-  <rect width="1000" height="700" rx="12" fill="#fafbfc"/>
-  <text x="500" y="28" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#D97706">🌀 生命演化时间螺旋 — 从RNA世界到人类文明</text>
-  <!-- Time axis label -->
-  <text x="500" y="48" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#9ca3af">← 46亿年 地球形成 ———————————————————————————————————→ 现在</text>
-  <!-- ===== SPIRAL PATH (main evolutionary trajectory) ===== -->
-  <!-- The spiral starts from center and expands outward counterclockwise -->
-  <g class="evo-spiral">
-    <path d="M500,660 C490,660 480,655 475,645 C460,620 470,590 500,570 C540,540 620,520 680,480 C770,420 830,340 800,260 C770,190 680,140 580,130 C480,120 380,160 320,210 C260,260 240,340 280,410 C320,480 420,520 520,520 C640,520 760,460 820,370 C890,270 860,140 760,80" fill="none" stroke="#D97706" stroke-width="4" stroke-linecap="round" opacity=".7"/>
-  </g>
-  <!-- ===== EVOLUTIONARY NODES along the spiral ===== -->
-  <!-- Node 0: RNA World (center origin) -->
-  <g class="evo-node">
-    <circle cx="495" cy="650" r="22" fill="#F59E0B" stroke="#D97706" stroke-width="2.5"/>
-    <text x="495" y="646" text-anchor="middle" fill="#fff" font-size="9" font-weight="700" font-family="sans-serif">RNA</text>
-    <text x="495" y="658" text-anchor="middle" fill="#fff" font-size="7">世界</text>
-    <text x="495" y="682" text-anchor="middle" fill="#92400e" font-size="8" font-family="sans-serif">~40亿年前</text>
-    <text x="495" y="694" text-anchor="middle" fill="#b45309" font-size="7">自我复制·核酶</text>
-  </g>
-  <!-- Node 1: Single-cell life -->
-  <g class="evo-node">
-    <circle cx="525" cy="555" r="18" fill="#ea580c" stroke="#c2410c" stroke-width="2"/>
-    <text x="525" y="551" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">单细胞</text>
-    <text x="525" y="563" text-anchor="middle" fill="#fff" font-size="6">生命</text>
-    <text x="525" y="580" text-anchor="middle" fill="#9a3412" font-size="7">~35亿年前</text>
-  </g>
-  <!-- Node 2: Multicellular -->
-  <g class="evo-node">
-    <circle cx="610" cy="485" r="18" fill="#ea580c" stroke="#c2410c" stroke-width="2"/>
-    <text x="610" y="481" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">多细胞</text>
-    <text x="610" y="493" text-anchor="middle" fill="#fff" font-size="6">生物</text>
-    <text x="610" y="510" text-anchor="middle" fill="#9a3412" font-size="7">~10亿年前</text>
-  </g>
-  <!-- Node 3: Cambrian explosion -->
-  <g class="evo-node">
-    <circle cx="750" cy="395" r="18" fill="#7c3aed" stroke="#6b21a8" stroke-width="2"/>
-    <text x="750" y="389" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">寒武纪</text>
-    <text x="750" y="401" text-anchor="middle" fill="#fff" font-size="6">大爆发</text>
-    <text x="750" y="418" text-anchor="middle" fill="#6b21a8" font-size="7">~5.4亿年前</text>
-  </g>
-  <!-- Node 4: Mammals -->
-  <g class="evo-node">
-    <circle cx="710" cy="260" r="18" fill="#7c3aed" stroke="#6b21a8" stroke-width="2"/>
-    <text x="710" y="254" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">哺乳类</text>
-    <text x="710" y="266" text-anchor="middle" fill="#fff" font-size="6">兴起</text>
-    <text x="710" y="242" text-anchor="middle" fill="#6b21a8" font-size="7">~2亿年前</text>
-  </g>
-  <!-- Node 5: Primates -->
-  <g class="evo-node">
-    <circle cx="560" cy="190" r="16" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
-    <text x="560" y="186" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">灵长类</text>
-    <text x="560" y="208" text-anchor="middle" fill="#1d4ed8" font-size="7">~6500万年前</text>
-  </g>
-  <!-- Node 6: Hominins -->
-  <g class="evo-node">
-    <circle cx="410" cy="225" r="18" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
-    <text x="410" y="219" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">人亚科</text>
-    <text x="410" y="231" text-anchor="middle" fill="#fff" font-size="6">直立行走</text>
-    <text x="410" y="248" text-anchor="middle" fill="#1d4ed8" font-size="7">~700万年前</text>
-  </g>
-  <!-- Node 7: Homo sapiens -->
-  <g class="evo-node">
-    <circle cx="360" cy="330" r="20" fill="#059669" stroke="#047857" stroke-width="2.5"/>
-    <text x="360" y="325" text-anchor="middle" fill="#fff" font-size="9" font-weight="700" font-family="sans-serif">智人</text>
-    <text x="360" y="340" text-anchor="middle" fill="#fff" font-size="7">Homo sapiens</text>
-    <text x="360" y="358" text-anchor="middle" fill="#047857" font-size="7">~30万年前</text>
-  </g>
-  <!-- Node 8: Cognition revolution -->
-  <g class="evo-node">
-    <circle cx="440" cy="450" r="18" fill="#059669" stroke="#047857" stroke-width="2"/>
-    <text x="440" y="444" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="sans-serif">认知</text>
-    <text x="440" y="456" text-anchor="middle" fill="#fff" font-size="6">革命</text>
-    <text x="440" y="475" text-anchor="middle" fill="#047857" font-size="7">~7万年前</text>
-  </g>
-  <!-- Node 9: Civilization -->
-  <g class="evo-node">
-    <circle cx="610" cy="530" r="20" fill="#F59E0B" stroke="#D97706" stroke-width="3"/>
-    <text x="610" y="525" text-anchor="middle" fill="#fff" font-size="9" font-weight="700" font-family="sans-serif">文明</text>
-    <text x="610" y="540" text-anchor="middle" fill="#fff" font-size="7">农业·文字·国家</text>
-    <text x="610" y="558" text-anchor="middle" fill="#92400e" font-size="7">~1万年前→现在</text>
-  </g>
-  <!-- ===== KEY BRANCH ANNOTATIONS ===== -->
-  <!-- Prion emergence annotation -->
-  <g class="evo-label">
-    <rect x="755" y="555" width="140" height="52" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
-    <text x="825" y="572" text-anchor="middle" fill="#dc2626" font-size="9" font-weight="700" font-family="sans-serif">⚠ 朊粒 (Prion)</text>
-    <text x="825" y="586" text-anchor="middle" fill="#991b1b" font-size="7">错误折叠蛋白→传染</text>
-    <text x="825" y="600" text-anchor="middle" fill="#991b1b" font-size="7">挑战"生命"定义</text>
-  </g>
-  <line x1="755" y1="575" x2="610" y2="540" stroke="#dc2626" stroke-width="1" stroke-dasharray="4,3" opacity=".4"/>
-  <!-- ERV integration annotation -->
-  <g class="evo-label">
-    <rect x="40" y="555" width="140" height="52" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="110" y="572" text-anchor="middle" fill="#7c3aed" font-size="9" font-weight="700" font-family="sans-serif">🧬 内源性逆转录病毒</text>
-    <text x="110" y="586" text-anchor="middle" fill="#6b21a8" font-size="7">ERV整合→基因组8%</text>
-    <text x="110" y="600" text-anchor="middle" fill="#6b21a8" font-size="7">胎盘进化关键推手</text>
-  </g>
-  <line x1="180" y1="575" x2="410" y2="235" stroke="#7c3aed" stroke-width="1" stroke-dasharray="4,3" opacity=".4"/>
-  <!-- Chimera annotation -->
-  <g class="evo-label">
-    <rect x="40" y="420" width="120" height="45" rx="6" fill="#fef3c7" stroke="#F59E0B" stroke-width="1.2"/>
-    <text x="100" y="437" text-anchor="middle" fill="#92400e" font-size="9" font-weight="700" font-family="sans-serif">🦎 嵌合体现象</text>
-    <text x="100" y="451" text-anchor="middle" fill="#b45309" font-size="7">自然·人工嵌合</text>
-    <text x="100" y="463" text-anchor="middle" fill="#b45309" font-size="7">线粒体·叶绿体起源</text>
-  </g>
-  <line x1="160" y1="440" x2="320" y2="335" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4,3" opacity=".4"/>
-  <!-- Brain evolution -->
-  <g class="evo-label">
-    <rect x="780" y="140" width="140" height="55" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2"/>
-    <text x="850" y="158" text-anchor="middle" fill="#1d4ed8" font-size="9" font-weight="700" font-family="sans-serif">🧠 大脑演化</text>
-    <text x="850" y="172" text-anchor="middle" fill="#3b82f6" font-size="7">新皮层扩张·语言区</text>
-    <text x="850" y="185" text-anchor="middle" fill="#3b82f6" font-size="7">STR基因·FOXP2</text>
-  </g>
-  <!-- Giant animal extinction -->
-  <g class="evo-label">
-    <rect x="40" y="320" width="140" height="50" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2"/>
-    <text x="110" y="337" text-anchor="middle" fill="#1f2937" font-size="9" font-weight="700" font-family="sans-serif">🦣 大型动物灭绝</text>
-    <text x="110" y="351" text-anchor="middle" fill="#6b7280" font-size="7">人类抵达→灭绝</text>
-    <text x="110" y="365" text-anchor="middle" fill="#6b7280" font-size="7">气候+狩猎协同</text>
-  </g>
-  <!-- Language / writing -->
-  <g class="evo-label">
-    <rect x="780" y="465" width="140" height="55" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.2"/>
-    <text x="850" y="482" text-anchor="middle" fill="#047857" font-size="9" font-weight="700" font-family="sans-serif">📜 语言与文字</text>
-    <text x="850" y="496" text-anchor="middle" fill="#10b981" font-size="7">口述传统→文字</text>
-    <text x="850" y="510" text-anchor="middle" fill="#10b981" font-size="7">汉语拼音演化</text>
-  </g>
-  <line x1="780" y1="490" x2="610" y2="530" stroke="#059669" stroke-width="1" stroke-dasharray="4,3" opacity=".4"/>
-  <!-- Bottom annotations: Key constraints -->
-  <g class="evo-label">
-    <rect x="40" y="68" width="155" height="65" rx="6" fill="#fff" stroke="#e5e7eb" stroke-width="1"/>
-    <text x="117" y="85" text-anchor="middle" fill="#1f2937" font-size="9" font-weight="700" font-family="sans-serif">⚠ 演化约束</text>
-    <line x1="50" y1="92" x2="185" y2="92" stroke="#e5e7eb" stroke-width=".5"/>
-    <text x="117" y="105" text-anchor="middle" fill="#dc2626" font-size="7">演化"脑残设计"</text>
-    <text x="117" y="118" text-anchor="middle" fill="#dc2626" font-size="7">STR基因限制</text>
-    <text x="117" y="131" text-anchor="middle" fill="#dc2626" font-size="7">地球资源限度</text>
-  </g>
-  <!-- Legend -->
-  <rect x="40" y="140" width="155" height="90" rx="6" fill="#fff" stroke="#e5e7eb" stroke-width="1"/>
-  <text x="117" y="157" text-anchor="middle" fill="#1f2937" font-size="9" font-weight="700" font-family="sans-serif">📖 图例</text>
-  <line x1="50" y1="164" x2="185" y2="164" stroke="#e5e7eb" stroke-width=".5"/>
-  <circle cx="55" cy="178" r="5" fill="#F59E0B"/><text x="68" y="181" fill="#6b7280" font-size="8">生命起源节点</text>
-  <circle cx="55" cy="194" r="5" fill="#7c3aed"/><text x="68" y="197" fill="#6b7280" font-size="8">演化过渡事件</text>
-  <circle cx="55" cy="210" r="5" fill="#059669"/><text x="68" y="213" fill="#6b7280" font-size="8">人类特有演化</text>
-  <circle cx="55" cy="226" r="5" fill="#dc2626"/><text x="68" y="229" fill="#6b7280" font-size="8">演化约束/挑战</text>
-  <!-- Bottom summary bar -->
-  <rect x="200" y="610" width="600" height="78" rx="8" fill="#fffbeb" stroke="#F59E0B" stroke-width="1.5"/>
-  <text x="500" y="632" text-anchor="middle" fill="#92400e" font-size="10" font-weight="700" font-family="sans-serif">🔬 核心认知：从RNA分子的错误折叠（朊粒）到内源性病毒的基因组整合（ERV） — 演化不是"设计"，而是修补匠</text>
-  <line x1="230" y1="645" x2="770" y2="645" stroke="#fcd34d" stroke-width=".5"/>
-  <text x="500" y="660" text-anchor="middle" fill="#78716c" font-size="8">嵌合体现象揭示了线粒体和叶绿体的内共生起源 · 智人独有的认知能力使文明成为"第二演化引擎"</text>
-  <text x="500" y="678" text-anchor="middle" fill="#9ca3af" font-size="7">时间螺旋由内向外：中心=地球起源(46亿年前) → 外缘=人类文明(~1万年前至今) · 每一圈螺旋对应一次重大的演化跃迁</text>
-</svg>
-  </div>
-</div>
-
-<!-- Boundary Knowledge Table -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>边界知识表</h3>
-  <table class="boundary-table">
-    <thead><tr><th>概念</th><th>是（核心）</th><th>不是（排除）</th><th>边界条件</th></tr></thead>
-    <tbody>
-      <tr><td>自然选择</td><td>环境筛选可遗传性状，适合度差异驱动演化</td><td>有目的的"设计"过程</td><td>需可遗传变异+生殖成功差异</td></tr>
-      <tr><td>尼安德特人</td><td>智人的近亲，与现代人有基因混血</td><td>智人的直系祖先</td><td>4万年前灭绝，1-4%基因存于欧亚人群</td></tr>
-      <tr><td>秩序涌现</td><td>简单规则经大量交互自发产生复杂有序结构</td><td>自上而下的中央规划</td><td>需足够数量的独立主体</td></tr>
-      <tr><td>战争起源</td><td>资源竞争引发的有组织群体暴力</td><td>人类独有的"本性"</td><td>黑猩猩也有类似战争行为</td></tr>
-      <tr><td>趋同演化</td><td>不同物种独立演化出相似性状</td><td>同源性状的遗传继承</td><td>需相似选择压力+不同演化起点</td></tr>
-      <tr><td>第一性原理</td><td>从最基本事实/公理出发推导</td><td>类比的、经验的推理</td><td>受限于对"第一性"的认知深度</td></tr>
-      <tr><td>生命游戏</td><td>元胞自动机模型展示简单规则涌现复杂</td><td>真实生物系统的模拟</td><td>二维网格+离散时间，无物理现实</td></tr>
-      <tr><td>人类改造地球</td><td>智人活动改变了地球表面/大气/生态系统</td><td>工业革命后才开始的现象</td><td>从农业革命即开始，已持续万年</td></tr>
-      <tr><td>演化脑残设计</td><td>演化历史遗留的不完美身体结构</td><td>智能设计的失败证据</td><td>需理解演化是修补匠非工程师</td></tr>
-      <tr><td>汉语拼音演化</td><td>符号系统为适应不同需求而持续变异</td><td>纯语言学现象</td><td>反映文化/政治/技术力量的博弈</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- Learning Path -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>学习路径</h3>
-  <div class="path-steps">
-    <div class="path-step current"><div class="step-num">1</div>生物演化基础</div>
-    <div class="path-step"><div class="step-num">2</div>智人与近亲</div>
-    <div class="path-step"><div class="step-num">3</div>社会演化机制</div>
-    <div class="path-step"><div class="step-num">4</div>知识演化历程</div>
-    <div class="path-step"><div class="step-num">5</div>环境与地球系统</div>
-    <div class="path-step"><div class="step-num">6</div>认知局限与边界</div>
-  </div>
-</div>
-
-<!-- Learning Progress -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>学习进度</h3>
-  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:14px">卡片已学 <span id="learnedCount">0</span>/8 | 题目已答 <span id="quizDone">0</span>/23</p>
-</div>
-
-<!-- Key Concepts (12 concept cards) -->
-<div class="section-title">核心概念</div>
-<div class="concepts-grid">
-  <div class="concept-card">
-    <div class="concept-num">1</div>
-    <h5>自然选择 — 演化的核心机制</h5>
-    <p>环境筛选可遗传性状，适合度差异驱动种群变化。不是有目的的"设计"，而是统计上的非随机淘汰。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">2</div>
-    <h5>尼安德特人与智人的竞争</h5>
-    <p>智人近亲4万年前灭绝，1-4%基因存于现代欧亚人群。语言、协作、文化累积可能是智人胜出的关键。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">3</div>
-    <h5>秩序的涌现（生命游戏）</h5>
-    <p>简单规则经大量交互自发产生复杂有序结构。康威生命游戏证明：复杂性可以源自极简的底层逻辑。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">4</div>
-    <h5>战争起源 — 演化还是文化</h5>
-    <p>杰贝尔萨哈巴墓地（约1.3万年前）是最早战争遗迹。黑猩猩同类相残表明有组织暴力有生物学根源。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">5</div>
-    <h5>趋同演化 — 演化的可预测性</h5>
-    <p>不同物种在相似选择压力下独立演化出相似结构（如眼睛）。说明演化不是完全随机的，受物理/生态约束。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">6</div>
-    <h5>第一性原理 — 思维方式</h5>
-    <p>从最基本事实/公理出发推理，不被类比限制。牛顿《原理》是典范，但受限于对"第一性"的认知深度。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">7</div>
-    <h5>生命游戏 — 元胞自动机</h5>
-    <p>二维网格上每个细胞根据邻居状态决定生死。极简规则产生滑翔机、振荡器等复杂模式，成为复杂性科学基石。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">8</div>
-    <h5>人类对地球的全面改造</h5>
-    <p>从农业革命至今，人类改变了地表覆盖、大气成分、物种分布、水循环，已进入"人类世"新地质年代。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">9</div>
-    <h5>演化脑残设计</h5>
-    <p>演化是"修补匠"而非"工程师"，遗留了许多不完美设计：盲点、智齿、阑尾、脊柱不适合直立行走等。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">10</div>
-    <h5>基因限制与STR遗传标记</h5>
-    <p>STR（短串联重复）作为遗传标记追踪人类迁徙。基因限制了演化速度——文化演化远超生物演化。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">11</div>
-    <h5>数学证明 — 社会契约</h5>
-    <p>数学真理的性质是一场社会协商。证明的说服力依赖于数学共同体的共识，而非绝对的形而上真理。</p>
-  </div>
-  <div class="concept-card">
-    <div class="concept-num">12</div>
-    <h5>汉语拼音的演化</h5>
-    <p>从注音符号到汉语拼音，符号系统随文化/政治/技术力量而变异，是文化演化的微观案例。</p>
-  </div>
-</div>
 </section>
 
-<!-- TAB 1: 知识卡片 -->
-<section class="tab-section" id="sec-cards">
-<h2>知识卡片 <span style="font-size:14px;color:var(--text-lighter)">— 点击翻转查看详情</span></h2>
-<div class="flip-container" id="flipContainer"></div>
-<div class="card-nav">
-  <button id="prevCardBtn">← 上一张</button>
-  <span class="card-idx" id="cardIndex">当前：第1/8 张</span>
-  <button id="nextCardBtn">下一张 →</button>
+<!-- DNA Fact #1 -->
+<div class="dna-fact">
+  <div class="fact-icon">🔬 你体内的「化石」</div>
+  <p>远古逆转录病毒的基因片段占据了人类基因组的约8%——这些「内源性逆转录病毒」是数百万年前感染我们祖先后，被「驯化」留在基因组中的分子化石。你体内每一个细胞都携带着远古病毒的历史。</p>
 </div>
-<div style="text-align:center;margin:16px 0">
-  <p>已学：<span id="cardLearned">0</span>/8 | 进度：<span id="cardProgress">0</span>%</p>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgressBar" style="width:0%"></div></div>
-  <button id="markLearnedBtn" style="padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin-top:8px">标记当前卡片为已学</button>
+
+<!-- Timeline Sections -->
+<main class="timeline" id="timeline"></main>
+
+<!-- DNA Fact #2 -->
+<div class="dna-fact">
+  <div class="fact-icon">🧬 尼安德特人的回声</div>
+  <p>除非洲裔人群外，现代欧亚人种的基因组中约有1.5%–2%来自尼安德特人。这些基因影响了我们的免疫反应、皮肤色素沉着，甚至情绪调节。你的祖先曾与另一个人类物种相遇、结合，这段经历至今写在你的DNA中。</p>
 </div>
-</section>
 
-<!-- TAB 2: 题库系统 -->
-<section class="tab-section" id="sec-quiz">
-<h2>题库系统</h2>
-<div class="quiz-controls">
-  <button id="startQuizBtn">🎲 随机抽题练习（10 道选择 + 3 道简答）</button>
-  <button id="resetQuiz">🔄 重置</button>
+<!-- DNA Fact #3 -->
+<div class="dna-fact" style="border-left-color:var(--cyber-purple); background:rgba(168,85,247,0.03);">
+  <div class="fact-icon" style="color:var(--cyber-purple);">🦠 朊粒悖论</div>
+  <p>朊粒——仅由错误折叠的蛋白质构成，不含任何核酸——却能自我复制并引发致命疾病。它挑战了我们对「生命」的最基本定义：没有DNA或RNA的东西，算「活着」吗？</p>
 </div>
-<div id="quizContainer"></div>
-<div id="staticQuiz" class="static-quiz"></div>
-</section>
 
-<!-- TAB 3: 考试模式 -->
-<section class="tab-section" id="sec-exam">
-<h2>考试模式</h2>
-<div class="exam-timer" id="examTimer">15:00</div>
-<div class="quiz-controls">
-  <button id="startExam">开始考试（15 分钟）</button>
-  <button id="submitExam">提交答卷</button>
-  <button id="resetExam">重置考试</button>
-</div>
-<div class="exam-score" id="examScore"></div>
-<div id="examContainer"></div>
-</section>
+<!-- Footer -->
+<footer class="footer">
+  <div class="glyph">🧬</div>
+  <p>基因时间机器 · 人类演化与文明进程</p>
+  <p><a href="index.html">返回首页</a> · 科技参考3</p>
+</footer>
 
-<!-- TAB 4: 复习模式 -->
-<section class="tab-section" id="sec-review">
-<h2>复习模式 — 错题回顾与间隔复习</h2>
-<div class="quiz-controls">
-  <button id="startReview">开始复习</button>
-  <button id="resetReview">重置复习进度</button>
-</div>
-<p style="font-size:14px;color:var(--text-light);margin:8px 0">点击复习项查看答案，确认掌握后勾选完成</p>
-<ul class="review-list" id="reviewList"></ul>
-</section>
-
-<!-- TAB 5: 思维导图 -->
-<section class="tab-section" id="sec-mindmap">
-<h2>思维导图 — 人类演化与文明知识体系</h2>
-<div class="graph-container" id="mindMapContainer"></div>
-</section>
-
-<!-- TAB 6: 深度追问 -->
-<section class="tab-section" id="sec-deepask">
-<h2>深度追问</h2>
-<p style="color:var(--text-light);margin-bottom:16px">点击问题展开深度解答 — 源自课程内容但超越原文，需要交叉推理</p>
-<div id="deepAskContainer"></div>
-</section>
-
-<!-- TAB 7: 案例分析 -->
-<section class="tab-section" id="sec-cases">
-<h2>案例分析</h2>
-<p style="color:var(--text-light);margin-bottom:16px">用人类演化与文明的概念框架分析真实事件</p>
-<div id="caseContainer"></div>
-</section>
-
-<!-- TAB 8: 实战决策 -->
-<section class="tab-section" id="sec-decision">
-<h2>实战决策</h2>
-<p style="color:var(--text-light);margin-bottom:16px">运用演化思维与文明分析框架做出判断</p>
-<div id="decisionContainer"></div>
-</section>
-
-<div class="footer">
-  <p>科技参考3 · MKS 最小知识集 | 人类演化与文明进程 | <a href="index.html">返回主板</a></p>
-  <p>内容源自卓克《科技参考3》2023-2024</p>
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 id="modalTitle"></h3>
+    <div class="modal-course" id="modalCourse"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
 </div>
 
 <script>
-// ===== 全局变量 =====
-var currentCardIdx = 0;
-var learnedCards = {};
-var quizAnswered = 0;
-var examInterval = null;
-var examSeconds = 900;
+// ═══════════════════════════════════════
+// DNA HELIX CANVAS ANIMATION
+// ═══════════════════════════════════════
+const canvas = document.getElementById('dnaCanvas');
+const ctx = canvas.getContext('2d');
+let scrollY = 0;
+let w, h;
 
-// ===== 标签切换 =====
-(function(){
-  var btns = document.querySelectorAll('.tab-nav button');
-  btns.forEach(function(b){
-    b.addEventListener('click',function(){
-      btns.forEach(function(x){x.classList.remove('active')});
-      this.classList.add('active');
-      document.querySelectorAll('.tab-section').forEach(function(s){s.classList.remove('active')});
-      var sec = document.getElementById('sec-'+this.dataset.tab);
-      if(sec) sec.classList.add('active');
-    });
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+const strands = [];
+const NUM_PAIRS = 60;
+const HELIX_RADIUS_BASE = Math.min(w * 0.15, 160);
+const HELIX_HEIGHT = 1600;
+const TWISTS = 5;
+
+for (let i = 0; i < NUM_PAIRS; i++) {
+  strands.push({
+    t: i / NUM_PAIRS,
+    baseOffset: (Math.random() - 0.5) * 0.05,
+    pulse: Math.random() * Math.PI * 2,
+    brightness: 0.3 + Math.random() * 0.4
   });
-})();
-
-// ===== 8 个核心概念数据 =====
-var concepts = [
-  {
-    id:'naturalSelection', icon:'🧬', name:'自然选择',
-    hint:'点击翻转 — 演化最核心的机制',
-    def:'自然选择是达尔文提出的演化核心机制：种群内存在可遗传的性状变异，特定性状使个体在特定环境中拥有更高的生存与繁殖成功率（适合度），这些性状在代际中频率增加。它不是有目的的"设计"，而是统计上的非随机淘汰——环境作为筛选器，保留那些碰巧有利的变异。',
-    analogy:'好比一个筛子——不是为了筛出某种特定形状而设计筛孔，而是只有刚好通过筛孔的颗粒能留下。如果筛孔形状变了（环境变了），留下的颗粒也会不同。所以不存在"更进化"的方向，只存在"更适合当前环境"。',
-    example:'工业革命时期英国桦尺蛾颜色变化——树干被煤烟熏黑后，深色蛾子比例从1%升到90%以上，因为深色在污染树干上更不容易被鸟发现。污染治理后树干变浅，浅色蛾子比例回升。整个过程就是在30年内完成的自然选择。',
-    counter:'自然选择不是"适者生存"那么简单——有很多性状是中性漂变的结果，不是每个性状都有适应性意义。还有"搭便车"效应：一个有害基因可能与有利基因连锁而被保留。'
-  },
-  {
-    id:'neanderthal', icon:'🦴', name:'尼安德特人',
-    hint:'点击翻转 — 智人最著名的近亲',
-    def:'尼安德特人（Homo neanderthalensis）生活在大约40万至4万年前的欧亚大陆。他们与智人共享一个约60万年前的共同祖先。现代DNA研究确认尼安德特人与智人有过基因交流——现代欧亚人群携带1-4%的尼安德特人基因。他们约4万年前灭绝，原因可能是智人的竞争、气候变化、或疾病等多种因素叠加。',
-    analogy:'好比你在街上看到一个很像你但又不是你的远房表亲——你们有共同曾祖父母但各自发展出不同特征。尼人更壮实、脑容量更大（约1600cc vs 智人1350cc），但智人在语言、协作、文化累积上可能更胜一筹。',
-    example:'尼安德特人基因在现代人中还在发挥作用——与免疫反应、角质形成、凝血等功能相关。研究发现尼人基因增加了新冠重症风险，但也增强了部分免疫应答。这表明远古混血事件至今影响我们的健康。',
-    counter:'尼安德特人不是"原始野蛮人"——他们有墓葬仪式、会制作工具、可能已有语言能力，甚至会用赭石装饰身体。灭绝不等于"劣等"，只是在这场生存博弈中输了。'
-  },
-  {
-    id:'orderEmergence', icon:'🔄', name:'秩序涌现',
-    hint:'点击翻转 — 复杂如何从简单自发产生',
-    def:'涌现（Emergence）是指系统整体表现出其组成部分所不具备的性质。在复杂系统中，大量个体遵循简单局部规则交互，未经过中央控制即自发产生宏观秩序。康威的"生命游戏"是最经典的涌现模型——仅4条规则在二维网格上即能产生滑翔机、振荡器、图灵完备的计算能力。',
-    analogy:'好比鸟群——每只鸟只遵循三条简单规则：与邻居保持距离、对齐飞行方向、向鸟群中心靠拢。没有一只"领袖鸟"，但整个鸟群呈现出复杂的队形变化。交通流、股市波动、蚁群觅食都遵循同样原理。',
-    example:'生命游戏中"滑翔机"——它能在网格中移动并保持自身结构。有趣的是：滑翔机的出现从未被设计，它是4条简单规则在随机初始条件下的自发产物。发现者花了几个月调试规则才让滑翔机出现——但一旦规则设定好，它的出现是必然的。',
-    counter:'涌现不等于"一切都能自组织"。某些复杂结构需要特定的初始条件和边界约束。即使是生命游戏，能涌现出真正有意义的复杂性也需要极大空间和极长时间——很多看似"自发"的秩序其实依赖隐藏的环境约束。'
-  },
-  {
-    id:'warOrigin', icon:'⚔️', name:'战争起源',
-    hint:'点击翻转 — 战争是本能还是文明的产物',
-    def:'战争是有组织的群体间暴力冲突。考古学上最早的明确战争证据是杰贝尔萨哈巴墓地（Jebel Sahaba，苏丹，约1.3万年前），61具遗骸中有24具（约40%）有暴力致死痕迹。生物学上，黑猩猩群体的"突袭战"（多只雄猩猩对隔壁群体落单者的围杀）表明有组织暴力在演化上有深远根源。',
-    analogy:'战争不是"人类堕落的标志"——它是智人和其他社会性灵长类共有的一种行为策略。好比两个公司竞标同一个客户——可以协商合作（双赢），也可以恶性压价（零和）。环境资源越紧张，"恶性压价"的概率越大。',
-    example:'黑猩猩贡贝国家公园"四年战争"（1974-1978）：一个大群体分裂后，两个子群体间爆发系统性杀戮，历时4年直至一方完全消灭另一方。这证明有组织暴力在有共同祖先的人类-黑猩猩谱系中至少已有600万年历史。',
-    counter:'战争有生物学基础不等于战争"不可避免"。人类区别于其他动物的关键恰恰在于我们有文化——法律、贸易、外交都是抑制战争的制度性手段。人类历史中暴力死亡率总体在降低（尽管有世界大战等波动）。'
-  },
-  {
-    id:'convergentEvo', icon:'🦋', name:'趋同演化',
-    hint:'点击翻转 — 演化可以预测吗',
-    def:'趋同演化（Convergent Evolution）是指不相关的物种在相似选择压力下，独立演化出相似的结构或功能。最经典的例子是眼睛——脊椎动物（如人类）和头足动物（如章鱼）各自独立演化出了极其相似的相机型眼睛，但二者的演化路径完全不同。',
-    analogy:'好比两个完全不同的公司面对同一个市场需求——一家从航空技术出发，一家从手机技术出发，最终都做出了无人机。虽然技术路线不同，但产品形态趋同——因为物理规律和市场需求是相同的。"好的解决方案"就那么几种。',
-    example:'人类的相机型眼睛 vs 章鱼的相机型眼睛——结构惊人相似（晶状体、视网膜、虹膜），但血管位置相反：人类的血管在视网膜前方（导致盲点），章鱼的血管在后方（无盲点）。这说明人类眼睛是"修补匠"做的（盲点是血管穿过的遗留），章鱼眼睛是"独立设计"的——趋同但非等同。',
-    counter:'趋同演化说明演化不是完全随机的，但不意味着演化有"预定方向"。相同的环境压力导致相同的结果——但如果环境不同（历史上常有这种事），结果也会完全不同。趋同是统计规律，不是宿命。'
-  },
-  {
-    id:'firstPrinciple', icon:'💡', name:'第一性原理',
-    hint:'点击翻转 — 从最基本事实出发思考',
-    def:'第一性原理思维（First Principles Thinking）是将问题分解到最基本的、不可再分解的事实或公理层面，然后从这些基本要素重新构建解决方案。它反对"类比思维"——反对说"因为别人这样做所以我们也这样做"。物理学家和工程师常用此法突破技术瓶颈。',
-    analogy:'好比你想做一个蛋糕——类比思维是看别人的食谱然后微调。第一性原理是回到"什么是蛋糕？糖、面粉、鸡蛋、热量、化学反应"，然后重新发明配方。马斯克用这个方法把火箭成本降了一个数量级——他不接受"火箭就是贵"的类比结论，而是反问"买原材料需要多少钱"。',
-    example:'牛顿《自然哲学的数学原理》是第一性原理的经典应用——他不接受亚里士多德"重物下落更快"的类比观念，而是从三大定律+万有引力出发，重新推导了整个力学体系，甚至解释了行星运动的开普勒定律。',
-    counter:'第一性原理的局限性：你怎么知道自己理解的是真正的"第一性"？牛顿力学在极高速和极微小尺度下是错的——第一性原理的好用程度取决于你对基础层面的理解有多深。过度自信于自己的"第一性"会导致系统性错误。'
-  },
-  {
-    id:'gameOfLife', icon:'🎮', name:'生命游戏',
-    hint:'点击翻转 — 元胞自动机的奇迹',
-    def:'康威的生命游戏（Conway\'s Game of Life）是1970年提出的元胞自动机模型。在无限二维网格上，每个细胞只有"生"或"死"两种状态，根据周围8个邻居的状态遵循4条规则更新下一时刻的状态。这4条规则极其简单，却涌现出令人惊叹的复杂行为——滑翔机、振荡器、甚至被证明是图灵完备的（理论上可模拟任何计算机程序）。',
-    analogy:'好比围棋——规则3分钟就能学会（围住就提子），但下出来的棋局变化无穷。生命游戏的4条规则比围棋还简单，但它产生的模式类型甚至比围棋还多——因为它的"棋盘"可以无限大，"棋子"可以无限多。',
-    example:'2018年发现的生命游戏首个自我复制的"元胞星舰"（Gemini）——它是一种每3360万代复制一次的庞然大物，证明了在生命游戏这样简单的系统中，自我复制这种被认为是"生命标志"的行为是可能自发涌现的。',
-    counter:'生命游戏的美妙但也危险的地方——它让人误以为"所有复杂性都可以从简单规则涌现"。真实生物学的复杂性不只是在2D网格上计数邻居数量。但作为概念框架，它极好地展示了涌现原理。'
-  },
-  {
-    id:'earthTransform', icon:'🌍', name:'人类改造地球',
-    hint:'点击翻转 — 人类世的地质证据',
-    def:'人类对地球的改造已如此深远，地质学家提出了"人类世"（Anthropocene）作为新的地质年代。改造包括：地表覆盖（城市/农田占陆地面积40%+）、大气成分（CO2比工业革命前+50%）、物种分布（第六次大灭绝正在发生）、水循环（大型水坝改变河流泥沙输送）、地球化学（氮循环翻倍、塑料微粒全球分布）。',
-    analogy:'好比一个房客搬进一套公寓——本以为只是住一阵子，结果他把墙壁全部打通重装、改了水电管道、在阳台养了200只猫、墙壁上画满了壁画。这就是人类在地球上的行为。不同之处在于：地球是人类唯一的"房子"，没有退路。',
-    example:'大型动物灭绝与人类到达时间高度吻合——马达加斯加的大狐猴、新西兰的恐鸟、美洲的剑齿虎等，都在人类首次到达该大陆后约1000年内灭绝。这种"人类到达→大型动物灭绝"的模式在全球反复出现，是最早的人类改造地球的证据。',
-    counter:'"人类世"作为正式地质年代仍有争议——反对者认为几千年的时间在46亿年地质历史中只是一个瞬间，不足以定义新的"世"。但支持者指出：塑料、核试验沉降物、混凝土等"技术化石"将在地层中留下永久标记，百万年后仍可辨识。'
-  }
-];
-
-// ===== 渲染知识卡片 =====
-function renderCards(){
-  var container = document.getElementById('flipContainer');
-  var html = '';
-  concepts.forEach(function(c, i){
-    html += '<div class="flip-card'+(learnedCards[i]?' card-learned':'')+'" id="card-'+i+'">';
-    html += '<div class="flip-inner" id="flipInner-'+i+'">';
-    html += '<div class="flip-front" id="flipFront-'+i+'">';
-    html += '<div class="concept-icon">'+c.icon+'</div>';
-    html += '<div class="concept-name">'+c.name+'</div>';
-    html += '<div class="concept-hint">'+c.hint+'</div>';
-    html += '</div>';
-    html += '<div class="flip-back" id="flipBack-'+i+'">';
-    html += '<h4>'+c.icon+' '+c.name+'</h4>';
-    html += '<p><span class="label">定义</span> '+c.def+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">类比</span> '+c.analogy+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">示例</span> '+c.example+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">边界</span> '+c.counter+'</p>';
-    html += '</div></div></div>';
-  });
-  container.innerHTML = html;
 }
 
-function setCard(idx){
-  currentCardIdx = idx;
-  updateCardUI();
-}
+function drawDNA() {
+  ctx.clearRect(0, 0, w, h);
+  const centerX = w * 0.5;
+  const time = performance.now() * 0.0005;
 
-function toggleFlip(idx){
-  var inner = document.getElementById('flipInner-'+idx);
-  if(inner.classList.contains('flipped')){
-    inner.classList.remove('flipped');
-  }else{
-    inner.classList.add('flipped');
-  }
-  currentCardIdx = idx;
-  updateCardUI();
-}
+  strands.forEach((s, i) => {
+    const scrollFactor = 1 - (scrollY * 0.0004) % 1;
+    const tAdjusted = (s.t + scrollFactor + s.baseOffset) % 1;
+    const angle = tAdjusted * Math.PI * 2 * TWISTS;
+    const y = tAdjusted * HELIX_HEIGHT + (h - HELIX_HEIGHT) * 0.5 - scrollY * 0.12;
 
-function markLearned(idx){
-  if(learnedCards[idx]){
-    delete learnedCards[idx];
-  }else{
-    learnedCards[idx] = true;
-  }
-  var card = document.getElementById('card-'+idx);
-  if(card) card.classList.toggle('card-learned');
-  updateProgress();
-}
+    if (y < -80 || y > h + 80) return;
 
-function updateProgress(){
-  var pct = Math.round(Object.keys(learnedCards).length/concepts.length*100);
-  document.getElementById('cardLearned').textContent = Object.keys(learnedCards).length;
-  document.getElementById('cardProgress').textContent = pct;
-  document.getElementById('cardProgressBar').style.width = pct+'%';
-  document.getElementById('overallProgress').style.width = pct+'%';
-  document.getElementById('learnedCount').textContent = Object.keys(learnedCards).length;
-}
+    const helixRadius = HELIX_RADIUS_BASE * (1 + Math.sin(tAdjusted * Math.PI) * 0.3);
+    const x1 = centerX + Math.cos(angle) * helixRadius;
+    const x2 = centerX + Math.cos(angle + Math.PI) * helixRadius;
+    const yPos = y;
 
-function updateCardUI(){
-  document.getElementById('cardIndex').textContent = '当前：第'+(currentCardIdx+1)+'/'+concepts.length+' 张';
-}
+    const pulseAlpha = 0.15 + Math.sin(time * 2 + s.pulse) * 0.08;
+    const alpha = s.brightness * (0.25 + pulseAlpha);
 
-document.addEventListener('click', function(e){
-  var front = e.target.closest('.flip-front');
-  if(front){
-    var card = front.closest('.flip-card');
-    if(card){
-      var idx = parseInt(card.id.split('-')[1]);
-      toggleFlip(idx);
-    }
-  }
-});
+    // Draw connector first (behind nodes)
+    ctx.beginPath();
+    ctx.moveTo(x1, yPos);
+    ctx.lineTo(x2, yPos);
+    ctx.strokeStyle = `rgba(0,255,136,${alpha * 0.4})`;
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
 
-document.getElementById('markLearnedBtn').addEventListener('click', function(){
-  markLearned(currentCardIdx);
-});
+    // Strand 1 node (blue)
+    ctx.beginPath();
+    ctx.arc(x1, yPos, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(30,144,255,${alpha})`;
+    ctx.fill();
 
-document.getElementById('prevCardBtn').addEventListener('click', function(){
-  if(currentCardIdx > 0) setCard(currentCardIdx - 1);
-});
+    // Strand 2 node (pink)
+    ctx.beginPath();
+    ctx.arc(x2, yPos, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,107,157,${alpha})`;
+    ctx.fill();
 
-document.getElementById('nextCardBtn').addEventListener('click', function(){
-  if(currentCardIdx < concepts.length - 1) setCard(currentCardIdx + 1);
-});
+    // Backbone connections
+    if (i < NUM_PAIRS - 1) {
+      const next = strands[i + 1];
+      const nextT = ((next.t + scrollFactor + next.baseOffset) % 1);
+      const nextAngle = nextT * Math.PI * 2 * TWISTS;
+      const nextY = nextT * HELIX_HEIGHT + (h - HELIX_HEIGHT) * 0.5 - scrollY * 0.12;
+      const nextRadius = HELIX_RADIUS_BASE * (1 + Math.sin(nextT * Math.PI) * 0.3);
+      const nx1 = centerX + Math.cos(nextAngle) * nextRadius;
+      const nx2 = centerX + Math.cos(nextAngle + Math.PI) * nextRadius;
 
-// Save/load learned cards
-function saveLearned(){
-  try{localStorage.setItem('human-evo-learned',JSON.stringify(learnedCards));}catch(e){}
-}
-function loadLearned(){
-  try{var d=JSON.parse(localStorage.getItem('human-evo-learned'));if(d)learnedCards=d;}catch(e){}
-}
+      if (Math.abs(nextY - yPos) < 80) {
+        ctx.beginPath();
+        ctx.moveTo(x1, yPos);
+        ctx.lineTo(nx1, nextY);
+        ctx.strokeStyle = `rgba(30,144,255,${alpha * 0.5})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
 
-// ===== MCQ 题库（20 题，答案分布 {0:5,1:5,2:5,3:5}）=====
-var mcqBank = [
-  // --- ans:0 (5题) ---
-  {q:'康威生命游戏证明了什么？', opts:['复杂行为可以从简单规则自发涌现','生命必须是智能设计的','随机过程没有规律','复杂系统需要外部干预'], ans:0, explain:'生命游戏的4条简单规则能产生滑翔机、振荡器等复杂模式，证明了复杂性可以从极简的底层规则自发涌现——这是复杂性科学的核心洞见。'},
-  {q:'线粒体大约产生于多少年前？', opts:['21亿年前','37亿年前','5亿年前','6500万年前'], ans:0, explain:'线粒体起源于约21亿年前的一次内共生事件——一个古菌宿主吞噬了一个需氧细菌，后者没有被消化而是演化为细胞器，为真核细胞提供了高效的能量代谢。'},
-  {q:'演化"脑残设计"的例子包括什么？', opts:['视网膜血管在感光细胞前方的设计','完美的眼睛设计','人类拥有最佳脊柱结构','智齿完全不存在的设计'], ans:0, explain:'人类视网膜血管在感光细胞前方——这导致光线必须穿过血管才能到达感光细胞，造成盲点（视神经穿过处）。章鱼眼睛血管在后——这说明人类眼睛是"修补匠"产品。'},
-  {q:'"人类世"作为新地质年代的争议核心是什么？', opts:['人类活动的影响能否在地层中留下永久标记','人类是否真的存在过','地球是否是一个球体','恐龙是否比人类影响更大'], ans:0, explain:'支持者认为塑料、核沉降物、混凝土等"技术化石"将在百万年后仍可辨识；反对者认为数千年在46亿年地质史中太短，不足以定义新的"世"。'},
-  {q:'智人胜出尼安德特人的可能原因不包括什么？', opts:['更大的脑容量','更复杂的语言和协作能力','更有效的文化累积机制','更好的工具制造能力'], ans:0, explain:'尼安德特人脑容量（约1600cc）实际上大于智人（约1350cc）。智人胜出的关键可能在于语言、社交网络规模、文化累积效率等非脑容量因素。'},
-  // --- ans:1 (5题) ---
-  {q:'智人（Homo Sapiens）的发源地是哪里？', opts:['亚洲','非洲','欧洲','美洲'], ans:1, explain:'所有遗传学和化石证据一致指向非洲——线粒体夏娃和Y染色体亚当都生活在非洲。智人约20万年前在非洲出现，约7万年前开始走出非洲向全球扩散。'},
-  {q:'已知最早的有组织战争考古遗迹是哪里？', opts:['特洛伊遗址','杰贝尔萨哈巴墓地','秦始皇兵马俑','巨石阵'], ans:1, explain:'杰贝尔萨哈巴墓地位于苏丹，约1.3万年前，61具遗骸中有24具带有暴力致死痕迹，是目前公认最早的有组织战争考古证据。'},
-  {q:'第一性原理的核心特征是什么？', opts:['从类比出发得出推论','从最基本的事实或公理出发重新构建','模仿最成功的竞争对手','依赖专家直觉做决策'], ans:1, explain:'第一性原理将问题分解到不可再分解的基本事实，然后从零重新构建解决方案——牛顿的力学体系、马斯克降火箭成本都是经典应用。'},
-  {q:'黑猩猩群体间的有组织暴力说明了什么？', opts:['战争是人类独有的社会行为','有组织暴力的生物学根源可追溯至人类-黑猩猩共同祖先','黑猩猩比人类更好战','所有动物都会发动战争'], ans:1, explain:'黑猩猩"突袭战"（多只雄猩猩围杀隔壁群体落单者）与人类部落战争行为相似。这表明有组织暴力的行为倾向至少有600万年演化史。'},
-  {q:'STR遗传标记的主要用途是什么？', opts:['测量大气污染','追踪人类迁徙和亲缘关系','预测地震','治疗糖尿病'], ans:1, explain:'STR（短串联重复序列）是基因组中高度可变的区域，可用于追踪人类迁徙路径、确定亲缘关系和法医学个体识别。'},
-  // --- ans:2 (5题) ---
-  {q:'尼安德特人与现代智人的关系是什么？', opts:['尼人是智人的直系祖先','尼人是完全无关的物种','尼人与智人有过竞争并有基因混血','尼人与智人属于同一物种'], ans:2, explain:'尼安德特人和智人是两个独立物种，有共同祖先（约60万年前）。但他们在欧亚大陆共存期间有过基因交流——现代欧亚人群携带1-4%尼人基因。'},
-  {q:'趋同演化说明了什么？', opts:['所有物种最终都进化成同样的形态','物种间没有真正的差异','在相似选择压力下不相关的物种可独立演化出相似结构','演化完全是随机的'], ans:2, explain:'趋同演化的经典例子：章鱼和人类的相机型眼睛结构惊人相似但独立演化。这说明在相似选择压力下，"最优解"就那么几种，演化不是完全随机的。'},
-  {q:'人类对地球的全面改造不包括以下哪项？', opts:['大气CO2浓度上升','物种分布改变','板块构造运动加速','全球水循环改变'], ans:2, explain:'板块构造运动是地质动力驱动的，时间尺度以百万年计，人类活动远不足以影响板块运动。但人类已显著改变了大气、物种、水和氮循环。'},
-  {q:'关于农业革命，以下说法最准确的是？', opts:['农业革命让人类比狩猎采集者更健康长寿','农业革命大幅减少了人类每日工作时间','农业革命在增加食物总量的同时降低了饮食多样性和个体营养水平','农业革命只发生在中东的新月沃地'], ans:2, explain:'农业革命虽增加总食物产量支持更多人口，但个体层面饮食从上百种缩减到少数谷物，营养不良增加，工作时间反而更长——Jared Diamond称其为"人类史上最大的骗局"。'},
-  {q:'文化演化与生物演化的关键区别是什么？', opts:['文化演化需要基因突变作为基础','文化演化只能通过DNA遗传给下一代','文化演化可通过后天学习跨代传递，速度远超基因演化','文化演化与基因演化遵循完全相同的规律'], ans:2, explain:'文化演化通过模因（meme）——可通过教学、模仿、文字等后天方式传递，不依赖DNA。一项技术可在几年内传遍全球，而基因演化的时间尺度以千年计。'},
-  // --- ans:3 (5题) ---
-  {q:'汉语拼音的演化反映了什么？', opts:['语言是一成不变的','汉字将被拼音完全取代','中文没有演化','符号系统随文化/政治/技术力量持续变异'], ans:3, explain:'从注音符号到汉语拼音的演变反映了技术需求（打字机/计算机）、政治选择（国际标准化）、文化博弈（繁简字之争）等多种力量的共同塑造。'},
-  {q:'"数学证明是社会契约"的含义是什么？', opts:['数学没有客观性','数学定理都是错的','数学家总是在骗人','证明的说服力依赖于数学共同体的共识'], ans:3, explain:'这并非否定数学的客观性，而是指出：一个证明能否被接受不仅取决于其逻辑正确性，还取决于数学共同体对"什么是有效推理"的协商共识——这套共识本身就是社会构建的。'},
-  {q:'关于"认知革命"假说，以下说法正确的是？', opts:['认知革命已被考古学界一致确认为历史事实','认知革命指人类约1万年前学会农耕的事件','认知革命是由达尔文首先提出的理论','该假说认为约7万年前智人获得了虚构故事的能力，使大规模陌生人协作成为可能'], ans:3, explain:'认知革命假说（赫拉利《人类简史》）核心：智人约7万年前发展出"虚构故事"能力——关于神、国家、法律、货币的共同信念，使远超血缘的陌生人可大规模协作。'},
-  {q:'人类从狩猎采集转向农业的根本驱动力是什么？', opts:['人类主动选择更轻松的生活方式','一个统一政治领袖的命令','偶然发现种子可种植后迅速推广','多重因素叠加：气候变暖+人口压力+动植物与人类的双向驯化'], ans:3, explain:'农业起源非单一因素。全新世气候变暖使某些地区适合农耕；人口密度增加使狩猎采集不可持续；动植物在人类选择压力下发生基因变化——这是双向驯化过程。'},
-  {q:'以下关于"集体学习"的说法，最准确的是？', opts:['集体学习只有现代学校才能实现','除人类外的动物完全没有集体学习能力','集体学习的效率与群体规模无关','集体学习指知识通过社交网络在代际间累积传递，是人类文明加速发展的核心机制'], ans:3, explain:'集体学习（David Christian提出）= 信息共享 + 代际传递 + 知识累积。它解释人类文明指数增长——每代人在前人全部知识基础上创新，而非从零开始。'}
-];
-
-// ===== 简答题库（8 题）=====
-var saBank = [
-  {q:'为什么智人能战胜尼安德特人？', answer:'智人胜出可能是多因素的：1）更有效的语言和符号沟通能力，允许更大规模协作；2）文化累积机制——智人能通过跨代传递持续改良技术（"棘轮效应"），尼人工具在几万年中变化很小；3）更大的社交网络——智人群体间可能有远距离交换和联盟，尼人群体相对孤立；4）更高效的食物利用和适应能力——智人饮食范围更广，能适应更多生态环境。最终可能是多因素叠加而非单一"杀手锏"。'},
-  {q:'什么是"秩序的涌现"？举例说明。', answer:'涌现指系统整体表现出其组成部分不具备的属性。经典例子：1）生命游戏——4条简单规则在2D网格上产生滑翔机（可自我维持的移动结构），从未被设计；2）鸟群——每只鸟只遵循三条局部规则（保持距离、对齐方向、向中心靠拢），无需领袖即可形成复杂队形；3）市场——买卖双方只关心自身利益，但价格机制自发实现供需平衡。核心洞见：复杂秩序不一定需要复杂规则或中央控制。'},
-  {q:'为什么大型动物在人类到达后快速灭绝？', answer:'"人类到达→大型动物灭绝"模式在全球反复出现：1）大型动物繁殖率低，种群恢复慢——即使少量猎杀也能导致种群崩溃；2）人类是超级掠食者——用工具、协作、火驱赶等手段效率远超其他掠食者；3）大型动物没有与人类共演化的经验——缺乏对智人的恐惧和逃避本能；4）岛屿和大陆边缘效应——如新西兰恐鸟在被毛利人到达后200年即灭绝，因为有限栖息地没有缓冲空间。'},
-  {q:'数学证明为什么被称为"社会契约"？', answer:'这不是否定数学真理的客观性，而是指出：1）数学证明的"有效性"依赖数学共同体对推理规则的共识——不同历史时期对"什么是证明"的理解不同；2）证明最终是被一群人阅读、检查、讨论、达成共识的过程——极端复杂的证明（如ABC猜想的望月证明）长期未被广泛接受，正说明"证明"的社会建构性质；3）这反映了人类知识的普遍特征：即使是"最客观"的数学也离不开人类共识的载体。'},
-  {q:'趋同演化说明了什么？', answer:'趋同演化的重要洞见：1）演化不是完全随机的——相似的选择压力会导致相似的结构，无论演化起点如何不同；2）物理和生态规律限制了"可行的解决方案"空间——眼睛至少有40次独立起源，相机型结构至少有5次以上独立演化；3）这暗示如果地球生命重新演化一次，很多"设计"可能会再次出现——让外星生命中"类人智慧"的可能性比随机概率更高；4）但不能过度延伸——趋同是统计趋势而非铁律，许多性状只演化了一次。'},
-  {q:'第一性原理有什么局限性？', answer:'主要局限：1）你怎么确定自己到达了真正的"第一性"？牛顿力学在极高速和极微小尺度上是错的——对"基本事实"的理解本身就是有层次和深度的；2）实际决策往往无法等待"从零推导"——大多数情况下类比思维（经验）才是高效的；3）过度使用"第一性原理"的人常低估制度、文化、社会等"非物理"因素的复杂性——这些领域没有像物理学那样清晰的基本定律；4）可能会陷入"重新发明轮子"的低效陷阱。'},
-  {q:'汉语拼音的演化反映了什么？', answer:'汉语拼音是文化演化的微观标本：1）从威妥玛拼音到注音符号到汉语拼音——每一次变化都承载着技术需求（打字机→计算机输入法）、国际标准竞争（ISO7098）、文化权力（民国vs新中国）；2）拼音不是"中性工具"——它塑造了我们对中文语音的感知方式（如声母韵母的划分）；3）至今台湾仍用注音符号、海外华人有不同转写系统——这反映了政治身份如何影响最基础的符号选择；4）语言演化与生物演化有深层相似——变异+选择+传播+固化，但文化演化的速度远超生物演化。'},
-  {q:'人类对地球的"全面改造"体现在哪些方面？', answer:'六大领域：1）地表覆盖——城市和农田已占陆地面积40%以上；2）大气成分——CO2浓度从280ppm升至420+ppm，甲烷翻倍；3）物种分布——第六次大灭绝正在进行，灭绝速度是背景水平的100倍以上；4）水循环——大型水坝改变流域泥沙输送，地下水抽取导致地面沉降；5）地球化学——人类固氮量超过自然固氮总量，塑料微粒在海洋和土壤中遍及全球；6）"技术化石"——混凝土、塑料、铝制品、核沉降物将在百万年地层中留下明确标记。'}
-];
-
-// ===== 渲染 MCQ =====
-function renderMCQ(questions){
-  var container = document.getElementById('quizContainer');
-  var html = '<h3>选择题（共 '+questions.length+' 题）</h3>';
-  questions.forEach(function(item, i){
-    html += '<div class="quiz-item" id="mcq-'+i+'">';
-    html += '<h4>'+(i+1)+'. '+item.q+'</h4>';
-    item.opts.forEach(function(opt, j){
-      html += '<label><input type="radio" name="mcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
-    });
-    html += '<button style="margin-top:6px;padding:4px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--accent-light);color:var(--accent-dark)" data-mcq-idx="'+i+'" data-mcq-ans="'+item.ans+'" data-mcq-explain="'+item.explain.replace(/"/g,'&quot;')+'">核对</button>';
-    html += '<div class="quiz-feedback" id="fb-'+i+'"></div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('button[data-mcq-idx]').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var idx = parseInt(this.dataset.mcqIdx);
-      var ans = parseInt(this.dataset.mcqAns);
-      var explain = this.dataset.mcqExplain;
-      var radios = document.getElementsByName('mcq'+idx);
-      var fb = document.getElementById('fb-'+idx);
-      var selected = -1;
-      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
-      if(selected===-1){fb.textContent='请先选择一个选项';fb.className='quiz-feedback wrong';return;}
-      if(selected===ans){
-        fb.innerHTML='✅ 正确！'+explain;
-        fb.className='quiz-feedback correct';
-      }else{
-        fb.innerHTML='❌ 错误。正确答案是 '+String.fromCharCode(65+ans)+'。'+explain;
-        fb.className='quiz-feedback wrong';
+        ctx.beginPath();
+        ctx.moveTo(x2, yPos);
+        ctx.lineTo(nx2, nextY);
+        ctx.strokeStyle = `rgba(255,107,157,${alpha * 0.5})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
       }
-      quizAnswered++;
-      document.getElementById('quizDone').textContent = quizAnswered;
-    });
-  });
-}
-
-// ===== 渲染简答题 =====
-function renderSA(questions){
-  var container = document.getElementById('quizContainer');
-  var html = '<h3 style="margin-top:30px">简答题（共 '+questions.length+' 题）</h3>';
-  questions.forEach(function(item, i){
-    html += '<div class="sa-item">';
-    html += '<h4>'+(i+1)+'. '+item.q+'</h4>';
-    html += '<textarea placeholder="在此输入你的回答..."></textarea>';
-    html += '<button class="sa-show-btn" style="padding:6px 12px;border:1px solid var(--accent);border-radius:6px;cursor:pointer;background:#fff;color:var(--accent-dark)">显示参考答案</button>';
-    html += '<div class="show-answer"><strong>参考答案：</strong>'+item.answer+'</div>';
-    html += '</div>';
-  });
-  container.innerHTML += html;
-  container.querySelectorAll('.sa-show-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var ansDiv = this.nextElementSibling;
-      ansDiv.style.display = ansDiv.style.display==='block'?'none':'block';
-    });
-  });
-}
-
-// ===== 随机抽题 =====
-document.getElementById('startQuizBtn').addEventListener('click', function(){
-  var shuffledM = mcqBank.slice().sort(function(){return Math.random()-.5});
-  var shuffledS = saBank.slice().sort(function(){return Math.random()-.5});
-  var mcqs = shuffledM.slice(0, 10);
-  var sas = shuffledS.slice(0, 3);
-  document.getElementById('quizContainer').innerHTML = '';
-  renderMCQ(mcqs);
-  renderSA(sas);
-  window._currentMcqs = mcqs;
-  window._currentSas = sas;
-});
-
-document.getElementById('resetQuiz').addEventListener('click', function(){
-  document.getElementById('quizContainer').innerHTML = '';
-});
-
-// ===== 考试模式 =====
-document.getElementById('startExam').addEventListener('click', function(){
-  var allMCQ = mcqBank.slice().sort(function(){return Math.random()-.5}).slice(0, 10);
-  var allSA = saBank.slice().sort(function(){return Math.random()-.5}).slice(0, 2);
-  var container = document.getElementById('examContainer');
-  var html = '<h3>MCQ 部分（10 题）</h3>';
-  allMCQ.forEach(function(item, i){
-    html += '<div class="quiz-item"><h4>'+(i+1)+'. '+item.q+'</h4>';
-    item.opts.forEach(function(opt, j){
-      html += '<label><input type="radio" name="exmcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
-    });
-    html += '</div>';
-  });
-  html += '<h3>简答部分（2 题）</h3>';
-  allSA.forEach(function(item, i){
-    html += '<div class="sa-item"><h4>'+(10+i+1)+'. '+item.q+'</h4>';
-    html += '<textarea placeholder="在此输入你的回答..." style="min-height:100px"></textarea></div>';
-  });
-  container.innerHTML = html;
-  examSeconds = 900;
-  updateExamTimer();
-  if(examInterval) clearInterval(examInterval);
-  examInterval = setInterval(function(){
-    examSeconds--;
-    updateExamTimer();
-    if(examSeconds<=0){clearInterval(examInterval);alert('时间到！请提交答卷。');}
-  },1000);
-  window._examMcqs = allMCQ;
-  window._examSas = allSA;
-});
-
-function updateExamTimer(){
-  var m = Math.floor(examSeconds/60);
-  var s = examSeconds%60;
-  document.getElementById('examTimer').textContent = (m<10?'0'+m:m)+':'+(s<10?'0'+s:s);
-}
-
-document.getElementById('submitExam').addEventListener('click', function(){
-  clearInterval(examInterval);
-  var correct = 0;
-  var mcqs = window._examMcqs || [];
-  for(var i=0;i<mcqs.length;i++){
-    var radios = document.getElementsByName('exmcq'+i);
-    if(radios.length===0) continue;
-    for(var j=0;j<radios.length;j++){
-      if(radios[j].checked && parseInt(radios[j].value)===mcqs[i].ans) correct++;
     }
+
+    // Occasional glow
+    if (i % 8 === Math.floor(time * 3) % 8) {
+      ctx.beginPath();
+      ctx.arc(x1, yPos, 10, 0, Math.PI * 2);
+      const glow = ctx.createRadialGradient(x1, yPos, 2, x1, yPos, 10);
+      glow.addColorStop(0, 'rgba(0,212,255,0.25)');
+      glow.addColorStop(1, 'rgba(0,212,255,0)');
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+  });
+
+  // Floating particles
+  for (let p = 0; p < 18; p++) {
+    const px = (Math.sin(time * 0.7 + p * 2.1) * 0.5 + 0.5) * w;
+    const py = ((time * 35 + p * 250 + scrollY * 0.2) % (h + 100)) - 50;
+    ctx.beginPath();
+    ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,255,136,${0.08 + Math.sin(time + p) * 0.04})`;
+    ctx.fill();
   }
-  var pct = Math.round(correct/mcqs.length*100);
-  document.getElementById('examScore').innerHTML = 'MCQ 得分：'+correct+'/'+mcqs.length+'（'+pct+'%）| 简答题需手动评分';
+
+  requestAnimationFrame(drawDNA);
+}
+drawDNA();
+
+// ═══════════════════════════════════════
+// SCROLL PROGRESS BAR
+// ═══════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
 });
 
-document.getElementById('resetExam').addEventListener('click', function(){
-  clearInterval(examInterval);
-  document.getElementById('examContainer').innerHTML = '';
-  document.getElementById('examScore').textContent = '';
-  document.getElementById('examTimer').textContent = '15:00';
-});
-
-// ===== 复习模式 =====
-document.getElementById('startReview').addEventListener('click', function(){
-  var list = document.getElementById('reviewList');
-  var items = concepts.map(function(c){return c.name+' — 复习要点：定义+类比+边界'});
-  var html = '';
-  items.forEach(function(item, i){
-    html += '<li id="rev-'+i+'" class="review-item-click">'+(i+1)+'. '+item+'</li>';
-  });
-  list.innerHTML = html;
-  list.querySelectorAll('.review-item-click').forEach(function(li){
-    li.addEventListener('click',function(){
-      this.classList.toggle('reviewed');
-    });
-  });
-});
-
-document.getElementById('resetReview').addEventListener('click', function(){
-  document.getElementById('reviewList').innerHTML = '';
-});
-
-// ===== 深度追问 =====
-var deepQuestions = [
-  {q:'从尼安德特人的灭绝看智人成功的真正原因是什么？', a:'尼安德特人灭绝不是因为"落后"——他们有更大脑容量（1600cc vs 1350cc）、有墓葬仪式、会制作工具。智人胜出的关键可能不是个体智能，而是<strong>社交网络规模</strong>和<strong>文化累积能力</strong>。现代狩猎采集者的研究显示：人类群体规模越大、社交网络越广，技术创新越快。尼人的小型孤立群体可能无法维持足够的"集体大脑"——当一个人发明了改进的打火石技术，如果群体太小，这个创新可能在他死后就丢失了。智人依靠大型社交网络使得创新能在代际间跨群体传播和改良——这就是"文化棘轮效应"。换句话说，智人是个体不更聪明但<strong>集体更聪明</strong>的物种。'},
-  {q:'战争是人类的本能还是文明的产物？', a:'两者都不完全是——战争是<strong>有生物学基础但可被文化调节</strong>的行为。黑猩猩的"突袭战"（多只雄性围杀隔壁群体落单者）证明有组织暴力至少有600万年演化史。但人类的战争行为远比黑猩猩复杂——部落战争、王国征服、世界大战，这些需要只有人类才有的语言、符号系统、大型协作才能实现。值得注意的趋势是：人类历史上暴力死亡率总体上在降低——这恰恰证明"文化可以超越本能"。法律体系、贸易网络、外交制度、人道主义规范都是人类用文化"驯化"暴力本能的证据。'},
-  {q:'秩序涌现机制如何帮助我们理解AI的发展？', a:'涌现原理对AI发展有深刻启示：1）LLM大语言模型的能力本身就是涌现——GPT-4的推理能力从未被明确编程，而是从海量数据+Transformer架构+足够参数规模中自发涌现的；2）多智能体系统——类似的简单规则大量交互可能产生复杂AI行为，如群体无人机的自组织编队；3）AI安全——涌现的不可预测性既是AI能力的来源也是风险的来源。我们无法通过审查代码来预测大型AI的行为，就像无法通过审查4条规则预测滑翔机会出现。因此AI安全研究必须关注系统层面的涌现属性而非单纯的规则安全。4）未来的AGI可能不是被"设计"出来的，而是从足够复杂的系统中<strong>涌现</strong>出来的——这改变了对AGI何时到来的预测框架。'},
-  {q:'人类演化中的"脑残设计"给医学研究什么启示？', a:'演化"修补匠"身份给医学深远的启示：1）很多疾病不是"故障"而是"设计缺陷的后果"——如盲点来自视网膜血管位置、腰痛来自脊柱改造不适合完全直立、阑尾容易发炎因为它是退化器官的残余。这些不是疾病而是演化历史的遗留。2）修复"设计缺陷"可能比治疗"故障"更根本——如基因编辑未来可能将视网膜血管移到感光细胞后方（像章鱼那样）。3）但修改演化设计也有风险——某些"缺陷"可能承担我们不知道的功能（阑尾储存肠道菌群、智齿曾支撑粗糙食物研磨）。4）最深刻的启示：<strong>人体不是为长寿设计的，而是为繁殖成功设计的</strong>——大多数老年疾病发生在繁殖年龄之后，演化"不在乎"这些。医学本质上是在与演化的"设计意图"对抗。'}
+// ═══════════════════════════════════════
+// ARTICLE DATA
+// ═══════════════════════════════════════
+const articlesData = [
+  {"title":"011 | 随机控制：绝望中的办法","excerpt":"当我们面对一个完全陌生的问题，现存理论里没有一个可供参考的。这个时候，盘点所有可能性，把尚未尝试的组合都去试试——从控制论的角度讲，这就是「随机控制」。米勒-尤里实验正是用这种方法探索了生命起源：模拟30多亿年前地球环境，一周后氨基酸、糖类和脂类竟然出现了。","sort_order":59,"course_name":"科技参考基础版"},
+  {"title":"020 | 问答：新能源什么时候会成为主流？","excerpt":"全球能源消耗中化石能源占85%。煤炭从占比5%到50%用了60年，石油用了60年才到40%，天然气90年只到23%。能源更替速度越来越慢，新能源在你有生之年最多在少数国家占比过半，核聚变成为主流很可能是2220年以后的事了。","sort_order":262,"course_name":"科技参考基础版"},
+  {"title":"086 | 问答：怎样筛选出好药？","excerpt":"从神农尝百草到现代药物筛选，人类寻找有效药物的方法经历了从随机控制到理性设计的演化。当今医学界已经可以精确合成药物分子并理解其作用机制，但药物研发的底层逻辑——在无数可能性中筛选有效答案——始终未变。","sort_order":274,"course_name":"科技参考基础版"},
+  {"title":"091 | 人口4：如何对抗巨大的风险？","excerpt":"从典型的亚洲国家到典型的美洲国家，生育率呈现出深刻的悖论：高生育率往往伴随着低入学率、高文盲率、高贫困率；低生育率则意味着族群的慢性灭绝。欧美发达国家通过引入移民对抗这一风险——人类迁徙从未停止，只是换了形式。","sort_order":207,"course_name":"科技参考基础版"},
+  {"title":"092 | 问答：母爱是有条件的，父爱呢？","excerpt":"「25号宇宙」老鼠实验揭示了一个惊人的现象：当所有生存需求都被满足后，种群反而走向崩溃。行为沉沦——母鼠抛弃幼崽、雄鼠丧失社交能力——在人类社会是否也有回响？这关系到演化塑造的社会行为与现代社会环境的错配。","sort_order":275,"course_name":"科技参考基础版"},
+  {"title":"095 | 疫情中演化出的作弊工具","excerpt":"新冠疫情下学生作弊手段的演化是一个活生生的微型演化案例。从微信群共享答案到专业代考服务，作弊策略在环境压力下快速「演化」，正如病毒在自然选择压力下不断变异——演化不只在远古，它每时每刻都在发生。","sort_order":37,"course_name":"科技参考基础版"},
+  {"title":"101 | 特斯拉新型电池：究竟提升在哪儿？","excerpt":"特斯拉4680电池代表了储能技术的重大进步。从能量密度到成本结构，电池技术的演化轨迹与生物演化有着惊人的相似之处——渐进改良、关键突破、适者生存。人类文明的能源基础正在经历达尔文式竞争。","sort_order":141,"course_name":"科技参考基础版"},
+  {"title":"103 | 正确保健：关于葡萄籽、诺丽果、小稀藤茶的问答","excerpt":"在动物实验中葡萄籽提取物确实有抗氧化、减少自由基损伤的效果，但人体临床证据严重不足。保健品市场暴露出人类认知的一个演化缺陷——我们的大脑并未进化出甄别现代营销话术的能力，古老的「稀缺性」和「自然=好」的直觉常被利用。","sort_order":179,"course_name":"科技参考基础版"},
+  {"title":"104 | 科技产品：关于电动牙刷、电子烟、护眼灯和洁面仪的问答","excerpt":"电子烟是目前效果最好的戒烟方法之一——比吃戒烟糖、贴戒烟贴效果都好。尼古丁虽然高度致瘾但本身不是致癌物，燃烧产生的焦油才是。这一发现挑战了「烟草=坏」的直觉判断，揭示了演化赋予我们的直觉在科技时代的局限性。","sort_order":218,"course_name":"科技参考基础版"},
+  {"title":"106 | 科学养育：关于备孕、哺乳期忌口和爱情婚姻的问答","excerpt":"科学备孕涉及遗传学、营养学和发育生物学的交叉知识。从叶酸补充到基因筛查，现代人类正以前所未有的方式主动干预自身的繁殖过程——这在演化史上是完全新颖的现象，人类已经成为自己演化的设计师。","sort_order":277,"course_name":"科技参考基础版"},
+  {"title":"120 | 微塑料：每年吃进5.5万颗，意味着什么？","excerpt":"因为吃海鲜每人每年可能摄入5.5万颗微塑料。这一数据来自2020年底发表在《环境健康展望》上的综述性研究。微塑料已遍布全球海洋，人类活动对地球的改造已经深入到微观尺度——这是文明对环境施加的全新选择压力。","sort_order":182,"course_name":"科技参考基础版"},
+  {"title":"121 | 棕色脂肪：那些健康的脂肪","excerpt":"俄罗斯的「战斗民族」妈妈们抱着婴儿在雪地里做运动——这背后是现代科学对棕色脂肪的认识。棕色脂肪能够燃烧热量产热，帮助婴儿和冬眠动物抵御寒冷。人类对环境温度的适应机制深深刻在脂肪细胞的演化历史中。","sort_order":183,"course_name":"科技参考基础版"},
+  {"title":"126 | 飞行汽车 ≈ 不靠谱","excerpt":"各大车企纷纷推出飞行汽车概念——优步、吉利、小鹏、通用、空客、波音都在布局。但飞行汽车面临的安全认证、空中管制、能源效率等问题远比想象的复杂。技术梦想与物理现实的博弈，本质上也是人类认知边界的体现。","sort_order":163,"course_name":"科技参考基础版"},
+  {"title":"135 | 问答：养宠物的好处和坏处","excerpt":"宠物与人类的关系触及演化生物学的核心问题：共生。一万多年前狼被驯化为狗，开启了人类与动物最深刻的跨物种合作。现代科学研究证实，养宠物确实能降低压力激素水平——这段演化伙伴关系至今塑造着我们的生理状态。","sort_order":283,"course_name":"科技参考基础版"},
+  {"title":"140 | 爆发与传播4：跳出网络外","excerpt":"让新闻成为热点传播出去，和阻止病毒扩散高度类似——核心参数都是R值。信息传播与传染病学的数学模型惊人地一致。语言——这个人类演化史上最独特的发明——在社会网络中的传播方式，遵循着我们基因中最古老的扩散模式。","sort_order":69,"course_name":"科技参考基础版"},
+  {"title":"162 | 新冠：被忽视的动物感染","excerpt":"病毒如果在人类群体中暂时消失但能感染动物，就可能再次回到人类世界。天花是仅感染人类的罕见例外。病毒学家一直在测试家畜和野生动物感染新冠的情况——跨物种传播是病毒演化的重要机制，也是理解人类与病原体共同演化的关键窗口。","sort_order":247,"course_name":"科技参考基础版"},
+  {"title":"186 | 改造：10亿只转基因蚊子飞出去了","excerpt":"美国一家生物公司释放10亿只转基因雄性蚊子，它们与雌蚊交配后只产雄性后代，从而大面积杀灭蚊子。基因驱动技术代表了人类主动干预生态演化前所未有的能力——同时也引发了深刻的伦理和安全担忧。","sort_order":13,"course_name":"科技参考基础版"},
+  {"title":"194 | 变化：传统计算机的衰落","excerpt":"MIT科学家尼尔·汤普森发表《作为通用技术的计算机的衰落》，预测数字经济发展趋势。摩尔定律的减速与演化生物学中的「趋同演化」有深刻类比——技术的发展轨迹并非无限加速，而是受制于物理定律的终极约束。","sort_order":17,"course_name":"科技参考基础版"},
+  {"title":"195 | 问答：宁德时代即将发布的钠电池，前景如何？","excerpt":"USB Type-C v2.1标准将供电规格提升至48V/5A，高达240W。从USB接口的演化可以看到技术标准如何在兼容性与创新之间取得平衡——技术演化同样遵循「路径依赖」原则，早期选择锁定了长期发展方向。","sort_order":294,"course_name":"科技参考基础版"},
+  {"title":"196 | 三系法：杂交水稻是怎么杂交的？","excerpt":"袁隆平的杂交水稻利用了植物界的杂种优势现象。三系法——不育系、保持系、恢复系——的精妙设计实现了大规模杂交制种。从孟德尔的豌豆到袁隆平的水稻，基因重组原理的应用是人类对生命密码最成功的操控之一。","sort_order":187,"course_name":"科技参考基础版"},
+  {"title":"198 | 幸福感：婚姻中的科学研究","excerpt":"科学研究表明基因对婚姻幸福感有显著影响——5-HTTLPR基因的短等位基因携带者婚姻满意度较低。这揭示了一个深刻事实：我们以为「自由选择」的婚姻质量，部分已在基因层面被预设。尼安德特人留给我们的基因遗产也包含情绪调节相关的变异。","sort_order":211,"course_name":"科技参考基础版"},
+  {"title":"199 | 生物学研究：做男人注定要吃亏","excerpt":"中国女性平均寿命77.37岁，男性72.38岁，相差整整5年。全球各国男女性预期寿命的差值普遍存在，深层原因藏在性染色体的不对称中——男性只有一个X染色体，隐性致病基因缺乏备份。雄性在生物学上就是「更弱」的性别。","sort_order":212,"course_name":"科技参考基础版"},
+  {"title":"202 | 新冠：两个好消息和一个坏消息","excerpt":"五月末全球新冠疫情反弹，日本病例暴发，印度死亡数字维持高峰。病毒的持续变异展示了一个实时演化过程——我们正在亲眼见证自然选择如何在一个RNA病毒的基因组中运作，每一次突变都是一次演化实验。","sort_order":251,"course_name":"科技参考基础版"},
+  {"title":"217 | 遗传算法：怎么把马赛克变成性感图片？","excerpt":"超过一百万日本人参与的游戏展示了遗传算法的力量——通过「选择→变异→遗传」的迭代，马赛克图像逐步演化为清晰画面。这正是自然演化机制的数学模型：变异产生多样性，选择保留优势，遗传确保积累。演化是一个算法，而DNA就是它的存储介质。","sort_order":78,"course_name":"科技参考基础版"},
+  {"title":"250 | 泡水车：暴雨后的大坑","excerpt":"河南特大暴雨后泡水车问题复杂——现代汽车电子系统被水浸泡后隐患深远。泡水车的技术损伤折射出人类技术文明面对自然力量的脆弱性——文明永远在与环境的力量博弈，正如演化史上的每一次大灭绝和每一次适应性辐射。","sort_order":225,"course_name":"科技参考基础版"},
+  {"title":"256 | 科学式训练：苏炳添为什么能跑9秒83？","excerpt":"苏炳添以9秒83晋级奥运会百米决赛，创亚洲历史。32岁的「高龄」选手取得突破，背后是科学化训练方法——精确到毫秒的起跑分析、个性化的肌肉训练方案。人体极限的突破展示了人类生物学潜能与科技方法结合的巨大空间。","sort_order":51,"course_name":"科技参考基础版"},
+  {"title":"259 | 实证：老生常谈的口罩问题","excerpt":"科学家如何高质量证明「口罩对预防新冠病毒有用」？通过大规模随机对照试验——但这在伦理学上不可行。最终通过自然实验和观察研究积累了证据。这个案例展示了在现实约束下科学认知的演化路径——科学方法本身也在「演化」。","sort_order":229,"course_name":"科技参考基础版"},
+  {"title":"275 | 骗局：中老年养生保健微信群","excerpt":"老年人被医疗保健产品传销坑害是一个被普遍忽视的问题。从演化心理学角度看，老年人对健康威胁的敏感性、对权威的信任倾向、社交网络的封闭性——这些特征在过去环境中是适应性的，但在现代市场中成为被利用的漏洞。","sort_order":233,"course_name":"科技参考基础版"},
+  {"title":"286 | 新突破：迷你大脑与近似永生","excerpt":"德国杜塞尔多夫大学团队用人工方式培养出带有视觉功能的迷你大脑——这是类器官研究的重大突破。迷你大脑不仅是研究神经发育和疾病的平台，更触及意识起源和「永生」的终极问题：如果意识可以被培养和保存，生命的边界在哪里？","sort_order":26,"course_name":"科技参考基础版"},
+  {"title":"296 | 辟谣：关于视力的各种误区","excerpt":"中国是全球近视发病率最高的国家。视力问题涉及眼球发育生物学、神经可塑性和环境因素的复杂交互。近视率的飙升本身就是一个人类生物学与环境快速变化失配的典型案例——我们的眼睛是为草原和森林而演化的，不是为书本和屏幕。","sort_order":234,"course_name":"科技参考基础版"},
+  {"title":"298 | 脑机接口1：在疯人院地下室搞科研","excerpt":"马斯克的Neuralink让猴子用意念玩碰撞球游戏。脑机接口技术的发展代表了人类演化史上一个全新阶段——我们不再仅仅通过生物学演化来改变大脑，而是通过工程技术直接与神经系统对话。这条道路将把人类带向何方？","sort_order":82,"course_name":"科技参考基础版"},
+  {"title":"303 | 问答：「人工合成淀粉」有多牛？","excerpt":"人工合成淀粉——这个成果很可能是诺奖级的突破！它不依赖植物光合作用，直接从二氧化碳合成淀粉。这不仅是对生命核心代谢途径的复现，更是对「生命是什么」这一根本问题的实验性回答。从米勒-尤里到人工合成淀粉，人类正一步步逼近生命起源的终极秘密。","sort_order":314,"course_name":"科技参考基础版"}
 ];
 
-function renderDeepQuestions(){
-  var container = document.getElementById('deepAskContainer');
-  var html = '';
-  deepQuestions.forEach(function(item, i){
-    html += '<div class="dq-item">';
-    html += '<div class="dq-question">'+(i+1)+'. '+item.q+'</div>';
-    html += '<div class="dq-answer">'+item.a+'</div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.dq-question').forEach(function(q){
-    q.addEventListener('click',function(){
-      var ans = this.nextElementSibling;
-      ans.style.display = ans.style.display==='block'?'none':'block';
-    });
-  });
-}
-
-// ===== 案例分析 =====
-var cases = [
-  {title:'案例 1：贝多芬DNA研究揭示的人类学新图景', meta:'涉及概念：基因追踪(STR)、自然选择、跨学科整合', content:'2023年，科学家从贝多芬的8缕头发中提取DNA进行分析，最初是为了解释他晚年的耳聋和肝脏疾病。研究不仅揭示了贝多芬的健康状况，更意外地重构了人类学图景。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>基因比对：</strong>将贝多芬的Y染色体与现代贝多芬家族男性后代比对，发现不相匹配——这意味着贝多芬家族在1570-1790年之间某个时点曾发生"非父事件"（孩子的生父不是法律上的父亲）。</li><li><strong>历史-DNA交叉验证：</strong>这一发现推动了对欧洲父系谱系的大规模重新审视——类似事件在历史上的频率远比传统记录高得多。</li><li><strong>人类学洞见：</strong>"非父事件"在人类社会中每代约有1-2%的发生率。DNA证据比文字记录更可靠地揭示了真实的人类交配和社会结构——文字记录反映"应当"，DNA记录反映"实际"。</li><li><strong>边界条件：</strong>DNA检测仍有局限——污染、样本降解、STR突变率的不确定性都需要审慎对待。单一样本不能过度推广。</li><li><strong>结论：</strong>DNA分析正在重写人类历史叙事——从追溯贝多芬家族秘密到揭示整个人类社会的交配结构，基因科学正在提供比任何文字记录都更基础的人类学证据。</li></ol>'},
-  {title:'案例 2：姜萍事件中的证据分析与批判性思维', meta:'涉及概念：科学方法、认知偏见、信息甄别', content:'2024年6月，17岁的中专生姜萍在全球数学竞赛预赛中获得第12名，引发巨大关注。随后关于其成绩真实性的质疑出现。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>分解初始证据：</strong>仅凭"中专生+女生+自学"的组合让人惊叹——但这恰恰触发了认知偏见：用身份标签而非数学证据来判断可能性。</li><li><strong>查证链条：</strong>流传的"板书照片"与竞赛答题有何关联？板书由谁书写？竞赛是线上进行还是线下？有独立监考或视频记录吗？</li><li><strong>分清"希望是真的"和"证据支持是真的"：</strong>大众希望这个故事是真的——因为它太激励人心了。但这种"希望"恰好是认知偏见的种子——我们倾向于相信让自己感觉良好的故事。</li><li><strong>应用"等待证据"原则：</strong>真正证据不足时，最理性的态度不是"相信"也不是"不信"，而是"我不知道，等待更多信息"——这种不确定性的容忍正是科学思维与日常思维的根本区别之一。</li><li><strong>结论：</strong>无论最终结果如何，这个案例完美展示了信息时代最稀缺的能力：在对真相没有充分了解的阶段，保持"判断悬置"——不被情绪裹挟而草率站队。</li></ol>'}
+// ═══════════════════════════════════════
+// THEME CONFIGURATIONS
+// ═══════════════════════════════════════
+const themes = [
+  {
+    id: 'prion',
+    name: '朊粒与生命边界',
+    time: '~40亿年前 → 生命的起源',
+    icon: '🦠',
+    color: '#a855f7',
+    description: '什么是生命？朊粒——仅由错误折叠的蛋白质构成，不含任何核酸——却能自我复制并引发致命疾病。它挑战了我们对「生命」的最基本定义。从米勒-尤里实验到人工合成淀粉，人类正在用实验一步步逼近这个终极问题的答案。',
+    themeClass: 'theme-prion',
+    articleIndices: [0, 23, 31]
+  },
+  {
+    id: 'virus',
+    name: '远古病毒与人类基因组',
+    time: '~数百万–数千万年前',
+    icon: '🧫',
+    color: '#ff4560',
+    description: '人类基因组的8%来自远古逆转录病毒。这些分子化石曾是感染我们祖先的病原体，如今却被「驯化」为人体功能的一部分——有些甚至参与了胎盘的形成。病毒不是生命的敌人，而是演化史上最意想不到的合作者。',
+    themeClass: 'theme-virus',
+    articleIndices: [5, 15, 16, 22, 26]
+  },
+  {
+    id: 'chimera',
+    name: '嵌合体与基因重组',
+    time: '~数十亿年 · 持续至今',
+    icon: '🧬',
+    color: '#ffb347',
+    description: '杂交水稻、转基因生物、遗传算法——人类不仅是被演化塑造的产物，也已成为主动设计基因的力量。从孟德尔的豌豆到袁隆平的水稻，基因重组的故事贯穿了生命演化的全部历史。',
+    themeClass: 'theme-chimera',
+    articleIndices: [19, 17, 24]
+  },
+  {
+    id: 'migration',
+    name: '人类迁徙的基因证据',
+    time: '~30万年前 → 1万年前',
+    icon: '🗺️',
+    color: '#60a5fa',
+    description: '走出非洲、跨越大陆——我们的祖先在地球上扩散的路径，清晰地记录在Y染色体和线粒体DNA中。每一代人的迁徙都在基因组中留下了可追溯的印记，让我们得以像阅读地图一样重建远古人类的壮丽旅程。',
+    themeClass: 'theme-migration',
+    articleIndices: [3, 4, 10]
+  },
+  {
+    id: 'neanderthal',
+    name: '尼安德特人基因遗产',
+    time: '~5万年前 · 智人与尼安德特人交汇',
+    icon: '🪨',
+    color: '#fb923c',
+    description: '除非洲裔人群外的现代人类基因组中携带1.5%–2%的尼安德特人DNA。这些远古基因影响了我们的免疫力、皮肤色素沉着、Ⅱ型糖尿病风险，甚至抑郁倾向。在你的血管里，流淌着一个早已消失的人类物种的记忆。',
+    themeClass: 'theme-neanderthal',
+    articleIndices: [20, 21, 25, 28]
+  },
+  {
+    id: 'brain',
+    name: '大脑演化与意识起源',
+    time: '~5亿年前 → 至今',
+    icon: '🧠',
+    color: '#00d4ff',
+    description: '从神经索到大脑皮层，从条件反射到自我意识——大脑的演化是生命史上最壮丽的篇章。迷你大脑培养、脑机接口技术……我们不仅在追溯意识的过去，也在主动设计它的未来。',
+    themeClass: 'theme-brain',
+    articleIndices: [27, 29, 30]
+  },
+  {
+    id: 'language',
+    name: '语言与符号的起源',
+    time: '~10万年前 → 5千年前',
+    icon: '📜',
+    color: '#34d399',
+    description: '语言是人类演化史上最独特的发明——它让信息跨代传递，让文化积累以指数级加速。从FOXP2基因到信息传播的流行病学模型，语言的秘密既藏在DNA的编码区中，也藏在我们构建的社会网络里。',
+    themeClass: 'theme-language',
+    articleIndices: [14, 2, 1]
+  },
+  {
+    id: 'civilization',
+    name: '文明的生物学基础',
+    time: '~1万年前 → 现代',
+    icon: '🏛️',
+    color: '#fbbf24',
+    description: '农业革命、城市兴起、科技飞跃——文明的每一步都建立在人类生物学特性之上。从棕色脂肪对寒冷适应的演化，到婚姻制度背后的神经化学机制，生物学持续塑造着我们的社会形态。文明不是生物学的对立面，而是它的延伸。',
+    themeClass: 'theme-civilization',
+    articleIndices: [6, 7, 8, 9, 11, 12, 13]
+  }
 ];
 
-function renderCases(){
-  var container = document.getElementById('caseContainer');
-  var html = '';
-  cases.forEach(function(c){
-    html += '<div class="case-card">';
-    html += '<div class="case-title">'+c.title+'</div>';
-    html += '<div class="case-meta">'+c.meta+'</div>';
-    html += '<p>'+c.content+'</p>';
-    html += '</div>';
+// ═══════════════════════════════════════
+// BUILD TIMELINE
+// ═══════════════════════════════════════
+const timeline = document.getElementById('timeline');
+
+// Track used articles to avoid duplication
+const usedArticles = new Set();
+
+themes.forEach((theme) => {
+  const section = document.createElement('section');
+  section.className = `era-section ${theme.themeClass}`;
+
+  section.innerHTML = `
+    <div class="era-header">
+      <div class="era-marker" style="color:${theme.color}; background:${theme.color}15; border:2px solid ${theme.color}40;">
+        ${theme.icon}
+      </div>
+      <div>
+        <div class="era-label" style="color:${theme.color}">${theme.name}</div>
+        <div class="era-time">${theme.time}</div>
+      </div>
+    </div>
+    <p style="color:var(--text-dim); margin-bottom:1.5rem; padding-left:1rem; font-size:0.9rem; max-width:700px;">${theme.description}</p>
+    <div class="articles-grid" id="grid-${theme.id}"></div>
+  `;
+
+  timeline.appendChild(section);
+
+  // Populate articles
+  const grid = section.querySelector(`#grid-${theme.id}`);
+  theme.articleIndices.forEach((ai, cardIdx) => {
+    if (ai >= articlesData.length) return;
+    // Skip duplicates
+    if (usedArticles.has(ai)) return;
+    usedArticles.add(ai);
+
+    const art = articlesData[ai];
+    const card = document.createElement('div');
+    card.className = 'article-card';
+    card.setAttribute('data-article-index', ai);
+    card.onclick = () => openArticle(ai, theme);
+    card.innerHTML = `
+      <div class="card-index">▸ 基因位点 · ${theme.icon} ${theme.name}</div>
+      <h3>${art.title}</h3>
+      <p>${art.excerpt}</p>
+      <div class="card-meta">
+        <span>${art.course_name}</span>
+        <span>#${art.sort_order}</span>
+      </div>
+    `;
+    grid.appendChild(card);
   });
-  container.innerHTML = html;
+});
+
+// Add remaining unused articles as "游离基因片段"
+const remainingSection = document.createElement('section');
+remainingSection.className = 'era-section';
+remainingSection.innerHTML = `
+  <div class="era-header">
+    <div class="era-marker" style="color:#94a3b8; background:rgba(148,163,184,0.08); border:2px solid rgba(148,163,184,0.25);">
+      🧩
+    </div>
+    <div>
+      <div class="era-label" style="color:#94a3b8;">游离基因片段</div>
+      <div class="era-time">演化拼图的补充视角</div>
+    </div>
+  </div>
+  <p style="color:var(--text-dim); margin-bottom:1.5rem; padding-left:1rem; font-size:0.9rem; max-width:700px;">这些文章从技术、经济和社会的角度，补充了人类文明进程的拼图。它们不直接讲述基因故事，却是理解「人类为什么是现在这个样子」不可或缺的视角。</p>
+  <div class="articles-grid" id="grid-extra"></div>
+`;
+timeline.appendChild(remainingSection);
+
+const extraGrid = remainingSection.querySelector('#grid-extra');
+articlesData.forEach((art, i) => {
+  if (usedArticles.has(i)) return;
+  const card = document.createElement('div');
+  card.className = 'article-card';
+  card.style.setProperty('--card-accent', '#94a3b8');
+  card.style.setProperty('--card-glow', '0 0 30px rgba(148,163,184,0.1)');
+  card.onclick = () => openArticle(i, { name: '游离基因片段', icon: '🧩', color: '#94a3b8' });
+  card.innerHTML = `
+    <div class="card-index" style="color:#94a3b8;">▸ 游离片段</div>
+    <h3>${art.title}</h3>
+    <p>${art.excerpt}</p>
+    <div class="card-meta">
+      <span>${art.course_name}</span>
+      <span>#${art.sort_order}</span>
+    </div>
+  `;
+  extraGrid.appendChild(card);
+});
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function openArticle(index, theme) {
+  const art = articlesData[index];
+  document.getElementById('modalTitle').textContent = art.title;
+  document.getElementById('modalCourse').innerHTML = `
+    <span style="color:${theme.color}">${theme.icon} ${theme.name}</span> · ${art.course_name} · 排序#${art.sort_order}
+  `;
+  document.getElementById('modalBody').innerHTML = `
+    <p style="margin-bottom:1rem; padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid ${theme.color};">
+      ${art.excerpt}
+    </p>
+    <p style="color:var(--text-dim); font-size:0.85rem; margin-top:1rem;">
+      📡 这篇文章收录于「${theme.name}」演化节点，探索塑造人类基因与文明的关键机制。
+    </p>
+  `;
+  document.getElementById('modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
-// ===== 实战决策 =====
-var decisions = [
-  {title:'场景 1：古人类学家的新化石挑战',q:'你是一名古人类学家，在亚洲发现了一批约18万年前的智人化石，比公认的"走出非洲"（约7万年前）早了10万年以上。你如何处理这个可能颠覆"非洲起源说"的发现？',opts:['立即召开发布会宣布推翻非洲起源说','严格进行多维度验证（地层测年、形态学分析、古DNA、独立第三方复检）后再发表','不发表以免引起争议','只在中国期刊发表以确保优先权'],ans:1,explain:'科学史上出现过多次"疑似推翻"现有理论的发现，但绝大多数在后续严格检验中被否定。正确的步骤：1）多方法独立测年（碳14+光释光+铀系测年三者交叉验证）；2）形态学对比分析——是智人还是其他古人类？3）如果可能提取古DNA做遗传学验证；4）邀请国际独立专家到现场复查地层；5）经同行评议后在顶尖国际期刊发表。好的科学不怕被检验，怕的是检验不充分就草率断言。'},
-  {title:'场景 2：AI对人类就业的冲击',q:'你是一家大型科技公司的决策者，AI技术正在快速进步，预计3-5年内将替代公司约30%的岗位。你如何在效率提升与员工生计之间取得平衡？',opts:['立即裁员30%以最大化利润率','制定渐进转型计划：AI工具辅助→人机协作→结构性重组，同步开展内部培训转岗','完全禁用AI技术以保护就业','外包所有岗位给更便宜的国家'],ans:1,explain:'从人类文明演化视角看：技术替代不是新现象——农业革命替代了狩猎采集（花了几千年）、工业革命替代了手工业（花了几百年）。AI革命（可能只需几十年）的独特之处在于速度。正确应对：1）不是"一刀切裁员"而是"人机协作"——AI辅助人类提高效率（每个员工都成为AI管理者）；2）同步投资员工培训——从执行者转型为AI管理者需要新技能；3）关注"被替代"岗位的社会安全网（如公司内部再就业基金）；4）认识到长期来看人类适应技术变迁的能力——历史上每一次技术革命最终创造了比消灭的更多的就业类型，但转型期的阵痛需要主动管理而非忽视。'}
-];
-
-function renderDecision(){
-  var container = document.getElementById('decisionContainer');
-  var html = '';
-  decisions.forEach(function(s, i){
-    html += '<div class="decision-scenario">';
-    html += '<h4>'+s.title+'</h4>';
-    html += '<p style="margin:10px 0;line-height:1.7">'+s.q+'</p>';
-    s.opts.forEach(function(opt, j){
-      html += '<label style="display:block;margin:6px 0;cursor:pointer;padding:8px 12px;border:1px solid var(--border);border-radius:8px"><input type="radio" name="dec'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
-    });
-    html += '<button class="dec-submit" data-idx="'+i+'" data-ans="'+s.ans+'" data-explain="'+s.explain.replace(/"/g,'&quot;')+'">提交决策</button>';
-    html += '<div class="decision-output" id="decOut-'+i+'"></div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.dec-submit').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var idx = parseInt(this.dataset.idx);
-      var ans = parseInt(this.dataset.ans);
-      var explain = this.dataset.explain;
-      var radios = document.getElementsByName('dec'+idx);
-      var out = document.getElementById('decOut-'+idx);
-      var selected = -1;
-      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
-      if(selected===-1){out.textContent='请先选择一个选项';out.style.display='block';return;}
-      if(selected===ans){
-        out.innerHTML='✅ 正确决策！<br>'+explain;
-        out.style.color='#155724';out.style.background='#d4edda';
-      }else{
-        out.innerHTML='⚠️ 可以优化。最合理的选择是 '+String.fromCharCode(65+ans)+'：<br>'+explain;
-        out.style.color='#721c24';out.style.background='#f8d7da';
-      }
-      out.style.display='block';
-    });
-  });
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
 }
 
-// ===== 思维导图 SVG =====
-function renderMindMap(){
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" class="mind-map-svg">';
-  svg += '<defs><filter id="sh"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.12"/></filter></defs>';
-  svg += '<rect width="1000" height="700" fill="#fafbfc"/>';
-  svg += '<text x="500" y="28" text-anchor="middle" font-family="Noto Sans SC" font-size="17" font-weight="700" fill="#D97706">人类演化与文明 — 思维导图</text>';
-  // Center node
-  svg += '<ellipse cx="500" cy="350" rx="90" ry="45" fill="#F59E0B" filter="url(#sh)"/><text x="500" y="344" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">人类演化</text><text x="500" y="362" text-anchor="middle" fill="#fff" font-size="11">与文明</text>';
-  // Branch nodes
-  var branches = [
-    {label:'生物演化',x:160,y:180,color:'#F59E0B',sub:[
-      {label:'自然选择',x:45,y:120},{label:'尼安德特人',x:160,y:120},{label:'趋同演化',x:275,y:120}
-    ]},
-    {label:'社会演化',x:160,y:520,color:'#3B82F6',sub:[
-      {label:'战争起源',x:45,y:580},{label:'秩序涌现',x:160,y:580},{label:'暴力消退',x:275,y:580}
-    ]},
-    {label:'知识演化',x:840,y:180,color:'#10B981',sub:[
-      {label:'数学体系',x:725,y:120},{label:'第一性原理',x:840,y:120},{label:'科学方法',x:955,y:120}
-    ]},
-    {label:'环境影响',x:840,y:520,color:'#10B981',sub:[
-      {label:'大型动物灭绝',x:725,y:580},{label:'地球限度',x:840,y:580},{label:'气候变化',x:955,y:580}
-    ]},
-    {label:'认知局限',x:500,y:620,color:'#EF4444',sub:[
-      {label:'脑残设计',x:390,y:668},{label:'基因限制',x:500,y:668},{label:'认知偏见',x:610,y:668}
-    ]}
-  ];
-  branches.forEach(function(b){
-    svg += '<ellipse cx="'+b.x+'" cy="'+b.y+'" rx="70" ry="30" fill="'+b.color+'" filter="url(#sh)"/>';
-    svg += '<text x="'+b.x+'" y="'+(b.y+4)+'" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">'+b.label+'</text>';
-    svg += '<line x1="420" y1="340" x2="'+b.x+'" y2="'+b.y+'" stroke="'+b.color+'" stroke-width="2.5" stroke-opacity="0.7"/>';
-    b.sub.forEach(function(s,i){
-      svg += '<rect x="'+(s.x-52)+'" y="'+(s.y-12)+'" width="104" height="24" rx="12" fill="'+b.color+'" opacity="0.85" filter="url(#sh)"/>';
-      svg += '<text x="'+s.x+'" y="'+(s.y+4)+'" text-anchor="middle" fill="#fff" font-size="10">'+s.label+'</text>';
-    });
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ═══════════════════════════════════════
+// INTERSECTION OBSERVER — Fade in sections
+// ═══════════════════════════════════════
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
   });
-  // Extra nodes
-  var extras = [
-    {label:'合作演化',x:45,y:500},{label:'致病微生物',x:275,y:500},
-    {label:'语言演化',x:725,y:500},{label:'汉语拼音',x:955,y:500},
-    {label:'人类改造地球',x:500,y:100}
-  ];
-  extras.forEach(function(e){
-    svg += '<rect x="'+(e.x-40)+'" y="'+(e.y-12)+'" width="80" height="24" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" opacity="0.9"/>';
-    svg += '<text x="'+e.x+'" y="'+(e.y+5)+'" text-anchor="middle" fill="#92400E" font-size="9">'+e.label+'</text>';
-  });
-  svg += '</svg>';
-  document.getElementById('mindMapContainer').innerHTML = svg;
-}
+}, { threshold: 0.08 });
 
-// ===== Toast =====
-function showToast(msg){
-  var t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(function(){t.remove()},2000);
-}
-
-// ===== Init =====
-function init(){
-  loadLearned();
-  renderCards();
-  renderDeepQuestions();
-  renderCases();
-  renderDecision();
-  renderMindMap();
-  updateCardUI();
-  updateProgress();
-}
-
-document.addEventListener('DOMContentLoaded', init);
-
-// Autosave learned cards
-window.addEventListener('beforeunload', function(){saveLearned();});
-setInterval(saveLearned, 10000);
+document.querySelectorAll('.era-section, .dna-fact').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+  observer.observe(el);
+});
 </script>
-
 </body>
 </html>

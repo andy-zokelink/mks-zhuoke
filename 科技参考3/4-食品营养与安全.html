@@ -3,1260 +3,1207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>食品营养与安全 — 科技参考3 MKS</title>
+<title>食品营养与安全 — 焦虑解码器</title>
 <style>
-:root{
-  --bg:#fafbfc; --card:#ffffff; --accent:#F59E0B; --accent-dark:#D97706;
-  --accent-light:#FEF3C7; --text:#1f2937; --text-light:#6b7280;
-  --text-lighter:#9ca3af; --border:#e5e7eb; --border-light:#f3f4f6;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.06); --shadow:0 2px 12px rgba(0,0,0,.07);
-  --shadow-lg:0 8px 30px rgba(0,0,0,.10); --radius:12px; --radius-sm:8px;
-  --transition:0.2s ease;
-  --red:#dc2626; --blue:#2563eb; --green:#059669; --purple:#7c3aed;
+/* ============================================================
+   ANXIETY DECODER — 焦虑解码器
+   食品焦虑的本质是信息不对称。
+   这个页面要教会你「如何自己判断」— 用危害×暴露量=风险的框架。
+   ============================================================ */
+
+/* ===== Foundations ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-deep: #080c14;
+  --bg-card: rgba(14,18,28,0.82);
+  --bg-card-hover: rgba(20,26,42,0.9);
+  --text: #c8c8d4;
+  --text-bright: #ece8f2;
+  --text-dim: #727290;
+  --text-subtle: #4a4a62;
+  --border: rgba(150,150,180,0.08);
+  --border-glow: rgba(150,150,180,0.14);
+  --red: #f87171;
+  --red-glow: rgba(248,113,113,0.2);
+  --orange: #fb923c;
+  --orange-glow: rgba(251,146,60,0.2);
+  --amber: #fbbf24;
+  --amber-glow: rgba(251,191,36,0.2);
+  --green: #4ade80;
+  --green-glow: rgba(74,222,128,0.2);
+  --teal: #2dd4bf;
+  --teal-glow: rgba(45,212,191,0.2);
+  --blue: #60a5fa;
+  --blue-glow: rgba(96,165,250,0.2);
+  --purple: #a78bfa;
+  --purple-glow: rgba(167,139,250,0.2);
+  --pink: #f472b6;
+  --pink-glow: rgba(244,114,182,0.2);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: 0.3s cubic-bezier(0, 0, 0.2, 1);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","Source Han Serif SC",Georgia,"SimSun",serif;line-height:1.75;min-height:100vh}
 
-/* Top Nav */
-.top-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.top-nav .home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:var(--accent);color:#fff;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:all var(--transition)}
-.top-nav .home-btn:hover{background:var(--accent-dark);color:#fff}
-.top-nav .breadcrumb{font-size:13px;color:var(--text-light)}
-
-/* Tab Nav */
-.tab-nav{position:sticky;top:48px;z-index:99;display:flex;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-dark),var(--accent));padding:0;box-shadow:0 2px 12px rgba(0,0,0,.12)}
-.tab-nav button{flex:1;min-width:70px;padding:10px 6px;border:none;background:transparent;color:rgba(255,255,255,.78);cursor:pointer;font-size:12.5px;font-weight:600;transition:all .3s;position:relative;white-space:nowrap}
-.tab-nav button:hover,.tab-nav button.active{color:#fff;background:rgba(255,255,255,.14)}
-.tab-nav button.active::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:3px;background:#fff;border-radius:2px}
-
-/* Tab Section */
-.tab-section{display:none;padding:24px 20px;max-width:1100px;margin:0 auto;animation:fadeIn .5s}
-.tab-section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-h1{font-size:clamp(1.4rem,2.8vw,2rem);color:var(--accent-dark);text-align:center;margin:16px 0 8px}
-h2{font-size:clamp(1.15rem,2vw,1.5rem);color:var(--accent-dark);border-bottom:2px solid var(--border);padding-bottom:8px;margin:20px 0 14px}
-h3{font-size:clamp(1rem,1.5vw,1.2rem);color:var(--text);margin:14px 0 8px}
-
-/* Overview */
-.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:16px 0}
-.overview-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
-.overview-card h3{color:var(--accent-dark);margin-bottom:10px}
-
-.goal-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0}
-
-.stats-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0}
-.stat-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:24px;font-size:.82rem;color:var(--text-light)}
-.stat-badge .num{font-weight:700;color:var(--accent-dark);font-size:1rem}
-
-/* Graph & Legend */
-.graph-container{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);text-align:center;overflow-x:auto}
-.graph-container svg{max-width:100%;height:auto}
-.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:12px 0;font-size:13px}
-.legend span{display:flex;align-items:center;gap:4px}
-.legend .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
-
-/* Boundary */
-.boundary-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
-.boundary-table th{background:var(--accent);color:#fff;padding:10px 12px;text-align:left}
-.boundary-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
-.boundary-table tr:nth-child(even){background:var(--accent-light)}
-
-/* Path */
-.path-steps{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
-.path-step{flex:1;min-width:120px;background:var(--card);border-radius:10px;padding:14px;text-align:center;border:2px solid var(--border);position:relative}
-.path-step.current{border-color:var(--accent);background:var(--accent-light)}
-.path-step .step-num{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:6px}
-
-/* Progress */
-.progress-bar{height:10px;background:var(--border);border-radius:5px;margin:12px 0;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:5px;transition:width .5s}
-
-/* Flip Cards */
-.flip-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin:16px 0}
-.flip-card{perspective:1000px;height:clamp(220px,40vw,280px);margin-bottom:14px}
-.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
-.flip-inner.flipped{transform:rotateY(180deg)}
-.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;padding:clamp(16px,3vw,24px)}
-.flip-front{background:var(--card);border:2px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.flip-front .concept-icon{font-size:44px;margin-bottom:8px}
-.flip-front .concept-name{font-size:18px;font-weight:700;color:var(--accent-dark)}
-.flip-front .concept-hint{font-size:12.5px;color:var(--text-lighter);margin-top:6px}
-.flip-back{background:var(--card);border:2px solid var(--accent);transform:rotateY(180deg);overflow-y:auto;font-size:13.5px;line-height:1.7}
-.flip-back h4{color:var(--accent-dark);font-size:15px;margin-bottom:6px}
-.flip-back .label{display:inline-block;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:3px;margin-right:4px;font-weight:600}
-
-.card-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap}
-.card-nav button{padding:6px 16px;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s;font-size:13px}
-.card-nav button:hover{background:var(--accent);color:#fff}
-.card-nav .card-idx{font-size:13px;color:var(--text-light);min-width:50px;text-align:center}
-
-.card-learned{opacity:.5;border-color:#ccc!important}
-.card-learned .flip-front{border-color:#ccc}
-
-/* Quiz */
-.quiz-controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
-.quiz-controls button{padding:8px 18px;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s;font-size:13px}
-.quiz-controls button:hover{background:var(--accent);color:#fff}
-
-.quiz-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
-.quiz-item h4{color:var(--accent-dark);margin-bottom:10px}
-.quiz-item label{display:block;padding:8px 12px;margin:4px 0;border-radius:6px;cursor:pointer;transition:background .2s}
-.quiz-item label:hover{background:var(--accent-light)}
-.quiz-item input[type="radio"]{margin-right:8px}
-
-.quiz-feedback{margin-top:10px;padding:10px;border-radius:6px;font-weight:600;display:none}
-.quiz-feedback.correct{background:#d4edda;color:#155724;display:block}
-.quiz-feedback.wrong{background:#f8d7da;color:#721c24;display:block}
-
-.sa-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--border)}
-.sa-item textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:6px;padding:10px;font-family:inherit;resize:vertical;margin:8px 0}
-.sa-item .show-answer{background:var(--accent-light);padding:10px;border-radius:6px;margin-top:8px;display:none;font-size:13px}
-
-.static-quiz{display:none}
-
-/* Exam */
-.exam-timer{font-size:24px;font-weight:700;color:var(--accent-dark);text-align:center;margin:16px 0}
-.exam-score{font-size:20px;font-weight:700;text-align:center;margin:12px 0}
-
-/* Review */
-.review-list{list-style:none;margin:16px 0}
-.review-list li{padding:10px 16px;margin:6px 0;background:var(--card);border-radius:8px;cursor:pointer;border:1px solid var(--border);transition:all .2s}
-.review-list li:hover{border-color:var(--accent)}
-.review-list li.reviewed{opacity:.5;text-decoration:line-through}
-
-/* Deep Q */
-.dq-item{background:var(--card);border-radius:10px;padding:16px;margin:12px 0;border-left:4px solid var(--accent)}
-.dq-item .dq-question{font-weight:700;color:var(--accent-dark);cursor:pointer}
-.dq-item .dq-answer{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:14px}
-
-/* Cases */
-.case-card{background:var(--card);border-radius:10px;padding:20px;margin:12px 0;border:1px solid var(--border)}
-.case-card .case-title{font-weight:700;color:var(--accent-dark);font-size:18px}
-.case-card .case-meta{font-size:13px;color:var(--text-light);margin:6px 0}
-.case-steps{margin:12px 0;padding-left:20px}
-.case-steps li{margin:6px 0}
-
-/* Decision */
-.decision-scenario{background:var(--card);border-radius:10px;padding:20px;margin:16px 0;border:1px solid var(--border)}
-.decision-scenario h4{color:var(--accent-dark)}
-.decision-scenario select,.decision-scenario button{margin:8px 4px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);font-family:inherit}
-.decision-scenario button{background:var(--accent);color:#fff;cursor:pointer;border:none;font-weight:600}
-.decision-output{background:var(--accent-light);padding:16px;border-radius:8px;margin-top:12px;display:none;font-size:14px}
-
-/* Toast */
-.toast{position:fixed;top:20px;right:20px;background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;z-index:999;animation:slideIn .3s;font-size:14px}
-@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
-
-/* Footer */
-.footer{text-align:center;padding:32px 20px 16px;color:var(--text-lighter);font-size:.72rem;border-top:1px solid var(--border-light);margin-top:40px}
-.footer a{color:var(--accent-dark)}
-
-@media(max-width:768px){
-  .tab-nav button{font-size:11px;padding:8px 4px;min-width:55px}
-  .tab-section{padding:16px 10px}
-  .overview-grid,.flip-container{grid-template-columns:1fr}
-  .top-nav{padding:8px 12px}
+body {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  line-height: 1.75;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
-@media(max-width:480px){
-  .flip-container{grid-template-columns:1fr}
-  .tab-nav button{font-size:10px;padding:6px 2px;min-width:45px}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a58; }
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(8,12,20,.88); backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 22px;
+  display: flex; align-items: center; gap: 14px;
+}
+.home-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 16px; border-radius: 20px;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: #fff; font-size: 13px; font-weight: 700;
+  text-decoration: none; transition: all var(--ease-out);
+  white-space: nowrap;
+}
+.home-link:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(167,139,250,.3); }
+.breadcrumb { font-size: 12px; color: var(--text-dim); }
+.nav-sections { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.nav-sections button {
+  background: none; border: 1px solid var(--border); color: var(--text-dim);
+  padding: 4px 10px; border-radius: 14px; font-size: 11px; cursor: pointer;
+  transition: all var(--ease-out); white-space: nowrap; font-family: inherit;
+}
+.nav-sections button:hover, .nav-sections button.active {
+  border-color: var(--purple); color: var(--purple); background: rgba(167,139,250,.08);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+  padding: 80px 20px 40px;
+}
+.hero-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-content { position: relative; z-index: 1; text-align: center; max-width: 860px; }
+.hero-badge {
+  display: inline-block; padding: 4px 16px; border-radius: 20px;
+  background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.25);
+  font-size: .78rem; color: var(--purple); letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 900;
+  background: linear-gradient(135deg, #a78bfa, #60a5fa, #2dd4bf);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 14px; line-height: 1.25;
+}
+.hero h1 .icon { -webkit-text-fill-color: initial; font-size: .7em; }
+.hero .subtitle {
+  font-size: clamp(.95rem, 1.8vw, 1.2rem); color: var(--text-dim);
+  margin-bottom: 36px; max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.hero-formula {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  flex-wrap: wrap; margin-bottom: 28px;
+}
+.formula-block {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 22px; text-align: center;
+  backdrop-filter: blur(8px);
+}
+.formula-block .sym { font-size: 1.6rem; font-weight: 900; }
+.formula-block .label { font-size: .7rem; color: var(--text-dim); margin-top: 2px; }
+.formula-block.hazard .sym { color: var(--red); }
+.formula-block.exposure .sym { color: var(--amber); }
+.formula-block.risk .sym { color: var(--orange); }
+.formula-op { font-size: 1.8rem; color: var(--text-dim); font-weight: 300; }
+.formula-eq { font-size: 2rem; color: var(--text-bright); font-weight: 300; }
+.hero-stats { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; }
+.hero-stat { text-align: center; }
+.hero-stat .num { font-size: 1.8rem; font-weight: 900; color: var(--teal); }
+.hero-stat .label { font-size: .75rem; color: var(--text-dim); }
+
+.scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: var(--text-subtle); font-size: 11px; display: flex;
+  flex-direction: column; align-items: center; gap: 4px;
+  animation: bounce 2.2s infinite; z-index: 2;
+}
+@keyframes bounce {
+  0%,100%{transform:translateX(-50%) translateY(0);opacity:.6}
+  50%{transform:translateX(-50%) translateY(8px);opacity:1}
+}
+
+/* ===== SECTION COMMON ===== */
+.section {
+  position: relative; padding: 70px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.section::before {
+  content: ''; position: absolute; top: 0; left: 5%; right: 5%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(167,139,250,.25), transparent);
+}
+.section-header { text-align: center; margin-bottom: 44px; max-width: 700px; }
+.section-num {
+  font-size: .72rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 8px;
+}
+.section-header h2 {
+  font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 800;
+  background: linear-gradient(135deg, #ece8f2, var(--text-dim));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 10px;
+}
+.section-header p { color: var(--text-dim); font-size: .95rem; max-width: 540px; margin: 0 auto; }
+.section-content { max-width: 1060px; width: 100%; }
+
+/* Accented headers per section */
+.s1 .section-header h2 { background-image: linear-gradient(135deg, #4ade80, #2dd4bf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s2 .section-header h2 { background-image: linear-gradient(135deg, #f87171, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s3 .section-header h2 { background-image: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s4 .section-header h2 { background-image: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.s5 .section-header h2 { background-image: linear-gradient(135deg, #f472b6, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ===== S1: RISK EQUATION VISUALIZER ===== */
+.risk-viz {
+  background: var(--bg-card); border-radius: var(--radius); padding: 28px;
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.risk-sliders { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
+.risk-slider-group { }
+.risk-slider-group .slider-label {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;
+  font-size: .88rem; font-weight: 600;
+}
+.risk-slider-group .slider-label .name { }
+.risk-slider-group .slider-label .val { color: var(--green); font-weight: 800; font-size: 1rem; }
+.risk-slider-group.hazard .slider-label .name { color: var(--red); }
+.risk-slider-group.exposure .slider-label .name { color: var(--amber); }
+.risk-slider-group.exposure .slider-label .val { color: var(--amber); }
+.risk-slider-group input[type="range"] {
+  width: 100%; -webkit-appearance: none; appearance: none;
+  height: 8px; border-radius: 4px; background: var(--border);
+  outline: none; cursor: pointer;
+}
+.risk-slider-group.hazard input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--red); cursor: pointer; box-shadow: 0 0 14px rgba(248,113,113,.4);
+}
+.risk-slider-group.exposure input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--amber); cursor: pointer; box-shadow: 0 0 14px rgba(251,191,36,.4);
+}
+.risk-scenario-select {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; justify-content: center;
+}
+.risk-scenario-select button {
+  padding: 7px 16px; border-radius: 20px; font-size: .8rem; cursor: pointer;
+  background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+  transition: all var(--ease-out); font-family: inherit;
+}
+.risk-scenario-select button:hover, .risk-scenario-select button.active {
+  border-color: var(--green); color: var(--green); background: rgba(74,222,128,.06);
+}
+.risk-result {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  flex-wrap: wrap; padding: 20px; background: var(--bg-card-hover);
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.risk-gauge {
+  width: 100px; height: 100px; border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border: 4px solid var(--border); transition: all .6s var(--ease);
+}
+.risk-gauge .risk-num { font-size: 1.4rem; font-weight: 900; z-index: 1; }
+.risk-gauge.low { border-color: var(--green); box-shadow: 0 0 24px rgba(74,222,128,.25); }
+.risk-gauge.low .risk-num { color: var(--green); }
+.risk-gauge.mid { border-color: var(--amber); box-shadow: 0 0 24px rgba(251,191,36,.25); }
+.risk-gauge.mid .risk-num { color: var(--amber); }
+.risk-gauge.high { border-color: var(--red); box-shadow: 0 0 24px rgba(248,113,113,.25); }
+.risk-gauge.high .risk-num { color: var(--red); }
+.risk-verdict { flex: 1; min-width: 200px; }
+.risk-verdict .verdict-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+.risk-verdict .verdict-desc { font-size: .82rem; color: var(--text-dim); line-height: 1.6; }
+.risk-examples {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px; margin-top: 16px;
+}
+.risk-example {
+  background: var(--bg-card-hover); border-radius: var(--radius-sm);
+  padding: 12px 14px; border: 1px solid var(--border); cursor: pointer;
+  transition: all var(--ease-out); font-size: .8rem; text-align: center;
+}
+.risk-example:hover { border-color: var(--green); background: rgba(74,222,128,.06); }
+.risk-example .ex-name { font-weight: 700; margin-bottom: 3px; }
+.risk-example .ex-risk { font-size: .7rem; color: var(--text-dim); }
+
+/* ===== S2: SCIENCE COURT ===== */
+.court-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+@media (max-width: 768px) { .court-layout { grid-template-columns: 1fr; } }
+.court-bench {
+  background: var(--bg-card); border-radius: var(--radius); padding: 22px;
+  border: 1px solid var(--border);
+}
+.court-bench h3 {
+  font-size: 1rem; color: var(--amber); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.court-case-list { display: flex; flex-direction: column; gap: 8px; }
+.court-case {
+  padding: 14px 16px; background: var(--bg-card-hover); border-radius: var(--radius-sm);
+  cursor: pointer; border: 2px solid transparent; transition: all var(--ease-out);
+}
+.court-case:hover, .court-case.active {
+  border-color: var(--amber); background: rgba(251,191,36,.06);
+}
+.court-case .case-name { font-weight: 700; font-size: .92rem; margin-bottom: 4px; }
+.court-case .case-charge { font-size: .75rem; color: var(--text-dim); }
+.court-verdict {
+  background: var(--bg-card); border-radius: var(--radius); padding: 22px;
+  border: 1px solid var(--border); min-height: 300px;
+  transition: all .4s var(--ease);
+}
+.court-verdict .judge-icon { font-size: 3rem; text-align: center; margin-bottom: 10px; }
+.court-verdict .verdict-ruling { text-align: center; font-size: 1.3rem; font-weight: 900; margin-bottom: 8px; }
+.court-verdict .verdict-reason { font-size: .85rem; color: var(--text-dim); line-height: 1.7; }
+.court-verdict .verdict-evidence {
+  margin-top: 12px; padding: 10px 14px; background: var(--bg-card-hover);
+  border-radius: var(--radius-sm); border-left: 3px solid var(--amber);
+  font-size: .78rem; color: var(--text-dim);
+}
+.verdict-safe { color: var(--green); }
+.verdict-warn { color: var(--amber); }
+.verdict-danger { color: var(--red); }
+
+/* ===== S3: DIGESTIVE JOURNEY ===== */
+.journey-track {
+  position: relative; padding: 20px 0;
+}
+.journey-track::before {
+  content: ''; position: absolute; left: 50%; top: 40px; bottom: 40px;
+  width: 3px; background: linear-gradient(180deg, var(--pink), var(--red), var(--orange), var(--amber), var(--green), var(--teal), var(--blue));
+  transform: translateX(-50%); border-radius: 2px;
+}
+.journey-node {
+  position: relative; display: flex; align-items: center; margin-bottom: 28px;
+  cursor: pointer;
+}
+.journey-node:nth-child(odd) { flex-direction: row; }
+.journey-node:nth-child(even) { flex-direction: row-reverse; }
+.journey-node .node-marker {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 32px; height: 32px; border-radius: 50%; z-index: 2;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  background: var(--bg-card); border: 2px solid var(--border);
+  transition: all .4s var(--ease);
+}
+.journey-node:hover .node-marker, .journey-node.active .node-marker {
+  border-color: var(--teal); box-shadow: 0 0 18px rgba(45,212,191,.3);
+  transform: translate(-50%,-50%) scale(1.15);
+}
+.journey-node .node-card {
+  width: calc(50% - 36px); background: var(--bg-card); border-radius: var(--radius);
+  padding: 18px; border: 1px solid var(--border); transition: all .4s var(--ease);
+}
+.journey-node:hover .node-card, .journey-node.active .node-card {
+  border-color: var(--teal); background: var(--bg-card-hover);
+}
+.journey-node .node-card h4 { font-size: .95rem; margin-bottom: 6px; }
+.journey-node .node-card .node-loc { font-size: .7rem; color: var(--teal); margin-bottom: 8px; }
+.journey-node .node-card .node-detail {
+  font-size: .8rem; color: var(--text-dim); line-height: 1.6;
+  max-height: 0; overflow: hidden; transition: max-height .5s var(--ease);
+}
+.journey-node.active .node-card .node-detail { max-height: 300px; }
+.journey-particle {
+  position: absolute; left: 50%; top: 0;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--teal); z-index: 3;
+  box-shadow: 0 0 14px rgba(45,212,191,.5);
+  transform: translate(-50%, -50%);
+  animation: particleTravel 6s infinite;
+}
+@keyframes particleTravel {
+  0% { top: 0%; }
+  100% { top: 100%; }
+}
+
+/* ===== S4: EVIDENCE PYRAMID ===== */
+.evidence-pyramid {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  position: relative;
+}
+.pyramid-level {
+  width: 100%; max-width: 640px; padding: 18px 22px;
+  background: var(--bg-card); border-radius: var(--radius-sm);
+  border: 1px solid var(--border); cursor: pointer; transition: all .4s var(--ease);
+  text-align: center; position: relative;
+}
+.pyramid-level:hover {
+  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.3);
+}
+.pyramid-level .level-num { font-size: 2rem; font-weight: 900; margin-bottom: 2px; }
+.pyramid-level .level-name { font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
+.pyramid-level .level-example { font-size: .75rem; color: var(--text-dim); }
+.pyramid-level .level-detail {
+  display: none; margin-top: 10px; padding: 12px; background: var(--bg-card-hover);
+  border-radius: var(--radius-sm); font-size: .8rem; color: var(--text-dim);
+  line-height: 1.6; text-align: left;
+}
+.pyramid-level.expanded .level-detail { display: block; animation: fadeUp .3s; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.pyramid-level.l1 { width: 45%; }
+.pyramid-level.l2 { width: 55%; }
+.pyramid-level.l3 { width: 68%; }
+.pyramid-level.l4 { width: 82%; }
+.pyramid-level.l5 { width: 100%; }
+.pyramid-level.l1 .level-num { color: var(--red); }
+.pyramid-level.l2 .level-num { color: var(--orange); }
+.pyramid-level.l3 .level-num { color: var(--amber); }
+.pyramid-level.l4 .level-num { color: var(--green); }
+.pyramid-level.l5 .level-num { color: var(--teal); }
+.pyramid-level.l1 { border-left: 3px solid var(--red); }
+.pyramid-level.l2 { border-left: 3px solid var(--orange); }
+.pyramid-level.l3 { border-left: 3px solid var(--amber); }
+.pyramid-level.l4 { border-left: 3px solid var(--green); }
+.pyramid-level.l5 { border-left: 3px solid var(--teal); }
+
+/* ===== S5: ARTICLE UNIVERSE ===== */
+.article-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;
+}
+.article-card {
+  background: var(--bg-card); border-radius: var(--radius); padding: 18px;
+  border: 1px solid var(--border); cursor: pointer; transition: all .35s var(--ease-out);
+  position: relative; overflow: hidden;
+}
+.article-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--teal)); opacity: 0;
+  transition: opacity .35s var(--ease-out);
+}
+.article-card:hover {
+  border-color: var(--purple); transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(167,139,250,.12);
+}
+.article-card:hover::after { opacity: 1; }
+.article-card .a-id {
+  font-size: .65rem; color: var(--purple); font-weight: 700;
+  letter-spacing: 1px; margin-bottom: 6px;
+}
+.article-card .a-title {
+  font-weight: 700; font-size: .92rem; margin-bottom: 8px;
+  line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.article-card .a-preview {
+  font-size: .76rem; color: var(--text-dim); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.article-card.highlight-food {
+  border-color: rgba(74,222,128,.2);
+}
+.article-card.highlight-food .a-id { color: var(--green); }
+
+.article-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; justify-content: center; }
+.article-tag {
+  padding: 4px 12px; border-radius: 14px; font-size: .72rem; cursor: pointer;
+  border: 1px solid var(--border); color: var(--text-dim); background: transparent;
+  transition: all var(--ease-out); font-family: inherit;
+}
+.article-tag:hover, .article-tag.active {
+  border-color: var(--purple); color: var(--purple); background: rgba(167,139,250,.08);
+}
+
+/* ===== KNOWLEDGE METER ===== */
+.kmeter {
+  position: fixed; bottom: 18px; right: 18px; z-index: 999;
+  background: rgba(14,18,28,.92); border: 1px solid var(--border);
+  border-radius: 16px; padding: 12px 16px; font-size: .75rem;
+  display: flex; align-items: center; gap: 10px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  transition: opacity .5s;
+}
+.kmeter .km-ring {
+  width: 38px; height: 38px; border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid var(--border);
+}
+.kmeter .km-pct { font-weight: 900; font-size: .8rem; color: var(--purple); }
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center; padding: 44px 20px 28px;
+  border-top: 1px solid var(--border); color: var(--text-subtle); font-size: .78rem;
+}
+.footer a { color: var(--purple); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .footer-nav { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+.footer .footer-nav a {
+  padding: 5px 14px; border-radius: 14px; border: 1px solid var(--border);
+  font-size: .75rem; transition: all var(--ease-out);
+}
+.footer .footer-nav a:hover { border-color: var(--purple); background: rgba(167,139,250,.06); text-decoration: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .top-nav { padding: 8px 12px; }
+  .breadcrumb { display: none; }
+  .nav-sections { display: none; }
+  .section { padding: 44px 14px; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero-stats { gap: 16px; }
+  .hero-stat .num { font-size: 1.3rem; }
+  .hero-formula { gap: 6px; }
+  .formula-block { padding: 10px 14px; }
+  .formula-block .sym { font-size: 1.2rem; }
+  .formula-op { font-size: 1.2rem; }
+  .formula-eq { font-size: 1.4rem; }
+  .risk-viz { padding: 18px; }
+  .risk-examples { grid-template-columns: repeat(2, 1fr); }
+  .court-layout { grid-template-columns: 1fr; }
+  .court-verdict { min-height: auto; }
+  .journey-track::before { left: 18px; }
+  .journey-node { flex-direction: row !important; padding-left: 46px; }
+  .journey-node .node-marker { left: 18px; }
+  .journey-node .node-card { width: 100%; }
+  .pyramid-level.l1, .pyramid-level.l2, .pyramid-level.l3, .pyramid-level.l4, .pyramid-level.l5 {
+    width: 100%; max-width: 100%;
+  }
+  .article-grid { grid-template-columns: 1fr; }
+  .kmeter { bottom: 10px; right: 10px; padding: 8px 12px; font-size: .68rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.4rem; }
+  .hero .subtitle { font-size: .85rem; }
+  .hero-stats { gap: 10px; }
+  .hero-stat .num { font-size: 1.1rem; }
+  .risk-examples { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
 <!-- TOP NAV -->
-<div class="top-nav">
-  <a href="index.html" class="home-btn">← 科技参考3 主板</a>
-  <span class="breadcrumb">食品营养与安全 · 44 篇文章 · MKS 最小知识集</span>
-</div>
-
-<!-- TAB NAV -->
-<nav class="tab-nav" id="tabNav">
-  <button class="active" data-tab="overview">知识集总览</button>
-  <button data-tab="cards">知识卡片</button>
-  <button data-tab="quiz">题库系统</button>
-  <button data-tab="exam">考试模式</button>
-  <button data-tab="review">复习模式</button>
-  <button data-tab="mindmap">思维导图</button>
-  <button data-tab="deepask">深度追问</button>
-  <button data-tab="cases">案例分析</button>
-  <button data-tab="decision">实战决策</button>
+<nav class="top-nav">
+  <a href="index.html" class="home-link">◂ 科技分光镜</a>
+  <span class="breadcrumb">食品营养与安全 · 焦虑解码器</span>
+  <div class="nav-sections">
+    <button onclick="scrollToSection('s1')" class="active">风险公式</button>
+    <button onclick="scrollToSection('s2')">科学法庭</button>
+    <button onclick="scrollToSection('s3')">体内旅程</button>
+    <button onclick="scrollToSection('s4')">证据金字塔</button>
+    <button onclick="scrollToSection('s5')">文章宇宙</button>
+  </div>
 </nav>
 
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">🧬 ANXIETY DECODER v3.0</div>
+    <h1>焦虑解码器<span class="icon">🔍</span></h1>
+    <p class="subtitle">
+      吃进去的恐惧，还是吃进去的科学？<br>
+      44篇深度文章，帮你建立食品安全的底层判断力
+    </p>
 
-<!-- TAB 0: 知识集总览 -->
-<section class="tab-section active" id="sec-overview">
-<h1>🍽️ 食品营养与安全</h1>
-<p style="text-align:center;color:var(--text-light);margin-bottom:16px">从餐桌到实验室，吃背后的科学真相 | 44 篇文章 · 2023-2024</p>
+    <div class="hero-formula">
+      <div class="formula-block hazard">
+        <div class="sym">危害</div>
+        <div class="label">Hazard</div>
+      </div>
+      <div class="formula-op">×</div>
+      <div class="formula-block exposure">
+        <div class="sym">暴露量</div>
+        <div class="label">Exposure</div>
+      </div>
+      <div class="formula-eq">=</div>
+      <div class="formula-block risk">
+        <div class="sym">风险</div>
+        <div class="label">Risk</div>
+      </div>
+    </div>
 
-<div class="goal-box">
-  <strong>核心目标：</strong>在食品安全谣言四起、保健品收割智商税的时代，建立基于科学方法的饮食判断力——理解食品安全风险评估的逻辑、识别智商税产品的营销套路、掌握食品标签的解读能力、从营养科学角度做出理性饮食决策，不被"代糖致癌""化工罐车""日本神药"等热点裹挟。
-</div>
-
-<div class="stats-row">
-  <div class="stat-badge"><span class="num">44</span> 篇文章</div>
-  <div class="stat-badge">📅 2023-2024</div>
-  <div class="stat-badge">🎯 10 核心概念</div>
-  <div class="stat-badge">🏗️ 4 层架构</div>
-</div>
-
-<!-- Concept Graph -->
-<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
-  <h3>📊 概念关系图 — 食品营养与安全的四层架构</h3>
-  <div class="graph-container">
-<!-- Generated by graphviz version 2.43.0 (0)
- -->
-<!-- Title: FoodSafety Pages: 1 -->
-<svg width="689pt" height="429pt"
- viewBox="0.00 0.00 689.00 429.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 425)">
-<title>FoodSafety</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-425 685,-425 685,4 -4,4"/>
-<text text-anchor="middle" x="340.5" y="-404.2" font-family="Noto Sans SC" font-size="16.00" fill="#333333">食品营养与安全 · 概念关系图（4层架构）</text>
-<g id="clust1" class="cluster">
-<title>cluster_risk</title>
-<polygon fill="#fef2f2" stroke="#dc2626" points="252,-314 252,-387 673,-387 673,-314 252,-314"/>
-<text text-anchor="middle" x="462.5" y="-373.4" font-family="Noto Sans SC" font-size="12.00" fill="#dc2626">第1层：食品安全风险</text>
-</g>
-<g id="clust2" class="cluster">
-<title>cluster_science</title>
-<polygon fill="#eff6ff" stroke="#2563eb" points="252,-212 252,-285 567,-285 567,-212 252,-212"/>
-<text text-anchor="middle" x="409.5" y="-271.4" font-family="Noto Sans SC" font-size="12.00" fill="#2563eb">第2层：食品科学基础</text>
-</g>
-<g id="clust3" class="cluster">
-<title>cluster_cognition</title>
-<polygon fill="#ecfdf5" stroke="#059669" points="8,-110 8,-183 350,-183 350,-110 8,-110"/>
-<text text-anchor="middle" x="179" y="-169.4" font-family="Noto Sans SC" font-size="12.00" fill="#059669">第3层：认知与决策</text>
-</g>
-<g id="clust4" class="cluster">
-<title>cluster_social</title>
-<polygon fill="#f5f3ff" stroke="#7c3aed" points="186,-8 186,-81 542,-81 542,-8 186,-8"/>
-<text text-anchor="middle" x="364" y="-67.4" font-family="Noto Sans SC" font-size="12.00" fill="#7c3aed">第4层：社会影响</text>
-</g>
-<!-- MICRO -->
-<g id="node1" class="node">
-<title>MICRO</title>
-<ellipse fill="#dc2626" stroke="black" cx="423" cy="-340" rx="43.8" ry="18"/>
-<text text-anchor="middle" x="423" y="-337.2" font-family="Noto Sans SC" font-size="11.00" fill="white">微生物污染</text>
-</g>
-<!-- ADDITIVE -->
-<g id="node6" class="node">
-<title>ADDITIVE</title>
-<ellipse fill="#2563eb" stroke="black" cx="423" cy="-238" rx="43.8" ry="18"/>
-<text text-anchor="middle" x="423" y="-235.2" font-family="Noto Sans SC" font-size="11.00" fill="white">食品添加剂</text>
-</g>
-<!-- MICRO&#45;&gt;ADDITIVE -->
-<g id="edge1" class="edge">
-<title>MICRO&#45;&gt;ADDITIVE</title>
-<path fill="none" stroke="#dc2626" d="M423,-321.58C423,-306.38 423,-284.07 423,-266.46"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="426.5,-266.22 423,-256.22 419.5,-266.22 426.5,-266.22"/>
-<text text-anchor="middle" x="443" y="-296" font-family="Noto Sans SC" font-size="10.00" fill="#dc2626">防腐保存</text>
-</g>
-<!-- CHEM -->
-<g id="node2" class="node">
-<title>CHEM</title>
-<ellipse fill="#dc2626" stroke="black" cx="522" cy="-340" rx="37.07" ry="18"/>
-<text text-anchor="middle" x="522" y="-337.2" font-family="Noto Sans SC" font-size="11.00" fill="white">化学残留</text>
-</g>
-<!-- PROCESS -->
-<g id="node7" class="node">
-<title>PROCESS</title>
-<ellipse fill="#2563eb" stroke="black" cx="522" cy="-238" rx="37.07" ry="18"/>
-<text text-anchor="middle" x="522" y="-235.2" font-family="Noto Sans SC" font-size="11.00" fill="white">加工工艺</text>
-</g>
-<!-- CHEM&#45;&gt;PROCESS -->
-<g id="edge2" class="edge">
-<title>CHEM&#45;&gt;PROCESS</title>
-<path fill="none" stroke="#dc2626" d="M522,-321.58C522,-306.38 522,-284.07 522,-266.46"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="525.5,-266.22 522,-256.22 518.5,-266.22 525.5,-266.22"/>
-<text text-anchor="middle" x="542" y="-296" font-family="Noto Sans SC" font-size="10.00" fill="#dc2626">规范加工</text>
-</g>
-<!-- METAL -->
-<g id="node3" class="node">
-<title>METAL</title>
-<ellipse fill="#dc2626" stroke="black" cx="311" cy="-340" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="311" y="-337.2" font-family="Noto Sans SC" font-size="11.00" fill="white">重金属与毒素</text>
-</g>
-<!-- NUTRITION -->
-<g id="node5" class="node">
-<title>NUTRITION</title>
-<ellipse fill="#2563eb" stroke="black" cx="311" cy="-238" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="311" y="-235.2" font-family="Noto Sans SC" font-size="11.00" fill="white">营养物质代谢</text>
-</g>
-<!-- METAL&#45;&gt;NUTRITION -->
-<g id="edge4" class="edge">
-<title>METAL&#45;&gt;NUTRITION</title>
-<path fill="none" stroke="#dc2626" d="M311,-321.58C311,-306.38 311,-284.07 311,-266.46"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="314.5,-266.22 311,-256.22 307.5,-266.22 314.5,-266.22"/>
-<text text-anchor="middle" x="331" y="-296" font-family="Noto Sans SC" font-size="10.00" fill="#dc2626">暴露评估</text>
-</g>
-<!-- PLASTIC -->
-<g id="node4" class="node">
-<title>PLASTIC</title>
-<ellipse fill="#dc2626" stroke="black" cx="621" cy="-340" rx="43.8" ry="18"/>
-<text text-anchor="middle" x="621" y="-337.2" font-family="Noto Sans SC" font-size="11.00" fill="white">微塑料污染</text>
-</g>
-<!-- PLASTIC&#45;&gt;PROCESS -->
-<g id="edge3" class="edge">
-<title>PLASTIC&#45;&gt;PROCESS</title>
-<path fill="none" stroke="#dc2626" d="M605.09,-322.93C588.83,-306.51 563.41,-280.83 544.97,-262.2"/>
-<polygon fill="#dc2626" stroke="#dc2626" points="547.06,-259.34 537.54,-254.7 542.09,-264.27 547.06,-259.34"/>
-<text text-anchor="middle" x="606" y="-296" font-family="Noto Sans SC" font-size="10.00" fill="#dc2626">去除策略</text>
-</g>
-<!-- IQTAX -->
-<g id="node8" class="node">
-<title>IQTAX</title>
-<ellipse fill="#059669" stroke="black" cx="60" cy="-136" rx="43.8" ry="18"/>
-<text text-anchor="middle" x="60" y="-133.2" font-family="Noto Sans SC" font-size="11.00" fill="white">智商税识别</text>
-</g>
-<!-- NUTRITION&#45;&gt;IQTAX -->
-<g id="edge5" class="edge">
-<title>NUTRITION&#45;&gt;IQTAX</title>
-<path fill="none" stroke="#2563eb" d="M264.51,-230.58C222.68,-223.39 160.52,-209.17 112,-183 101.01,-177.07 90.39,-168.4 81.65,-160.19"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="84.08,-157.66 74.49,-153.16 79.18,-162.66 84.08,-157.66"/>
-<text text-anchor="middle" x="173" y="-194" font-family="Noto Sans SC" font-size="10.00" fill="#2563eb">判定真伪</text>
-</g>
-<!-- DECISION -->
-<g id="node10" class="node">
-<title>DECISION</title>
-<ellipse fill="#059669" stroke="black" cx="172" cy="-136" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="172" y="-133.2" font-family="Noto Sans SC" font-size="11.00" fill="white">饮食决策方法</text>
-</g>
-<!-- NUTRITION&#45;&gt;DECISION -->
-<g id="edge8" class="edge">
-<title>NUTRITION&#45;&gt;DECISION</title>
-<path fill="none" stroke="#2563eb" d="M285.12,-222.38C274.92,-216.36 263.22,-209.14 253,-202 233.99,-188.73 213.64,-172.39 198.1,-159.41"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="200.34,-156.73 190.44,-152.97 195.83,-162.08 200.34,-156.73"/>
-<text text-anchor="middle" x="273" y="-194" font-family="Noto Sans SC" font-size="10.00" fill="#2563eb">营养指导</text>
-</g>
-<!-- LABEL -->
-<g id="node9" class="node">
-<title>LABEL</title>
-<ellipse fill="#059669" stroke="black" cx="291" cy="-136" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="291" y="-133.2" font-family="Noto Sans SC" font-size="11.00" fill="white">食品标签解读</text>
-</g>
-<!-- ADDITIVE&#45;&gt;LABEL -->
-<g id="edge6" class="edge">
-<title>ADDITIVE&#45;&gt;LABEL</title>
-<path fill="none" stroke="#2563eb" d="M411.44,-220.5C403.81,-210.7 393.02,-198.71 381,-191 371.18,-184.7 366.44,-188.21 356,-183 342.79,-176.41 329.29,-167.31 318.04,-158.95"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="319.99,-156.04 309.92,-152.75 315.75,-161.6 319.99,-156.04"/>
-<text text-anchor="middle" x="415" y="-194" font-family="Noto Sans SC" font-size="10.00" fill="#2563eb">成分解读</text>
-</g>
-<!-- PROCESS&#45;&gt;DECISION -->
-<g id="edge7" class="edge">
-<title>PROCESS&#45;&gt;DECISION</title>
-<path fill="none" stroke="#2563eb" d="M500.83,-223.05C493.29,-218.75 484.55,-214.5 476,-212 416.56,-194.6 398.04,-212.48 337,-202 318.83,-198.88 315.09,-194.56 297,-191 268.01,-185.29 258.31,-194.27 231,-183 218.12,-177.68 205.67,-168.74 195.55,-160.15"/>
-<polygon fill="#2563eb" stroke="#2563eb" points="197.77,-157.44 187.97,-153.4 193.12,-162.67 197.77,-157.44"/>
-<text text-anchor="middle" x="357" y="-194" font-family="Noto Sans SC" font-size="10.00" fill="#2563eb">加工选择</text>
-</g>
-<!-- RUMOR -->
-<g id="node12" class="node">
-<title>RUMOR</title>
-<ellipse fill="#7c3aed" stroke="black" cx="245" cy="-34" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="245" y="-31.2" font-family="Noto Sans SC" font-size="11.00" fill="white">食品谣言机制</text>
-</g>
-<!-- IQTAX&#45;&gt;RUMOR -->
-<g id="edge11" class="edge">
-<title>IQTAX&#45;&gt;RUMOR</title>
-<path fill="none" stroke="#059669" d="M68.31,-118.11C73.85,-108.41 81.94,-96.67 92,-89 121.01,-66.89 159.82,-53.33 191.09,-45.33"/>
-<polygon fill="#059669" stroke="#059669" points="192.07,-48.7 200.95,-42.93 190.41,-41.9 192.07,-48.7"/>
-<text text-anchor="middle" x="116.5" y="-92" font-family="Noto Sans SC" font-size="10.00" fill="#059669">戳破伪科学</text>
-</g>
-<!-- BEHAVIOR -->
-<g id="node13" class="node">
-<title>BEHAVIOR</title>
-<ellipse fill="#7c3aed" stroke="black" cx="364" cy="-34" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="364" y="-31.2" font-family="Noto Sans SC" font-size="11.00" fill="white">消费行为变迁</text>
-</g>
-<!-- IQTAX&#45;&gt;BEHAVIOR -->
-<g id="edge9" class="edge">
-<title>IQTAX&#45;&gt;BEHAVIOR</title>
-<path fill="none" stroke="#059669" d="M86.45,-121.55C94.56,-117.63 103.57,-113.47 112,-110 124.61,-104.82 128.43,-105.28 141,-100 151.08,-95.76 152.44,-91.81 163,-89 193.54,-80.88 275.41,-92.11 305,-81 318.24,-76.03 330.89,-66.96 341.06,-58.19"/>
-<polygon fill="#059669" stroke="#059669" points="343.6,-60.61 348.65,-51.29 338.89,-55.43 343.6,-60.61"/>
-<text text-anchor="middle" x="183" y="-92" font-family="Noto Sans SC" font-size="10.00" fill="#059669">影响购买</text>
-</g>
-<!-- REGULATION -->
-<g id="node11" class="node">
-<title>REGULATION</title>
-<ellipse fill="#7c3aed" stroke="black" cx="483" cy="-34" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="483" y="-31.2" font-family="Noto Sans SC" font-size="11.00" fill="white">食品安全监管</text>
-</g>
-<!-- LABEL&#45;&gt;REGULATION -->
-<g id="edge10" class="edge">
-<title>LABEL&#45;&gt;REGULATION</title>
-<path fill="none" stroke="#059669" d="M323.81,-122.23C360.17,-107.98 414.91,-86.25 424,-81 435.6,-74.3 447.43,-65.53 457.42,-57.45"/>
-<polygon fill="#059669" stroke="#059669" points="459.87,-59.96 465.33,-50.88 455.4,-54.58 459.87,-59.96"/>
-<text text-anchor="middle" x="425" y="-92" font-family="Noto Sans SC" font-size="10.00" fill="#059669">推动规范</text>
-</g>
-<!-- DECISION&#45;&gt;RUMOR -->
-<g id="edge12" class="edge">
-<title>DECISION&#45;&gt;RUMOR</title>
-<path fill="none" stroke="#059669" d="M189.66,-119.08C195.52,-113.36 201.86,-106.67 207,-100 216.42,-87.79 225.22,-73.04 231.98,-60.67"/>
-<polygon fill="#059669" stroke="#059669" points="235.11,-62.24 236.73,-51.77 228.94,-58.95 235.11,-62.24"/>
-<text text-anchor="middle" x="235" y="-92" font-family="Noto Sans SC" font-size="10.00" fill="#059669">理性辟谣</text>
-</g>
-<!-- REGULATION&#45;&gt;MICRO -->
-<g id="edge13" class="edge">
-<title>REGULATION&#45;&gt;MICRO</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M508.28,-49.91C527.87,-63.02 553.69,-84.02 566,-110 599.32,-180.32 580.98,-207.83 571,-285 569.88,-293.66 572.61,-298.29 566,-304 550.77,-317.15 495.36,-308.52 476,-314 469.77,-315.76 463.36,-318.19 457.25,-320.85"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="455.55,-317.78 447.95,-325.16 458.49,-324.13 455.55,-317.78"/>
-<text text-anchor="middle" x="604" y="-194" font-family="Noto Sans SC" font-size="10.00" fill="#7c3aed">监管溯源</text>
-</g>
-<!-- RUMOR&#45;&gt;ADDITIVE -->
-<g id="edge14" class="edge">
-<title>RUMOR&#45;&gt;ADDITIVE</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M261.78,-51.17C272.94,-61.1 288.37,-73.35 304,-81 334.89,-96.12 345.63,-91.7 379,-100 397.2,-104.53 406.8,-96.68 420,-110 447.92,-138.16 446.19,-168.99 439,-202 438.37,-204.88 437.49,-207.8 436.45,-210.67"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="433.15,-209.49 432.51,-220.06 439.61,-212.2 433.15,-209.49"/>
-<text text-anchor="middle" x="464" y="-133.5" font-family="Noto Sans SC" font-size="10.00" fill="#7c3aed">误解决策</text>
-</g>
-<!-- BEHAVIOR&#45;&gt;NUTRITION -->
-<g id="edge16" class="edge">
-<title>BEHAVIOR&#45;&gt;NUTRITION</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M368.64,-51.98C375.77,-82.18 385.53,-145.58 354,-183 344.28,-194.54 331.54,-180.2 321,-191 316.2,-195.91 313.48,-202.55 311.98,-209.26"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="308.45,-209.22 310.52,-219.61 315.38,-210.2 308.45,-209.22"/>
-<text text-anchor="middle" x="396" y="-133.5" font-family="Noto Sans SC" font-size="10.00" fill="#7c3aed">需求驱动</text>
-</g>
-<!-- BEHAVIOR&#45;&gt;PROCESS -->
-<g id="edge15" class="edge">
-<title>BEHAVIOR&#45;&gt;PROCESS</title>
-<path fill="none" stroke="#7c3aed" stroke-dasharray="5,2" d="M381.16,-51.12C392.35,-60.91 407.68,-73.02 423,-81 433.72,-86.59 437.65,-84.84 449,-89 471.24,-97.16 483.17,-91.52 498,-110 520.69,-138.27 524.3,-181.44 523.88,-209.44"/>
-<polygon fill="#7c3aed" stroke="#7c3aed" points="520.37,-209.61 523.53,-219.72 527.36,-209.84 520.37,-209.61"/>
-<text text-anchor="middle" x="542" y="-133.5" font-family="Noto Sans SC" font-size="10.00" fill="#7c3aed">倒逼升级</text>
-</g>
-</g>
-</svg>
-
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">44</div><div class="label">深度文章</div></div>
+      <div class="hero-stat"><div class="num">7</div><div class="label">核心议题</div></div>
+      <div class="hero-stat"><div class="num">2B</div><div class="label">阿斯巴甜致癌等级</div></div>
+      <div class="hero-stat"><div class="num">5.5万</div><div class="label">年摄入微塑料颗粒</div></div>
+    </div>
   </div>
-  <div class="legend">
-    <span><span class="dot" style="background:#dc2626"></span> 第一层：食品安全风险</span>
-    <span><span class="dot" style="background:#2563eb"></span> 第二层：食品科学基础</span>
-    <span><span class="dot" style="background:#059669"></span> 第三层：认知与决策</span>
-    <span><span class="dot" style="background:#7c3aed"></span> 第四层：社会影响</span>
-    <span style="color:var(--text-lighter);font-size:12px">⇢ 虚线回环 = 监管反馈·需求倒逼</span>
+  <div class="scroll-hint">
+    <span>向下解码焦虑</span>
+    <span style="font-size:16px">⌄</span>
   </div>
-</div>
+</section>
 
-<!-- Creative Illustration -->
-<div class="overview-card" style="grid-column:1/-1;margin-bottom:18px">
-  <h3>🎨 创意图 — 从农田到餐桌：食品安全链的环形守护</h3>
-  <p style="font-size:13px;color:var(--text-light);margin-bottom:12px">视觉隐喻：食品安全不是一个"检查点"，而是一条从农田到餐桌的完整链条——每一个环节都可能引入风险，每一个环节也需要防护。环形结构象征食物系统的封闭循环：消费者的选择反过来影响上游生产。</p>
-  <div class="graph-container">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" style="max-width:100%;height:auto">
-      <style>
-        .fs-node{transition:all .3s ease;cursor:pointer}
-        .fs-node:hover{opacity:.8;filter:drop-shadow(0 2px 8px rgba(245,158,11,.3))}
-        .fs-risk{transition:all .25s ease;cursor:pointer}
-        .fs-risk:hover{fill:#dc2626;font-weight:700}
-        .fs-arrow{transition:all .3s ease}
-        .fs-arrow:hover{stroke-width:3.5}
-        .fs-ctrl{transition:all .25s ease;cursor:pointer}
-        .fs-ctrl:hover{opacity:.9;transform:scale(1.05)}
-      </style>
-      <rect width="800" height="560" rx="12" fill="#fefce8"/>
-      <!-- Title -->
-      <text x="400" y="26" text-anchor="middle" fill="#92400e" font-size="15" font-weight="700" font-family="sans-serif">🌾 从农田到餐桌 — 食品安全守护链（含关键控制点）</text>
-      <!-- Decorative soil strip bottom -->
-      <rect y="405" width="800" height="155" fill="#78350f" opacity=".07"/>
-      <path d="M0,405 Q100,395 200,405 Q300,415 400,405 Q500,395 600,405 Q700,415 800,405" fill="none" stroke="#78350f" stroke-width="1" opacity=".3"/>
-      <!-- ===== STATION 1: FARM (top-left) ===== -->
-      <g class="fs-node">
-        <rect x="40" y="60" width="130" height="72" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
-        <text x="105" y="86" text-anchor="middle" fill="#92400e" font-size="12" font-weight="700" font-family="sans-serif">🌱 农田种植</text>
-        <text x="105" y="104" text-anchor="middle" fill="#78716c" font-size="9">农药残留·重金属</text>
-        <text x="105" y="120" text-anchor="middle" fill="#78716c" font-size="9">化肥过量·霉菌毒素</text>
-        <!-- Risk tag -->
-        <rect x="175" y="65" width="75" height="18" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width=".8"/>
-        <text x="212" y="78" text-anchor="middle" fill="#dc2626" font-size="8">⚠ 源头风险</text>
-        <!-- Control point -->
-        <rect x="175" y="88" width="75" height="18" rx="4" fill="#d1fae5" stroke="#059669" stroke-width=".8"/>
-        <text x="212" y="101" text-anchor="middle" fill="#059669" font-size="8">✓ GAP认证</text>
-      </g>
-      <!-- ===== STATION 2: PROCESSING (top-right) ===== -->
-      <g class="fs-node">
-        <rect x="560" y="60" width="130" height="72" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
-        <text x="625" y="86" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700" font-family="sans-serif">🏭 食品加工</text>
-        <text x="625" y="104" text-anchor="middle" fill="#64748b" font-size="9">添加剂·防腐剂</text>
-        <text x="625" y="120" text-anchor="middle" fill="#64748b" font-size="9">反式脂肪·亚硝酸盐</text>
-        <rect x="480" y="65" width="75" height="18" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width=".8"/>
-        <text x="517" y="78" text-anchor="middle" fill="#dc2626" font-size="8">⚠ 超标风险</text>
-        <rect x="480" y="88" width="75" height="18" rx="4" fill="#d1fae5" stroke="#059669" stroke-width=".8"/>
-        <text x="517" y="101" text-anchor="middle" fill="#059669" font-size="8">✓ HACCP</text>
-      </g>
-      <!-- Arrow: Farm → Processing -->
-      <g class="fs-arrow">
-        <line x1="170" y1="96" x2="555" y2="96" stroke="#b45309" stroke-width="2.2" stroke-dasharray="8,3"/>
-        <polygon points="555,90 568,96 555,102" fill="#b45309"/>
-        <text x="360" y="88" text-anchor="middle" fill="#b45309" font-size="9" font-weight="600">原料运输 →</text>
-      </g>
-      <!-- ===== STATION 3: TRANSPORT/STORAGE (right) ===== -->
-      <g class="fs-node">
-        <rect x="620" y="220" width="140" height="72" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
-        <text x="690" y="246" text-anchor="middle" fill="#6b21a8" font-size="12" font-weight="700" font-family="sans-serif">🚛 运输储存</text>
-        <text x="690" y="264" text-anchor="middle" fill="#78716c" font-size="9">冷链断裂·混装</text>
-        <text x="690" y="280" text-anchor="middle" fill="#78716c" font-size="9">微塑料迁移·氧化</text>
-        <rect x="540" y="228" width="75" height="18" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width=".8"/>
-        <text x="577" y="241" text-anchor="middle" fill="#dc2626" font-size="8">⚠ 罐车混装</text>
-        <rect x="540" y="251" width="75" height="18" rx="4" fill="#d1fae5" stroke="#059669" stroke-width=".8"/>
-        <text x="577" y="264" text-anchor="middle" fill="#059669" font-size="8">✓ 冷链监控</text>
-      </g>
-      <!-- Arrow: Processing → Transport -->
-      <g class="fs-arrow">
-        <path d="M655,132 C670,160 680,180 690,215" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-dasharray="8,3"/>
-        <polygon points="685,218 694,225 695,213" fill="#2563eb"/>
-        <text x="700" y="175" fill="#2563eb" font-size="9" font-weight="600">↓ 分销</text>
-      </g>
-      <!-- ===== STATION 4: RETAIL (bottom-right) ===== -->
-      <g class="fs-node">
-        <rect x="520" y="350" width="130" height="68" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="2.5"/>
-        <text x="585" y="376" text-anchor="middle" fill="#047857" font-size="12" font-weight="700" font-family="sans-serif">🏪 市场零售</text>
-        <text x="585" y="394" text-anchor="middle" fill="#64748b" font-size="9">标签误导·过期</text>
-        <text x="585" y="410" text-anchor="middle" fill="#64748b" font-size="9">虚假宣传·以次充好</text>
-      </g>
-      <!-- Arrow: Transport → Retail -->
-      <g class="fs-arrow">
-        <path d="M665,292 C650,320 620,340 605,348" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-dasharray="8,3"/>
-        <polygon points="599,345 597,357 607,352" fill="#7c3aed"/>
-        <text x="645" y="330" fill="#7c3aed" font-size="9" font-weight="600">配送 ↓</text>
-      </g>
-      <!-- ===== STATION 5: KITCHEN (bottom-left) ===== -->
-      <g class="fs-node">
-        <rect x="100" y="350" width="130" height="68" rx="12" fill="#ffedd5" stroke="#ea580c" stroke-width="2.5"/>
-        <text x="165" y="376" text-anchor="middle" fill="#9a3412" font-size="12" font-weight="700" font-family="sans-serif">🍳 家庭厨房</text>
-        <text x="165" y="394" text-anchor="middle" fill="#78716c" font-size="9">交叉污染·未煮熟</text>
-        <text x="165" y="410" text-anchor="middle" fill="#78716c" font-size="9">油反复使用·储存不当</text>
-      </g>
-      <!-- Arrow: Retail → Kitchen -->
-      <g class="fs-arrow">
-        <line x1="520" y1="384" x2="235" y2="384" stroke="#059669" stroke-width="2.2" stroke-dasharray="8,3"/>
-        <polygon points="235,378 222,384 235,390" fill="#059669"/>
-        <text x="380" y="376" text-anchor="middle" fill="#059669" font-size="9" font-weight="600">← 购买回家</text>
-      </g>
-      <!-- ===== STATION 6: TABLE / CONSUMER (center) ===== -->
-      <g class="fs-node">
-        <rect x="300" y="220" width="150" height="82" rx="14" fill="#fef3c7" stroke="#F59E0B" stroke-width="3.5"/>
-        <text x="375" y="248" text-anchor="middle" fill="#92400e" font-size="13" font-weight="700" font-family="sans-serif">🍽️ 餐桌</text>
-        <text x="375" y="266" text-anchor="middle" fill="#92400e" font-size="10" font-weight="600">消费者理性决策</text>
-        <text x="375" y="284" text-anchor="middle" fill="#78716c" font-size="8">阿斯巴甜·转基因·微塑料</text>
-        <text x="375" y="298" text-anchor="middle" fill="#78716c" font-size="8">智商税识别·谣言甄别</text>
-      </g>
-      <!-- Arrow: Kitchen → Table -->
-      <g class="fs-arrow">
-        <path d="M230,370 C260,340 290,300 310,280" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-dasharray="8,3"/>
-        <polygon points="314,275 318,287 308,282" fill="#ea580c"/>
-      </g>
-      <!-- Arrow: Table → Farm (feedback loop) -->
-      <g class="fs-arrow">
-        <path d="M300,240 C260,200 220,150 180,110" fill="none" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,4"/>
-        <polygon points="177,106 173,118 183,113" fill="#F59E0B"/>
-        <text x="210" y="170" transform="rotate(-50,210,170)" fill="#b45309" font-size="8" font-weight="600">消费选择→生产</text>
-      </g>
-      <!-- Arrow: Table → Processing (feedback) -->
-      <g class="fs-arrow">
-        <path d="M450,240 C500,200 540,150 580,115" fill="none" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,4"/>
-        <polygon points="584,111 584,123 574,118" fill="#F59E0B"/>
-        <text x="550" y="170" transform="rotate(40,550,170)" fill="#2563eb" font-size="8" font-weight="600">健康诉求→升级</text>
-      </g>
-      <!-- ===== KEY RISK ANNOTATIONS ===== -->
-      <g class="fs-risk">
-        <rect x="40" y="165" width="175" height="62" rx="6" fill="#fff" stroke="#dc2626" stroke-width="1.2"/>
-        <text x="127" y="182" text-anchor="middle" fill="#dc2626" font-size="9" font-weight="700">⚠ 阿斯巴甜争议</text>
-        <text x="127" y="197" text-anchor="middle" fill="#6b7280" font-size="7">IARC 2B类致癌物</text>
-        <text x="127" y="210" text-anchor="middle" fill="#6b7280" font-size="7">每日允许摄入量(ADI)</text>
-        <text x="127" y="223" text-anchor="middle" fill="#6b7280" font-size="7">剂量决定毒性</text>
-      </g>
-      <g class="fs-risk">
-        <rect x="560" y="165" width="175" height="45" rx="6" fill="#fff" stroke="#7c3aed" stroke-width="1.2"/>
-        <text x="647" y="182" text-anchor="middle" fill="#7c3aed" font-size="9" font-weight="700">🔬 微塑料无处不在</text>
-        <text x="647" y="197" text-anchor="middle" fill="#6b7280" font-size="7">PET/PE/PP → 血液·胎盘</text>
-        <text x="647" y="210" text-anchor="middle" fill="#6b7280" font-size="7">健康影响仍在研究</text>
-      </g>
-      <!-- ===== KEY CONTROL POINTS ===== -->
-      <g class="fs-ctrl">
-        <rect x="310" y="330" width="200" height="32" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.2"/>
-        <text x="410" y="342" text-anchor="middle" fill="#047857" font-size="9" font-weight="600">🛡️ 关键控制点：HACCP·GAP·冷链·标签法</text>
-        <text x="410" y="356" text-anchor="middle" fill="#047857" font-size="7">每一环节的风险管理而非"零风险"追求</text>
-      </g>
-      <!-- Bottom legend panel -->
-      <rect x="40" y="440" width="720" height="110" rx="10" fill="#fffbeb" stroke="#F59E0B" stroke-width="1.5"/>
-      <text x="400" y="462" text-anchor="middle" fill="#92400e" font-size="11" font-weight="700" font-family="sans-serif">🔑 食品安全 = 风险概率管理（不是"零风险"）| 营养决策 = 科学证据 + 个体差异（不是"一刀切"教条）</text>
-      <line x1="80" y1="475" x2="720" y2="475" stroke="#fcd34d" stroke-width=".5"/>
-      <!-- Legend items row -->
-      <rect x="70" y="488" width="14" height="10" rx="2" fill="#dc2626"/><text x="90" y="497" fill="#6b7280" font-size="9">风险警示</text>
-      <rect x="170" y="488" width="14" height="10" rx="2" fill="#059669"/><text x="190" y="497" fill="#6b7280" font-size="9">控制/认证</text>
-      <rect x="280" y="488" width="14" height="10" rx="2" fill="#2563eb"/><text x="300" y="497" fill="#6b7280" font-size="9">加工环节</text>
-      <rect x="390" y="488" width="14" height="10" rx="2" fill="#7c3aed"/><text x="410" y="497" fill="#6b7280" font-size="9">物流环节</text>
-      <rect x="500" y="488" width="14" height="10" rx="2" fill="#ea580c"/><text x="520" y="497" fill="#6b7280" font-size="9">消费环节</text>
-      <rect x="610" y="488" width="14" height="10" rx="2" fill="#F59E0B"/><text x="630" y="497" fill="#6b7280" font-size="9">消费反馈</text>
-      <text x="400" y="525" text-anchor="middle" fill="#78716c" font-size="9">从"化工罐车装食用油"到"代糖致癌争论"——每个食品安全热点背后，都是风险评估、剂量效应与产业链博弈的交织</text>
-      <text x="400" y="543" text-anchor="middle" fill="#78716c" font-size="8">消费者的每一次购买选择，都在反向塑造上游生产加工链——你的餐桌即你的投票</text>
-    </svg>
+<!-- ============ S1: 风险方程式 ============ -->
+<section class="section s1" id="s1">
+  <div class="section-header">
+    <div class="section-num">Section 01</div>
+    <h2>风险方程式：剂量决定毒性</h2>
+    <p>16世纪的帕拉塞尔苏斯说：「万物皆有毒，关键在于剂量。」500年后，这句话依然是食品安全的第一定律。拖动滑块，理解危害与暴露量的乘积。</p>
+  </div>
+  <div class="section-content">
+    <div class="risk-viz">
+      <div class="risk-scenario-select" id="scenarioBtns">
+        <button data-scenario="aspartame" class="active">🥤 阿斯巴甜</button>
+        <button data-scenario="microplastic">🧴 微塑料</button>
+        <button data-scenario="sulfur">🧆 硫磺熏蒸</button>
+        <button data-scenario="alcohol">🍺 酒精</button>
+        <button data-scenario="nitrite">🥓 亚硝酸盐</button>
+        <button data-scenario="custom">🎛️ 自由调节</button>
+      </div>
+      <div class="risk-sliders">
+        <div class="risk-slider-group hazard">
+          <div class="slider-label"><span class="name">⚠️ 危害等级 (物质本身的毒性)</span><span class="val" id="hazardVal">2</span></div>
+          <input type="range" min="1" max="10" value="2" id="hazardSlider">
+        </div>
+        <div class="risk-slider-group exposure">
+          <div class="slider-label"><span class="name">📏 暴露量 (实际摄入/接触多少)</span><span class="val" id="exposureVal">3</span></div>
+          <input type="range" min="1" max="10" value="3" id="exposureSlider">
+        </div>
+      </div>
+      <div class="risk-result">
+        <div class="risk-gauge low" id="riskGauge">
+          <span class="risk-num" id="riskNum">6</span>
+        </div>
+        <div class="risk-verdict" id="riskVerdict">
+          <div class="verdict-title" style="color:var(--green);">✅ 低风险</div>
+          <div class="verdict-desc">
+            阿斯巴甜的IARC分类为<strong>2B类</strong>（可能对人类致癌），与泡菜、手机辐射同级。<br>
+            一个70kg成人每天喝<strong>14罐以上</strong>无糖可乐才会超过ADI（每日允许摄入量）。正常饮用下，风险接近于零。
+          </div>
+        </div>
+      </div>
+      <div class="risk-examples" id="riskExamples">
+        <div class="risk-example" data-risk="2">
+          <div class="ex-name">🥤 阿斯巴甜</div><div class="ex-risk">2B类 · 日常摄入远低于ADI</div>
+        </div>
+        <div class="risk-example" data-risk="1">
+          <div class="ex-name">☕ 咖啡（丙烯酰胺）</div><div class="ex-risk">2A类 · 含量极低</div>
+        </div>
+        <div class="risk-example" data-risk="5">
+          <div class="ex-name">🧆 硫磺熏八角</div><div class="ex-risk">违规使用 · 有风险</div>
+        </div>
+        <div class="risk-example" data-risk="4">
+          <div class="ex-name">🍺 酒精</div><div class="ex-risk">1类致癌物 · 剂量相关</div>
+        </div>
+        <div class="risk-example" data-risk="7">
+          <div class="ex-name">🥓 亚硝酸盐（超标）</div><div class="ex-risk">急性毒性 · 高剂量</div>
+        </div>
+        <div class="risk-example" data-risk="1">
+          <div class="ex-name">🧴 微塑料</div><div class="ex-risk">危害未知 · 研究不足</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S2: 科学法庭 ============ -->
+<section class="section s2" id="s2">
+  <div class="section-header">
+    <div class="section-num">Section 02</div>
+    <h2>科学法庭：让证据说话</h2>
+    <p>每当一种食品成分被「指控」有害时，它有权在科学法庭上为自己辩护。法官只有一个——证据等级。陪审团是你自己。</p>
+  </div>
+  <div class="section-content">
+    <div class="court-layout">
+      <div class="court-bench">
+        <h3>⚖️ 待审案件</h3>
+        <div class="court-case-list" id="courtCases">
+          <div class="court-case active" data-case="0">
+            <div class="case-name">🥤 阿斯巴甜致癌案</div>
+            <div class="case-charge">指控：长期摄入导致癌症</div>
+          </div>
+          <div class="court-case" data-case="1">
+            <div class="case-name">🧴 微塑料健康风险案</div>
+            <div class="case-charge">指控：体内累积危害人体健康</div>
+          </div>
+          <div class="court-case" data-case="2">
+            <div class="case-name">🧬 转基因食品安全案</div>
+            <div class="case-charge">指控：长期食用存在未知风险</div>
+          </div>
+          <div class="court-case" data-case="3">
+            <div class="case-name">🦠 益生菌功效欺诈案</div>
+            <div class="case-charge">指控：宣称功效缺乏科学证据</div>
+          </div>
+          <div class="court-case" data-case="4">
+            <div class="case-name">🧫 硫磺八角公共危害案</div>
+            <div class="case-charge">指控：超量硫磺熏蒸危害公众健康</div>
+          </div>
+          <div class="court-case" data-case="5">
+            <div class="case-name">💊 保健品虚假宣传案</div>
+            <div class="case-charge">指控：夸大保健功效误导消费者</div>
+          </div>
+        </div>
+      </div>
+      <div class="court-verdict" id="courtVerdict">
+        <div class="judge-icon">👨‍⚖️</div>
+        <div class="verdict-ruling verdict-warn">⚡ 证据不足，发回重审</div>
+        <div class="verdict-reason">
+          <strong>阿斯巴甜</strong>被IARC列为<strong>2B类致癌物</strong>——「可能对人类致癌」。<br><br>
+          但2B类意味着<strong>证据有限</strong>。同在此类的还有：泡菜、芦荟全叶提取物、手机射频辐射。<br><br>
+          <strong>关键事实：</strong>IARC的分类只评估「危害」而不评估「风险」。一个70kg的成人每天需要喝<strong>14罐以上</strong>无糖可乐才会超出FDA的每日允许摄入量（ADI=50mg/kg）。
+        </div>
+        <div class="verdict-evidence">
+          <strong>📚 证据等级：</strong> 流行病学研究（中等质量）<br>
+          <strong>🔬 相关文章：</strong> 《食品添加剂安全性评估中的证据等级思维》<br>
+          <strong>💡 学会判断：</strong> 下次看到「XX致癌」的标题，先问三个问题：<br>
+          ① 是「危害」还是「风险」？② 剂量是多少？③ 研究类型是什么（流行病学/动物实验/体外实验）？
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S3: 消化道旅程 ============ -->
+<section class="section s3" id="s3">
+  <div class="section-header">
+    <div class="section-num">Section 03</div>
+    <h2>体内旅程：从口到肠的真相</h2>
+    <p>跟随一颗食物，穿行你的消化系统。看看添加剂、微塑料、营养成分在体内的真实路径——哪些被吸收、哪些被排出、哪些产生了影响。</p>
+  </div>
+  <div class="section-content">
+    <div class="journey-track" id="journeyTrack">
+      <div class="journey-node active" data-node="0">
+        <div class="node-marker">👄</div>
+        <div class="node-card">
+          <h4>口腔 · 第一道防线</h4>
+          <div class="node-loc">📍 唾液中的酶开始工作</div>
+          <div class="node-detail" style="max-height:300px;">
+            <strong>发生了什么：</strong>食物被咀嚼粉碎，唾液淀粉酶开始分解碳水化合物。微塑料颗粒可能在此时从食物包装中释放。<br><br>
+            <strong>食品添加剂：</strong>甜味剂（如阿斯巴甜）在此被味蕾感知，但不被吸收——甜味信号传到大脑，身体预期糖分到来。<br><br>
+            <strong>关键事实：</strong>这就是为什么代糖可能「欺骗」大脑，影响胰岛素分泌预期。
+          </div>
+        </div>
+      </div>
+
+      <div class="journey-node" data-node="1">
+        <div class="node-marker">🫁</div>
+        <div class="node-card">
+          <h4>食道 · 快速通道</h4>
+          <div class="node-loc">📍 约25cm · 蠕动耗时约6秒</div>
+          <div class="node-detail">
+            <strong>发生了什么：</strong>食团经蠕动推进到胃。此阶段无消化，纯运输。<br><br>
+            <strong>风险点：</strong>过烫饮品（>65°C）在此损伤黏膜，IARC将「饮用过烫饮料」列为<strong>2A类致癌物</strong>——比阿斯巴甜的2B类还高一级。<br><br>
+            <strong>启示：</strong>很多人害怕阿斯巴甜却不在乎热饮——这就是风险感知与科学证据的错位。
+          </div>
+        </div>
+      </div>
+
+      <div class="journey-node" data-node="2">
+        <div class="node-marker">🫗</div>
+        <div class="node-card">
+          <h4>胃 · 强酸熔炉</h4>
+          <div class="node-loc">📍 pH 1.5-3.5 · 停留2-4小时</div>
+          <div class="node-detail">
+            <strong>发生了什么：</strong>胃酸（盐酸）将大部分细菌杀死，胃蛋白酶开始分解蛋白质。这是人体最强大的消毒系统。<br><br>
+            <strong>食品添加剂：</strong>大多数添加剂能通过胃酸环境不变。亚硝酸盐在此与胺类反应生成<strong>亚硝胺</strong>——这才是真正的一级致癌物。<br><br>
+            <strong>微塑料：</strong>胃酸无法分解塑料微粒，它们将继续前行。
+          </div>
+        </div>
+      </div>
+
+      <div class="journey-node" data-node="3">
+        <div class="node-marker">🧬</div>
+        <div class="node-card">
+          <h4>小肠 · 吸收主战场</h4>
+          <div class="node-loc">📍 约6米 · 停留3-6小时</div>
+          <div class="node-detail">
+            <strong>发生了什么：</strong>90%的营养在此吸收。胰腺酶、胆汁、肠酶协同工作。肠壁绒毛展开面积≈<strong>半个羽毛球场</strong>。<br><br>
+            <strong>代糖的真相：</strong>阿斯巴甜被分解为天冬氨酸和苯丙氨酸——两种普通氨基酸。除非有苯丙酮尿症（PKU），身体无法区分它与食物蛋白的区别。<br><br>
+            <strong>微塑料：</strong>小于150μm的颗粒可能穿过肠壁进入血液循环——这是目前最大的科学担忧。
+          </div>
+        </div>
+      </div>
+
+      <div class="journey-node" data-node="4">
+        <div class="node-marker">🦠</div>
+        <div class="node-card">
+          <h4>大肠 · 菌群宇宙</h4>
+          <div class="node-loc">📍 约1.5米 · 停留12-48小时</div>
+          <div class="node-detail">
+            <strong>发生了什么：</strong>约100万亿个细菌（重约<strong>1-2kg</strong>）在此发酵未被消化的纤维，产生短链脂肪酸、维生素K和B族维生素。<br><br>
+            <strong>益生菌的现实：</strong>《自然评论》2021年的综述指出——大多数市售益生菌产品中的菌株<strong>无法在肠道定植</strong>，它们只是「过客」。这就是卓克在《203 | 益生菌：不论好坏很难有用》中讨论的核心发现。<br><br>
+            <strong>添加剂：</strong>某些乳化剂（如CMC、P80）在动物实验中显示可能破坏肠道菌群屏障——但人类证据仍不充分。
+          </div>
+        </div>
+      </div>
+
+      <div class="journey-node" data-node="5">
+        <div class="node-marker">🚪</div>
+        <div class="node-card">
+          <h4>排出 · 终末审判</h4>
+          <div class="node-loc">📍 未被吸收的物质排出体外</div>
+          <div class="node-detail">
+            <strong>最终命运：</strong>绝大多数食品添加剂和微塑料随粪便排出。人体并非「来者不拒」——它有精密的选择性吸收机制。<br><br>
+            <strong>关键认知：</strong>「检测到」≠「有害」。现代分析化学可以在万亿分之一的浓度下检测任何物质——但检测限远低于毒性阈值。<br><br>
+            <strong>卓克的核心方法：</strong>下次看到「XX食品中检测出XX」的新闻，问自己——检测出的量，离产生危害的量还差几个数量级？
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S4: 证据金字塔 ============ -->
+<section class="section s4" id="s4">
+  <div class="section-header">
+    <div class="section-num">Section 04</div>
+    <h2>证据金字塔：谁的话能信？</h2>
+    <p>从「我妈说」到「Cochrane系统综述」——营养健康领域的证据有明确的等级。学会看证据等级，你就超越了90%的信息消费者。</p>
+  </div>
+  <div class="section-content">
+    <div class="evidence-pyramid" id="evidencePyramid">
+      <div class="pyramid-level l1" data-level="0">
+        <div class="level-num">🥉</div>
+        <div class="level-name">体外实验 / 动物实验</div>
+        <div class="level-example">例：细胞培养中发现某添加剂抑制线粒体功能</div>
+        <div class="level-detail">
+          <strong>为什么在底层：</strong>体外浓度往往是体内的1000倍以上，动物代谢路径与人类不同。体外实验中「有害」的结论，90%以上在人体研究中被推翻。<br><br>
+          <strong>媒体最爱：</strong>「科学家发现XX致癌！」——几乎总是来自这一层。标题里的「致癌」省略了关键信息：「在培养皿中，用超高浓度浸泡72小时」。
+        </div>
+      </div>
+      <div class="pyramid-level l2" data-level="1">
+        <div class="level-num">🥈</div>
+        <div class="level-name">个案报告 / 专家意见</div>
+        <div class="level-example">例：某医生发论文称接诊了5例代糖不耐受患者</div>
+        <div class="level-detail">
+          <strong>价值与局限：</strong>个案报告可以发现新问题，但不能证明因果关系。专家意见受个人经验和利益冲突影响。<br><br>
+          <strong>警惕：</strong>「钟南山推荐」「哈佛教授研究发现」——个人头衔不等于证据等级。看他说了什么不如看他引用了什么。
+        </div>
+      </div>
+      <div class="pyramid-level l3" data-level="2">
+        <div class="level-num">🏅</div>
+        <div class="level-name">观察性研究 (队列/病例对照)</div>
+        <div class="level-example">例：追踪10万人10年，发现代糖饮料摄入与BMI变化相关</div>
+        <div class="level-detail">
+          <strong>注意：</strong>观察性研究发现的是「相关性」而非「因果性」。喝无糖可乐的人可能本身就有不健康的饮食习惯——这是混淆因子。<br><br>
+          <strong>IARC分类主要依赖这一层。</strong>阿斯巴甜的2B类结论来自于有限的流行病学证据+动物实验证据。
+        </div>
+      </div>
+      <div class="pyramid-level l4" data-level="3">
+        <div class="level-num">🎖️</div>
+        <div class="level-name">随机对照试验 (RCT)</div>
+        <div class="level-example">例：随机分组，干预组服用益生菌，对照组服安慰剂，双盲评估</div>
+        <div class="level-detail">
+          <strong>黄金标准：</strong>随机化消除选择偏倚，双盲消除安慰剂效应。这是证明因果关系的唯一可靠方法。<br><br>
+          <strong>在营养学中的困境：</strong>让人们严格按实验饮食生活数月几乎不可能——所以营养学的高质量RCT很少。这不是科学的失败，而是现实的限制。
+        </div>
+      </div>
+      <div class="pyramid-level l5" data-level="4">
+        <div class="level-num">🏆</div>
+        <div class="level-name">系统综述 / Meta分析</div>
+        <div class="level-example">例：Cochrane综述汇总20项RCT，综合评估益生菌对IBS的效果</div>
+        <div class="level-detail">
+          <strong>证据的顶峰：</strong>综合所有可用研究，用统计学方法给出最可靠的结论。一篇高质量系统综述胜过100篇个案报告。<br><br>
+          <strong>最终结论：</strong>如果一项Meta分析说「益生菌对健康人无明显益处」——你可以相信这个结论比益生菌广告更接近真相。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S5: 文章宇宙 ============ -->
+<section class="section s5" id="s5">
+  <div class="section-header">
+    <div class="section-num">Section 05</div>
+    <h2>文章宇宙：44篇深度解码</h2>
+    <p>所有文章按主题组织。点击标签筛选——每一篇都是你对抗食品焦虑的武器。</p>
+  </div>
+  <div class="section-content">
+    <div class="article-tags" id="articleTags">
+      <button class="article-tag active" data-tag="all">全部 (44)</button>
+      <button class="article-tag" data-tag="food">🍽️ 食品安全 (9)</button>
+      <button class="article-tag" data-tag="science">🔬 科学方法 (8)</button>
+      <button class="article-tag" data-tag="health">🏥 公共卫生 (8)</button>
+      <button class="article-tag" data-tag="tech">⚡ 能源科技 (12)</button>
+      <button class="article-tag" data-tag="ai">🤖 AI与认知 (7)</button>
+    </div>
+    <div class="article-grid" id="articleGrid"></div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE METER -->
+<div class="kmeter" id="kmeter">
+  <span style="color:var(--text-dim);">解码进度</span>
+  <div class="km-ring">
+    <span class="km-pct" id="kmPct">0%</span>
   </div>
 </div>
 
-<!-- Overview Cards -->
-<div class="overview-grid">
-  <div class="overview-card">
-    <h3>🧠 核心概念（10个）</h3>
-    <ol style="padding-left:20px;line-height:2.2;font-size:14px">
-      <li>食品安全风险评估 — 剂量决定毒性</li>
-      <li>食品添加剂与防腐剂 — 必要之恶vs滥用</li>
-      <li>智商税识别框架 — 保健品消费决策</li>
-      <li>微塑料与食品安全 — 新兴污染物认知</li>
-      <li>转基因食品科学 — 育种vs转基因</li>
-      <li>营养补充剂真相 — NMN/白藜芦醇/叶黄素</li>
-      <li>食品标签解读 — 配料表的秘密</li>
-      <li>食物加工与营养 — 精炼vs天然</li>
-      <li>食品产业链 — 从农田到餐桌</li>
-      <li>饮食谣言机制 — 传播与辟谣</li>
-    </ol>
-  </div>
-  <div class="overview-card">
-    <h3>🎯 最小知识集 (MKS)</h3>
-    <p style="font-size:14px">10个核心概念覆盖本专题 80% 以上的认知价值：</p>
-    <ul style="padding-left:20px;line-height:2.1;margin-top:8px;font-size:14px">
-      <li><strong>剂量效应</strong> — 毒性取决于剂量</li>
-      <li><strong>防腐剂机制</strong> — 不用比用更危险</li>
-      <li><strong>智商税五步法</strong> — 保健品判断框架</li>
-      <li><strong>微塑料评估</strong> — 风险尚未确定</li>
-      <li><strong>转基因vs育种</strong> — 科学定义边界</li>
-      <li><strong>NMN争议</strong> — 抗衰老的丑闻</li>
-      <li><strong>配料表排序</strong> — 含量从高到低</li>
-      <li><strong>毛油精炼</strong> — 六步去除杂质</li>
-      <li><strong>化工罐车事件</strong> — 产业链监管漏洞</li>
-      <li><strong>食品谣言模板</strong> — 识别与甄别方法</li>
-    </ul>
-  </div>
-</div>
-
-<!-- Boundary Table -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>📋 边界知识表</h3>
-  <table class="boundary-table">
-    <thead><tr><th>概念</th><th>是（核心）</th><th>不是（排除）</th><th>边界条件</th></tr></thead>
-    <tbody>
-      <tr><td>食品安全</td><td>风险概率管理，剂量决定毒性</td><td>追求"零风险"或"绝对安全"</td><td>任何食物都有风险，关键是剂量</td></tr>
-      <tr><td>防腐剂</td><td>防止微生物繁殖的保护剂</td><td>可有可无的"化学毒药"</td><td>不添加防腐剂的健康损失更大</td></tr>
-      <tr><td>智商税</td><td>支付远超功能价值的溢价</td><td>所有高价产品</td><td>取决于信息不对称程度</td></tr>
-      <tr><td>转基因</td><td>精准修改1-2个已知基因</td><td>等同于传统杂交育种</td><td>育种是全基因组随机重组</td></tr>
-      <tr><td>微塑料</td><td>环境新兴污染物</td><td>已确认的健康杀手</td><td>人体健康影响证据仍不充分</td></tr>
-      <tr><td>NMN/白藜芦醇</td><td>实验室动物研究阶段</td><td>经证实的人类抗衰老药</td><td>人体临床证据缺失，学术丑闻</td></tr>
-      <tr><td>食品标签</td><td>配料含量从高到低排列</td><td>"0反式脂肪"=完全不含</td><td>≤0.3g/100g 可标注为0</td></tr>
-      <tr><td>食用油精炼</td><td>六步精炼去除杂质</td><td>所有杂质都能被彻底去除</td><td>精炼可去除大部分但非全部</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- Learning Path -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>🗺️ 学习路径</h3>
-  <div class="path-steps">
-    <div class="path-step current"><div class="step-num">1</div>食品安全基础</div>
-    <div class="path-step"><div class="step-num">2</div>添加剂与防腐</div>
-    <div class="path-step"><div class="step-num">3</div>智商税识别</div>
-    <div class="path-step"><div class="step-num">4</div>营养科学边界</div>
-    <div class="path-step"><div class="step-num">5</div>产业链与监管</div>
-  </div>
-</div>
-
-<!-- Progress -->
-<div class="overview-card" style="grid-column:1/-1">
-  <h3>📈 学习进度</h3>
-  <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:14px">卡片已学 <span id="learnedCount">0</span>/10 | 题目已答 <span id="quizDone">0</span>/23</p>
-</div>
-</section>
-
-<!-- TAB 1: 知识卡片 -->
-<section class="tab-section" id="sec-cards">
-<h2>🃏 知识卡片 <span style="font-size:13px;color:var(--text-light)">— 点击卡片翻转查看详情</span></h2>
-<div class="flip-container" id="flipContainer"></div>
-<div style="text-align:center;margin:14px 0">
-  <p>已学：<span id="cardLearned">0</span>/10 | 进度：<span id="cardProgress">0</span>%</p>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgressBar" style="width:0%"></div></div>
-</div>
-<div class="card-nav">
-  <button id="prevCard">← 上一张</button>
-  <span class="card-idx" id="cardIndex">1/10</span>
-  <button id="nextCard">下一张 →</button>
-  <button id="markLearnedBtn" style="margin-left:8px">✓ 标记已学</button>
-</div>
-</section>
-
-<!-- TAB 2: 题库系统 -->
-<section class="tab-section" id="sec-quiz">
-<h2>📝 题库系统</h2>
-<div class="quiz-controls">
-  <button id="randomMCQ">🎲 随机抽 MCQ（15 题）</button>
-  <button id="randomSA">🎲 随机抽简答（8 题）</button>
-  <button id="resetQuiz">🔄 重置全部</button>
-</div>
-<div id="quizContainer"></div>
-<div id="staticQuiz" class="static-quiz"></div>
-</section>
-
-<!-- TAB 3: 考试模式 -->
-<section class="tab-section" id="sec-exam">
-<h2>⏱️ 考试模式</h2>
-<div class="exam-timer" id="examTimer">30:00</div>
-<div class="quiz-controls">
-  <button id="startExam">开始考试（30 分钟）</button>
-  <button id="submitExam">提交答卷</button>
-  <button id="resetExam">重置考试</button>
-</div>
-<div class="exam-score" id="examScore"></div>
-<div id="examContainer"></div>
-</section>
-
-<!-- TAB 4: 复习模式 -->
-<section class="tab-section" id="sec-review">
-<h2>🔄 复习模式 — 艾宾浩斯间隔复习</h2>
-<div class="quiz-controls">
-  <button id="startReview">开始复习</button>
-  <button id="resetReview">重置复习进度</button>
-</div>
-<p style="font-size:13px;color:var(--text-light);margin:8px 0">点击复习项查看答案，确认掌握后勾选完成</p>
-<ul class="review-list" id="reviewList"></ul>
-</section>
-
-<!-- TAB 5: 思维导图 -->
-<section class="tab-section" id="sec-mindmap">
-<h2>🗺️ 思维导图 — 食品营养与安全知识体系</h2>
-<div class="graph-container" id="mindMapContainer"></div>
-</section>
-
-<!-- TAB 6: 深度追问 -->
-<section class="tab-section" id="sec-deepask">
-<h2>🔍 深度追问</h2>
-<p style="color:var(--text-light);margin-bottom:14px;font-size:14px">点击问题展开深度解答 — 源自课程内容但超越原文，需要交叉推理</p>
-<div id="deepAskContainer"></div>
-</section>
-
-<!-- TAB 7: 案例分析 -->
-<section class="tab-section" id="sec-cases">
-<h2>📋 案例分析</h2>
-<p style="color:var(--text-light);margin-bottom:14px;font-size:14px">用 MKS 概念框架分析食品安全热点事件</p>
-<div id="caseContainer"></div>
-</section>
-
-<!-- TAB 8: 实战决策 -->
-<section class="tab-section" id="sec-decision">
-<h2>🎯 实战决策 — 食品消费模拟</h2>
-<p style="color:var(--text-light);margin-bottom:14px;font-size:14px">运用"智商税识别五步法"做食品相关购买决策</p>
-<div id="decisionContainer"></div>
-</section>
-
+<!-- FOOTER -->
 <footer class="footer">
-  <p><a href="index.html">← 返回科技参考3 主板</a> · 卓克 · 科技参考3 · MKS 最小知识集</p>
+  <div class="footer-nav">
+    <a href="index.html">🏠 科技分光镜 · 主板</a>
+    <a href="1-AI与芯片革命.html">🤖 AI与芯片革命</a>
+    <a href="2-航天与太空探索.html">🚀 航天与太空探索</a>
+    <a href="3-医学与健康前沿.html">🏥 医学与健康前沿</a>
+  </div>
+  <p>卓克 · 科技参考3 — 焦虑解码器 | 学会区分「危害」与「风险」</p>
+  <p style="margin-top:4px;">© 2026 科技分光镜 · 深空观测台数据引擎</p>
 </footer>
 
 <script>
-// ===== Global =====
-var currentCardIdx = 0;
-var learnedCards = {};
-var quizAnswered = 0;
-var examInterval = null;
-var examSeconds = 1800;
+// ============================================================
+// HERO CANVAS — Floating food molecules
+// ============================================================
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
 
-// ===== Tab Switching =====
-(function(){
-  var btns = document.querySelectorAll('.tab-nav button');
-  btns.forEach(function(b){
-    b.addEventListener('click',function(){
-      btns.forEach(function(x){x.classList.remove('active')});
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Create particles representing food molecules
+  const colors = ['#a78bfa','#60a5fa','#2dd4bf','#fbbf24','#4ade80','#f87171','#f472b6'];
+  for (let i = 0; i < 70; i++) {
+    particles.push({
+      x: Math.random() * w, y: Math.random() * h,
+      r: Math.random() * 3 + 1.5,
+      vx: (Math.random() - .5) * .6,
+      vy: (Math.random() - .5) * .6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: Math.random() * .02 + .01
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+      p.pulse += p.pulseSpeed;
+      const alpha = .3 + Math.sin(p.pulse) * .2;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color.replace(')', `,${alpha})`).replace('rgb', 'rgba');
+      if (p.color.startsWith('#')) {
+        const hex = p.color;
+        ctx.fillStyle = hex + Math.floor(alpha * 255).toString(16).padStart(2,'0');
+      }
+      ctx.fill();
+
+      // Connect nearby particles
+      particles.forEach(p2 => {
+        const dx = p.x - p2.x, dy = p.y - p2.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100 && dist > 0) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(167,139,250,${.04 * (1 - dist/100)})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ============================================================
+// S1: RISK EQUATION VISUALIZER
+// ============================================================
+(function() {
+  const hazardSlider = document.getElementById('hazardSlider');
+  const exposureSlider = document.getElementById('exposureSlider');
+  const hazardVal = document.getElementById('hazardVal');
+  const exposureVal = document.getElementById('exposureVal');
+  const riskGauge = document.getElementById('riskGauge');
+  const riskNum = document.getElementById('riskNum');
+  const riskVerdict = document.getElementById('riskVerdict');
+  const scenarioBtns = document.getElementById('scenarioBtns');
+
+  const scenarios = {
+    aspartame: { hazard: 2, exposure: 3, title: '低风险', color: 'var(--green)', cls: 'low', desc: '阿斯巴甜的IARC分类为<strong>2B类</strong>（可能对人类致癌），与泡菜、手机辐射同级。<br>一个70kg成人每天喝<strong>14罐以上</strong>无糖可乐才会超过ADI（每日允许摄入量）。正常饮用下，风险接近于零。' },
+    microplastic: { hazard: 4, exposure: 7, title: '中等风险（证据不足）', color: 'var(--amber)', cls: 'mid', desc: '每人每年摄入约<strong>5.5万颗</strong>微塑料颗粒。但目前科学尚不清楚微塑料在人体内的确切危害。<br><strong>关键不确定性：</strong>塑料颗粒的化学毒性 vs 物理堵塞效应？小于150μm的颗粒能否穿越肠壁？这些都没有答案。' },
+    sulfur: { hazard: 6, exposure: 6, title: '中高风险', color: 'var(--amber)', cls: 'mid', desc: '广西八角批发市场<strong>95%以上</strong>使用硫磺熏蒸，全国1/3的八角来自此市场。<br>过量二氧化硫可引发哮喘、损伤呼吸道。但正常烹饪中硫残留大部分挥发。<strong>风险可控的前提是：</strong>监管到位、摊贩合规。' },
+    alcohol: { hazard: 8, exposure: 5, title: '高风险（剂量相关）', color: 'var(--red)', cls: 'high', desc: '酒精是<strong>1类致癌物</strong>——比阿斯巴甜的2B类高两级。与石棉、烟草同级。<br>但少量饮酒的风险远低于大量饮酒。酒精致癌的机制包括乙醛-DNA加合物形成、氧化应激等——有明确的生化路径。' },
+    nitrite: { hazard: 9, exposure: 4, title: '高风险（超标时）', color: 'var(--red)', cls: 'high', desc: '亚硝酸盐本身就是剧毒（致死量约3g），合规用量下风险可控。<br><strong>真正危险：</strong>它在胃中与胺类反应生成<strong>亚硝胺</strong>——1类致癌物。这就是为什么火腿肠既含亚硝酸盐又含维C（维C阻止亚硝胺生成）。' },
+    custom: { hazard: 5, exposure: 5, title: '中等风险', color: 'var(--amber)', cls: 'mid', desc: '自由调节两个滑块，观察风险值如何变化。<br><strong>记住：</strong>危害×暴露量=风险。高危害低暴露（如河豚毒素）可以安全食用；低危害高暴露（如糖）可以造成健康问题。' }
+  };
+
+  function updateRisk() {
+    const h = parseInt(hazardSlider.value);
+    const e = parseInt(exposureSlider.value);
+    const risk = h * e;
+    hazardVal.textContent = h;
+    exposureVal.textContent = e;
+    riskNum.textContent = risk;
+
+    riskGauge.className = 'risk-gauge';
+    riskVerdict.querySelector('.verdict-title').style.color = '';
+    if (risk <= 15) {
+      riskGauge.classList.add('low');
+      riskVerdict.querySelector('.verdict-title').style.color = 'var(--green)';
+      riskVerdict.querySelector('.verdict-title').textContent = '✅ 低风险';
+    } else if (risk <= 50) {
+      riskGauge.classList.add('mid');
+      riskVerdict.querySelector('.verdict-title').style.color = 'var(--amber)';
+      riskVerdict.querySelector('.verdict-title').textContent = '⚠️ 中等风险';
+    } else {
+      riskGauge.classList.add('high');
+      riskVerdict.querySelector('.verdict-title').style.color = 'var(--red)';
+      riskVerdict.querySelector('.verdict-title').textContent = '🚨 高风险';
+    }
+  }
+
+  hazardSlider.addEventListener('input', updateRisk);
+  exposureSlider.addEventListener('input', updateRisk);
+
+  scenarioBtns.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      scenarioBtns.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-      document.querySelectorAll('.tab-section').forEach(function(s){s.classList.remove('active')});
-      var sec = document.getElementById('sec-'+this.dataset.tab);
-      if(sec) sec.classList.add('active');
+      const s = scenarios[this.dataset.scenario];
+      hazardSlider.value = s.hazard;
+      exposureSlider.value = s.exposure;
+      hazardVal.textContent = s.hazard;
+      exposureVal.textContent = s.exposure;
+      updateRisk();
+      riskVerdict.querySelector('.verdict-desc').innerHTML = s.desc;
     });
   });
 })();
 
-// ===== 10 Knowledge Cards =====
-var concepts = [
-  {
-    id:'risk', icon:'⚠️', name:'食品安全风险评估',
-    hint:'点击翻转 — 理解"剂量决定毒性"',
-    def:'食品安全风险 = 危害物毒性 × 暴露剂量 × 暴露频率。核心原则是"剂量决定毒性"（帕拉塞尔苏斯）——任何物质在足够高的剂量下都是有毒的，关键在于实际摄入量。食品安全监管设定"每日允许摄入量(ADI)"和"最大残留限量(MRL)"作为安全标准。',
-    analogy:'好比喝水——每天喝2升水有益健康，但一次喝20升会水中毒致死。食品安全风险也一样：微量的农药残留（比如0.01mg/kg）经过安全评估，远低于有害阈值。新闻里的"检出"不等于"有害"——检出的灵敏度是纳克级，而有害剂量通常是毫克级，差了一百万倍。',
-    example:'化工罐车装食用油事件：煤制油含有苯系物、多环芳烃等有害物质。但实际风险取决于：1）混装比例（被稀释了多少）；2）精炼过程能去除多少；3）长期摄入的累积效应。定量分析显示：偶尔摄入的风险远小于每天吸烟、饮酒的致癌风险。',
-    counter:'风险交流的最大障碍：公众追求"零风险"，科学只能提供"可接受风险"。任何"检出"都被媒体放大，但"未检出"不代表零（检测限以下），"检出"不代表有害（远低于安全阈值）。食品安全是风险管理，不是风险消除。'
-  },
-  {
-    id:'additive', icon:'🧪', name:'食品添加剂与防腐剂',
-    hint:'点击翻转 — 为什么"零添加"可能是营销骗局',
-    def:'食品添加剂是为改善食品品质（色、香、味、防腐）而加入的合成或天然物质。防腐剂（如苯甲酸钠、山梨酸钾、脱氢乙酸钠）的核心功能是抑制微生物生长。在中国，每种添加剂都有严格的GB2760使用标准和ADI限量。2024年脱氢乙酸钠在月饼中使用被热议，但关键差异是"合规使用"vs"超量滥用"。',
-    analogy:'防腐剂好比疫苗——微量使用预防大风险。一块不加防腐剂的肉放在常温下，24小时内细菌可达危险水平（肉毒杆菌毒素比防腐剂毒性高数百万倍）。添加防腐剂带来的健康风险（微量化学物），远远小于不添加防腐剂带来的风险（细菌毒素/食物中毒）。与其担心防腐剂，不如担心没有防腐剂的食物为什么不变质。',
-    example:'月饼脱氢乙酸钠事件：中国允许在月饼中使用脱氢乙酸钠（≤0.5g/kg），但韩国不允许。2023-2024年稻香村月饼因含此成分被韩国退货18次。这不等于月饼"有毒"——韩国的标准和中国的标准不同，类似欧盟禁用瘦肉精但美国允许。标准的差异不等于科学上的有害。',
-    counter:'不是所有添加剂都无害——亚硝酸盐（发色剂）在体内可转化为致癌物亚硝胺。但中国规定肉制品中亚硝酸盐残留≤30mg/kg，远低于风险剂量。真正的风险不是"有添加剂"而是"违规超量使用"——小作坊的散装食品往往没有监管。'
-  },
-  {
-    id:'iqtax', icon:'🛒', name:'智商税识别框架',
-    hint:'点击翻转 — 保健品消费决策五步法',
-    def:'"智商税"=支付远超功能价值的溢价，核心成因是信息不对称。五步识别法：1）需求真实性——我真的需要吗？2）技术原理——宣称的机制有科学依据吗？3）参数对比——和成熟产品比差多少？4）溢价合理度——多付的钱买到了什么？5）替代方案——有无更便宜的方式？',
-    analogy:'好比"左旋肉碱减肥"——左旋肉碱确实参与脂肪运输到线粒体的过程，但这不等于"吃了就能减肥"。就像一条高速公路能跑车，但不等于你多发几张驾照就能让车速更快。身体的脂肪消耗由能量赤字（消耗>摄入）决定，不是由"运输工具"的多少决定的。如果吃得比消耗多，再多左旋肉碱也没用。',
-    example:'NMN保健品：哈佛教授大卫·辛克莱尔的研究让NMN成为抗衰老"神药"。但1）人体临床证据几乎为零；2）辛克莱尔自己的公司以7.2亿美元被收购——他在卖自己推广的东西；3）2024年中国已禁止NMN作为食品原料。一个被禁的、无人体验证的产品仍在朋友圈热销。',
-    counter:'不是所有保健品都是智商税——维生素D对日照不足人群确实有效，叶酸对备孕女性确实必要。智商税的核心是"溢价远超实际功能价值"——如果一个保健品定价500元/月但有效成分成本仅5元，且宣称的功效远超科学证据，那就是智商税。'
-  },
-  {
-    id:'microplastic', icon:'🔬', name:'微塑料与食品安全',
-    hint:'点击翻转 — 新兴污染物的科学边界',
-    def:'微塑料（<5mm）和纳米塑料（<1μm）是塑料制品降解的产物，已在海洋、土壤、空气、饮用水甚至人体胎盘中被发现。塑料大规模使用仅60-70年，人体健康影响的研究非常有限。WHO 2019年报告结论：饮用水中的微塑料在现有水平下"似乎不构成健康风险"，但承认数据不足。',
-    analogy:'微塑料好比空气中的PM2.5——它们确实存在，也确实进入了人体，但从"存在"到"有害"中间有很长的科学证据链需要建立。我们知道PM2.5有害，是因为有几十年的流行病学数据。微塑料的研究才刚起步——目前最大的问题不是"确定有害"而是"不确定是否有害"。恐慌本身可能比微塑料危害更大。',
-    example:'2018年奥地利研究声称在人类粪便中检出9种微塑料，引发全球恐慌。但该研究仅8个样本，且未排除采样过程中的污染。2022年荷兰研究在人体血液中检出微塑料——但浓度极低（1.6μg/mL），且血液中的塑料颗粒会随代谢排出。从"检出"到"致病"，中间的因果链远未被建立。',
-    counter:'不恐慌≠不重视。微塑料确实是值得持续监测的新兴污染物，减少塑料使用有环境价值。但如果因此而不敢喝水、不敢吃海鲜，反而因噎废食。科学的态度是：关注但不恐慌，支持研究但不传播未经证实的"微塑料致死"类谣言。'
-  },
-  {
-    id:'gmo', icon:'🧬', name:'转基因食品科学',
-    hint:'点击翻转 — 转基因和育种的本质区别',
-    def:'转基因（GMO）=通过基因工程技术将特定基因从一个生物体转移到另一个生物体，精确修改1-2个基因。传统杂交育种=将两个品种的全部基因组随机重组，选择优良后代。关键区别：转基因知道改变的是哪几个基因，育种不知道（全基因组随机洗牌）。全球仅两种转基因水果获批商业化：夏威夷木瓜和"北极"苹果。',
-    analogy:'转基因好比精确编辑文档中的一个单词，育种类比把两本书随机拆成碎片再重新拼起来。从科学角度看，编辑一个已知功能的基因（如抗虫的Bt蛋白）比全基因组随机重组更容易评估安全性。但公众直觉相反——觉得"自然"的育种安全，"人为"的转基因危险。这是自然主义谬误。',
-    example:'水果越来越甜不是转基因——是传统选育+日本育种技术。国光苹果甜度~13，红富士~15，今天的品种超18。通过几代人反复选育甜度最高的植株杂交，实现了甜度的持续提升。转基因水果少的原因：监管审批成本极高（数亿美元），且水果不是主粮，商业动力不足。',
-    counter:'转基因不是万能无害——转基因作物的生态风险（基因漂移、抗性害虫）需要持续监测。但"转基因=有毒"是伪科学。全球数十亿人食用转基因作物超过20年，没有一例被科学确认的健康损害。反转基因运动的最大讽刺：最需要高产抗虫转基因作物的非洲小农被发达国家的反GMO运动剥夺了选择权。'
-  },
-  {
-    id:'supplement', icon:'💊', name:'营养补充剂真相',
-    hint:'点击翻转 — NMN/白藜芦醇/叶黄素值不值',
-    def:'营养补充剂市场超千亿美元，但绝大多数产品的功效证据薄弱。NMN（烟酰胺单核苷酸）：动物实验中展示抗衰老效果，但人体临床证据几乎为零。白藜芦醇：大卫·辛克莱尔的成名研究被指"操纵数据"，大量后续研究无法复现。叶黄素：对老年黄斑变性可能有保护作用，但对"改善视力""防蓝光"无明确证据。',
-    analogy:'补充维生素好比给车加机油——如果你的车确实缺机油（临床缺乏），加是对的。但如果车不缺，继续加只会溢出、浪费、甚至损坏发动机。同样的逻辑：如果你的饮食均衡多样，额外补充的营养素只是被排出体外（变成昂贵的尿液）。如果你确实缺乏（维生素D、铁、叶酸），补充就是必要的治疗而非智商税。',
-    example:'小林制药红曲事件（2024年3月）：日本小林制药的红曲胆固醇颗粒导致多人肾损伤甚至死亡，召回产品。这暴露了保健品行业的根本问题——不受药品级别的安全监管，但宣传上暗示药品级别的效果。保健品上市不需要临床试验，出事后才召回。',
-    counter:'不是所有补充剂都没用——维生素D对日照不足人群、铁剂对缺铁性贫血、叶酸对备孕女性、钙+VD对骨质疏松高风险人群都有明确益处。关键在于"你缺不缺"而不是"有没有用"。判断方法：去医院查血液中的营养素水平，而不是相信广告。'
-  },
-  {
-    id:'label', icon:'🏷️', name:'食品标签解读',
-    hint:'点击翻转 — 配料表里的秘密',
-    def:'中国食品标签的核心规则：1）配料表按含量从高到低排列（前三位决定了食品的主体）；2）营养表强制标注能量、蛋白质、脂肪、碳水化合物、钠；3）"0反式脂肪"≠不含（≤0.3g/100g可标0）；4）"无糖"指≤0.5g/100g；5）"全麦面包"可能全麦粉只占5%——看配料表第一位是不是全麦粉。',
-    analogy:'食品标签好比产品的"身份证"——正面广告是"自我介绍"（可能美化），配料表是"户口本"（不能说谎）。买"草莓味酸奶"看配料表——如果草莓果酱排在第五位以后而前面是糖和水，那草莓味主要来自香精不是草莓。买"全麦面包"——如果第一位是小麦粉而非全麦粉，那全麦含量可能不到10%。',
-    example:'"木薯淀粉"冒充"红薯淀粉"：2024年直播带货被曝光——大量粉条配料表故意抹去"木薯淀粉"成分。木薯含氰苷（有毒），但经加工后氰苷已去除——木薯淀粉本身无毒。问题是"冒充"——消费者花红薯淀粉的钱买了更便宜的木薯淀粉，且不知道买的是什么。配料表是唯一不说谎的地方——如果有机会隐瞒。',
-    counter:'标签不是万能的——小作坊、农贸市场散装食品、餐饮外卖都没有配料表。且标签只能告诉你"有什么"，不能告诉你"怎么做的"（加工工艺）、"从哪里来"（原料溯源）、"有多新鲜"。食品安全需要标签+监管+消费者知识三管齐下。'
-  },
-  {
-    id:'process', icon:'🏭', name:'食物加工与营养',
-    hint:'点击翻转 — 精炼、发酵、灭菌到底改变了什么',
-    def:'食品加工的核心目的是：保藏（防腐）、改善口感、提高安全性。食用油精炼六步骤：脱固体杂质→脱胶→脱酸→脱色→脱臭→脱蜡。毛油经精炼可去除绝大部分杂质（包括混装引入的污染物）。发酵：利用微生物将大分子分解为小分子，产生鲜味物质（如泡菜、酱油）。巴氏杀菌：72-75℃加热15-30秒，杀死致病菌保留营养。',
-    analogy:'加工好比"翻译"——把原始食材"翻译"成安全、美味、方便的形式。毛油像"草稿"，精炼像"定稿"——去掉了不需要的杂质。泡菜的发酵像"让微生物帮你做菜"——乳酸菌把蔬菜变成酸爽的泡菜，同时抑制了有害菌的生长。过度加工（超加工食品）才是问题——像把文章改得面目全非。',
-    example:'化工罐车装食用油事件的技术分析：如果污染的是毛油（粗榨未精炼），后续精炼的六步工艺可以去除绝大部分矿物油残留。如果污染的是成品油（已精炼），去除难度更大。但从定量分析看，混装造成的污染浓度（ppm级别）经过消化道稀释后，单次摄入的风险极低。真正需要关注的是长期低剂量暴露的累积效应。',
-    counter:'加工≠不健康——杀菌让牛奶可以安全饮用，精炼让食用油去除有害杂质，发酵产生益生菌和风味物质。“零加工”不是更安全——生牛奶可能含致病菌，自榨油可能含黄曲霉毒素。关键在于加工程度和工艺，而非"加工"本身。'
-  },
-  {
-    id:'chain', icon:'⛓️', name:'食品产业链与监管',
-    hint:'点击翻转 — 从农田到餐桌每一环的风险',
-    def:'食品产业链：种植/养殖→收储→初加工→深加工→运输→批发→零售→消费。每一环都可能有风险引入：种植（农药/兽药残留）、加工（添加剂/掺假）、运输（混装/冷链断裂）、零售（临期/标签造假）。中国食品安全监管由市场监管总局统筹，但实际执法分散在农业、卫生、海关等多个部门。',
-    analogy:'食品链好比一个接力赛——任何一棒掉棒都会出问题。农田的农药超量（第一棒掉了）、加工时过量硫磺熏蒸（第二棒掉了）、运输时罐车混装（第三棒掉了）、零售时篡改保质期（第四棒掉了）——消费者是最后一棒，但前面所有棒的问题都由消费者承担。监管的作用就是给每一棒装"检查站"。',
-    example:'化工罐车事件暴露了监管"接力赛"的断点：1）运输环节的罐车清洗没有强制规范；2）食品企业和化工企业共用物流体系但监管不互通；3）《新京报》暗访发现这是行业"公开的秘密"而非个案。解决之道不是"不再用罐车运油"（不现实），而是建立罐车清洗记录、GPS追踪、随机抽查制度。',
-    counter:'中国食品安全进步巨大——2008年三聚氰胺事件后，食品安全标准从几百项增加到现在的2000+项。但标准多≠执行好，关键在于执法力度和违法成本。当前最大的漏洞是：违法成本太低（罚款几十万vs利润几百万）、消费者维权成本太高（检测费+诉讼费+时间成本）。'
-  },
-  {
-    id:'rumor', icon:'📢', name:'饮食谣言识别',
-    hint:'点击翻转 — 为什么食品谣言永远杀不死',
-    def:'食品谣言的特征：1）诉诸恐惧（"致癌""致死"）；2）简化归因（"这个东西有毒"）；3）权威包装（"美国最新研究""老中医说"）；4）无法溯源（没有具体研究论文或机构名称）。识别方法：查原始来源→看样本量和方法→找立场冲突方的质疑→区分"相关"和"因果"。',
-    analogy:'食品谣言像病毒——它们利用人类的恐惧情绪"感染"传播，辟谣像"疫苗"——需要反复接种才能建立免疫力。谣言传播速度是真相的6倍（MIT 2018研究）。为什么？因为谣言可以编得"完美简洁"（"XX致癌！"），而真相往往是"复杂不确定"（"在特定剂量下对特定人群有潜在风险，但现有证据不充分..."）。',
-    example:'"塑料紫菜"谣言：视频中有人把紫菜泡水后拉扯不断，声称是塑料做的。事实上紫菜富含多糖，泡水后就是有韧性的——这是正常物理特性。但辟谣的成本远高于造谣：造谣只需一个15秒视频，辟谣需要买紫菜→泡水→测成分→写文章→传播。而且看过谣言的人即使被辟谣了，也不会主动转发辟谣文章。',
-    counter:'辟谣不是万能的——"逆火效应"（backfire effect）指当辟谣信息与既有信念冲突时，人们反而更坚定地相信谣言。辟谣策略：1）不要重复谣言本身（会加强记忆）；2）用"真相三明治"——先说事实→再说谣言为什么错→再说事实；3）诉诸替代解释而非直接否定。'
-  }
-];
-
-// ===== Set card (flip to specific card index) =====
-function setCard(idx, shouldFlip){
-  if(idx < 0 || idx >= concepts.length) return;
-  currentCardIdx = idx;
-  if(shouldFlip){
-    var inner = document.getElementById('flipInner-'+idx);
-    if(!inner.classList.contains('flipped')) inner.classList.add('flipped');
-  }
-  document.getElementById('cardIndex').textContent = (idx+1)+'/'+concepts.length;
-}
-
-// ===== Render Cards =====
-function renderCards(){
-  var container = document.getElementById('flipContainer');
-  var html = '';
-  concepts.forEach(function(c, i){
-    html += '<div class="flip-card'+(learnedCards[i]?' card-learned':'')+'" id="card-'+i+'">';
-    html += '<div class="flip-inner" id="flipInner-'+i+'">';
-    html += '<div class="flip-front" id="flipFront-'+i+'">';
-    html += '<div class="concept-icon">'+c.icon+'</div>';
-    html += '<div class="concept-name">'+c.name+'</div>';
-    html += '<div class="concept-hint">'+c.hint+'</div>';
-    html += '</div>';
-    html += '<div class="flip-back" id="flipBack-'+i+'">';
-    html += '<h4>'+c.icon+' '+c.name+'</h4>';
-    html += '<p><span class="label">定义</span> '+c.def+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">类比</span> '+c.analogy+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">示例</span> '+c.example+'</p>';
-    html += '<p style="margin-top:4px"><span class="label">反例/边界</span> '+c.counter+'</p>';
-    html += '</div></div></div>';
-  });
-  container.innerHTML = html;
-  
-  concepts.forEach(function(c, i){
-    var inner = document.getElementById('flipInner-'+i);
-    if(inner){
-      inner.addEventListener('click', function(){
-        this.classList.toggle('flipped');
-        currentCardIdx = i;
-        document.getElementById('cardIndex').textContent = (i+1)+'/'+concepts.length;
-      });
+// ============================================================
+// S2: SCIENCE COURT
+// ============================================================
+(function() {
+  const verdicts = [
+    {
+      icon: '👨‍⚖️', ruling: '⚡ 证据不足，发回重审', rulingClass: 'verdict-warn',
+      reason: '<strong>阿斯巴甜</strong>被IARC列为<strong>2B类致癌物</strong>——「可能对人类致癌」。<br><br>但2B类意味着<strong>证据有限</strong>。同在此类的还有：泡菜、芦荟全叶提取物、手机射频辐射。<br><br><strong>关键事实：</strong>IARC的分类只评估「危害」而不评估「风险」。一个70kg的成人每天需要喝<strong>14罐以上</strong>无糖可乐才会超出FDA的每日允许摄入量（ADI=50mg/kg）。',
+      evidence: '📚 <strong>证据等级：</strong> 流行病学研究（中等质量）<br>🔬 <strong>相关文章：</strong> 《食品添加剂安全性评估中的证据等级思维》<br>💡 <strong>学会判断：</strong> 下次看到「XX致癌」的标题，先问三个问题：① 是「危害」还是「风险」？② 剂量是多少？③ 研究类型是什么？'
+    },
+    {
+      icon: '🔬', ruling: '⚠️ 科学尚无法定论', rulingClass: 'verdict-warn',
+      reason: '每人每年摄入约<strong>5.5万颗</strong>微塑料，吸入约<strong>7.4万颗</strong>。血液、胎盘、粪便中均已检出。<br><br><strong>但关键问题无解：</strong>这些微塑料对健康的影响是什么？我们不知道。目前的毒理学研究大多使用远高于实际暴露的浓度。<br><br>WHO在2019年的评估结论：<strong>「目前没有证据表明微塑料对人体健康构成危害」</strong>——同时强调研究不足。',
+      evidence: '📚 <strong>证据等级：</strong> 环境监测数据丰富，人体健康数据缺乏<br>🧪 <strong>当前研究重点：</strong> 纳米级塑料颗粒（<1μm）的跨膜转运机制<br>💡 <strong>合理回应：</strong> 减少不必要的塑料使用，但不必为微塑料焦虑到影响正常饮食。'
+    },
+    {
+      icon: '🧬', ruling: '✅ 无罪——科学共识明确', rulingClass: 'verdict-safe',
+      reason: '转基因食品（GMO）是人类历史上<strong>被研究最彻底</strong>的食品之一。<br><br>美国国家科学院2016年报告：转基因作物与传统育种作物在健康风险上<strong>没有显著差异</strong>。欧盟历时25年、耗资3亿欧元的研究得出相同结论。<br><br><strong>反转基因的流行观点</strong>几乎全部来自被撤回的论文或非同行评审的宣传。',
+      evidence: '📚 <strong>证据等级：</strong> 多项Meta分析 + 多国科学院联合报告<br>🏆 <strong>科学共识强度：</strong> 与「人类活动导致全球变暖」同级<br>💡 <strong>核心认知：</strong> 「转基因」是一种技术，不是一种成分。技术本身无好坏，要看具体改了哪个基因、为了什么目的。'
+    },
+    {
+      icon: '🦠', ruling: '✅ 大部分指控成立', rulingClass: 'verdict-safe',
+      reason: '2021年《自然评论-肠胃病学和肝脏病学》综述：<br><br>大多数市售益生菌的菌株<strong>无法在肠道定植</strong>。它们只是「过客」——通过肠道但不留下。<br><br><strong>对健康人群：</strong>额外补充益生菌没有明确益处。<br><strong>对特定疾病：</strong>如抗生素相关腹泻、肠易激综合征——部分菌株有证据，但效果有限。<br><br><strong>卓克的观点：</strong>与其花大钱买益生菌，不如多吃膳食纤维——喂养你已有的菌群。',
+      evidence: '📚 <strong>证据等级：</strong> 系统综述（最高级别）<br>🏆 <strong>发表于：</strong> Nature Reviews Gastroenterology & Hepatology (IF=73)<br>💡 <strong>为什么依然畅销：</strong> 「益生菌」三个字自带健康光环——这是广告创造的需求，不是科学驱动的需求。'
+    },
+    {
+      icon: '⚖️', ruling: '🚨 有罪——违规使用确有害', rulingClass: 'verdict-danger',
+      reason: '<strong>事实：</strong>广西八角批发市场95%以上使用硫磺熏蒸，二氧化硫残留严重超标。<br><br>过量硫磺熏蒸可导致：哮喘发作、呼吸道灼伤、破坏食物中的维生素B1。<br><br><strong>但关键区别：</strong>这是<strong>违规使用</strong>问题，不是八角本身的问题。合规的硫磺熏蒸（限量使用）在国际上普遍允许——包括干果、葡萄酒等。',
+      evidence: '📚 <strong>证据等级：</strong> 急性毒理学明确 + 市场监管数据<br>⚠️ <strong>相关文章：</strong> 《012 | 硫化：食物安全中的大风险》<br>💡 <strong>核心教训：</strong> 「检测出有害物质」≠「吃了就会得病」。但行业系统性违规是监管问题——需要曝光和整改。'
+    },
+    {
+      icon: '💊', ruling: '🚨 大部分有罪——系统性虚假宣传', rulingClass: 'verdict-danger',
+      reason: '全球保健品市场规模超过<strong>2000亿美元</strong>。但在大多数国家，保健品<strong>无需证明有效性</strong>即可上市。<br><br>FDA和EFSA只要求「不声称治疗疾病」。于是厂商用「支持免疫力」「维护心脏健康」等模糊语言——在法律边缘跳舞。<br><br><strong>真正有效的补充剂：</strong>叶酸（备孕）、维生素D（缺乏者）、维生素B12（素食者）。其他大多数缺乏高质量证据。',
+      evidence: '📚 <strong>证据等级：</strong> 大量RCT未发现预期效果，但行业资助研究倾向于阳性结果<br>⚠️ <strong>利益冲突：</strong> 美国补充剂行业每年游说费用超数亿美元<br>💡 <strong>最可靠的判断方法：</strong> 如果某保健品真的有效——它早就被做成药品了。'
     }
-  });
-}
+  ];
 
-// ===== Card Navigation =====
-document.getElementById('prevCard').addEventListener('click', function(){
-  if(currentCardIdx > 0) currentCardIdx--;
-  var inner = document.getElementById('flipInner-'+currentCardIdx);
-  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
-});
-document.getElementById('nextCard').addEventListener('click', function(){
-  if(currentCardIdx < concepts.length-1) currentCardIdx++;
-  var inner = document.getElementById('flipInner-'+currentCardIdx);
-  if(inner && inner.classList.contains('flipped')) inner.classList.remove('flipped');
-  document.getElementById('cardIndex').textContent = (currentCardIdx+1)+'/'+concepts.length;
-});
-document.getElementById('markLearnedBtn').addEventListener('click', function(){
-  markLearned(currentCardIdx);
-});
+  const cases = document.querySelectorAll('#courtCases .court-case');
+  const verdictEl = document.getElementById('courtVerdict');
 
-function markLearned(idx){
-  if(learnedCards[idx]){ delete learnedCards[idx]; }
-  else { learnedCards[idx] = true; }
-  var card = document.getElementById('card-'+idx);
-  if(card) card.classList.toggle('card-learned');
-  var pct = Math.round(Object.keys(learnedCards).length/concepts.length*100);
-  document.getElementById('cardLearned').textContent = Object.keys(learnedCards).length;
-  document.getElementById('cardProgress').textContent = pct;
-  document.getElementById('cardProgressBar').style.width = pct+'%';
-  document.getElementById('overallProgress').style.width = pct+'%';
-  document.getElementById('learnedCount').textContent = Object.keys(learnedCards).length;
-}
-
-// ===== MCQ Bank (20 questions, answer distribution {0:5,1:5,2:5,3:5}) =====
-var mcqBank = [{q:'食品安全风险的核心原则是什么？', opts:['剂量决定毒性','天然食品绝对安全','添加剂都有毒','有机食品零风险'], ans:0, explain:'帕拉塞尔苏斯原则——任何物质在足够高的剂量下都有毒，关键在于实际摄入量。"检出"不等于"有害"。'},
-,
-  {q:'化工罐车装食用油事件的正确理解是？', opts:['精炼可去除全部污染物','偶尔摄入风险远小于日常吸烟/饮酒的致癌风险','食用油因此不能再吃了','这是单个司机的孤立事件'], ans:1, explain:'混装造成的污染浓度在ppm级别，急性中毒风险很低。需要关注的是长期低剂量暴露的累积效应和监管漏洞。'},
-,
-  {q:'关于食品防腐剂的正确说法是？', opts:['添加防腐剂的健康风险远小于不添加的微生物风险','不加防腐剂的食品更安全','防腐剂是可有可无的','所有防腐剂都致癌'], ans:0, explain:'肉毒杆菌毒素的毒性是防腐剂的数百万倍。不加防腐剂的肉常温24小时可达到危险水平。'},
-,
-  {q:'"0反式脂肪"标签的正确理解是？', opts:['完全不含反式脂肪','只适用于进口食品','每100g中含量不超过0.3g','这是虚假宣传'], ans:2, explain:'中国标准允许≤0.3g/100g标注为0。所以"0反式脂肪"不等于完全不含。'},
-,
-  {q:'NMN保健品的科学事实是什么？', opts:['人体临床证据几乎为零，中国已禁用作食品原料','被证实可延长人类寿命','是安全的食品添加剂','被WHO推荐为抗衰老补充剂'], ans:0, explain:'NMN仅在动物实验（线虫、小鼠）中展示抗衰老效果。创始人辛克莱尔自己的公司以7.2亿美元被收购——利益冲突明显。'},
-,
-  {q:'智商税的核心判断标准是什么？', opts:['产品价格超过500元','是中国品牌','广告中用了"科学"一词','支付远超功能价值的溢价'], ans:3, explain:'智商税=信息不对称导致的溢价。判断标准是"多付的钱买到了什么"——是真正的研发成本还是营销推广费？'},
-,
-  {q:'转基因食品的科学定义是什么？', opts:['精准修改1-2个已知基因','任何经过人工改良的作物','等同于杂交育种','自然不存在的东西'], ans:0, explain:'转基因精确修改已知功能的基因；杂交育种是全基因组随机重组。两者机制不同但转基因更容易评估安全性。'},
-,
-  {q:'食品配料表的排序规则是什么？', opts:['随机排列','按字母顺序','按含量从高到低排列','按添加时间顺序'], ans:2, explain:'配料表第一位含量最高。所以判断"全麦面包"是否真全麦，看第一位是不是全麦粉。'},
-,
-  {q:'微塑料对健康的影响，目前科学共识是什么？', opts:['已确认会导致人类癌症','完全没有影响','和PM2.5危害一样确定','证据不充分——不确定是否对健康有害'], ans:3, explain:'WHO 2019年结论：现有数据下"似乎不构成健康风险"，但数据不足需要更多研究。从"检出"到"致病"的证据链远未建立。'},
-,
-  {q:'小林制药红曲事件说明了什么？', opts:['日本保健品都很安全','所有保健品都是骗人的','保健品不受药品级安全监管但宣传暗示药效','红曲本身有毒'], ans:2, explain:'保健品上市不需要临床试验，出事才召回。这是保健品行业的结构性问题——享受"食品"的监管宽松+暗示"药品"的功效。'},
-,
-  {q:'食品谣言传播速度是真相的几倍？（MIT 2018研究）', opts:['2倍','一样快','10倍','6倍'], ans:3, explain:'MIT 2018年对Twitter上12.6万条信息的分析显示，假新闻传播速度是真新闻的6倍——因为谣言可以编得"完美简洁"，真相往往是"复杂不确定"。'},
-,
-  {q:'关于食品添加剂亚硝酸盐的正确说法是？', opts:['完全无害','应该从所有食品中禁止','在规定限量内使用是安全的，但过量可转化为致癌物','只在中国使用'], ans:2, explain:'亚硝酸盐在限量内（肉制品≤30mg/kg）可安全使用，但过量会在体内转化为亚硝胺（致癌物）。风险来自"违规超量"而非"存在"。'},
-,
-  {q:'水果越来越甜的主要原因是什么？', opts:['都是转基因','气候变暖','打了甜蜜素','传统选育+人工筛选甜度最高的品种'], ans:3, explain:'国光苹果甜度~13，今天的品种超18——这是几十年反复选育的结果，不是转基因。全球仅两种转基因水果获批：夏威夷木瓜和北极苹果。'},
-,
-  {q:'大白菜上的黑点是什么？', opts:['农药残留','虫子咬的','叶柄细胞分裂错误导致细胞自杀的痕迹','重金属污染'], ans:2, explain:'黑点是大白菜叶柄细胞在分裂时发生错误，细胞壁未闭合，细胞执行自杀程序后留下的痕迹。不影响食用安全。'},
-,
-  {q:'左旋肉碱减肥的说法为什么是智商税？', opts:['左旋肉碱不存在','它已被禁止使用','它只对运动员有效','它是脂肪运输载体但不决定脂肪消耗速度——能量赤字才是关键'], ans:3, explain:'左旋肉碱确实参与脂肪运输到线粒体，但脂肪消耗由能量赤字节决定。多吃左旋肉碱≠多消耗脂肪——好比多发几张驾照不等于车速更快。'},
-,
-  {q:'关于"皮蛋含铅"的正确说法是？', opts:['正规品牌皮蛋已不用含铅工艺，散装小作坊皮蛋不足10%铅超标','所有皮蛋都含铅不能吃','皮蛋的铅是鸡蛋自带的','铅超标对成人无害'], ans:0, explain:'现代皮蛋用无铅工艺（硫酸铜+硫酸锌替代氧化铅）。正规品牌安全，散装小作坊有约10%铅超标概率。'},
-,
-  {q:'木薯淀粉本身有毒吗？', opts:['剧毒，不能食用','加工后的木薯淀粉无毒——氰苷已去除，问题在于冒充红薯淀粉','和红薯淀粉完全一样','只能工业使用'], ans:1, explain:'木薯含氰苷（有毒），但经去皮、浸泡、加热等加工后氰苷已去除——木薯淀粉本身无毒。问题是商家故意隐瞒成分冒充高价红薯淀粉。'},
-,
-  {q:'食品加工精炼环节的意义是什么？', opts:['只是让油看起来更清澈','去除有害杂质——六步精炼可去除绝大部分农药、重金属、矿物油残留','降低营养价值','是商家为了省钱的借口'], ans:1, explain:'精炼六步：脱固体杂质→脱胶→脱酸→脱色→脱臭→脱蜡。毛油中的大部分污染物可在此过程中被去除。'},
-,
-  {q:'关于"喝硬水会不会结石"的正确说法？', opts:['一定会结石','目前的科学证据不支持硬水导致结石的结论','软水更健康','只有中国才喝硬水'], ans:1, explain:'多项流行病学研究未发现饮用水硬度与肾结石发病率之间的因果关系。体内钙代谢远比水中的钙含量复杂。'},
-,
-  {q:'汤泡饭有害健康的说法正确吗？', opts:['对所有人都有害','对消化功能正常的人没有明显危害——这种建议只对消化功能近乎丧失的人有些许用处','是中国传统养生智慧','已被现代医学证实'], ans:1, explain:'汤泡饭不会"稀释胃酸"到影响消化的程度。胃的调节能力很强。这个建议只对消化功能极度受损的患者有意义。'}];
-
-// ===== SAQ Bank (12 questions) =====
-var saBank = [
-  {q:'用你自己的话解释"剂量决定毒性"的含义，并找一个生活中的例子。', answer:'任何物质在足够高的剂量下都是有毒的——水喝太多会水中毒，盐吃太多会高钠血症。食品安全的关键不是"有没有"而是"有多少"。例如苹果籽含氰苷，但吃一两个苹果的籽不会中毒——因为剂量远低于有害阈值。甲醛天然存在于苹果、梨中（约6-22mg/kg），但没人害怕吃苹果。同样的甲醛如果来自工业添加，人们就会恐慌——但化学物质不会因为来源不同而毒性不同。'},
-  {q:'为什么"不加防腐剂"可能比"加防腐剂"更危险？请从微生物角度说明。', answer:'肉毒杆菌产生的肉毒毒素是已知最毒的物质之一（LD50约1ng/kg），其毒性是防腐剂的数百万倍。不加防腐剂的肉制品在常温下24小时内细菌可繁殖到危险水平。防腐剂的健康风险是"微量化学物长期摄入的潜在风险"，而细菌毒素的风险是"急性中毒甚至死亡"——两害相权取其轻。所以现代食品工业的共识是：合法合规添加防腐剂的食品比不添加的更安全。恐慌"防腐剂"的结果是：小作坊刻意不添加防腐剂但卫生条件差→细菌繁殖→食物中毒。'},
-  {q:'从NMN事件看，如何判断一个保健品是"智商税"？请用五步法分析。', answer:'以NMN为例应用五步法：1）需求真实性——我真的需要"抗衰老"吗？衰老是自然过程，不是疾病。2）技术原理——NMN提升NAD+水平→激活sirtuins→抗衰老。这条通路在动物中存在，但人体中没有高质量证据。3）参数对比——NMN保健品vs安慰剂的随机双盲人体试验？没有。4）溢价合理度——每月花费1000-3000元，买的是一堆不确定是否有效的粉末。创始人的公司7.2亿美元被收购——利益冲突明显。5）替代方案——运动、充足睡眠、均衡饮食是目前唯一被证实的"抗衰老"方法，且免费。结论：NMN在当前证据水平下是智商税。'},
-  {q:'为什么"化工罐车装食用油"事件引起了巨大恐慌，但定量分析显示单次摄入风险并不高？这种"恐慌和风险不对等"的根本原因是什么？', answer:'根本原因是公众和专家对"风险"的定义不同。专家用的是"健康风险=毒性×剂量×频率"的定量模型——单次摄入ppm级别的污染物，急性健康风险确实很低。公众用的是"恶心感+信任背叛"的情感模型——"我的食用油和煤制油共用罐车"这个概念本身就让人恶心，不管剂量多少都不可接受。这种不对等是风险交流的经典困境：科学能计算毒理学风险，但计算不了"信任破裂"的社会成本。此外，媒体放大效应——"化工罐车装食用油"的标题比"食用油中矿物油残留符合安全标准"的标题点击率高100倍。'},
-  {q:'食品标签中"全麦面包"为什么可能不是真全麦？作为消费者应该怎么看？', answer:'中国标准中"全麦面包"没有强制要求全麦粉的最低比例——只要加了全麦粉就可以叫全麦面包。所以市面上的"全麦面包"可能只含5%全麦粉，95%是精白面粉+焦糖色（染成褐色模仿全麦）。识别方法：1）看配料表第一位——必须是"全麦粉"而非"小麦粉"；2）全麦面包质地粗糙、口感偏干，如果吃起来和白面包一样松软，基本不是真全麦；3）看膳食纤维含量——真全麦面包每100g膳食纤维≥6g。配料表是法律要求不能作假的，所以直接看配料表比看广告词可靠。'},
-  {q:'从微塑料到农药残留，食品安全领域的"检出焦虑"为什么普遍存在？科学上如何缓解这种焦虑？', answer:'检出焦虑源于三个认知偏差：1）检测技术进步——现在能检出纳克级（十亿分之一克）的物质，50年前只能检出毫克级。很多"新发现的污染物"其实一直存在，只是以前检不出。2）"天然=安全"谬误——天然食物中的天然毒素（土豆的龙葵碱、杏仁的氰苷）常被忽略，而"人工添加"的微量物质引起恐慌。3）媒体传播偏差——"XX食品检出有毒物质"是新闻，"XX食品中有毒物质远低于安全标准"不是新闻。缓解方法：学会看"检出量"和"安全标准"的比值——如果检出量是安全标准的1/1000，风险就和走在路上被陨石砸中的概率差不多。'},
-  {q:'转基因食品只在全球批准了两种水果（木瓜和苹果），为什么这么少？是安全性问题吗？', answer:'不是安全性问题，是经济和监管成本问题。1）监管成本——转基因作物从研发到获批上市需要数亿美元和10+年时间，主要是监管审批而非科学研究。2）商业回报——水果不是主粮，市场体量远小于大豆、玉米、棉花（已广泛种植的转基因作物）。花数亿美元审批一种水果品种，商业上不划算。3）反转基因运动的政治压力——消费者恐慌导致食品公司不敢用转基因原料，形成"没有需求→没人研发→没有产品"的循环。事实上，转基因木瓜（抗环斑病毒）拯救了夏威夷木瓜产业——如果没有转基因，夏威夷木瓜已经灭绝了。这说明转基因的安全性不是问题，政治才是。'},
-  {q:'为什么老年人更容易成为保健品智商税的受害者？从认知和情感两个角度分析。', answer:'认知角度：1）信息不对称——老年人获取科学信息的渠道有限（主要靠电视、微信群），而这些渠道恰恰是保健品广告的主战场。2）科学素养差——不会查论文、不会辨别"个案见证"和"临床证据"的区别。3）权威误置——把"穿白大褂的人""上过电视的人"等同于"科学家"，而真正的科学家几乎不上保健品广告。情感角度：1）健康焦虑——随着年龄增长身体机能下降，对疾病的恐惧是真实的，保健品提供了"掌控感"。2）孤独感——保健品销售员的"关心"（送鸡蛋、陪聊天）填补了情感空缺。3）不想给子女添麻烦——希望通过保健品维持健康减少子女负担。结论：打击保健品智商税不能只靠"科普教育"，还要解决老年人的情感需求。'},
-  {q:'泡菜发酵的科学原理是什么？为什么说"越久越好"不一定对？', answer:'泡菜发酵是乳酸菌（乳杆菌属、明串珠菌属）在厌氧条件下将蔬菜中的糖转化为乳酸的过程。乳酸降低pH值（约3.5-4.0），抑制有害菌生长，同时产生独特风味。时间维度上的变化：初期（1-3天）——乳酸菌快速繁殖，亚硝酸盐先升后降（"亚硝酸盐峰"）；中期（4-10天）——乳酸积累达峰值，风味最佳，亚硝酸盐已降至安全水平；后期（>2周）——过度酸化，口感过酸，如果密封不好可能被酵母菌/霉菌污染。所以"越久越好"不科学——最佳食用期通常在第4-10天。'},
-  {q:'剥开一个"日本保健品"为什么在中国热销？从文化心理和市场机制两个角度分析。', answer:'文化心理角度：1）"日本制造"光环——中国人对日本产品质量有正面刻板印象（工匠精神、严格标准），这个光环被借用到保健品上。2）"亚洲人适合亚洲产品"叙事——暗示欧美保健品"不适合亚洲人体质"，但这种说法没有任何科学依据。3）代购文化——代购既是销售渠道也是"信任背书"——"我亲自从日本买的"比"淘宝上的"更有说服力。市场机制角度：1）跨境监管真空——通过代购/海淘进入中国的保健品绕过了中国的审批和监管。小林制药红曲事件中，涉事产品就是通过跨境电商卖给中国消费者的。2）超高利润——日本几百日元的产品在中国卖几百人民币，利润足以支撑庞大的营销体系。3）语言壁垒——大部分中国消费者无法直接查阅日本监管机构的公告，信息完全依赖销售方提供。'},
-  {q:'食品安全监管中最大的挑战是什么？从"三聚氰胺"到"化工罐车"，问题根源变了还是没变？', answer:'根源没变——都是"违法成本远低于违法收益"。三聚氰胺（2008）：加三聚氰胺提升蛋白质检测值，每公斤成本不足1元，但可多赚几十元。化工罐车（2024）：不清洗直接装食用油节省约500-1000元/次的清洗费，但潜在罚款远低于累计节省。核心矛盾：1）监管资源不足——中国食品企业4000万+家，监管人员不足10万，平均每人管400家；2）分段监管的缝隙——农业管种植、市场监管管加工零售、海关管进口，罐车混装问题恰恰落在运输环节（各部门都管也都不管）；3）地方保护——大型食品企业是地方的税收和就业来源，属地监管天然有偏袒动机。解决方向：提高违法成本（惩罚性赔偿→罚到倾家荡产）+建立可追溯体系（一车一码全程追踪）+消费者参与监督（随手拍举报有奖）。'},
-  {q:'如果你要给父母解释"为什么不能相信微信群里的食品安全文章"，你会怎么说？（注意不要激起逆反心理）', answer:'沟通策略（避免逆反）：1）先认可动机——"我知道你转发这些是关心我们，希望我们吃得健康——谢谢你。"（先建立情感连接，而不是直接反驳）。2）给替代方案而非否定——"以后看到这类文章可以先发给我，我帮你查查是不是真的。我有个很方便的核查方法。"3）教简单识别方法而非讲大道理——"你看这篇文章没有写具体的研究名字、没有研究员的名字、只是说「美国最新研究」——这种基本是编的。真的研究一定会写发表在哪个期刊。"4）用他们关心的话题切入——"上次你买那个保健品，我帮你查了一下，它的有效成分成本才几块钱，卖你几百块——这些人太坏了，专门骗像你这样注重健康的人。"（把矛头指向骗子而非父母的判断力）。核心原则：永远不要嘲笑他们的"无知"——他们不是在"蠢"，而是在用有限的信息保护家人。'}
-];
-
-// ===== Render MCQ =====
-function renderMCQ(questions){
-  var container = document.getElementById('quizContainer');
-  var html = '<h3>选择题（共 '+questions.length+' 题）</h3>';
-  questions.forEach(function(item, i){
-    html += '<div class="quiz-item" id="mcq-'+i+'"><h4>'+(i+1)+'. '+item.q+'</h4>';
-    item.opts.forEach(function(opt, j){
-      html += '<label><input type="radio" name="mcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
-    });
-    html += '<button style="margin-top:6px;padding:4px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--accent-light)" data-mcq-idx="'+i+'" data-mcq-ans="'+item.ans+'" data-mcq-explain="'+item.explain.replace(/"/g,'&quot;')+'">核对</button>';
-    html += '<div class="quiz-feedback" id="fb-'+i+'"></div></div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('button[data-mcq-idx]').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var idx = parseInt(this.dataset.mcqIdx);
-      var ans = parseInt(this.dataset.mcqAns);
-      var explain = this.dataset.mcqExplain;
-      var radios = document.getElementsByName('mcq'+idx);
-      var fb = document.getElementById('fb-'+idx);
-      var selected = -1;
-      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
-      if(selected===-1){fb.textContent='请先选择一个选项';fb.className='quiz-feedback wrong';return;}
-      if(selected===ans){fb.innerHTML='✅ 正确！'+explain;fb.className='quiz-feedback correct';}
-      else{fb.innerHTML='❌ 错误。正确答案是 '+String.fromCharCode(65+ans)+'。'+explain;fb.className='quiz-feedback wrong';}
-      quizAnswered++; document.getElementById('quizDone').textContent = quizAnswered;
+  cases.forEach(c => {
+    c.addEventListener('click', function() {
+      cases.forEach(cc => cc.classList.remove('active'));
+      this.classList.add('active');
+      const idx = parseInt(this.dataset.case);
+      const v = verdicts[idx];
+      verdictEl.innerHTML = `
+        <div class="judge-icon">${v.icon}</div>
+        <div class="verdict-ruling ${v.rulingClass}">${v.ruling}</div>
+        <div class="verdict-reason">${v.reason}</div>
+        <div class="verdict-evidence">${v.evidence}</div>
+      `;
     });
   });
-}
+})();
 
-// ===== Render SA =====
-function renderSA(questions){
-  var container = document.getElementById('quizContainer');
-  var html = '<h3>简答题（共 '+questions.length+' 题）</h3>';
-  questions.forEach(function(item, i){
-    html += '<div class="sa-item"><h4>'+(i+1)+'. '+item.q+'</h4>';
-    html += '<textarea placeholder="在此输入你的回答..."></textarea>';
-    html += '<button class="sa-show-btn" style="padding:6px 12px;border:1px solid var(--accent);border-radius:6px;cursor:pointer;background:#fff;color:var(--accent-dark)">显示参考答案</button>';
-    html += '<div class="show-answer"><strong>参考答案：</strong>'+item.answer+'</div></div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.sa-show-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var ansDiv = this.nextElementSibling;
-      ansDiv.style.display = ansDiv.style.display==='block'?'none':'block';
+// ============================================================
+// S3: DIGESTIVE JOURNEY
+// ============================================================
+(function() {
+  const nodes = document.querySelectorAll('.journey-node');
+  nodes.forEach(node => {
+    node.addEventListener('click', function() {
+      const wasActive = this.classList.contains('active');
+      nodes.forEach(n => n.classList.remove('active'));
+      if (!wasActive) this.classList.add('active');
     });
   });
-}
+})();
 
-// ===== Quiz Controls =====
-document.getElementById('randomMCQ').addEventListener('click', function(){
-  var shuffled = mcqBank.slice().sort(function(){return Math.random()-.5});
-  renderMCQ(shuffled.slice(0, 15));
-});
-document.getElementById('randomSA').addEventListener('click', function(){
-  var shuffled = saBank.slice().sort(function(){return Math.random()-.5});
-  renderSA(shuffled.slice(0, 8));
-});
-document.getElementById('resetQuiz').addEventListener('click', function(){
-  document.getElementById('quizContainer').innerHTML = '';
-});
-
-// ===== Exam Mode =====
-document.getElementById('startExam').addEventListener('click', function(){
-  var allMCQ = mcqBank.slice().sort(function(){return Math.random()-.5}).slice(0, 15);
-  var allSA = saBank.slice().sort(function(){return Math.random()-.5}).slice(0, 5);
-  var container = document.getElementById('examContainer');
-  var html = '<h3>MCQ 部分（15 题）</h3>';
-  allMCQ.forEach(function(item, i){
-    html += '<div class="quiz-item"><h4>'+(i+1)+'. '+item.q+'</h4>';
-    item.opts.forEach(function(opt, j){
-      html += '<label><input type="radio" name="exmcq'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+opt+'</label>';
+// ============================================================
+// S4: EVIDENCE PYRAMID
+// ============================================================
+(function() {
+  const levels = document.querySelectorAll('.pyramid-level');
+  levels.forEach(level => {
+    level.addEventListener('click', function() {
+      this.classList.toggle('expanded');
     });
-    html += '</div>';
   });
-  html += '<h3>简答部分（5 题）</h3>';
-  allSA.forEach(function(item, i){
-    html += '<div class="sa-item"><h4>'+(15+i+1)+'. '+item.q+'</h4>';
-    html += '<textarea placeholder="在此输入你的回答..."></textarea></div>';
-  });
-  container.innerHTML = html;
-  examSeconds = 1800; updateExamTimer();
-  if(examInterval) clearInterval(examInterval);
-  examInterval = setInterval(function(){
-    examSeconds--; updateExamTimer();
-    if(examSeconds<=0){clearInterval(examInterval);alert('时间到！');}
-  },1000);
-  window._examMcqs = allMCQ;
-});
+})();
 
-function updateExamTimer(){
-  var m = Math.floor(examSeconds/60), s = examSeconds%60;
-  document.getElementById('examTimer').textContent = (m<10?'0'+m:m)+':'+(s<10?'0'+s:s);
-}
+// ============================================================
+// S5: ARTICLE UNIVERSE
+// ============================================================
+(function() {
+  const ARTICLES = [
+    {id:1, title:"004 | 可能性空间：为什么不幸的家庭各有各的不幸？", preview:"控制论这套理论是俄罗斯裔的美国数学家诺伯特·维纳在1948年提出来的。到今天，它已经是自动化、计算机、机器人、人工智能等领域的基础。", tags:['science']},
+    {id:2, title:"009 | 特高压1：为什么是新基建七大领域之一？", preview:"我在的一个微信群里都是讨论炒股的。他们关注最多的方向就是新基建，包括5G、城际高速铁路、大数据中心、人工智能这些词。还有一个电力领域的专业词——特高压。", tags:['tech']},
+    {id:3, title:"012 | 硫化：食物安全中的大风险", preview:"《新京报》发布了一系列关于广西八角使用超量硫磺熏蒸的报道。以当地最大的八角批发市场来看，完全不用硫磺熏蒸的摊贩比例很可能低于1/20。", tags:['food']},
+    {id:4, title:"015 | 核能1：核电站是怎样工作的？", preview:"有一个技术大家提到的最多，那就是核能。今天我们先深入核电站的内部，看看核电站是如何发电的。核能是战争的副产物。", tags:['tech']},
+    {id:5, title:"022 | 室温超导：只是实验室内的突破", preview:"《自然》杂志上有一篇文章轰动了科学界——美国罗切斯特大学实现了室温超导，温度是15℃。很多人认为超导马上就要应用在日常生活里了。", tags:['tech']},
+    {id:6, title:"046 | 自动驾驶5：每年万亿美元的巨大市场", preview:"谷歌的自动驾驶项目是2009年初秘密启动的。第一次真正有人意识到他们在做无人驾驶，是一个从测试车旁经过的司机。", tags:['tech']},
+    {id:7, title:"047 | 自动驾驶6：哪种路线今后会成为主流？", preview:"自动驾驶可以分成两大路线：以特斯拉为代表的低感知+高处理能力方式，和以谷歌为代表的高感知+高处理能力方式。", tags:['tech']},
+    {id:8, title:"067 | 肉链2：肉的营养无可比拟", preview:"回顾人类进入农业社会之前的吃肉历史，肉的作用无可替代。为什么人类一定要吃肉？肉类为什么有如此丰富的口感？", tags:['food']},
+    {id:9, title:"076 | 固态电池：锂电池今后的必经之路", preview:"由大众和比尔·盖茨投资的初创公司QuantumScape公布了最新的固态电池数据，能把电动汽车的续航里程提高80%。", tags:['tech']},
+    {id:10, title:"081 | 疫苗：那两针别任性，按时间去", preview:"不论你是在国外还是在国内，都会马上面临新冠疫苗接种。我们可能会忽视疫苗的接种细节，从而失去疫苗的保护。两针之间要间隔20多天。", tags:['health']},
+    {id:11, title:"088 | 人口1：剧烈波动的历史", preview:"中国社科院的专家在讨论延迟退休的问题。目标是把退休年龄统一调整为65岁。延迟退休并不是现代社会才有的。", tags:['science']},
+    {id:12, title:"089 | 人口2：增长不会持续", preview:"全球人口的猛增是从1650年之后开始的，持续了300多年。大航海的出现给农业施加了足够多的影响。", tags:['science']},
+    {id:13, title:"090 | 人口3：人口为什么会减少？", preview:"动物种群会在安详中生育率大幅下降，人类会不会呢？世界上第一个系统阐述人口发展的著作是马尔萨斯的《人口论》。", tags:['science']},
+    {id:14, title:"094 | 新冠：令人担忧的病毒变异出现了", preview:"新冠病毒一直在突变。比较有威胁的只有几种，比如D614G和英国的N501Y。辉瑞和摩德那都做了测试。", tags:['health']},
+    {id:15, title:"098 | 问答：进口产品表面新冠病毒阳性，值得担心吗？", preview:"春节前的答疑。近期教育部提到的培养阳刚之气的解读，刚刚发布的新技术隔空充电，还有特斯拉4680无极耳电池的技术细节。", tags:['health']},
+    {id:16, title:"117 | 问答：跑步、看书、学习会不会上瘾？", preview:"听完《电竞训练营成了网瘾戒除所》那期参考后的提问。首先温习'瘾'的定义：明知不好但还是难以停止。", tags:['health']},
+    {id:17, title:"118 | 析锂：电动汽车为什么怕低温？", preview:"这个冬天有几场寒潮。和往年不同，由于电动汽车逐渐普及，很多媒体都组织了电动汽车的冬季续航测试。", tags:['tech']},
+    {id:18, title:"125 | 验证：经典案例的'崩塌'", preview:"一些在职场培训和企业管理中常常出现的说法，如果用实验手段较真的看，还能说得通吗？温水煮青蛙、鲶鱼效应……", tags:['science']},
+    {id:19, title:"132 | 学术期刊历史1：谁是科学家？", preview:"困扰99%以上科研人员的事情就是发论文。刊发论文的期刊分为三六九等，期刊也都有审稿制度。", tags:['science']},
+    {id:20, title:"146 | 演化思维3：没有永恒的理论", preview:"演化思维的两个缺陷：一个是它随时都在变，必然会过时；另一个是它给造假者提供了伪造理论的空间。", tags:['science']},
+    {id:21, title:"147 | 问答：那么多种虚拟币，有靠谱的吗？", preview:"环保币、买矿机、虚拟币交易，这些东西到底是怎么回事？虚拟币的种类太多了，有说8000多种的。", tags:['tech']},
+    {id:22, title:"183 | 问答：为什么国际关注中国一级火箭重返大气层？", preview:"这一次国际上对我国的一级火箭重返大气层关注的原因。发射空间站'天和'核心舱的是大型火箭'长征5B'。", tags:['tech']},
+    {id:23, title:"192 | 新发现：一个持续了20年的衰老研究", preview:"同样岁数的人，衰老程度是不一样的。有人拿郭德纲和林志颖对比——你能相信吗，这两人就差1岁。", tags:['health']},
+    {id:24, title:"203 | 益生菌：不论好坏很难有用", preview:"市面上不少产品都打着'益生菌'的旗号。发酵食物里有没有活的微生物？它对肠道菌群有没有影响？对健康有没有益处？", tags:['food']},
+    {id:25, title:"211 | 鸿蒙3：手机上的鸿蒙", preview:"谷歌的安卓系统形成了一套生态系统，因为除了AOSP外还配有GMS，包含通知系统+账号系统+软件认证系统。", tags:['tech']},
+    {id:26, title:"212｜鸿蒙4：物联网上的鸿蒙", preview:"鸿蒙被很多程序员说成是安卓套壳，其实这指的是手机鸿蒙；而号称一行安卓源代码都没有使用的是物联网鸿蒙。", tags:['tech']},
+    {id:27, title:"214 | 欧洲杯上的心脏复苏：感人的一刻，保命的一招", preview:"欧洲杯开赛第二天，丹麦队主力埃里克森突然走步踉跄，一头栽倒失去知觉。后来实施了教科书似的抢救。", tags:['health']},
+    {id:28, title:"231 | 问答：琥珀中的DNA能还原吗？", preview:"在电影《侏罗纪公园》中，科学家在琥珀化石中的蚊子体内提取了恐龙的DNA。现实中这当然是不可能的。", tags:['science']},
+    {id:29, title:"233 | 电动汽车：未来十年，动力电池的徘徊", preview:"比亚迪董事长王传福在论坛上发表演讲。中国的石油70%以上依靠进口，其中70%又消费在交通领域。", tags:['tech']},
+    {id:30, title:"234 | 准诺奖：体内基因编辑技术", preview:"一项意义重大的生物医学新技术公布——单剂NTLA-2001导致血清中的TTR蛋白水平平均下降了87%。", tags:['health']},
+    {id:31, title:"235 | 地外文明：美国军方的UFO调查报告", preview:"美国军方公布的UFO调查文件是怎么回事。这期《科技参考》，我们用科学角度解读人与地外文明交流的可能性。", tags:['science']},
+    {id:32, title:"236 | 空间站：航天员出舱都有哪些看点？", preview:"中国3名航天员搭载神舟12号飞船首批到达中国空间站。第一次出舱活动要完成哪些任务？有什么亮点？", tags:['tech']},
+    {id:33, title:"238 | 航空航天：一趟20万美元的太空旅游", preview:"维珍银河创始人布兰森乘坐自家太空船飞到了距离地面86公里高度的太空边缘，实现了儿时的梦想。", tags:['tech']},
+    {id:34, title:"245 | 碳中和5：二氧化碳怎么捕捉？", preview:"到底怎么把已经存在于大气层里的二氧化碳捕捉出来。碳捕捉和碳封存其实只占未来30年全球碳中和计划中比较小的部分。", tags:['tech']},
+    {id:35, title:"260 | VR：现在发展到什么阶段了？", preview:"VR这个词想必已经逐渐凉下去了。但实际上，经过了9年的发展，它刚刚走过了黎明前的黑暗。", tags:['tech']},
+    {id:36, title:"272｜听话水：警惕第三代毒品", preview:"最近一起犯罪事件在网上传得沸沸扬扬。当事人涉及了迷奸行为并且使用了听话水。听话水离我们并不远。", tags:['food','health']},
+    {id:37, title:"288 | 人工智能：和机器人辩论，不能输", preview:"2019年2月有一场有趣的辩论赛，题目是'政府是否应该补贴学前教育'。一方是世界辩论赛冠军，另一方是IBM的AI。", tags:['ai']},
+    {id:38, title:"297｜问答：为什么喝酒之后会口渴、头疼？", preview:"是不是喝酒后口渴也是渗透压的原理？酒精进入肠道后是不是也会导致体内水分渗出？口渴是真的，但原理不是这样。", tags:['food','health']},
+    {id:39, title:"302 | 新冠：关于病毒变异的新研究", preview:"英国科学家的研究证实新冠病毒差不多一周变异一次，变异速度比之前还要高50%以上。仔细想想又会觉得有些矛盾。", tags:['health']},
+    {id:40, title:"304 | 人工智能：与死去的未婚妻对话（上）", preview:"《旧金山纪事报》报道了一对加拿大情侣间科幻离奇的故事。如果只看情节完全不会怀疑它是科幻故事。", tags:['ai']},
+    {id:41, title:"305 | 人工智能：与死去的未婚妻对话（下）", preview:"我们讲了一个令人欣慰的故事，听着像科幻但却是真事。那个AI机器人是用什么技术实现的？GPT-3。", tags:['ai']},
+    {id:42, title:"306 | AI与音乐1：音高的出现", preview:"中央音乐学院发布了一条招生信息，方向是人工智能方向的博士生。你觉得自己有没有音乐细胞？", tags:['ai']},
+    {id:43, title:"308 | AI与音乐3：混日子越来越难", preview:"人工智能可以作曲吗？今天问这个问题，就等价于1990年问电脑能不能在国际象棋大赛中赢过世界冠军。", tags:['ai']},
+    {id:44, title:"310 | 能源：拉闸限电是怎么回事？", preview:"近期影响最大的事件——拉闸限电。有一种典型误解以为拉闸限电最大的动因是过分追求碳中和指标。", tags:['tech']}
+  ];
 
-document.getElementById('submitExam').addEventListener('click', function(){
-  clearInterval(examInterval);
-  var correct = 0;
-  var mcqs = window._examMcqs || mcqBank.slice(0,15);
-  for(var i=0;i<15;i++){
-    var radios = document.getElementsByName('exmcq'+i);
-    if(radios.length===0) continue;
-    for(var j=0;j<radios.length;j++){
-      if(radios[j].checked && parseInt(radios[j].value)===mcqs[i]?.ans) correct++;
-    }
+  const grid = document.getElementById('articleGrid');
+  const tagsContainer = document.getElementById('articleTags');
+
+  function renderArticles(filter) {
+    const filtered = filter === 'all' ? ARTICLES : ARTICLES.filter(a => a.tags.includes(filter));
+    grid.innerHTML = filtered.map(a => {
+      const isFood = a.tags.includes('food');
+      return `<div class="article-card${isFood ? ' highlight-food' : ''}">
+        <div class="a-id">#${String(a.id).padStart(3,'0')} ${isFood ? '🍽️' : '📡'}</div>
+        <div class="a-title">${a.title}</div>
+        <div class="a-preview">${a.preview}</div>
+      </div>`;
+    }).join('');
   }
-  document.getElementById('examScore').textContent = 'MCQ 得分：'+correct+'/15（简答需手动评分）';
-});
-document.getElementById('resetExam').addEventListener('click', function(){
-  clearInterval(examInterval);
-  document.getElementById('examContainer').innerHTML = '';
-  document.getElementById('examScore').textContent = '';
-  document.getElementById('examTimer').textContent = '30:00';
-});
 
-// ===== Review Mode =====
-document.getElementById('startReview').addEventListener('click', function(){
-  var list = document.getElementById('reviewList');
-  var items = concepts.map(function(c){return c.name+' — 复习要点：定义+类比+边界'});
-  var html = '';
-  items.forEach(function(item, i){
-    html += '<li id="rev-'+i+'" class="review-item-click">'+item+'</li>';
-  });
-  list.innerHTML = html;
-  list.querySelectorAll('.review-item-click').forEach(function(li){
-    li.addEventListener('click',function(){ this.classList.toggle('reviewed'); });
-  });
-});
-document.getElementById('resetReview').addEventListener('click', function(){
-  document.getElementById('reviewList').innerHTML = '';
-});
-
-// ===== Mind Map SVG (hand-drawn style) =====
-function renderMindMap(){
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" style="max-width:100%;height:auto">';
-  svg += '<defs><filter id="mshadow"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter></defs>';
-  svg += '<rect width="960" height="640" fill="#fafbfc" rx="8"/>';
-  // Center
-  svg += '<ellipse cx="480" cy="320" rx="95" ry="46" fill="#F59E0B" filter="url(#mshadow)"/>';
-  svg += '<text x="480" y="314" text-anchor="middle" fill="white" font-size="15" font-weight="bold">食品营养与安全</text>';
-  svg += '<text x="480" y="334" text-anchor="middle" fill="white" font-size="11">MKS 核心框架</text>';
-  // 4 branches
-  var branches = [
-    {label:'安全风险',x:150,y:140,c:'#dc2626'},
-    {label:'科学基础',x:810,y:140,c:'#2563eb'},
-    {label:'认知决策',x:150,y:500,c:'#059669'},
-    {label:'社会影响',x:810,y:500,c:'#7c3aed'}
-  ];
-  branches.forEach(function(b){
-    svg += '<ellipse cx="'+b.x+'" cy="'+b.y+'" rx="65" ry="30" fill="'+b.c+'" filter="url(#mshadow)"/>';
-    svg += '<text x="'+b.x+'" y="'+b.y+'" text-anchor="middle" fill="white" font-size="13" font-weight="bold">'+b.label+'</text>';
-    svg += '<line x1="386" y1="320" x2="'+b.x+'" y2="'+b.y+'" stroke="'+b.c+'" stroke-width="2.5" stroke-dasharray="8,4"/>';
-  });
-  // Leaves
-  var leaves = [
-    {label:'微生物污染',x:48,y:65,c:'#ef4444'},{label:'化学残留',x:150,y:65,c:'#ef4444'},
-    {label:'重金属',x:48,y:215,c:'#ef4444'},{label:'微塑料',x:150,y:215,c:'#ef4444'},
-    {label:'营养代谢',x:720,y:65,c:'#3b82f6'},{label:'添加剂',x:810,y:65,c:'#3b82f6'},
-    {label:'食品加工',x:720,y:215,c:'#3b82f6'},{label:'转基因',x:810,y:215,c:'#3b82f6'},
-    {label:'智商税',x:48,y:430,c:'#10b981'},{label:'标签解读',x:150,y:430,c:'#10b981'},
-    {label:'饮食决策',x:48,y:570,c:'#10b981'},{label:'风险评估',x:150,y:570,c:'#10b981'},
-    {label:'监管标准',x:720,y:430,c:'#8b5cf6'},{label:'谣言机制',x:810,y:430,c:'#8b5cf6'},
-    {label:'消费行为',x:720,y:570,c:'#8b5cf6'},{label:'保健品市场',x:810,y:570,c:'#8b5cf6'}
-  ];
-  leaves.forEach(function(l){
-    svg += '<rect x="'+(l.x-38)+'" y="'+(l.y-13)+'" width="76" height="26" rx="5" fill="'+l.c+'" opacity="0.9" filter="url(#mshadow)"/>';
-    svg += '<text x="'+l.x+'" y="'+(l.y+4)+'" text-anchor="middle" fill="white" font-size="10">'+l.label+'</text>';
-  });
-  svg += '</svg>';
-  document.getElementById('mindMapContainer').innerHTML = svg;
-}
-
-// ===== Deep Questions (5 items) =====
-var deepQuestions = [
-  {q:'如果"剂量决定毒性"是食品安全的核心原则，为什么公众对ppm级别的农药残留恐慌，但对日常饮酒（酒精是1类致癌物）却毫不在意？这背后是科学问题还是心理学问题？', a:'这是典型的"风险感知偏差"——人们对风险的评价不是基于科学数据，而是基于心理学因素：1）自愿性——自己选择喝酒vs"被动"摄入农药残留，前者感到可控后者不可控；2）天然vs人工——酒精是"天然发酵"的产物（尽管是1类致癌物），农药是"人工合成"的——但化学物质的毒性不因其来源改变；3）即时vs延迟——喝酒的愉悦感是即时的（致癌风险是几十年后的），农药残留只有风险没有愉悦；4）可见性——喝醉可见，ppm级残留不可见。心理学研究发现，人们最害怕的是"不可控+不可见+人为+延迟后果"的风险——农药残留恰好全部符合。而酒精——可控+可见+自我选择——即使风险更高也被接受了。这提醒我们：食品安全沟通不能只讲数据，要理解人的心理机制。'},
-  {q:'如果有一天微塑料真的被证实对人体健康有害，我们的食品体系还能退回去吗？塑料替代品的可能性有多大？', a:'退回去几乎不可能——塑料已经深度嵌入全球食品供应链。1）包装——全球约40%的塑料用于包装，其中食品包装占最大份额。替代材料（玻璃、金属、纸）在成本和性能上都有差距。2）农业——地膜覆盖技术让中国粮食增产20-30%，全降解地膜价格是普通地膜的3-5倍。3）加工设备——食品加工管道、传送带大量使用塑料部件，因为不锈钢不耐酸性食品。替代路径：1）可降解塑料——PLA（聚乳酸）已在一些场景替代，但降解条件苛刻（需要工业堆肥设施），且成本高3-5倍；2）减少使用——如禁止一次性塑料、鼓励自带容器——这是最可行的"低垂果实"；3）材料创新——壳聚糖（虾蟹壳提取）、菌丝体（蘑菇根部）等生物基材料正在实验室阶段。但所有这些方案的共同问题是：成本。只有当微塑料的健康危害证据足够强，公众才愿意为替代方案支付溢价。在此之前，经济规律决定了塑料不会被大规模替代。'},
-  {q:'从NMN、白藜芦醇到红曲，为什么"抗衰老"这个赛道特别容易出智商税？衰老本身能否被"补"回来？', a:'抗衰老特别容易出智商税的原因：1）恐惧驱动——衰老是人最基本的恐惧之一，恐惧让人降低理性判断门槛；2）效果不可验证——抗衰老的"效果"以年为单位才可能显现，消费者无法在短期内验证产品是否有效——这给营销提供了完美的模糊空间；3）科学的外衣——NAD+通路、sirtuins、端粒、线粒体——这些真实的生物学概念让营销看起来像科学，但"真实机制"不等于"干预有效"；4）无法证伪——"吃了感觉年轻了"是主观体验，无法被驳斥。衰老能否被"补"回来？从生物学角度看——衰老是DNA损伤累积、端粒缩短、线粒体功能衰退、蛋白质稳态丧失等多重机制的结果。单一分子的补充（NMN/白藜芦醇）理论上不可能逆转这一多因多果的复杂过程。目前唯一被证实的"抗衰老"干预：热量限制（减少30%热量摄入延长实验动物寿命）、运动、充足的睡眠。这些方法不需要花一分钱——所以没有公司在推广它们。'},
-  {q:'中国的食品安全标准为什么经常被说"偏低"？这是事实还是误解？标准和执行之间最大的鸿沟在哪里？', a:'部分事实，部分误解。事实方面：1）某些标准确实低于欧美——如中国对某些农药的MRL（最大残留限量）比欧盟高（更宽松），原因包括中国气候湿润病虫害压力大、中国仍是发展中国家需要平衡粮食安全和安全标准。2）标准制定过程中的产业影响——强势的行业协会可能压低标准。误解方面：1）"不同≠偏低"——有些标准中国比欧美更严格（如中国对某些抗生素的禁令比美国严格）；2）国际标准（Codex Alimentarius）往往被用作参考基准——中国的很多标准已经和Codex接轨。标准和执行之间的鸿沟：中国食品安全标准从2008年的数百项增加到现在的2000+项，标准本身已经接近国际水平。但执行层面的问题远大于标准本身：1）抽检率低——几十万家食品企业的日常监管依赖"双随机"抽查，被抽到的概率很小；2）执法不严——地方保护导致处罚力度打折；3）消费者维权成本高——检测费+诉讼费+时间成本让绝大多数人放弃。标准是"书面的承诺"，执行是"现实的兑现"——二者之间的差距才是真正的问题。'},
-  {q:'如果中国消费者的食品安全素养提升到北欧水平，中国的食品产业会发生什么变化？这是好事还是会有代价？', a:'变化将深远而复杂。好事方面：1）低质劣质食品被市场淘汰——消费者用"购买选择"倒逼产业升级；2）食品标签透明化——企业不敢在配料表上玩文字游戏；3）智商税保健品市场萎缩——消费者用五步法过滤掉80%无效产品；4）产业链可追溯——消费者要求"从农田到餐桌"的透明度，区块链溯源等技术得以推广。代价方面：1）食品价格上涨——更高的安全标准意味着更高的生产成本，最终传递到零售价格。对于低收入群体来说，食品支出占比已经很高（恩格尔系数高），价格上涨会影响生活质量。2）小农/小作坊出局——他们承担不起合规成本（检测设备、认证费用），规模化企业垄断市场——食品多样性可能下降。3）"完美主义"陷阱——如果消费者追求"零风险"，将导致食品浪费（过了最佳食用期但还安全的食品被扔掉）、过度包装、碳足迹增加。北欧模式的核心是：高素养消费者+强监管+高价格+小农补贴（CAP农业补贴）——是一个昂贵的平衡系统。中国路径可能需要在"安全底线"和"价格可负担"之间找到自己的平衡点。'}
-];
-
-function renderDeepQuestions(){
-  var container = document.getElementById('deepAskContainer');
-  var html = '';
-  deepQuestions.forEach(function(item, i){
-    html += '<div class="dq-item"><div class="dq-question">'+(i+1)+'. '+item.q+'</div>';
-    html += '<div class="dq-answer">'+item.a+'</div></div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.dq-question').forEach(function(q){
-    q.addEventListener('click',function(){
-      var ans = this.nextElementSibling;
-      ans.style.display = ans.style.display==='block'?'none':'block';
+  tagsContainer.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      tagsContainer.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      renderArticles(this.dataset.tag);
     });
   });
+
+  renderArticles('all');
+})();
+
+// ============================================================
+// SCROLL TO SECTION
+// ============================================================
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
 }
 
-// ===== Case Studies (3 items) =====
-var cases = [
-  {title:'化工罐车装食用油事件（2024.7）', meta:'涉及概念：食品安全风险、产业链监管、风险评估', content:'2024年7月，《新京报》暗访揭露：运输煤制油的罐车卸货后不清洗直接装食用油，涉及知名粮油企业。事件引爆公众恐慌，但随后出现"反转论"——有物流单据显示收货方为"金属材料公司"，暗示可能为工业用油而非食用油。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>事实核实：</strong>采访的7名罐车司机均承认知道化工原料与食用油混装且知道不应该这样做。这不是个案而是行业"公开的秘密"。</li><li><strong>风险评估：</strong>煤制油含苯系物、多环芳烃（PAHs）等有害物质。但定量分析表明：混装污染浓度在ppm级别；食用油精炼六步工艺（脱胶→脱酸→脱色→脱臭→脱蜡）可去除大部分杂质；单次摄入的急性风险很低。</li><li><strong>监管漏洞：</strong>运输环节是监管"灰色地带"——农业部门管生产、市场监管管零售、交通部门管运输安全——但罐车清洗规范没有强制性食品安全监管。</li><li><strong>公众反应：</strong>恐慌不源于毒理学风险评估，而源于"恶心感+信任背叛"——"我的食用油和化工原料共用一个容器"这一概念本身让人无法接受，不管剂量多低。</li><li><strong>MKS应用：</strong>食品安全=风险概率管理，而非"零风险"追求。化工罐车事件暴露的不是"食用油都有毒"，而是产业链监管的断点和违法成本过低的结构性问题。</li></ol>'},
-  {title:'小林制药红曲保健品致死事件（2024.3）', meta:'涉及概念：智商税识别、保健品监管、日本保健品光环', content:'2024年3月22日，日本小林制药宣布召回含红曲成分的保健品，原因是出现多例食用后肾脏疾病的报告。截至2024年5月，事件导致5人死亡、近300人住院。涉事产品通过跨境电商大量销往中国。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>时间线还原：</strong>小林制药2024年1月首次接到医生报告→3月22日宣布召回→4月公布死亡案例。从首次报告到公开召回滞后了约2个月。</li><li><strong>问题溯源：</strong>小林制药红曲原料由自家培养，2023年4-10月批次的原料中检出"未知成分"（后鉴定为软毛青霉酸Puromycin——一种抗生素）。红曲本身含有天然的他汀类成分（降胆固醇），但同时也可能产生桔青霉素（肾毒性）。发酵过程控制不当就可能产生意外毒素。</li><li><strong>监管漏洞：</strong>日本保健品分为"特定保健用食品"（需审批）和"功能性标示食品"（只需备案）。小林制药的红曲产品是后者——上市前不需要安全性和有效性审查。中国的跨境电商绕过了两国监管。</li><li><strong>消费心理：</strong>日本制造光环+小林制药品牌信任+红曲的"天然"叙事=消费者放下了警惕。"日本的保健品"在很多人心里等于"安全有效"——这次事件打破了这一印象。</li><li><strong>MKS框架：</strong>保健品的安全监管远低于药品（因为定义为"食品"），但营销上暗示药品级的疗效。这种"监管套利"是所有保健品行业的原罪——不仅日本，全球都一样。</li></ol>'},
-  {title:'水果越来越甜——选育、转基因与消费选择（2024）', meta:'涉及概念：转基因科学、育种技术、食品标签、消费决策', content:'2024年《科技参考》连续多期讨论了"水果越来越甜"的现象——从国光苹果（甜度~13）到今天的红富士（~15）再到最新品种（超18）。网络上流传"水果这么甜是不是打了甜蜜素/转基因"的说法。<br><br><strong>分析步骤：</strong><ol class="case-steps"><li><strong>科学事实：</strong>水果变甜不是转基因——全球仅两种转基因水果获批（夏威夷木瓜的"彩虹"品种和"北极"苹果）。真正的驱动力是传统选育——反复选择甜度最高的植株进行杂交，几代人累积的结果。日本育种技术在这一领域全球领先——浪漫红宝石葡萄、红颜草莓、千雪苹果都是日本选育成果。</li><li><strong>甜蜜素谣言：</strong>甜蜜素注射到植物中无法通过植物维管系统均匀分布，且成本远高于自然选育。"打甜蜜素"在技术上不可行也不经济。但谣言符合"无良商家+化学毒药"的叙事模板，所以传播极快。</li><li><strong>消费选择的悖论：</strong>消费者一边买最甜的水果品种（市场上甜度低于15的品种已被淘汰），一边抱怨"水果太甜了"。这不是商家的错——是消费者用钱包投票的结果。育种者只是在满足市场偏好。</li><li><strong>健康的隐忧：</strong>今天一根香蕉的糖分≈40年前的两根。水果的"隐形糖"摄入增加是公共卫生关注的问题——尤其是对糖尿病患者。但公众的注意力被"转基因谣言"吸引走了，没人讨论真正的健康问题。</li><li><strong>MKS启示：</strong>1）谣言之所以流行，因为比真相"更好听"（简单、有坏人、有受害者）；2）消费者需要意识到的不是"转基因恐慌"，而是自己的消费选择如何塑造了食品体系；3）真正的健康问题（糖摄入增加）被谣言遮蔽了。</li></ol>'}
-];
+// ============================================================
+// KNOWLEDGE METER — track scroll progress through sections
+// ============================================================
+(function() {
+  const kmPct = document.getElementById('kmPct');
+  const sections = document.querySelectorAll('.section');
+  const totalSections = sections.length;
 
-function renderCases(){
-  var container = document.getElementById('caseContainer');
-  var html = '';
-  cases.forEach(function(c){
-    html += '<div class="case-card"><div class="case-title">'+c.title+'</div>';
-    html += '<div class="case-meta">'+c.meta+'</div><p>'+c.content+'</p></div>';
-  });
-  container.innerHTML = html;
-}
-
-// ===== Decision Scenarios (3 items) =====
-function renderDecision(){
-  var container = document.getElementById('decisionContainer');
-  var scenarios = [
-    {title:'场景 1：亲戚推荐"抗衰老"NMN保健品',q:'长辈在家庭群里转发"哈佛教授推荐NMN抗衰老"，说吃了半年感觉年轻了，推荐你也买。你如何决策？',opts:['支持长辈买——长辈开心最重要','分析：1）NMN人体临床证据为零；2）创始人辛克莱尔以7.2亿美元出售公司；3）中国已禁止NMN作食品原料——建议长辈去体检，真有健康问题找医生而非保健品','自己也开始买NMN吃——万一有效呢','给长辈买更多保健品替代'],ans:1,explain:'用五步法分析NMN：需求（抗衰老）→技术原理（NAD+通路真实但人体证据缺失）→对比（无随机双盲人体试验）→溢价（每月1000-3000元买不确定的粉末）→替代（运动+睡眠+均衡饮食=唯一证实有效的"抗衰老"方法）。给长辈的建议：感恩他们的关心，建议先去医院做全面体检，根据体检结果（而非广告）决定是否需要补充剂。如果确实缺乏某种营养，医生会推荐有临床证据的产品。'},
-    {title:'场景 2：超市选购"全麦面包"',q:'你站在超市面包货架前，有三款产品都标着"全麦"：A牌8元/袋包装写了"真全麦"；B牌5元/袋写了"含全麦"；C牌15元/袋写了"有机全麦"。怎么选？',opts:['买最贵的C——有机+全麦肯定最好','看配料表：第一位必须是"全麦粉"而非"小麦粉"。A和C都查配料表，选配料表第一位是全麦粉且不含焦糖色（染色）的那个','买最便宜的B——面包都差不多','随便拿一袋'],ans:1,explain:'全麦面包的核心指标不是价格和"有机"标签，而是配料表第一位。正确做法：1）翻到背面看配料表——第一位是"全麦粉"才是真全麦；2）如果第一位是"小麦粉"（=精白面粉）后面才写"全麦粉"，那全麦含量可能不到10%；3）注意颜色——真全麦面包是灰褐色的，如果面包是深褐色但配料表有"焦糖色"——那是染出来的。最贵的C可能是智商税——"有机全麦"可能是营销组合；最便宜的B几乎肯定不是真全麦。结论：看配料表，不要看包装正面。'},
-    {title:'场景 3：微信群里看到"XX食品致癌"的转发文章',q:'爸爸在家庭群里转发了一篇"央视曝光！这6种蔬菜比砒霜还毒，你却天天在吃！"——里面说番茄含龙葵碱、土豆发芽有毒、未煮熟的四季豆含凝集素。你准备怎么回应？',opts:['直接转发辟谣文章到群里并@所有人','私下跟爸爸说：1）先认可他的关心——"谢谢你提醒我们注意饮食安全"；2）帮他用科学方法复核——"爸你帮我查一下文章最后有没有写引用哪篇研究论文？真的科学文章一定会写的"；3）给替代方案——"以后看到这种文章先发给我，我帮你在学术数据库里查证"','在群里说"这又是谣言"然后退群','装作没看见'],ans:1,explain:'直接反驳会触发逆反心理——爸爸转发是出于关心，直接否定等于否定他的关心。策略：1）情感认同——"谢谢爸爸关心我们"（建立连接而非对立）；2）教方法而非讲道理——"真的科学文章一定会写研究名称和发表的期刊，没有这些信息的基本是编的"（给工具而非给结论）；3）给角色——"以后你看到这种文章先发给我，我帮你查"（让他从"转发者"变成"信息的第一道过滤器"——这个角色转变比任何辟谣都有用）。文章里提到的一些内容（土豆发芽有毒、未熟四季豆含凝集素）本身是真实的科学知识——谣言包装往往是"真实信息+虚假恐怖结论"。直接否定"全部是谣言"反而伤害了你的可信度。'},
-    {title:'场景 4：选购食用油——散装vs品牌vs进口',q:'经历了"化工罐车装食用油"事件后，家里长辈想去农贸市场买"现榨花生油"觉得更安全。你的建议是？',opts:['支持——现榨的最新鲜最安全','分析：1）农贸市场散装油没有精炼工艺——可能含黄曲霉毒素（1类致癌物，花生最易感染）；2）品牌油经过六步精炼可去除大部分杂质；3）"现榨"≠安全——小作坊的卫生条件和原料筛选无法保障。建议买大品牌且来源可追溯的食用油','劝他们别吃油了','无所谓，都一样'],ans:1,explain:'"化工罐车事件"后，公众对品牌油信任下降→转向自榨油，但这是从一个风险跳到另一个风险。黄曲霉毒素B1的致癌性远超煤制油残留物的风险——自榨花生油是黄曲霉毒素暴露的主要来源之一。品牌油经历了六步精炼（脱胶、脱酸、脱色、脱臭、脱蜡），可去除绝大部分黄曲霉毒素、农药残留以及混装可能引入的矿物油杂质。正确做法：买大品牌、有追溯码、包装完好的食用油。化工罐车事件暴露的是监管漏洞，不是"所有品牌油都有问题"——不应该因噎废食。'}
-  ];
-  var html = '';
-  scenarios.forEach(function(s, i){
-    html += '<div class="decision-scenario"><h4>'+s.title+'</h4><p>'+s.q+'</p>';
-    s.opts.forEach(function(opt, j){
-      html += '<label style="display:block;margin:4px 0;cursor:pointer"><input type="radio" name="dec'+i+'" value="'+j+'"> '+opt+'</label>';
+  function updateMeter() {
+    let viewed = 0;
+    sections.forEach(s => {
+      const rect = s.getBoundingClientRect();
+      if (rect.top < window.innerHeight * .6) viewed++;
     });
-    html += '<button class="dec-submit" data-idx="'+i+'" data-ans="'+s.ans+'" data-explain="'+s.explain.replace(/"/g,'&quot;')+'">提交决策</button>';
-    html += '<div class="decision-output" id="decOut-'+i+'"></div></div>';
-  });
-  container.innerHTML = html;
-  container.querySelectorAll('.dec-submit').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var idx = parseInt(this.dataset.idx), ans = parseInt(this.dataset.ans);
-      var explain = this.dataset.explain;
-      var radios = document.getElementsByName('dec'+idx);
-      var out = document.getElementById('decOut-'+idx), selected = -1;
-      for(var k=0;k<radios.length;k++){if(radios[k].checked){selected=parseInt(radios[k].value);break;}}
-      if(selected===-1){out.textContent='请先选择一个选项';out.style.display='block';return;}
-      if(selected===ans){
-        out.innerHTML='✅ 正确决策！<br>'+explain;out.style.color='#155724';out.style.background='#d4edda';
-      }else{
-        out.innerHTML='⚠️ 可以优化。最合理的选择是：<br>'+explain;out.style.color='#721c24';out.style.background='#f8d7da';
+    const pct = Math.min(100, Math.round((viewed / totalSections) * 100));
+    kmPct.textContent = pct + '%';
+  }
+
+  window.addEventListener('scroll', updateMeter, { passive: true });
+  updateMeter();
+
+  // Nav buttons active state
+  const navBtns = document.querySelectorAll('.nav-sections button');
+  window.addEventListener('scroll', function() {
+    let current = 's1';
+    sections.forEach(s => {
+      const rect = s.getBoundingClientRect();
+      if (rect.top < window.innerHeight * .4) {
+        current = s.id;
       }
-      out.style.display='block';
     });
-  });
-}
-
-// ===== Toast =====
-function showToast(msg){
-  var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t); setTimeout(function(){t.remove()},2000);
-}
-
-// ===== Init =====
-function init(){
-  renderCards();
-  renderDeepQuestions();
-  renderCases();
-  renderDecision();
-  renderMindMap();
-  document.getElementById('cardIndex').textContent = '1/10';
-}
-
-document.addEventListener('DOMContentLoaded', init);
+    navBtns.forEach(b => {
+      b.classList.toggle('active', b.textContent.includes(
+        current === 's1' ? '风险公式' : current === 's2' ? '科学法庭' :
+        current === 's3' ? '体内旅程' : current === 's4' ? '证据金字塔' :
+        current === 's5' ? '文章宇宙' : ''
+      ));
+    });
+  }, { passive: true });
+})();
 </script>
 
 </body>
