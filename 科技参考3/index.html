@@ -105,6 +105,7 @@ h3{font-size:clamp(1rem,1.7vw,1.25rem);color:var(--text);margin:16px 0 10px}
 <body>
 
 <nav class="tab-nav" id="tabNav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:4px;padding:12px 14px;color:rgba(255,255,255,.85);text-decoration:none;font-size:13px;font-weight:600;border-right:1px solid rgba(255,255,255,.2);margin-right:4px;transition:all .3s" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.color='rgba(255,255,255,.85)';this.style.background='transparent'">← 卓克知识主板</a>
   <button class="active" data-tab="overview">知识集总览</button>
   <button data-tab="cards">知识卡片</button>
   <button data-tab="quiz">题库系统</button>
@@ -527,28 +528,21 @@ function renderCards(){
     html += '</div></div></div>';
   });
   container.innerHTML = html;
-  // Add click listeners to flip-inner for each card
+  // Add click listeners: unified setCard pattern
   concepts.forEach(function(c, i){
     var inner = document.getElementById('flipInner-'+i);
     if(inner){
       inner.addEventListener('click', function(){
-        this.classList.toggle('flipped');
-        currentCardIdx = i;
-        updateCardUI();
+        flipCard(i);
       });
     }
   });
 }
 
-function toggleFlip(idx){
+function flipCard(idx){
+  setCard(idx);
   var inner = document.getElementById('flipInner-'+idx);
-  if(inner.classList.contains('flipped')){
-    inner.classList.remove('flipped');
-  }else{
-    inner.classList.add('flipped');
-  }
-  currentCardIdx = idx;
-  updateCardUI();
+  if(inner) inner.classList.toggle('flipped');
 }
 
 function markLearned(idx){
@@ -611,7 +605,11 @@ var mcqBank = [
   {q:'可控核聚变中托卡马克的主要约束方式是什么？', opts:['重力约束','激光压缩','静电约束','强磁场约束'], ans:3, explain:'托卡马克使用环形容器+强磁场（由环向和极向磁线圈产生）将上亿度的等离子体约束在真空室中央，避免接触容器壁（017 期）。'},
   {q:'”嵌合体”（Chimera）在生物学中是什么意思？', opts:['基因编辑婴儿','纯种克隆动物','个体由两个不同受精卵的细胞融合而成','人工合成的完整基因'], ans:2, explain:'超雄 XYY 的很多案例实际上是嵌合体——个体体内存在两套不同来源的细胞系，可能来自双受精卵融合（247 期）。'},
   {q:'哪种说法正确描述了马斯克的”第一性原理”？', opts:['一切从物理学最基本的事实出发分析','先看竞争对手怎么做再优化','依赖直觉做决策','模仿最成功的产品'], ans:0, explain:'马斯克的第一性原理是：不被类比思维限制，将问题拆解到最基本的物理/经济事实，再从零开始重构解决方案。但卓克也指出其另一面——这种思维让他在一些领域低估了监管和社会的复杂性（160 期）。'},
-  {q:'关于”同行评议”（Peer Review），哪项是正确的？', opts:['是完美的质量控制机制','是相对最不坏的学术筛选制度，但有严重缺陷','从未被滥用','已被 AI 评审取代'], ans:1, explain:'同行评议制在近几十年暴露出诸多问题：审稿人偏见、阻挠竞争者、无法识别突破性研究。但它是目前为止相对最不坏的制度（072/109 期）。'}
+  {q:'关于”同行评议”（Peer Review），哪项是正确的？', opts:['是完美的质量控制机制','是相对最不坏的学术筛选制度，但有严重缺陷','从未被滥用','已被 AI 评审取代'], ans:1, explain:'同行评议制在近几十年暴露出诸多问题：审稿人偏见、阻挠竞争者、无法识别突破性研究。但它是目前为止相对最不坏的制度（072/109 期）。'},
+  {q:'以下哪项最能说明”AI对齐”问题的本质？', opts:['让AI输出符合人类价值观，但不等于政治审查','给AI设定政治立场','禁止AI回答敏感问题','让AI无条件服从指令'], ans:0, explain:'AI对齐是确保AI行为符合人类价值观——不做有害的事（如教人制炸弹），而非强加特定政治立场。但”谁来定义有害”正是对齐的核心困境（185 期）。'},
+  {q:'星舰为什么被设计为”完全可重用”？', opts:['为了炫耀技术实力','核心经济学逻辑——燃料成本仅占总成本不到2%，可重用性将每公斤入轨成本降低2个数量级','NASA的强制要求','对标猎鹰9号的外观设计'], ans:1, explain:'传统火箭发射后扔掉，相当于飞纽约后扔掉飞机。星舰让火箭像客机一样周转，燃料只占2%成本。若实现，入轨成本将从数万$/kg降至数百$/kg（128 期）。'},
+  {q:'以下哪项关于演化生物学的说法符合卓克的论述？', opts:['演化有明确的方向和目标','所有物种都在不断”进步”','人类已停止演化','人类基因组约8%来自远古内源性逆转录病毒残余，衰老可能与这些病毒残余的重新激活有关'], ans:3, explain:'基因组中8%是ERV（内源性逆转录病毒）残留——远古病毒感染生殖细胞并整合进基因组。年轻时被抑制，年长后可能重新激活促进衰老。这表明演化是”修补匠”非”工程师”（247 期）。'},
+  {q:'关于”科学可复现性”的问题，哪项正确？', opts:['所有论文结果都能被复现','复现失败一定意味着原始研究造假','约36%的心理学研究在2015年大规模复现中未能复现，推动了预注册制度普及','可复现性只适用于物理学'], ans:2, explain:'2015年《科学》发表大规模复现研究：100项心理学研究中仅36%可复现。这直接推动了预注册和注册报告（Registered Reports）的普及。但复现失败≠原始研究造假——可能是方法细节、样本差异导致（072 期）。'}
 ];
 
 // ===== 简答题库（12 题）=====
