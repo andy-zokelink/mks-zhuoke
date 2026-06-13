@@ -82,7 +82,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
 .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.8s var(--ease); }
 .flip-container { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 32px; }
-.flip-card { width: 100%; max-width: 500px; height: clamp(220px, 40vw, 280px); perspective: 1200px; cursor: pointer; }
+.flip-card { width: 100%; max-width: 700px; height: auto; min-height: clamp(280px, 45vw, 380px); perspective: 1200px; cursor: pointer; }
 .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
 .flip-inner.flipped { transform: rotateY(180deg); }
 .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: var(--radius-lg); padding: 32px 28px; display: flex; flex-direction: column; justify-content: center; }
@@ -92,7 +92,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
 .flip-back { background: var(--card); border: 1px solid var(--border-light); transform: rotateY(180deg); overflow-y: auto; text-align: left; border-top: 4px solid var(--mks); }
 .flip-back .fb-row { margin-bottom: 10px; }
 .flip-back .fb-label { font-size: 0.68rem; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.flip-back .fb-text { font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+.flip-back .fb-text { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
 .flip-nav { display: flex; align-items: center; gap: 16px; }
 .flip-nav button { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border-light); background: var(--card); color: var(--text); cursor: pointer; font-size: 0.8rem; transition: all var(--ease); font-family: inherit; }
 .flip-nav button:hover { border-color: var(--accent); color: var(--accent); }
@@ -157,7 +157,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
   .hero-inner { padding: 28px 20px; } .hero h2 { font-size: 1.5rem; }
   .concept-grid { grid-template-columns: 1fr; } .mks-grid { grid-template-columns: 1fr; }
   .path-steps { flex-direction: column; align-items: center; gap: 16px; } .path-steps::before { display: none; }
-  .flip-card { height: clamp(220px, 40vw, 280px); } .tab-btn { font-size: 0.68rem; padding: 4px 8px; } .top-bar h1 { font-size: 0.85rem; }
+  .flip-card { height: auto; min-height: clamp(280px, 45vw, 380px); } .tab-btn { font-size: 0.68rem; padding: 4px 8px; } .top-bar h1 { font-size: 0.85rem; }
 }
 </style>
 </head>
@@ -174,6 +174,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
   <button class="tab-btn" data-tab="7">案例分析</button>
   <button class="tab-btn" data-tab="8">实战决策</button>
 </div>
+<div class="tab-panel active" id="panel0">
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-badge">BAND 05 · 生命红 · MKS CORE</div>
@@ -182,16 +183,18 @@ body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 
     <p class="hero-desc">当人造肉挑战传统畜牧、代糖科学陷入方向相反的证据、肠道微生物被宣称为你的「第二大脑」——饮食健康领域的信息过载和商业噪音比任何学科都严重。这不是一本食谱，而是一套用科学思维穿透营销迷雾、做出理性饮食选择的工具包。</p>
 </div>
 </section>
-<div style="max-width:1100px;margin:0 auto;padding:0 24px 20px;position:relative;z-index:1;">
-  <div class="progress-wrap"><div class="progress-header-row"><span class="lbl">学习进度</span><span class="val" id="progressPct">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div></div>
-</div>
-<div class="tab-panel active" id="panel0">
+
 <h3 class="sec-title">🍽 10个核心概念</h3><div class="concept-grid" id="conceptGrid0"></div>
 <h3 class="sec-title">🔧 MKS核心工具箱</h3><div class="mks-grid" id="mksGrid"></div>
 <h3 class="sec-title">🕸 概念关系图</h3><div class="svg-wrap" id="svgMap"></div>
 <h3 class="sec-title">🎨 创意图：食物决策的认知地图</h3><div class="svg-wrap" id="creativeSVG"></div>
 <h3 class="sec-title">🗺 边界知识表</h3><div style="overflow-x:auto;"><table class="boundary-table" id="boundaryTable"></table></div>
 <h3 class="sec-title">🛤 学习路径</h3><div class="path-steps" id="pathSteps"></div>
+
+<div class="progress-wrap" style="margin-top:32px;">
+  <div class="progress-header-row"><span class="lbl">学习进度</span><span class="val" id="progressPct">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
 </div>
 <div class="tab-panel" id="panel1"><h3 class="sec-title">🃏 3D翻转知识卡片</h3>
 <div class="flip-container"><div class="flip-card" id="flipCard" onclick="flipCard()"><div class="flip-inner" id="flipInner"><div class="flip-front"><div class="ff-name" id="ffName"></div><div class="ff-hint">点击翻转查看详情</div></div><div class="flip-back" id="flipBack"></div></div></div>
@@ -273,8 +276,8 @@ function renderOverviewTab() {
 function toggleConcept(el) { var extra = el.querySelector('.c-extra'), hint = el.querySelector('.c-hint'); if (extra) { extra.classList.toggle('show'); if (hint) hint.style.display = extra.classList.contains('show') ? 'none' : ''; } }
 
 function buildSVGMap() {
-  var w = 1000, h = 730;
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
+  var w = 1150, h = 850;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1150px;">';
   svg += '<defs><filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter><marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ff6b6b" opacity="0.5"/></marker></defs>';
   svg += '<rect width="' + w + '" height="' + h + '" fill="#111820" rx="8"/>';
   svg += '<rect x="340" y="20" width="320" height="52" rx="12" fill="#180a0c" stroke="#ff6b6b" stroke-width="2.5" filter="url(#s)"/>';
@@ -340,7 +343,7 @@ function buildSVGMap() {
 
 function buildCreativeSVG() {
   var w = 1000, h = 560;
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1150px;">';
   svg += '<defs>';
   svg += '<marker id="arrIn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10,0 L0,5 L10,10 Z" fill="#ff5252"/></marker>';
   svg += '<marker id="arrOut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M10,0 L0,5 L10,10 Z" fill="#64b5f6"/></marker>';
