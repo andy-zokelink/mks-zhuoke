@@ -394,7 +394,7 @@ body::before {
 <h3 class="sec-title">🕸 概念关系图</h3>
 <div class="svg-wrap" id="svgMap"></div>
 
-<h3 class="sec-title">🎨 创意图：计算范式的历史跃迁</h3>
+<h3 class="sec-title">🎨 创意图：算力堆栈——从物理定律到机器智能</h3>
 <div class="svg-wrap" id="creativeSVG"></div>
 
 <h3 class="sec-title">🗺 边界知识表</h3>
@@ -709,74 +709,67 @@ function buildSVGMap() {
   return svg;
 }
 
-	// ===== CREATIVE SVG: Computing Architecture Evolution Tree =====
+	// ===== CREATIVE SVG: 算力堆栈——从物理定律到机器智能 =====
 	function buildCreativeSVG() {
-	  var w = 1000, h = 620;
+	  var w = 1000, h = 640;
 	  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
 	  svg += '<defs><filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>';
-	  svg += '<linearGradient id="trunkGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4dd0e1"/><stop offset="100%" stop-color="#006064"/></linearGradient>';
+	  svg += '<marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#5e6b7c" opacity="0.5"/></marker>';
 	  svg += '</defs>';
 
 	  svg += '<rect width="' + w + '" height="' + h + '" fill="#0a0e14" rx="10"/>';
 
 	  // Title
-	  svg += '<text x="500" y="32" text-anchor="middle" fill="#4dd0e1" font-size="17" font-weight="700">计算架构进化树：从沙粒到硅基智能</text>';
-	  svg += '<text x="500" y="52" text-anchor="middle" fill="#5e6b7c" font-size="10">Computing Architecture Evolutionary Tree · From Sand to Silicon Intelligence</text>';
+	  svg += '<text x="500" y="30" text-anchor="middle" fill="#4dd0e1" font-size="16" font-weight="700">算力堆栈：从物理定律到机器智能的六层跃迁</text>';
+	  svg += '<text x="500" y="50" text-anchor="middle" fill="#5e6b7c" font-size="9">The Computing Stack · Six Layers from Physics to Intelligence</text>';
 
-	  // ===== ROOTS (Foundation) =====
-	  var roots = [
-	    { x: 310, label: "量子力学", sub: "能带理论·隧穿" },
-	    { x: 500, label: "材料科学", sub: "硅纯化·掺杂工艺" },
-	    { x: 690, label: "电磁理论", sub: "麦克斯韦·信号完整" }
+	  // Six stacked layers — drawn bottom-to-top so upper layers render on top
+	  var layers = [
+	    { label: "智能层", y: 105, w: 380, color: "#ad1457", terms: "深度学习 · LLM · AlphaFold · 自动驾驶" },
+	    { label: "系统层", y: 175, w: 460, color: "#e65100", terms: "操作系统 · 编译器 · 虚拟化 · 运行时" },
+	    { label: "架构层", y: 245, w: 540, color: "#4a148c", terms: "ISA · 冯诺依曼 · 微架构 · 流水线" },
+	    { label: "逻辑层", y: 315, w: 620, color: "#283593", terms: "逻辑门 · 触发器 · 组合/时序电路" },
+	    { label: "器件层", y: 385, w: 700, color: "#1565c0", terms: "晶体管 · FinFET · GAA · 隧穿效应" },
+	    { label: "物理根基层", y: 455, w: 780, color: "#006064", terms: "量子力学 · 材料科学 · 电磁理论" }
 	  ];
-	  roots.forEach(function(r) {
-	    svg += '<rect x="' + (r.x - 55) + '" y="564" width="110" height="38" rx="8" fill="#0d1a2d" stroke="#1a3a4a" stroke-width="1"/>';
-	    svg += '<text x="' + r.x + '" y="581" text-anchor="middle" fill="#4dd0e1" font-size="10" font-weight="600">' + r.label + '</text>';
-	    svg += '<text x="' + r.x + '" y="594" text-anchor="middle" fill="#4a5a6a" font-size="8">' + r.sub + '</text>';
-	    svg += '<path d="M' + r.x + ',564 Q' + r.x + ',534 500,534" stroke="#1a3a4a" stroke-width="1.5" fill="none" opacity="0.35"/>';
-	  });
-	  svg += '<text x="500" y="550" text-anchor="middle" fill="#4a5a6a" font-size="9">▲ 物理根基层</text>';
 
-	  // ===== TRUNK =====
-	  svg += '<rect x="370" y="456" width="260" height="68" rx="12" fill="#0a1628" stroke="#00bcd4" stroke-width="2.5" filter="url(#s)"/>';
-	  svg += '<text x="500" y="482" text-anchor="middle" fill="#4dd0e1" font-size="14" font-weight="700">半导体·集成电路</text>';
-	  svg += '<text x="500" y="498" text-anchor="middle" fill="#5e6b7c" font-size="10">晶体管→IC→VLSI · 1947-1970s</text>';
-	  svg += '<text x="500" y="514" text-anchor="middle" fill="#4a5a6a" font-size="8">贝尔实验室→仙童→Intel 4004</text>';
-	  svg += '<path d="M500,534 L500,456" stroke="#00bcd4" stroke-width="2.5" fill="none" opacity="0.5"/>';
+	  for (var i = layers.length - 1; i >= 0; i--) {
+	    var ly = layers[i];
+	    var lx = (w - ly.w) / 2;
+	    // Layer body with semi-transparent fill
+	    svg += '<rect x="' + lx + '" y="' + ly.y + '" width="' + ly.w + '" height="58" rx="10" fill="' + ly.color + '" fill-opacity="0.15" stroke="' + ly.color + '" stroke-width="2" filter="url(#s)"/>';
+	    // Title bar
+	    svg += '<rect x="' + (lx + 2) + '" y="' + (ly.y + 2) + '" width="' + (ly.w - 4) + '" height="22" rx="8" fill="' + ly.color + '" fill-opacity="0.3"/>';
+	    svg += '<text x="' + (w/2) + '" y="' + (ly.y + 17) + '" text-anchor="middle" fill="#e4e9f0" font-size="12" font-weight="700">' + ly.label + '</text>';
+	    // Key terms
+	    svg += '<text x="' + (w/2) + '" y="' + (ly.y + 42) + '" text-anchor="middle" fill="' + ly.color + '" font-size="10" opacity="0.85">' + ly.terms + '</text>';
+	  }
 
-	  // ===== BRANCHES =====
-	  var branches = [
-	    { x: 175, y: 340, w: 140, color: "#00bcd4", label: "CPU 通用计算", sub: "冯诺依曼架构", sub2: "x86 · ARM · RISC-V" },
-	    { x: 500, y: 260, w: 140, color: "#4caf50", label: "GPU 并行计算", sub: "SIMD/SIMT架构", sub2: "CUDA · 图形渲染" },
-	    { x: 825, y: 340, w: 140, color: "#ff9800", label: "NPU 神经计算", sub: "深度学习加速器", sub2: "TPU · 存内计算" },
-	    { x: 825, y: 470, w: 140, color: "#7c4dff", label: "量子计算", sub: "量子比特·叠加态", sub2: "超导·离子阱·光量子" }
+	  // Bidirectional arrows between layers (left side)
+	  var gaps = [
+	    { topY: 163, bottomY: 175 },
+	    { topY: 233, bottomY: 245 },
+	    { topY: 303, bottomY: 315 },
+	    { topY: 373, bottomY: 385 },
+	    { topY: 443, bottomY: 455 }
 	  ];
-	  branches.forEach(function(b) {
-	    svg += '<path d="M500,456 Q' + ((500+b.x)/2) + ',' + (Math.min(456,b.y)-20) + ' ' + b.x + ',' + b.y + '" stroke="' + b.color + '" stroke-width="2.5" fill="none" opacity="0.5"/>';
-	    svg += '<rect x="' + (b.x - b.w/2) + '" y="' + (b.y - 8) + '" width="' + b.w + '" height="72" rx="10" fill="#0d1a2d" stroke="' + b.color + '" stroke-width="2" filter="url(#s)"/>';
-	    svg += '<text x="' + b.x + '" y="' + (b.y + 9) + '" text-anchor="middle" fill="' + b.color + '" font-size="12" font-weight="700">' + b.label + '</text>';
-	    svg += '<text x="' + b.x + '" y="' + (b.y + 26) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">' + b.sub + '</text>';
-	    svg += '<text x="' + b.x + '" y="' + (b.y + 43) + '" text-anchor="middle" fill="#5e6b7c" font-size="8">' + b.sub2 + '</text>';
-	  });
 
-	  // ===== LEAVES (Applications) =====
-	  var leaves = [
-	    { x: 80, y: 260, label: "PC/服务器" }, { x: 260, y: 250, label: "手机SoC" },
-	    { x: 400, y: 182, label: "AI训练" }, { x: 600, y: 182, label: "自动驾驶" },
-	    { x: 720, y: 270, label: "AlphaFold" }, { x: 940, y: 280, label: "脑机接口" },
-	    { x: 720, y: 420, label: "量子霸权" }, { x: 940, y: 465, label: "后量子密码" }
-	  ];
-	  leaves.forEach(function(l) {
-	    svg += '<circle cx="' + l.x + '" cy="' + l.y + '" r="5" fill="#4dd0e1" opacity="0.6"/>';
-	    svg += '<text x="' + l.x + '" y="' + (l.y - 10) + '" text-anchor="middle" fill="#5e6b7c" font-size="8">' + l.label + '</text>';
+	  gaps.forEach(function(g) {
+	    var mid = (g.topY + g.bottomY) / 2;
+	    // Downward — 约束/使能
+	    svg += '<line x1="85" y1="' + g.topY + '" x2="85" y2="' + g.bottomY + '" stroke="#5e6b7c" stroke-width="1.2" opacity="0.45" marker-end="url(#arr)"/>';
+	    svg += '<text x="77" y="' + (mid + 4) + '" text-anchor="end" fill="#5e6b7c" font-size="7" opacity="0.6">约束/使能</text>';
+	    // Upward — 抽象/封装
+	    svg += '<line x1="103" y1="' + g.bottomY + '" x2="103" y2="' + g.topY + '" stroke="#5e6b7c" stroke-width="1.2" opacity="0.45" marker-end="url(#arr)"/>';
+	    svg += '<text x="111" y="' + (mid + 4) + '" text-anchor="start" fill="#5e6b7c" font-size="7" opacity="0.6">抽象/封装</text>';
 	  });
 
-	  // ===== Feedback loop =====
-	  svg += '<path d="M825,390 Q950,200 630,200" stroke="#ff9800" stroke-width="1.2" stroke-dasharray="6,4" fill="none" opacity="0.3"/>';
-	  svg += '<text x="820" y="270" fill="#ff9800" font-size="8" opacity="0.5">AI辅助芯片设计↺</text>';
+	  // Dashed feedback loop: 智能层 → 回到底层 (right side)
+	  svg += '<path d="M695,134 Q940,134 940,310 Q940,480 790,484" stroke="#ff9800" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.4" marker-end="url(#arr)"/>';
+	  svg += '<text x="955" y="310" fill="#ff9800" font-size="8" opacity="0.6" transform="rotate(90,955,310)">AI辅助芯片设计 ↺ 反馈闭环</text>';
 
 	  // Bottom insight
-	  svg += '<text x="500" y="605" text-anchor="middle" fill="#4dd0e1" font-size="11" font-weight="600">MKS洞察：计算范式是物理约束下的组织形式跃迁 — 从电子开关到概率推理，每一层都是对「计算」的重新定义</text>';
+	  svg += '<text x="500" y="610" text-anchor="middle" fill="#4dd0e1" font-size="11" font-weight="600">MKS洞察：每一层都是对下层复杂性的封装——理解分层抽象，就是理解计算世界的第一性原理</text>';
 
 	  svg += '</svg>';
 	  return svg;

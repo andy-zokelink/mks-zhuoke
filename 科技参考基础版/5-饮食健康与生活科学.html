@@ -287,13 +287,16 @@ function buildSVGMap() {
   ];
 
   var edgeLabels = ['营养代谢', '食品安全', '肠道微生物', '生活方式'];
-  l2.forEach(function(n, ei) {
-    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="56" rx="10" fill="#241016" stroke="#ff8a80" stroke-width="1.5" filter="url(#s)"/>';
-    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 22) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="600">' + n.label + '</text>';
-    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 42) + '" text-anchor="middle" fill="#5e6b7c" font-size="10">' + n.sub + '</text>';
-    svg += '<line x1="500" y1="72" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="#ff6b6b" stroke-width="1" opacity="0.3" marker-end="url(#arrow)"/>';
-    svg += '<text x="' + ((500 + n.x + n.w/2)/2) + '" y="' + ((72 + n.y)/2 - 6) + '" text-anchor="middle" fill="#ff8a80" font-size="9" opacity="0.55">' + (edgeLabels[ei] || "") + '</text>';
-  });
+  	  var pCoL5 = ['#ff8a80','#81c784','#80deea','#ffb74d'];
+	  var pFills5 = ['#241016','#132a20','#132530','#2a2013'];
+	  var pCo5 = ['#ff6b6b','#4caf50','#4dd0e1','#ff9800'];
+	  l2.forEach(function(n, ei) {
+	    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="56" rx="10" fill="' + pFills5[ei] + '" stroke="' + pCoL5[ei] + '" stroke-width="1.5" filter="url(#s)"/>';
+	    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 22) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="600">' + n.label + '</text>';
+	    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 42) + '" text-anchor="middle" fill="#5e6b7c" font-size="10">' + n.sub + '</text>';
+	    svg += '<line x1="500" y1="72" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="' + pCo5[ei] + '" stroke-width="1" opacity="0.3" marker-end="url(#arrow)"/>';
+	    svg += '<text x="' + ((500 + n.x + n.w/2)/2) + '" y="' + ((72 + n.y)/2 - 6) + '" text-anchor="middle" fill="' + pCoL5[ei] + '" font-size="9" opacity="0.55">' + (edgeLabels[ei] || "") + '</text>';
+	  });
   var l3 = [
     { x: 30, y: 270, w: 140, label: "人造肉", parent: 0 },{ x: 185, y: 270, w: 140, label: "间歇性断食", parent: 0 },
     { x: 30, y: 340, w: 140, label: "血脂与心血管", parent: 0 },{ x: 185, y: 340, w: 140, label: "代糖/甜味剂", parent: 0 },
@@ -320,6 +323,12 @@ function buildSVGMap() {
     { x: 860, y: 440, w: 120, label: "饮食模式选择" },{ x: 860, y: 500, w: 120, label: "咖啡推荐争议" }
   ];
   l4.forEach(function(n) { svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="36" rx="6" fill="#0d1a20" stroke="#1a0c0d" stroke-width="0.8"/><text x="' + (n.x + n.w/2) + '" y="' + (n.y + 23) + '" text-anchor="middle" fill="#5e6b7c" font-size="9.5">' + n.label + '</text>'; });
+  // Feedback loop: 健康结果→研究反馈
+  svg += '<path d="M120,580 Q60,450 50,300" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.25" marker-end="url(#arrow)"/>';
+  svg += '<text x="35" y="440" fill="#ff8a80" font-size="8" opacity="0.45" transform="rotate(-90,35,440)">健康结果→研究反馈</text>';
+  svg += '<path d="M860,580 Q920,450 870,300" stroke="#ff9800" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.25" marker-end="url(#arrow)"/>';
+  svg += '<text x="895" y="440" fill="#ffb74d" font-size="8" opacity="0.45" transform="rotate(-90,895,440)">健康结果→研究反馈</text>';
+
   var lx = 740, ly = 14;
   svg += '<rect x="' + lx + '" y="' + ly + '" width="14" height="14" rx="3" fill="#180a0c" stroke="#ff6b6b" stroke-width="2"/><text x="' + (lx+20) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">根概念</text>';
   svg += '<rect x="' + (lx+130) + '" y="' + ly + '" width="14" height="14" rx="3" fill="#241016" stroke="#ff8a80" stroke-width="1"/><text x="' + (lx+150) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">MKS支柱层</text>';
@@ -330,17 +339,94 @@ function buildSVGMap() {
 }
 
 function buildCreativeSVG() {
-  var w = 1000, h = 500;
+  var w = 1000, h = 560;
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
-  svg += '<defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff6b6b"/><stop offset="100%" stop-color="#ff8a80"/></linearGradient></defs>';
-  svg += '<rect width="' + w + '" height="' + h + '" fill="#111820" rx="8"/>';
-  svg += '<text x="500" y="35" text-anchor="middle" fill="#e4e9f0" font-size="16" font-weight="700">食物决策的认知地图：五层影响圈</text>';
-  svg += '<text x="500" y="55" text-anchor="middle" fill="#5e6b7c" font-size="10">是什么在真正决定你吃什么？——从本能到政策</text>';
-  svg += '<circle cx="500" cy="360" r="250" fill="none" stroke="#ff9800" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/><text x="500" y="106" text-anchor="middle" fill="#ff9800" font-size="11" font-weight="700">政策与产业层</text><text x="500" y="120" text-anchor="middle" fill="#ffb74d" font-size="9">农业补贴 · 食品标签法 · 糖税 · 广告限制 · 零售布局</text>';
-  svg += '<circle cx="500" cy="360" r="190" fill="none" stroke="#4caf50" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/><text x="500" y="168" text-anchor="middle" fill="#4caf50" font-size="11" font-weight="700">环境与社会层</text><text x="500" y="182" text-anchor="middle" fill="#a5d6a7" font-size="9">食物可及性 · 价格 · 广告曝光 · 社交圈饮食文化</text><text x="500" y="196" text-anchor="middle" fill="#a5d6a7" font-size="9">家庭传统 · 朋友影响 · 社交媒体 · 聚餐文化</text>';
-  svg += '<circle cx="500" cy="360" r="130" fill="none" stroke="#ff6b6b" stroke-width="2.5" opacity="0.6"/><circle cx="500" cy="360" r="130" fill="rgba(255,107,107,0.05)"/><text x="500" y="240" text-anchor="middle" fill="#ff8a80" font-size="11" font-weight="700">认知与感官层</text><text x="500" y="254" text-anchor="middle" fill="#ffcccc" font-size="9">营养知识 · 健康信念 · 科学素养 · 媒体信息</text><text x="500" y="268" text-anchor="middle" fill="#ffcccc" font-size="9">味觉 · 嗅觉 · 口感 · 外观 · 温度</text>';
-  svg += '<circle cx="500" cy="360" r="75" fill="none" stroke="#ff8a80" stroke-width="2" opacity="0.7"/><circle cx="500" cy="360" r="75" fill="rgba(255,107,107,0.08)"/><text x="500" y="350" text-anchor="middle" fill="#ff8a80" font-size="13" font-weight="700">生理需求层</text><text x="500" y="368" text-anchor="middle" fill="#ffcccc" font-size="10">饥饿信号 · 饱腹信号</text><text x="500" y="383" text-anchor="middle" fill="#ffcccc" font-size="10">营养缺乏 · 代谢需求</text>';
-  svg += '<rect x="350" y="440" width="300" height="45" rx="10" fill="#ff6b6b" opacity="0.9"/><text x="500" y="460" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">你的食物决策</text><text x="500" y="476" text-anchor="middle" fill="#ffcccc" font-size="9">五层影响圈的交汇点</text>';
+  svg += '<defs>';
+  svg += '<marker id="arrIn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10,0 L0,5 L10,10 Z" fill="#ff5252"/></marker>';
+  svg += '<marker id="arrOut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M10,0 L0,5 L10,10 Z" fill="#64b5f6"/></marker>';
+  svg += '<filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+  svg += '</defs>';
+  svg += '<rect width="' + w + '" height="' + h + '" fill="#0a0e14" rx="8"/>';
+  // Title
+  svg += '<text x="500" y="30" text-anchor="middle" fill="#e8edf4" font-size="16" font-weight="700">食物选择的力场：五层力量如何塑造你的每一口</text>';
+  svg += '<text x="500" y="50" text-anchor="middle" fill="#6b7385" font-size="10">从本能欲望到产业政策——每一口食物都是五层力量的合力结果</text>';
+  // Layer 5 outermost: 政策与产业 (blue #1e88e5)
+  var cx = 400, cy = 285;
+  var l5w = 440, l5h = 440; svg += '<rect x="' + (cx-l5w/2) + '" y="' + (cy-l5h/2) + '" width="' + l5w + '" height="' + l5h + '" rx="18" fill="none" stroke="#1e88e5" stroke-width="2" opacity="0.7"/>';
+  svg += '<text x="' + cx + '" y="62" text-anchor="middle" fill="#1e88e5" font-size="10" font-weight="700">政策与产业层</text>';
+  svg += '<text x="' + cx + '" y="78" text-anchor="middle" fill="#90caf9" font-size="8.5">农业补贴 · 食品标签法 · 糖税 · 食品安全标准 · 零售布局</text>';
+  // Layer 4: 社会与环境 (green #43a047)
+  var l4w = 360, l4h = 360; svg += '<rect x="' + (cx-l4w/2) + '" y="' + (cy-l4h/2) + '" width="' + l4w + '" height="' + l4h + '" rx="16" fill="none" stroke="#43a047" stroke-width="2" opacity="0.7"/>';
+  svg += '<text x="' + cx + '" y="100" text-anchor="middle" fill="#43a047" font-size="10" font-weight="700">社会与环境层</text>';
+  svg += '<text x="' + cx + '" y="116" text-anchor="middle" fill="#a5d6a7" font-size="8.5">家庭传统 · 社交压力 · 食物可及性 · 广告 · 价格 · 聚餐文化</text>';
+  // Layer 3: 肠道与代谢 (amber #ffb300)
+  var l3w = 280, l3h = 280; svg += '<rect x="' + (cx-l3w/2) + '" y="' + (cy-l3h/2) + '" width="' + l3w + '" height="' + l3h + '" rx="14" fill="none" stroke="#ffb300" stroke-width="2" opacity="0.7"/>';
+  svg += '<text x="' + cx + '" y="140" text-anchor="middle" fill="#ffb300" font-size="10" font-weight="700">肠道与代谢层</text>';
+  svg += '<text x="' + cx + '" y="156" text-anchor="middle" fill="#ffe082" font-size="8.5">微生物组 · 血糖反应 · 饱腹信号 · 食物不耐受</text>';
+  // Layer 2: 感官与认知 (orange #fb8c00)
+  var l2w = 200, l2h = 200; svg += '<rect x="' + (cx-l2w/2) + '" y="' + (cy-l2h/2) + '" width="' + l2w + '" height="' + l2h + '" rx="12" fill="none" stroke="#fb8c00" stroke-width="2" opacity="0.7"/>';
+  svg += '<text x="' + cx + '" y="178" text-anchor="middle" fill="#fb8c00" font-size="10" font-weight="700">感官与认知层</text>';
+  svg += '<text x="' + cx + '" y="194" text-anchor="middle" fill="#ffcc80" font-size="8.5">色香味 · 营养知识 · 健康信念 · 标签阅读</text>';
+  // Layer 1 innermost: 生理驱动 (red #e53935)
+  var l1w = 124, l1h = 124; svg += '<rect x="' + (cx-l1w/2) + '" y="' + (cy-l1h/2) + '" width="' + l1w + '" height="' + l1h + '" rx="10" fill="rgba(229,57,53,0.08)" stroke="#e53935" stroke-width="2.5" opacity="0.85"/>';
+  svg += '<text x="' + cx + '" y="216" text-anchor="middle" fill="#e53935" font-size="10" font-weight="700">生理驱动层</text>';
+  svg += '<text x="' + cx + '" y="232" text-anchor="middle" fill="#ef9a9a" font-size="8.5">饥饿素 · 瘦素 · 营养缺乏 · 味觉偏好</text>';
+  // Center: plate + fork icon
+  svg += '<g transform="translate(' + cx + ',' + cy + ')" filter="url(#glow)">';
+  svg += '<ellipse cx="0" cy="0" rx="42" ry="32" fill="#1a1a2e" stroke="#c5cdd8" stroke-width="2.5"/>';
+  svg += '<ellipse cx="0" cy="0" rx="32" ry="22" fill="#252540" stroke="#5e6b7c" stroke-width="1"/>';
+  svg += '<line x1="-12" y1="-18" x2="-12" y2="22" stroke="#c5cdd8" stroke-width="2.5" stroke-linecap="round"/>';
+  svg += '<line x1="-12" y1="-18" x2="-24" y2="-24" stroke="#c5cdd8" stroke-width="2" stroke-linecap="round"/>';
+  svg += '<line x1="-12" y1="-12" x2="-24" y2="-18" stroke="#c5cdd8" stroke-width="2" stroke-linecap="round"/>';
+  svg += '<line x1="-12" y1="-6" x2="-24" y2="-12" stroke="#c5cdd8" stroke-width="2" stroke-linecap="round"/>';
+  svg += '<line x1="-12" y1="0" x2="-24" y2="-6" stroke="#c5cdd8" stroke-width="2" stroke-linecap="round"/>';
+  svg += '</g>';
+  svg += '<text x="' + cx + '" y="' + (cy+55) + '" text-anchor="middle" fill="#e8edf4" font-size="12" font-weight="700">你的食物决策</text>';
+  svg += '<text x="' + cx + '" y="' + (cy+72) + '" text-anchor="middle" fill="#6b7385" font-size="8.5">五层力量的交汇点</text>';
+  // Bidirectional arrows between layers (right side)
+  // Between L5 and L4
+  svg += '<line x1="' + (cx+l4w/2+6) + '" y1="125" x2="' + (cx+l5w/2-6) + '" y2="125" stroke="#ff5252" stroke-width="3" opacity="0.7" marker-end="url(#arrIn)"/>';
+  svg += '<text x="' + (cx+l4w/2+44) + '" y="121" text-anchor="middle" fill="#ff5252" font-size="7.5">约束/塑造</text>';
+  svg += '<line x1="' + (cx+l5w/2-6) + '" y1="138" x2="' + (cx+l4w/2+6) + '" y2="138" stroke="#64b5f6" stroke-width="1.5" opacity="0.6" marker-end="url(#arrOut)"/>';
+  svg += '<text x="' + (cx+l4w/2+44) + '" y="150" text-anchor="middle" fill="#64b5f6" font-size="7">反馈/改变</text>';
+  // Between L4 and L3
+  svg += '<line x1="' + (cx+l3w/2+6) + '" y1="163" x2="' + (cx+l4w/2-6) + '" y2="163" stroke="#ff5252" stroke-width="2.5" opacity="0.7" marker-end="url(#arrIn)"/>';
+  svg += '<text x="' + (cx+l3w/2+38) + '" y="159" text-anchor="middle" fill="#ff5252" font-size="7.5">约束/塑造</text>';
+  svg += '<line x1="' + (cx+l4w/2-6) + '" y1="176" x2="' + (cx+l3w/2+6) + '" y2="176" stroke="#64b5f6" stroke-width="1.5" opacity="0.6" marker-end="url(#arrOut)"/>';
+  svg += '<text x="' + (cx+l3w/2+38) + '" y="188" text-anchor="middle" fill="#64b5f6" font-size="7">反馈/改变</text>';
+  // Between L3 and L2
+  svg += '<line x1="' + (cx+l2w/2+6) + '" y1="200" x2="' + (cx+l3w/2-6) + '" y2="200" stroke="#ff5252" stroke-width="2.2" opacity="0.7" marker-end="url(#arrIn)"/>';
+  svg += '<text x="' + (cx+l2w/2+32) + '" y="196" text-anchor="middle" fill="#ff5252" font-size="7.5">约束/塑造</text>';
+  svg += '<line x1="' + (cx+l3w/2-6) + '" y1="213" x2="' + (cx+l2w/2+6) + '" y2="213" stroke="#64b5f6" stroke-width="1.5" opacity="0.6" marker-end="url(#arrOut)"/>';
+  svg += '<text x="' + (cx+l2w/2+32) + '" y="225" text-anchor="middle" fill="#64b5f6" font-size="7">反馈/改变</text>';
+  // Between L2 and L1
+  svg += '<line x1="' + (cx+l1w/2+6) + '" y1="237" x2="' + (cx+l2w/2-6) + '" y2="237" stroke="#ff5252" stroke-width="2" opacity="0.7" marker-end="url(#arrIn)"/>';
+  svg += '<text x="' + (cx+l1w/2+26) + '" y="233" text-anchor="middle" fill="#ff5252" font-size="7.5">约束/塑造</text>';
+  svg += '<line x1="' + (cx+l2w/2-6) + '" y1="250" x2="' + (cx+l1w/2+6) + '" y2="250" stroke="#64b5f6" stroke-width="1.5" opacity="0.6" marker-end="url(#arrOut)"/>';
+  svg += '<text x="' + (cx+l1w/2+26) + '" y="262" text-anchor="middle" fill="#64b5f6" font-size="7">反馈/改变</text>';
+  // Left vertical scale: 影响强度递增
+  svg += '<line x1="120" y1="100" x2="120" y2="450" stroke="#ff5252" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>';
+  svg += '<polygon points="120,90 114,100 126,100" fill="#ff5252" opacity="0.6"/>';
+  svg += '<text x="130" y="275" fill="#ff5252" font-size="9" font-weight="700" transform="rotate(-90,130,275)">影响强度递增</text>';
+  svg += '<text x="155" y="278" fill="#ef9a9a" font-size="7.5" transform="rotate(-90,155,278)">(由外向内)</text>';
+  // Right vertical scale: 个人可控性递减
+  svg += '<line x1="670" y1="100" x2="670" y2="450" stroke="#64b5f6" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>';
+  svg += '<polygon points="670,90 664,100 676,100" fill="#64b5f6" opacity="0.6"/>';
+  svg += '<text x="680" y="275" fill="#64b5f6" font-size="9" font-weight="700" transform="rotate(-90,680,275)">个人可控性递减</text>';
+  svg += '<text x="705" y="278" fill="#90caf9" font-size="7.5" transform="rotate(-90,705,278)">(由内向外)</text>';
+  // Small icons scattered in layers
+  svg += '<text x="' + (cx+70) + '" y="' + (cy-45) + '" font-size="16" opacity="0.7">&#127822;</text>';
+  svg += '<text x="' + (cx-100) + '" y="' + (cy+30) + '" font-size="14" opacity="0.7">&#129440;</text>';
+  svg += '<text x="' + (cx+155) + '" y="' + (cy-120) + '" font-size="14" opacity="0.7">&#127963;</text>';
+  svg += '<text x="' + (cx-50) + '" y="' + (cy-105) + '" font-size="13" opacity="0.6">&#129309;</text>';
+  // Legend
+  svg += '<rect x="' + (cx+180) + '" y="20" width="12" height="12" rx="3" fill="none" stroke="#ff5252" stroke-width="2.5"/>';
+  svg += '<text x="' + (cx+198) + '" y="30" fill="#c5cdd8" font-size="8">向内约束力</text>';
+  svg += '<rect x="' + (cx+280) + '" y="20" width="12" height="12" rx="3" fill="none" stroke="#64b5f6" stroke-width="2"/>';
+  svg += '<text x="' + (cx+298) + '" y="30" fill="#c5cdd8" font-size="8">向外反馈力</text>';
+  // Bottom insight
+  svg += '<text x="500" y="536" text-anchor="middle" fill="#6b7385" font-size="9.5" font-style="italic">MKS洞察：你以为自己在选择食物——实际上你的选择被层层力量预先编码。理解这些力量，是夺回饮食自主权的第一步。</text>';
+  svg += '<rect x="330" y="543" width="340" height="1" fill="#1a2330"/>';
   svg += '</svg>';
   return svg;
 }

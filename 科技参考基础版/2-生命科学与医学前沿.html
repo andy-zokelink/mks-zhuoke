@@ -362,7 +362,7 @@ body::before {
 <div class="mks-grid" id="mksGrid"></div>
 <h3 class="sec-title">🕸 概念关系图</h3>
 <div class="svg-wrap" id="svgMap"></div>
-<h3 class="sec-title">🎨 创意图：医学范式的四次革命</h3>
+<h3 class="sec-title">🎨 创意图：医学干预深度——从体表到基因组的六层穿透</h3>
 <div class="svg-wrap" id="creativeSVG"></div>
 <h3 class="sec-title">🗺 边界知识表</h3>
 <div style="overflow-x:auto;">
@@ -556,7 +556,11 @@ function buildSVGMap() {
   var w = 1000, h = 730;
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
   svg += '<defs><filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>';
-  svg += '<marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4caf50" opacity="0.5"/></marker></defs>';
+  svg += '<marker id="mar0" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4caf50" opacity="0.5"/></marker>';
+	  svg += '<marker id="mar1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4dd0e1" opacity="0.5"/></marker>';
+	  svg += '<marker id="mar2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ff9800" opacity="0.5"/></marker>';
+	  svg += '<marker id="mar3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#7c4dff" opacity="0.5"/></marker>';
+	  svg += '</defs>';
   svg += '<rect width="' + w + '" height="' + h + '" fill="#111820" rx="8"/>';
   svg += '<rect x="340" y="20" width="320" height="52" rx="12" fill="#0a1620" stroke="#4caf50" stroke-width="2.5" filter="url(#s)"/>';
   svg += '<text x="500" y="52" text-anchor="middle" fill="#66bb6a" font-size="15" font-weight="700">生命科学与医学前沿</text>';
@@ -568,14 +572,17 @@ function buildSVGMap() {
   ];
 
   var edgeLabels = ['分子基础', '免疫治疗', '遗传工程', '微生态系统'];
-  l2.forEach(function(n, ei) {
-    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="56" rx="10" fill="#132520" stroke="#66bb6a" stroke-width="1.5" filter="url(#s)"/>';
-    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 22) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="600">' + n.label + '</text>';
-    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 42) + '" text-anchor="middle" fill="#5e6b7c" font-size="10">' + n.sub + '</text>';
-    svg += '<line x1="500" y1="72" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="#4caf50" stroke-width="1" opacity="0.3" marker-end="url(#arrow)"/>';
-    svg += '<text x="' + ((500 + n.x + n.w/2)/2) + '" y="' + ((72 + n.y)/2 - 6) + '" text-anchor="middle" fill="#66bb6a" font-size="9" opacity="0.55">' + (edgeLabels[ei] || "") + '</text>';
-  });
-  var l3 = [
+	  var pCoL = ['#66bb6a','#80deea','#ffb74d','#b388ff'];
+	  var pFills = ['#132520','#132530','#2a2013','#201332'];
+	  var pCo = ['#4caf50','#4dd0e1','#ff9800','#7c4dff'];
+	  l2.forEach(function(n, ei) {
+	    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="56" rx="10" fill="' + pFills[ei] + '" stroke="' + pCoL[ei] + '" stroke-width="1.5" filter="url(#s)"/>';
+	    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 22) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="600">' + n.label + '</text>';
+	    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 42) + '" text-anchor="middle" fill="#5e6b7c" font-size="10">' + n.sub + '</text>';
+	    svg += '<line x1="500" y1="72" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="' + pCo[ei] + '" stroke-width="1" opacity="0.3" marker-end="url(#mar' + ei + ')"/>';
+	    svg += '<text x="' + ((500 + n.x + n.w/2)/2) + '" y="' + ((72 + n.y)/2 - 6) + '" text-anchor="middle" fill="' + pCoL[ei] + '" font-size="9" opacity="0.55">' + (edgeLabels[ei] || "") + '</text>';
+	  });
+var l3 = [
     { x: 30, y: 270, w: 140, label: "mRNA技术", parent: 0 },    { x: 185, y: 270, w: 140, label: "蛋白质结构预测", parent: 0 },
     { x: 30, y: 340, w: 140, label: "脂质纳米颗粒(LNP)", parent: 0 },    { x: 185, y: 340, w: 140, label: "核苷修饰", parent: 0 },
     { x: 270, y: 270, w: 150, label: "CAR-T细胞疗法", parent: 1 },    { x: 435, y: 270, w: 150, label: "超级细菌", parent: 1 },
@@ -604,6 +611,12 @@ function buildSVGMap() {
     svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="36" rx="6" fill="#0d1a20" stroke="#1a2a20" stroke-width="0.8"/>';
     svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 23) + '" text-anchor="middle" fill="#5e6b7c" font-size="9.5">' + n.label + '</text>';
   });
+  // Feedback loop: 临床验证→理论修正
+  svg += '<path d="M120,580 Q60,450 50,300" stroke="#4caf50" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.25" marker-end="url(#mar0)"/>';
+  svg += '<text x="35" y="440" fill="#66bb6a" font-size="8" opacity="0.45" transform="rotate(-90,35,440)">临床验证→理论修正</text>';
+  svg += '<path d="M860,580 Q920,450 870,300" stroke="#7c4dff" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.25" marker-end="url(#mar3)"/>';
+  svg += '<text x="895" y="440" fill="#b388ff" font-size="8" opacity="0.45" transform="rotate(-90,895,440)">临床验证→理论修正</text>';
+
   var lx = 740, ly = 14;
   svg += '<rect x="' + lx + '" y="' + ly + '" width="14" height="14" rx="3" fill="#0a1620" stroke="#4caf50" stroke-width="2"/>';
   svg += '<text x="' + (lx+20) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">根概念</text>';
@@ -619,63 +632,87 @@ function buildSVGMap() {
 }
 
 function buildCreativeSVG() {
-  var w = 1000, h = 500;
+  var w = 1000, h = 580;
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
-  svg += '<defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4caf50"/><stop offset="100%" stop-color="#66bb6a"/></linearGradient></defs>';
-  svg += '<rect width="' + w + '" height="' + h + '" fill="#111820" rx="8"/>';
-  svg += '<text x="500" y="35" text-anchor="middle" fill="#e4e9f0" font-size="16" font-weight="700">医学范式的四次革命：从经验到智能</text>';
-  svg += '<text x="500" y="55" text-anchor="middle" fill="#5e6b7c" font-size="10">The Four Paradigm Shifts in Medicine</text>';
-  svg += '<line x1="60" y1="240" x2="940" y2="240" stroke="#1a2330" stroke-width="3"/>';
-  var era1x = 130, era1y = 150;
-  svg += '<rect x="45" y="110" width="170" height="180" rx="14" fill="#0d1a20" stroke="#4caf50" stroke-width="1.5" opacity="0.8"/>';
-  svg += '<circle cx="' + era1x + '" cy="240" r="18" fill="#0d1a20" stroke="#4caf50" stroke-width="2"/>';
-  svg += '<text x="' + era1x + '" y="245" text-anchor="middle" fill="#4caf50" font-size="11" font-weight="700">1</text>';
-  svg += '<text x="' + era1x + '" y="' + (era1y-10) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="700">经验医学</text>';
-  svg += '<text x="' + era1x + '" y="' + (era1y+14) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">~400BCE-1800s</text>';
-  svg += '<text x="' + era1x + '" y="' + (era1y+55) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">希波克拉底四体液说</text>';
-  svg += '<text x="' + era1x + '" y="' + (era1y+73) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">维萨留斯人体解剖</text>';
-  svg += '<text x="' + era1x + '" y="' + (era1y+91) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">科赫法则确立病原观</text>';
-  svg += '<text x="' + era1x + '" y="' + (era1y+115) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">听诊器叩诊尸检</text>';
-  var era2x = 370, era2y = 130;
-  svg += '<rect x="275" y="100" width="190" height="220" rx="14" fill="#0d1a20" stroke="#66bb6a" stroke-width="1.5" opacity="0.8"/>';
-  svg += '<circle cx="' + era2x + '" cy="240" r="22" fill="#0d1a20" stroke="#66bb6a" stroke-width="2.5"/>';
-  svg += '<text x="' + era2x + '" y="246" text-anchor="middle" fill="#66bb6a" font-size="13" font-weight="700">2</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y-5) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="700">微生物革命</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+19) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">1850s-1940s</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+48) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">巴斯德细菌学说</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+66) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">李斯特消毒术</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+84) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">青霉素抗生素时代</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+102) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">疫苗大规模接种</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+120) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">外科无菌操作</text>';
-  svg += '<text x="' + era2x + '" y="' + (era2y+150) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">人均寿命大幅延长</text>';
-  var era3x = 630, era3y = 120;
-  svg += '<rect x="535" y="90" width="190" height="240" rx="14" fill="#0d1a20" stroke="#ff9800" stroke-width="1.5" opacity="0.8"/>';
-  svg += '<circle cx="' + era3x + '" cy="240" r="22" fill="#0d1a20" stroke="#ff9800" stroke-width="2.5"/>';
-  svg += '<text x="' + era3x + '" y="246" text-anchor="middle" fill="#ff9800" font-size="13" font-weight="700">3</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y-5) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="700">分子革命</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+19) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">1950s-2010s</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+48) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">DNA双螺旋基因组学</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+66) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">PCR基因测序</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+84) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">单克隆抗体药物</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+102) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">CRISPR基因编辑</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+120) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">CAR-T免疫治疗</text>';
-  svg += '<text x="' + era3x + '" y="' + (era3y+150) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">精准医疗的黎明</text>';
-  var era4x = 880, era4y = 150;
-  svg += '<rect x="805" y="130" width="150" height="170" rx="14" fill="#0d1a20" stroke="#4dd0e1" stroke-width="1.5" opacity="0.8"/>';
-  svg += '<circle cx="' + era4x + '" cy="240" r="18" fill="#0d1a20" stroke="#4dd0e1" stroke-width="2"/>';
-  svg += '<text x="' + era4x + '" y="245" text-anchor="middle" fill="#4dd0e1" font-size="11" font-weight="700">4</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+10) + '" text-anchor="middle" fill="#e4e9f0" font-size="12" font-weight="700">智能医学</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+34) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">2020s</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+58) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">AI驱动药物发现</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+76) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">AlphaFold结构预测</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+94) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">mRNA疫苗平台</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+112) + '" text-anchor="middle" fill="#c5cdd8" font-size="9">数字孪生药物</text>';
-  svg += '<text x="' + era4x + '" y="' + (era4y+135) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">智能+生物融合</text>';
-  svg += '<path d="M215,240 L275,240" stroke="#4caf50" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.4"/>';
-  svg += '<path d="M465,240 L535,240" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.4"/>';
-  svg += '<path d="M725,240 L805,240" stroke="#ff9800" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.4"/>';
-  svg += '<text x="500" y="460" text-anchor="middle" fill="#ff9800" font-size="11" font-weight="600">MKS洞察：每一次医学范式革命都重新定义了治病——从驱魔到灭菌，从灭菌到修复分子，从修复分子到预测与编程</text>';
-  svg += '<text x="500" y="482" text-anchor="middle" fill="#5e6b7c" font-size="9">经验科学 = 观察跃迁 | 科学微生物 = 因果跃迁 | 微生物分子 = 精度跃迁 | 分子智能 = 加速跃迁</text>';
+  svg += '<defs><filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>';
+  svg += '<marker id="arrD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ff9800" opacity="0.5"/></marker>';
+  svg += '<marker id="arrU" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4caf50" opacity="0.5"/></marker>';
+  svg += '</defs>';
+
+  svg += '<rect width="' + w + '" height="' + h + '" fill="#0a0e14" rx="10"/>';
+
+  // Title
+  svg += '<text x="500" y="32" text-anchor="middle" fill="#66bb6a" font-size="16" font-weight="700">医学干预深度：从体表到基因组的六层穿透</text>';
+  svg += '<text x="500" y="52" text-anchor="middle" fill="#5e6b7c" font-size="9">Depth of Medical Intervention · Six Layers from Surface to Genome</text>';
+
+  // Center point
+  var cx = 500, cy = 310;
+
+  // Concentric rings from outermost to innermost
+  var rings = [
+    { r: 280, color: "#1565c0", label: "行为/公卫", terms: "饮食 · 运动 · 卫生 · 流行病学" },
+    { r: 235, color: "#00695c", label: "微生物/环境", terms: "粪菌移植 · 益生菌 · 消毒 · 疫苗" },
+    { r: 190, color: "#2e7d32", label: "组织/器官", terms: "手术 · 移植 · 影像 · 内窥镜" },
+    { r: 145, color: "#ff8f00", label: "细胞干预", terms: "CAR-T · 干细胞 · 免疫检查点 · 噬菌体" },
+    { r: 100, color: "#e65100", label: "分子干预", terms: "mRNA · 抗体药物 · 小分子 · 酶替代" },
+    { r: 60, color: "#c62828", label: "基因编辑", terms: "CRISPR · 碱基编辑 · 基因治疗" }
+  ];
+
+  // Draw rings from largest to smallest
+  rings.forEach(function(rg) {
+    svg += '<circle cx="' + cx + '" cy="' + cy + '" r="' + rg.r + '" fill="' + rg.color + '" fill-opacity="0.12" stroke="' + rg.color + '" stroke-width="2.5" filter="url(#s)"/>';
+    // Ring label at top
+    svg += '<text x="' + cx + '" y="' + (cy - rg.r + 22) + '" text-anchor="middle" fill="' + rg.color + '" font-size="12" font-weight="700">' + rg.label + '</text>';
+    // Technology terms at bottom
+    svg += '<text x="' + cx + '" y="' + (cy + rg.r - 14) + '" text-anchor="middle" fill="#c5cdd8" font-size="9" opacity="0.85">' + rg.terms + '</text>';
+  });
+
+  // === DNA double helix at center ===
+  // Left strand (curved path)
+  svg += '<path d="M490,265 Q515,280 490,295 Q485,310 510,325" stroke="#e4e9f0" stroke-width="2" fill="none" opacity="0.7"/>';
+  svg += '<path d="M490,280 Q510,295 490,310" stroke="#e4e9f0" stroke-width="2" fill="none" opacity="0.7"/>';
+  // Right strand
+  svg += '<path d="M510,265 Q485,280 510,295 Q515,310 490,325" stroke="#e4e9f0" stroke-width="2" fill="none" opacity="0.7"/>';
+  svg += '<path d="M510,280 Q490,295 510,310" stroke="#e4e9f0" stroke-width="2" fill="none" opacity="0.7"/>';
+  // Rungs
+  svg += '<line x1="490" y1="278" x2="510" y2="278" stroke="#66bb6a" stroke-width="1" opacity="0.35"/>';
+  svg += '<line x1="488" y1="295" x2="512" y2="295" stroke="#66bb6a" stroke-width="1" opacity="0.35"/>';
+  svg += '<line x1="490" y1="312" x2="510" y2="312" stroke="#66bb6a" stroke-width="1" opacity="0.35"/>';
+  // Label
+  svg += '<text x="' + cx + '" y="' + (cy - 5) + '" text-anchor="middle" fill="#e4e9f0" font-size="12" font-weight="700">DNA</text>';
+  svg += '<text x="' + cx + '" y="' + (cy + 14) + '" text-anchor="middle" fill="#e4e9f0" font-size="9" opacity="0.7">基因组</text>';
+
+  // === Left side: depth arrow (inward) ===
+  svg += '<line x1="50" y1="80" x2="50" y2="540" stroke="#ff9800" stroke-width="2" opacity="0.3"/>';
+  svg += '<polygon points="50,540 42,528 58,528" fill="#ff9800" opacity="0.45"/>';
+  svg += '<text x="35" y="310" text-anchor="middle" fill="#ff9800" font-size="9" font-weight="600" transform="rotate(-90,35,310)" opacity="0.7">干预深度递增 →</text>';
+
+  // === Right side: population arrow (outward) ===
+  svg += '<line x1="950" y1="80" x2="950" y2="540" stroke="#4caf50" stroke-width="2" opacity="0.3"/>';
+  svg += '<polygon points="950,80 942,92 958,92" fill="#4caf50" opacity="0.45"/>';
+  svg += '<text x="965" y="310" text-anchor="middle" fill="#4caf50" font-size="9" font-weight="600" transform="rotate(90,965,310)" opacity="0.7">← 覆盖人群递增</text>';
+
+  // === Era markers along left depth arrow ===
+  var eras = [
+    { y: 500, label: "经验医学", desc: "行为/体表层" },
+    { y: 420, label: "微生物革命", desc: "微生物/消毒层" },
+    { y: 320, label: "分子革命", desc: "细胞/分子层" },
+    { y: 220, label: "智能医学", desc: "基因编程层" }
+  ];
+
+  eras.forEach(function(e) {
+    // Connecting dot
+    svg += '<circle cx="50" cy="' + e.y + '" r="5" fill="#ff9800" opacity="0.7"/>';
+    // Connector line
+    svg += '<line x1="55" y1="' + e.y + '" x2="115" y2="' + e.y + '" stroke="#ff9800" stroke-width="0.8" opacity="0.3"/>';
+    // Label
+    svg += '<text x="120" y="' + (e.y - 6) + '" fill="#ff9800" font-size="10" font-weight="700">' + e.label + '</text>';
+    svg += '<text x="120" y="' + (e.y + 8) + '" fill="#5e6b7c" font-size="8">' + e.desc + '</text>';
+  });
+
+  // Bottom insight
+  svg += '<text x="500" y="562" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="600">MKS洞察：医学进步的本质是干预精度的提升——从猜想到看见，从看见到修改，从修改到编程</text>';
+
   svg += '</svg>';
   return svg;
 }

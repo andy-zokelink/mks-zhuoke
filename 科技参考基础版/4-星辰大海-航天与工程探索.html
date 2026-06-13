@@ -636,8 +636,10 @@ function buildSVGMap() {
   ];
 
   var edgeLabels = ['运载推进', '轨道通信', '深空探测', '人类活动'];
+	  var pCoL = ['#b388ff','#80deea','#ffb74d','#81c784'];
+	  var pFills4 = ['#13253e','#132530','#2a2013','#132a20'];
   l2.forEach(function(n, ei) {
-    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="56" rx="10" fill="#13253e" stroke="#b388ff" stroke-width="1.5" filter="url(#s)"/>';
+    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="56" rx="10" fill="' + pFills4[ei] + '" stroke="' + pCoL[ei] + '" stroke-width="1.5" filter="url(#s)"/>';
     svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 22) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="600">' + n.label + '</text>';
     svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 42) + '" text-anchor="middle" fill="#5e6b7c" font-size="10">' + n.sub + '</text>';
   });
@@ -645,9 +647,10 @@ function buildSVGMap() {
   // Connection lines L1→L2
 
   var edgeLabels = ['运载推进', '轨道通信', '深空探测', '人类活动'];
+	  var pCo4 = ['#7c4dff','#4dd0e1','#ff9800','#4caf50'];
   l2.forEach(function(n, ei) {
-    svg += '<line x1="500" y1="72" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="#7c4dff" stroke-width="1" opacity="0.3" marker-end="url(#arrow)"/>';
-    svg += '<text x="' + ((500 + n.x + n.w/2)/2) + '" y="' + ((72 + n.y)/2 - 6) + '" text-anchor="middle" fill="#b388ff" font-size="9" opacity="0.55">' + (edgeLabels[ei] || "") + '</text>';
+    svg += '<line x1="500" y1="72" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="' + pCo4[ei] + '" stroke-width="1" opacity="0.3" marker-end="url(#arrow)"/>';
+    svg += '<text x="' + ((500 + n.x + n.w/2)/2) + '" y="' + ((72 + n.y)/2 - 6) + '" text-anchor="middle" fill="' + pCoL[ei] + '" font-size="9" opacity="0.55">' + (edgeLabels[ei] || "") + '</text>';
   });
 
   // Layer 3: Concepts
@@ -707,8 +710,8 @@ function buildSVGMap() {
 
 
   // Feedback loop: 应用反过来丰富理论
-  svg += '<path d="M900,430 Q950,300 800,168" stroke="' + info["root_color"] + '" stroke-width="1.2" stroke-dasharray="8,5" fill="none" opacity="0.35" marker-end="url(#arrow)"/>';
-  svg += '<text x="920" y="300" fill="' + info["root_color"] + '" font-size="8" opacity="0.5">实践反哺理论</text>';
+  svg += '<path d="M900,430 Q950,300 800,168" stroke="' + "#7c4dff" + '" stroke-width="1.2" stroke-dasharray="8,5" fill="none" opacity="0.35" marker-end="url(#arrow)"/>';
+  svg += '<text x="920" y="300" fill="' + "#7c4dff" + '" font-size="8" opacity="0.5">实践反哺理论</text>';
 
   // Legend
   var lx = 740, ly = 14;
@@ -726,69 +729,156 @@ function buildSVGMap() {
   return svg;
 }
 
-// ===== CREATIVE SVG: 人类太空探索里程碑 Timeline =====
+// ===== CREATIVE SVG: 太阳系探索代价地图 — Radial Delta-V Map =====
 function buildCreativeSVG() {
-  var w = 1000, h = 550;
+  var w = 1000, h = 620;
+  var cx = 500, cy = 315;
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1000px;">';
-  svg += '<defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7c4dff"/><stop offset="100%" stop-color="#b388ff"/></linearGradient></defs>';
-  svg += '<rect width="' + w + '" height="' + h + '" fill="#111820" rx="8"/>';
+
+  // Defs
+  svg += '<defs>';
+  svg += '<radialGradient id="bgGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#111a28"/><stop offset="60%" stop-color="#0a0e14"/><stop offset="100%" stop-color="#06090c"/></radialGradient>';
+  svg += '<filter id="ringGlow"><feDropShadow dx="0" dy="0" stdDeviation="3" flood-opacity="0.4"/></filter>';
+  svg += '<filter id="earthGlow"><feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#42a5f5" flood-opacity="0.5"/></filter>';
+  svg += '<linearGradient id="trajGrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#ff5722"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient>';
+  svg += '<marker id="rocketArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L8,5 L0,9 Z" fill="#ff9800"/></marker>';
+  svg += '</defs>';
+
+  // Background
+  svg += '<rect width="' + w + '" height="' + h + '" fill="url(#bgGlow)" rx="12"/>';
+
+  // Starfield dots (scattered small white circles)
+  svg += '<circle cx="80" cy="50" r="1" fill="#fff" opacity="0.3"/><circle cx="150" cy="120" r="0.8" fill="#fff" opacity="0.2"/><circle cx="250" cy="40" r="1.2" fill="#fff" opacity="0.35"/><circle cx="880" cy="80" r="1" fill="#fff" opacity="0.25"/><circle cx="920" cy="150" r="0.7" fill="#fff" opacity="0.2"/><circle cx="780" cy="45" r="1.1" fill="#fff" opacity="0.3"/><circle cx="680" cy="560" r="0.9" fill="#fff" opacity="0.25"/><circle cx="120" cy="480" r="1" fill="#fff" opacity="0.2"/><circle cx="60" cy="300" r="0.8" fill="#fff" opacity="0.3"/><circle cx="940" cy="350" r="1" fill="#fff" opacity="0.2"/><circle cx="350" cy="580" r="0.7" fill="#fff" opacity="0.25"/><circle cx="600" cy="590" r="0.9" fill="#fff" opacity="0.2"/>';
 
   // Title
-  svg += '<text x="500" y="35" text-anchor="middle" fill="#e4e9f0" font-size="16" font-weight="700">人类太空探索里程碑：从政府主导到商业航天</text>';
-  svg += '<text x="500" y="55" text-anchor="middle" fill="#5e6b7c" font-size="10">From Government Era to Commercial Space Age</text>';
+  svg += '<text x="' + (cx) + '" y="24" text-anchor="middle" fill="#e4e9f0" font-size="17" font-weight="700" font-family="sans-serif">太阳系探索代价地图：ΔV即壁垒</text>';
+  svg += '<text x="' + (cx) + '" y="43" text-anchor="middle" fill="#5e6b7c" font-size="10" font-family="sans-serif">The Cost Map of Solar System Exploration — Every Layer Is an Energy Barrier</text>';
 
-  // Timeline base
-  svg += '<line x1="50" y1="260" x2="950" y2="260" stroke="#1a2330" stroke-width="3"/>';
+  // Spiral gravity-assist path (dashed, behind rings)
+  svg += '<path d="M520,310 C570,295 590,270 580,235 C565,185 510,155 450,175 C390,195 360,250 390,310 C425,375 500,410 580,380 C660,350 700,270 670,190 C640,110 550,60 450,80" fill="none" stroke="#7c4dff" stroke-width="1.2" stroke-dasharray="6,10" opacity="0.35"/>';
+  svg += '<text x="610" y="130" fill="#b388ff" font-size="8" font-family="sans-serif" opacity="0.6">引力弹弓借力路径</text>';
 
-  // Era label background
-  svg += '<rect x="50" y="200" width="430" height="38" rx="8" fill="rgba(124,77,255,0.08)" stroke="rgba(124,77,255,0.2)" stroke-width="1"/>';
-  svg += '<text x="265" y="225" text-anchor="middle" fill="#7c4dff" font-size="11" font-weight="700">政府主导时代（1957-2011）</text>';
+  // ---- Concentric Rings (innermost = warm, outermost = cold) ----
 
-  svg += '<rect x="540" y="200" width="410" height="38" rx="8" fill="rgba(255,152,0,0.08)" stroke="rgba(255,152,0,0.25)" stroke-width="1"/>';
-  svg += '<text x="745" y="225" text-anchor="middle" fill="#ff9800" font-size="11" font-weight="700">商业航天崛起（2015 →）</text>';
+  // Ring 1: LEO (r=40)
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="40" fill="none" stroke="#ff5722" stroke-width="1.2" stroke-dasharray="4,8" opacity="0.55"/>';
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="40" fill="none" stroke="rgba(255,87,34,0.08)" stroke-width="12"/>';
+  svg += '<text x="' + (cx+60) + '" y="' + (cy-14) + '" fill="#ff7043" font-size="9" font-weight="700" font-family="sans-serif">LEO 低地球轨道</text>';
+  svg += '<text x="' + (cx+60) + '" y="' + (cy-2) + '" fill="#ffab91" font-size="8" font-family="sans-serif">9.4 km/s</text>';
+  // ISS
+  svg += '<g transform="rotate(20,' + cx + ',' + cy + ')"><circle cx="' + (cx+40) + '" cy="' + cy + '" r="3.5" fill="#ff5722" stroke="#fff" stroke-width="0.6"/></g>';
+  svg += '<text x="' + (cx+52) + '" y="' + (cy-20) + '" fill="#ffab91" font-size="7" font-family="sans-serif">ISS</text>';
+  // 天宫
+  svg += '<g transform="rotate(55,' + cx + ',' + cy + ')"><circle cx="' + (cx+40) + '" cy="' + cy + '" r="3.5" fill="#ff5722" stroke="#fff" stroke-width="0.6"/></g>';
+  svg += '<text x="' + (cx+14) + '" y="' + (cy-48) + '" fill="#ffab91" font-size="7" font-family="sans-serif">天宫</text>';
+  // Starlink
+  svg += '<g transform="rotate(-30,' + cx + ',' + cy + ')"><circle cx="' + (cx+40) + '" cy="' + cy + '" r="3.5" fill="#ff5722" stroke="#fff" stroke-width="0.6"/></g>';
+  svg += '<text x="' + (cx+46) + '" y="' + (cy+16) + '" fill="#ffab91" font-size="7" font-family="sans-serif">Starlink</text>';
 
-  // Transition arrow
-  svg += '<path d="M485,219 L540,219" stroke="#b388ff" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.5" marker-end="url(#arrow)"/>';
+  // Ring 2: GTO (r=82)
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="82" fill="none" stroke="#ff9800" stroke-width="1.1" stroke-dasharray="5,10" opacity="0.5"/>';
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="82" fill="none" stroke="rgba(255,152,0,0.06)" stroke-width="12"/>';
+  svg += '<text x="' + (cx+98) + '" y="' + (cy-8) + '" fill="#ff9800" font-size="9" font-weight="700" font-family="sans-serif">GTO 地球同步转移</text>';
+  svg += '<text x="' + (cx+98) + '" y="' + (cy+4) + '" fill="#ffb74d" font-size="8" font-family="sans-serif">11.2 km/s</text>';
+  // 通信卫星
+  svg += '<g transform="rotate(-15,' + cx + ',' + cy + ')"><circle cx="' + (cx+82) + '" cy="' + cy + '" r="3.2" fill="#ff9800" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+88) + '" y="' + (cy+18) + '" fill="#ffb74d" font-size="7" font-family="sans-serif">通信卫星</text>';
+  // 北斗/GPS
+  svg += '<g transform="rotate(35,' + cx + ',' + cy + ')"><circle cx="' + (cx+82) + '" cy="' + cy + '" r="3.2" fill="#ff9800" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+42) + '" y="' + (cy-68) + '" fill="#ffb74d" font-size="7" font-family="sans-serif">北斗/GPS</text>';
 
-  // Milestone nodes
-  var milestones = [
-    { x: 95, y: 260, label: "1957", sub: "Sputnik 1", desc: "首颗人造卫星", color: "#7c4dff", y2: 300 },
-    { x: 195, y: 260, label: "1961", sub: "Gagarin", desc: "首次载人航天", color: "#7c4dff", y2: 330 },
-    { x: 320, y: 260, label: "1969", sub: "Apollo 11", desc: "人类首次登月", color: "#b388ff", y2: 300 },
-    { x: 470, y: 260, label: "1998", sub: "ISS", desc: "国际空间站", color: "#b388ff", y2: 330 },
-    { x: 610, y: 260, label: "2015", sub: "Falcon 9 landing", desc: "火箭首次回收", color: "#ff9800", y2: 300 },
-    { x: 730, y: 260, label: "2021", sub: "Ingenuity", desc: "火星直升机首飞", color: "#ff9800", y2: 330 },
-    { x: 845, y: 260, label: "2020s", sub: "Starship开发", desc: "快速迭代范式", color: "#ff9800", y2: 300 },
-    { x: 930, y: 260, label: "2030s", sub: "载人火星", desc: "计划中...", color: "#ff9800", y2: 330, dashed: true }
-  ];
+  // Ring 3: Lunar (r=124)
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="124" fill="none" stroke="#ffc107" stroke-width="1" stroke-dasharray="6,12" opacity="0.5"/>';
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="124" fill="none" stroke="rgba(255,193,7,0.04)" stroke-width="12"/>';
+  svg += '<text x="' + (cx+138) + '" y="' + (cy-2) + '" fill="#ffc107" font-size="9" font-weight="700" font-family="sans-serif">Lunar 月球</text>';
+  svg += '<text x="' + (cx+138) + '" y="' + (cy+10) + '" fill="#ffd54f" font-size="8" font-family="sans-serif">13.5 km/s</text>';
+  // Apollo
+  svg += '<g transform="rotate(70,' + cx + ',' + cy + ')"><circle cx="' + (cx+124) + '" cy="' + cy + '" r="3" fill="#ffc107" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+24) + '" y="' + (cy-110) + '" fill="#ffd54f" font-size="7" font-family="sans-serif">Apollo</text>';
+  // 嫦娥
+  svg += '<g transform="rotate(-50,' + cx + ',' + cy + ')"><circle cx="' + (cx+124) + '" cy="' + cy + '" r="3" fill="#ffc107" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+78) + '" y="' + (cy+82) + '" fill="#ffd54f" font-size="7" font-family="sans-serif">嫦娥</text>';
+  // Artemis
+  svg += '<g transform="rotate(100,' + cx + ',' + cy + ')"><circle cx="' + (cx+124) + '" cy="' + cy + '" r="3" fill="#ffc107" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx-32) + '" y="' + (cy-108) + '" fill="#ffd54f" font-size="7" font-family="sans-serif">Artemis</text>';
 
-  milestones.forEach(function(m) {
-    // Vertical line
-    svg += '<line x1="' + m.x + '" y1="260" x2="' + m.x + '" y2="' + m.y2 + '" stroke="' + m.color + '" stroke-width="1" opacity="0.5" stroke-dasharray="' + (m.dashed ? '4,3' : '0') + '"/>';
+  // Ring 4: Mars (r=168)
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="168" fill="none" stroke="#ef5350" stroke-width="1" stroke-dasharray="6,12" opacity="0.45"/>';
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="168" fill="none" stroke="rgba(239,83,80,0.04)" stroke-width="12"/>';
+  svg += '<text x="' + (cx+180) + '" y="' + (cy+5) + '" fill="#ef5350" font-size="9" font-weight="700" font-family="sans-serif">Mars 火星</text>';
+  svg += '<text x="' + (cx+180) + '" y="' + (cy+17) + '" fill="#ef9a9a" font-size="8" font-family="sans-serif">16.5 km/s</text>';
+  // Perseverance
+  svg += '<g transform="rotate(30,' + cx + ',' + cy + ')"><circle cx="' + (cx+168) + '" cy="' + cy + '" r="2.8" fill="#ef5350" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+146) + '" y="' + (cy-72) + '" fill="#ef9a9a" font-size="7" font-family="sans-serif">Perseverance</text>';
+  // 天问
+  svg += '<g transform="rotate(-25,' + cx + ',' + cy + ')"><circle cx="' + (cx+168) + '" cy="' + cy + '" r="2.8" fill="#ef5350" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+158) + '" y="' + (cy+58) + '" fill="#ef9a9a" font-size="7" font-family="sans-serif">天问一号</text>';
+  // Starship目标
+  svg += '<g transform="rotate(10,' + cx + ',' + cy + ')"><circle cx="' + (cx+168) + '" cy="' + cy + '" r="2.8" fill="#ef5350" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+160) + '" y="' + (cy-24) + '" fill="#ef9a9a" font-size="7" font-family="sans-serif">Starship</text>';
 
-    // Node circle
-    svg += '<circle cx="' + m.x + '" cy="260" r="10" fill="#111820" stroke="' + m.color + '" stroke-width="2.5" filter="url(#s)"/>';
-    if (m.dashed) {
-      svg += '<circle cx="' + m.x + '" cy="260" r="10" fill="none" stroke="' + m.color + '" stroke-width="2.5" stroke-dasharray="5,3" opacity="0.7"/>';
-    }
+  // Ring 5: Jupiter (r=214)
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="214" fill="none" stroke="#42a5f5" stroke-width="0.9" stroke-dasharray="7,13" opacity="0.45"/>';
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="214" fill="none" stroke="rgba(66,165,245,0.03)" stroke-width="12"/>';
+  svg += '<text x="' + (cx+226) + '" y="' + (cy+10) + '" fill="#42a5f5" font-size="9" font-weight="700" font-family="sans-serif">Jupiter 木星</text>';
+  svg += '<text x="' + (cx+226) + '" y="' + (cy+22) + '" fill="#90caf9" font-size="8" font-family="sans-serif">21 km/s</text>';
+  // Galileo
+  svg += '<g transform="rotate(-38,' + cx + ',' + cy + ')"><circle cx="' + (cx+214) + '" cy="' + cy + '" r="2.5" fill="#42a5f5" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+180) + '" y="' + (cy+108) + '" fill="#90caf9" font-size="7" font-family="sans-serif">Galileo</text>';
+  // Juno
+  svg += '<g transform="rotate(12,' + cx + ',' + cy + ')"><circle cx="' + (cx+214) + '" cy="' + cy + '" r="2.5" fill="#42a5f5" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+198) + '" y="' + (cy-30) + '" fill="#90caf9" font-size="7" font-family="sans-serif">Juno</text>';
+  // Europa Clipper
+  svg += '<g transform="rotate(60,' + cx + ',' + cy + ')"><circle cx="' + (cx+214) + '" cy="' + cy + '" r="2.5" fill="#42a5f5" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+84) + '" y="' + (cy-180) + '" fill="#90caf9" font-size="7" font-family="sans-serif">Europa Clipper</text>';
 
-    // Label box
-    var bx = m.x - 55, bw = 110, by = m.y2;
-    svg += '<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="52" rx="8" fill="#0d1a2d" stroke="' + m.color + '" stroke-width="1" opacity="0.85"/>';
-    svg += '<text x="' + m.x + '" y="' + (by+18) + '" text-anchor="middle" fill="' + m.color + '" font-size="12" font-weight="700">' + m.label + '</text>';
-    svg += '<text x="' + m.x + '" y="' + (by+34) + '" text-anchor="middle" fill="#e4e9f0" font-size="10" font-weight="600">' + m.sub + '</text>';
-    svg += '<text x="' + m.x + '" y="' + (by+48) + '" text-anchor="middle" fill="#5e6b7c" font-size="8">' + m.desc + '</text>';
-  });
+  // Ring 6: Outer Solar System (r=256)
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="256" fill="none" stroke="#7c4dff" stroke-width="0.8" stroke-dasharray="8,14" opacity="0.4"/>';
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="256" fill="none" stroke="rgba(124,77,255,0.03)" stroke-width="12"/>';
+  svg += '<text x="' + (cx+268) + '" y="' + (cy+14) + '" fill="#7c4dff" font-size="9" font-weight="700" font-family="sans-serif">Outer 外太阳系</text>';
+  svg += '<text x="' + (cx+268) + '" y="' + (cy+26) + '" fill="#b388ff" font-size="8" font-family="sans-serif">25+ km/s</text>';
+  // Voyager
+  svg += '<g transform="rotate(-55,' + cx + ',' + cy + ')"><circle cx="' + (cx+256) + '" cy="' + cy + '" r="2.5" fill="#7c4dff" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+178) + '" y="' + (cy+168) + '" fill="#b388ff" font-size="7" font-family="sans-serif">Voyager</text>';
+  // New Horizons
+  svg += '<g transform="rotate(75,' + cx + ',' + cy + ')"><circle cx="' + (cx+256) + '" cy="' + cy + '" r="2.5" fill="#7c4dff" stroke="#fff" stroke-width="0.5"/></g>';
+  svg += '<text x="' + (cx+38) + '" y="' + (cy-236) + '" fill="#b388ff" font-size="7" font-family="sans-serif">New Horizons</text>';
 
-  // Bottom insight
-  svg += '<text x="500" y="430" text-anchor="middle" fill="#ff9800" font-size="11" font-weight="600">MKS洞察：从「国家能力展示」到「工程经济优化」——航天的范式转移</text>';
-  svg += '<text x="500" y="455" text-anchor="middle" fill="#5e6b7c" font-size="9">政府时代：一次性火箭 · 不计成本 · 政治驱动 | 商业时代：复用火箭 · 成本优先 · 市场化可持续</text>';
-  svg += '<text x="500" y="475" text-anchor="middle" fill="#5e6b7c" font-size="9">转变的核心：火箭复用技术使发射成本下降70%以上，打开了商业航天的经济可行性大门</text>';
+  // Earth icon at center
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="18" fill="#1565c0" stroke="#42a5f5" stroke-width="2" filter="url(#earthGlow)"/>';
+  svg += '<path d="M493,308 Q498,303 506,310 Q512,315 507,322 Q501,326 493,320 Z" fill="#4caf50" opacity="0.5"/>';
+  svg += '<path d="M502,307 Q507,313 504,318 Q500,320 496,316 Z" fill="#81c784" opacity="0.35"/>';
+  svg += '<text x="' + cx + '" y="' + (cy+34) + '" text-anchor="middle" fill="#90caf9" font-size="9" font-weight="700" font-family="sans-serif">EARTH</text>';
 
-  // Scale axis
-  svg += '<text x="50" y="520" fill="#5e6b7c" font-size="8">1950</text>';
-  svg += '<text x="940" y="520" fill="#5e6b7c" font-size="8">2040</text>';
-  svg += '<line x1="50" y1="510" x2="950" y2="510" stroke="#1a2330" stroke-width="1"/>';
+  // Rocket trajectory path (from near center outward to the right-down)
+  svg += '<path d="M530,295 Q620,260 700,210 Q740,190 760,165" fill="none" stroke="url(#trajGrad)" stroke-width="2" stroke-dasharray="8,6" opacity="0.6" marker-end="url(#rocketArr)"/>';
+  svg += '<text x="710" y="200" fill="#ff9800" font-size="8" font-weight="700" font-family="sans-serif" transform="rotate(-28,710,200)">复用火箭使成本↓70%</text>';
+
+  // Rocket icon (at ~(660,240) on the trajectory)
+  svg += '<g transform="translate(655,243) rotate(-38)">';
+  svg += '<rect x="-5" y="-18" width="10" height="18" rx="3" fill="#ff9800" stroke="#e65100" stroke-width="0.5"/>';
+  svg += '<polygon points="-5,-18 0,-28 5,-18" fill="#ef5350"/>';
+  svg += '<rect x="-7" y="-2" width="14" height="5" rx="1.5" fill="#ffb74d" opacity="0.7"/>';
+  svg += '<rect x="-2" y="0" width="4" height="6" rx="1" fill="#ffcc02" opacity="0.8"/>';
+  svg += '</g>';
+
+  // Rocket Equation Inset (bottom-right)
+  svg += '<rect x="670" y="480" width="310" height="90" rx="10" fill="rgba(10,14,20,0.9)" stroke="#7c4dff" stroke-width="1.2"/>';
+  svg += '<text x="690" y="502" fill="#b388ff" font-size="12" font-weight="700" font-family="sans-serif">齐奥尔科夫斯基火箭方程</text>';
+  svg += '<text x="690" y="522" fill="#e4e9f0" font-size="15" font-weight="700" font-family="serif" font-style="italic">Δv = Isp · g₀ · ln(m₀/m₁)</text>';
+  svg += '<text x="690" y="542" fill="#5e6b7c" font-size="9" font-family="sans-serif">Isp: 比冲(specific impulse) | g₀: 9.8m/s² 地表重力加速度</text>';
+  svg += '<text x="690" y="558" fill="#5e6b7c" font-size="9" font-family="sans-serif">m₀: 初始质量(含燃料) | m₁: 最终质量(干重) | ln: 自然对数</text>';
+
+  // Delta-V cost scale bar (bottom-left)
+  svg += '<rect x="30" y="570" width="250" height="14" rx="3" fill="none" stroke="#1a2330" stroke-width="0.8"/>';
+  svg += '<rect x="30" y="570" width="250" height="14" rx="3" fill="none"/>';
+  svg += '<line x1="30" y1="570" x2="280" y2="570" stroke="url(#trajGrad)" stroke-width="3" opacity="0.6"/>';
+  svg += '<text x="30" y="582" fill="#ff5722" font-size="7" font-family="sans-serif">9.4</text>';
+  svg += '<text x="280" y="582" text-anchor="end" fill="#7c4dff" font-size="7" font-family="sans-serif">25+ km/s</text>';
+  svg += '<text x="155" y="582" text-anchor="middle" fill="#5e6b7c" font-size="6" font-family="sans-serif">ΔV 尺度</text>';
+
+  // MKS Insight (bottom)
+  svg += '<text x="' + cx + '" y="602" text-anchor="middle" fill="#ff9800" font-size="10" font-weight="600" font-family="sans-serif">MKS洞察：太空探索的核心约束不是距离而是速度变化量(ΔV)——理解ΔV就理解了为什么火星难、木星更难、星际近乎不可能</text>';
 
   svg += '</svg>';
   return svg;
