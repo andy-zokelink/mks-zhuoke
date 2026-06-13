@@ -3,1363 +3,1361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>细胞之下 · 医学与健康前沿</title>
+<title>医学与健康前沿 — 人体微观宇宙</title>
 <style>
 /* ============================================================
-   细胞之下 — 一场从文明到分子的医学远征
-   设计理念：逐级缩小的观察尺度 + 生命黑箱的七重照亮
-   基于13篇卓克·科技参考3真实医学文章
+   医学与健康前沿 · 人体微观宇宙
+   隐喻：人体是未被完全探索的内在宇宙，医学是对生命黑箱的逐层照亮
+   设计：深色生物荧光主题，6层生物尺度导航，沉浸式微观旅程
    ============================================================ */
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #06090f;
-  --surface: #0d1117;
-  --surface2: #111922;
-  --teal: #2dd4bf;
-  --teal-dim: #0d9488;
-  --teal-glow: rgba(45,212,191,0.3);
-  --amber: #f59e0b;
-  --amber-dim: #b45309;
-  --amber-glow: rgba(245,158,11,0.25);
-  --crimson: #f87171;
-  --crimson-dim: #b91c1c;
-  --crimson-glow: rgba(248,113,113,0.3);
-  --indigo: #818cf8;
-  --indigo-dim: #4f46e5;
-  --indigo-glow: rgba(129,140,248,0.3);
-  --emerald: #34d399;
-  --emerald-dim: #059669;
-  --rose: #fb7185;
-  --sky: #38bdf8;
-  --text: #e2e8f0;
-  --text-dim: #94a3b8;
-  --text-subtle: #64748b;
-  --border: rgba(255,255,255,0.06);
-  --border-glow: rgba(255,255,255,0.12);
-  --radius: 14px;
-  --radius-sm: 10px;
+  --bg-void: #060f0e;
+  --bg-surface: rgba(10, 32, 30, 0.82);
+  --bg-card: rgba(12, 28, 26, 0.7);
+  --bg-card-hover: rgba(16, 36, 34, 0.85);
+
+  --bio-green: #00e5a0;
+  --bio-green-dim: #00b880;
+  --bio-green-glow: rgba(0, 229, 160, 0.15);
+  --bio-cyan: #4dc9f6;
+  --bio-cyan-glow: rgba(77, 201, 246, 0.15);
+  --bio-blue: #5b8def;
+  --bio-blue-glow: rgba(91, 141, 239, 0.12);
+  --bio-purple: #a78bfa;
+  --bio-purple-glow: rgba(167, 139, 250, 0.12);
+
+  --immune-red: #ff5c72;
+  --immune-red-glow: rgba(255, 92, 114, 0.15);
+  --diagnostic-amber: #f0a050;
+  --amber-glow: rgba(240, 160, 80, 0.15);
+
+  --text-bright: #d8e8e4;
+  --text: #b0c8c2;
+  --text-dim: #5a8a80;
+  --text-subtle: #3a5a52;
+
+  --border: rgba(90, 138, 128, 0.12);
+  --border-glow: rgba(0, 229, 160, 0.15);
+  --radius: 12px;
+  --radius-lg: 18px;
+  --ease: 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "SimSun", serif;
+  background: var(--bg-void);
   color: var(--text);
-  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Microsoft YaHei", serif;
   line-height: 1.8;
-  overflow-x: hidden;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: #1a3a34; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--bio-green-dim); }
 
-/* ===== CELL FIELD CANVAS ===== */
-#cellCanvas {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 0; pointer-events: none;
+/* ===== BACKGROUND AMBIENT ===== */
+.bio-ambient {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 40% 30% at 50% 15%, rgba(0, 229, 160, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 30% 50%, rgba(0, 180, 120, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 40% at 70% 55%, rgba(77, 201, 246, 0.035) 0%, transparent 55%),
+    radial-gradient(ellipse 25% 35% at 20% 30%, rgba(167, 139, 250, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 25% 35% at 80% 25%, rgba(255, 92, 114, 0.02) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(6, 15, 14, 0.95) 100%);
 }
 
-/* ===== SCROLL PROGRESS ===== */
-.scroll-bar {
-  position: fixed; top: 0; left: 0; height: 2px;
-  background: linear-gradient(90deg, var(--teal), var(--amber), var(--crimson), var(--indigo));
-  z-index: 200; transition: width 0.1s linear;
+/* ===== CELL PARTICLE FIELD ===== */
+.cell-field {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.cell-particle {
+  position: absolute; border-radius: 50%;
+  animation: cell-drift linear infinite; opacity: 0;
+}
+.cell-particle.membrane {
+  border: 1px solid rgba(0, 229, 160, 0.12);
+  background: rgba(0, 229, 160, 0.03);
+}
+.cell-particle.nucleus {
+  background: rgba(77, 201, 246, 0.15);
+  box-shadow: 0 0 6px rgba(77, 201, 246, 0.2);
+}
+.cell-particle.protein {
+  background: rgba(240, 160, 80, 0.2);
+}
+.cell-particle.pathogen {
+  background: rgba(255, 92, 114, 0.25);
+  box-shadow: 0 0 4px rgba(255, 92, 114, 0.3);
+}
+@keyframes cell-drift {
+  0%   { opacity: 0; transform: translateY(0) translateX(0) scale(1); }
+  15%  { opacity: 0.7; }
+  50%  { opacity: 0.2; }
+  85%  { opacity: 0.05; }
+  100% { opacity: 0; transform: translateY(-160px) translateX(30px) scale(0.4); }
 }
 
 /* ===== TOP NAV ===== */
 .top-nav {
-  position: fixed; top: 0; z-index: 100; width: 100%;
-  padding: 12px 20px; display: flex; align-items: center; gap: 14px;
-  background: linear-gradient(180deg, rgba(6,9,15,0.95) 60%, rgba(6,9,15,0));
-  backdrop-filter: blur(10px);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(6, 15, 14, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex; align-items: center; gap: 12px;
 }
-.home-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 16px; border-radius: 20px;
-  background: rgba(45,212,191,0.12);
-  border: 1px solid rgba(45,212,191,0.25);
-  color: var(--teal); font-size: 13px; font-weight: 600;
-  cursor: pointer; text-decoration: none; transition: all 0.3s;
-  font-family: system-ui, sans-serif;
+.top-nav .home-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 16px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--bio-green-dim), var(--bio-green));
+  color: #060f0e; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+  text-decoration: none; transition: all 0.3s;
+  border: none; cursor: pointer; white-space: nowrap;
 }
-.home-btn:hover {
-  background: rgba(45,212,191,0.22);
-  border-color: var(--teal);
-  box-shadow: 0 0 20px var(--teal-glow);
+.top-nav .home-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--bio-green-glow);
 }
-.nav-tag {
-  font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
-  font-family: system-ui, sans-serif;
+.top-nav .nav-links {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto;
 }
-
-/* ===== SCALE INDICATOR (side) ===== */
-.scale-indicator {
-  position: fixed; right: 16px; top: 50%; transform: translateY(-50%);
-  z-index: 50; display: flex; flex-direction: column; gap: 10px;
+.top-nav .nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px;
+  padding: 5px 10px; border-radius: 14px;
+  transition: all 0.3s; white-space: nowrap;
 }
-.scale-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: rgba(255,255,255,0.15); transition: all 0.4s;
-  cursor: pointer; position: relative;
-}
-.scale-dot.active {
-  background: var(--teal);
-  box-shadow: 0 0 12px var(--teal-glow);
-  transform: scale(1.6);
-}
-.scale-dot .scale-label {
-  position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
-  font-size: 10px; color: var(--text-dim); white-space: nowrap;
-  opacity: 0; transition: opacity 0.3s; pointer-events: none;
-  font-family: system-ui, sans-serif;
-}
-.scale-dot:hover .scale-label, .scale-dot.active .scale-label { opacity: 1; }
+.top-nav .nav-links a:hover { color: var(--bio-green); }
 
 /* ===== HERO ===== */
 .hero {
-  position: relative; z-index: 1; min-height: 100vh;
+  min-height: 100vh;
   display: flex; flex-direction: column; align-items: center;
-  justify-content: center; text-align: center; padding: 100px 24px 60px;
+  justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 100px 20px 60px;
 }
-.hero-badge {
-  display: inline-block; padding: 5px 16px;
-  border: 1px solid rgba(45,212,191,0.35);
-  border-radius: 20px; font-size: 11px; letter-spacing: 3px;
-  color: var(--teal); margin-bottom: 20px;
-  font-family: system-ui, sans-serif;
-  animation: pulse-border 2.5s ease-in-out infinite;
+.hero-canvas {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%; z-index: 1; pointer-events: none;
 }
-@keyframes pulse-border {
-  0%,100% { border-color: rgba(45,212,191,0.35); }
-  50% { border-color: rgba(45,212,191,0.7); box-shadow: 0 0 20px var(--teal-glow); }
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; max-width: 780px;
 }
+.hero .eyebrow {
+  font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 6px; color: var(--bio-green-dim);
+  margin-bottom: 20px; display: inline-block; position: relative;
+}
+.hero .eyebrow::before, .hero .eyebrow::after {
+  content: "◆"; position: absolute; top: 50%;
+  transform: translateY(-50%); font-size: 0.35rem;
+  color: var(--bio-green); opacity: 0.5;
+}
+.hero .eyebrow::before { left: -28px; }
+.hero .eyebrow::after  { right: -28px; }
 .hero h1 {
-  font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 900;
-  background: linear-gradient(135deg, #fff 0%, var(--teal) 30%, var(--sky) 70%, var(--indigo) 100%);
+  font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 900;
+  letter-spacing: 3px; line-height: 1.25; margin-bottom: 16px;
+  background: linear-gradient(180deg, #e0fff0 0%, #80f0c0 25%, #00e5a0 50%, #00a870 75%, #006040 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text; margin-bottom: 14px; line-height: 1.25;
+  background-clip: text;
+  filter: drop-shadow(0 2px 20px rgba(0, 229, 160, 0.35));
+}
+.hero h1 .pulse {
+  display: inline-block;
+  -webkit-text-fill-color: #00e5a0;
+  animation: bio-pulse 2.2s ease-in-out infinite;
+}
+@keyframes bio-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  35% { transform: scale(1.12); opacity: 0.6; }
+  65% { transform: scale(1.04); opacity: 0.85; }
 }
 .hero .tagline {
-  font-size: clamp(1rem, 2vw, 1.3rem); color: var(--text-dim);
-  max-width: 620px; margin-bottom: 36px; line-height: 1.7;
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  color: var(--text-dim); letter-spacing: 1px;
+  margin-bottom: 10px; font-weight: 500;
 }
-.hero-stats { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
-.hero-stat { text-align: center; }
+.hero .sub-tagline {
+  font-size: 0.82rem; color: var(--text-subtle);
+  letter-spacing: 0.5px; margin-bottom: 36px;
+}
+.hero-stats {
+  display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+}
+.hero-stat {
+  text-align: center; padding: 16px 22px; min-width: 100px;
+  border-radius: 12px; background: var(--bg-card);
+  border: 1px solid var(--border); transition: all var(--ease);
+}
+.hero-stat:hover {
+  transform: translateY(-3px);
+  border-color: var(--bio-green-glow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
 .hero-stat .num {
-  font-size: 2.2rem; font-weight: 900;
-  background: linear-gradient(135deg, var(--teal), var(--sky));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: block; font-size: 1.7rem; font-weight: 900;
+  color: var(--bio-green); letter-spacing: 1px;
+  font-family: "Georgia", "Times New Roman", serif; line-height: 1.2;
 }
-.hero-stat .lbl { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; margin-top: 2px; }
+.hero-stat .lbl {
+  display: block; font-size: 0.7rem; color: var(--text-dim);
+  margin-top: 4px; letter-spacing: 0.5px;
+}
+
 .scroll-hint {
-  position: absolute; bottom: 36px; display: flex;
-  flex-direction: column; align-items: center; gap: 8px;
-  animation: float-up 2s ease-in-out infinite; cursor: pointer;
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  color: var(--text-subtle); font-size: 0.72rem; letter-spacing: 2px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  z-index: 2; animation: hint-bounce 2.2s ease-in-out infinite;
 }
-@keyframes float-up {
-  0%,100% { transform: translateY(0); opacity: 0.6; }
-  50% { transform: translateY(-10px); opacity: 1; }
+.scroll-hint .arrow-down {
+  width: 24px; height: 24px;
+  border-right: 2px solid var(--bio-green-dim);
+  border-bottom: 2px solid var(--bio-green-dim);
+  transform: rotate(45deg); opacity: 0.5;
 }
-.scroll-hint span { font-size: 11px; color: var(--text-subtle); letter-spacing: 2px; font-family: system-ui, sans-serif; }
-.scroll-hint .arr { font-size: 18px; color: var(--teal); }
+@keyframes hint-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
 
-/* ===== ZOOM SECTION ===== */
-.zoom-section {
-  position: relative; z-index: 1; padding: 80px 24px; min-height: 50vh;
+/* ===== SCALE NAVIGATOR ===== */
+.scale-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto;
+  padding: 80px 24px 60px;
+}
+.scale-header { text-align: center; margin-bottom: 52px; }
+.scale-header h2 {
+  font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800;
+  color: var(--text-bright); letter-spacing: 2px; margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--bio-green), var(--bio-cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; display: inline-block;
+}
+.scale-header p {
+  font-size: 0.88rem; color: var(--text-dim);
+  max-width: 560px; margin: 0 auto;
+}
+
+.scale-bar-wrap {
+  position: relative; margin-bottom: 48px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.scale-bar {
+  position: relative; width: 4px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.scale-bar::before {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 50%;
+  width: 2px; transform: translateX(-50%);
+  background: linear-gradient(180deg,
+    var(--bio-purple) 0%, var(--bio-blue) 20%, var(--bio-cyan) 40%,
+    var(--bio-green) 60%, var(--diagnostic-amber) 80%, var(--immune-red) 100%);
+  border-radius: 1px; opacity: 0.4;
+}
+.scale-node {
+  display: flex; align-items: center; gap: 28px;
+  padding: 20px 0; cursor: pointer; position: relative;
+  transition: all var(--ease);
+}
+.scale-node:hover .scale-dot { transform: scale(1.35); }
+.scale-node:nth-child(1):hover .scale-dot { box-shadow: 0 0 24px var(--bio-purple-glow); border-color: var(--bio-purple); }
+.scale-node:nth-child(2):hover .scale-dot { box-shadow: 0 0 24px var(--bio-blue-glow); border-color: var(--bio-blue); }
+.scale-node:nth-child(3):hover .scale-dot { box-shadow: 0 0 24px var(--bio-cyan-glow); border-color: var(--bio-cyan); }
+.scale-node:nth-child(4):hover .scale-dot { box-shadow: 0 0 24px var(--bio-green-glow); border-color: var(--bio-green); }
+.scale-node:nth-child(5):hover .scale-dot { box-shadow: 0 0 24px var(--amber-glow); border-color: var(--diagnostic-amber); }
+.scale-node:nth-child(6):hover .scale-dot { box-shadow: 0 0 24px var(--immune-red-glow); border-color: var(--immune-red); }
+
+.scale-dot {
+  width: 48px; height: 48px; min-width: 48px;
+  border-radius: 50%; background: var(--bg-surface);
+  border: 2px solid var(--border);
   display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 800;
+  transition: all var(--ease); position: relative; z-index: 1;
 }
-.zoom-container { max-width: 960px; width: 100%; }
-.zoom-header { margin-bottom: 14px; }
-.zoom-marker {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+.scale-node:nth-child(1) .scale-dot { color: var(--bio-purple); }
+.scale-node:nth-child(2) .scale-dot { color: var(--bio-blue); }
+.scale-node:nth-child(3) .scale-dot { color: var(--bio-cyan); }
+.scale-node:nth-child(4) .scale-dot { color: var(--bio-green); }
+.scale-node:nth-child(5) .scale-dot { color: var(--diagnostic-amber); }
+.scale-node:nth-child(6) .scale-dot { color: var(--immune-red); }
+
+.scale-info {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 22px;
+  transition: all var(--ease); flex: 1; max-width: 600px;
 }
-.zoom-dot-icon {
-  width: 12px; height: 12px; border-radius: 50%;
-  box-shadow: 0 0 14px currentColor;
-  animation: glow-pulse 2s ease-in-out infinite;
+.scale-node:hover .scale-info {
+  border-color: rgba(0, 229, 160, 0.2);
+  background: var(--bg-card-hover);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
 }
-@keyframes glow-pulse {
-  0%,100% { box-shadow: 0 0 8px currentColor; }
-  50% { box-shadow: 0 0 22px currentColor; }
+.scale-info .scale-name {
+  font-size: 1rem; font-weight: 750; color: var(--text-bright);
+  margin-bottom: 4px; letter-spacing: 0.5px;
 }
-.zoom-scale-tag {
-  font-size: 11px; letter-spacing: 2px; color: var(--text-dim);
-  font-family: system-ui, sans-serif;
+.scale-info .scale-range {
+  font-size: 0.68rem; color: var(--text-subtle);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
 }
-.zoom-title {
-  font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 900;
-  margin-bottom: 8px; line-height: 1.3;
-}
-.zoom-desc {
-  font-size: 0.92rem; color: var(--text-dim); margin-bottom: 36px;
-  line-height: 1.7; max-width: 640px;
+.scale-info .scale-desc {
+  font-size: 0.8rem; color: var(--text-dim); line-height: 1.6;
 }
 
-/* ===== CONTENT CARDS ===== */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px; margin-bottom: 20px;
+/* ===== SECTION TITLE ===== */
+.section-anchor {
+  text-align: center; padding: 60px 24px 0; position: relative; z-index: 1;
 }
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 22px;
-  transition: all 0.35s; cursor: default;
-  backdrop-filter: blur(6px);
-  position: relative; overflow: hidden;
+.section-anchor h2 {
+  font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800;
+  letter-spacing: 2px; display: inline-block;
 }
-.card::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-  opacity: 0; transition: opacity 0.35s;
+.section-anchor .sub {
+  font-size: 0.85rem; color: var(--text-dim);
+  margin-top: 10px; opacity: 0.65;
 }
-.card:hover { border-color: var(--border-glow); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
-.card:hover::after { opacity: 1; }
-.card .card-icon { font-size: 30px; margin-bottom: 12px; }
-.card h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
-.card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.75; }
-.card .card-quote {
-  margin-top: 12px; padding: 10px 14px;
-  background: rgba(255,255,255,0.02);
-  border-left: 3px solid var(--teal);
-  border-radius: 0 6px 6px 0;
-  font-size: 0.82rem; font-style: italic; line-height: 1.65;
-}
-.card .card-quote.teal { border-left-color: var(--teal); color: var(--teal); }
-.card .card-quote.amber { border-left-color: var(--amber); color: var(--amber); }
-.card .card-quote.crimson { border-left-color: var(--crimson); color: var(--crimson); }
-.card .card-quote.indigo { border-left-color: var(--indigo); color: var(--indigo); }
-.card .card-quote.emerald { border-left-color: var(--emerald); color: var(--emerald); }
-.card .card-quote.rose { border-left-color: var(--rose); color: var(--rose); }
-
-/* ===== DATA PANEL ===== */
-.data-panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px; margin: 20px 0;
-  backdrop-filter: blur(6px);
-}
-.data-item { text-align: center; }
-.data-val {
-  font-size: 1.6rem; font-weight: 900;
-  background: linear-gradient(135deg, var(--teal), var(--sky));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.data-lbl { font-size: 11px; color: var(--text-dim); margin-top: 2px; letter-spacing: 1px; }
-
-/* ===== TIMELINE ===== */
-.timeline {
-  position: relative; padding-left: 32px;
-  border-left: 1px solid rgba(255,255,255,0.08);
-  margin: 20px 0;
-}
-.tl-item {
-  position: relative; margin-bottom: 28px; cursor: pointer;
-}
-.tl-item::before {
-  content: ''; position: absolute; left: -37px; top: 5px;
-  width: 11px; height: 11px; border-radius: 50%;
-  background: var(--surface2); border: 2px solid rgba(255,255,255,0.15);
-  transition: all 0.35s;
-}
-.tl-item:hover::before, .tl-item.active::before {
-  border-color: var(--amber); background: var(--amber-dim);
-  box-shadow: 0 0 14px var(--amber-glow);
-}
-.tl-date { font-size: 11px; color: var(--amber); letter-spacing: 1px; font-family: system-ui, sans-serif; font-weight: 600; }
-.tl-title { font-size: 1rem; font-weight: 700; margin: 3px 0 6px; }
-.tl-body { display: none; margin-top: 10px; padding: 14px; background: var(--surface2); border-radius: var(--radius-sm); font-size: 0.84rem; color: var(--text-dim); line-height: 1.75; }
-.tl-body.show { display: block; animation: fadeIn 0.35s; }
-
-/* ===== EXPANDABLE ARTICLE ===== */
-.article-expand {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius); margin: 16px 0; overflow: hidden;
-}
-.ae-header {
-  padding: 16px 20px; cursor: pointer;
-  display: flex; justify-content: space-between; align-items: center;
-  transition: background 0.3s;
-}
-.ae-header:hover { background: rgba(255,255,255,0.02); }
-.ae-header h4 { font-size: 0.95rem; font-weight: 700; flex: 1; padding-right: 12px; }
-.ae-icon { font-size: 12px; color: var(--text-dim); transition: transform 0.35s; }
-.article-expand.open .ae-icon { transform: rotate(180deg); }
-.ae-body {
-  max-height: 0; overflow: hidden; transition: max-height 0.55s ease, padding 0.55s ease;
-  font-size: 0.86rem; color: var(--text-dim); line-height: 2;
-}
-.article-expand.open .ae-body { max-height: 3000px; padding: 0 20px 20px; }
-
-/* ===== FLIP CARDS (Scale 3: Brain) ===== */
-.flip-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-}
-.flip-card {
-  perspective: 900px; height: 260px;
-}
-.flip-inner {
-  width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
-  transform-style: preserve-3d; cursor: pointer; position: relative;
-}
-.flip-inner.flipped { transform: rotateY(180deg); }
-.flip-front, .flip-back {
-  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-  border-radius: var(--radius); padding: 22px;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-}
-.flip-front {
-  background: var(--surface); border: 1px solid var(--border);
-  text-align: center;
-}
-.flip-front .flip-icon { font-size: 2.5rem; margin-bottom: 12px; }
-.flip-front .flip-title { font-weight: 800; font-size: 1rem; color: var(--indigo); }
-.flip-front .flip-hint { font-size: 0.75rem; color: var(--text-subtle); margin-top: 8px; }
-.flip-back {
-  background: var(--surface2); border: 2px solid var(--indigo);
-  transform: rotateY(180deg); overflow-y: auto; padding: 18px;
-  text-align: left; justify-content: flex-start;
-  font-size: 0.82rem; line-height: 1.7;
-}
-.flip-back h4 { color: var(--indigo); margin-bottom: 10px; font-size: 0.95rem; }
-
-/* ===== DECISION SIM (Scale 2: Surgery) ===== */
-.decision-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px;
-}
-.decision-box h4 { margin-bottom: 14px; }
-.decision-q { color: var(--text-dim); margin-bottom: 16px; font-size: 0.9rem; }
-.decision-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-.decision-opts label {
-  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
-  background: var(--surface2); border-radius: var(--radius-sm);
-  cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
-}
-.decision-opts label:hover { border-color: var(--crimson); }
-.decision-opts input[type="radio"] { accent-color: var(--crimson); }
-.decision-submit {
-  padding: 10px 28px; background: linear-gradient(135deg, var(--crimson-dim), var(--crimson));
-  border: none; border-radius: 8px; color: #fff; font-weight: 700;
-  cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
-}
-.decision-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 18px var(--crimson-glow); }
-.decision-fb {
-  margin-top: 14px; padding: 14px; border-radius: var(--radius-sm);
-  display: none; font-size: 0.86rem; line-height: 1.7;
-}
-.decision-fb.show { display: block; animation: fadeIn 0.35s; }
-.decision-fb.correct { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.25); color: var(--emerald); }
-.decision-fb.wrong { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); color: var(--crimson); }
-
-/* ===== PCR STEP VISUALIZATION (Scale 5: Molecule) ===== */
-.pcr-steps {
-  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 18px;
-}
-.pcr-step {
-  flex: 1; min-width: 120px; max-width: 170px;
-  background: var(--surface2); border-radius: var(--radius-sm);
-  padding: 16px 12px; text-align: center; cursor: pointer;
-  border: 1px solid transparent; transition: all 0.3s; position: relative;
-}
-.pcr-step:hover, .pcr-step.active {
-  border-color: var(--teal); background: #0d1a1f;
-  transform: translateY(-4px); box-shadow: 0 8px 28px rgba(45,212,191,0.12);
-}
-.pcr-step .pcr-icon { font-size: 1.8rem; margin-bottom: 8px; }
-.pcr-step .pcr-name { font-size: 0.82rem; font-weight: 700; color: var(--text); }
-.pcr-step .pcr-arrow {
-  position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
-  color: var(--teal-dim); font-size: 1rem; z-index: 2;
-}
-.pcr-detail {
-  padding: 16px; background: var(--surface2); border-radius: var(--radius-sm);
-  border-left: 3px solid var(--teal); display: none; font-size: 0.86rem; line-height: 1.8;
-}
-.pcr-detail.show { display: block; animation: fadeIn 0.35s; }
-
-/* ===== QUIZ (Scale 6: Cognition) ===== */
-.quiz-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px;
-}
-.quiz-progress { font-size: 0.8rem; color: var(--text-subtle); margin-bottom: 16px; font-family: system-ui, sans-serif; }
-.quiz-question { font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; line-height: 1.6; }
-.quiz-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-.quiz-opt {
-  padding: 12px 16px; background: var(--surface2); border-radius: var(--radius-sm);
-  cursor: pointer; border: 1px solid transparent; transition: all 0.2s;
-  font-size: 0.9rem;
-}
-.quiz-opt:hover { border-color: var(--amber); background: rgba(245,158,11,0.05); }
-.quiz-opt.chosen-correct { border-color: var(--emerald); background: rgba(52,211,153,0.08); color: var(--emerald); }
-.quiz-opt.chosen-wrong { border-color: var(--crimson); background: rgba(248,113,113,0.08); color: var(--crimson); }
-.quiz-opt.correct-reveal { border-color: var(--emerald); background: rgba(52,211,153,0.05); }
-.quiz-explain {
-  display: none; margin-top: 14px; padding: 14px;
-  background: var(--surface2); border-radius: var(--radius-sm);
-  font-size: 0.85rem; line-height: 1.7; color: var(--text-dim);
-  border-left: 3px solid var(--amber);
-}
-.quiz-explain.show { display: block; animation: fadeIn 0.35s; }
-.quiz-next {
-  display: none; margin-top: 12px; padding: 8px 22px;
-  background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25);
-  color: var(--amber); border-radius: 8px; cursor: pointer;
-  font-weight: 600; transition: all 0.2s; font-size: 0.85rem;
-}
-.quiz-next:hover { background: rgba(245,158,11,0.2); }
-.quiz-next.show { display: inline-block; }
-
-/* ===== TREND VIS (Scale 7: Time) ===== */
-.trend-bars {
-  display: flex; flex-direction: column; gap: 18px; margin: 20px 0;
-}
-.trend-bar-label { display: flex; justify-content: space-between; font-size: 0.84rem; margin-bottom: 6px; color: var(--text-dim); }
-.trend-bar-label .tbl-year { color: var(--amber); font-weight: 700; }
-.trend-bar-track {
-  height: 10px; background: var(--border); border-radius: 5px; overflow: hidden;
-  position: relative;
-}
-.trend-bar-fill {
-  height: 100%; border-radius: 5px; transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
-}
-.trend-bar-fill.down { background: linear-gradient(90deg, var(--crimson-dim), var(--crimson)); }
-.trend-bar-fill.up { background: linear-gradient(90deg, var(--emerald-dim), var(--emerald)); }
-
-/* ===== END CTA ===== */
-.end-section {
-  position: relative; z-index: 1; text-align: center;
-  padding: 100px 24px 80px;
-}
-.end-section h2 {
-  font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 900;
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, var(--teal), var(--indigo));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.end-section p { color: var(--text-dim); max-width: 560px; margin: 0 auto 28px; font-size: 0.92rem; }
-.end-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 28px;
-  background: rgba(45,212,191,0.1);
-  border: 1px solid rgba(45,212,191,0.3);
-  color: var(--teal); border-radius: 24px;
-  font-size: 15px; font-weight: 600; cursor: pointer;
-  text-decoration: none; transition: all 0.3s;
-}
-.end-cta:hover {
-  background: rgba(45,212,191,0.2);
-  box-shadow: 0 0 32px var(--teal-glow);
+.section-anchor::before {
+  content: ''; display: block; width: 80px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--bio-green-dim), transparent);
+  margin: 0 auto 24px; border-radius: 2px;
 }
 
-/* ===== FOOTER ===== */
-.footer {
-  position: relative; z-index: 1; text-align: center;
-  padding: 28px 20px; border-top: 1px solid rgba(255,255,255,0.04);
-  color: var(--text-subtle); font-size: 0.72rem;
+/* ===== IMMUNE BATTLEFIELD ===== */
+.immune-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 60px 24px 20px;
 }
-.footer a { color: var(--teal); text-decoration: none; }
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeIn {
+.immune-intro {
+  text-align: center; max-width: 640px; margin: 0 auto 40px;
+  font-size: 0.9rem; color: var(--text-dim); line-height: 1.8;
+}
+.immune-battlefield {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px; margin-bottom: 36px;
+}
+.immune-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px 20px;
+  cursor: pointer; transition: all var(--ease);
+  position: relative; overflow: hidden; text-align: center;
+}
+.immune-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 229, 160, 0.2);
+  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.4);
+}
+.immune-card .cell-icon {
+  font-size: 3rem; margin-bottom: 12px;
+  transition: transform 0.5s; display: block;
+}
+.immune-card:hover .cell-icon { transform: scale(1.2); }
+.immune-card h4 {
+  font-size: 0.95rem; font-weight: 700;
+  color: var(--text-bright); margin-bottom: 6px;
+}
+.immune-card .role {
+  font-size: 0.72rem; color: var(--bio-green);
+  letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;
+}
+.immune-card .detail {
+  font-size: 0.78rem; color: var(--text-dim);
+  line-height: 1.6; display: none; margin-top: 8px;
+}
+.immune-card.expanded .detail { display: block; animation: fadeUp 0.4s; }
+@keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .zoom-section { padding: 48px 16px; }
-  .card-grid { grid-template-columns: 1fr; }
-  .hero-stats { gap: 16px; }
-  .hero-stat .num { font-size: 1.5rem; }
-  .data-panel { grid-template-columns: repeat(2, 1fr); }
-  .top-nav { padding: 8px 12px; }
-  .flip-grid { grid-template-columns: 1fr; }
-  .pcr-steps { flex-direction: column; align-items: center; }
-  .pcr-step { max-width: 100%; width: 100%; }
-  .pcr-step .pcr-arrow { display: none; }
-  .scale-indicator { right: 6px; gap: 8px; }
-  .scale-dot { width: 6px; height: 6px; }
-  .timeline { padding-left: 22px; }
-  .tl-item::before { left: -27px; width: 9px; height: 9px; }
+.immune-narrative {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px;
+  max-width: 800px; margin: 0 auto;
+  line-height: 1.9; font-size: 0.9rem; color: var(--text);
 }
-@media (max-width: 480px) {
-  .hero h1 { font-size: 1.6rem; }
-  .card { padding: 16px; }
-  .zoom-title { font-size: 1.3rem; }
+
+/* ===== mRNA SECTION ===== */
+.mrna-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 60px 24px 20px;
+}
+.mrna-sequence {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  justify-content: center; margin-bottom: 24px;
+}
+.mrna-step {
+  flex: 1; min-width: 160px; max-width: 200px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 16px;
+  text-align: center; cursor: pointer;
+  transition: all var(--ease); position: relative;
+}
+.mrna-step:hover, .mrna-step.active {
+  border-color: var(--bio-green); transform: translateY(-3px);
+  box-shadow: 0 6px 28px rgba(0, 229, 160, 0.12);
+  background: var(--bg-card-hover);
+}
+.mrna-step .step-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(0, 229, 160, 0.08);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem;
+  color: var(--bio-green); margin: 0 auto 10px;
+  transition: all var(--ease);
+}
+.mrna-step:hover .step-num, .mrna-step.active .step-num {
+  background: var(--bio-green); color: #060f0e;
+}
+.mrna-step .step-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.mrna-step h4 { font-size: 0.85rem; font-weight: 700; color: var(--text-bright); margin-bottom: 4px; }
+.mrna-step p { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; }
+.mrna-detail-panel {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 28px;
+  max-width: 800px; margin: 0 auto;
+  min-height: 60px; font-size: 0.88rem; color: var(--text);
+  line-height: 1.9; transition: all 0.4s;
+}
+
+/* ===== BODY MAP ===== */
+.body-map-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 60px 24px 20px;
+}
+.body-map-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.body-system-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 20px;
+  cursor: pointer; transition: all var(--ease);
+  position: relative; overflow: hidden;
+}
+.body-system-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--immune-red-glow);
+  box-shadow: 0 6px 30px rgba(255, 92, 114, 0.08);
+}
+.body-system-card h4 { font-size: 1rem; font-weight: 700; color: var(--text-bright); margin-bottom: 4px; }
+.body-system-card .sys-icon { font-size: 2rem; margin-bottom: 6px; display: block; }
+.body-system-card .symptoms { font-size: 0.76rem; color: var(--text-dim); line-height: 1.6; }
+.body-system-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--immune-red); opacity: 0; transition: opacity 0.3s;
+}
+.body-system-card:hover::after { opacity: 0.6; }
+.body-system-card .stat-highlight {
+  display: inline-block; font-weight: 700; color: var(--immune-red);
+  font-size: 0.85rem; margin: 6px 0;
+}
+
+/* ===== EVIDENCE PYRAMID ===== */
+.evidence-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 60px 24px 20px;
+}
+.pyramid-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  max-width: 700px; margin: 0 auto 24px;
+}
+.pyramid-level {
+  text-align: center; padding: 16px 32px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  transition: all var(--ease); position: relative;
+  display: flex; align-items: center; gap: 14px;
+  width: 100%;
+}
+.pyramid-level:hover {
+  border-color: var(--bio-green-glow);
+  transform: translateX(4px); background: var(--bg-card-hover);
+}
+.pyramid-level .pyra-icon { font-size: 1.5rem; flex-shrink: 0; }
+.pyramid-level .pyra-info { text-align: left; flex: 1; }
+.pyramid-level .pyra-name { font-weight: 700; color: var(--text-bright); font-size: 0.9rem; }
+.pyramid-level .pyra-desc { font-size: 0.74rem; color: var(--text-dim); }
+.pyramid-level .pyra-strength {
+  font-size: 0.68rem; padding: 3px 10px; border-radius: 10px;
+  font-weight: 600; letter-spacing: 0.5px; flex-shrink: 0;
+}
+.pyra-strong { background: rgba(0, 229, 160, 0.1); color: var(--bio-green); }
+.pyra-good { background: rgba(77, 201, 246, 0.1); color: var(--bio-cyan); }
+.pyra-moderate { background: rgba(240, 160, 80, 0.1); color: var(--diagnostic-amber); }
+.pyra-weak { background: rgba(255, 92, 114, 0.08); color: var(--immune-red); }
+
+/* FDA Flow */
+.fda-flow {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: center; margin-top: 36px;
+}
+.fda-phase {
+  flex: 1; min-width: 120px; max-width: 200px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 14px;
+  text-align: center; transition: all var(--ease); cursor: pointer;
+}
+.fda-phase:hover {
+  transform: translateY(-3px);
+  border-color: var(--diagnostic-amber);
+  box-shadow: 0 6px 24px var(--amber-glow);
+}
+.fda-phase .phase-num {
+  font-size: 2rem; font-weight: 900;
+  font-family: "Georgia", serif;
+  color: var(--diagnostic-amber); opacity: 0.3; margin-bottom: 4px;
+}
+.fda-phase h4 { font-size: 0.85rem; color: var(--text-bright); font-weight: 700; }
+.fda-phase p { font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; }
+.fda-phase .cost { font-size: 0.65rem; color: var(--text-subtle); margin-top: 6px; font-style: italic; }
+
+/* ===== TIMELINE ===== */
+.timeline-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 60px 24px 20px;
+}
+.timeline { position: relative; padding: 20px 0; }
+.timeline::before {
+  content: ''; position: absolute; top: 0; bottom: 0;
+  left: 50%; width: 2px; transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--bio-green-dim), var(--bio-cyan), var(--bio-purple));
+  opacity: 0.3; border-radius: 1px;
+}
+.timeline-item {
+  display: flex; align-items: flex-start;
+  margin-bottom: 28px; position: relative;
+}
+.timeline-item:nth-child(odd) { flex-direction: row; }
+.timeline-item:nth-child(even) { flex-direction: row-reverse; }
+.timeline-item .tl-content {
+  width: 45%; padding: 18px 20px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); transition: all var(--ease);
+}
+.timeline-item:hover .tl-content {
+  border-color: var(--bio-green-glow);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+.timeline-item .tl-dot {
+  position: absolute; left: 50%; top: 24px;
+  width: 16px; height: 16px; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bio-green); z-index: 2;
+  box-shadow: 0 0 16px var(--bio-green-glow);
+}
+.timeline-item .tl-year {
+  font-family: "Georgia", serif;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--bio-green); letter-spacing: 1px; margin-bottom: 4px;
+}
+.timeline-item h4 { font-size: 0.9rem; color: var(--text-bright); font-weight: 700; }
+.timeline-item p { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; }
+
+/* ===== FLIP CARDS ===== */
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.flip-card { perspective: 1000px; height: 280px; }
+.flip-card-inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform-style: preserve-3d; cursor: pointer;
+}
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; border-radius: var(--radius);
+  padding: 24px 20px; display: flex; flex-direction: column;
+  border: 1px solid var(--border);
+}
+.flip-card-front {
+  background: var(--bg-card); align-items: center;
+  justify-content: center; text-align: center;
+}
+.flip-card-front .card-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.flip-card-front h3 { font-size: 1.05rem; color: var(--text-bright); font-weight: 700; }
+.flip-card-front .hint { font-size: 0.68rem; color: var(--text-subtle); margin-top: 8px; letter-spacing: 1px; }
+.flip-card-back {
+  background: var(--bg-card-hover); transform: rotateY(180deg); justify-content: center;
+}
+.flip-card-back h4 { font-size: 0.9rem; color: var(--bio-green); font-weight: 700; margin-bottom: 8px; }
+.flip-card-back p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; }
+
+/* ===== DECISION TREE ===== */
+.decision-section {
+  position: relative; z-index: 1;
+  max-width: 800px; margin: 0 auto; padding: 40px 24px 20px;
+}
+.decision-node {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px 24px;
+  text-align: center; margin-bottom: 20px;
+}
+.decision-node h3 { font-size: 1rem; color: var(--text-bright); margin-bottom: 16px; }
+.decision-options { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.decision-btn {
+  padding: 10px 24px; border-radius: 22px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface); color: var(--text);
+  cursor: pointer; font-size: 0.85rem; font-weight: 600;
+  transition: all var(--ease); font-family: inherit;
+}
+.decision-btn:hover {
+  border-color: var(--bio-green);
+  background: rgba(0, 229, 160, 0.06);
+  color: var(--bio-green);
+  box-shadow: 0 0 20px var(--bio-green-glow);
+}
+.decision-result {
+  margin-top: 16px; padding: 16px 20px;
+  background: var(--bg-surface); border-radius: var(--radius);
+  border-left: 3px solid var(--bio-green);
+  display: none; font-size: 0.85rem; color: var(--text); line-height: 1.8;
+}
+.decision-result.show { display: block; animation: fadeUp 0.4s; }
+
+/* ===== FOOTER ===== */
+.footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 56px 24px 40px;
+  border-top: 1px solid var(--border); margin-top: 40px;
+}
+.footer-stats {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 36px; margin-bottom: 18px;
+}
+.footer-stat { text-align: center; }
+.footer-stat .num {
+  display: block; font-size: 1.3rem; font-weight: 900;
+  color: var(--bio-green-dim); letter-spacing: 1px;
+  font-family: "Georgia", serif;
+}
+.footer-stat .lbl { font-size: 0.74rem; color: var(--text-dim); letter-spacing: 0.5px; }
+.footer .copy { font-size: 0.74rem; color: var(--text-subtle); opacity: 0.5; }
+.footer a { color: var(--bio-green-dim); text-decoration: none; transition: color 0.3s; }
+.footer a:hover { color: var(--bio-green); }
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .scale-node { gap: 16px; }
+  .scale-info { padding: 14px 16px; }
+  .mrna-step { min-width: 130px; }
+  .immune-battlefield { grid-template-columns: repeat(2, 1fr); }
+  .body-map-grid { grid-template-columns: 1fr; }
+  .top-nav .nav-links { display: none; }
+  .timeline::before { left: 20px; }
+  .timeline-item, .timeline-item:nth-child(even) { flex-direction: row; }
+  .timeline-item .tl-content { width: calc(100% - 50px); margin-left: 40px; }
+  .timeline-item .tl-dot { left: 20px; }
+}
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 1.8rem; }
+  .hero-stats { gap: 10px; }
+  .hero-stat { padding: 10px 14px; min-width: 70px; }
+  .hero-stat .num { font-size: 1.3rem; }
+  .immune-battlefield { grid-template-columns: 1fr; }
+  .mrna-sequence { flex-direction: column; }
+  .mrna-step { max-width: 100%; }
+  .pyramid-level { padding: 12px 16px; }
+  .fda-phase { min-width: 100px; }
+  .scale-info { max-width: 220px; }
+  .flip-card { height: 240px; }
+  .section-anchor { padding: 40px 16px 0; }
+  .scale-section, .immune-section, .mrna-section,
+  .body-map-section, .evidence-section, .timeline-section { padding: 40px 14px 12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Cell Field Canvas -->
-<canvas id="cellCanvas"></canvas>
+<div class="bio-ambient"></div>
+<div class="cell-field" id="cellField"></div>
 
-<!-- Scroll Progress -->
-<div class="scroll-bar" id="scrollBar"></div>
-
-<!-- Scale Indicator -->
-<nav class="scale-indicator" id="scaleIndicator"></nav>
-
-<!-- Top Nav -->
 <nav class="top-nav">
-  <a href="index.html" class="home-btn">◂ 科技参考3 主板</a>
-  <span class="nav-tag">EXPEDITION · 细胞之下</span>
+  <a href="index.html" class="home-link">🔬 返回首页</a>
+  <div class="nav-links">
+    <a href="#scale">微观航程</a>
+    <a href="#immune">免疫战场</a>
+    <a href="#mrna">mRNA解密</a>
+    <a href="#body-map">新冠解剖</a>
+    <a href="#evidence">证据之塔</a>
+    <a href="#timeline">时间轴</a>
+  </div>
 </nav>
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="hero">
-  <div class="hero-badge">🔬 显微镜头加载中…</div>
-  <h1>细胞之下</h1>
-  <p class="tagline">从文明涟漪到分子密码——一场横跨七个数量级的医学远征。<br>每一层放大，都是对生命黑箱的一次照亮。</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="num">13</div><div class="lbl">篇真实文章</div></div>
-    <div class="hero-stat"><div class="num">7</div><div class="lbl">观察尺度</div></div>
-    <div class="hero-stat"><div class="num">10⁷</div><div class="lbl">× 放大倍数</div></div>
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <div class="eyebrow">医学与健康前沿</div>
+    <h1>人体<span class="pulse">微观</span>宇宙</h1>
+    <p class="tagline">每个人体内都藏着一个宇宙——37万亿个细胞，比银河系的恒星还多十倍</p>
+    <p class="sub-tagline">这不是教科书，这是一次对生命黑箱的逐层照亮</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="num">59</span><span class="lbl">期深度参考</span></div>
+      <div class="hero-stat"><span class="num">6</span><span class="lbl">层生物尺度</span></div>
+      <div class="hero-stat"><span class="num">37万亿</span><span class="lbl">细胞/人体</span></div>
+      <div class="hero-stat"><span class="num">100亿</span><span class="lbl">美元/新药研发</span></div>
+    </div>
   </div>
-  <div class="scroll-hint" onclick="document.getElementById('scale1')?.scrollIntoView({behavior:'smooth'})">
-    <span>进入微观世界</span>
-    <div class="arr">↓</div>
-  </div>
-</section>
-
-<!-- ===== SCALE 1: 文明涟漪 — Pandemics & Society ===== -->
-<section class="zoom-section" id="scale1">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#f87171; color:#f87171;"></div>
-        <span class="zoom-scale-tag">尺度 01 · 10⁷ 米 · 文明尺度</span>
-      </div>
-      <h2 class="zoom-title" style="color:var(--crimson);">文明涟漪 · 大流行如何重塑世界</h2>
-      <p class="zoom-desc">站在最远处回望，传染病是塑造人类文明最深刻的力量之一。每一次大流行，都是一次社会免疫系统的压力测试。</p>
-    </div>
-
-    <div class="data-panel">
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--crimson),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">240万+</div><div class="data-lbl">新冠第一年全球死亡</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--crimson),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">89%</div><div class="data-lbl">科学家认为将成局部流行病</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--crimson),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">3300万</div><div class="data-lbl">艾滋病累计死亡(对比)</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--crimson),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">82.5万/年</div><div class="data-lbl">艾滋年均死亡(对比)</div></div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon">📜</div>
-        <h4>新冠：500年级别的历史事件</h4>
-        <p>新冠第一年累计死亡超过240万，远高于艾滋病年均82.5万的死亡数。艾滋病从发现到有效药物用了15年，疫苗40多年仍未成功——而新冠疫苗仅用一年就投入市场，彻底改写了药物研发史。</p>
-        <div class="card-quote crimson">"如果500年后的人类历史学家梳理改变人类的传染病，2020年新冠一定会被列入其中。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🧪</div>
-        <h4>英国冒险的人体试验</h4>
-        <p>2021年2月，英国政府批准让90名18-30岁志愿者主动感染新冠病毒，每人报酬4500英镑。这种"人体挑战试验"在前新冠年代几乎不可能获批——但有控制的感染观察比自然感染研究效率高得多，一两年才能找到的规律，两个月就能完成。</p>
-        <div class="card-quote crimson">"有控制的感染观察效率远高于毫无控制的自然感染研究。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🌏</div>
-        <h4>印度的灾难：单日确诊30万+</h4>
-        <p>2021年4月，印度连续多日确诊超30万，占全球新增40%以上。问题不在于检测能力不足——印度此前8个月单日检测量稳定在80-150万。真正原因：洒红节等大规模聚集 + Delta变种超强传播力 + 医疗系统全面崩溃。</p>
-        <div class="card-quote crimson">"检测试剂供应量从2020年9月就基本满足需求——感染数字暴涨反映的是真实疫情恶化。"</div>
-      </div>
-    </div>
-
-    <!-- Timeline: COVID Milestones -->
-    <div class="timeline" id="covidTimeline">
-      <div class="tl-item" onclick="toggleTL(this)">
-        <div class="tl-date">2020年1月</div>
-        <div class="tl-title">武汉疫情爆发，全球进入紧急状态</div>
-        <div class="tl-body">春节前的大事件，持续超过一年。全球范围内，新冠在一年内导致的累计死亡超过240万——超越艾滋病成为当年致死人数最多的传染病。</div>
-      </div>
-      <div class="tl-item" onclick="toggleTL(this)">
-        <div class="tl-date">2020年夏</div>
-        <div class="tl-title">全球170个疫苗项目同时推进，8个进入临床III期</div>
-        <div class="tl-body">进度最快的8个疫苗中，5个由中国药企研发或参与研发。接种人数最多的是中国生物的灭活疫苗（BBIBP-CorV）。但真正确保安全和有效，要等到2021年第一季度才有初步可靠结论。</div>
-      </div>
-      <div class="tl-item" onclick="toggleTL(this)">
-        <div class="tl-date">2021年2月</div>
-        <div class="tl-title">英国批准全球首例新冠病毒人体挑战试验</div>
-        <div class="tl-body">90名18-30岁健康志愿者在隔离医院中主动感染新冠病毒，每人报酬4500英镑。目的：研究免疫系统对病毒的具体反应、症状规律、引发感染的最低病毒剂量。</div>
-      </div>
-      <div class="tl-item" onclick="toggleTL(this)">
-        <div class="tl-date">2021年4月</div>
-        <div class="tl-title">印度疫情崩溃，单日确诊超30万</div>
-        <div class="tl-body">Delta变种的传播力约为原始款两倍。印度3月洒红节大规模聚集后疫情爆发，医疗系统崩溃。氧气管、呼吸机、甚至火葬场都不够用。单日新增占全球40%以上。</div>
-      </div>
-      <div class="tl-item" onclick="toggleTL(this)">
-        <div class="tl-date">2021年夏</div>
-        <div class="tl-title">Delta变异株全球扩散，"与病毒共存"成为议题</div>
-        <div class="tl-body">Delta传播力大增后，即使全民接种有效率80%以上的疫苗，也无法达到群体免疫及格线。张文宏医生提出"与病毒共存"——长期严防死守已不可能完全消灭病毒，必须全面考量得失。</div>
-      </div>
-    </div>
-
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：122 | 新冠：这辈子见证了历史 + 172 | 印度疫情 + 281 | 与病毒共存的三个视角</h4>
-        <span class="ae-icon">▼</span>
-      </div>
-      <div class="ae-body">
-        <p><strong>关于《自然》杂志的专家调查：</strong>"2021年1月，《自然》向来自23个国家的119名免疫学家、病毒学家和传染病学家发放问卷。89%的科学家认为新冠病毒可能或非常可能成为局部流行的病毒，只有6%认为不太可能和不可能。"</p>
-        <p style="margin-top:8px;"><strong>关于与病毒共存的演化视角：</strong>"前北大生命科学院院长饶毅指出：病毒早在人类出现之前几十亿年就出现了。人类基因组里写满了病毒的序列。有些序列甚至参与了动物和人的进化——精子的行为就和病毒非常类似。"</p>
-        <p style="margin-top:8px;"><strong>关于人体是病毒大容器：</strong>"最近10年的研究发现，地球上的每个人都是一个病毒大容器。人体中大约有30万亿个细胞，但体内的病毒颗粒数量远超这个数字——仅肠道中的噬菌体就超过100万亿。"</p>
-      </div>
-    </div>
+  <div class="scroll-hint">
+    <span>向下探索</span>
+    <div class="arrow-down"></div>
   </div>
 </section>
 
-<!-- ===== SCALE 2: 人体疆界 — Body & Surgery ===== -->
-<section class="zoom-section" id="scale2">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#fb7185; color:#fb7185;"></div>
-        <span class="zoom-scale-tag">尺度 02 · 10⁰ 米 · 人体尺度</span>
-      </div>
-      <h2 class="zoom-title" style="color:var(--rose);">人体疆界 · 当手术刀划开身体</h2>
-      <p class="zoom-desc">从体表到内脏，这是医学最原始的干预尺度。但看似"立竿见影"的外科手段，背后是复杂的生理学博弈。</p>
-    </div>
-
-    <div class="data-panel">
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--rose),var(--crimson));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">6200万¥</div><div class="data-lbl">燕窝打假退赔金额</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--rose),var(--crimson));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">45天</div><div class="data-lbl">金丝燕建一个窝</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--rose),var(--crimson));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">33岁</div><div class="data-lbl">杭州抽脂事故受害者年龄</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--rose),var(--crimson));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">10亿$+</div><div class="data-lbl">典型药物研发成本</div></div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon">🪶</div>
-        <h4>燕窝的真相：糖水还是神药？</h4>
-        <p>茗挚燕窝被职业打假人王海揭露为"糖水"。燕窝由金丝燕用唾液、羽毛和植物枝丫混合筑成，一对燕子需45天才能建好一个窝。科学分析表明，燕窝的主要成分是蛋白质和碳水化合物，并无特殊"滋补"功效——它的神话更多来自郑和下西洋的传说。</p>
-        <div class="card-quote rose">"有名人故事做背景，再用古代医学解释一番，燕窝自然很受欢迎。但科学提纯才是区分食品和药品的真正界限。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🩺</div>
-        <h4>抽脂手术：一劳永逸的幻觉</h4>
-        <p>专业名称为"肿胀麻醉负压脂肪抽吸术"。脂肪粘稠，不能像吸尘器一样"吸"——需先注射含麻醉药的肿胀液使脂肪膨胀松软。2021年7月，杭州33岁网红在抽脂术后因感染和器官衰竭死亡。杭州市卫健委认定：术前认知不足、术中操作不当、术后观察不及时。</p>
-        <div class="card-quote crimson">"吸脂手术是美容手术中风险最高的项目之一。血管、神经与脂肪交织，简单粗暴地'吸'只会导致大出血和脂肪栓塞。"</div>
-      </div>
-    </div>
-
-    <!-- Decision Simulator -->
-    <div class="decision-box" style="margin-top:16px;">
-      <h4 style="color:var(--rose);">🩺 临床决策模拟：你应该接受这项医美手术吗？</h4>
-      <div class="decision-q">一位33岁、BMI 28的女性咨询抽脂手术。她没有心脏病史，但有轻度脂肪肝。她在一家美容院看到"无创抽脂、即做即走"的广告。作为医学顾问，你的建议是？</div>
-      <div class="decision-opts">
-        <label><input type="radio" name="dChoice" value="a"> A. 美容院方便又便宜，推荐她去做</label>
-        <label><input type="radio" name="dChoice" value="b"> B. 建议她去正规三甲医院整形外科咨询，了解全部风险后再决定</label>
-        <label><input type="radio" name="dChoice" value="c"> C. 抽脂是小手术，没有任何风险，可以放心做</label>
-      </div>
-      <button class="decision-submit" onclick="checkDecision()">提交判断</button>
-      <div class="decision-fb" id="dFb"></div>
-    </div>
-
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：058 | 燕窝和补品无效的逻辑 + 247 | 抽脂手术</h4>
-        <span class="ae-icon">▼</span>
-      </div>
-      <div class="ae-body">
-        <p><strong>关于燕窝的形成过程：</strong>"金丝燕每年九月到第二年四月是繁殖期。一对夫妇共同劳作45天才建好一个窝。如果窝被破坏，它们会再花40多天建新窝——但窝里的蛋会少一些。小金丝燕在14天后孵出。"</p>
-        <p style="margin-top:8px;"><strong>关于抽脂事故的官方结论：</strong>"杭州市卫健委调查结论：这是一起医疗事故。华颜医疗美容医院存在术前缺乏认识、术中操作不当、术后观察处理不及时等过错，与患者死亡存在因果关系，承担全部责任。"</p>
-        <p style="margin-top:8px;"><strong>关于FDA药物认证成本：</strong>"大多数药物在研发阶段都要花十多亿美元，经历十年左右才能获批上市。疫苗比药物更严——药物只用在患者身上，疫苗要用在所有健康人身上。疫苗上一点点致死率乘以几十亿人口基数，结果就是灾难性的。"</p>
-      </div>
-    </div>
+<!-- ===== SCALE NAVIGATOR ===== -->
+<section class="scale-section reveal" id="scale">
+  <div class="scale-header">
+    <h2>🔬 微观航程：从分子到文明的六层跃迁</h2>
+    <p>医学探索如同深海潜航——每一层生物尺度都揭示着不同的生命秘密。点击每个层级，进入对应的探索领域。</p>
   </div>
-</section>
-
-<!-- ===== SCALE 3: 器官深处 — Brain & Dreams ===== -->
-<section class="zoom-section" id="scale3">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#818cf8; color:#818cf8;"></div>
-        <span class="zoom-scale-tag">尺度 03 · 10⁻¹ 米 · 器官尺度</span>
-      </div>
-      <h2 class="zoom-title" style="color:var(--indigo);">器官深处 · 在大脑的迷宫中寻找意识</h2>
-      <p class="zoom-desc">大脑——这个1.4公斤的器官是已知宇宙中最复杂的结构。我们至今无法回答：梦境从何而来？睡眠为何必要？意识如何产生？</p>
-    </div>
-
-    <div class="data-panel">
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--indigo),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">36人</div><div class="data-lbl">清醒梦实验参与者</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--indigo),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">4-10次</div><div class="data-lbl">每晚安梦周期数</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--indigo),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">11个</div><div class="data-lbl">FDA认证睡眠仪总数</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--indigo),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">9V</div><div class="data-lbl">微电流刺激电压</div></div>
-    </div>
-
-    <!-- Flip Cards -->
-    <div class="flip-grid">
-      <div class="flip-card">
-        <div class="flip-inner" onclick="this.classList.toggle('flipped')">
-          <div class="flip-front">
-            <div class="flip-icon">🧠</div>
-            <div class="flip-title">与做梦者实时对话</div>
-            <div class="flip-hint">点击翻开 →</div>
-          </div>
-          <div class="flip-back">
-            <h4>2021年突破性实验</h4>
-            <p>《当代生物学》刊登：科学家通过脑电波监测确认被试者进入"清醒梦"状态后，用语音提问，做梦者用眨眼肌肉动作回答。36人参与，在4个国家不同实验室完成——醒着的人第一次实现了与梦中之人的实时交流。</p>
-          </div>
+  <div class="scale-bar-wrap">
+    <div class="scale-bar">
+      <div class="scale-node" onclick="navigateToScale(this, 1)">
+        <div class="scale-dot">🧬</div>
+        <div class="scale-info">
+          <div class="scale-name">分子密码层</div>
+          <div class="scale-range">10⁻⁹m · DNA · mRNA · 蛋白质</div>
+          <div class="scale-desc">生命的源代码。mRNA疫苗技术、基因编辑CRISPR、药物分子设计——这是医学最精密的战场。</div>
         </div>
       </div>
-      <div class="flip-card">
-        <div class="flip-inner" onclick="this.classList.toggle('flipped')">
-          <div class="flip-front">
-            <div class="flip-icon">👁️</div>
-            <div class="flip-title">清醒梦的秘密</div>
-            <div class="flip-hint">点击翻开 →</div>
-          </div>
-          <div class="flip-back">
-            <h4>梦中知道自己在做梦</h4>
-            <p>一部分人即使在做梦时也能随时意识到所见所感都只是梦——这就是"清醒梦"（Lucid Dream）。他们可以在梦中获得上帝视角，对梦境主动调整——比如被鬼追杀时主动唤醒自己。卓克自述就是这样的人，因此"逃过了很多追杀和试卷做不完的噩梦"。</p>
-          </div>
+      <div class="scale-node" onclick="navigateToScale(this, 2)">
+        <div class="scale-dot">🦠</div>
+        <div class="scale-info">
+          <div class="scale-name">细胞战场层</div>
+          <div class="scale-range">10⁻⁶m · 免疫细胞 · 病毒 · 癌细胞</div>
+          <div class="scale-desc">免疫系统的24/7防御战。T细胞识别、B细胞抗体生产、巨噬细胞吞噬——你体内每秒都在进行无声的战争。</div>
         </div>
       </div>
-      <div class="flip-card">
-        <div class="flip-inner" onclick="this.classList.toggle('flipped')">
-          <div class="flip-front">
-            <div class="flip-icon">⚡</div>
-            <div class="flip-title">睡眠仪：有用还是玄学？</div>
-            <div class="flip-hint">点击翻开 →</div>
-          </div>
-          <div class="flip-back">
-            <h4>简单的结论：不能说有疗效</h4>
-            <p>三类睡眠仪：微电流刺激（9V、几毫安）、白噪音播放器、光照调节褪黑素。微电流设备虽有11个通过FDA认证用于抑郁症和失眠，但从2014年起不利证据越来越多，FDA也加强了使用限制。睡眠问题还是要从睡眠卫生习惯入手。</p>
-          </div>
+      <div class="scale-node" onclick="navigateToScale(this, 3)">
+        <div class="scale-dot">🧠</div>
+        <div class="scale-info">
+          <div class="scale-name">器官系统层</div>
+          <div class="scale-range">10⁻²m · 大脑 · 心脏 · 肺 · 生殖系统</div>
+          <div class="scale-desc">器官是细胞社会的"城市群"。阿尔茨海默症、长新冠后遗症、精子质量下降——每个器官都有未解之谜。</div>
+        </div>
+      </div>
+      <div class="scale-node" onclick="navigateToScale(this, 4)">
+        <div class="scale-dot">💉</div>
+        <div class="scale-info">
+          <div class="scale-name">个体防御层</div>
+          <div class="scale-range">10⁰m · 疫苗 · 药物 · 手术</div>
+          <div class="scale-desc">人体是一个需要持续维护的堡垒。疫苗训练免疫系统，药物精准打击病原，手术修复结构损坏。</div>
+        </div>
+      </div>
+      <div class="scale-node" onclick="navigateToScale(this, 5)">
+        <div class="scale-dot">🌍</div>
+        <div class="scale-info">
+          <div class="scale-name">社会免疫层</div>
+          <div class="scale-range">10⁶m · 流行病学 · 公共卫生 · 群体免疫</div>
+          <div class="scale-desc">一个人的免疫是不够的。核酸检测、隔离措施、疫苗分配——当个体防御连成网络，社会免疫系统才真正诞生。</div>
+        </div>
+      </div>
+      <div class="scale-node" onclick="navigateToScale(this, 6)">
+        <div class="scale-dot">🏛️</div>
+        <div class="scale-info">
+          <div class="scale-name">证据认知层</div>
+          <div class="scale-range">抽象 · FDA审批 · 临床试验 · 循证医学</div>
+          <div class="scale-desc">医学如何"知道"它知道的？从随机双盲对照到荟萃分析，医学证据的金字塔是人类对抗认知偏误的终极武器。</div>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="card-grid" style="margin-top:20px;">
-      <div class="card">
-        <div class="card-icon">💤</div>
-        <h4>快速眼动期的秘密</h4>
-        <p>快速眼动期（REM）每晚间隔出现4-10次，短则几分钟，长则30-40分钟。梦境基本都出现在REM期。如果此时被叫醒，被试者能比较完整地回忆起梦境内容。此前的梦研究止步于测量眼动和脑电波——直到2021年"与做梦者对话"实验出现。</p>
-        <div class="card-quote indigo">"其实我就是做清醒梦的人，也因此逃过了很多追杀和试卷做不完的噩梦。"——卓克</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🎬</div>
-        <h4>从《盗梦空间》到现实科学</h4>
-        <p>十年前《盗梦空间》中特工潜入他人梦境窃取机密的设定太科幻。但2021年的实验证明：现实中的科学家确实可以在被试者做梦时与其进行信息交换——虽然距离电影里的"梦中植入想法"还有漫长的距离。</p>
-        <div class="card-quote indigo">"科学进展离解答梦境的产生机制还有很远的距离。最大的困难是：正在做梦的人很容易被测量过程打断。"</div>
-      </div>
+<!-- ===== IMMUNE BATTLEFIELD ===== -->
+<div class="section-anchor reveal" id="immune">
+  <h2 style="background:linear-gradient(135deg,var(--immune-red),var(--diagnostic-amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">⚔️ 免疫战场：你体内的常备军</h2>
+  <p class="sub">每一个健康的瞬间，都是免疫系统在无声战斗的结果</p>
+</div>
+
+<section class="immune-section reveal">
+  <p class="immune-intro">
+    你的免疫系统是一个精密的防御网络，拥有多种"兵种"协同作战。病毒入侵时，从识别到清除，每一步都是分子级的精确博弈。点击下方卡片，了解每个"战士"的职责。
+  </p>
+  <div class="immune-battlefield">
+    <div class="immune-card" onclick="toggleImmuneCard(this)">
+      <span class="cell-icon">🛡️</span>
+      <h4>巨噬细胞</h4>
+      <div class="role">前线巡逻兵</div>
+      <div class="detail">巨噬细胞是免疫系统的"清道夫"，它们在组织中不断巡逻，吞噬任何外来的病原体和细胞碎片。一旦发现入侵者，立即释放细胞因子，拉响全身免疫警报。在COVID-19感染中，肺泡巨噬细胞的过度激活是导致"细胞因子风暴"的关键因素之一。</div>
     </div>
+    <div class="immune-card" onclick="toggleImmuneCard(this)">
+      <span class="cell-icon">🎯</span>
+      <h4>T淋巴细胞</h4>
+      <div class="role">特种部队</div>
+      <div class="detail">杀伤性T细胞(CD8+)能精确识别并消灭被病毒感染的细胞。每个T细胞表面有独特的TCR受体，能够识别特定抗原。在新冠疫苗的设计中，能否激发足够强的T细胞免疫应答是衡量疫苗效果的重要指标。mRNA疫苗恰好在这点上表现出色。</div>
+    </div>
+    <div class="immune-card" onclick="toggleImmuneCard(this)">
+      <span class="cell-icon">🏭</span>
+      <h4>B淋巴细胞</h4>
+      <div class="role">抗体工厂</div>
+      <div class="detail">B细胞是抗体生产专家。每个激活的B细胞每秒可以分泌数千个抗体分子，这些Y形蛋白质像精确的"钥匙"一样锁定病毒表面的"锁孔"（抗原表位）。疫苗接种的本质，就是提前让B细胞"预习"敌人的样貌，以便真正入侵时快速反应。</div>
+    </div>
+    <div class="immune-card" onclick="toggleImmuneCard(this)">
+      <span class="cell-icon">🧠</span>
+      <h4>记忆细胞</h4>
+      <div class="role">情报档案库</div>
+      <div class="detail">免疫记忆是疫苗能长期保护我们的根本原因。记忆T细胞和记忆B细胞在初次感染后被保留下来，可以在体内存活数十年。当同一种病原再次入侵时，它们能在一两天内——而不是一两周——发动大规模免疫应答。这就是为什么大多数疫苗只需要接种一两次就能提供长期保护。</div>
+    </div>
+    <div class="immune-card" onclick="toggleImmuneCard(this)">
+      <span class="cell-icon">🧪</span>
+      <h4>树突状细胞</h4>
+      <div class="role">情报传递官</div>
+      <div class="detail">树突状细胞是免疫系统中最重要的抗原呈递细胞。它们捕获病毒碎片后，会迁移到淋巴结，将"敌人档案"展示给T细胞和B细胞看。mRNA疫苗的核心原理就是让我们的细胞临时充当树突状细胞的角色——自己生产一段病毒蛋白，然后呈递给免疫系统进行"演习"。</div>
+    </div>
+    <div class="immune-card" onclick="toggleImmuneCard(this)">
+      <span class="cell-icon">💥</span>
+      <h4>自然杀伤细胞</h4>
+      <div class="role">快速反应部队</div>
+      <div class="detail">NK细胞不需要预演就能识别并消灭异常细胞——包括被病毒感染的细胞和癌细胞。它们通过检测细胞表面的MHC-I分子是否正常来判断目标。很多癌细胞会下调MHC-I来逃避T细胞的追杀，但正好落入NK细胞的"缺I即杀"规则之中。这是免疫系统内置的双保险机制。</div>
+    </div>
+  </div>
 
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：163 | 脑科学：与做梦者对话 + 141 | 睡眠仪真的能改善睡眠吗？</h4>
-        <span class="ae-icon">▼</span>
+  <div class="immune-narrative">
+    <p>从卓克·科技参考的疫苗专题中，我们了解到：<strong>疫苗的标准是所有药物中最严格的</strong>。药物只用在患者身上，而疫苗要用在几十亿<strong>健康人</strong>身上。一种登革热药物最多几千万人服用，而疫苗一旦使用就是几十亿人注射——"一点点致死率乘以几十亿人口的基数，结果就是灾难性的。"</p>
+    <p style="margin-top:12px;">全球有约<strong style="color:var(--bio-green);">170个</strong>正在研发的新冠疫苗，进度最快的8个进入临床III期的疫苗中，有<strong style="color:var(--bio-green);">5个</strong>是中国药企研发或参与研发的。这就是现代医学在最紧急时刻展现出的惊人动员能力。</p>
+  </div>
+</section>
+
+<!-- ===== mRNA DEEP DIVE ===== -->
+<div class="section-anchor reveal" id="mrna">
+  <h2 style="background:linear-gradient(135deg,var(--bio-green),var(--bio-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">📜 mRNA：生命源代码的新语言</h2>
+  <p class="sub">点击每一步，理解mRNA疫苗如何重写免疫规则</p>
+</div>
+
+<section class="mrna-section reveal">
+  <div class="mrna-sequence" id="mrnaSequence">
+    <div class="mrna-step active" onclick="showMrnaDetail(0, this)">
+      <div class="step-num">1</div><div class="step-icon">🧬</div>
+      <h4>DNA转录</h4><p>细胞核内，DNA解旋，基因信息被转录成mRNA</p>
+    </div>
+    <div class="mrna-step" onclick="showMrnaDetail(1, this)">
+      <div class="step-num">2</div><div class="step-icon">📦</div>
+      <h4>mRNA合成</h4><p>实验室合成编码病毒刺突蛋白的mRNA序列</p>
+    </div>
+    <div class="mrna-step" onclick="showMrnaDetail(2, this)">
+      <div class="step-num">3</div><div class="step-icon">🫧</div>
+      <h4>脂质包裹</h4><p>脂质纳米颗粒包裹mRNA，保护其不被降解</p>
+    </div>
+    <div class="mrna-step" onclick="showMrnaDetail(3, this)">
+      <div class="step-num">4</div><div class="step-icon">💉</div>
+      <h4>注射入体</h4><p>疫苗注入肌肉细胞，脂质体与细胞膜融合</p>
+    </div>
+    <div class="mrna-step" onclick="showMrnaDetail(4, this)">
+      <div class="step-num">5</div><div class="step-icon">🏭</div>
+      <h4>蛋白生产</h4><p>核糖体读取mRNA，生产刺突蛋白片段</p>
+    </div>
+    <div class="mrna-step" onclick="showMrnaDetail(5, this)">
+      <div class="step-num">6</div><div class="step-icon">⚔️</div>
+      <h4>免疫训练</h4><p>免疫系统识别刺突蛋白，建立长期免疫记忆</p>
+    </div>
+  </div>
+
+  <div class="mrna-detail-panel" id="mrnaDetail">
+    <p><strong>🧬 第一步：DNA转录</strong> — 在细胞核内，DNA双螺旋被解旋酶打开。RNA聚合酶读取基因编码区，转录出信使RNA（mRNA）。这条mRNA携带制造蛋白质的完整配方，从细胞核进入细胞质。生命的中央法则：DNA → RNA → 蛋白质。DNA是"总图纸"，mRNA是"施工指令"，蛋白质是最终的"建筑成果"。</p>
+    <p style="margin-top:10px;color:var(--text-dim);font-size:0.82rem;">mRNA疫苗的革命性在于：我们不再需要将灭活病毒或病毒蛋白注入体内，而是直接给细胞发送"施工指令"，让身体自己生产抗原蛋白。这就像教会免疫系统识别敌人的"通缉令"，而不是让真正的罪犯进入身体。</p>
+  </div>
+
+  <!-- Flip cards -->
+  <div style="margin-top:44px;">
+    <h3 style="text-align:center;color:var(--text-dim);font-size:0.9rem;letter-spacing:1px;margin-bottom:24px;">翻转卡片 · 疫苗与药物的关键认知</h3>
+    <div class="insight-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-icon">💊</div>
+            <h3>疫苗 vs 药物的标准差异</h3>
+            <div class="hint">点击翻转 →</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>为什么疫苗标准比药物更严？</h4>
+            <p>药物只用在患者身上，而疫苗要用在所有<strong>健康人</strong>身上。一种疾病最多几千万患者，疫苗却要覆盖几十亿人——两个数量级的差距。疫苗上任何微小的风险，乘以几十亿的基数，结果都是灾难性的。这就是为什么FDA对疫苗审批格外审慎。</p>
+          </div>
+        </div>
       </div>
-      <div class="ae-body">
-        <p><strong>关于与做梦者沟通的方法：</strong>"科学家在快速眼动期确认被试者开始做清醒梦后，用简单清晰的语音向做梦者提问。做梦者通过眨眼的肌肉动作传递答案。美国实验室设置的问题是简单的数学题——比如'3加2等于几'——做梦者通过左右转眼球来传递答案。"</p>
-        <p style="margin-top:8px;"><strong>关于睡眠仪的真实情况：</strong>"微电流刺激设备从上世纪50年代出现，寄希望于大脑感受刺激后分泌正确量的神经递质。但2014年起不利信息增多：FDA怀疑安全性，加强使用限制。证明有效的实验后来几乎没有了——这类设备在所有已通过认证的疗法中属于'边缘人士'。"</p>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-icon">🦠</div>
+            <h3>病毒变异与疫苗效力</h3>
+            <div class="hint">点击翻转 →</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>E484K突变为什么关键？</h4>
+            <p>新冠病毒S蛋白上的E484K是影响疫苗效力的关键突变位点。英国变种(B.1.1.7)增加61%死亡风险但初代疫苗仍有效；而南非、巴西、尼日利亚变种都携带E484K突变，会明显削弱疫苗效力。英国对5%的感染者做了病毒测序，贡献了全球45%的病毒序列数据。</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-icon">⏳</div>
+            <h3>药物研发的时间与金钱</h3>
+            <div class="hint">点击翻转 →</div>
+          </div>
+          <div class="flip-card-back">
+            <h4>十年十亿的豪赌</h4>
+            <p>大多数药物通过FDA认证需要<strong>十亿美元级别</strong>的投入和<strong>十年左右</strong>的时间。从药物发现到临床前研究，再到I/II/III期临床试验，每一步的失败率都极高。最终能从实验室走到药房的候选分子，不到万分之一。</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== SCALE 4: 细胞战场 — Immune System & Vaccines ===== -->
-<section class="zoom-section" id="scale4">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#f59e0b; color:#f59e0b;"></div>
-        <span class="zoom-scale-tag">尺度 04 · 10⁻⁵ 米 · 细胞尺度</span>
-      </div>
-      <h2 class="zoom-title" style="color:var(--amber);">细胞战场 · 免疫系统永不终结的战争</h2>
-      <p class="zoom-desc">每时每刻，你体内的免疫细胞都在巡逻、识别、攻击。疫苗是人类设计的"模拟战报"——它教会免疫系统在不真正遭遇敌人的情况下，做好战斗准备。</p>
-    </div>
+<!-- ===== COVID BODY MAP ===== -->
+<div class="section-anchor reveal" id="body-map">
+  <h2 style="background:linear-gradient(135deg,var(--immune-red),var(--bio-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🫁 新冠解剖课：病毒如何影响全身</h2>
+  <p class="sub">新冠病毒不是"肺炎病毒"——它影响的是整个人体系统</p>
+</div>
 
-    <div class="data-panel">
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--amber),#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">170个</div><div class="data-lbl">全球新冠疫苗研发项目</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--amber),#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">8个</div><div class="data-lbl">进入临床III期</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--amber),#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">5个</div><div class="data-lbl">中国药企研发/参与</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--amber),#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">4种</div><div class="data-lbl">重要病毒变种</div></div>
+<section class="body-map-section reveal">
+  <p style="text-align:center;max-width:640px;margin:0 auto 32px;font-size:0.9rem;color:var(--text-dim);line-height:1.8;">
+    新冠病毒与流感病毒最显著的区别是：有相当高比例的患者在痊愈后很长时间仍然留有后遗症。《柳叶刀》2021年1月发表的研究观察了1733名痊愈患者——<strong style="color:var(--immune-red);">76%的患者在出院6个月后仍然有至少一种后遗症。</strong>而这些后遗症导致了随后一年的高死亡率，但并未被统计进新冠死亡率中。
+  </p>
+  <div class="body-map-grid">
+    <div class="body-system-card">
+      <span class="sys-icon">🫁</span>
+      <h4>呼吸系统</h4>
+      <p class="symptoms"><span class="stat-highlight">76%</span> 患者有持续症状。最常见：呼吸急促、咳嗽、肺功能异常。部分患者出现肺纤维化的早期迹象。即使在轻症患者中，肺部弥散功能下降可持续数月。COVID-19不是"大号流感"——它对呼吸系统的损伤更持久、更广泛。</p>
     </div>
+    <div class="body-system-card">
+      <span class="sys-icon">🧠</span>
+      <h4>神经系统</h4>
+      <p class="symptoms"><strong>长新冠认知症状：</strong>记忆力缺失、"脑雾"（brain fog）、注意力下降、头疼。部分康复者出现嗅觉和味觉的长期丧失。科学家推测病毒可能通过嗅球直接侵入中枢神经系统，或通过引发全身性炎症间接损伤神经元。</p>
+    </div>
+    <div class="body-system-card">
+      <span class="sys-icon">❤️</span>
+      <h4>心血管系统</h4>
+      <p class="symptoms"><strong>隐藏的心脏损伤：</strong>心跳过速、心肌炎、胸疼。研究显示即使是轻症年轻患者，康复后心肌损伤标志物也高于正常水平。病毒通过ACE2受体侵入心肌细胞，可能引发持续性炎症反应——这个发现改变了对"轻症=无害"的认知。</p>
+    </div>
+    <div class="body-system-card">
+      <span class="sys-icon">🦵</span>
+      <h4>肌肉骨骼系统</h4>
+      <p class="symptoms"><strong>持续的疲劳与疼痛：</strong>关节疼、肌肉疼是长新冠最常见的症状之一。很多患者在感染数月后仍然报告"挥之不去的疲惫感"。这种疲劳与慢性疲劳综合征有相似特征，可能涉及线粒体功能障碍和自主神经紊乱。</p>
+    </div>
+    <div class="body-system-card">
+      <span class="sys-icon">🧬</span>
+      <h4>肾脏与代谢</h4>
+      <p class="symptoms"><strong>急性肾衰竭：</strong>重症患者中出现急性肾损伤的比例令人担忧。即使康复后，肾功能也可能无法完全恢复到感染前水平。病毒对肾小管细胞的直接损伤以及全身炎症反应共同导致了这一后果。</p>
+    </div>
+    <div class="body-system-card">
+      <span class="sys-icon">😔</span>
+      <h4>精神健康</h4>
+      <p class="symptoms"><strong>看不见的后遗症：</strong>抑郁症和焦虑症在康复者中显著高发。这不只是"生病后的心理应激"——炎症因子穿过血脑屏障可以直接影响神经递质平衡。长新冠的精神症状有其生物学基础，而非简单的"心理脆弱"。</p>
+    </div>
+  </div>
 
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon">💉</div>
-        <h4>疫苗为何如此严格？</h4>
-        <p>药物只用在患者身上，疫苗却要用于所有健康人——受众大了两个数量级。典型的药物研发需要十多亿美元、十年左右才能通过FDA认证。疫苗标准更高：一点点致死率乘以几十亿人，结果就是灾难性的。</p>
-        <div class="card-quote amber">"疫苗上一点点致死率乘以几十亿人口的基数，结果就是灾难性的。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🦠</div>
-        <h4>病毒变种追踪</h4>
-        <p>截至2021年初，四种重要的新冠变种：英国变种（B.1.1.7）、南非变种（B.1.351）、巴西变种（B.1.28）、尼日利亚变种（B.1.525）。英国在病毒测序方面做得最好——全球病毒序列数据的45%由英国研究机构上传，英国感染者中约5%接受了病毒测序。</p>
-        <div class="card-quote amber">"变种前面的国家名不意味着起源地，更多是反映哪个国家有钱、重视测序。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🛡️</div>
-        <h4>群体免疫的数学门槛</h4>
-        <p>Delta变种传播力约为原始款的两倍。即使全民接种有效率超过80%的疫苗，也依然达不到流行病学中群体免疫的及格线。接受与病毒共存，不是政策选择问题，而是基于科学事实的必然推论。</p>
-        <div class="card-quote amber">"Delta的R₀约为5-7，意味着疫苗有效率需要达到80-85%以上才有可能阻断传播。"</div>
+  <div style="max-width:800px;margin:36px auto 0;">
+    <div class="immune-narrative">
+      <p><strong style="color:var(--diagnostic-amber);">理解"与病毒共存"的三个角度：</strong></p>
+      <p style="margin-top:8px;"><strong>角度一：病毒难以消灭。</strong>Delta变种传播力倍增后，即使全民接种有效率超过80%的疫苗，也达不到群体免疫的及格线。加上检测试剂假阴性比例常达30%，从理论上就不可能完全阻断传播。</p>
+      <p style="margin-top:8px;"><strong>角度二：演化规律。</strong>从演化生物学看，病毒的"最优策略"从来不是杀死宿主，而是与宿主共存。随着时间推移，高致死率的病毒变种会被自然选择淘汰，留下传播力更强但致病性更弱的毒株——这是病毒与人类数百万年共同演化的必然趋势。</p>
+      <p style="margin-top:8px;"><strong>角度三：中国方案。</strong>张文宏医生的观点是："世界如何与病毒共存，各个国家都在作出自己的回答。中国曾经给出了一张漂亮的答卷。南京疫情之后，我们一定会学习到更多。"在严防死守与全面开放之间，中国在寻找一条兼顾防控与经济发展的动态平衡路径。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRAIN SCIENCE ===== -->
+<div class="section-anchor reveal" id="brain">
+  <h2 style="background:linear-gradient(135deg,var(--bio-purple),var(--bio-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🕯️ 大脑：最后的黑箱</h2>
+  <p class="sub">当科学家能够与睡梦中的人实时对话——我们对意识的理解正在被重写</p>
+</div>
+
+<section class="mrna-section reveal">
+  <div class="immune-narrative" style="max-width:800px;margin:0 auto;">
+    <p>2021年，《细胞》杂志子刊《当代生物学》刊登了一项具有里程碑意义的研究——<strong>《快速眼动睡眠中实验者与做梦者的实时对话》</strong>。这不是比喻，而是一个清醒的人真的和一个正在睡梦中的人进行了对话。</p>
+    <p style="margin-top:12px;">睡眠分为<strong>快速眼动期（REM）</strong>和非快速眼动期。梦境几乎都出现在REM期——每晚会出现4-10次，短则几分钟，长则三四十分钟。如果此时掀开睡眠者的眼皮，你能看到眼球在快速转动。</p>
+    <p style="margin-top:12px;">在这项实验中，研究人员训练了36名志愿者在有清明梦（lucid dream）状态时通过眼球运动或面部肌肉的微弱收缩来向外发送信号。当志愿者在REM期发出信号后，研究人员用简单的数学题（如"8减6等于几？"）进行提问——做梦者通过眼球左右移动（代表2）来回答！</p>
+    <p style="margin-top:12px;color:var(--text-dim);">这项研究的意义远超猎奇。它打开了研究意识本质的一个全新窗口。如果能在睡梦状态下建立稳定的双向通信，我们就能开始回答那些困扰人类数千年的问题：梦是什么？意识如何产生？自我觉知的神经基础是什么？</p>
+  </div>
+
+  <!-- Diagnosis Simulator -->
+  <div class="decision-section reveal" style="margin-top:40px;">
+    <div class="decision-node" id="diagnosisNode">
+      <h3>🩺 诊断思维模拟器：一个病例</h3>
+      <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:14px;">
+        患者，65岁男性，近期出现进行性记忆力下降，有时忘记回家的路。同时伴有睡眠障碍、嗅觉减退。作为医生，你的第一步是？
+      </p>
+      <div class="decision-options">
+        <button class="decision-btn" onclick="showDiagnosis(1)">🧪 血液生化检查</button>
+        <button class="decision-btn" onclick="showDiagnosis(2)">🧠 脑部MRI扫描</button>
+        <button class="decision-btn" onclick="showDiagnosis(3)">📋 认知功能量表评估</button>
+        <button class="decision-btn" onclick="showDiagnosis(4)">🩻 PET淀粉样蛋白扫描</button>
       </div>
     </div>
+    <div class="decision-result" id="diagResult"></div>
+  </div>
+</section>
 
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：002 | 疫苗：我们离完善的疫苗还有多远？+ 142 | 病毒突变和疫苗最新进展</h4>
-        <span class="ae-icon">▼</span>
+<!-- ===== EVIDENCE PYRAMID ===== -->
+<div class="section-anchor reveal" id="evidence">
+  <h2 style="background:linear-gradient(135deg,var(--diagnostic-amber),var(--bio-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🏛️ 证据金字塔：医学如何"知道"</h2>
+  <p class="sub">从细胞实验到荟萃分析——医学证据的等级决定了我们对治疗的信心</p>
+</div>
+
+<section class="evidence-section reveal">
+  <div class="pyramid-wrap">
+    <div class="pyramid-level" style="width:55%;">
+      <div class="pyra-icon">🔬</div>
+      <div class="pyra-info"><div class="pyra-name">体外/细胞实验 & 动物模型</div><div class="pyra-desc">初步机制研究，探索可能性而非证明有效性</div></div>
+      <div class="pyra-strength pyra-weak">证据最弱</div>
+    </div>
+    <div class="pyramid-level" style="width:65%;">
+      <div class="pyra-icon">📝</div>
+      <div class="pyra-info"><div class="pyra-name">病例报告 & 专家意见</div><div class="pyra-desc">个别医生的经验总结，存在严重的选择偏倚</div></div>
+      <div class="pyra-strength pyra-weak">弱证据</div>
+    </div>
+    <div class="pyramid-level" style="width:75%;">
+      <div class="pyra-icon">👥</div>
+      <div class="pyra-info"><div class="pyra-name">队列研究 & 病例对照研究</div><div class="pyra-desc">观察性研究，可以发现关联但无法确立因果关系</div></div>
+      <div class="pyra-strength pyra-moderate">中等证据</div>
+    </div>
+    <div class="pyramid-level" style="width:85%;">
+      <div class="pyra-icon">🎲</div>
+      <div class="pyra-info"><div class="pyra-name">随机双盲对照试验 (RCT)</div><div class="pyra-desc">临床研究的金标准，随机分配消除混杂因素</div></div>
+      <div class="pyra-strength pyra-good">强证据</div>
+    </div>
+    <div class="pyramid-level" style="width:95%;">
+      <div class="pyra-icon">📊</div>
+      <div class="pyra-info"><div class="pyra-name">系统综述 & 荟萃分析 (Meta-Analysis)</div><div class="pyra-desc">综合多个RCT结果的统计方法，证据等级最高</div></div>
+      <div class="pyra-strength pyra-strong">证据最强</div>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:0.78rem;color:var(--text-subtle);max-width:600px;margin:0 auto;">
+    理解证据等级是科学素养的核心。当你在朋友圈看到"某研究发现XX能治癌"时，问自己：这是体外实验？动物实验？观察性研究？还是RCT？证据等级不同，结论的可信度天差地别。
+  </p>
+
+  <h3 style="text-align:center;color:var(--diagnostic-amber);font-size:0.95rem;letter-spacing:1px;margin-top:48px;margin-bottom:20px;">FDA药物审批流程：从分子到药房的漫长旅程</h3>
+  <div class="fda-flow">
+    <div class="fda-phase"><div class="phase-num">~10⁴</div><h4>药物发现</h4><p>从数万化合物中筛选候选分子</p><div class="cost">2-5年</div></div>
+    <div class="fda-phase"><div class="phase-num">临床前</div><h4>实验室&动物</h4><p>安全性评估、药代动力学</p><div class="cost">1-2年</div></div>
+    <div class="fda-phase"><div class="phase-num">I期</div><h4>安全性</h4><p>20-80名健康志愿者</p><div class="cost">~1年</div></div>
+    <div class="fda-phase"><div class="phase-num">II期</div><h4>有效性探索</h4><p>100-300名患者</p><div class="cost">~2年</div></div>
+    <div class="fda-phase"><div class="phase-num">III期</div><h4>大规模验证</h4><p>1000-5000名患者，RCT</p><div class="cost">~3年</div></div>
+    <div class="fda-phase"><div class="phase-num">FDA</div><h4>审评审批</h4><p>综合评估风险-获益比</p><div class="cost">6-12月</div></div>
+    <div class="fda-phase"><div class="phase-num">IV期</div><h4>上市后监测</h4><p>长期安全性、罕见副作用</p><div class="cost">持续</div></div>
+  </div>
+  <p style="text-align:center;font-size:0.75rem;color:var(--text-subtle);margin-top:12px;">
+    总成本：约10-26亿美元 · 总时间：10-15年 · 成功率：进入临床的候选药物中仅~12%最终获批
+  </p>
+
+  <div class="immune-narrative" style="max-width:800px;margin:36px auto 0;">
+    <p><strong style="color:var(--diagnostic-amber);">新冠口服药：莫纳皮拉韦（Molnupiravir）的智慧</strong></p>
+    <p style="margin-top:8px;">这款药物的作用原理堪称精妙——它在体内呈现两种分子结构，一种模仿胞嘧啶(C)，一种模仿尿嘧啶(U)。当病毒RNA复制时，蛋白质"工人"会错误地将药物分子当作真正的碱基插入RNA链中。随着这些错误不断积累，病毒的遗传信息被彻底"污染"，最终导致病毒无法继续复制——这就是所谓的<strong style="color:var(--bio-green);">"致死突变"（lethal mutagenesis）</strong>策略。</p>
+    <p style="margin-top:8px;">值得注意的是：FDA并未批准该药上市，甚至三期临床试验也只做到一半。是制药公司认为中期结果足够好，主动发布公告呼吁FDA给予紧急使用授权。这提醒我们——<strong>对任何"突破性药物"的新闻，都要追问：数据来自哪个阶段的试验？</strong></p>
+  </div>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<div class="section-anchor reveal" id="timeline">
+  <h2 style="background:linear-gradient(135deg,var(--bio-cyan),var(--bio-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">⏳ 发现的时间轴</h2>
+  <p class="sub">每一个医学里程碑，都是对生命黑箱的一次照亮</p>
+</div>
+
+<section class="timeline-section reveal">
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-year">1796</div>
+        <h4>詹纳发明牛痘疫苗</h4>
+        <p>爱德华·詹纳发现挤奶女工感染牛痘后不会得天花，由此开创了疫苗接种的先河。这是人类第一次主动"训练"免疫系统，也是现代免疫学的开端。</p>
       </div>
-      <div class="ae-body">
-        <p><strong>关于疫苗的三大标准：</strong>"完善疫苗定义为安全、有效和长期保护——这相当于问三个问题：疫苗安全不安全？能不能100%预防新冠？几个月后病毒突变了，疫苗还管用吗？"</p>
-        <p style="margin-top:8px;"><strong>关于临床III期试验的设计：</strong>"几万名志愿者分别注射疫苗和安慰剂后，被放回正常生活。实验人员耐心观察——当两个组分别有几十到几百人感染后，药效差异才能从统计学上证明。这个过程一年已经是短到不能再短。"</p>
-        <p style="margin-top:8px;"><strong>关于强生疫苗的暂停：</strong>"2021年4月，强生疫苗因为6例罕见的血栓副作用被FDA建议暂停使用。在已接种的约700万人中，出现6例脑静脉窦血栓——概率约百万分之一。这恰好说明了疫苗安全监管的严格程度。"</p>
+      <div class="tl-dot"></div><div style="width:45%;"></div>
+    </div>
+    <div class="timeline-item">
+      <div style="width:45%;"></div><div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">1928</div>
+        <h4>弗莱明发现青霉素</h4>
+        <p>一个被霉菌污染的培养皿改变了人类历史。青霉素的发现让细菌感染不再是死刑判决，开启了抗生素时代，将人类平均寿命延长了约15年。</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-year">1953</div>
+        <h4>DNA双螺旋结构发现</h4>
+        <p>沃森和克里克揭开了遗传物质的结构之谜。从这一刻起，医学开始从"对症治疗"走向"分子医学"，为后来的基因工程、基因治疗和mRNA技术奠定了基础。</p>
+      </div>
+      <div class="tl-dot"></div><div style="width:45%;"></div>
+    </div>
+    <div class="timeline-item">
+      <div style="width:45%;"></div><div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">1980</div>
+        <h4>WHO宣布消灭天花</h4>
+        <p>这是人类历史上第一次也是唯一一次通过疫苗完全消灭一种传染病。它证明了：只要有足够强的政治意愿和全球协作，人类可以战胜任何病原体。</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-year">2003</div>
+        <h4>人类基因组计划完成</h4>
+        <p>历时13年、耗资约30亿美元，人类第一次读完了自己的"源代码"。30亿个碱基对的测序完成为精准医疗、药物基因组学和遗传病研究打开了大门。</p>
+      </div>
+      <div class="tl-dot"></div><div style="width:45%;"></div>
+    </div>
+    <div class="timeline-item">
+      <div style="width:45%;"></div><div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">2020</div>
+        <h4>mRNA疫苗紧急使用</h4>
+        <p>从病毒基因测序公布到疫苗进入人体试验，只用了63天。mRNA技术的成功不仅终结了新冠大流行最黑暗的时期，也验证了一种全新疫苗平台——未来应对任何新发传染病，我们都有了更快的武器。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== SCALE 5: 分子密码 — PCR & Testing ===== -->
-<section class="zoom-section" id="scale5">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#2dd4bf; color:#2dd4bf;"></div>
-        <span class="zoom-scale-tag">尺度 05 · 10⁻⁹ 米 · 分子尺度</span>
-      </div>
-      <h2 class="zoom-title" style="color:var(--teal);">分子密码 · 在核酸的螺旋中寻找证据</h2>
-      <p class="zoom-desc">当我们放大到分子级别，病毒的RNA、PCR的荧光探针、荧光定量的Ct值——这些分子工具构成了现代流行病防控的基础设施。</p>
-    </div>
+<!-- ===== KEY INSIGHTS ===== -->
+<div class="section-anchor reveal">
+  <h2 style="background:linear-gradient(135deg,var(--bio-green),var(--bio-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">💡 更多医学洞察</h2>
+  <p class="sub">来自科技参考的真实数据与深刻认知</p>
+</div>
 
-    <div class="data-panel">
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--teal),var(--emerald));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">300万倍</div><div class="data-lbl">PCR扩增倍数</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--teal),var(--emerald));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">2-3h</div><div class="data-lbl">扩增耗时</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--teal),var(--emerald));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">~30%</div><div class="data-lbl">假阴性率</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,var(--teal),var(--emerald));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">2-3天</div><div class="data-lbl">mNGS测序耗时</div></div>
+<section class="body-map-section reveal">
+  <div class="insight-grid">
+    <div class="body-system-card" style="border-top:3px solid var(--diagnostic-amber);">
+      <span class="sys-icon">🧪</span>
+      <h4>核酸检测的规模挑战</h4>
+      <p class="symptoms">核酸检测使用的是"实时荧光定量PCR"技术。原理是用棉签刮取上皮细胞，检测其是否被病毒入侵。关键挑战在于<strong>灵敏度与通量的平衡</strong>——检测1000万人与检测1个人是完全不同的工程问题。假阴性比例通常达到30%，这是大规模筛查中不可回避的现实。</p>
     </div>
-
-    <!-- PCR Interactive Steps -->
-    <div class="pcr-steps" id="pcrSteps">
-      <div class="pcr-step active" onclick="showPCR(0); event.stopPropagation();" data-idx="0">
-        <div class="pcr-icon">🧬</div>
-        <div class="pcr-name">采样破膜</div>
-        <div class="pcr-arrow">→</div>
-      </div>
-      <div class="pcr-step" onclick="showPCR(1); event.stopPropagation();" data-idx="1">
-        <div class="pcr-icon">🧲</div>
-        <div class="pcr-name">反转录固定</div>
-        <div class="pcr-arrow">→</div>
-      </div>
-      <div class="pcr-step" onclick="showPCR(2); event.stopPropagation();" data-idx="2">
-        <div class="pcr-icon">🔍</div>
-        <div class="pcr-name">引物筛选</div>
-        <div class="pcr-arrow">→</div>
-      </div>
-      <div class="pcr-step" onclick="showPCR(3); event.stopPropagation();" data-idx="3">
-        <div class="pcr-icon">📈</div>
-        <div class="pcr-name">扩增×300万</div>
-        <div class="pcr-arrow">→</div>
-      </div>
-      <div class="pcr-step" onclick="showPCR(4); event.stopPropagation();" data-idx="4">
-        <div class="pcr-icon">💡</div>
-        <div class="pcr-name">荧光定量</div>
-      </div>
+    <div class="body-system-card" style="border-top:3px solid var(--immune-red);">
+      <span class="sys-icon">⚠️</span>
+      <h4>抽脂手术的医学真相</h4>
+      <p class="symptoms">专业名称：<strong>"肿胀麻醉负压脂肪抽吸术"</strong>。并非简单"把脂肪吸出来"——需要先注入大量液体使脂肪层肿胀，将脂肪颗粒打散后才能安全吸出。2021年杭州一起医疗事故导致33岁网红死亡，暴露了医美行业在术前评估、术中操作和术后监测上的系统性风险。</p>
     </div>
-    <div class="pcr-detail show" id="pcrDetail0">
-      <strong>① 采样与破膜</strong> — 用棉签在咽喉或鼻腔深处刮取上皮细胞。这些细胞可能已被病毒入侵。第一步：弄破细胞，释放RNA。RNA极不稳定，释放后若不处理会立刻解体。
+    <div class="body-system-card" style="border-top:3px solid var(--bio-green);">
+      <span class="sys-icon">🧬</span>
+      <h4>精子质量50年下降50%</h4>
+      <p class="symptoms">丹麦科学家卡尔森分析了1938-1991年间61篇研究，发现53年里精液中每毫升精子数量<strong>下降42%</strong>，单次射精量下降19%，综合来看每次射出的精子总数正好是53年前的一半。1973-2011年的数据进一步确认这种下降趋势仍在加速。这不仅是生育问题，更可能是环境暴露的"生物标志物"。</p>
     </div>
-    <div class="pcr-detail" id="pcrDetail1">
-      <strong>② 反转录固定</strong> — 将RNA罪证"固定"下来：把RNA反转录为对应的DNA。反转录酶以RNA为模板合成互补DNA（cDNA）链——这是从RNA世界进入DNA世界的桥梁步骤。
+    <div class="body-system-card" style="border-top:3px solid var(--bio-cyan);">
+      <span class="sys-icon">🏥</span>
+      <h4>印度疫情：统计黑洞</h4>
+      <p class="symptoms">2021年4月印度连续8天确诊超20万，占全球新增40%以上。印度此前之所以看起来"抗疫成功"，部分是因为检测能力不足。在开放洒红节、圣水沐浴节等大规模聚集活动后，确诊数在一个月内陡增十多倍。这个案例提醒我们：<strong>在公共卫生中，没有检测就没有真相。</strong></p>
     </div>
-    <div class="pcr-detail" id="pcrDetail2">
-      <strong>③ 引物筛选</strong> — 只有包含新冠病毒特征序列的RNA片段会被模板式DNA单链工具筛选出来并结合。如同吸铁石从沙堆里吸铁屑——沙堆中有沙粒、石头、塑料碎片，但吸铁石只吸铁屑。
-    </div>
-    <div class="pcr-detail" id="pcrDetail3">
-      <strong>④ PCR扩增</strong> — 将罪证DNA复制扩增到原量的300万倍。这是最耗时的环节，约需2-3小时。因为原始样本中病毒RNA太少了——必须扩增到足够量才能被仪器检测到。
-    </div>
-    <div class="pcr-detail" id="pcrDetail4">
-      <strong>⑤ 荧光定量</strong> — 罪证DNA每次复制时，荧光探针释放信号，荧光强度递增。当荧光信号超过阈值（Ct值）时，确认为阳性。如果样本中无病毒RNA，荧光信号始终不增加——结果阴性。
-    </div>
-
-    <div class="card-grid" style="margin-top:20px;">
-      <div class="card">
-        <div class="card-icon">⚖️</div>
-        <h4>1人 vs 1000万人的区别</h4>
-        <p>单管检测可以做到精确，但面对千万级人口的全员筛查，必须使用"混采"——将5-10人的样本混合在一起检测。混采阴性则全部阴性；混采阳性再逐一排查。这是成本和速度之间的精妙工程平衡。</p>
-        <div class="card-quote teal">"大规模筛查不是把1个人的流程重复1000万次——它涉及完全不同的技术路线和组织方式。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">⚠️</div>
-        <h4>假阴性：无法避免的30%</h4>
-        <p>检测试剂假阴性比例通常达30%。原因：采样位置不够深、病毒载量在感染早期太低、RNA在运输中降解。这30%是即使所有步骤都完美执行也无法消除的系统性误差——这也是"仅凭检测无法完全消灭病毒"的科学依据之一。</p>
-        <div class="card-quote teal">"假阴性比例约30%——这是核酸检测无法绕开的物理极限。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🧬</div>
-        <h4>mNGS：病毒的"全基因组测序"</h4>
-        <p>病原宏基因组测序（mNGS）是更精确的方法：对样本中所有DNA/RNA进行测序，能分辨感染的是哪一款病毒变种。但耗时2-3天、价格高，不适合大规模筛查。一般只对约1%的确诊样本使用，用于疾控部门的流行病学追踪和政策制定。</p>
-      </div>
-    </div>
-
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：268 | 规模：核酸检测1人和1000万人的区别</h4>
-        <span class="ae-icon">▼</span>
-      </div>
-      <div class="ae-body">
-        <p><strong>关于混采的策略：</strong>"当面对一个1000万人口城市的全员检测时，单管检测是不可行的——检测能力不够、成本太高。策略是5合1或10合1混采：5-10人的拭子放入同一个试管。如果混合样本阴性，5-10人全部排除；如果阳性，这5-10人再单独重测。"</p>
-        <p style="margin-top:8px;"><strong>关于"荧光定量"的原理：</strong>"在罪证DNA复制时，试剂盒里还有一个荧光探针。罪证每次扩增，荧光信号就会增加数值。当复制足够多、数值足够大时，就能被确认为阳性。绝大部分人没有感染，荧光信号始终不增加——结果阴性。"</p>
-      </div>
+    <div class="body-system-card" style="border-top:3px solid var(--bio-purple);">
+      <span class="sys-icon">📊</span>
+      <h4>效应量思维</h4>
+      <p class="symptoms">理解"效应量"是科学思维的关键。在解读任何医学研究时，不仅要问"有没有效果"，更要问"效果有多大"。一个统计显著但效应量微小的发现——比如某种药物"显著"降低血压2mmHg——在临床上可能毫无意义。区分<strong>统计显著性与临床显著性</strong>，是理解医学新闻的第一道防线。</p>
     </div>
   </div>
 </section>
 
-<!-- ===== SCALE 6: 认知免疫 — Health Claims & Critical Thinking ===== -->
-<section class="zoom-section" id="scale6">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#f59e0b; color:#f59e0b;"></div>
-        <span class="zoom-scale-tag">尺度 06 · 信息尺度 · 认知免疫</span>
-      </div>
-      <h2 class="zoom-title" style="color:var(--amber);">认知免疫 · 当古老信仰遭遇现代科学</h2>
-      <p class="zoom-desc">信息也需要免疫系统。"药食同源"是100年前的认知水平，"功能性食品"往往只是消费者的健康想象。学会识别健康领域的虚假宣称，是每个人的必备技能。</p>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon">🍲</div>
-        <h4>药食同源：100年前的认知</h4>
-        <p>在没有对食品药品进行管理的年代，确实"药食同源"——因为根本没有真正意义上的药。食品和药品因为化学的发展而分离：化学提纯能将物质浓度提高上亿倍，食材才变成了制药原料。如果今天有人拿"药食同源"说事，你要警觉——这是100年前医药卫生的认知水平。</p>
-        <div class="card-quote amber">"食品和药品是因为化学的发展而分离的。化学提纯将物质浓度提高上亿倍——食材才不再是食材。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">💊</div>
-        <h4>保健品无效的底层逻辑</h4>
-        <p>从燕窝到冬虫夏草，保健品遵循同样的逻辑链：名人故事背书 → 古代医书记载 → "治未病"概念包装 → 夸大个别成分的作用。但科学评价任何物质的功效，标准只有一个：随机双盲对照临床试验。几乎所有保健品都没有通过这个检验。</p>
-        <div class="card-quote amber">"科学提纯——把一种物质的浓度提高上亿倍——是食品和药品的真正分界线。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🧪</div>
-        <h4>化学的双刃剑</h4>
-        <p>化学提纯带来了现代医药，也让食品造假更容易：从前判断食物好坏的经验失效了。硫磺熏蒸让食材泛光泽、硫酸铜让蔬菜鲜亮、苏丹红让辣椒更红——这些都超出了传统村落生活的经验范围。</p>
-        <div class="card-quote amber">"从前判断食物好坏的经验，在日用化学出现后就不再起作用了。"</div>
-      </div>
-    </div>
-
-    <!-- Health Claims Quiz -->
-    <div class="quiz-box" id="quizBox" style="margin-top:16px;">
-      <h4 style="color:var(--amber); margin-bottom:4px;">🧠 健康宣称鉴别测试</h4>
-      <div class="quiz-progress" id="quizProgress">第 1 / 4 题</div>
-      <div class="quiz-question" id="quizQ"></div>
-      <div class="quiz-opts" id="quizOpts"></div>
-      <div class="quiz-explain" id="quizExplain"></div>
-      <button class="quiz-next" id="quizNext" onclick="nextQuiz()">下一题 →</button>
-    </div>
-
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：058 | 燕窝和补品无效的逻辑 + 063 | 药食是不是同源？</h4>
-        <span class="ae-icon">▼</span>
-      </div>
-      <div class="ae-body">
-        <p><strong>关于药食同源的历史背景：</strong>"在没有对食品药品进行管理的年代，就是药食同源的。因为那时候没有真正意义上的药，有一部分食品就被赋予上了疗效。如果今天有人拿药食同源说事儿，你应该警觉——这是100年前医药卫生方面的认知水平。"</p>
-        <p style="margin-top:8px;"><strong>关于不公布成分的祖传秘方：</strong>"不公布成分的祖传秘方，或者'纯天然提取物'这种模糊的说法，大概率是无效甚至有害的。真正的药物必须有明确的化学成分、明确的剂量、明确的疗效和安全性数据。"</p>
-        <p style="margin-top:8px;"><strong>关于功能性食品：</strong>"所谓的'功能性'食品是不是忽悠？对于食品，首先是安全卫生，然后是基本营养元素的配比——除此之外，都是给消费者的健康想象。"</p>
-      </div>
-    </div>
+<!-- ===== PUBLIC HEALTH NARRATIVE ===== -->
+<section class="mrna-section reveal">
+  <div class="immune-narrative" style="max-width:800px;margin:0 auto;">
+    <h3 style="color:var(--bio-green);text-align:center;margin-bottom:16px;">🌐 社会免疫：当个体防御连成网络</h3>
+    <p>公共卫生的本质可以用一句话概括：<strong>一个人的免疫是不够的。</strong></p>
+    <p style="margin-top:10px;">新冠疫情让人们前所未有地意识到——个体健康与群体健康之间的界限是模糊的。一个人的疫苗接种不仅保护自己，也保护了那些因医疗原因无法接种的人。这就是<strong>群体免疫</strong>的伦理基础：接种疫苗不仅是一种权利，也是一种对他人的责任。</p>
+    <p style="margin-top:10px;">从2020年初到2021年底，人类在应对这场百年一遇的大流行中展现了令人惊叹的集体行动能力：全球<strong>170个</strong>疫苗项目同时推进，mRNA技术从实验室走向数十亿人的手臂只用了不到一年。在人类医学史上，从未有过如此规模、如此速度的科学动员。</p>
+    <p style="margin-top:10px;color:var(--text-dim);">但同样值得反思的是：为什么在21世纪，一个拥有如此先进医学技术的人类文明，仍然会被一种病毒彻底改变生活方式？<strong>答案或许不在于病毒的强大，而在于我们对自己身体这个"内在宇宙"的了解仍然远远不够。</strong></p>
   </div>
 </section>
 
-<!-- ===== SCALE 7: 时间之河 — Long-term Effects ===== -->
-<section class="zoom-section" id="scale7">
-  <div class="zoom-container">
-    <div class="zoom-header">
-      <div class="zoom-marker">
-        <div class="zoom-dot-icon" style="background:#a78bfa; color:#a78bfa;"></div>
-        <span class="zoom-scale-tag">尺度 07 · 时间尺度 · 跨越岁月的回响</span>
-      </div>
-      <h2 class="zoom-title" style="color:#a78bfa;">时间之河 · 当效应跨越岁月的回响</h2>
-      <p class="zoom-desc">有些医学真相只有在时间的长河中才能显现——新冠后遗症的渐进、精子质量的世代下降、与病毒共存的演化宿命。</p>
-    </div>
-
-    <div class="data-panel">
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">76%</div><div class="data-lbl">出院6月后仍有症状</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">12%</div><div class="data-lbl">住院者出院140天内死亡</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">59%</div><div class="data-lbl">40年间精子总数下降</div></div>
-      <div class="data-item"><div class="data-val" style="background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">20%</div><div class="data-lbl">2016年精子库合格率</div></div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon">🫁</div>
-        <h4>长新冠：被低估的杀手</h4>
-        <p>新冠与流感最显著的区别：相当高比例的患者在痊愈后很长时间留有后遗症。《柳叶刀》1733名武汉康复者研究：76%在出院6个月后仍有至少一种症状——疲劳、呼吸急促、记忆缺失、抑郁。英国4.8万住院患者中，12%在出院后140天内死亡——这部分死亡未被统计到新冠死亡率中。</p>
-        <div class="card-quote crimson">"新冠病毒的危害是被低估的——相当高比例的患者在痊愈后很长时间留有后遗症，导致了随后一年的高死亡率。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🧬</div>
-        <h4>精子质量：跨越50年的断崖式下跌</h4>
-        <p>1938-1991年53年间，精子数量下降至一半。1973-2011年40年间，精子浓度再降52%，总数降59%。中国最大精子库——中信湘雅的数据：2006年合格率46%，2016年降至20%。下降趋势明显且持续。"2045年精子消失"是线性外推的谬误——但下降本身是真实的。</p>
-        <div class="card-quote indigo">"2045年精子消失是假的——但精子质量持续大幅下降是真的，且并非缓慢，而是在四五十年间明显的下跌。"</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🌍</div>
-        <h4>人类的病毒宿命</h4>
-        <p>从演化角度看，与病毒共存不是政策选择——是规律。病毒早于人类几十亿年出现，人类基因组中写满了远古病毒的序列。有些序列在人类进化中甚至发挥了关键作用。每个人体内病毒颗粒数远超自身细胞数——仅肠道噬菌体就超过100万亿。</p>
-        <div class="card-quote indigo">""病毒在先，人类在后，病毒是老祖宗，人类在病毒面前连重孙子都算不上。"——饶毅"</div>
-      </div>
-    </div>
-
-    <!-- Trend Visualization -->
-    <div class="trend-bars" style="margin-top:20px;">
-      <div class="trend-bar-group">
-        <div class="trend-bar-label"><span>精子浓度下降（1938-2011）</span><span class="tbl-year">-52%</span></div>
-        <div class="trend-bar-track"><div class="trend-bar-fill down" style="width:0%" data-width="85%"></div></div>
-      </div>
-      <div class="trend-bar-group">
-        <div class="trend-bar-label"><span>单次射精精子总数下降（1973-2011）</span><span class="tbl-year">-59%</span></div>
-        <div class="trend-bar-track"><div class="trend-bar-fill down" style="width:0%" data-width="90%"></div></div>
-      </div>
-      <div class="trend-bar-group">
-        <div class="trend-bar-label"><span>精子库合格率（中国·2006）</span><span class="tbl-year">46%</span></div>
-        <div class="trend-bar-track"><div class="trend-bar-fill up" style="width:0%" data-width="46%"></div></div>
-      </div>
-      <div class="trend-bar-group">
-        <div class="trend-bar-label"><span>精子库合格率（中国·2016）</span><span class="tbl-year">20%</span></div>
-        <div class="trend-bar-track"><div class="trend-bar-fill down" style="width:0%" data-width="20%"></div></div>
-      </div>
-      <div class="trend-bar-group">
-        <div class="trend-bar-label"><span>新冠康复者6个月后仍有症状</span><span class="tbl-year">76%</span></div>
-        <div class="trend-bar-track"><div class="trend-bar-fill down" style="width:0%" data-width="76%"></div></div>
-      </div>
-      <div class="trend-bar-group">
-        <div class="trend-bar-label"><span>住院康复者出院140天内死亡</span><span class="tbl-year">12%</span></div>
-        <div class="trend-bar-track"><div class="trend-bar-fill down" style="width:0%" data-width="40%"></div></div>
-      </div>
-    </div>
-
-    <div class="article-expand" onclick="this.classList.toggle('open'); event.stopPropagation();">
-      <div class="ae-header">
-        <h4>📖 原文来源：173 | 新冠后遗症 + 220 | 精子质量大幅下降 + 281 | 与病毒共存的三个视角</h4>
-        <span class="ae-icon">▼</span>
-      </div>
-      <div class="ae-body">
-        <p><strong>关于长新冠的严重性：</strong>"新冠后遗症的严重程度被严重低估。武汉市金银潭医院等机构在《柳叶刀》上的研究：1733名康复者中，76%在出院6个月后仍有症状。英国4.8万住院患者研究：12%在出院后140天内死亡——这超过了1/9。"</p>
-        <p style="margin-top:8px;"><strong>关于轻症的后遗症：</strong>"利用美国退伍军人医疗系统数据库做的统计：7.3万确诊后未住院的轻症退伍士兵与500万未感染老兵对比。结果显示：即使是轻症，确诊后30天到6个月间，死亡风险和多种后遗症风险都显著增加。"</p>
-        <p style="margin-top:8px;"><strong>关于精子质量趋势：</strong>"斯旺教授在《倒计时》一书中用统计点拟合直线来预测2045年精子数为零——但科学界普遍认为这种线性外推没有意义。顺着这根线往前追溯到1940年，精子浓度就会高到荒谬的程度。真实情况是：下降是真实的，但不会归零。"</p>
-        <p style="margin-top:8px;"><strong>饶毅的观点：</strong>"病毒早在人类出现之前几十亿年就出现。当人类出现时，基因组里早写满了病毒的序列。有些序列甚至参与了人类的进化——精子的行为就和病毒非常类似：一组DNA外裹蛋白质，专门入侵特定细胞。"</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== END CTA ===== -->
-<section class="end-section">
-  <h2>每一次探索，都是对生命的致敬</h2>
-  <p>从10⁷米的文明尺度到10⁻⁹米的分子密码——医学远征没有终点。<br>每一个发现，都是对生命黑箱的一次照亮。</p>
-  <a href="index.html" class="end-cta">◂ 返回科技参考3 主板</a>
-</section>
-
+<!-- ===== FOOTER ===== -->
 <footer class="footer">
-  <p>内容来源：卓克 · 科技参考3 | <a href="index.html">返回首页</a> | 基于13篇真实医学文章构建</p>
+  <div class="footer-stats">
+    <div class="footer-stat"><span class="num">59</span><span class="lbl">篇科技参考</span></div>
+    <div class="footer-stat"><span class="num">6</span><span class="lbl">层生物尺度</span></div>
+    <div class="footer-stat"><span class="num">37万亿</span><span class="lbl">细胞/人体</span></div>
+    <div class="footer-stat"><span class="num">100亿</span><span class="lbl">美元/新药</span></div>
+  </div>
+  <p class="copy">
+    内容来源：<a href="index.html">卓克·科技参考3</a> · 医学与健康前沿专题<br>
+    设计理念：人体微观宇宙 — 探索生命黑箱的内在旅程
+  </p>
 </footer>
 
 <script>
-/* ============================================================
-   CELL FIELD CANVAS — floating cells, viruses, connections
-   ============================================================ */
+// ===== CELL PARTICLE FIELD =====
 (function(){
-  const canvas = document.getElementById('cellCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = document.documentElement.scrollHeight;
-    initParticles();
+  const field = document.getElementById('cellField');
+  const types = ['membrane','nucleus','protein','pathogen'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.classList.add('cell-particle',types[i%4]);
+    const s=4+Math.random()*20;
+    p.style.width=s+'px'; p.style.height=s+'px';
+    p.style.left=Math.random()*100+'%';
+    p.style.top=60+Math.random()*40+'%';
+    p.style.animationDuration=8+Math.random()*22+'s';
+    p.style.animationDelay=Math.random()*15+'s';
+    field.appendChild(p);
   }
+})();
 
-  function initParticles() {
-    const count = Math.min(Math.floor(W * H / 14000), 220);
-    particles = [];
-    const colors = ['#2dd4bf','#38bdf8','#818cf8','#f59e0b','#f87171','#34d399','#fb7185','#a78bfa'];
-    for (let i = 0; i < count; i++) {
-      const type = Math.random();
+// ===== HERO CANVAS =====
+(function(){
+  const canvas=document.getElementById('heroCanvas');
+  const ctx=canvas.getContext('2d');
+  let particles=[], animId;
+
+  function resize(){
+    canvas.width=canvas.offsetWidth;
+    canvas.height=canvas.offsetHeight;
+  }
+  resize(); window.addEventListener('resize',resize);
+
+  function initParticles(){
+    particles=[];
+    for(let i=0;i<80;i++){
       particles.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: type < 0.12 ? 3 + Math.random() * 7 : 1 + Math.random() * 3,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        type: type < 0.12 ? 'cell' : 'particle',
-        phase: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.004 + Math.random() * 0.012,
-        alpha: 0.12 + Math.random() * 0.3,
-        color: colors[Math.floor(Math.random() * colors.length)]
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:1+Math.random()*4,
+        vx:(Math.random()-0.5)*0.5,
+        vy:(Math.random()-0.5)*0.4-0.3,
+        alpha:0.08+Math.random()*0.25,
+        color:Math.random()<0.5?'rgba(0,229,160,ALPHA)':
+              Math.random()<0.5?'rgba(77,201,246,ALPHA)':'rgba(167,139,250,ALPHA)',
+        pulse:Math.random()*Math.PI*2,
+        pulseSpeed:0.01+Math.random()*0.03
       });
     }
   }
+  initParticles();
 
-  function hexToRgba(hex, alpha) {
-    const r = parseInt(hex.slice(1,3), 16);
-    const g = parseInt(hex.slice(3,5), 16);
-    const b = parseInt(hex.slice(5,7), 16);
-    return `rgba(${r},${g},${b},${alpha})`;
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    const scrollY = window.scrollY;
-    const vh = window.innerHeight;
-
-    particles.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < -30) p.x += W + 60;
-      if (p.x > W + 30) p.x -= W + 60;
-      if (p.y < -30) p.y += H + 60;
-      if (p.y > H + 30) p.y -= H + 60;
-
-      const sy = p.y - scrollY * 0.3;
-      if (sy < -50 || sy > vh + 50) return;
-
-      const pulse = Math.sin(Date.now() * p.pulseSpeed + p.phase) * 0.5 + 0.5;
-      if (p.type === 'cell') {
-        const r = p.r + pulse * 2;
-        ctx.beginPath();
-        ctx.arc(p.x, sy, r, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgba(p.color, p.alpha);
-        ctx.fill();
-        ctx.strokeStyle = hexToRgba(p.color, p.alpha * 1.3);
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(p.x - r*0.15, sy - r*0.15, r*0.3, 0, Math.PI*2);
-        ctx.fillStyle = hexToRgba(p.color, p.alpha * 0.45);
-        ctx.fill();
-      } else {
-        ctx.beginPath();
-        ctx.arc(p.x, sy, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgba(p.color, p.alpha * 0.65);
-        ctx.fill();
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.pulse+=p.pulseSpeed;
+      if(p.x<-10)p.x=canvas.width+10;
+      if(p.x>canvas.width+10)p.x=-10;
+      if(p.y<-10)p.y=canvas.height+10;
+      if(p.y>canvas.height+10)p.y=-10;
+      const a=p.alpha*(0.6+0.4*Math.sin(p.pulse));
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color.replace('ALPHA',a); ctx.fill();
+      if(p.r>2.5){
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r+2,0,Math.PI*2);
+        ctx.strokeStyle=p.color.replace('ALPHA',a*0.4);
+        ctx.lineWidth=0.5; ctx.stroke();
       }
     });
-
-    // Draw connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const a = particles[i], b = particles[j];
-        const ay = a.y - scrollY * 0.3, by = b.y - scrollY * 0.3;
-        if (ay < -30 || ay > vh + 30 || by < -30 || by > vh + 30) continue;
-        const dx = a.x - b.x, dy = ay - by;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 160) {
+    // connections
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x;
+        const dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100){
           ctx.beginPath();
-          ctx.moveTo(a.x, ay);
-          ctx.lineTo(b.x, by);
-          ctx.strokeStyle = `rgba(45,212,191,${(1 - dist/160) * 0.07})`;
-          ctx.lineWidth = 0.3;
-          ctx.stroke();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle='rgba(0,229,160,'+(0.03*(1-dist/100))+')';
+          ctx.lineWidth=0.3; ctx.stroke();
         }
       }
     }
-
-    requestAnimationFrame(draw);
+    animId=requestAnimationFrame(draw);
   }
-
-  window.addEventListener('resize', resize);
-  resize();
   draw();
-})();
-
-/* ===== SCROLL PROGRESS ===== */
-(function(){
-  const bar = document.getElementById('scrollBar');
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    bar.style.width = pct + '%';
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden)cancelAnimationFrame(animId); else draw();
   });
 })();
 
-/* ===== SCALE INDICATOR DOTS ===== */
-(function(){
-  const container = document.getElementById('scaleIndicator');
-  const sections = document.querySelectorAll('.zoom-section');
-  const labels = ['文明','人体','器官','细胞','分子','认知','时间'];
-  const colors = ['#f87171','#fb7185','#818cf8','#f59e0b','#2dd4bf','#f59e0b','#a78bfa'];
-
-  labels.forEach((l, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'scale-dot';
-    dot.style.color = colors[i];
-    dot.innerHTML = `<span class="scale-label">${l}</span>`;
-    dot.addEventListener('click', () => {
-      if (sections[i]) sections[i].scrollIntoView({behavior:'smooth', block:'center'});
-    });
-    container.appendChild(dot);
-  });
-
-  const dots = container.querySelectorAll('.scale-dot');
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY + window.innerHeight / 2;
-    let active = -1;
-    sections.forEach((s, i) => {
-      const top = s.offsetTop;
-      const bottom = top + s.offsetHeight;
-      if (scrollY >= top && scrollY < bottom) active = i;
-    });
-    dots.forEach((d, i) => d.classList.toggle('active', i === active));
-  });
-})();
-
-/* ===== TIMELINE TOGGLE ===== */
-function toggleTL(el) {
-  const body = el.querySelector('.tl-body');
-  const wasOpen = body.classList.contains('show');
-  document.querySelectorAll('.tl-body').forEach(b => b.classList.remove('show'));
-  document.querySelectorAll('.tl-item').forEach(i => i.classList.remove('active'));
-  if (!wasOpen) {
-    body.classList.add('show');
-    el.classList.add('active');
+// ===== SCALE NAVIGATOR =====
+function navigateToScale(el,level){
+  const targets=['#scale','#immune','#body-map','#mrna','#body-map','#evidence'];
+  if(level<=targets.length){
+    document.querySelector(targets[level-1]).scrollIntoView({behavior:'smooth'});
   }
+  document.querySelectorAll('.scale-node').forEach(n=>n.style.opacity='0.5');
+  el.style.opacity='1';
+  setTimeout(()=>document.querySelectorAll('.scale-node').forEach(n=>n.style.opacity='1'),600);
 }
 
-/* ===== DECISION SIMULATOR ===== */
-function checkDecision() {
-  const selected = document.querySelector('input[name="dChoice"]:checked');
-  const fb = document.getElementById('dFb');
-  if (!selected) { fb.className = 'decision-fb wrong show'; fb.textContent = '请先选择一个选项。'; return; }
-  fb.classList.add('show');
-  if (selected.value === 'b') {
-    fb.className = 'decision-fb correct show';
-    fb.innerHTML = '✅ <strong>正确！</strong> 抽脂手术是美容手术中风险最高的项目之一。"肿胀麻醉负压脂肪抽吸术"需要在正规医疗机构由专业整形外科医生操作。术前需要全面评估——包括心血管功能、凝血功能、脂肪分布等。任何声称"无创抽脂、即做即走"的广告都应高度警惕。杭州市卫健委对2021年7月抽脂死亡事故的结论明确指出：涉事医院术前缺乏认识、术中操作不当、术后观察不及时。';
-  } else if (selected.value === 'a') {
-    fb.className = 'decision-fb wrong show';
-    fb.innerHTML = '❌ <strong>错误。</strong> 美容院不是医疗机构，不具备开展手术的条件。2021年7月杭州抽脂死亡事故就发生在美容医院——连正规医院都存在术前认知不足等问题，美容院的风险更高。任何侵入性手术都不应在美容院进行。';
-  } else {
-    fb.className = 'decision-fb wrong show';
-    fb.innerHTML = '❌ <strong>错误。</strong> 任何外科手术都有风险。抽脂手术可能导致感染、脂肪栓塞、器官损伤、大量失血甚至死亡。杭州33岁网红在术后2个多月因感染和器官衰竭死亡就是惨痛的案例。不存在"没有任何风险"的手术。';
-  }
+// ===== IMMUNE CARD TOGGLE =====
+function toggleImmuneCard(card){
+  const was=card.classList.contains('expanded');
+  document.querySelectorAll('.immune-card').forEach(c=>c.classList.remove('expanded'));
+  if(!was)card.classList.add('expanded');
 }
 
-/* ===== PCR STEP INTERACTIVE ===== */
-function showPCR(idx) {
-  document.querySelectorAll('.pcr-step').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.pcr-detail').forEach(d => d.classList.remove('show'));
-  const step = document.querySelector(`.pcr-step[data-idx="${idx}"]`);
-  if (step) step.classList.add('active');
-  const detail = document.getElementById('pcrDetail' + idx);
-  if (detail) detail.classList.add('show');
-}
-
-/* ===== HEALTH CLAIMS QUIZ ===== */
-const quizData = [
-  {
-    q: '"药食同源"意味着食物可以当药吃，药物也可以当饭吃。这个说法科学吗？',
-    opts: ['A. 科学，中医几千年的智慧', 'B. 不科学，这是100年前医药卫生管理水平低下时的认知', 'C. 部分科学，某些食物确实有药用价值', 'D. 完全科学，所有食物都有药用功效'],
-    correct: 1,
-    explain: '"药食同源"是在没有对食品药品进行管理的年代形成的概念——因为那时候根本没有真正意义上的药。食品和药品因为化学的发展而分离：化学提纯将物质浓度提高上亿倍，食材才有了制药的可能。如果今天有人拿"药食同源"说事，你应该警觉——这是100年前的认知水平。'
-  },
-  {
-    q: '微电流睡眠仪能有效治疗失眠吗？',
-    opts: ['A. 能，有FDA认证就是有效的证明', 'B. 不能简单说有疗效，不利证据越来越多，FDA已加强使用限制', 'C. 绝对有效，很多用户反馈很好', 'D. 完全无效，是纯粹的骗局'],
-    correct: 1,
-    explain: '微电流刺激设备虽有11个通过了FDA认证，但从2014年起不利信息增多：FDA怀疑安全性、加强使用限制，证明其有效的实验后来几乎没有了。这类设备在所有已通过认证的疗法中属于"边缘人士"。'
-  },
-  {
-    q: '某保健品宣称"纯天然提取物，无任何副作用"。这个宣称的问题在哪里？',
-    opts: ['A. 没问题，天然的就是安全的', 'B. "纯天然"不是安全保证，"无副作用"是虚假宣称——真正的药物都有明确的不良反应说明', 'C. 天然提取物比化学合成的更有效', 'D. 只要剂量合适就没问题'],
-    correct: 1,
-    explain: '"不公布成分的祖传秘方"或"纯天然提取物"这种模糊说法，大概率是无效甚至有害的。真正的药物必须有明确的化学成分、剂量、疗效和安全性数据——包括已知的副作用。氰化物也是"纯天然"的。'
-  },
-  {
-    q: '根据《柳叶刀》研究，新冠康复者出院后6个月仍有至少一种后遗症的比例是多少？',
-    opts: ['A. 约10%', 'B. 约30%', 'C. 约50%', 'D. 约76%'],
-    correct: 3,
-    explain: '根据武汉市金银潭医院等在《柳叶刀》发表的研究：1733名康复者中，76%在出院6个月后仍有至少一种症状。最常见的包括疲劳、呼吸急促、记忆力缺失、抑郁。新冠病毒的危害确实被低估了。'
-  }
+// ===== mRNA DETAIL =====
+const mrnaDetails=[
+  '<p><strong>🧬 第一步：DNA转录</strong> — 在细胞核内，DNA双螺旋被解旋酶打开。RNA聚合酶读取基因编码区，转录出信使RNA（mRNA）分子。这条mRNA携带制造蛋白质的完整配方，从细胞核进入细胞质。生命的中央法则：DNA→RNA→蛋白质。DNA是"总图纸"，mRNA是"施工指令"，蛋白质是最终的"建筑成果"。</p><p style="margin-top:10px;color:var(--text-dim);">mRNA疫苗的革命性在于：不再需要将灭活病毒或病毒蛋白注入体内，而是直接给细胞发送"施工指令"，让身体自己生产抗原蛋白。</p>',
+  '<p><strong>📦 第二步：mRNA合成</strong> — 科学家在实验室中合成一段编码新冠病毒刺突蛋白（Spike Protein）的mRNA序列。关键在于：这段mRNA只包含制造刺突蛋白所需的信息，<em>不包含病毒的完整遗传物质</em>——这意味着疫苗不可能导致感染。刺突蛋白是病毒入侵细胞的"钥匙"，也是免疫系统识别病毒的最佳靶点。</p><p style="margin-top:10px;color:var(--text-dim);">教会免疫系统认识这把"钥匙"，就等于废掉了病毒的开锁能力。</p>',
+  '<p><strong>🫧 第三步：脂质纳米颗粒包裹</strong> — 裸露的mRNA在体液中极不稳定，几秒钟就会被RNA酶分解。科学家将mRNA包裹在脂质纳米颗粒（LNP）中——这些微小的"脂肪气泡"像保护壳一样护送mRNA安全抵达目标细胞。LNP技术的突破是mRNA疫苗成功的关键瓶颈之一。从2005年科学家发现修饰核苷酸可以降低mRNA的免疫原性，到2020年疫苗获批，这条路走了15年。</p>',
+  '<p><strong>💉 第四步：注射入体</strong> — 疫苗通过肌肉注射进入人体。脂质纳米颗粒与肌肉细胞的细胞膜融合，将mRNA释放到细胞质中。这些mRNA<strong>不会</strong>进入细胞核，也不会整合到我们的DNA中——它只是在细胞质中临时存在，完成使命后很快被降解。常见误解澄清：mRNA疫苗<strong>不会改变你的DNA</strong>。mRNA从始至终都留在细胞质中，而DNA在细胞核里。</p>',
+  '<p><strong>🏭 第五步：蛋白生产</strong> — 细胞质中的核糖体（蛋白质工厂）读取mRNA上的密码，将其翻译为刺突蛋白片段。这些外来的刺突蛋白被运输到细胞表面展示，或在细胞外被免疫系统的巡逻兵（树突状细胞）捕获。从注射到蛋白表达只需数小时。每个被转染的细胞可以生产数千个刺突蛋白拷贝，充当临时的"抗原工厂"，运行几天后自然关闭。</p>',
+  '<p><strong>⚔️ 第六步：免疫训练</strong> — 免疫系统检测到外来刺突蛋白后启动全面应答：B细胞产生特异性抗体，T细胞学会识别并消灭表达刺突蛋白的细胞。最重要的是，记忆B细胞和记忆T细胞被保存下来——它们在体内可以存活数十年。这就是mRNA疫苗最优雅之处：不向体内引入任何活病毒或灭活病毒，<strong>只引入一个"通缉令"</strong>，让免疫系统自行"演练"。</p>'
 ];
 
-let quizIdx = 0;
-function loadQuiz() {
-  const q = quizData[quizIdx];
-  document.getElementById('quizProgress').textContent = `第 ${quizIdx + 1} / ${quizData.length} 题`;
-  document.getElementById('quizQ').textContent = q.q;
-  const optsContainer = document.getElementById('quizOpts');
-  optsContainer.innerHTML = '';
-  q.opts.forEach((opt, i) => {
-    const div = document.createElement('div');
-    div.className = 'quiz-opt';
-    div.textContent = opt;
-    div.addEventListener('click', () => answerQuiz(i, div));
-    optsContainer.appendChild(div);
+function showMrnaDetail(index,el){
+  document.querySelectorAll('.mrna-step').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  const panel=document.getElementById('mrnaDetail');
+  panel.style.opacity='0'; panel.style.transform='translateY(8px)';
+  setTimeout(()=>{
+    panel.innerHTML=mrnaDetails[index];
+    panel.style.opacity='1'; panel.style.transform='translateY(0)';
+    panel.style.transition='all 0.4s cubic-bezier(0.22,0.61,0.36,1)';
+  },150);
+}
+
+// ===== DIAGNOSIS SIMULATOR =====
+function showDiagnosis(choice){
+  const result=document.getElementById('diagResult');
+  const responses={
+    1:'<p><strong>🧪 血液生化检查</strong></p><p>你排除了甲状腺功能减退、维生素B12缺乏等可逆性认知障碍原因。血常规、肝肾功能、电解质均正常。但认知症状的特异性病因仍未明确——这是合理的排除性诊断步骤，但不足以确诊。需要进一步检查。</p><p style="margin-top:4px;color:var(--diagnostic-amber);">✅ 正确但不够。阿尔茨海默症的诊断需要综合影像学、认知评估和生物标志物。</p>',
+    2:'<p><strong>🧠 脑部MRI扫描</strong></p><p>MRI显示双侧海马体萎缩，颞叶皮层变薄。这些是阿尔茨海默症的典型影像学特征。但仅凭MRI不足以确诊——海马体萎缩也见于正常老年化和抑郁症。</p><p style="margin-top:4px;color:var(--bio-green);">✅ 关键步骤！神经影像学是AD诊断的核心环节。海马体萎缩的严重程度与认知下降的进程高度相关。</p>',
+    3:'<p><strong>📋 认知功能量表评估</strong></p><p>MMSE评分23/30（轻度认知障碍范围），以短时记忆和视空间能力受损为主。MoCA评分20/30。这些评估对量化认知损伤程度至关重要，且可以用于追踪病情进展。</p><p style="margin-top:4px;color:var(--bio-green);">✅ 基础且必要。量表是评估认知功能的"听诊器"，但需要与其他检查结合才能构成完整诊断。</p>',
+    4:'<p><strong>🩻 PET淀粉样蛋白扫描</strong></p><p>PET扫描显示大脑皮层中β-淀粉样蛋白沉积阳性。结合MRI显示的海马体萎缩和认知评估结果，现在可以做出<strong>阿尔茨海默症</strong>的临床诊断（高度可能）。</p><p style="margin-top:4px;color:var(--bio-green);">✅ 这是最特异的检查！淀粉样蛋白PET是区分AD与其他类型痴呆的最有力工具。</p><p style="margin-top:8px;color:var(--text-dim);font-size:0.82rem;">这个诊断模拟说明：现代医学的诊断从来不是依赖单一检查，而是通过多种手段交叉验证，逐步逼近真相。这是一个"排除+确认"的迭代过程。</p>'
+  };
+  result.innerHTML=responses[choice];
+  result.classList.add('show');
+}
+
+// ===== SCROLL REVEAL =====
+const revealObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+
+// ===== SMOOTH LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',function(e){
+    e.preventDefault();
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target)target.scrollIntoView({behavior:'smooth'});
   });
-  document.getElementById('quizExplain').classList.remove('show');
-  document.getElementById('quizNext').classList.remove('show');
-}
-
-function answerQuiz(idx, el) {
-  if (el.classList.contains('chosen-correct') || el.classList.contains('chosen-wrong')) return;
-  const q = quizData[quizIdx];
-  const allOpts = document.querySelectorAll('#quizOpts .quiz-opt');
-  allOpts.forEach(o => o.style.pointerEvents = 'none');
-  if (idx === q.correct) {
-    el.classList.add('chosen-correct');
-  } else {
-    el.classList.add('chosen-wrong');
-    allOpts[q.correct].classList.add('correct-reveal');
-  }
-  const explain = document.getElementById('quizExplain');
-  explain.textContent = (idx === q.correct ? '✅ 正确！' : '❌ 不对。') + ' ' + q.explain;
-  explain.classList.add('show');
-  if (quizIdx < quizData.length - 1) {
-    document.getElementById('quizNext').classList.add('show');
-  } else {
-    const nb = document.getElementById('quizNext');
-    nb.textContent = '完成测试 ✓';
-    nb.classList.add('show');
-  }
-}
-
-function nextQuiz() {
-  quizIdx++;
-  if (quizIdx >= quizData.length) {
-    document.getElementById('quizProgress').textContent = '测试完成！';
-    document.getElementById('quizQ').textContent = '你已经完成了健康宣称鉴别测试。记住：科学评价任何物质功效的标准只有一个——随机双盲对照临床试验。';
-    document.getElementById('quizOpts').innerHTML = '';
-    document.getElementById('quizExplain').classList.remove('show');
-    document.getElementById('quizNext').classList.remove('show');
-    return;
-  }
-  loadQuiz();
-}
-
-loadQuiz();
-
-/* ===== TREND BARS ANIMATION ===== */
-(function(){
-  const bars = document.querySelectorAll('.trend-bar-fill[data-width]');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const bar = entry.target;
-        bar.style.width = bar.getAttribute('data-width');
-        observer.unobserve(bar);
-      }
-    });
-  }, { threshold: 0.3 });
-  bars.forEach(b => observer.observe(b));
-})();
+});
 </script>
+
 </body>
 </html>
