@@ -5,562 +5,1274 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>宇宙的秩序 — 卓老板聊科技 MKS</title>
 <style>
-:root { --bg: #fdf6ec; --card: #fffaf2; --accent: #c0392b; --accent2: #8b6db0; --gold: #d4914a; --success: #5a9e6f; --text: #3d2f2f; --text-light: #6b5b5b; --border: #e8d5c4; --shadow: 0 2px 12px rgba(61,47,47,.08); --radius: 10px; --nav-bg: #3d2f2f; --nav-text: #fdf6ec; }
+/* ===== 宇宙的秩序 — 设计语言 =====
+ * 本质洞察：在一个根本不确定的量子世界里，宇宙如何建立起秩序？
+ * 情感基调：敬畏 — 读者应感受到在宏大宇宙面前的渺小与好奇
+ * 叙事锚点：仰望者 — 一个人站在地球上，一层层揭开宇宙的面纱
+ * 视觉策略：深酒红+暖金 — 深空不是黑色而是温暖深邃的酒红，
+ *   因为人类对宇宙的追问本身就是最温暖的好奇心
+ */
+:root {
+  --bg: #fdf6ec;
+  --card: #fffaf2;
+  --accent: #6b1a1a;
+  --accent2: #8b6db0;
+  --gold: #c9a55c;
+  --gold-light: #e8d5a3;
+  --success: #5a9e6f;
+  --text: #2a1f1a;
+  --text-light: #5c4a3d;
+  --border: #e0d0b8;
+  --shadow: 0 2px 16px rgba(42,31,26,.07);
+  --radius: 12px;
+  --nav-bg: #1a0f0a;
+  --nav-text: #fdf6ec;
+  --cosmic-deep: #3d1f1a;
+  --cosmic-glow: rgba(201,165,92,.15);
+  --star-color: #c9a55c;
+}
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; padding-top:56px; }
-.container { max-width:960px; margin:0 auto; padding:0 16px; }
-.top-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--nav-bg); color:var(--nav-text); display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:56px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
-.top-bar .title { font-size:1.05rem; font-weight:600; }
-.top-bar .home-btn { color:var(--nav-text); text-decoration:none; font-size:.88rem; padding:6px 14px; border:1px solid rgba(255,255,255,.3); border-radius:6px; }
-.tab-bar { display:flex; flex-wrap:wrap; gap:4px; padding:12px 0; position:sticky; top:56px; background:var(--bg); z-index:99; border-bottom:1px solid var(--border); margin-bottom:20px; }
-.tab-btn { padding:7px 14px; border:1px solid var(--border); border-radius:20px; background:var(--card); color:var(--text-light); cursor:pointer; font-size:.82rem; transition:all .2s; white-space:nowrap; }
-.tab-btn:hover { border-color:var(--accent); color:var(--accent); }
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', Georgia, 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  padding-top: 56px;
+  font-size: 16px;
+}
+.container { max-width: 980px; margin:0 auto; padding:0 20px; }
+
+/* Top Bar */
+.top-bar {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  background: var(--nav-bg); color: var(--nav-text);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; height:56px;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.top-bar .title { font-family:'Noto Sans SC',sans-serif; font-size:1rem; font-weight:600; letter-spacing:.5px; }
+.top-bar .home-btn {
+  color:var(--nav-text); text-decoration:none; font-size:.85rem;
+  padding:6px 16px; border:1px solid rgba(255,255,255,.25);
+  border-radius:20px; font-family:'Noto Sans SC',sans-serif;
+  transition: all .2s;
+}
+.top-bar .home-btn:hover { background:rgba(255,255,255,.1); border-color:var(--gold); color:var(--gold-light); }
+
+/* Tab Bar */
+.tab-bar {
+  display:flex; flex-wrap:wrap; gap:6px; padding:14px 0;
+  position:sticky; top:56px; background:var(--bg); z-index:99;
+  border-bottom:1px solid var(--border); margin-bottom:24px;
+}
+.tab-btn {
+  padding:8px 16px; border:1px solid var(--border);
+  border-radius:20px; background:var(--card); color:var(--text-light);
+  cursor:pointer; font-size:.82rem; transition:all .25s;
+  white-space:nowrap; font-family:'Noto Sans SC',sans-serif;
+}
+.tab-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--cosmic-glow); }
 .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.tab-panel { display:none; animation:fadeIn .3s ease; }
+.tab-panel { display:none; animation:fadeIn .4s ease; }
 .tab-panel.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.section-title { font-size:1.3rem; color:var(--accent); margin:24px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
-.sub-title { font-size:1.1rem; color:var(--text); margin:20px 0 12px; }
-.overview-block { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.overview-block h3 { color:var(--accent); margin-bottom:10px; font-size:1.05rem; }
-.skeleton-list { list-style:none; padding:0; }
-.skeleton-list li { background:linear-gradient(135deg,#fff5f5,#fffaf2); border-left:4px solid var(--accent); padding:12px 16px; margin-bottom:10px; border-radius:0 var(--radius) var(--radius) 0; }
-.skeleton-list li .star { color:var(--gold); font-size:1.1rem; }
-.boundary-table { width:100%; border-collapse:collapse; font-size:.9rem; }
-.boundary-table th { background:var(--accent); color:#fff; padding:10px 14px; text-align:left; }
-.boundary-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ===== HERO — 叙事创意图 ===== */
+.hero {
+  position:relative; overflow:hidden;
+  background:linear-gradient(175deg, #fdf6ec 0%, #f8eed8 30%, #e8d5b8 60%, #3d1f1a 85%, #1a0f0a 100%);
+  border-radius:var(--radius); margin-bottom:32px;
+  min-height:420px; display:flex; align-items:center; justify-content:center;
+}
+.hero-svg { width:100%; max-width:900px; height:auto; display:block; margin:0 auto; }
+.hero-caption {
+  position:absolute; bottom:36px; left:0; right:0; text-align:center;
+  color:#fdf6ec; font-size:1.15rem; letter-spacing:2px;
+  font-family:'Noto Serif SC',serif; opacity:.85;
+  text-shadow:0 1px 8px rgba(0,0,0,.5);
+}
+
+/* ===== 叙事引言区 ===== */
+.narrative-block {
+  background:linear-gradient(135deg, #fffaf6, #fef8ee);
+  border-left: 4px solid var(--accent);
+  padding: 28px 32px; margin:28px 0;
+  border-radius:0 var(--radius) var(--radius) 0;
+  box-shadow:var(--shadow);
+}
+.narrative-block .lead {
+  font-size:1.2rem; color:var(--accent); font-weight:600;
+  margin-bottom:12px; line-height:1.6;
+}
+.narrative-block p {
+  color:var(--text-light); font-size:.95rem; line-height:1.9;
+  margin-bottom:8px;
+}
+
+/* ===== 概念时间轴 (not cards!) ===== */
+.cosmic-timeline {
+  position:relative; padding:20px 0 20px 48px;
+  margin:28px 0;
+}
+.cosmic-timeline::before {
+  content:''; position:absolute; left:18px; top:0; bottom:0;
+  width:2px; background:linear-gradient(180deg, var(--gold-light), var(--accent), var(--gold-light));
+}
+.timeline-node {
+  position:relative; margin-bottom:28px;
+}
+.timeline-node::before {
+  content:''; position:absolute; left:-38px; top:10px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--accent); border:3px solid var(--gold-light);
+  box-shadow:0 0 0 4px var(--cosmic-glow);
+}
+.timeline-node h3 {
+  font-size:1.05rem; color:var(--accent); margin-bottom:6px;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.timeline-node .node-desc {
+  font-size:.88rem; color:var(--text-light); line-height:1.7;
+  margin-bottom:4px;
+}
+.timeline-node .node-source {
+  font-size:.78rem; color:var(--gold); font-style:italic;
+}
+.timeline-node .node-article {
+  display:inline-block; background:var(--cosmic-glow);
+  padding:2px 10px; border-radius:10px; font-size:.75rem;
+  color:var(--accent); margin-top:4px;
+}
+
+/* ===== 概念关系叙事SVG区 ===== */
+.svg-stage {
+  background:var(--card); border-radius:var(--radius);
+  padding:20px; margin:28px 0; box-shadow:var(--shadow);
+  border:1px solid var(--border); overflow-x:auto;
+}
+.svg-stage svg { display:block; margin:0 auto; max-width:100%; height:auto; }
+
+/* ===== 苏格拉底追问面板 ===== */
+.socratic-panel {
+  background:linear-gradient(135deg, #faf5f0, #fdf6ec);
+  border:1px dashed var(--accent); border-radius:var(--radius);
+  padding:24px; margin:20px 0;
+}
+.socratic-panel .q-a { margin-bottom:20px; }
+.socratic-panel .question {
+  font-weight:600; color:var(--accent); margin-bottom:6px;
+  font-size:.95rem;
+}
+.socratic-panel .question::before { content:'问：'; color:var(--gold); }
+.socratic-panel .answer {
+  color:var(--text-light); font-size:.9rem; padding-left:16px;
+  border-left:2px solid var(--gold-light);
+}
+.socratic-panel .answer::before { content:'答：'; color:var(--success); font-weight:600; }
+
+/* ===== 案例对比面板 ===== */
+.case-compare {
+  display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;
+}
+@media (max-width:600px) { .case-compare { grid-template-columns:1fr; } }
+.case-card {
+  background:var(--card); border-radius:var(--radius);
+  padding:20px; box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.case-card h4 { color:var(--accent); margin-bottom:10px; font-family:'Noto Sans SC',sans-serif; }
+.case-card p { font-size:.88rem; color:var(--text-light); line-height:1.7; }
+
+/* ===== 知识边界表 ===== */
+.boundary-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:16px 0; }
+.boundary-table th {
+  background:var(--accent); color:#fff; padding:12px 16px;
+  text-align:left; font-family:'Noto Sans SC',sans-serif; font-weight:500;
+}
+.boundary-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
 .boundary-table tr:nth-child(even) td { background:var(--card); }
-.path-step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
-.path-num { background:var(--accent); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
-.path-content { flex:1; background:var(--card); padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); }
-.progress-bar { width:100%; height:12px; background:var(--border); border-radius:6px; overflow:hidden; margin:12px 0; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:6px; transition:width .4s ease; }
-.flip-card { perspective:1000px; height:clamp(220px,40vw,280px); margin-bottom:14px; }
+.boundary-table .level-tag {
+  display:inline-block; padding:2px 8px; border-radius:10px;
+  font-size:.72rem; font-weight:600;
+}
+.level-core { background:var(--accent); color:#fff; }
+.level-understand { background:var(--gold); color:#2a1f1a; }
+.level-know { background:#ddd; color:#555; }
+
+/* ===== Quiz ===== */
+.quiz-card {
+  background:var(--card); border-radius:var(--radius);
+  padding:20px; margin-bottom:16px; box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.quiz-card .q-text { font-weight:600; margin-bottom:12px; font-size:.95rem; }
+.q-option {
+  display:block; width:100%; text-align:left; padding:10px 16px;
+  margin:6px 0; border:1px solid var(--border); border-radius:8px;
+  background:var(--bg); cursor:pointer; transition:all .2s;
+  font-size:.88rem; font-family:inherit;
+}
+.q-option:hover { border-color:var(--accent); background:var(--cosmic-glow); }
+.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
+.q-option.wrong { background:#f8d7da; border-color:var(--accent); color:#721c24; }
+.q-option:disabled { cursor:default; }
+.q-feedback { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:.85rem; display:none; }
+
+/* ===== 决策场景 ===== */
+.decision-scene {
+  background:linear-gradient(135deg, #faf5f0, #f8eed8);
+  border-radius:var(--radius); padding:24px; margin:20px 0;
+  border:1px solid var(--gold-light);
+}
+.decision-scene h3 { color:var(--accent); margin-bottom:12px; }
+.decision-scene .scenario {
+  background:var(--card); padding:18px; border-radius:8px;
+  margin-bottom:14px; border-left:3px solid var(--gold);
+}
+.decision-scene .choices { display:flex; flex-direction:column; gap:8px; }
+.decision-scene .choice-btn {
+  text-align:left; padding:10px 16px; border:1px solid var(--border);
+  border-radius:8px; background:var(--card); cursor:pointer;
+  transition:all .2s; font-family:inherit; font-size:.88rem;
+}
+.decision-scene .choice-btn:hover { border-color:var(--accent); background:var(--cosmic-glow); }
+.decision-scene .choice-btn.chosen-correct { border-color:var(--success); background:#d4edda; }
+.decision-scene .choice-btn.chosen-wrong { border-color:var(--accent); background:#f8d7da; }
+
+/* ===== Mindmap ===== */
+.mindmap { margin:16px 0; }
+.mindmap .node { margin-bottom:6px; }
+.mindmap .node-header {
+  display:flex; align-items:center; gap:8px; cursor:pointer;
+  padding:10px 14px; background:var(--card); border-radius:8px;
+  border:1px solid var(--border); transition:all .2s;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.mindmap .node-header:hover { border-color:var(--accent); background:var(--cosmic-glow); }
+.mindmap .node-header .toggle {
+  font-size:.7rem; transition:transform .3s; color:var(--accent);
+  width:16px; text-align:center;
+}
+.mindmap .node-header .toggle.open { transform:rotate(90deg); }
+.mindmap .node-body { display:none; padding:8px 0 8px 28px; }
+.mindmap .node-body.open { display:block; }
+.mindmap .leaf {
+  padding:6px 12px; margin:4px 0; font-size:.85rem;
+  color:var(--text-light); border-left:2px solid var(--gold-light);
+}
+
+/* ===== 实战决策 ===== */
+.practical-block {
+  background:var(--card); border-radius:var(--radius);
+  padding:20px; margin:16px 0; box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.practical-block h3 { color:var(--accent); margin-bottom:12px; font-family:'Noto Sans SC',sans-serif; }
+
+/* ===== 简答区 ===== */
+.sa-input {
+  width:100%; min-height:100px; padding:14px; font-family:inherit;
+  font-size:.9rem; border:1px solid var(--border); border-radius:var(--radius);
+  background:var(--bg); resize:vertical;
+}
+.sa-reveal {
+  background:var(--card); padding:16px; border-radius:var(--radius);
+  margin-top:10px; display:none; border:1px dashed var(--accent);
+  font-size:.9rem; line-height:1.8;
+}
+
+/* ===== 评分 ===== */
+.score-bar {
+  text-align:center; padding:16px; font-size:1.1rem; font-weight:600;
+  color:var(--accent);
+}
+
+/* ===== 进度条 ===== */
+.progress-bar {
+  width:100%; height:8px; background:var(--border); border-radius:4px;
+  overflow:hidden; margin:12px 0;
+}
+.progress-fill {
+  height:100%; background:linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius:4px; transition:width .5s ease;
+}
+
+/* ===== Section titles ===== */
+.section-title {
+  font-size:1.25rem; color:var(--accent); margin:32px 0 18px;
+  padding-bottom:10px; border-bottom:2px solid var(--border);
+  font-family:'Noto Sans SC',sans-serif; letter-spacing:1px;
+}
+
+/* ===== 科学家卡片 (portrait style, different from concept cards) ===== */
+.scientist-row { display:flex; flex-wrap:wrap; gap:16px; margin:16px 0; }
+.scientist-portrait {
+  flex:1 1 200px; min-width:180px; background:var(--card);
+  border-radius:var(--radius); padding:20px; text-align:center;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.scientist-portrait .emoji { font-size:2.5rem; margin-bottom:10px; }
+.scientist-portrait h4 { color:var(--accent); font-size:.95rem; margin-bottom:6px; }
+.scientist-portrait p { font-size:.8rem; color:var(--text-light); line-height:1.6; }
+
+/* ===== 翻转卡片 (only for concept deep dive) ===== */
+.flip-card { perspective:1000px; height:260px; margin-bottom:14px; }
 .flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; cursor:pointer; }
 .flip-inner.flipped { transform:rotateY(180deg); }
-.flip-front,.flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:10px; padding:clamp(16px,3vw,24px); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
-.flip-front { background:var(--card); }
-.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:clamp(.8rem,1.6vw,.9rem); }
-.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
-.btn { padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:inherit; }
+.flip-front,.flip-back {
+  position:absolute; width:100%; height:100%;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  border-radius:var(--radius); padding:24px;
+  display:flex; flex-direction:column; justify-content:center;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.flip-front { background:var(--card); align-items:center; text-align:center; }
+.flip-back { background:linear-gradient(135deg,#fffaf2,#fef5e7); transform:rotateY(180deg); overflow-y:auto; align-items:flex-start; text-align:left; font-size:.85rem; }
+.flip-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin:10px 0; }
+.btn { padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.88rem; border:none; transition:all .2s; font-family:'Noto Sans SC',sans-serif; }
 .btn-outline { background:transparent; border:1px solid var(--accent); color:var(--accent); }
 .btn-outline:hover { background:var(--accent); color:#fff; }
 .btn-success { background:var(--success); color:#fff; }
-.btn-sm { padding:5px 12px; font-size:.8rem; }
-.tag { display:inline-block; background:var(--success); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; }
-.quiz-card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.quiz-card .q-text { font-weight:600; margin-bottom:12px; }
-.q-option { display:block; width:100%; text-align:left; padding:10px 14px; margin:6px 0; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; transition:all .2s; font-size:.9rem; font-family:inherit; }
-.q-option:hover { border-color:var(--accent); background:#fff5f5; }
-.q-option.correct { background:#d4edda; border-color:var(--success); color:#155724; }
-.q-option.wrong { background:#f8d7da; border-color:#c0392b; color:#721c24; }
-.q-option:disabled { cursor:default; }
-.q-feedback { margin-top:8px; padding:8px 12px; border-radius:6px; font-size:.85rem; display:none; }
-.sa-input { width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.9rem; resize:vertical; background:var(--bg); }
-.sa-reveal { background:var(--card); padding:14px; border-radius:var(--radius); margin-top:8px; display:none; border:1px dashed var(--accent); }
-.mindmap { padding:10px 0; }
-.mindmap .node { margin:4px 0 4px 20px; }
-.mindmap .node-title { cursor:pointer; padding:8px 14px; background:var(--card); border-radius:6px; border:1px solid var(--border); font-size:.9rem; transition:all .2s; user-select:none; }
-.mindmap .node-title:hover { border-color:var(--accent); background:#fff5f5; }
-.mindmap .node-title::before { content:'\25B6 '; font-size:.7rem; display:inline-block; transition:transform .3s; margin-right:4px; }
-.mindmap .node-title.open::before { transform:rotate(90deg); }
-.mindmap .node-body { display:none; }
-.mindmap .node-body.open { display:block; }
-.inquiry-item { margin-bottom:12px; }
-.inquiry-q { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.inquiry-q:hover { border-color:var(--accent); background:#fff5f5; }
-.inquiry-q::after { content:' \25BC'; font-size:.7rem; float:right; }
-.inquiry-q.open::after { content:' \25B2'; }
-.inquiry-a { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.inquiry-a.open { display:block; }
-.case-item { margin-bottom:14px; }
-.case-title { background:var(--card); padding:14px 18px; border-radius:var(--radius); cursor:pointer; font-weight:600; border:1px solid var(--border); transition:all .2s; user-select:none; }
-.case-title:hover { border-color:var(--accent); background:#fff5f5; }
-.case-title::after { content:' \25BC'; font-size:.7rem; float:right; }
-.case-title.open::after { content:' \25B2'; }
-.case-body { display:none; padding:16px 18px; background:var(--bg); border-radius:0 0 var(--radius) var(--radius); font-size:.9rem; color:var(--text-light); line-height:1.7; border:1px solid var(--border); border-top:none; }
-.case-body.open { display:block; }
-.decision-round { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:1px solid var(--border); }
-.d-scenario { margin-bottom:16px; }
-.d-option { display:block; width:100%; text-align:left; margin:8px 0; }
-.d-result { padding:10px 14px; border-radius:6px; margin-top:10px; font-weight:600; display:none; }
-.d-explain { padding:10px 14px; background:var(--bg); border-radius:6px; margin-top:8px; font-size:.88rem; color:var(--text-light); display:none; }
-.svg-wrap { overflow-x:auto; margin:16px 0; text-align:center; }
-.svg-wrap svg { max-width:100%; height:auto; }
-.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--nav-bg); color:#fff; padding:10px 24px; border-radius:20px; font-size:.88rem; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
-.toast.show { opacity:1; }
-@media (max-width:600px) { .tab-bar { gap:3px; padding:8px 0; } .tab-btn { padding:5px 10px; font-size:.75rem; } .top-bar { padding:0 12px; } .container { padding:0 10px; } .flip-card { height:clamp(200px,55vw,260px); } }
+
+/* ===== 文章摘录块 ===== */
+.article-excerpt {
+  background:var(--card); border-radius:var(--radius); padding:18px;
+  margin:12px 0; box-shadow:var(--shadow); border:1px solid var(--border);
+  position:relative;
+}
+.article-excerpt::before { content:open-quote; font-size:3rem; color:var(--gold-light); position:absolute; top:4px; left:12px; opacity:.5; }
+.article-excerpt .excerpt-title { font-weight:600; color:var(--accent); margin-bottom:8px; font-size:.92rem; }
+.article-excerpt p { font-size:.85rem; color:var(--text-light); line-height:1.7; padding-left:20px; }
+
+/* Footer */
+.footer {
+  text-align:center; padding:32px 20px; margin-top:40px;
+  border-top:1px solid var(--border); color:var(--text-light);
+  font-size:.82rem;
+}
+.footer a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
-<div class="top-bar"><span class="title">🌌 宇宙的秩序</span><a href="index.html" class="home-btn">← 返回科学客厅</a></div>
+
+<!-- ========== TOP BAR ========== -->
+<nav class="top-bar">
+  <span class="title">🌌 宇宙的秩序</span>
+  <a href="index.html" class="home-btn">← 返回课程首页</a>
+</nav>
+
 <div class="container">
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)">知识集总览</button>
-  <button class="tab-btn" onclick="switchTab(1)">知识卡片</button>
-  <button class="tab-btn" onclick="switchTab(2)">题库系统</button>
-  <button class="tab-btn" onclick="switchTab(3)">考试模式</button>
-  <button class="tab-btn" onclick="switchTab(4)">复习模式</button>
-  <button class="tab-btn" onclick="switchTab(5)">思维导图</button>
-  <button class="tab-btn" onclick="switchTab(6)">深度追问</button>
-  <button class="tab-btn" onclick="switchTab(7)">案例分析</button>
-  <button class="tab-btn" onclick="switchTab(8)">实战决策</button>
+
+<!-- ========== HERO — 叙事创意图 ========== -->
+<div class="hero">
+  <svg class="hero-svg" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fef9e7" stop-opacity="1"/>
+        <stop offset="60%" stop-color="#e8d5a3" stop-opacity=".4"/>
+        <stop offset="100%" stop-color="#c9a55c" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="cosmicVoid" cx="50%" cy="40%" r="60%">
+        <stop offset="0%" stop-color="#5c2a1a" stop-opacity=".9"/>
+        <stop offset="50%" stop-color="#3d1f1a" stop-opacity=".6"/>
+        <stop offset="100%" stop-color="#1a0f0a" stop-opacity=".3"/>
+      </radialGradient>
+      <filter id="glowFilter"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#fdf6ec"/>
+        <stop offset="50%" stop-color="#fef9e7"/>
+        <stop offset="100%" stop-color="#e8d5a3"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Background: deep cosmic gradient -->
+    <rect width="900" height="420" fill="url(#cosmicVoid)" rx="12"/>
+
+    <!-- Stars scattered in the deep space -->
+    <g filter="url(#glowFilter)" opacity=".7">
+      <circle cx="120" cy="80" r="1" fill="#fef9e7"/><circle cx="780" cy="60" r="1.5" fill="#fef9e7"/>
+      <circle cx="340" cy="40" r="1" fill="#fef9e7"/><circle cx="560" cy="90" r="1.2" fill="#fef9e7"/>
+      <circle cx="200" cy="150" r=".8" fill="#e8d5a3"/><circle cx="680" cy="130" r="1" fill="#e8d5a3"/>
+      <circle cx="450" cy="70" r=".8" fill="#fef9e7"/><circle cx="820" cy="170" r=".6" fill="#fef9e7"/>
+      <circle cx="90" cy="200" r=".7" fill="#e8d5a3"/><circle cx="300" cy="110" r=".5" fill="#fef9e7"/>
+      <circle cx="700" cy="200" r=".9" fill="#fef9e7"/><circle cx="500" cy="120" r=".7" fill="#e8d5a3"/>
+    </g>
+
+    <!-- Layer 1: Quantum Uncertainty — wavy probability clouds at bottom -->
+    <g opacity=".35">
+      <path d="M50,380 Q150,330 250,370 Q350,410 450,360 Q550,310 650,355 Q750,395 850,350" stroke="#e8d5a3" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+      <path d="M30,365 Q130,315 230,355 Q330,395 430,345 Q530,295 630,340 Q730,380 870,335" stroke="#c9a55c" stroke-width="1" fill="none" stroke-dasharray="3,4"/>
+      <text x="870" y="370" fill="#e8d5a3" font-size="9" text-anchor="end" opacity=".6">量子涨落</text>
+    </g>
+
+    <!-- Layer 2: Spacetime curvature — sweeping arcs -->
+    <g opacity=".5">
+      <path d="M80,340 Q250,200 450,310 Q650,420 850,280" stroke="#d4914a" stroke-width="2" fill="none" opacity=".6"/>
+      <path d="M60,320 Q230,180 430,290 Q630,400 870,260" stroke="#c9a55c" stroke-width="1.2" fill="none" stroke-dasharray="8,4" opacity=".4"/>
+      <text x="440" y="210" fill="#d4914a" font-size="10" text-anchor="middle" opacity=".5">时空弯曲</text>
+    </g>
+
+    <!-- Layer 3: Black Hole accretion disk — elliptical rings -->
+    <g opacity=".6">
+      <ellipse cx="450" cy="280" rx="160" ry="35" fill="none" stroke="#6b1a1a" stroke-width="3"/>
+      <ellipse cx="450" cy="280" rx="200" ry="45" fill="none" stroke="#8b3a1a" stroke-width="1.5" opacity=".5"/>
+      <ellipse cx="450" cy="280" rx="120" ry="25" fill="none" stroke="#c9a55c" stroke-width="2" opacity=".4"/>
+      <!-- Event horizon glow -->
+      <circle cx="450" cy="278" r="18" fill="#1a0f0a" opacity=".9"/>
+      <circle cx="450" cy="278" r="22" fill="none" stroke="#c9a55c" stroke-width="1" opacity=".5"/>
+      <circle cx="450" cy="278" r="20" fill="url(#starGlow)" opacity=".3"/>
+    </g>
+
+    <!-- Layer 4: Stellar nucleosynthesis — radiating from center -->
+    <g filter="url(#glowFilter)" opacity=".5">
+      <circle cx="680" cy="160" r="28" fill="url(#starGlow)" opacity=".3"/>
+      <circle cx="680" cy="160" r="8" fill="#fef9e7" opacity=".8"/>
+      <!-- Radiating lines -->
+      <line x1="680" y1="160" x2="720" y2="120" stroke="#e8d5a3" stroke-width=".5" opacity=".4"/>
+      <line x1="680" y1="160" x2="730" y2="175" stroke="#e8d5a3" stroke-width=".5" opacity=".4"/>
+      <line x1="680" y1="160" x2="700" y2="200" stroke="#e8d5a3" stroke-width=".5" opacity=".4"/>
+      <line x1="680" y1="160" x2="650" y2="200" stroke="#e8d5a3" stroke-width=".5" opacity=".4"/>
+      <text x="730" y="155" fill="#e8d5a3" font-size="9" opacity=".5">元素锻造</text>
+    </g>
+
+    <!-- Layer 5: Hubble / Observer — telescope pointing out -->
+    <g opacity=".6">
+      <rect x="130" y="90" width="50" height="12" rx="3" fill="#c9a55c" opacity=".7" transform="rotate(-15,155,96)"/>
+      <rect x="170" y="88" width="40" height="16" rx="2" fill="#d4914a" opacity=".5" transform="rotate(-15,190,96)"/>
+      <line x1="180" y1="95" x2="400" y2="260" stroke="#e8d5a3" stroke-width=".5" opacity=".3" stroke-dasharray="3,5"/>
+    </g>
+
+    <!-- Central text — the human question -->
+    <text x="450" y="395" fill="url(#textGrad)" font-size="16" font-family="'Noto Serif SC',serif" text-anchor="middle" letter-spacing="4" opacity=".9">我们在不确定的宇宙中，寻找秩序</text>
+
+    <!-- Title area -->
+    <text x="450" y="42" fill="#fdf6ec" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" letter-spacing="6" opacity=".7">THE COSMIC ORDER</text>
+
+    <!-- The Observer — small human figure at bottom -->
+    <g transform="translate(445,362)" opacity=".8">
+      <circle cx="0" cy="-8" r="4" fill="#fdf6ec"/>
+      <line x1="0" y1="-4" x2="0" y2="6" stroke="#fdf6ec" stroke-width="1.5"/>
+      <line x1="-6" y1="0" x2="6" y2="0" stroke="#fdf6ec" stroke-width="1"/>
+    </g>
+    <text x="450" y="380" fill="#fdf6ec" font-size="8" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" opacity=".4">仰望者</text>
+  </svg>
+  <div class="hero-caption">从一个简单的问题开始：我们不观察这个世界的时候，它到底存不存在？</div>
 </div>
-<div class="tab-panel active" id="panel0">
-  <div class="section-title">核心目标</div>
-  <div class="overview-block"><p>理解宇宙运行的基本法则——从量子涨落到星系团，从元素起源到时空弯曲，构建一套以物理学为骨架的宇宙认知框架。</p></div>
-  <div class="section-title">核心概念</div>
-  <div class="overview-block"><ol class="concept-list"><li><strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。...</li>
-<li><strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。...</li>
-<li><strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。...</li>
-<li><strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。...</li>
-<li><strong>对称性破缺</strong> — 物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。...</li>
-<li><strong>熵作为信息</strong> — 熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。...</li>
-<li><strong>核合成阶梯</strong> — 宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。...</li>
-<li><strong>观测驱动实在</strong> — 物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。...</li>
-<li><strong>真空涨落</strong> — 真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。...</li>
-<li><strong>宇宙标度律</strong> — 宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。...</li></ol></div>
-  <div class="section-title">最小知识集（骨架中的骨架）</div>
-  <div class="overview-block"><ul class="skeleton-list"><li><span class="star">★</span> <strong>不确定性原理</strong> — 共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。</li>
-<li><span class="star">★</span> <strong>波粒二象性</strong> — 微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。</li>
-<li><span class="star">★</span> <strong>时空弯曲</strong> — 广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。</li>
-<li><span class="star">★</span> <strong>黑洞热力学</strong> — 黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。</li></ul></div>
-  <div class="section-title">概念关系图</div>
-  <div class="overview-block"><div class="svg-wrap" id="svgContainer"><svg width="966pt" height="407pt"
- viewBox="0.00 0.00 966.00 407.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 403)">
-<title>G</title>
-<polygon fill="#fdf6ec" stroke="transparent" points="-4,4 -4,-403 962,-403 962,4 -4,4"/>
-<g id="clust1" class="cluster">
-<title>cluster_legend</title>
-<path fill="#fffaf2" stroke="black" stroke-dasharray="5,2" d="M820,-74C820,-74 938,-74 938,-74 944,-74 950,-80 950,-86 950,-86 950,-379 950,-379 950,-385 944,-391 938,-391 938,-391 820,-391 820,-391 814,-391 808,-385 808,-379 808,-379 808,-86 808,-86 808,-80 814,-74 820,-74"/>
-<text text-anchor="middle" x="879" y="-379" font-family="Noto Sans SC" font-size="10.00">图例</text>
-</g>
-<!-- root -->
-<g id="node1" class="node">
-<title>root</title>
-<polygon fill="#c0392b" stroke="black" points="597.5,-364 352.5,-364 352.5,-328 597.5,-328 597.5,-364"/>
-<text text-anchor="middle" x="475" y="-342.3" font-family="Noto Sans SC" font-size="14.00" fill="white">宇宙的秩序——物理定律的层级结构</text>
-</g>
-<!-- qm -->
-<g id="node2" class="node">
-<title>qm</title>
-<polygon fill="#d4914a" stroke="black" points="264.5,-282 171.5,-282 171.5,-246 264.5,-246 264.5,-282"/>
-<text text-anchor="middle" x="218" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">量子力学(微观)</text>
-</g>
-<!-- root&#45;&gt;qm -->
-<g id="edge1" class="edge">
-<title>root&#45;&gt;qm</title>
-<path fill="none" stroke="black" d="M420.18,-327.94C377.24,-314.57 317.71,-296.04 274.37,-282.55"/>
-<polygon fill="black" stroke="black" points="275.14,-279.12 264.56,-279.49 273.06,-285.81 275.14,-279.12"/>
-<text text-anchor="middle" x="371.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- gr -->
-<g id="node3" class="node">
-<title>gr</title>
-<polygon fill="#d4914a" stroke="black" points="527,-282 423,-282 423,-246 527,-246 527,-282"/>
-<text text-anchor="middle" x="475" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">广义相对论(宇观)</text>
-</g>
-<!-- root&#45;&gt;gr -->
-<g id="edge2" class="edge">
-<title>root&#45;&gt;gr</title>
-<path fill="none" stroke="black" d="M475,-327.64C475,-317.3 475,-303.94 475,-292.22"/>
-<polygon fill="black" stroke="black" points="478.5,-292.05 475,-282.05 471.5,-292.05 478.5,-292.05"/>
-<text text-anchor="middle" x="484.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- th -->
-<g id="node4" class="node">
-<title>th</title>
-<polygon fill="#d4914a" stroke="black" points="640,-282 558,-282 558,-246 640,-246 640,-282"/>
-<text text-anchor="middle" x="599" y="-261.2" font-family="Noto Sans SC" font-size="11.00" fill="white">热力学(宏观)</text>
-</g>
-<!-- root&#45;&gt;th -->
-<g id="edge3" class="edge">
-<title>root&#45;&gt;th</title>
-<path fill="none" stroke="black" d="M501.6,-327.84C519.83,-316.08 544.19,-300.36 563.99,-287.59"/>
-<polygon fill="black" stroke="black" points="565.94,-290.5 572.44,-282.13 562.14,-284.61 565.94,-290.5"/>
-<text text-anchor="middle" x="554.5" y="-302.8" font-family="Noto Sans SC" font-size="9.00">描述</text>
-</g>
-<!-- u -->
-<g id="node5" class="node">
-<title>u</title>
-<polygon fill="#5b8db8" stroke="black" points="84,-200 0,-200 0,-164 84,-164 84,-200"/>
-<text text-anchor="middle" x="42" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">不确定性原理</text>
-</g>
-<!-- qm&#45;&gt;u -->
-<g id="edge4" class="edge">
-<title>qm&#45;&gt;u</title>
-<path fill="none" stroke="black" d="M171.26,-259.74C141.61,-255.79 103.58,-247.1 75,-228 67.75,-223.16 61.52,-216.16 56.49,-209.11"/>
-<polygon fill="black" stroke="black" points="59.16,-206.8 50.77,-200.33 53.29,-210.62 59.16,-206.8"/>
-<text text-anchor="middle" x="93.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心原理</text>
-</g>
-<!-- w -->
-<g id="node6" class="node">
-<title>w</title>
-<polygon fill="#5b8db8" stroke="black" points="254.5,-200 181.5,-200 181.5,-164 254.5,-164 254.5,-200"/>
-<text text-anchor="middle" x="218" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">波粒二象性</text>
-</g>
-<!-- qm&#45;&gt;w -->
-<g id="edge5" class="edge">
-<title>qm&#45;&gt;w</title>
-<path fill="none" stroke="black" d="M218,-245.64C218,-235.3 218,-221.94 218,-210.22"/>
-<polygon fill="black" stroke="black" points="221.5,-210.05 218,-200.05 214.5,-210.05 221.5,-210.05"/>
-<text text-anchor="middle" x="236.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">基本现象</text>
-</g>
-<!-- v -->
-<g id="node7" class="node">
-<title>v</title>
-<polygon fill="#5b8db8" stroke="black" points="149,-118 87,-118 87,-82 149,-82 149,-118"/>
-<text text-anchor="middle" x="118" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">真空涨落</text>
-</g>
-<!-- qm&#45;&gt;v -->
-<g id="edge6" class="edge">
-<title>qm&#45;&gt;v</title>
-<path fill="none" stroke="black" d="M184.68,-245.83C167.12,-235.05 146.83,-219.48 135,-200 121.82,-178.3 118.13,-149.25 117.4,-128.24"/>
-<polygon fill="black" stroke="black" points="120.9,-128.01 117.26,-118.07 113.9,-128.11 120.9,-128.01"/>
-<text text-anchor="middle" x="153.5" y="-179.8" font-family="Noto Sans SC" font-size="9.00">场论推论</text>
-</g>
-<!-- sy -->
-<g id="node8" class="node">
-<title>sy</title>
-<polygon fill="#5b8db8" stroke="black" points="345.5,-200 272.5,-200 272.5,-164 345.5,-164 345.5,-200"/>
-<text text-anchor="middle" x="309" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">对称性破缺</text>
-</g>
-<!-- qm&#45;&gt;sy -->
-<g id="edge7" class="edge">
-<title>qm&#45;&gt;sy</title>
-<path fill="none" stroke="black" d="M238.53,-245.66C245.1,-240.06 252.38,-233.8 259,-228 266.61,-221.33 274.8,-214.02 282.3,-207.26"/>
-<polygon fill="black" stroke="black" points="285.03,-209.51 290.11,-200.21 280.34,-204.32 285.03,-209.51"/>
-<text text-anchor="middle" x="280.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">弱力</text>
-</g>
-<!-- st -->
-<g id="node9" class="node">
-<title>st</title>
-<polygon fill="#5b8db8" stroke="black" points="506,-200 444,-200 444,-164 506,-164 506,-200"/>
-<text text-anchor="middle" x="475" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">时空弯曲</text>
-</g>
-<!-- gr&#45;&gt;st -->
-<g id="edge8" class="edge">
-<title>gr&#45;&gt;st</title>
-<path fill="none" stroke="black" d="M475,-245.64C475,-235.3 475,-221.94 475,-210.22"/>
-<polygon fill="black" stroke="black" points="478.5,-210.05 475,-200.05 471.5,-210.05 478.5,-210.05"/>
-<text text-anchor="middle" x="493.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">几何本质</text>
-</g>
-<!-- bh -->
-<g id="node10" class="node">
-<title>bh</title>
-<polygon fill="#5b8db8" stroke="black" points="597.5,-200 524.5,-200 524.5,-164 597.5,-164 597.5,-200"/>
-<text text-anchor="middle" x="561" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">黑洞热力学</text>
-</g>
-<!-- gr&#45;&gt;bh -->
-<g id="edge9" class="edge">
-<title>gr&#45;&gt;bh</title>
-<path fill="none" stroke="black" d="M495.71,-245.86C502.3,-240.28 509.54,-233.97 516,-228 522.88,-221.64 530.14,-214.56 536.78,-207.92"/>
-<polygon fill="black" stroke="black" points="539.66,-209.98 544.22,-200.42 534.69,-205.06 539.66,-209.98"/>
-<text text-anchor="middle" x="541" y="-220.8" font-family="Noto Sans SC" font-size="9.00">极端解</text>
-</g>
-<!-- co -->
-<g id="node11" class="node">
-<title>co</title>
-<polygon fill="#5b8db8" stroke="black" points="426,-200 364,-200 364,-164 426,-164 426,-200"/>
-<text text-anchor="middle" x="395" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">宇宙膨胀</text>
-</g>
-<!-- gr&#45;&gt;co -->
-<g id="edge10" class="edge">
-<title>gr&#45;&gt;co</title>
-<path fill="none" stroke="black" d="M446.82,-246C439.28,-240.75 431.44,-234.59 425,-228 419.49,-222.37 414.38,-215.6 409.98,-209.04"/>
-<polygon fill="black" stroke="black" points="412.78,-206.92 404.47,-200.35 406.87,-210.67 412.78,-206.92"/>
-<text text-anchor="middle" x="448" y="-220.8" font-family="Noto Sans SC" font-size="9.00">宇宙学推论</text>
-</g>
-<!-- en -->
-<g id="node12" class="node">
-<title>en</title>
-<polygon fill="#5b8db8" stroke="black" points="698.5,-200 625.5,-200 625.5,-164 698.5,-164 698.5,-200"/>
-<text text-anchor="middle" x="662" y="-179.2" font-family="Noto Sans SC" font-size="11.00" fill="white">熵作为信息</text>
-</g>
-<!-- th&#45;&gt;en -->
-<g id="edge11" class="edge">
-<title>th&#45;&gt;en</title>
-<path fill="none" stroke="black" d="M612.67,-245.64C621.31,-234.66 632.63,-220.29 642.24,-208.09"/>
-<polygon fill="black" stroke="black" points="645.14,-210.07 648.57,-200.05 639.64,-205.74 645.14,-210.07"/>
-<text text-anchor="middle" x="653.5" y="-220.8" font-family="Noto Sans SC" font-size="9.00">核心概念</text>
-</g>
-<!-- u&#45;&gt;v -->
-<g id="edge14" class="edge">
-<title>u&#45;&gt;v</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M34.56,-163.95C31.85,-154.97 30.61,-144.16 36,-136 45.24,-122.01 61.33,-113.6 76.83,-108.54"/>
-<polygon fill="black" stroke="black" points="78.19,-111.79 86.85,-105.68 76.27,-105.06 78.19,-111.79"/>
-<text text-anchor="middle" x="74" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量&#45;时间不确定性</text>
-</g>
-<!-- ob -->
-<g id="node19" class="node">
-<title>ob</title>
-<ellipse fill="#b8955a" stroke="black" cx="218" cy="-100" rx="50.52" ry="18"/>
-<text text-anchor="middle" x="218" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">观测驱动实在</text>
-</g>
-<!-- w&#45;&gt;ob -->
-<g id="edge20" class="edge">
-<title>w&#45;&gt;ob</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M218,-163.64C218,-153.3 218,-139.94 218,-128.22"/>
-<polygon fill="black" stroke="black" points="221.5,-128.05 218,-118.05 214.5,-128.05 221.5,-128.05"/>
-<text text-anchor="middle" x="241" y="-138.8" font-family="Noto Sans SC" font-size="9.00">挑战实在观</text>
-</g>
-<!-- hr -->
-<g id="node14" class="node">
-<title>hr</title>
-<polygon fill="#5a9e6f" stroke="black" points="405,-36 349,-36 349,0 411,0 411,-30 405,-36"/>
-<polyline fill="none" stroke="black" points="405,-36 405,-30 "/>
-<polyline fill="none" stroke="black" points="411,-30 405,-30 "/>
-<text text-anchor="middle" x="380" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">霍金辐射</text>
-</g>
-<!-- v&#45;&gt;hr -->
-<g id="edge12" class="edge">
-<title>v&#45;&gt;hr</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M142.74,-81.87C147.65,-78.95 152.87,-76.17 158,-74 218.38,-48.42 293.24,-32.96 338.77,-25.2"/>
-<polygon fill="black" stroke="black" points="339.56,-28.62 348.86,-23.53 338.42,-21.71 339.56,-28.62"/>
-<text text-anchor="middle" x="234" y="-56.8" font-family="Noto Sans SC" font-size="9.00">视界面产生</text>
-</g>
-<!-- sm -->
-<g id="node16" class="node">
-<title>sm</title>
-<polygon fill="#5a9e6f" stroke="black" points="343,-118 287,-118 287,-82 349,-82 349,-112 343,-118"/>
-<polyline fill="none" stroke="black" points="343,-118 343,-112 "/>
-<polyline fill="none" stroke="black" points="349,-112 343,-112 "/>
-<text text-anchor="middle" x="318" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">标准模型</text>
-</g>
-<!-- sy&#45;&gt;sm -->
-<g id="edge16" class="edge">
-<title>sy&#45;&gt;sm</title>
-<path fill="none" stroke="black" d="M310.95,-163.64C312.12,-153.3 313.62,-139.94 314.94,-128.22"/>
-<polygon fill="black" stroke="black" points="318.44,-128.38 316.08,-118.05 311.49,-127.6 318.44,-128.38"/>
-<text text-anchor="middle" x="324.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">启发</text>
-</g>
-<!-- gp -->
-<g id="node15" class="node">
-<title>gp</title>
-<polygon fill="#5a9e6f" stroke="black" points="444.5,-118 367.5,-118 367.5,-82 450.5,-82 450.5,-112 444.5,-118"/>
-<polyline fill="none" stroke="black" points="444.5,-118 444.5,-112 "/>
-<polyline fill="none" stroke="black" points="450.5,-112 444.5,-112 "/>
-<text text-anchor="middle" x="409" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">GPS时间修正</text>
-</g>
-<!-- st&#45;&gt;gp -->
-<g id="edge15" class="edge">
-<title>st&#45;&gt;gp</title>
-<path fill="none" stroke="black" d="M453.65,-163.9C447.58,-158.52 441.21,-152.32 436,-146 431.25,-140.24 426.77,-133.55 422.88,-127.13"/>
-<polygon fill="black" stroke="black" points="425.66,-124.95 417.63,-118.03 419.6,-128.45 425.66,-124.95"/>
-<text text-anchor="middle" x="454.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">工程应用</text>
-</g>
-<!-- bh&#45;&gt;hr -->
-<g id="edge13" class="edge">
-<title>bh&#45;&gt;hr</title>
-<path fill="none" stroke="black" d="M544.72,-163.91C516.07,-133.82 459.58,-74.5 459,-74 445.55,-62.47 429.7,-51.06 415.73,-41.64"/>
-<polygon fill="black" stroke="black" points="417.59,-38.67 407.32,-36.06 413.71,-44.51 417.59,-38.67"/>
-<text text-anchor="middle" x="519.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">理论预言</text>
-</g>
-<!-- nu -->
-<g id="node13" class="node">
-<title>nu</title>
-<polygon fill="#5b8db8" stroke="black" points="799.5,-118 726.5,-118 726.5,-82 799.5,-82 799.5,-118"/>
-<text text-anchor="middle" x="763" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">核合成阶梯</text>
-</g>
-<!-- en&#45;&gt;nu -->
-<g id="edge18" class="edge">
-<title>en&#45;&gt;nu</title>
-<path fill="none" stroke="black" d="M683.92,-163.64C698.44,-152.14 717.67,-136.9 733.53,-124.34"/>
-<polygon fill="black" stroke="black" points="735.81,-127 741.47,-118.05 731.46,-121.52 735.81,-127"/>
-<text text-anchor="middle" x="737.5" y="-138.8" font-family="Noto Sans SC" font-size="9.00">能量流动</text>
-</g>
-<!-- it -->
-<g id="node17" class="node">
-<title>it</title>
-<polygon fill="#5a9e6f" stroke="black" points="702.5,-118 615.5,-118 615.5,-82 708.5,-82 708.5,-112 702.5,-118"/>
-<polyline fill="none" stroke="black" points="702.5,-118 702.5,-112 "/>
-<polyline fill="none" stroke="black" points="708.5,-112 702.5,-112 "/>
-<text text-anchor="middle" x="662" y="-97.2" font-family="Noto Sans SC" font-size="11.00" fill="white">信息论(香农熵)</text>
-</g>
-<!-- en&#45;&gt;it -->
-<g id="edge17" class="edge">
-<title>en&#45;&gt;it</title>
-<path fill="none" stroke="black" d="M662,-163.64C662,-153.3 662,-139.94 662,-128.22"/>
-<polygon fill="black" stroke="black" points="665.5,-128.05 662,-118.05 658.5,-128.05 665.5,-128.05"/>
-<text text-anchor="middle" x="676" y="-138.8" font-family="Noto Sans SC" font-size="9.00">推广至</text>
-</g>
-<!-- se -->
-<g id="node18" class="node">
-<title>se</title>
-<polygon fill="#5a9e6f" stroke="black" points="793.5,-36 726.5,-36 726.5,0 799.5,0 799.5,-30 793.5,-36"/>
-<polyline fill="none" stroke="black" points="793.5,-36 793.5,-30 "/>
-<polyline fill="none" stroke="black" points="799.5,-30 793.5,-30 "/>
-<text text-anchor="middle" x="763" y="-15.2" font-family="Noto Sans SC" font-size="11.00" fill="white">恒星演化论</text>
-</g>
-<!-- nu&#45;&gt;se -->
-<g id="edge19" class="edge">
-<title>nu&#45;&gt;se</title>
-<path fill="none" stroke="black" d="M763,-81.64C763,-71.3 763,-57.94 763,-46.22"/>
-<polygon fill="black" stroke="black" points="766.5,-46.05 763,-36.05 759.5,-46.05 766.5,-46.05"/>
-<text text-anchor="middle" x="772.5" y="-56.8" font-family="Noto Sans SC" font-size="9.00">驱动</text>
-</g>
-<!-- hr&#45;&gt;bh -->
-<g id="edge21" class="edge">
-<title>hr&#45;&gt;bh</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.28,-22.29C457.34,-27.42 508.41,-40.52 538,-74 557.31,-95.85 561.74,-129.97 562.18,-153.78"/>
-<polygon fill="black" stroke="black" points="421.44,-18.78 411.08,-21 420.56,-25.73 421.44,-18.78"/>
-<polygon fill="black" stroke="black" points="558.68,-153.91 562.14,-163.92 565.68,-153.93 558.68,-153.91"/>
-<text text-anchor="middle" x="577.5" y="-97.8" font-family="Noto Sans SC" font-size="9.00">反馈修正</text>
-</g>
-<!-- l1 -->
-<g id="node20" class="node">
-<title>l1</title>
-<polygon fill="#c0392b" stroke="black" points="942,-364 888,-364 888,-328 942,-328 942,-364"/>
-<text text-anchor="middle" x="915" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">根节点</text>
-</g>
-<!-- l2 -->
-<g id="node21" class="node">
-<title>l2</title>
-<polygon fill="#d4914a" stroke="black" points="942,-282 888,-282 888,-246 942,-246 942,-282"/>
-<text text-anchor="middle" x="915" y="-261.8" font-family="Noto Sans SC" font-size="9.00" fill="white">一级分类</text>
-</g>
-<!-- l1&#45;&gt;l2 -->
-<!-- l3 -->
-<g id="node22" class="node">
-<title>l3</title>
-<polygon fill="#5b8db8" stroke="black" points="942,-200 888,-200 888,-164 942,-164 942,-200"/>
-<text text-anchor="middle" x="915" y="-179.8" font-family="Noto Sans SC" font-size="9.00" fill="white">具体概念</text>
-</g>
-<!-- l2&#45;&gt;l3 -->
-<!-- l4 -->
-<g id="node23" class="node">
-<title>l4</title>
-<polygon fill="#5a9e6f" stroke="black" points="936,-118 888,-118 888,-82 942,-82 942,-112 936,-118"/>
-<polyline fill="none" stroke="black" points="936,-118 936,-112 "/>
-<polyline fill="none" stroke="black" points="942,-112 936,-112 "/>
-<text text-anchor="middle" x="915" y="-97.8" font-family="Noto Sans SC" font-size="9.00" fill="white">应用产物</text>
-</g>
-<!-- l3&#45;&gt;l4 -->
-<!-- l5 -->
-<g id="node24" class="node">
-<title>l5</title>
-<ellipse fill="#b8955a" stroke="black" cx="843" cy="-346" rx="27" ry="18"/>
-<text text-anchor="middle" x="843" y="-343.8" font-family="Noto Sans SC" font-size="9.00" fill="white">元层次</text>
-</g>
-</g>
-</svg></div><p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:8px">▲ 红(根节点) → 橙(一级分类) → 蓝(具体概念) → 绿(元概念)；虚线=交叉连接/回环</p></div>
-  <div class="section-title">边界知识表</div>
-  <div class="overview-block" style="overflow-x:auto;"><table class="boundary-table"><tr><th>知识点</th><th>使用场景</th></tr><tr><td>不确定性原理</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>波粒二象性</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>时空弯曲</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>黑洞热力学</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>对称性破缺</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>熵作为信息</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>核合成阶梯</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>观测驱动实在</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>真空涨落</td><td>当你深入学习相关专业内容时</td></tr>
-<tr><td>宇宙标度律</td><td>当你深入学习相关专业内容时</td></tr></table></div>
-  <div class="section-title">学习路径</div>
-  <div class="overview-block"><div class="path-step"><div class="path-num">1</div><div class="path-content"><h4>基础概念入门</h4><p>从不确定性原理和波粒二象性入手</p></div></div>
-<div class="path-step"><div class="path-num">2</div><div class="path-content"><h4>方法与工具</h4><p>学习时空弯曲和黑洞热力学</p></div></div>
-<div class="path-step"><div class="path-num">3</div><div class="path-content"><h4>交叉联系</h4><p>将不同概念串联起来</p></div></div>
-<div class="path-step"><div class="path-num">4</div><div class="path-content"><h4>应用实践</h4><p>通过案例分析和实战决策转化为思维工具</p></div></div>
-<div class="path-step"><div class="path-num">5</div><div class="path-content"><h4>元认知反思</h4><p>跳出具体概念，思考这些工具如何改变你的认知方式</p></div></div></div>
-  <div class="section-title">学习进度</div>
-  <div class="overview-block"><div class="progress-bar"><div class="progress-fill" id="overviewProgress" style="width:0%"></div></div><p style="text-align:center;font-size:.85rem;color:var(--text-light)">跨模块学习进度：<strong><span id="overviewPercent">0</span>%</strong></p></div>
+
+<!-- ========== TAB BAR ========== -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="tab0">🌅 起点：不确定</button>
+  <button class="tab-btn" data-tab="tab1">🌟 核心概念</button>
+  <button class="tab-btn" data-tab="tab2">🗺️ 概念星图</button>
+  <button class="tab-btn" data-tab="tab3">🔬 深度探究</button>
+  <button class="tab-btn" data-tab="tab4">👤 科学家群像</button>
+  <button class="tab-btn" data-tab="tab5">🧭 思维导图</button>
+  <button class="tab-btn" data-tab="tab6">⚠️ 知识边界</button>
+  <button class="tab-btn" data-tab="tab7">📝 题库系统</button>
+  <button class="tab-btn" data-tab="tab8">🎯 学以致用</button>
 </div>
-<div class="tab-panel" id="panel1">
-  <div class="section-title">知识卡片</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">点击卡片翻转查看详情 | 正面=概念名 | 反面=定义+类比+示例+反例</p>
-  <div class="flip-card"><div class="flip-inner" id="flipInner"><div class="flip-front" id="flipFront"></div><div class="flip-back" id="flipBack"></div></div></div>
+
+<!-- ========== TAB 0: 起点：不确定 ========== -->
+<div class="tab-panel active" id="tab0">
+  <div class="narrative-block">
+    <div class="lead">每个人的世界观，都从"世界是什么样"开始</div>
+    <p>
+      卓老板聊科技的听众张亚林说得好——上学时老师教我们要树立三观，但三观之间的关系老师没说。
+      他想明白了：<strong>世界观决定价值观，价值观影响选择，选择构成人生。</strong>
+      而物理学，是认识世界最靠谱的路径之一。
+    </p>
+    <p>
+      这个专题的45篇文章，就是一趟旅程。起点是<strong>量子力学的不确定性</strong>——在最小的尺度上，世界不是钟表，而是一片概率云。
+      从这片不确定的深渊出发，我们一路发现：引力编织时空、黑洞吞噬光线、元素在恒星的心脏里锻造、宇宙在138亿年前从奇点诞生。
+    </p>
+    <p style="color:var(--accent);font-weight:600;">在最深的混乱里，物理学家找到了最深的秩序。这就是"宇宙的秩序"。</p>
+  </div>
+
+  <div class="section-title">从文章里，听听卓老板怎么说</div>
+
+  <div class="article-excerpt">
+    <div class="excerpt-title">《我们不观察这个世界的时候，它到底存不存在？》</div>
+    <p>量子力学的思考方式，是在物理定律已经失效的精度下，为了让所有研究者可以用统一的概念一起讨论——把发挥的想象力和不靠谱的发散性思考去除，剩下的创新性思考再经过严格筛选，最后得到的就是那个朴素的，只谈论观测方法本身，不再做过多延伸、过度解读的思想。</p>
+  </div>
+
+  <div class="article-excerpt">
+    <div class="excerpt-title">《史上最牛科学家合影，以及物理学中的不确定性》</div>
+    <p>1927年索尔维会议，29人参会，17人获诺贝尔奖。不确定性原理不是技术门槛——它是理论限制，人类无法突破。速度和位置是一对共轭物理量，测量误差的乘积永远大于等于狄拉克常数。</p>
+  </div>
+
+  <div class="article-excerpt">
+    <div class="excerpt-title">《真实的引力波，和我们印象中的完全不一样》</div>
+    <p>"牛顿发现了万有引力"这句话默认引力是客观存在的。而在广义相对论中，引力产生的效果可以用时空扭曲来解释——应该说牛顿<strong>发明</strong>了一种解释世界的新定律。</p>
+  </div>
+
+  <div class="article-excerpt">
+    <div class="excerpt-title">《宇宙大爆炸的来龙去脉》</div>
+    <p>量子力学由很多人长时间努力形成——每一步进展都有丰富可靠的实验证据。相对论基本就是爱因斯坦一人发展出来的，实验证据不丰富，精度难以做到很高。</p>
+  </div>
+
+  <div class="article-excerpt">
+    <div class="excerpt-title">《熵增加与复杂度》</div>
+    <p>封闭系统内的熵不会减少——热力学第二定律是物理学中唯一有时间箭头的定律。所有的其他物理定律在时间上都是可逆的。熵 = k·ln(状态数)，其中k是玻尔兹曼常数。</p>
+  </div>
+
+  <div class="article-excerpt">
+    <div class="excerpt-title">《构成世界的元素从何而来？》</div>
+    <p>1937年以前，科学界认为所有元素从宇宙诞生时就存在。B²FH理论告诉我们：<strong>元素都是在恒星内部试炼出来的</strong>。宇宙大爆炸提供了氢和氘，恒星核聚变制造了更重的元素。你我身体里的碳、氧、铁——都曾在一颗恒星的烈焰中锻造。</p>
+  </div>
+</div>
+
+<!-- ========== TAB 1: 核心概念 ========== -->
+<div class="tab-panel" id="tab1">
+  <div class="section-title">十个核心概念 — 沿着宇宙的阶梯向上攀登</div>
+
+  <div class="narrative-block">
+    <p>从量子泡沫到星系长城，物理学家们在地球的这个角落，用数学和实验一层层揭开了宇宙的面纱。以下十个概念，是你理解"宇宙秩序"的最小骨架。它们不是孤立的定义——它们是一连串的"为什么"和"然后呢"。</p>
+  </div>
+
+  <!-- Concept timeline — waypoint style, not cards -->
+  <div class="cosmic-timeline">
+
+    <div class="timeline-node">
+      <h3>① 不确定性原理</h3>
+      <div class="node-desc">共轭物理量（如位置与动量）的测量误差乘积有理论下限——等于约化的普朗克常数除以2。这不是测量仪器的限制，而是自然的底层代码。它意味着：<strong>在量子世界里，"精确知道一切"在原则上不可能</strong>。</div>
+      <div class="node-article">📻 《史上最牛科学家合影，以及物理学中的不确定性》《我们不观察这个世界的时候，它到底存不存在？》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>② 量子叠加态</h3>
+      <div class="node-desc">在未被观测时，粒子可以同时处于多个状态的叠加。双缝实验中，单个电子也能产生干涉条纹——它同时走过了两条缝。但一旦观测，叠加态就坍缩成确定的状态。薛定谔的猫就是对这一荒谬性的思想实验。<strong>观测行为本身改变了被观测的对象。</strong></div>
+      <div class="node-article">📻 《大科学家薛定谔是情圣？》《我们不观察这个世界的时候，它到底存不存在？》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>③ 广义相对论</h3>
+      <div class="node-desc">爱因斯坦在1915年提出：引力不是"力"，是质量弯曲了时空。行星不是被太阳"拉"着转，而是沿着弯曲时空的测地线运动。引力波是时空弯曲以光速向外传播的涟漪——LIGO在2015年首次直接探测到。</div>
+      <div class="node-article">📻 《真实的引力波，和我们印象中的完全不一样》《了解黑洞必备的几个知识点》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>④ 黑洞</h3>
+      <div class="node-desc">时空曲率大到连光都无法逃逸的天体。按质量分为恒星级、中等质量、超大质量和微型黑洞。史瓦西黑洞是最简单的球对称模型，克尔黑洞是旋转的。霍金证明黑洞有温度、会蒸发——在事件视界边缘，量子效应让黑洞缓慢"泄露"能量。</div>
+      <div class="node-article">📻 《4种黑洞与年轻的霍金》《了解黑洞必备的几个知识点》《时间的终点与霍金的黑洞》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>⑤ 奇点定理</h3>
+      <div class="node-desc">霍金与彭罗斯在1970年代证明：在一个因果律成立的时空中，只要存在质量或光，就至少存在一个奇点——它是时间的起始点。在奇点处，广义相对论的方程失效，时空曲率无限大。大爆炸奇点是时间的开端，黑洞奇点是时间的终点。</div>
+      <div class="node-article">📻 《时间的终点与霍金的黑洞》《宇宙大爆炸的来龙去脉》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>⑥ 熵增原理</h3>
+      <div class="node-desc">热力学第二定律：孤立系统的熵永不减少。用状态数描述：熵 = k × ln(可能状态数)。为什么它是唯一有时间箭头的物理定律？因为时间的方向就是状态数增加的方向。屋子不会自己变整洁——不是因为"有人规定"，而是因为"整洁"的状态数远少于"混乱"的状态数。</div>
+      <div class="node-article">📻 《熵增加与复杂度》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>⑦ 恒星核合成</h3>
+      <div class="node-desc">除了氢、氦和少量锂诞生于大爆炸，宇宙中所有比锂重的元素都是在恒星内部通过核聚变制造出来的。质量越大的恒星，能合成的元素越重——直到铁。比铁更重的元素（金、铂、铀）需要超新星爆发或中子星碰撞这种极端事件才能产生。<strong>你戒指上的金，来自两颗中子星的碰撞。</strong></div>
+      <div class="node-article">📻 《构成世界的元素从何而来？》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>⑧ 拓扑相变</h3>
+      <div class="node-desc">2016年诺贝尔物理学奖。传统相变（冰→水→汽）由对称性破缺描述，但拓扑相变完全不同——它描述的是物质整体形态的改变，类似于"揉一揉压一压无法将一个球变成甜甜圈"。在极低温二维材料中，拓扑序决定了电子的集体行为，可能成为未来量子计算机的基础。</div>
+      <div class="node-article">📻 《解读2016年诺贝尔物理学奖"拓扑相变"》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>⑨ 路径积分</h3>
+      <div class="node-desc">费曼的量子力学表述：粒子从A到B，不是走"一条"路径，而是同时走<strong>所有可能的路径</strong>。每条路径对应一个概率振幅（箭头），把所有箭头的贡献加起来，就得到最终概率。这个表述自然地解释了：光为什么走直线？因为越接近直线的路径，箭头的贡献越"对齐"——相互增强而非抵消。</div>
+      <div class="node-article">📻 《费曼和杨振宁讲的物理课》</div>
+    </div>
+
+    <div class="timeline-node">
+      <h3>⑩ 引力波</h3>
+      <div class="node-desc">当大质量天体加速运动时，时空的弯曲会以波的形式向外传播——这就是引力波。2015年LIGO探测到的引力波来自13亿光年外两个黑洞的合并，在最后0.2秒内释放的能量超过全宇宙所有恒星发光的总和。引力波的发现打开了观测宇宙的全新窗口——"听到"了光看不到的宇宙。</div>
+      <div class="node-article">📻 《真实的引力波，和我们印象中的完全不一样》《起死回生的哈勃望远镜》</div>
+    </div>
+  </div>
+
+  <!-- Flip cards for concept deep-dive -->
+  <div class="section-title">翻转卡片 — 深入理解每个概念</div>
+  <div class="flip-card">
+    <div class="flip-inner" id="flipInner1" onclick="this.classList.toggle('flipped')">
+      <div class="flip-front"><span style="font-size:3rem;">🎲</span><h3 style="margin-top:8px;">不确定性原理</h3><p style="color:var(--text-light);font-size:.85rem;">点击翻转了解详情</p></div>
+      <div class="flip-back"><h4>为什么它是宇宙故事的第一章？</h4><p>不确定性原理宣告了决定论的终结。拉普拉斯曾想象：如果知道宇宙每个粒子的位置和速度，就能预知一切未来。海森堡用一道不等式证明：<strong>你连一个粒子的完整信息都无法同时获得。</strong>位置越精确，动量就越模糊——这不是技术问题，是大自然写在底层代码里的限制。世界从一台可完整预知的机器变成了一片概率云。</p></div>
+    </div>
+  </div>
   <div class="flip-nav">
-    <button class="btn btn-outline btn-sm" onclick="prevCard()">← 上一张</button>
-    <span style="font-size:.85rem;color:var(--text-light)" id="cardIndex">1 / 10</span>
-    <button class="btn btn-outline btn-sm" onclick="nextCard()">下一张 →</button>
+    <button class="btn btn-outline" onclick="prevConcept()">◀ 上一个</button>
+    <span id="conceptCounter" style="font-size:.85rem;color:var(--text-light);">1 / 10</span>
+    <button class="btn btn-outline" onclick="nextConcept()">下一个 ▶</button>
   </div>
-  <div style="text-align:center;margin:8px 0"><button class="btn btn-success btn-sm" onclick="markLearned()" id="markLearnedBtn">✓ 标记已学习</button></div>
-  <div class="progress-bar"><div class="progress-fill" id="cardProgress" style="width:0%"></div></div>
-  <p style="text-align:center;font-size:.78rem;color:var(--text-light)">已学习 <span id="cardLearned">0</span> / 10 个概念</p>
 </div>
-<div class="tab-panel" id="panel2">
-  <div class="section-title">题库系统</div>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startQuiz()" style="margin-right:10px;">🎲 随机抽题练习</button>
-    <button class="btn btn-outline" onclick="resetQuiz()">↺ 重置</button>
+
+<!-- ========== TAB 2: 概念星图 — 叙事SVG关系图 ========== -->
+<div class="tab-panel" id="tab2">
+  <div class="section-title">概念关系星图 — 从量子泡沫到宇宙尺度的叙事</div>
+  <div class="narrative-block">
+    <p>这张图不是教科书图解——它是一个叙事空间。从底部的量子不确定性出发，沿着引力的阶梯向上，穿过恒星的熔炉，抵达黑洞的边缘。每一条连线都是一个"然后呢"。</p>
   </div>
+  <div class="svg-stage">
+    <svg viewBox="0 0 880 640" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bgGrad2" cx="50%" cy="70%" r="60%">
+          <stop offset="0%" stop-color="#fdf6ec"/><stop offset="100%" stop-color="#e8d5b8"/>
+        </radialGradient>
+        <filter id="softShadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#2a1f1a" flood-opacity=".1"/></filter>
+        <marker id="arrowGold" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#c9a55c"/>
+        </marker>
+        <marker id="arrowRed" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#6b1a1a"/>
+        </marker>
+      </defs>
+      <rect width="880" height="640" fill="url(#bgGrad2)" rx="12"/>
+
+      <!-- Background: faint cosmic rings -->
+      <ellipse cx="440" cy="340" rx="380" ry="260" fill="none" stroke="#e0d0b8" stroke-width=".5" stroke-dasharray="8,12" opacity=".4"/>
+      <ellipse cx="440" cy="340" rx="280" ry="190" fill="none" stroke="#e0d0b8" stroke-width=".5" stroke-dasharray="5,15" opacity=".3"/>
+
+      <!-- ===== NODES with narrative positioning ===== -->
+      <!-- Bottom: Quantum layer -->
+      <g filter="url(#softShadow)">
+        <rect x="340" y="540" width="200" height="52" rx="26" fill="#6b1a1a" opacity=".92"/>
+        <text x="440" y="572" fill="#fdf6ec" font-size="14" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">不确定性原理</text>
+        <text x="440" y="610" fill="#5c4a3d" font-size="10" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" opacity=".7">Δx·Δp ≥ ℏ/2</text>
+
+        <rect x="620" y="540" width="180" height="44" rx="22" fill="#8b3a1a" opacity=".85"/>
+        <text x="710" y="567" fill="#fdf6ec" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">量子叠加态</text>
+      </g>
+
+      <!-- Middle: Gravity & Spacetime -->
+      <g filter="url(#softShadow)">
+        <rect x="140" y="380" width="180" height="48" rx="24" fill="#3d1f1a" opacity=".9"/>
+        <text x="230" y="409" fill="#fdf6ec" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">广义相对论</text>
+
+        <rect x="560" y="370" width="180" height="48" rx="24" fill="#5c2a1a" opacity=".88"/>
+        <text x="650" y="399" fill="#fdf6ec" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">引力波</text>
+
+        <rect x="360" y="280" width="160" height="48" rx="24" fill="#2a0f0a" opacity=".92"/>
+        <text x="440" y="309" fill="#e8d5a3" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">黑洞</text>
+        <circle cx="440" cy="295" r="30" fill="none" stroke="#c9a55c" stroke-width=".8" stroke-dasharray="3,3" opacity=".4"/>
+      </g>
+
+      <!-- Top: Cosmic scale -->
+      <g filter="url(#softShadow)">
+        <rect x="60" y="140" width="200" height="50" rx="25" fill="#6b1a1a" opacity=".9"/>
+        <text x="160" y="170" fill="#fef9e7" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">恒星核合成</text>
+
+        <rect x="620" y="130" width="200" height="50" rx="25" fill="#6b1a1a" opacity=".9"/>
+        <text x="720" y="160" fill="#fef9e7" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">奇点定理</text>
+
+        <rect x="340" y="140" width="200" height="50" rx="25" fill="#8b3a1a" opacity=".88"/>
+        <text x="440" y="170" fill="#fef9e7" font-size="13" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">宇宙大爆炸</text>
+      </g>
+
+      <!-- Top level: Tools -->
+      <g filter="url(#softShadow)">
+        <rect x="150" y="40" width="180" height="44" rx="22" fill="#c9a55c" opacity=".85"/>
+        <text x="240" y="67" fill="#2a1f1a" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">拓扑相变</text>
+
+        <rect x="550" y="40" width="180" height="44" rx="22" fill="#d4914a" opacity=".85"/>
+        <text x="640" y="67" fill="#2a1f1a" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">路径积分</text>
+      </g>
+
+      <!-- Right side: Entropy -->
+      <g filter="url(#softShadow)">
+        <rect x="730" y="280" width="120" height="44" rx="22" fill="#3d1f1a" opacity=".85"/>
+        <text x="790" y="307" fill="#fdf6ec" font-size="12" font-family="'Noto Sans SC',sans-serif" text-anchor="middle" dy=".3em">熵增原理</text>
+      </g>
+
+      <!-- ===== CONNECTIONS with labels ===== -->
+      <line x1="540" y1="562" x2="620" y2="562" stroke="#c9a55c" stroke-width="1.2" marker-end="url(#arrowGold)" opacity=".5"/>
+      <text x="580" y="556" fill="#c9a55c" font-size="8" text-anchor="middle" opacity=".5">导出</text>
+
+      <path d="M340,555 Q250,470 230,428" stroke="#6b1a1a" stroke-width="1.5" fill="none" marker-end="url(#arrowRed)" opacity=".6"/>
+      <text x="260" y="490" fill="#6b1a1a" font-size="9" text-anchor="middle" opacity=".5">对立统一</text>
+
+      <path d="M270,390 Q320,340 360,310" stroke="#6b1a1a" stroke-width="1.8" fill="none" marker-end="url(#arrowRed)" opacity=".7"/>
+      <text x="300" y="355" fill="#6b1a1a" font-size="9" text-anchor="middle" opacity=".6">场方程解</text>
+
+      <path d="M320,395 Q500,370 560,395" stroke="#c9a55c" stroke-width="1.2" fill="none" marker-end="url(#arrowGold)" opacity=".5"/>
+      <text x="440" y="380" fill="#c9a55c" font-size="8" text-anchor="middle" opacity=".5">预言</text>
+
+      <path d="M440,280 Q440,220 440,190" stroke="#6b1a1a" stroke-width="1.5" fill="none" marker-end="url(#arrowRed)" opacity=".6"/>
+      <text x="460" y="240" fill="#6b1a1a" font-size="8" opacity=".5">奇点即边界</text>
+
+      <path d="M620,155 Q530,155 540,165" stroke="#c9a55c" stroke-width="1.2" fill="none" marker-end="url(#arrowGold)" opacity=".5"/>
+      <text x="580" y="148" fill="#c9a55c" font-size="8" text-anchor="middle" opacity=".5">时间起点</text>
+
+      <path d="M340,165 Q250,165 260,165" stroke="#d4914a" stroke-width="1.2" fill="none" marker-end="url(#arrowGold)" opacity=".5"/>
+      <text x="300" y="158" fill="#d4914a" font-size="8" text-anchor="middle" opacity=".5">元素诞生</text>
+
+      <path d="M520,295 Q620,295 730,305" stroke="#c9a55c" stroke-width="1" fill="none" marker-end="url(#arrowGold)" opacity=".4"/>
+      <text x="620" y="288" fill="#c9a55c" font-size="8" text-anchor="middle" opacity=".4">黑洞熵</text>
+
+      <path d="M650,370 Q650,300 640,260" stroke="#d4914a" stroke-width=".8" fill="none" marker-end="url(#arrowGold)" opacity=".3" stroke-dasharray="4,3"/>
+      <text x="665" y="320" fill="#d4914a" font-size="8" opacity=".4">数学工具</text>
+
+      <path d="M380,150 Q300,100 240,84" stroke="#c9a55c" stroke-width=".8" fill="none" marker-end="url(#arrowGold)" opacity=".3" stroke-dasharray="4,3"/>
+      <text x="295" y="110" fill="#c9a55c" font-size="8" opacity=".4">早期宇宙相变</text>
+
+      <!-- Title -->
+      <text x="440" y="25" fill="#6b1a1a" font-size="16" font-family="'Noto Serif SC',serif" text-anchor="middle" font-weight="600" letter-spacing="3">从量子泡沫到宇宙长城</text>
+
+      <!-- Legend -->
+      <g transform="translate(30,580)">
+        <line x1="0" y1="0" x2="30" y2="0" stroke="#6b1a1a" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+        <text x="36" y="4" fill="#5c4a3d" font-size="9">因果推导</text>
+        <line x1="130" y1="0" x2="160" y2="0" stroke="#c9a55c" stroke-width="1.5" marker-end="url(#arrowGold)"/>
+        <text x="166" y="4" fill="#5c4a3d" font-size="9">概念关联</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<!-- ========== TAB 3: 深度探究 ========== -->
+<div class="tab-panel" id="tab3">
+  <div class="section-title">深度探究 — 三个核心追问</div>
+
+  <div class="socratic-panel">
+    <div class="q-a">
+      <div class="question">如果宇宙是不确定的，那科学预测还有什么用？</div>
+      <div class="answer">
+        不确定性原理定义的是<strong>单个粒子的精确测量极限</strong>，而不是宏观世界的不可预测。一个篮球的位置不确定度约为10⁻³⁴米——比你测量尺的精度小几十个数量级。量子不确定性只在亚原子尺度显著。
+        <br><br>
+        更重要的是，量子力学虽然放弃了确定性，却给出了更精确的概率预测。薛定谔方程可以以惊人精度预言电子的行为——只是这种预言是关于概率的，而不是关于确定轨迹的。科学预测从"它一定在X点"变成了"它在X点的概率是87.3%"——<strong>放弃确定性换来了更深的精确性</strong>。
+      </div>
+    </div>
+    <div class="q-a">
+      <div class="question">黑洞内部是什么？物理学能回答吗？</div>
+      <div class="answer">
+        霍金和彭罗斯的奇点定理告诉我们：在黑洞内部，时空曲率趋于无穷大——广义相对论的方程在这里失效。要描述奇点，需要将<strong>广义相对论和量子力学统一</strong>的量子引力理论，而这恰恰是当今物理学最大的未解难题。
+        <br><br>
+        从外部看，黑洞可以用三个参数完全描述：质量、角动量、电荷（"黑洞无毛定理"）。从内部看——我们不知道。信息落入黑洞后是否永久消失？霍金最初认为"是"，后来自我修正为"否"，引发了一场持续数十年的"黑洞信息悖论"。<strong>这个问题的答案，可能通往下一场物理学革命。</strong>
+      </div>
+    </div>
+    <div class="q-a">
+      <div class="question">"牛顿发现了万有引力"这句话有什么问题？</div>
+      <div class="answer">
+        这句话默认万有引力是客观存在的——只是从前我们没有发现它。但卓克指出，在广义相对论中，引力根本不是"力"，而是时空弯曲的表现。<strong>应该说牛顿"发明"了万有引力定律</strong>——他创造了一个数学模型，在低速弱场条件下精确描述了行星运动。但模型不等于实在。
+        <br><br>
+        科学史上反复出现这个模式：托勒密的本轮模型也能预测行星位置（用了几百年），但我们不会说托勒密"发现"了本轮——他只是发明了一个有效的近似模型。牛顿的万有引力定律也是如此——在它适用的范围内极其精确，但它不是自然的终极语言。
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">案例分析：黑洞照片背后的物理</div>
+  <div class="case-compare">
+    <div class="case-card">
+      <h4>🌍 事件视界望远镜 (EHT)</h4>
+      <p>2019年4月，人类第一次"看到"了黑洞——M87星系中心黑洞的影子。这不是传统意义上的照片：<strong>EHT是一个地球大小的虚拟望远镜</strong>，通过甚长基线干涉技术(VLBI)将全球8个射电望远镜的数据合成。观测波长1.3毫米，分辨率足以看清月球上的一个橙子。照片中的橙色光环是黑洞周围被加热到数十亿度的等离子体发出的辐射，中心的黑暗区域是黑洞的"影子"——光线在事件视界处被弯曲、捕获。</p>
+    </div>
+    <div class="case-card">
+      <h4>🔭 为什么花了100年？</h4>
+      <p>从1915年爱因斯坦场方程首次预言黑洞存在，到2019年拍下第一张照片，历经104年。阻碍不是理论——<strong>是技术</strong>。你需要：① 亚毫米波段的超高灵敏度接收器 ② 原子钟精度的时间同步（误差小于1皮秒）③ 处理PB级数据的算法。黑洞本身不发光，你要看的是它周围被引力加热到极端的物质。而且宇宙尘埃和地球大气都在吸收这一波段的信号——你需要把望远镜建在高海拔干燥地区，还需要全球天文学家协调观测窗口。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 4: 科学家群像 ========== -->
+<div class="tab-panel" id="tab4">
+  <div class="section-title">故事中的人物 — 这些科学家不只是名字</div>
+  <div class="narrative-block">
+    <p>科学不是从天而降的公式——它是有血有肉的人面对未知时的挣扎。他们恋爱、嫉妒、犯错、自我修正。这些人的故事，就是"宇宙的秩序"这个故事的主角。</p>
+  </div>
+
+  <div class="scientist-row">
+    <div class="scientist-portrait">
+      <div class="emoji">🧠</div>
+      <h4>阿尔伯特·爱因斯坦</h4>
+      <p>不仅发明了相对论，还是一个有温度的人。1927年索尔维会议期间，他写信声援因婚外情被媒体围攻的居里夫人。他婚后有过6个女朋友。他中年后拼命反对量子力学的概率解释——"上帝不掷骰子"——但反复被实验打脸。他的伟大和局限，构成了物理学最有戏剧性的章节。</p>
+    </div>
+    <div class="scientist-portrait">
+      <div class="emoji">🐱</div>
+      <h4>埃尔温·薛定谔</h4>
+      <p>量子力学奠基人，却走向反对量子力学的路。他学术生涯最高峰——连续6篇革命性论文——全部在婚外情的5个月中完成。他写的《生命是什么》从物理学角度预言了基因的结构，启发了沃森和克里克。那只著名的"薛定谔的猫"本是用来嘲讽量子力学的，却成了最流行的科普符号。</p>
+    </div>
+    <div class="scientist-portrait">
+      <div class="emoji">🕳️</div>
+      <h4>斯蒂芬·霍金</h4>
+      <p>21岁被诊断渐冻症，医生说最多活2年——他活了55年。证明了奇点定理（时间有起点），发现了黑洞辐射（霍金辐射），用唯一能动的一根手指写了《时间简史》——卖了2500万册。他热爱打赌（而且经常输），在轮椅上体验零重力飞行，声音通过合成器传遍世界。</p>
+    </div>
+    <div class="scientist-portrait">
+      <div class="emoji">🎯</div>
+      <h4>理查德·费曼</h4>
+      <p>口才不输脱口秀演员的理论物理学家。发明的路径积分表述至今是量子场论的核心工具。他能给没物理基础的人讲清楚泛函积分。参与调查挑战者号航天飞机爆炸——在电视直播中用一杯冰水演示了O型密封圈在低温下失效，让全美国瞬间明白事故原因。</p>
+    </div>
+    <div class="scientist-portrait">
+      <div class="emoji">🏆</div>
+      <h4>杨振宁</h4>
+      <p>提出宇称不守恒定律时年仅35岁，次年即获诺贝尔奖。因转回中国国籍被舆论非议——卓克指出：杨振宁在物理学史上的地位已经无可争议，杨-米尔斯理论是现代粒子物理的基石，他不需要用国籍来"证明"什么。科学成就的本质，不应被国籍选择的争议所遮蔽。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 5: 思维导图 ========== -->
+<div class="tab-panel" id="tab5">
+  <div class="section-title">思维导图 — 宇宙秩序的知识层级</div>
+  <div class="mindmap" id="mindmap">
+    <div class="node">
+      <div class="node-header" onclick="toggleMindmap(this)" style="background:var(--accent);color:#fff;">
+        <span class="toggle open">▶</span> 宇宙的秩序 — 知识体系
+      </div>
+      <div class="node-body open">
+        <div class="node">
+          <div class="node-header" onclick="toggleMindmap(this)">
+            <span class="toggle">▶</span> 量子基础层
+          </div>
+          <div class="node-body">
+            <div class="leaf">不确定性原理 — Δx·Δp ≥ ℏ/2，自然的底层代码</div>
+            <div class="leaf">量子叠加态 — 观测前粒子同时处于多种状态</div>
+            <div class="leaf">波粒二象性 — 光和物质既是波也是粒子</div>
+            <div class="leaf">路径积分 — 粒子同时走所有可能路径</div>
+            <div class="leaf">薛定谔方程 — 描述量子态随时间演化的基本方程</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-header" onclick="toggleMindmap(this)">
+            <span class="toggle">▶</span> 引力与时空层
+          </div>
+          <div class="node-body">
+            <div class="leaf">广义相对论 — 质量弯曲时空产生引力效应</div>
+            <div class="leaf">引力波 — 时空弯曲的涟漪，光速传播</div>
+            <div class="leaf">黑洞 — 时空曲率极大处，光也无法逃逸</div>
+            <div class="leaf">虫洞 — 爱因斯坦-罗森桥，数学解非物理实体</div>
+            <div class="leaf">时空奇点 — 物理定律失效处，时间起点/终点</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-header" onclick="toggleMindmap(this)">
+            <span class="toggle">▶</span> 宇宙学层
+          </div>
+          <div class="node-body">
+            <div class="leaf">大爆炸理论 — 138亿年前宇宙从奇点诞生</div>
+            <div class="leaf">恒星核合成 — 元素在恒星内部通过聚变生成</div>
+            <div class="leaf">宇宙膨胀 — 哈勃发现星系在相互远离</div>
+            <div class="leaf">暗物质与暗能量 — 宇宙95%的组分仍未知</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-header" onclick="toggleMindmap(this)">
+            <span class="toggle">▶</span> 热力学与统计层
+          </div>
+          <div class="node-body">
+            <div class="leaf">熵增原理 — 孤立系统熵永不减少</div>
+            <div class="leaf">时间箭头 — 熵增定义了时间的方向</div>
+            <div class="leaf">热寂说 — 宇宙最终归于热平衡的推测</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-header" onclick="toggleMindmap(this)">
+            <span class="toggle">▶</span> 数学工具层
+          </div>
+          <div class="node-body">
+            <div class="leaf">拓扑学 — 研究空间在连续变形下的不变量</div>
+            <div class="leaf">拓扑相变 — 2016诺贝尔奖，超越对称性破缺</div>
+            <div class="leaf">黎曼几何 — 广义相对论的数学语言</div>
+            <div class="leaf">概率振幅 — 费曼路径积分的数学核心</div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-header" onclick="toggleMindmap(this)">
+            <span class="toggle">▶</span> 观测技术层
+          </div>
+          <div class="node-body">
+            <div class="leaf">哈勃望远镜 — 大型轨道天文台计划首颗卫星</div>
+            <div class="leaf">LIGO — 激光干涉引力波天文台</div>
+            <div class="leaf">EHT — 事件视界望远镜，地球大小虚拟天线</div>
+            <div class="leaf">朱诺号 — 木星探测器，179公斤钛合金防护罩</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 6: 知识边界 ========== -->
+<div class="tab-panel" id="tab6">
+  <div class="section-title">知识边界 — 这个知道就行，不用深究</div>
+  <div class="narrative-block">
+    <p>在理解宇宙秩序的路上，有些知识是"核心装备"（必须精确理解），有些是"参考地图"（知道大致即可），有些只是"路标"（知道存在就行）。这张表帮你分配认知资源。</p>
+  </div>
+
+  <table class="boundary-table">
+    <thead><tr><th>知识条目</th><th>掌握程度</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>不确定性原理的含义和推论</td><td><span class="level-tag level-core">核心掌握</span></td><td>理解量子世界本质的入口，影响世界观</td></tr>
+      <tr><td>广义相对论的基本思想（时空弯曲）</td><td><span class="level-tag level-core">核心掌握</span></td><td>现代宇宙学的语言基础</td></tr>
+      <tr><td>熵的概念和时间箭头</td><td><span class="level-tag level-core">核心掌握</span></td><td>唯一有时间方向的物理定律，跨领域通用</td></tr>
+      <tr><td>黑洞的基本分类和性质</td><td><span class="level-tag level-understand">理解即可</span></td><td>天文发现的语境基础</td></tr>
+      <tr><td>引力波探测原理</td><td><span class="level-tag level-understand">理解即可</span></td><td>理解科学新闻的关键语境</td></tr>
+      <tr><td>恒星核合成的元素链</td><td><span class="level-tag level-understand">理解即可</span></td><td>理解"我们来自星辰"的科学含义</td></tr>
+      <tr><td>拓扑相变的数学细节</td><td><span class="level-tag level-know">知道存在</span></td><td>需要研究生级拓扑学基础</td></tr>
+      <tr><td>爱因斯坦场方程的精确形式</td><td><span class="level-tag level-know">知道存在</span></td><td>需要张量分析和微分几何背景</td></tr>
+      <tr><td>史瓦西度规 vs 克尔度规的区别</td><td><span class="level-tag level-know">知道存在</span></td><td>属于专业天体物理范畴</td></tr>
+      <tr><td>路径积分的数学严格化</td><td><span class="level-tag level-know">知道存在</span></td><td>至今没有完全严格的数学定义</td></tr>
+      <tr><td>哈勃常数 tension 的争议</td><td><span class="level-tag level-know">知道存在</span></td><td>当前宇宙学前沿争议，尚未解决</td></tr>
+      <tr><td>弦理论/M理论的具体内容</td><td><span class="level-tag level-know">知道存在</span></td><td>尚无实验验证，超出本专题范围</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ========== TAB 7: 题库系统 ========== -->
+<div class="tab-panel" id="tab7">
+  <div class="section-title">题库系统 — 20道题检验你的理解</div>
+  <div class="score-bar" id="quizScore">已答：0 / 20</div>
+  <div class="progress-bar"><div class="progress-fill" id="quizProgress" style="width:0%"></div></div>
   <div id="quizContainer"></div>
-  <div id="staticQuiz" style="display:none"></div>
-</div>
-<div class="tab-panel" id="panel3">
-  <div class="section-title">考试模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">限时30分钟，随机抽取10道选择题+4道简答题</p>
-  <div style="text-align:center;margin-bottom:20px;">
-    <button class="btn btn-outline" onclick="startExam()" id="startExamBtn">开始考试</button>
-    <span style="margin-left:12px;font-size:.9rem;color:var(--text-light)" id="examTimer">剩余时间：30:00</span>
+  <button class="btn btn-outline" onclick="resetQuiz()" style="margin-top:16px;">🔄 重新作答</button>
+
+  <div class="section-title">简答题</div>
+  <div class="quiz-card">
+    <p class="q-text">🖊️ 用你自己的话说：为什么不确定性原理宣告了牛顿式决定论的终结？</p>
+    <textarea class="sa-input" id="sa1" placeholder="写下你的理解..."></textarea>
+    <button class="btn btn-outline" onclick="showAnswer(1)" style="margin-top:8px;">查看参考答案</button>
+    <div class="sa-reveal" id="saR1">
+      牛顿物理学假定：如果你精确知道宇宙中每个粒子的位置和速度，就能预测一切未来。拉普拉斯妖就是这一信念的极端表达。不确定性原理击碎了这一前提：<strong>你连一个粒子的完整信息都无法同时获取</strong>——位置越精确，动量就越模糊。这不是技术问题，是自然的本性。世界从一台"可完整预知的机器"变成了一片"概率云"——但量子力学在这片概率云中找到了更深层的预测规律。
+    </div>
   </div>
-  <div id="examContainer"></div>
-  <div id="examResult" style="display:none;text-align:center;padding:20px;">
-    <h3 style="color:var(--accent);margin-bottom:10px;">考试完成！</h3>
-    <p id="examScore" style="font-size:1.2rem;margin-bottom:10px;"></p>
-    <div class="progress-bar"><div class="progress-fill" id="examProgressBar" style="width:0%"></div></div>
+
+  <div class="quiz-card">
+    <p class="q-text">🖊️ 卓克说"牛顿发明了万有引力"而不是"发现了万有引力"——你同意吗？为什么？</p>
+    <textarea class="sa-input" id="sa2" placeholder="写下你的理解..."></textarea>
+    <button class="btn btn-outline" onclick="showAnswer(2)" style="margin-top:8px;">查看参考答案</button>
+    <div class="sa-reveal" id="saR2">
+      这涉及一个深刻的哲学问题：物理理论描述的是"实在"还是"模型"？卓克的观点是后者。广义相对论表明引力可以完全用时空弯曲来描述，"引力"这个"力"根本不存在。牛顿创造了一个数学模型（万有引力定律），在太阳系尺度极其精确——但它是一个<strong>近似模型</strong>，不是终极真理。科学史上反复出现：更好的理论出现后，旧理论被揭示为有效近似。我们可以说托勒密"发明"了本轮系统，说牛顿"发明"了万有引力定律——他们创造了模型，而不是发现了"本来就存在在那里的真理"。
+    </div>
   </div>
 </div>
-<div class="tab-panel" id="panel4">
-  <div class="section-title">复习模式</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px">基于学习数据定制复习薄弱概念和错题</p>
-  <div id="reviewContainer">
-    <div class="overview-block"><h3>📊 你的学习统计</h3><p id="reviewStats" style="font-size:.9rem;color:var(--text-light);">加载中...</p></div>
-    <div id="reviewWeakAreas"></div>
+
+<!-- ========== TAB 8: 学以致用 ========== -->
+<div class="tab-panel" id="tab8">
+  <div class="section-title">实战决策 — 把宇宙知识转化为日常洞察</div>
+
+  <div class="decision-scene">
+    <h3>场景一：天体物理预算决策</h3>
+    <div class="scenario">
+      <strong>情境：</strong>假设你是NASA的科学顾问。年度预算有限，只能资助一个大项目：A) 发射新一代X射线太空望远镜（3亿美元） B) 扩建地面引力波探测器网络（2.5亿美元） C) 资助量子引力理论研究基金（1亿美元）。你会怎么选？
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="evalDecision(this,'a')">A) X射线望远镜——能看到黑洞吸积盘的精细结构</button>
+      <button class="choice-btn" onclick="evalDecision(this,'b')">B) 引力波探测器——能"听"到光看不到的宇宙</button>
+      <button class="choice-btn" onclick="evalDecision(this,'c')">C) 量子引力理论——可能统一相对论和量子力学</button>
+    </div>
+    <div id="decisionFeedback1" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div>
   </div>
-  <div style="text-align:center;margin-top:16px;"><button class="btn btn-outline" onclick="generateReview()">生成复习计划</button></div>
+
+  <div class="decision-scene">
+    <h3>场景二：科学传播中的类比边界</h3>
+    <div class="scenario">
+      <strong>情境：</strong>你在给朋友解释"引力波"。你说"想象时空是一张蹦床，放一个铅球上去，蹦床凹下去——这就是引力"。朋友追问："那引力波呢？"你说："你突然把铅球拿起来再放下，蹦床上的波动就是引力波。"这个类比有没有问题？
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="evalDecision2(this,'a')">A) 没问题——这是最标准最有效的科普类比</button>
+      <button class="choice-btn" onclick="evalDecision2(this,'b')">B) 有问题——蹦床的凹陷需要"重力"来产生，而引力波理论中不存在这个"额外的重力"，存在循环定义</button>
+      <button class="choice-btn" onclick="evalDecision2(this,'c')">C) 有问题——引力波不是"拿走重物再放回去"产生的，而是天体加速运动时连续辐射的</button>
+    </div>
+    <div id="decisionFeedback2" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div>
+  </div>
+
+  <div class="decision-scene">
+    <h3>场景三：识别科学新闻中的"引力波"标题党</h3>
+    <div class="scenario">
+      <strong>情境：</strong>一条新闻标题说"中国科学家发现引力波可治癌症！"你打开看，内容是说某研究团队发现低频机械振动（自称"声学引力波"）可以破坏癌细胞。你如何判断这则新闻的可信度？
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="evalDecision3(this,'a')">A) 立刻转发——中国科学家厉害了！</button>
+      <button class="choice-btn" onclick="evalDecision3(this,'b')">B) 质疑——"引力波"是时空本身的波动，频率极低、能量极弱、与物质作用极微弱，不可能用于"治疗"。用"引力波"命名是偷换概念</button>
+      <button class="choice-btn" onclick="evalDecision3(this,'c')">C) 保持中立——说不定是新发现呢？</button>
+    </div>
+    <div id="decisionFeedback3" style="margin-top:12px;padding:12px;border-radius:8px;display:none;"></div>
+  </div>
 </div>
-<div class="tab-panel" id="panel5">
-  <div class="section-title">思维导图</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:12px;font-size:.85rem">点击节点展开/折叠</p>
-  <div class="mindmap"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">宇宙的秩序——物理定律的层级结构</div><div class="node-body"><div class="node"><div class="node-title" onclick="toggleMindmap(this)">量子力学（微观尺度）</div><div class="node-body"><div class="node"><div class="node-title">不确定性原理：共轭物理量测量精度有理论极限</div></div><div class="node"><div class="node-title">波粒二象性：观测方式决定实体表现</div></div><div class="node"><div class="node-title">真空涨落：虚粒子对借能量而生灭</div></div><div class="node"><div class="node-title">对称性破缺：弱力区分左右</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">广义相对论（宇观尺度）</div><div class="node-body"><div class="node"><div class="node-title">时空弯曲：引力是几何表现</div></div><div class="node"><div class="node-title">黑洞热力学：黑洞有熵、温度和辐射</div></div><div class="node"><div class="node-title">宇宙膨胀：哈勃定律揭示时空膨胀</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">热力学（宏观尺度）</div><div class="node-body"><div class="node"><div class="node-title">熵作为信息：物理熵和信息熵统一</div></div><div class="node"><div class="node-title">核合成阶梯：恒星锻造元素</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">交叉地带</div><div class="node-body"><div class="node"><div class="node-title">霍金辐射：量子+广相→黑洞蒸发</div></div><div class="node"><div class="node-title">真空涨落→宇宙暴胀：量子涨落拉伸到星系尺度</div></div></div></div><div class="node"><div class="node-title" onclick="toggleMindmap(this)">元层次：观测驱动实在</div><div class="node-body"><div class="node"><div class="node-title">物理理论是模型而非终极真理</div></div><div class="node"><div class="node-title">宇宙标度律：不同尺度用不同工具</div></div></div></div></div></div></div>
+
+<!-- ========== FOOTER ========== -->
+<div class="footer">
+  <p>🌌 宇宙的秩序 — 卓老板聊科技 MKS · 最小知识集</p>
+  <p style="margin-top:4px;">45篇文章 · 10个核心概念 · 基于刘雪峰最小知识集理论</p>
+  <p style="margin-top:4px;"><a href="index.html">← 返回课程首页</a></p>
 </div>
-<div class="tab-panel" id="panel6">
-  <div class="section-title">深度追问</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">苏格拉底式追问——点击问题展开参考答案</p>
-  <div class="inquiry-list"><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">如果人类从未发明望远镜，我们对宇宙的理解会停留在哪里？</div><div class="inquiry-a">停留在托勒密地心说和亚里士多德物理学——所有突破（从伽利略卫星到哈勃发现宇宙膨胀）都始于'看得更远'这一个技术动作。今天我们对暗物质的无知，是否因为缺少了某种能'看到'非电磁信号的'新一代望远镜'？引力波探测器已打开这个窗口。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">量子力学说'观测创造实在'——是否意味着没有意识就没有宇宙？</div><div class="inquiry-a">常见误解。量子力学'观测'不要求有意识观察者——任何不可逆的相互作用都构成'测量'。环境退相干——恒星光、微波背景辐射——一直在进行'观测'。宇宙在人类之前就存在。波函数坍缩不需要意识，需要不可逆的信息记录。</div></div><div class="inquiry-item"><div class="inquiry-q" onclick="this.nextElementSibling.classList.toggle('open')">科学理论是'发明'还是'发现'？这个区分重要吗？</div><div class="inquiry-a">极为重要。'发现'→终极真理客观存在，我们正逼近它→滋养科学傲慢。'发明'→任何理论都是特定条件下最佳近似→深刻的谦卑。牛顿不是'错'了，是在他的精度内最优解；爱因斯坦不是'对'了，是在更高精度内更好近似。科学是不断自我修正的过程。</div></div></div>
-</div>
-<div class="tab-panel" id="panel7">
-  <div class="section-title">案例分析</div>
-  <p style="text-align:center;color:var(--text-light);margin-bottom:16px;font-size:.9rem">用本专题的思维工具解析真实世界案例</p>
-  <div class="case-list"><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">GPS系统——相对论在日常中的应用</div><div class="case-body"><p>GPS卫星时速14000km/h，距地20200km。狭义相对论使钟日慢7微秒，广义使钟日快45微秒——净快38微秒/天。</p><p><strong>不修正：</strong>日累积11.4公里定位误差——GPS几天内完全不可用。</p><p><strong>启示：</strong>相对论不是象牙塔抽象理论——打开手机地图时，你正见证狭义和广义相对论同时为你工作。</p></div></div><div class="case-item"><div class="case-title" onclick="this.nextElementSibling.classList.toggle('open')">哈勃望远镜——从灾难到人类之眼</div><div class="case-body"><p>耗资数十亿发射后发现镜面参数错误（厚2微米）→媒体称'人类科技史灾难'。1993年修复：安装矫正镜片+更换陀螺仪。</p><p><strong>成果：</strong>超期服役26年→发现宇宙加速膨胀+坐实星系中心黑洞+测定宇宙年龄(138亿年)+哈勃深场。</p><p><strong>启示：</strong>更好观测工具（即使开局灾难）彻底改变宇宙认知。展示了科学工程中'可修复性设计'的价值。</p></div></div></div>
-</div>
-<div class="tab-panel" id="panel8">
-  <div class="section-title">实战决策</div>
-  <div class="decision-round" id="decisionRound"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：科普信息可信度评估</h4><p>社交媒体上一篇文章声称：<em>"科学家证实量子纠缠可实现超光速通信，爱因斯坦错了！"</em></p></div><div class="d-options" id="dOpts1"><button class="btn btn-outline d-option" onclick="evalDecision(1,0,this)">A. 量子纠缠确实可实现超光速通信</button><button class="btn btn-outline d-option" onclick="evalDecision(1,1,this)">B. 量子纠缠不能传输信息——测量结果随机，无法控制传输内容，相对论因果律未被打破</button><button class="btn btn-outline d-option" onclick="evalDecision(1,2,this)">C. 中国量子技术领先世界证明这一点</button><button class="btn btn-outline d-option" onclick="evalDecision(1,3,this)">D. 爱因斯坦可能错了但需更多验证</button></div><div class="d-result" id="dResult1"></div><div class="d-explain" id="dExplain1"></div></div><div class="decision-round" id="decisionRound2" style="display:none"><div class="d-scenario"><h4 style="color:var(--accent);margin-bottom:12px">场景：投资判断中的不确定性思维</h4><p>朋友推荐"稳赚不赔"理财，年化15%，展示连续12个月"完美记录"。如何用不确定性原理评估？</p></div><div class="d-options" id="dOpts2"><button class="btn btn-outline d-option" onclick="evalDecision(2,0,this)">A. 数据证明可靠，应抓住机会</button><button class="btn btn-outline d-option" onclick="evalDecision(2,1,this)">B. 12个月样本太小，'稳赚不赔'违背风险-收益规律——不确定性原理核心精神：任何测量都有误差和置信区间</button><button class="btn btn-outline d-option" onclick="evalDecision(2,2,this)">C. 朋友推荐值得信任</button><button class="btn btn-outline d-option" onclick="evalDecision(2,3,this)">D. 投小部分试试</button></div><div class="d-result" id="dResult2"></div><div class="d-explain" id="dExplain2"></div></div>
-</div>
-</div>
-<div class="toast" id="toast"></div>
+
+</div><!-- /container -->
+
 <script>
-const concepts = [{"id": "c1", "name": "不确定性原理", "def": "共轭物理量（位置与动量、能量与时间）的测量精度之积存在普朗克常数级别的下限——不是仪器问题，是理论极限。", "analogy": "像用快门拍奔跑的人：快门越快位置越清晰但速度无法判断，放慢快门能看清轨迹但位置已模糊。", "example": "GPS卫星每天因相对论效应产生38微秒净时差——如果不修正，定位误差每天累积11公里。", "counter": "宏观物体不确定性远小于测量精度，经典力学完全够用。不是'什么都不可知'。"}, {"id": "c2", "name": "波粒二象性", "def": "微观实体在观测方式不同时分别表现波动性或粒子性——取决于实验装置'问'什么问题。", "analogy": "像同一个人在不同场合：在法庭是证人（确定位置），在合唱团是声音的一部分（干涉叠加）。", "example": "双缝实验：逐个发射电子仍出现干涉条纹——每个电子'自己干涉自己'。费曼路径积分统一了波粒描述。", "counter": "宏观物体也有德布罗意波长，但远小于原子核尺寸，波动性完全不可观测。"}, {"id": "c3", "name": "时空弯曲", "def": "广义相对论核心：引力不是力，而是质量使时空产生弯曲，物体沿弯曲时空的'测地线'运动。", "analogy": "把时空想象成拉紧的橡胶膜，放保龄球（太阳）会凹陷；弹珠（地球）沿凹陷边缘绕圈——不是球在'拉'弹珠。", "example": "水星近日点每百年43角秒进动误差，牛顿力学无法解释，广义相对论完美吻合。这是时空弯曲的第一个证据。", "counter": "日常尺度效应极弱——地球引力场中时间流逝比太空慢不到一亿分之一。只在强引力场或极高精度才必须考虑。"}, {"id": "c4", "name": "黑洞热力学", "def": "黑洞有温度、熵和辐射。霍金证明黑洞因真空量子涨落而缓慢蒸发——将广义相对论和量子力学统一在一个物理图景中。", "analogy": "像热咖啡放冷房间：咖啡慢慢蒸发，温度越来越高——黑洞越小温度越高，最终以爆炸终结。", "example": "贝肯斯坦从霍金的'黑洞面积只增不减'推论出黑洞表面积=熵，被霍金激烈反对——霍金随后证明贝肯斯坦是对的。这是最著名的'自我打脸'。", "counter": "所有黑洞属性都来自数学推导，实测仅引力波确认了黑洞存在。霍金辐射从未被直接观测——恒星级黑洞温度远低于微波背景。"}, {"id": "c5", "name": "对称性破缺", "def": "物理定律看似对称，但具体状态可以不对称。宇称不守恒揭示了弱力区分左右——对称性是待检验假说而非预设真理。", "analogy": "镜中人举起'左手'对应你的右手——我们天然认为镜中世界和真实世界物理相同。但某些粒子衰变在镜中不会发生——自然界确实能区分左右。", "example": "杨振宁和李政道系统检查实验证据→发现弱力中从未检验过宇称→吴健雄用钴-60证实宇称不守恒→1957年获诺贝尔奖（史上最快）。", "counter": "宇称不守恒只在弱力出现。对称性破缺不是'对称性不存在'而是在特定条件下被隐藏——启发了希格斯机制。"}, {"id": "c6", "name": "熵作为信息", "def": "熵不仅是热力学'无序度'，更是信息论'不确定度'。系统熵越大，描述它所需信息越多——物理世界和信息世界在数学上统一。", "analogy": "整洁房间（低熵）：每样东西只有几个位置，一句话描述。杂乱房间（高熵）：物品分布数以亿计，需大量信息。打扫=减少状态数=消耗能量。", "example": "麦克斯韦妖（1871）→西拉德证明（1929）：妖'测量'产生的熵大于分拣减少的熵→信息即物理。香农定义了信息熵：编码所需最少空间。", "counter": "熵增定律只适用孤立系统。生命是开放系统，通过吸收'负熵'（低熵物质）维持自身低熵——薛定谔在《生命是什么》中首次提出。"}, {"id": "c7", "name": "核合成阶梯", "def": "宇宙中从氢到铀的所有元素都诞生于恒星内部逐级核聚变。每级需要更高温度和压力——铁是聚变终点，更重元素来自超新星。", "analogy": "宇宙级餐厅：氢=生食材；恒星=炉灶。小火（太阳）炒氢成氦；中火（大质量恒星）加工碳氧；大火（超新星）爆炒金银铀。", "example": "太阳已烧掉50%氢→50亿年后氦燃烧→红巨星阶段→地球被吞没→最终变为碳核心白矮星。B²FH理论（1957）首次系统解释元素起源。", "counter": "铁后元素不全是超新星产生——2017年引力波+光联合观测确认中子星合并（千新星）也是重元素（金、铂、铀）重要来源。"}, {"id": "c8", "name": "观测驱动实在", "def": "物理学描述的不是'世界是什么'，而是'用特定仪器在特定条件下观测到什么'。牛顿的引力、爱因斯坦的时空弯曲——都是人类发明的描述工具。", "analogy": "盲人摸象：摸到腿说像柱子，摸耳说像扇子。都没错——错在认为自己的描述是'真相'。物理就是在承认'只能摸到一部分'的前提下找数学关系。", "example": "万有引力是'发明'而非'发现'——广义相对论中引力效果完全可用时空弯曲解释，不再需要'引力'概念。牛顿发明了有效近似工具，爱因斯坦发明了更精确的。", "counter": "观测驱动≠虚无主义。新理论必须兼容旧理论已解释的所有数据，并解释更多。托勒密vs哥白尼：最终由观测精度（金星相位）裁决。"}, {"id": "c9", "name": "真空涨落", "def": "真空不空——根据能量-时间不确定性，极短时间内可以'借'出巨大能量产生虚粒子对随即湮灭。这是霍金辐射的物理根源。", "analogy": "像从不透支的账户——但如果在万亿分之一秒内借还巨款，那个瞬间无人查账，可'无中生有'地使用。真空不断借能量、产粒子对、马上归还。", "example": "霍金辐射：黑洞视界面→粒子对分离→一个落入黑洞，一个逃逸→黑洞在'发射'粒子。质量越小，温度越高，蒸发越快。卡西米尔效应是可测量的真空涨落。", "counter": "真空涨落不能'免费获取能量'——虚粒子对必须极短时间内湮灭，净能量始终为零。只有黑洞视界面这种极端环境才能'分离'粒子对使之成为实粒子。"}, {"id": "c10", "name": "宇宙标度律", "def": "宇宙在不同尺度上遵循不同主导规律——从量子涨落(10⁻³⁵m)到星系团(10²⁴m)，物理定律呈层级结构。理解宇宙需知在哪个尺度该用哪套工具。", "analogy": "像地图多级缩放：街道级（量子力学）见门牌号红绿灯；城市级（经典物理）见路网地铁；国家级（广义相对论）见经纬线地球曲率。", "example": "牛顿力学在太阳系极精准（预测海王星存在），但水星近日点有43角秒/百年误差——牛顿力学尺度极限的'裂缝'。黑洞奇点处广义相对论也失效→需量子引力。", "counter": "尺度间非完全独立——量子涨落在宇宙暴胀期间被拉伸到星系尺度→成为大尺度结构的'种子'。极小与极大之间有因果联系，这是当代宇宙学最深谜题。"}];
-const mcqAll = [{"q": "不确定性原理表明位置和动量的测量精度之积不小于哪个常数？", "opts": ["普朗克常数除以2π（狄拉克常数）", "玻尔兹曼常数", "万有引力常数G", "真空光速c"], "answer": 0}, {"q": "为什么说'万有引力是牛顿发明的而非发现的'？", "opts": ["广义相对论中引力效果完全可用时空弯曲解释，不需要'引力'概念", "牛顿是第一个描述引力的人", "引力其实不存在", "这是哲学诡辩不是科学"], "answer": 0}, {"q": "量子力学中'真空'到底是什么状态？", "opts": ["真空不空——虚粒子对在极短时间内借能量产生又湮灭", "完全没有物质和能量的空间", "充满以太的空间", "只有人类无法观测到的物质"], "answer": 0}, {"q": "太阳系的未来如何演变？", "opts": ["50亿年后氢耗尽→氦燃烧（红巨星）→地球被吞没→变为碳核心白矮星", "会永远燃烧下去", "会突然爆炸成超新星", "会逐渐冷却变成冰球"], "answer": 0}, {"q": "GPS卫星为什么必须修正相对论效应？", "opts": ["高速（狭义）使钟慢+弱引力（广义）使钟快→每天38微秒净差→不修正则每天累积11公里误差", "卫星受磁场影响", "太阳能板供电不稳", "大气折射导致信号延迟"], "answer": 0}, {"q": "双缝实验逐个发射电子仍产生干涉条纹说明了什么？", "opts": ["电子间有电磁作用", "每个电子'自己干涉自己'——观测方式决定实体表现", "仪器有系统误差", "电子飞行中分裂成两个"], "answer": 1}, {"q": "霍金辐射的物理机制是什么？", "opts": ["黑洞内部核聚变", "视界面真空涨落→虚粒子对分离→一个逃逸成为实粒子", "黑洞旋转甩出粒子", "黑洞与恒星潮汐力"], "answer": 1}, {"q": "广义相对论场方程在数学上是什么类型？", "opts": ["一阶线性微分方程", "二阶非线性偏微分方程——求解极困难", "代数方程", "积分微分混合方程"], "answer": 1}, {"q": "黑洞'无毛定理'说坍缩后黑洞只保留哪三个信息？", "opts": ["温度、密度、体积", "质量、自旋、电荷——其余一切特征消失", "年龄、位置、速度", "磁场、电场、引力场"], "answer": 1}, {"q": "哈勃发现星系红移的现代解释是什么？", "opts": ["多普勒效应（星系在空间运动）", "时空膨胀导致星系间互相远离", "光子老化失去能量", "引力透镜效应"], "answer": 1}, {"q": "为什么铁是恒星核聚变终点？", "opts": ["铁熔点太高", "铁核极为稳定——拆开它需要的能量比聚变产生的还大", "恒星温度不够", "铁原子量太大"], "answer": 2}, {"q": "麦克斯韦妖悖论最终如何解决？", "opts": ["麦克斯韦自己撤回", "爱因斯坦用光电效应解释", "西拉德证明妖测量时产生的熵大于分拣减少的熵——信息即物理", "霍金用黑洞辐射类比"], "answer": 2}, {"q": "费曼路径积分方法统一了什么？", "opts": ["经典力学和电磁学", "光和物质的量子行为——用概率振幅矢量统一波粒描述", "狭义和广义相对论", "热力学和流体力学"], "answer": 2}, {"q": "薛定谔《生命是什么》的核心观点是？", "opts": ["DNA是双螺旋", "生命来自外太空", "生命体通过吸收'负熵'维持低熵状态——代谢本质是吸收秩序", "细胞是生命基本单位"], "answer": 2}, {"q": "人类首次直接探测到引力波在何时？", "opts": ["2014年", "2015年", "2016年2月——LIGO探测到双黑洞合并信号", "2017年"], "answer": 2}, {"q": "杨振宁的杨-米尔斯理论为什么比宇称不守恒更重要？", "opts": ["发表更早", "数学更优美", "此后7个诺奖+6个菲尔兹奖建立在其基础上——是现代粒子物理数学骨架", "更容易实验验证"], "answer": 3}, {"q": "恒星核合成中比铁更重的元素（金、铀）主要来自哪里？", "opts": ["超大恒星核心进一步聚变", "大爆炸初期直接产物", "行星形成过程的压缩", "超新星爆发和中子星合并——只有极端能量才能合成超铁元素"], "answer": 3}, {"q": "量子力学中的'观测者'必须具备什么条件？", "opts": ["有意识的人类", "经过训练的科学家", "精密电子仪器", "任何能产生不可逆信息记录的物理相互作用——环境退相干就是最普遍的'观测者'"], "answer": 3}, {"q": "'熵增→宇宙热寂→生命无意义'这个推论的问题在哪？", "opts": ["熵增定律本身错误", "热寂不会发生", "太阳还能烧很久", "生命是开放系统——吸收太阳低熵光子维持秩序。热寂在10^100年后，当下局部低熵（生命、文明）因熵增背景而弥足珍贵"], "answer": 3}, {"q": "拓扑学中带把的茶杯等价于什么？", "opts": ["圆球", "立方体", "饭碗", "甜甜圈——都只有一个'洞'，洞的数量是拓扑不变量"], "answer": 3}];
-const saqAll = [{"q": "简述不确定性原理为什么不是仪器问题而是理论限制。", "hint": "共轭物理量测量精度乘积≥ℏ/2——任何仪器、任何方法都无法突破。这是量子力学基本假设，已有无数实验验证"}, {"q": "用'观测驱动实在'解释为什么说万有引力是牛顿'发明'的。", "hint": "广义相对论中引力效果用时空弯曲解释→不需要'引力'概念。科学理论是人类构建的解释模型，不是终极真理的'发现'"}, {"q": "黑洞霍金辐射如何从真空涨落中产生？", "hint": "视界面附近虚粒子对分离→一个落入黑洞，一个逃逸→外部看到黑洞'发射'粒子。质量越小温度越高"}, {"q": "熵的概念如何统一物理学和信息论？", "hint": "熵=状态数对数=信息不确定度。西拉德证明测量产生熵→信息物理统一。香农定义信息熵=编码最少空间"}, {"q": "恒星如何成为'元素工厂'？从氢到铁的过程是怎样的？", "hint": "逐级聚变：氢→氦→碳→氧→...→铁。每级需更高温度压力。铁核最稳定→终点。超铁元素来自超新星/中子星合并"}, {"q": "双缝实验为什么是量子力学核心之谜？费曼路径积分如何理解？", "hint": "单个粒子也干涉→自己干涉自己。路径积分：每个路径有概率振幅矢量→矢量和→概率。统一波粒描述"}, {"q": "杨-米尔斯理论为什么比宇称不守恒更重要？", "hint": "后续7个诺奖+6个菲尔兹奖基于该理论。它是现代粒子物理标准模型的数学骨架——规范场论的核心"}, {"q": "太阳系未来演化轨迹是什么？", "hint": "50亿年氢耗尽→氦燃烧（红巨星）→地球被吞没→太阳最终变为碳核心白矮星。不会超新星爆发（质量不够）"}, {"q": "为什么说人体每个原子都来自恒星？", "hint": "大爆炸只产氢氦。碳氧铁→恒星聚变。金银铀→超新星/中子星合并。我们是'星尘'——字面意义上的"}, {"q": "哈勃望远镜经历了哪些挫折？成功启示是什么？", "hint": "预算被砍→挑战者号爆炸延期→镜面参数错误→陀螺仪失灵。但修复后服役26年→宇宙加速膨胀+黑洞坐实+宇宙年龄。可修复性设计的价值"}];
-const SK = 'mks_1';
-let learnedCards = JSON.parse(localStorage.getItem(SK+'_l') || '[]');
-let quizScores = JSON.parse(localStorage.getItem(SK+'_s') || '[]');
-let currentCardIdx = 0;
-function save(){ localStorage.setItem(SK+'_l',JSON.stringify(learnedCards)); localStorage.setItem(SK+'_s',JSON.stringify(quizScores)); }
-function showToast(m){ const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000); }
-function updateProgress(){ const p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('cardProgress').style.width=p+'%'; document.getElementById('cardLearned').textContent=learnedCards.length; document.getElementById('overviewProgress').style.width=p+'%'; document.getElementById('overviewPercent').textContent=p; }
-function switchTab(i){ document.querySelectorAll('.tab-btn').forEach(function(b,j){b.classList.toggle('active',j===i)}); document.querySelectorAll('.tab-panel').forEach(function(p,j){p.classList.toggle('active',j===i)}); if(i===4)updateReviewStats(); if(i===0)updateProgress(); }
-function setCard(i){ currentCardIdx=i; const c=concepts[i]; document.getElementById('flipFront').innerHTML='<h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--accent)">'+c.name+'</h3><p style="color:var(--text-light);margin-top:8px;font-size:clamp(.85rem,1.8vw,.95rem)">点击翻转卡片查看详情</p>'+(learnedCards.includes(c.id)?'<span class="tag" style="margin-top:8px">✓ 已学习</span>':''); document.getElementById('flipBack').innerHTML='<div style="margin-bottom:6px"><strong style="color:var(--accent)">定义：</strong>'+c.def+'</div><div style="margin-bottom:6px"><strong style="color:var(--accent)">类比：</strong>'+c.analogy+'</div><div style="margin-bottom:6px"><strong style="color:var(--success)">示例：</strong>'+c.example+'</div><div><strong style="color:var(--accent)">反例/边界：</strong>'+c.counter+'</div>'; document.getElementById('flipInner').classList.remove('flipped'); document.getElementById('cardIndex').textContent=(i+1)+' / '+concepts.length; document.getElementById('markLearnedBtn').textContent=learnedCards.includes(c.id)?'✓ 已学习':'✓ 标记已学习'; }
-function prevCard(){ if(currentCardIdx>0)setCard(currentCardIdx-1); }
-function nextCard(){ if(currentCardIdx<concepts.length-1)setCard(currentCardIdx+1); }
-function markLearned(){ const id=concepts[currentCardIdx].id; if(learnedCards.includes(id)){ learnedCards=learnedCards.filter(function(x){return x!==id}) } else { learnedCards.push(id); } save();updateProgress();setCard(currentCardIdx); }
-document.getElementById('flipInner').addEventListener('click',function(){ this.classList.toggle('flipped'); });
-function shuffle(a){ const r=a.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]; } return r; }
-function startQuiz(){ const c=document.getElementById('quizContainer'); const ms=shuffle(mcqAll).slice(0,10); const ss=shuffle(saqAll).slice(0,3); let h='<div class="sub-title">🎲 随机抽题练习 — '+ms.length+'道选择题 + '+ss.length+'道简答题</div>'; h+='<div class="sub-title" style="margin-top:16px;">选择题</div>'; ms.forEach(function(q,qi){ h+='<div class="quiz-card" id="qz-mc-'+qi+'"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" onclick="checkQuizMC('+qi+','+oi+','+q.answer+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='<div class="q-feedback" id="qz-fb-'+qi+'"></div></div>'; }); h+='<div class="sub-title" style="margin-top:24px;">简答题</div>'; ss.forEach(function(q,qi){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div><textarea class="sa-input" id="qz-sa-'+qi+'" placeholder="请输入你的答案..."></textarea><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="revealSA('+qi+')">查看参考</button><div class="sa-reveal" id="qz-sar-'+qi+'"><strong>参考方向：</strong> '+q.hint+'</div></div>'; }); c.innerHTML=h; }
-function checkQuizMC(qi,oi,ans,btn){ const c=document.getElementById('qz-mc-'+qi); c.querySelectorAll('.q-option').forEach(function(o,i){ o.disabled=true; if(i===ans)o.classList.add('correct'); if(i===oi&&i!==ans)o.classList.add('wrong'); }); const fb=document.getElementById('qz-fb-'+qi); fb.style.display='block'; fb.style.background=oi===ans?'#d4edda':'#f8d7da'; fb.style.color=oi===ans?'#155724':'#721c24'; fb.textContent=oi===ans?'✅ 正确！':'❌ 错误，正确答案是 '+String.fromCharCode(65+ans); }
-function revealSA(qi){ document.getElementById('qz-sar-'+qi).style.display='block'; }
-function resetQuiz(){ document.getElementById('quizContainer').innerHTML=''; }
-let et=null,el=1800,eq=[],ea={};
-function startExam(){ document.getElementById('startExamBtn').disabled=true; eq=shuffle(mcqAll).slice(0,10).concat(shuffle(saqAll).slice(0,4).map(function(q,i){var o=Object.assign({},q);o._sa=true;o._ix=i;return o;})); eq=shuffle(eq); el=1800; ea={}; document.getElementById('examResult').style.display='none'; let h=''; eq.forEach(function(q,qi){ if(q._sa){ h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. [简答] '+q.q+'</div><textarea class="sa-input" id="ex-sa-'+qi+'" placeholder="请输入你的答案..."></textarea></div>'; } else { h+='<div class="quiz-card"><div class="q-text">'+(qi+1)+'. '+q.q+'</div>'; q.opts.forEach(function(o,oi){ h+='<button class="q-option" id="ex-opt-'+qi+'-'+oi+'" onclick="selectExamOption('+qi+','+oi+',this)">'+String.fromCharCode(65+oi)+'. '+o+'</button>'; }); h+='</div>'; } }); h+='<div style="text-align:center;margin-top:20px;"><button class="btn btn-success" onclick="submitExam()">提交考卷</button></div>'; document.getElementById('examContainer').innerHTML=h; document.getElementById('examTimer').textContent='剩余时间：30:00'; et=setInterval(function(){ el--;var m=Math.floor(el/60),s=el%60; document.getElementById('examTimer').textContent='剩余时间：'+m+':'+(s<10?'0':'')+s; if(el<=0)submitExam(); },1000); }
-function selectExamOption(qi,oi,btn){ ea[qi]=oi; btn.parentElement.querySelectorAll('.q-option').forEach(function(b){b.style.background=''}); btn.style.background='#e8d5c4'; }
-function submitExam(){ clearInterval(et); var c=0,t=0; eq.forEach(function(q,qi){ if(!q._sa){ t++; if(ea[qi]===q.answer)c++; } }); var p=Math.round(c/t*100); document.getElementById('examResult').style.display='block'; document.getElementById('examScore').innerHTML='得分：<strong>'+c+'/'+t+'</strong> ('+p+'%)'; document.getElementById('examProgressBar').style.width=p+'%'; document.getElementById('startExamBtn').disabled=false; quizScores.push({date:new Date().toISOString(),score:c,total:t}); save(); }
-function updateReviewStats(){ var p=Math.round(learnedCards.length/concepts.length*100); document.getElementById('reviewStats').innerHTML='已学习概念：'+learnedCards.length+'/'+concepts.length+' ('+p+'%)<br>历史测验次数：'+quizScores.length; var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length>0){ document.getElementById('reviewWeakAreas').innerHTML='<div class="overview-block" style="margin-top:16px;"><h3>🎯 待复习概念</h3><ul>'+u.map(function(c){return '<li><strong>'+c.name+'</strong> — '+c.def.substring(0,60)+'...</li>'}).join('')+'</ul></div>'; } }
-function generateReview(){ var u=concepts.filter(function(c){return !learnedCards.includes(c.id)}); if(u.length===0){ showToast('🎉 全部概念已学习！');return; } switchTab(1);setCard(concepts.indexOf(u[0]));showToast('开始复习：'+u[0].name); }
-function toggleMindmap(el){ if(typeof el==='string')el=document.getElementById(el); el.classList.toggle('open'); var b=el.nextElementSibling; if(b)b.classList.toggle('open'); }
-setCard(0);updateProgress();
+// ===== TAB SYSTEM =====
+(function() {
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  var savedTab = localStorage.getItem('mks-cosmic-tab');
+
+  tabs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      this.classList.add('active');
+      var targetId = this.getAttribute('data-tab');
+      document.getElementById(targetId).classList.add('active');
+      localStorage.setItem('mks-cosmic-tab', targetId);
+    });
+  });
+
+  if (savedTab) {
+    var btn = document.querySelector('[data-tab="' + savedTab + '"]');
+    if (btn) btn.click();
+  }
+})();
+
+// ===== FLIP CARD CONCEPTS =====
+var conceptData = [
+  { name: '不确定性原理', emoji: '🎲', detail: '<h4>为什么它是宇宙故事的第一章？</h4><p>不确定性原理宣告了决定论的终结。拉普拉斯曾想象：如果知道宇宙每个粒子的位置和速度，就能预知一切未来。海森堡用一道不等式证明：<strong>你连一个粒子的完整信息都无法同时获得。</strong>位置越精确，动量就越模糊——这不是技术问题，是大自然写在底层代码里的限制。世界从一台可完整预知的机器变成了一片概率云。</p>' },
+  { name: '量子叠加态', emoji: '🌊', detail: '<h4>不观察时，世界是什么样？</h4><p>双缝实验给出了一个反直觉的答案：单个电子也能产生干涉条纹——它<strong>同时走过了两条缝</strong>。在被观测之前，粒子不存在于任何一个确定的位置——它处于多种可能性的叠加中。薛定谔那只既死又活的猫，就是为了讽刺这一荒谬性而提出的思想实验。讽刺的是，这个思想实验后来成了量子力学最好的科普。</p>' },
+  { name: '广义相对论', emoji: '🌐', detail: '<h4>引力不是力</h4><p>爱因斯坦在1915年告诉我们：物质告诉时空如何弯曲，时空告诉物质如何运动。行星绕太阳转——不是因为有一种力拉住它，而是因为太阳的质量弯曲了周围的时空，行星沿着弯曲时空的最短路径（测地线）运动。牛顿的万有引力定律在低速弱场下是极好的近似——但它不是自然的终极语言。</p>' },
+  { name: '黑洞', emoji: '🕳️', detail: '<h4>时空的尽头</h4><p>当足够多的质量压缩到足够小的空间，时空曲率变得如此之大，连光都无法逃逸——这就是黑洞。按质量分为恒星级（几倍到几十倍太阳质量）、超大质量级（数百万到数十亿倍）。银河系中心就有一个400万倍太阳质量的黑洞。霍金证明黑洞有温度、会通过量子效应缓慢蒸发——在遥远的未来，所有黑洞都会蒸发殆尽。</p>' },
+  { name: '奇点定理', emoji: '⏰', detail: '<h4>时间有起点</h4><p>霍金和彭罗斯证明：在有因果律的时空中，只要存在质量或光，就至少存在一个奇点。大爆炸奇点是时间的开端——问大爆炸之前是什么就像问北极之北是哪里一样没有意义。黑洞奇点是时间的终点。在奇点处，广义相对论失效——我们现有的物理定律无法描述那里发生的事。</p>' },
+  { name: '熵增原理', emoji: '📈', detail: '<h4>为什么时间一去不回？</h4><p>所有物理定律中，只有热力学第二定律有时间箭头——它说孤立系统的熵（混乱度）只增不减。为什么鸡蛋打碎了不能复原？不是物理上不可能——而是在统计意义上几乎不可能。熵增定义了时间的方向。关于生命和熵的关系，薛定谔有一句名言：<strong>生命以负熵为生</strong>——通过摄入低熵物质、排出高熵废物来维持自身的有序。</p>' },
+  { name: '恒星核合成', emoji: '⭐', detail: '<h4>我们都是星尘</h4><p>宇宙大爆炸只提供了氢、氦和少量锂。你身体里的碳、氧、铁、钙——所有这些元素都在某颗恒星的内部通过核聚变锻造出来的。质量越大的恒星能合成的元素越重——直到铁。比铁更重的元素（金、银、铂、铀）需要超新星爆发或中子星碰撞这种极端事件。卡尔·萨根说：<strong>我们都是星尘</strong>——这不是诗意的比喻，是精确的物理事实。</p>' },
+  { name: '拓扑相变', emoji: '🔮', detail: '<h4>当数学进入物理</h4><p>2016年诺贝尔物理学奖——三位科学家将拓扑学引入物理学。什么是拓扑？一个球和一个骰子在拓扑上是等价的（揉一揉就能变成对方），但一个球和一个甜甜圈不等价——因为甜甜圈有一个洞，不撕裂就无法消除。拓扑相变描述的就是这种整体形态的改变。在极低温二维材料中，拓扑序主导了电子的集体行为——这可能是未来量子计算机的物理基础。</p>' },
+  { name: '路径积分', emoji: '➗', detail: '<h4>费曼的直觉</h4><p>费曼发明了一种全新的方式理解量子力学：粒子从A到B不是走一条路径，而是<strong>同时走所有可能路径</strong>。每条路径对应一个箭头（概率振幅），把所有箭头的贡献加起来就是最终结果。为什么光走直线？因为越接近直线的路径，箭头方向越一致、相互增强；越弯曲的路径，箭头方向越分散、相互抵消。这是量子力学最优雅也最反直觉的表述。</p>' },
+  { name: '引力波', emoji: '〰️', detail: '<h4>时空的涟漪</h4><p>2015年9月14日，LIGO探测器首次直接探测到引力波——来自13亿光年外两个黑洞的合并。在合并的最后0.2秒内，释放的能量超过了全宇宙所有恒星发光的总和。引力波以光速传播，穿过一切——穿过地球、穿过你——让空间本身发生极其微弱的伸缩。LIGO的精度相当于测量地球到比邻星的距离变化——一根头发丝的厚度。引力波开启了观测宇宙的全新窗口：<strong>我们第一次听到了光看不到的宇宙</strong>。</p>' }
+];
+
+var currentConceptIdx = 0;
+var flipInner = document.getElementById('flipInner1');
+var conceptCounter = document.getElementById('conceptCounter');
+
+function updateConcept() {
+  var c = conceptData[currentConceptIdx];
+  flipInner.classList.remove('flipped');
+  flipInner.querySelector('.flip-front').innerHTML = '<span style="font-size:3rem;">' + c.emoji + '</span><h3 style="margin-top:8px;">' + c.name + '</h3><p style="color:var(--text-light);font-size:.85rem;">点击翻转了解详情</p>';
+  flipInner.querySelector('.flip-back').innerHTML = c.detail;
+  conceptCounter.textContent = (currentConceptIdx + 1) + ' / ' + conceptData.length;
+}
+
+function prevConcept() {
+  currentConceptIdx = (currentConceptIdx - 1 + conceptData.length) % conceptData.length;
+  updateConcept();
+}
+
+function nextConcept() {
+  currentConceptIdx = (currentConceptIdx + 1) % conceptData.length;
+  updateConcept();
+}
+
+// ===== MINDMAP =====
+function toggleMindmap(header) {
+  var toggle = header.querySelector('.toggle');
+  var body = header.parentElement.querySelector('.node-body');
+  if (body) {
+    body.classList.toggle('open');
+    toggle.classList.toggle('open');
+  }
+}
+
+// ===== QUIZ SYSTEM =====
+var quizData = [
+  {q:'不确定性原理描述的是哪一对物理量的关系？', opts:['位置与动量','质量与能量','电荷与磁矩','温度与熵'], ans:0, expl:'不确定性原理指出：位置和动量是一对共轭物理量，它们的测量误差乘积≥ℏ/2。这是自然的本性，不是技术限制。'},
+  {q:'量子力学中，观测行为会导致什么？', opts:['波函数坍缩','粒子加速','熵减少','时空弯曲'], ans:0, expl:'在量子力学中，观测行为会导致波函数从叠加态坍缩为确定的状态。在观测之前，粒子可以同时处于多种状态的叠加。'},
+  {q:'在广义相对论中，引力被解释为什么？', opts:['一种基本力','质量的固有属性','时空的弯曲','粒子的交换'], ans:2, expl:'爱因斯坦的广义相对论用时空弯曲来解释引力：质量弯曲了周围的时空，物体沿着弯曲时空中的测地线运动。'},
+  {q:'黑洞的事件视界指的是什么？', opts:['连光也无法逃逸的边界','黑洞的物理表面','黑洞内部最高温度处','时间停止流动的区域'], ans:0, expl:'事件视界是黑洞的不可返回点——一旦越过这个边界，任何物质或信息（包括光）都无法从黑洞中逃逸。'},
+  {q:'霍金辐射的理论含义是什么？', opts:['黑洞永远稳定','黑洞有温度，会缓慢蒸发','黑洞内部有生命','黑洞可以穿越时间'], ans:1, expl:'霍金结合量子力学和广义相对论，证明黑洞事件视界附近的量子效应会让黑洞发射辐射（霍金辐射），这意味着黑洞有温度、会缓慢蒸发。'},
+  {q:'奇点定理证明的是什么？', opts:['宇宙无限大','空间是平的','引力不存在','时间有起始点'], ans:3, expl:'霍金和彭罗斯证明：在有因果律的时空中，只要存在质量或光，就至少存在一个奇点——时间的起始点。大爆炸奇点是时间的开端。'},
+  {q:'热力学第二定律与其他物理定律的根本区别是什么？', opts:['更精确','有方向性（时间箭头）','适用范围更广','可以违反'], ans:1, expl:'热力学第二定律是唯一有时间箭头的物理定律——它说孤立系统的熵只增不减。其他物理定律在时间上都是可逆的。'},
+  {q:'恒星核合成理论(B²FH)告诉我们什么？', opts:['所有元素从宇宙诞生时就存在','元素只能在实验室合成','元素来自外星文明','重元素在恒星内部通过核聚变生成'], ans:3, expl:'B²FH理论证明：宇宙大爆炸只提供了氢和氦，更重的元素在恒星内部通过核聚变生成。铁以上的重元素需要超新星爆发或中子星碰撞。'},
+  {q:'2016年诺贝尔物理学奖拓扑相变的核心创新是什么？', opts:['将拓扑学引入物理学','发现新粒子','证明相对论错误','发现新元素'], ans:0, expl:'三位科学家将拓扑学这一纯数学分支引入物理学，用拓扑不变量描述物质相变——超越了传统的对称性破缺框架。'},
+  {q:'费曼的路径积分表述中，粒子从A到B是怎么运动的？', opts:['走最短路径','同时走所有可能路径','选择最优路径','随机挑选一条路径'], ans:1, expl:'路径积分的核心思想：粒子不是走一条路径，而是同时走所有可能路径。每条路径贡献一个概率振幅，所有振幅的叠加给出最终概率。'},
+  {q:'引力波首次被直接探测到是在哪一年？', opts:['2005年','2010年','2015年','2020年'], ans:2, expl:'LIGO在2015年9月14日首次直接探测到引力波信号GW150914——来自13亿光年外两个黑洞的合并。这个发现获得了2017年诺贝尔物理学奖。'},
+  {q:'LIGO探测引力波的原理是什么？', opts:['测量天体亮度变化','接收无线电信号','观测X射线暴','激光干涉测量空间距离的微小变化'], ans:3, expl:'LIGO使用激光干涉仪：两条4公里长的垂直臂管，引力波通过时会微弱地改变臂长——变化幅度约为质子直径的千分之一。通过激光干涉测量这个变化。'},
+  {q:'木星朱诺号探测器的钛合金防护罩重180公斤，它主要防护的是什么？', opts:['陨石撞击','极端温度','高强度辐射','太阳风'], ans:2, expl:'木星辐射带强度达2000万电子伏特，足以在很短时间内损坏电子设备。180公斤钛合金防护罩将辐射危害降低到八百分之一，发射成本因此增加了1亿美元。'},
+  {q:'熵的公式 S = k·ln(W) 中，W代表什么？', opts:['能量','功','状态数（可能微观状态）','温度'], ans:2, expl:'熵 = 玻尔兹曼常数 × ln(可能状态数)。W越大表示系统越混乱。因为用ln取对数，两个系统的总熵就是各自熵的和——方便计算。'},
+  {q:'爱因斯坦-罗森桥(ER桥)在物理上对应什么概念？', opts:['量子纠缠','虫洞的数学描述','黑洞的奇点','引力波的波前'], ans:1, expl:'爱因斯坦和罗森通过坐标变换消除了场方程中的奇点，得到了一个连接两个时空区域的桥梁——这就是虫洞的数学起源。但ER桥在物理上是否真实存在，至今未知。'},
+  {q:'薛定谔在《生命是什么》中，用根号n定律论证了什么？', opts:['基因的原子数量太少，不足以靠经典物理维持稳定','生命不可解释','生物一定比物理复杂','量子力学不适用于生命'], ans:0, expl:'薛定谔论证：根据根号n定律，一个由百万个原子组成的结构，热涨落误差约为千分之一——这个误差太大，不足以维持生命的稳定。因此基因一定有一种非经典的结构（他预言了一种非周期性晶体——后来被证实就是DNA）。'},
+  {q:'哈勃望远镜的主镜面出了什么问题？', opts:['焦距太长','材料选择错误','太重无法发射','镜面比标准厚了2微米'], ans:3, expl:'哈勃主镜面在打磨时参数出错，比标准厚了2微米——这导致对焦不准。人类头发丝直径约80微米，2微米的误差让哈勃的观测效果一度与地面望远镜差不多。1993年太空行走安装了矫正镜片后才起死回生。'},
+  {q:'拓扑学中，以下哪对物体在拓扑上不等价？', opts:['球和立方体','碗和盘子','球和甜甜圈','咖啡杯和甜甜圈'], ans:2, expl:'球和甜甜圈在拓扑上不等价——甜甜圈有一个洞，球没有。不撕裂就无法将球变形成甜甜圈。有趣的是，咖啡杯和甜甜圈在拓扑上是等价的（都有且仅有一个洞）。'},
+  {q:'虫洞可以实现时空穿越吗？', opts:['已经实现了','NASA正在建造','爱因斯坦试过','数学上存在解，但物理上可能不稳定'], ans:3, expl:'虫洞是爱因斯坦场方程的一个数学解（爱因斯坦-罗森桥），但理论分析表明它极其不稳定——任何物质试图穿过都会导致虫洞坍缩。维持虫洞打开需要负能量——目前只在极微小的量子尺度观察到过类似效应。'},
+  {q:'关于"满的硬盘比空的硬盘更重吗"这个问题，卓克的回答是什么？', opts:['都一样重','机械硬盘一样重，固态硬盘装满更重','装满的永远更重','空的永远更重'], ans:1, expl:'机械硬盘存储数据改变的是磁筹方向（不改变质量），所以装满和空盘一样重。固态硬盘存储数据就是存储电子——这部分电子确实增加了重量，所以装满的SSD更重一点（但差别微乎其微）。'}
+];
+
+var quizAnswered = 0;
+var quizCorrect = 0;
+
+function renderQuiz() {
+  var container = document.getElementById('quizContainer');
+  var html = '';
+  quizData.forEach(function(item, idx) {
+    html += '<div class="quiz-card" id="q' + idx + '">';
+    html += '<div class="q-text">' + (idx + 1) + '. ' + item.q + '</div>';
+    var labels = ['A', 'B', 'C', 'D'];
+    item.opts.forEach(function(opt, oi) {
+      html += '<button class="q-option" id="q' + idx + 'o' + oi + '" onclick="answerQuiz(' + idx + ',' + oi + ')">' + labels[oi] + '. ' + opt + '</button>';
+    });
+    html += '<div class="q-feedback" id="q' + idx + 'fb"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+
+  // Restore from localStorage
+  var saved = localStorage.getItem('mks-cosmic-quiz');
+  if (saved) {
+    var state = JSON.parse(saved);
+    state.forEach(function(s) {
+      if (s.answered) {
+        var optBtn = document.getElementById('q' + s.idx + 'o' + s.chosen);
+        if (optBtn) {
+          optBtn.classList.add(s.correct ? 'correct' : 'wrong');
+          optBtn.disabled = true;
+          var fb = document.getElementById('q' + s.idx + 'fb');
+          fb.style.display = 'block';
+          fb.innerHTML = s.correct ? '✅ 正确！' + quizData[s.idx].expl : '❌ 错误。' + quizData[s.idx].expl;
+          fb.style.background = s.correct ? '#d4edda' : '#f8d7da';
+        }
+        // Disable all options for this question
+        for (var oi = 0; oi < 4; oi++) {
+          var ob = document.getElementById('q' + s.idx + 'o' + oi);
+          if (ob) ob.disabled = true;
+        }
+      }
+    });
+    updateScore();
+  }
+}
+
+function answerQuiz(idx, chosen) {
+  var item = quizData[idx];
+  var correct = chosen === item.ans;
+  var fb = document.getElementById('q' + idx + 'fb');
+
+  if (correct) quizCorrect++;
+  quizAnswered++;
+
+  // Highlight chosen option
+  var chosenBtn = document.getElementById('q' + idx + 'o' + chosen);
+  chosenBtn.classList.add(correct ? 'correct' : 'wrong');
+
+  // Also highlight correct answer
+  var correctBtn = document.getElementById('q' + idx + 'o' + item.ans);
+  if (!correct) correctBtn.classList.add('correct');
+
+  // Disable all options
+  for (var oi = 0; oi < 4; oi++) {
+    var ob = document.getElementById('q' + idx + 'o' + oi);
+    if (ob) ob.disabled = true;
+  }
+
+  fb.style.display = 'block';
+  fb.innerHTML = correct ? '✅ 正确！' + item.expl : '❌ 错误。' + item.expl;
+  fb.style.background = correct ? '#d4edda' : '#f8d7da';
+
+  updateScore();
+  saveQuizState();
+}
+
+function updateScore() {
+  document.getElementById('quizScore').textContent = '已答：' + quizAnswered + ' / ' + quizData.length + ' | 正确：' + quizCorrect;
+  document.getElementById('quizProgress').style.width = (quizAnswered / quizData.length * 100) + '%';
+}
+
+function saveQuizState() {
+  var state = [];
+  for (var i = 0; i < quizData.length; i++) {
+    var chosen = -1;
+    var answered = false;
+    for (var oi = 0; oi < 4; oi++) {
+      var ob = document.getElementById('q' + i + 'o' + oi);
+      if (ob && (ob.classList.contains('correct') || ob.classList.contains('wrong'))) {
+        chosen = oi;
+        answered = true;
+        break;
+      }
+    }
+    if (answered) {
+      state.push({idx: i, chosen: chosen, correct: chosen === quizData[i].ans, answered: true});
+    }
+  }
+  localStorage.setItem('mks-cosmic-quiz', JSON.stringify(state));
+}
+
+function resetQuiz() {
+  quizAnswered = 0;
+  quizCorrect = 0;
+  localStorage.removeItem('mks-cosmic-quiz');
+  renderQuiz();
+}
+
+// ===== SHORT ANSWER =====
+function showAnswer(idx) {
+  var reveal = document.getElementById('saR' + idx);
+  reveal.style.display = reveal.style.display === 'block' ? 'none' : 'block';
+}
+
+// ===== DECISION SCENARIOS =====
+function evalDecision(el, choice) {
+  var parent = el.parentElement.parentElement;
+  var feedback = parent.querySelector('[id^="decisionFeedback"]');
+  if (!feedback) { feedback = parent.querySelector('[id^="decisionFeedback1"]'); }
+  var buttons = parent.querySelectorAll('.choice-btn');
+  buttons.forEach(function(b) { b.disabled = true; });
+
+  var messages = {
+    a: '✅ <strong>好选择！</strong>X射线望远镜能看到黑洞吸积盘的精细结构、测量黑洞自旋、研究极端条件下的物理——这些都是引力波探测器无法做到的。电磁波和引力波是互补的观测窗口。不过要注意：这是一个真实的天文学争论——不同的波段揭示不同的物理过程。',
+    b: '🤔 <strong>也有道理！</strong>引力波探测是全新的窗口，能听到电磁波看不到的事件（如黑洞合并）。LIGO已证明这个方向有巨大科学回报。不过它和X射线望远镜不是替代关系——最佳策略是两者兼顾（但预算不允许）。',
+    c: '⚠️ <strong>高风险选择。</strong>量子引力理论无疑是物理学最大的圣杯，但纯理论研究的产出时间表和成果不确定性都远大于观测项目。作为科学顾问，你需要在确定性科学回报和高风险基础研究之间权衡。说实话，这三者都值得资助——这就是为什么真实的科学预算辩论如此激烈。'
+  };
+  feedback.innerHTML = messages[choice] || messages.a;
+  feedback.style.display = 'block';
+  feedback.style.background = choice === 'a' ? '#d4edda' : '#fff3cd';
+}
+
+function evalDecision2(el, choice) {
+  var parent = el.parentElement.parentElement;
+  var feedback = parent.querySelector('[id^="decisionFeedback2"]');
+  var buttons = parent.querySelectorAll('.choice-btn');
+  buttons.forEach(function(b) { b.disabled = true; });
+
+  if (choice === 'b') {
+    feedback.innerHTML = '✅ <strong>你找到了核心问题！</strong>蹦床类比确实存在循环定义——它用重力拉下铅球使蹦床凹陷来解释引力，但重力本身就是需要被解释的东西。这也是为什么物理学家对这个类比既爱又恨：它直观，但逻辑上有根本缺陷。爱因斯坦本人晚年也在思考：时空弯曲究竟是什么里面弯曲的？';
+  } else if (choice === 'c') {
+    feedback.innerHTML = '👍 <strong>你也指出了一个实际缺陷。</strong>引力波确实不是拿来拿去产生的，而是天体加速运动时持续辐射的。不过这是类比的技术性缺陷，B选项揭示的是更深层的逻辑问题。两个问题都存在。';
+  } else {
+    feedback.innerHTML = '🤔 实际上，这个类比有一个根本的逻辑问题——蹦床的凹陷需要地球的重力来产生，但引力波理论中不存在这个额外的重力。这是一种循环定义。不过，没有完美的科普类比——关键在于知道每个类比的边界在哪里。';
+  }
+  feedback.style.display = 'block';
+  feedback.style.background = choice === 'b' ? '#d4edda' : '#fff3cd';
+}
+
+function evalDecision3(el, choice) {
+  var parent = el.parentElement.parentElement;
+  var feedback = parent.querySelector('[id^="decisionFeedback3"]');
+  var buttons = parent.querySelectorAll('.choice-btn');
+  buttons.forEach(function(b) { b.disabled = true; });
+
+  if (choice === 'b') {
+    feedback.innerHTML = '✅ <strong>精准判断！</strong>这是典型的术语劫持——用一个有严格物理定义的词（引力波）来包装不相关的内容（机械振动），利用公众对科学术语的敬畏来营销。声学引力波不等于引力波，就像量子波动速读不等于量子力学。真正的引力波能量极其微弱，探测它需要人类最精密的仪器——用它来治癌症在物理上毫无道理。';
+  } else if (choice === 'c') {
+    feedback.innerHTML = '⚠️ 保持中立看起来是安全的选择，但在科学传播中，<strong>不是所有观点都值得中立</strong>。当一个说法与已确立的物理定律直接矛盾时，中立等于把科学和伪科学放在同等地位——这恰恰是科学传播中需要避免的。';
+  } else {
+    feedback.innerHTML = '❌ <strong>这就是谣言传播的起点。</strong>真正的引力波是时空本身的波动，频率在几十到几千赫兹，能量密度极低，与物质的相互作用极其微弱——这就是为什么探测它需要4公里长的激光干涉仪。任何声称用引力波治病的说法都是对物理概念的严重滥用。';
+  }
+  feedback.style.display = 'block';
+  feedback.style.background = choice === 'b' ? '#d4edda' : '#f8d7da';
+}
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', function() {
+  renderQuiz();
+
+  // Count quiz state from localStorage
+  var saved = localStorage.getItem('mks-cosmic-quiz');
+  if (saved) {
+    var state = JSON.parse(saved);
+    state.forEach(function(s) {
+      if (s.answered) {
+        quizAnswered++;
+        if (s.correct) quizCorrect++;
+      }
+    });
+    updateScore();
+  }
+});
 </script>
+
 </body>
 </html>
