@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生命信号：健康祛魅 · 卓克科技参考五</title>
+<style>
+/* ===== 生命信号：健康祛魅 — 生机绿+警示红主题 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080c12; --bg2: #0d1219; --card: #111820;
+  --card-hover: #161e28; --text: #c5cdd8; --text-bright: #e4e9f0;
+  --text-dim: #5e6b7c; --border: #1a2330; --border-light: #243040;
+  --accent: #4caf50; --accent-glow: rgba(76,175,80,0.2);
+  --accent2: #66bb6a;
+  --danger: #ef5350; --danger-glow: rgba(239,83,80,0.15);
+  --warn: #ff9800; --warn-glow: rgba(255,152,0,0.12);
+  --info: #4dd0e1;
+  --shadow: 0 2px 12px rgba(0,0,0,0.35);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+  --radius: 10px; --radius-sm: 6px; --radius-lg: 16px;
+  --ease: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-serif: "Noto Serif SC", "STSong", "SimSun", "Georgia", serif;
+}
+
+html { font-size: clamp(14px, 1.2vw, 16px); scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.75;
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(76,175,80,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76,175,80,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+body::after {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 35% 25% at 50% 10%, rgba(76,175,80,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 30% 50%, rgba(239,83,80,0.03) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 40% at 70% 60%, rgba(76,175,80,0.04) 0%, transparent 55%);
+}
+
+.top-bar {
+  position: sticky; top: 0; z-index: 200;
+  background: linear-gradient(135deg, #0a1620 0%, #111d28 100%);
+  border-bottom: 1px solid rgba(76,175,80,0.2);
+  color: #e4e9f0; padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+.top-bar h1 { font-size: clamp(0.9rem, 2vw, 1.1rem); font-weight: 700; letter-spacing: 2px; }
+.top-bar .home-link {
+  color: var(--accent); font-size: 0.78rem; border: 1px solid var(--accent);
+  padding: 4px 14px; border-radius: 20px; text-decoration: none;
+  transition: all var(--ease); white-space: nowrap;
+}
+.top-bar .home-link:hover { background: var(--accent); color: #080c12; }
+
+.tab-bar {
+  position: sticky; top: 46px; z-index: 199;
+  display: flex; flex-wrap: wrap; gap: 3px;
+  padding: 6px clamp(4px, 1vw, 10px);
+  background: rgba(8,12,18,0.93); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  justify-content: center;
+}
+.tab-btn {
+  padding: 5px 11px; border-radius: 18px; border: 1px solid transparent;
+  background: transparent; color: var(--text-dim); cursor: pointer;
+  font-size: 0.73rem; font-weight: 500; letter-spacing: 0.5px;
+  transition: all var(--ease); font-family: inherit; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--accent); border-color: rgba(76,175,80,0.3); }
+.tab-btn.active { background: var(--accent); color: #080c12; border-color: var(--accent); font-weight: 700; box-shadow: 0 0 16px var(--accent-glow); }
+
+.tab-panel { display: none; position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+.tab-panel.active { display: block; animation: fadeSlideIn 0.35s ease; }
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Hero */
+.hero {
+  max-width: 1100px; margin: 0 auto; padding: 50px 24px 30px;
+  position: relative; z-index: 1;
+}
+.hero-inner {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 48px 40px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 0 60px rgba(76,175,80,0.06);
+}
+.hero-inner::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(76,175,80,0.08) 0%, transparent 70%);
+}
+.hero-inner::after {
+  content: ''; position: absolute; bottom: -40px; left: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(239,83,80,0.06) 0%, transparent 70%);
+}
+.hero-badge {
+  display: inline-block; background: rgba(76,175,80,0.12);
+  color: var(--accent); font-size: 0.75rem; letter-spacing: 3px;
+  padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;
+  font-weight: 600; position: relative; z-index: 1;
+}
+.hero h2 { font-size: 2rem; font-weight: 900; color: var(--text-bright); margin-bottom: 12px; position: relative; z-index: 1; letter-spacing: 2px; }
+.hero .hero-sub { font-size: 1rem; color: var(--accent2); margin-bottom: 20px; position: relative; z-index: 1; }
+.hero .hero-desc { font-size: 0.92rem; color: var(--text-dim); line-height: 1.8; max-width: 750px; position: relative; z-index: 1; }
+
+/* Filter tags */
+.filter-wrap {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;
+  padding: 12px 0; justify-content: center;
+}
+.filter-tag {
+  padding: 4px 13px; border-radius: 16px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-dim); cursor: pointer; font-size: 0.7rem;
+  font-weight: 600; letter-spacing: 0.5px; transition: all var(--ease);
+  font-family: inherit; white-space: nowrap;
+}
+.filter-tag:hover { border-color: var(--accent); color: var(--accent); }
+.filter-tag.active { background: var(--accent); color: #080c12; border-color: var(--accent); font-weight: 700; box-shadow: 0 0 12px var(--accent-glow); }
+
+.sec-title {
+  font-size: 1.2rem; font-weight: 700; color: var(--text-bright);
+  margin-bottom: 20px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  letter-spacing: 1px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Concept grid */
+.concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 32px; }
+.concept-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 20px;
+  border-left: 4px solid transparent; transition: all var(--ease);
+  cursor: pointer; box-shadow: var(--shadow); position: relative;
+}
+.concept-card:hover { border-left-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.concept-card .c-name { font-size: 1rem; font-weight: 700; color: var(--text-bright); margin-bottom: 6px; }
+.concept-card .c-def { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 8px; }
+.concept-card .c-extra { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; }
+.concept-card .c-extra.show { display: block; animation: expandIn 0.3s ease; }
+@keyframes expandIn { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
+.concept-card .c-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; letter-spacing: 0.5px; }
+.tag.green { background: rgba(76,175,80,0.12); color: var(--accent); }
+.tag.red { background: rgba(239,83,80,0.15); color: var(--danger); }
+.tag.warn { background: rgba(255,152,0,0.15); color: var(--warn); }
+.concept-card .c-hint { font-size: 0.68rem; color: var(--text-dim); margin-top: 8px; font-style: italic; }
+
+/* MKS Toolkit */
+.mks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
+.mks-card {
+  background: var(--card); border: 2px solid var(--danger);
+  border-radius: var(--radius); padding: 24px 20px;
+  position: relative; box-shadow: 0 0 20px var(--danger-glow);
+  transition: all var(--ease);
+}
+.mks-card:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(239,83,80,0.25); }
+.mks-card .mks-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--danger); color: #fff; font-size: 0.68rem;
+  padding: 3px 14px; border-radius: 12px; font-weight: 700; letter-spacing: 1px;
+  white-space: nowrap;
+}
+.mks-card .mk-name { font-size: 1rem; font-weight: 700; color: var(--text-bright); margin: 8px 0 6px; }
+.mks-card .mk-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; }
+
+/* SVG wrapper */
+.svg-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 32px;
+  text-align: center; overflow-x: auto; box-shadow: var(--shadow);
+}
+.svg-wrap svg { max-width: 100%; height: auto; }
+
+/* Boundary table */
+.boundary-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; font-size: 0.82rem; }
+.boundary-table th {
+  background: linear-gradient(135deg, #0d1a20, #132528);
+  color: var(--accent); padding: 12px 14px; text-align: left;
+  font-weight: 700; letter-spacing: 1px; font-size: 0.75rem;
+  border-bottom: 2px solid var(--accent);
+}
+.boundary-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+.boundary-table tr:hover td { background: rgba(76,175,80,0.04); }
+.boundary-table .bd-label { color: var(--accent2); font-weight: 600; white-space: nowrap; }
+
+/* Learning path */
+.path-steps { display: flex; gap: 0; margin-bottom: 32px; position: relative; flex-wrap: wrap; justify-content: center; }
+.path-steps::before {
+  content: ''; position: absolute; top: 28px; left: 5%; right: 5%; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--danger), var(--warn));
+  opacity: 0.3; z-index: 0;
+}
+.path-step {
+  flex: 1; min-width: 140px; max-width: 220px; position: relative; z-index: 1;
+  text-align: center; padding: 0 12px;
+}
+.path-step .step-dot {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--card); border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px; font-size: 1.3rem; transition: all var(--ease);
+}
+.path-step:nth-child(2) .step-dot { border-color: var(--accent2); }
+.path-step:nth-child(3) .step-dot { border-color: var(--danger); }
+.path-step:nth-child(4) .step-dot { border-color: var(--warn); }
+.path-step .step-dot:hover { transform: scale(1.1); box-shadow: 0 0 24px var(--accent-glow); }
+.path-step h4 { font-size: 0.85rem; color: var(--text-bright); margin-bottom: 4px; }
+.path-step p { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; }
+
+/* Progress */
+.progress-wrap { margin-bottom: 24px; }
+.progress-header-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.progress-header-row .lbl { font-size: 0.78rem; color: var(--text-dim); letter-spacing: 1px; }
+.progress-header-row .val { font-size: 1.4rem; font-weight: 900; color: var(--accent); font-family: var(--font-serif); }
+.progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.8s var(--ease); }
+
+/* Flip card */
+.flip-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+.flip-card { perspective: 1000px; height: clamp(240px, 40vw, 320px); margin-bottom: 14px; }
+.flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+.flip-inner.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius-lg); padding: 32px 28px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.flip-front {
+  background: linear-gradient(135deg, #0f1a18 0%, #142420 100%);
+  border: 1px solid var(--border-light); text-align: center;
+  border-top: 4px solid var(--accent);
+}
+.flip-front .ff-name { font-size: 1.6rem; font-weight: 900; color: var(--text-bright); margin-bottom: 8px; }
+.flip-front .ff-hint { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1px; }
+.flip-back {
+  background: linear-gradient(135deg, #1a1015 0%, #1d1518 100%);
+  border: 1px solid var(--border-light);
+  transform: rotateY(180deg); overflow-y: auto; text-align: left;
+  border-top: 4px solid var(--danger);
+}
+.flip-back .fb-row { margin-bottom: 10px; }
+.flip-back .fb-label { font-size: 0.68rem; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.flip-back .fb-text { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+.flip-nav { display: flex; align-items: center; gap: 16px; }
+.flip-nav button {
+  padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border-light);
+  background: var(--card); color: var(--text); cursor: pointer;
+  font-size: 0.8rem; transition: all var(--ease); font-family: inherit;
+}
+.flip-nav button:hover { border-color: var(--accent); color: var(--accent); }
+.flip-nav .idx { font-size: 0.82rem; color: var(--text-dim); min-width: 60px; text-align: center; }
+
+/* Quiz */
+.quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.quiz-q .q-title { font-weight: 700; color: var(--text-bright); margin-bottom: 10px; font-size: 0.9rem; }
+.quiz-q .q-opts { display: flex; flex-direction: column; gap: 6px; }
+.q-opt {
+  padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  background: var(--bg2); cursor: pointer; transition: all var(--ease);
+  font-size: 0.82rem; color: var(--text); font-family: inherit; text-align: left;
+}
+.q-opt:hover { border-color: var(--accent); background: rgba(76,175,80,0.06); }
+.q-opt.chosen { border-color: var(--accent); background: rgba(76,175,80,0.12); font-weight: 600; }
+.q-opt.correct { border-color: var(--accent); background: rgba(76,175,80,0.15); }
+.q-opt.wrong { border-color: var(--danger); background: rgba(239,83,80,0.12); }
+.q-feedback { display: none; margin-top: 8px; padding: 10px; border-radius: var(--radius-sm); font-size: 0.8rem; line-height: 1.6; }
+.q-feedback.show { display: block; }
+.q-feedback.correct { background: rgba(76,175,80,0.1); color: var(--accent2); border: 1px solid rgba(76,175,80,0.3); }
+.q-feedback.wrong { background: rgba(239,83,80,0.1); color: var(--danger); border: 1px solid rgba(239,83,80,0.3); }
+
+.quiz-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+.btn {
+  padding: 10px 22px; border-radius: 20px; border: none; cursor: pointer;
+  font-size: 0.82rem; font-weight: 600; font-family: inherit;
+  transition: all var(--ease); letter-spacing: 0.5px;
+}
+.btn-pri { background: var(--accent); color: #080c12; }
+.btn-pri:hover { box-shadow: 0 0 20px var(--accent-glow); }
+.btn-sec { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.btn-sec:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { box-shadow: 0 0 20px var(--danger-glow); }
+
+/* Case card */
+.case-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+.case-card h3 { color: var(--accent2); font-size: 1.1rem; margin-bottom: 10px; }
+.case-card .case-meta { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 12px; }
+.case-card .case-body { font-size: 0.85rem; color: var(--text); line-height: 1.8; }
+.case-card .case-insight { margin-top: 14px; padding: 12px; background: rgba(239,83,80,0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--danger); font-size: 0.8rem; color: var(--text); }
+
+/* Decision scene */
+.decision-scene { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+.decision-scene h3 { font-size: 0.95rem; color: var(--text-bright); margin-bottom: 8px; }
+.decision-scene .scene-desc { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.7; }
+.decision-scene .scene-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.decision-scene .scene-opt {
+  padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  background: var(--bg2); cursor: pointer; font-size: 0.82rem; color: var(--text);
+  transition: all var(--ease); font-family: inherit; text-align: left;
+}
+.decision-scene .scene-opt:hover { border-color: var(--accent); }
+.decision-scene .scene-opt.selected { border-color: var(--accent); background: rgba(76,175,80,0.12); }
+.decision-scene .scene-result { display: none; padding: 12px; background: rgba(76,175,80,0.06); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text); line-height: 1.7; }
+.decision-scene .scene-result.show { display: block; }
+
+/* SAQ */
+.saq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.saq-item .saq-q { font-weight: 600; color: var(--text-bright); margin-bottom: 10px; }
+.saq-item textarea {
+  width: 100%; height: 80px; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text); padding: 10px;
+  font-family: inherit; font-size: 0.82rem; resize: vertical;
+}
+.saq-item textarea:focus { outline: none; border-color: var(--accent); }
+.saq-ans { display: none; margin-top: 8px; padding: 10px; background: rgba(76,175,80,0.06); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text); line-height: 1.7; }
+.saq-ans.show { display: block; }
+
+/* Socratic */
+.soc-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+.soc-q { font-weight: 600; color: var(--text-bright); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.soc-q::after { content: '▸'; color: var(--accent); transition: transform var(--ease); font-size: 0.7rem; }
+.soc-q.open::after { transform: rotate(90deg); }
+.soc-a { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-dim); line-height: 1.7; }
+.soc-a.show { display: block; }
+
+/* Mindmap */
+.mindmap { padding: 10px 0; }
+.mm-node { margin: 4px 0; }
+.mm-toggle { cursor: pointer; color: var(--accent); font-weight: 700; margin-right: 4px; user-select: none; }
+.mm-label { font-size: 0.88rem; }
+.mm-children { margin-left: 20px; border-left: 1px solid var(--border); padding-left: 12px; display: none; }
+.mm-children.open { display: block; }
+.mm-root > .mm-label { font-size: 1rem; font-weight: 700; color: var(--accent2); }
+.mm-branch > .mm-label { font-weight: 600; color: var(--text-bright); }
+.mm-leaf { color: var(--text-dim); font-size: 0.8rem; padding: 2px 0; }
+.mm-leaf.danger-leaf { color: var(--danger); font-weight: 600; }
+
+/* Review */
+.review-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 8px; font-size: 0.82rem; }
+.review-item .r-q { color: var(--text-bright); font-weight: 600; }
+.review-item .r-a { color: var(--text-dim); margin-top: 4px; }
+
+@media (max-width: 768px) {
+  .hero-inner { padding: 28px 20px; }
+  .hero h2 { font-size: 1.5rem; }
+  .concept-grid { grid-template-columns: 1fr; }
+  .mks-grid { grid-template-columns: 1fr; }
+  .path-steps { flex-direction: column; align-items: center; gap: 16px; }
+  .path-steps::before { display: none; }
+  .tab-btn { font-size: 0.68rem; padding: 4px 8px; }
+  .top-bar h1 { font-size: 0.85rem; }
+  .flip-card { height: clamp(300px, 55vw, 400px); }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-bar">
+  <h1>🫀 生命信号：健康祛魅</h1>
+  <a href="index.html" class="home-link">← 返回雷达站</a>
+</nav>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="0">知识集总览</button>
+  <button class="tab-btn" data-tab="1">知识卡片</button>
+  <button class="tab-btn" data-tab="2">题库系统</button>
+  <button class="tab-btn" data-tab="3">复习模式</button>
+  <button class="tab-btn" data-tab="4">思维导图</button>
+  <button class="tab-btn" data-tab="5">深度追问</button>
+  <button class="tab-btn" data-tab="6">案例分析</button>
+  <button class="tab-btn" data-tab="7">实战决策</button>
+</div>
+
+<!-- TAB 0: 知识集总览 -->
+<div class="tab-panel active" id="panel0">
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">BAND 03 · 生机绿+警示红 · MKS CORE</div>
+    <h2>健康焦虑的解药：量化风险思维</h2>
+    <p class="hero-sub">"这个好可怕" → "风险基数多大？置信度多高？我该做什么？"</p>
+    <p class="hero-desc">
+      健康焦虑是这个时代最高频的噪声——汉坦病毒会不会是下一个新冠？微塑料真的入侵了每个人的大脑？鱼油促进痴呆？毒杨梅到底有多毒？埃博拉会全球爆发吗？冰箱除味器是智商税吗？<br><br>
+      《科技参考5》用12篇深度文章为你武装一套思维工具：<strong>量化风险</strong>。是的，安第斯病毒死亡率高达25%，但它的R₀只有2.1，潜伏期无传染性——风险被传播力锁死。是的，微塑料无处不在，但70%耸人听闻的研究使用了有缺陷的检测方法。是的，有人往杨梅里泡药水，但违规添加的纽甜和脱氢乙酸钠本身危害极低，真正的威胁是杂质。<br><br>
+      这不是一本教你"什么该怕什么不该怕"的清单——这是一套让你自己<strong style="color:var(--accent2);">拆解恐惧</strong>的方法论。绝大多数健康恐慌，经不起一个"量化风险"的追问。
+    </p>
+  </div>
+</section>
+
+<!-- Filter tags -->
+<div class="filter-wrap" id="filterWrap">
+  <button class="filter-tag active" data-filter="all">全部</button>
+  <button class="filter-tag" data-filter="概念">概念</button>
+  <button class="filter-tag" data-filter="工具">工具</button>
+  <button class="filter-tag" data-filter="案例">案例</button>
+  <button class="filter-tag" data-filter="数据">数据</button>
+  <button class="filter-tag" data-filter="趋势">趋势</button>
+  <button class="filter-tag" data-filter="争议">争议</button>
+  <button class="filter-tag" data-filter="人物">人物</button>
+  <button class="filter-tag" data-filter="方法论">方法论</button>
+</div>
+
+<h3 class="sec-title">🫀 10个核心概念</h3>
+<div class="concept-grid" id="conceptGrid0"></div>
+
+<h3 class="sec-title">🔴 MKS核心工具箱：健康祛魅四件套</h3>
+<div class="mks-grid" id="mksGrid"></div>
+
+<h3 class="sec-title">🕸 概念关系图：健康风险的量化评估体系</h3>
+<div class="svg-wrap" id="svgMap"></div>
+
+<h3 class="sec-title">🎨 创意图：恐惧放大器——健康风险的真实信号与噪声</h3>
+<div class="svg-wrap" id="creativeSVG"></div>
+
+<h3 class="sec-title">🗺 边界知识表</h3>
+<div style="overflow-x:auto;">
+<table class="boundary-table" id="boundaryTable"></table>
+</div>
+
+<h3 class="sec-title">🛤 学习路径</h3>
+<div class="path-steps" id="pathSteps"></div>
+
+<div class="progress-wrap" style="margin-top:32px;">
+  <div class="progress-header-row"><span class="lbl">祛魅进度</span><span class="val" id="progressPct">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+
+<!-- TAB 1: 知识卡片 -->
+<div class="tab-panel" id="panel1">
+<h3 class="sec-title">🃏 3D翻转知识卡片</h3>
+<div class="flip-container">
+  <div class="flip-card" id="flipCard" onclick="flipCard()">
+    <div class="flip-inner" id="flipInner">
+      <div class="flip-front"><div class="ff-name" id="ffName"></div><div class="ff-hint">点击翻转查看详情</div></div>
+      <div class="flip-back" id="flipBack"></div>
+    </div>
+  </div>
+  <div class="flip-nav">
+    <button onclick="prevCard()">◀ 上一张</button>
+    <span class="idx" id="cardIdx">1 / 10</span>
+    <button onclick="nextCard()">下一张 ▶</button>
+  </div>
+  <button class="btn btn-danger" onclick="markLearned()" id="markLearnedBtn">⭐ 标记已学习</button>
+</div>
+</div>
+
+<!-- TAB 2: 题库系统 -->
+<div class="tab-panel" id="panel2">
+<div class="quiz-actions">
+  <button class="btn btn-pri" onclick="startQuiz()">🎲 随机抽题练习</button>
+  <button class="btn btn-sec" onclick="resetQuiz()">重置</button>
+</div>
+<div id="quizContainer"></div>
+<div id="staticQuiz" style="display:none;">
+<h3 class="sec-title">📝 选择题（20题）</h3>
+<div id="mcqContainer"></div>
+</div>
+</div>
+
+<!-- TAB 3: 复习模式 -->
+<div class="tab-panel" id="panel3">
+<h3 class="sec-title">🔄 复习模式</h3>
+<div id="reviewStats"></div>
+<div id="reviewList"></div>
+</div>
+
+<!-- TAB 4: 思维导图 -->
+<div class="tab-panel" id="panel4">
+<h3 class="sec-title">🧠 思维导图</h3>
+<div class="mindmap" id="mindmapContainer"></div>
+</div>
+
+<!-- TAB 5: 深度追问 -->
+<div class="tab-panel" id="panel5">
+<h3 class="sec-title">🔍 苏格拉底式深度追问</h3>
+<div id="socraticContainer"></div>
+</div>
+
+<!-- TAB 6: 案例分析 -->
+<div class="tab-panel" id="panel6">
+<h3 class="sec-title">📋 案例深度分析</h3>
+<div class="case-card">
+  <h3>案例：微塑料恐慌的"通货膨胀"——一个科研赛道如何自我放大</h3>
+  <div class="case-meta">2021-2025 · 涉及概念：科研通货膨胀、Py-GC-MS缺陷、存在性vs因果性、信号检测</div>
+  <div class="case-body">
+    <p>2017年之前，微塑料研究每年只有300-600篇论文。2019年突破1000篇，2023-2025年稳定在每年4000多篇。论文数量膨胀了约10倍。</p>
+    <p style="margin-top:8px;">增长的驱动力是什么？一个可无限替换的模板：<strong>"我们在X里发现了微塑料"</strong>——X可以是海水、海盐、瓶装水、血液、胎盘、睾丸，最后是"每个人的大脑里都有一勺微塑料"。这些论文本质上都在证明"存在性"，而非阐述"因果性"。</p>
+    <p style="margin-top:8px;">2024年，德国亥姆霍兹环境研究中心的研究员杜尚·马特里奇公开批评《自然·医学》上的"大脑微塑料"论文："人类大脑有约60%的脂肪，而脂肪在他那套检测方法中极易产生假阳性——他测到的根本就不是微塑料，而是脂肪本身。"</p>
+    <p style="margin-top:8px;">昆士兰大学的卡珊德拉团队系统分析了所有使用"热解-气相色谱-质谱联用"（Py-GC-MS）方法的研究后得出结论：这种方法目前根本不适合鉴定生物组织中的聚乙烯或PVC——人体脂肪热解后产生的小分子，与微塑料热解产物高度吻合。而耸人听闻的微塑料风险报告中，<strong>约70%使用了这种不可靠的方法</strong>。</p>
+    <p style="margin-top:8px;">从MKS视角看：这是<strong>剂量决定毒性</strong>（检测到的"微塑料"剂量真不真实？）、<strong>相关≠因果</strong>（存在≠致病）、<strong>量化风险</strong>（即使有微塑料，风险基数多大？）和<strong>贝叶斯更新</strong>（在新证据面前大幅下调对"微塑料恐慌"的置信度）四重思维工具的经典应用场景。</p>
+  </div>
+  <div class="case-insight">
+    <strong>MKS洞察：</strong>一个科研赛道的"通货膨胀"轨迹遵循可预测的模式——存在性证明的低门槛→高影响因子期刊的早期接纳→后来者的军备竞赛式加码→质疑方法论的声音从边缘走向中心。理解这个模式，你就对"XX研究显示YY危险"有了免疫力。下一次，先问：这是什么类型的研究？用的什么检测方法？证明了因果还是只证明了存在？
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>案例：两个R₀的故事——为什么安第斯病毒不会成为新冠，而埃博拉被宣布为PHEIC</h3>
+  <div class="case-meta">2026年5月 · 涉及概念：R₀基本再生数、传播动力学、PHEIC、疫苗平台复用</div>
+  <div class="case-body">
+    <p>游轮上8例感染、3人死亡的安第斯病毒，死亡率高达25-38%。世界卫生组织评价："当前公共卫生风险很低。"为什么？因为它的R₀仅为2.1（隔离后降至0.96），且<strong>潜伏期无传染性</strong>——症状出现的第一、二天才是传染高峰。</p>
+    <p style="margin-top:8px;">而埃博拉病毒（本迪布焦型）被宣布为PHEIC——国际关注的突发公共卫生事件。不是因为它比安第斯病毒更致命（两者死亡率相当），而是因为：它在战乱地区爆发，"检测-追踪-隔离"体系完全失效；现有疫苗和抗体药物针对的是扎伊尔型，对本迪布焦型无效；美国退出WHO、解散USAID导致国际援助骤降至上次的1%。</p>
+    <p style="margin-top:8px;"><strong>R₀不是唯一重要的数字。</strong>安第斯病毒R₀=2.1但传播可控（因为传染期短且与症状同步），新冠BA.5的R₀实验室估值高达18.6（因为潜伏期即可传播）。两个数字相同R₀的病毒，公共卫生风险可能天差地别。这就是"量化风险"——不是看一个数字，而是看整个系统。</p>
+  </div>
+  <div class="case-insight">
+    <strong>MKS洞察：</strong>风险评估的本质不是"这个数字大不大"，而是"在多重约束条件下，这个系统会走向什么状态"。R₀只是起点，你还需要知道潜伏期传染性、检测能力、疫苗可用性、医疗系统承载量——这就是<strong>贝叶斯更新</strong>在公共卫生领域的应用：不断加入新的证据维度，修正初始判断。
+  </div>
+</div>
+</div>
+
+<!-- TAB 7: 实战决策 -->
+<div class="tab-panel" id="panel7">
+<h3 class="sec-title">🎯 实战决策模拟</h3>
+
+<div class="decision-scene" id="decision1">
+  <h3>场景一：朋友圈疯传"最新研究：鱼油导致痴呆！"</h3>
+  <div class="scene-desc">
+    你每天服用鱼油。朋友转发了一篇公众号文章，标题是"重磅！最新研究发现Omega-3补充剂加速认知衰退"。文章引用了廖正兵团队2026年发表在某个期刊上的研究，样本量近2000人。你应该怎么办？
+  </div>
+  <div class="scene-opts">
+    <button class="scene-opt" onclick="decide(1, 'A')">A. 立刻停止服用鱼油——这太可怕了</button>
+    <button class="scene-opt" onclick="decide(1, 'B')">B. 先看看：这是什么类型的研究？样本怎么选的？对照组怎么设的？</button>
+    <button class="scene-opt" onclick="decide(1, 'C')">C. 转发文章，提醒更多朋友注意鱼油的危害</button>
+    <button class="scene-opt" onclick="decide(1, 'D')">D. 搜索一下有没有相反结论的研究</button>
+  </div>
+  <div class="scene-result" id="decision1Result"></div>
+</div>
+
+<div class="decision-scene" id="decision2">
+  <h3>场景二：618购物节，看到一款198元的"冰箱除味抑菌保鲜器"</h3>
+  <div class="scene-desc">
+    产品页面写着："臭氧杀菌率99.9%""延长果蔬保鲜7天""内置5200mAh大电池续航80天"。评价8000+，好评率98%。你正准备下单。
+  </div>
+  <div class="scene-opts">
+    <button class="scene-opt" onclick="decide(2, 'A')">A. 果断下单——8000好评不会骗人</button>
+    <button class="scene-opt" onclick="decide(2, 'B')">B. 算一下：5200mAh ÷ 80天 ÷ 臭氧产生效率 = 冰箱臭氧浓度 ≈ 10ppm，远超安全限值0.1ppm</button>
+    <button class="scene-opt" onclick="decide(2, 'C')">C. 买个活性炭包就够了——吸附乙烯延缓成熟，只要几块钱</button>
+    <button class="scene-opt" onclick="decide(2, 'D')">D. 看买家秀，只要大部分人没闻到"消毒水味"就安全</button>
+  </div>
+  <div class="scene-result" id="decision2Result"></div>
+</div>
+
+<div class="decision-scene" id="decision3">
+  <h3>场景三：5月杨梅季，网上杨梅价格从19.9到199元/斤不等</h3>
+  <div class="scene-desc">
+    你在一个直播电商看到"漳州头茬杨梅，鲜亮硬实，放不软"——35元3斤。主播说保证新鲜。有弹幕在刷"毒杨梅"。你？
+  </div>
+  <div class="scene-opts">
+    <button class="scene-opt" onclick="decide(3, 'A')">A. 这个价格明显低于市场价，再联想到毒杨梅新闻——不买</button>
+    <button class="scene-opt" onclick="decide(3, 'B')">B. 杨梅产季已经到6月了，这个"头茬"可能是滞销货——但35元也是正常价格，买了试试</button>
+    <button class="scene-opt" onclick="decide(3, 'C')">C. 换个渠道——京东/盒马上买浙江东魁杨梅，全程冷链，虽然贵但安心</button>
+    <button class="scene-opt" onclick="decide(3, 'D')">D. 算了，今年不买杨梅了，太危险</button>
+  </div>
+  <div class="scene-result" id="decision3Result"></div>
+</div>
+</div>
+
+<script>
+// ==================== DATA ====================
+
+var concepts = [
+  {
+    name: "量化风险思维",
+    define: "面对任何健康恐吓，第一个追问不是"这个好可怕"，而是"这个风险基数多大？暴露量多少？剂量-反应关系是什么？置信度多高？"——用数字替代情绪，用系统思维替代恐惧本能。",
+    analogy: "就像看天气预报——你不会因为"明天有雷暴"就永远不出门。你会问：降雨概率多大？几点到几点？降水量多少毫米？然后决定带不带伞、是否需要调整行程。健康风险也需要同样的"概率+量级"思维。",
+    example: "安第斯病毒死亡率25-38%听着吓人，但R₀仅2.1，潜伏期无传染性，感染者在严密监控下——风险基数（可能被感染的人数）极小，传播链在统计中，因此WHO评估"风险很低"。死亡率高≠公共卫生风险高。",
+    counter: "量化风险的前提是有可靠数据。在信息缺失的情况下（如战乱中的埃博拉疫区），量化容易变成"假精确"——刚果官方报告746例疑似，真实数字可能是10倍。这时需要承认"我们不知道"，而不是瞎算。",
+    tags: ["概念", "工具", "方法论"]
+  },
+  {
+    name: "R₀基本再生数",
+    define: "在完全易感人群中，没有干预措施时，一个感染者平均传染的人数。R₀>1疫情扩大，R₀<1疫情消退。但R₀是实验室概念——现实传播力受行为、免疫、隔离等多种因素影响。",
+    analogy: "就像一个连锁信实验——R₀=2意味着每个人平均转发给了2个人，传到第10代就有1024人收到。R₀=0.5意味着每2个人收到信，只有1个会转发，很快链条就断了。病毒传播就是自然界的连锁信。",
+    example: "新冠BA.5实验室R₀估值18.6（史上最高），Delta现实统计R₀达5.1，BA.1摸到8.2。安第斯病毒干预前R₀=2.1，隔离后降至0.96——跟季节性流感（0.9-2.1）差不多。",
+    counter: "R₀相同的两种病毒，公共卫生风险可能天差地别。安第斯病毒R₀=2.1但潜伏期无传染性、传染高峰与症状同步→容易识别隔离。新冠潜伏期即具传染性→隔离总是慢一步。R₀必须结合"无症状传播比例"和"传染期与症状的时间关系"一起看。",
+    tags: ["概念", "数据", "工具"]
+  },
+  {
+    name: "相关≠因果",
+    define: "两个变量在统计上相关联，不等于其中一个导致了另一个。混淆因素、反向因果、选择性报告都可能产生虚假关联。这是解读健康研究新闻的第一道防线。",
+    analogy: "夏天冰淇淋销量和溺水死亡人数高度相关——不是因为冰淇淋导致溺水，而是因为"天气热"这个混淆因素同时导致更多人吃冰淇淋和更多人去游泳。健康研究中的"鱼油导致痴呆"可能同理：吃鱼油的人可能本来就有心血管基础病（医生建议他们吃的），而心血管病与认知衰退有关。",
+    example: "2026年廖正兵团队研究声称"吃鱼油加速认知衰退"，但同一数据库（ADNI）在2023年被另一批中国学者分析得出相反结论："长期使用Omega-3降低AD风险64%"。同一数据，不同入组标准，完全相反的结论——这就是典型的低质量相关性研究。",
+    counter: "相关≠因果不是说相关性没有价值——队列研究发现"吸烟与肺癌相关"就是因果关系的起点。关键是证据的强度等级：相关性能提示假设，但需要RCT和机制研究来确认因果。不要把"相关性线索"当成"因果性结论"。",
+    tags: ["概念", "方法论", "争议"]
+  },
+  {
+    name: "剂量决定毒性",
+    define: "毒理学第一原理：任何物质在足够高的剂量下都有毒，任何物质在足够低的剂量下都是安全的。毒性不是"有/无"的二元问题，而是"多少/多久"的连续谱。",
+    analogy: "水在短时间内喝10升会致死（稀释性低钠血症），但这不代表水是"毒物"。砒霜在极低剂量下曾被用作药物。毒杨梅事件中违规添加的纽甜和脱氢乙酸钠，即便违法，实际摄入量仍在安全范围内——真正危险的是小作坊生产中的甲醇、重金属等杂质污染。",
+    example: "纽甜甜度是蔗糖的8000倍，果农凭手感添加——稍微过量就会让杨梅甜得不正常而被发现，所以实际用量自然被"市场反馈"约束在合理范围内。脱氢乙酸钠作为合法的食品添加剂，安全余量很高——即使超标几倍食用，急性中毒风险也极低。但杂质呢？只有天知道。",
+    counter: "剂量决定毒性是急性毒理学的框架。对于长期低剂量暴露（如环境内分泌干扰物）、非单调剂量-反应关系（某些激素样物质在低剂量下效应反而更强），以及个体差异极大的过敏反应，这个框架需要拓展。",
+    tags: ["概念", "工具", "方法论"]
+  },
+  {
+    name: "贝叶斯更新",
+    define: "面对新证据，不是全盘接受或全盘否定，而是根据新证据的质量和强度，理性调整原有信念的置信度。先验概率×证据力度=后验概率。",
+    analogy: "你听到窗外有翅膀拍打声（新证据）。如果你住在城市公寓（先验：鸽子概率高），你不会认为那是一只鹰。如果你住在山间木屋（先验：猛禽也可能），你会更认真地对待这个证据。贝叶斯更新就是：不要让一个微弱的信号推翻你已经建立的整体认知。",
+    example: "在微塑料恐慌中，你的先验是"没有确认的微塑料致病案例"。当你看到"大脑微塑料"的新闻——先问：这证据力度强吗？用什么方法测的？然后发现70%耸人听闻的研究用了不可靠的Py-GC-MS方法→证据力度很弱→后验概率小幅上调但不恐慌。这比"看到新闻就信"或"完全不相信科学"都要理性。",
+    counter: "贝叶斯更新的风险在于先验可能本身就是错的。如果你从错误的先验出发，新证据的权重可能被低估或高估。所以需要定期检查自己的先验假设——比如"保健品普遍有害"和"保健品普遍有益"这两个先验都太粗糙。",
+    tags: ["概念", "工具", "方法论"]
+  },
+  {
+    name: "科研通货膨胀",
+    define: "某个研究领域论文数量激增、但平均质量下降的现象——由存在性证明的模板化、高影响因子期刊的早期接纳、后来者的军备竞赛式加码共同驱动。微塑料研究是典型案例。",
+    analogy: "就像货币超发导致购买力下降——当"我们在X里发现了微塑料"的论文模板可以无限套用，每篇论文的"信息量"就贬值了。早期发Nature Medicine，后来只能发普通期刊，再后来编辑都审美疲劳了。科研通货膨胀的终点是：人们开始质疑整个领域的测量方法。",
+    example: "微塑料研究：2017年前300-600篇/年 → 2023-2025年4000+篇/年。Web of Science上约10%的微塑料测量使用了已被证明不可靠的Py-GC-MS方法，但这些研究贡献了70%的耸人听闻的新闻标题。这是一个"新闻过滤器"效应——无聊的阴性结果没人报道。",
+    counter: "并非所有高速增长的研究领域都在通货膨胀——AI和大语言模型领域的论文数量也暴增，但平均质量（以技术突破为衡量标准）确实在提升。区分"泡沫增长"和"真实爆发"的关键是：这个领域是否产生了可复现的、因果性的、有实际应用价值的成果？",
+    tags: ["概念", "趋势", "争议"]
+  },
+  {
+    name: "传播动力学三要素",
+    define: "评估一种传染病的真实威胁，不能只看死亡率——必须同时看R₀（传播力）、潜伏期传染性（能否在症状出现前传染）、以及"检测-追踪-隔离"体系的完整性。三者共同决定疫情走向。",
+    analogy: "就像评估一支军队的威胁：R₀是"每个士兵能杀伤多少敌人"；潜伏期传染性是"士兵能否隐身接近目标"；检测-追踪-隔离体系是"你的雷达和防空系统有多好"。一个高杀伤力但不会隐身的敌人（安第斯病毒），比一个中等杀伤力但能隐身的敌人（新冠）好对付得多。",
+    example: "安第斯病毒：死亡率25%但潜伏期无传染性+传染高峰与症状同步→容易隔离→风险低。埃博拉本迪布焦型：死亡率22%但在战乱区爆发+"检测-追踪-隔离"体系崩溃+疫苗无效→PHEIC。同样的高死亡率，完全不同的风险等级——因为传播动力学的另外两个要素截然不同。",
+    counter: "三要素模型对已知病毒适用，但对新发传染病——当你不确定它是否已经获得了"潜伏期传染性"（如新冠早期的情况）——需要按最坏情况假设。保守原则在公共卫生中是理性的。",
+    tags: ["概念", "案例", "方法论"]
+  },
+  {
+    name: "证据金字塔",
+    define: "不是所有"科学研究表明"都同等可信——从体外实验→动物实验→病例报告→观察性研究→RCT→系统综述/Meta分析，证据强度逐级递增。你在热搜上看到的"最新研究"，大多数位于金字塔底部。",
+    analogy: "体外实验（试管里的细胞）就像在游泳池里练游泳——条件太简化了。动物实验就像在小河里练习。观察性研究（队列/病例对照）就像在海边游泳。RCT就像在真实海洋中进行的救生测试。当你听到"XX物质杀死癌细胞"——先问：是在培养皿里杀的（体外实验）？还是在小鼠身上（动物实验）？还是在人类RCT中？",
+    example: "鱼油与痴呆研究是观察性研究（从ADNI数据库的问卷中提取"吃没吃鱼油"的信息做相关性分析）——处于证据金字塔中部。NMN抗衰老研究大多数是动物实验——处于底部。mRNA疫苗的有效性是RCT结果——处于顶部。对鱼油恐慌，对NMN兴奋，对疫苗怀疑——这是把证据金字塔完全用反了。",
+    counter: "证据金字塔是理想化排序。现实中，一个设计精良的观察性研究可能比一个劣质的RCT更有信息量。此外，对于某些问题（如环境暴露的长期健康效应），RCT在伦理上不可行——你总不能随机分配一群人"必须呼吸有PM2.5的空气"吧。",
+    tags: ["概念", "方法论", "工具"]
+  },
+  {
+    name: "风险沟通的信号-噪声比",
+    define: "健康信息环境中，真正的风险信号被大量噪声淹没。噪声包括：低质量研究被媒体放大、利益冲突驱动的恐慌营销、以及人类对"新威胁"的认知偏误。提升信号-噪声比是健康素养的核心。",
+    analogy: "就像在嘈杂的酒吧里听人说话——你听到的词只有30%是真话（信号），70%是背景噪音。健康新闻也一样：70%的耸人听闻标题背后是不可靠的研究方法（噪声），只有30%值得认真对待（信号）。关键是学会分辨：这个声音来自"喝醉的陌生人"还是"清醒的医生"？",
+    example: "微塑料70%耸人听闻研究用了不可靠方法→低信号-噪声比。鱼油与痴呆研究来自同一数据库但入组标准不同就得出相反结论→说明相关性分析本身就噪声很大。毒杨梅事件中违规添加剂危害极低但新闻渲染为"科技与狠活"→噪声放大了信号。",
+    counter: "对"信号-噪声比"的过度警觉可能导致犬儒主义——对所有健康信息一概不信。这不是理性的终点。目标是对"信号"保持开放但设高门槛，对"噪声"保持免疫但不愤世嫉俗。一个实用的阈值：如果结论是"XX颠覆了之前的认知"，那它需要至少来自一个RCT级别的证据才值得你修改行为。",
+    tags: ["概念", "方法论", "案例"]
+  },
+  {
+    name: "健康信息素养",
+    define: "在信息洪流中有效获取、评估和应用健康信息的能力。核心技能包括：识别证据等级、区分相关与因果、追问剂量、识别利益冲突、用贝叶斯更新而非情绪反应来调整行为。",
+    analogy: "就像学开车——刚开始你需要刻意练习"看后视镜-打转向灯-刹车"，熟练后这些变成本能反应。健康信息素养也如此：一开始你需要刻意追问"什么研究？证据几级？剂量多少？谁出的钱？"，练多了就会自动触发"等等，我先量化一下这个风险"。",
+    example: "防晒服：烈日下暴露<3小时不需要防晒服（任何薄长袖挡90%紫外线=从20分钟延长到200分钟）。买防晒服看ASTM D6544认证（模拟2年洗涤暴晒后的防晒性能），而不是看UPF50+（未经洗涤的初始值）。冰箱除味器：198元的臭氧型=智商税（要么无效要么超标），几块钱的活性炭=有效且安全。这些都是把健康信息素养变成日常决策的例子。",
+    counter: "健康信息素养不是让你变成"怀疑论者"——它会让你在某些事情上更安心（如：知道了毒杨梅的真实风险极小，6月放心吃东魁杨梅），在某些事情上更警觉（如：知道了防晒服的伪需求逻辑，省了冤枉钱）。净效果是减少不必要的焦虑和消费。",
+    tags: ["概念", "工具", "方法论"]
+  }
+];
+
+var mksToolkit = [
+  {
+    name: "量化风险法",
+    desc: "面对任何健康恐吓，执行四步追问：①风险基数多大？（安第斯病毒死亡率25%，但可能感染的人数是多少？）②暴露量多少？（微塑料"一勺"是多大剂量？比我每天从空气中吸入的灰尘多还是少？）③剂量-反应关系是什么？（臭氧浓度达到多少ppm才开始抑菌？这个冰箱除味器的实际浓度是多少？）④置信度多高？（这个结论来自什么研究？用了什么检测方法？有没有独立验证？）<br><br><strong>应用场景：</strong>每次看到健康恐吓新闻时，把你的第一反应从"好可怕"改为"让我算算"。"
+  },
+  {
+    name: "贝叶斯更新",
+    desc: "不是"看到新证据就改变信念"，也不是"死守原有看法"——而是根据证据的力度，按比例调整信念的强度。微塑料恐慌中：先验"没有确认的微塑料致病案例"→新证据"大脑微塑料论文"→检查方法→发现70%耸人听闻研究用了不可靠方法→证据力度很弱→仅小幅上调后验概率。<br><br><strong>应用场景：</strong>你的健康信念应该像一个"概率分布"而不是"开关"——不是"鱼油有害or无害"，而是"基于当前证据，鱼油有害的概率约为X%，我会在更强证据出现时更新这个数字"。"
+  },
+  {
+    name: "相关≠因果",
+    desc: "统计关联是因果关系的必要但不充分条件。观察性研究中的"鱼油与认知衰退相关"可能被无数混杂因素解释：吃鱼油的人更可能有心血管基础病（医生建议的），基础病本身与认知衰退相关。同一数据库、不同入组标准就能得出相反结论——这是相关性研究脆弱的标志。<br><br><strong>应用场景：</strong>任何来自观察性研究的健康结论（"吃XX降低YY风险ZZ%"）都要打折听。RCT级别的因果证据才是修改行为的可靠依据。"
+  },
+  {
+    name: "剂量决定毒性",
+    desc: "毒性不是二元属性，而是暴露量的函数。毒杨梅中的纽甜和脱氢乙酸钠即使违规添加，实际剂量仍在安全范围内——真正危险的是小作坊生产中的杂质（甲醇、重金属、霉菌毒素）。冰箱臭氧除味器如果要真正抑菌，臭氧浓度需达0.1-0.5ppm——但这已经超过安全限值的几十倍，人会闻到"消毒水味"。所以厂商只能把臭氧浓度控制在远远低于有效的范围→结果就是：安全就无效，有效就不安全。<br><br><strong>应用场景：</strong>对任何声称"XX有毒"或"XX有益"的说法，第一个问题是："多少剂量？暴露多久？""
+  }
+];
+
+var boundaryData = [
+  { label: "汉坦病毒科", relation: "包含53种病毒的大家族，其中安第斯病毒是唯一可人传人的成员——中国每年约1万人感染的是非人传人型（引起肾出血），游轮上的是人传人型（引起心肺出血）", level: "基础知识" },
+  { label: "R₀基本再生数", relation: "流行病学的核心参数——在完全易感人群中一个感染者平均传染的人数。R₀>1疫情扩大，<1消退。但R₀是实验室概念，现实传播受免疫、行为、隔离等多种因素修正", level: "核心工具" },
+  { label: "Py-GC-MS", relation: "热解-气相色谱-质谱联用——当前微塑料检测最常用但也最有争议的方法。人体脂肪热解产物与微塑料热解产物高度相似，导致生物组织中微塑料检测存在大量假阳性", level: "争议方法" },
+  { label: "PHEIC", relation: "国际关注的突发公共卫生事件——WHO最高级别警报。历史上共宣布9次，最严重为新冠疫情。2026年刚果埃博拉（本迪布焦型）是第9次——因战乱+疫苗无效+美国援助缺失", level: "政策框架" },
+  { label: "托夫生(tofersen)", relation: "首款针对SOD1基因缺陷的渐冻症药物，2023年FDA批准——通过反义寡核苷酸技术中止SOD1蛋白表达。在蔡磊的数据平台加速下，从FDA批准到中国上市仅1年（正常需5-8年）", level: "医药前沿" },
+  { label: "纽甜", relation: "第六代人工甜味剂，甜度是蔗糖的7000-13000倍——毒杨梅事件中违规添加的"8000倍甜味复合糖"就是它。可用于食品，只是不允许用于生鲜水果", level: "基础知识" },
+  { label: "脱氢乙酸钠", relation: "防腐剂——2025年中国食品规范大幅收窄其使用范围，仅允许腌渍蔬菜/菌藻/发酵豆制品/熟肉/复合调味料使用。安全余量很高，即使违规添加在杨梅上危害也极低", level: "政策变动" },
+  { label: "ADNI数据库", relation: "阿尔茨海默影像学计划——美加研究中心积累20+年的综合性数据库，常被用来做二次数据分析。2023年同一数据库得出"鱼油降低AD风险64%"，2026年得出"鱼油加速认知衰退"——完全相反的结论", level: "数据资源" },
+  { label: "BRCA1基因", relation: "乳腺癌易感基因——安吉丽娜·朱莉因其突变预防性切除双乳让其闻名。但BRCA1有约20万种可能的突变错误，其中仅60种被确认致病，另有9000+种可能致病但未被识别——这就是基因筛查的"已知未知"困境", level: "前沿争议" },
+  { label: "ASTM D6544", relation: "唯一包含耐久性测试的防晒服认证标准——模拟2年洗涤和暴晒后复测防晒性能。其他标准（如国标GB/T 18830、AATCC TM183）只测初始防晒值，不提耐久性", level: "实用标准" },
+  { label: "臭氧安全限值", relation: "美国NIOSH对臭氧暴露的安全限值为0.1ppm，中国职业接触限值为0.15ppm。人鼻可闻出臭氧味的阈值约0.01ppm——厂商若控制在"闻不到"的浓度（<0.005ppm），则远低于有效抑菌所需的0.1-0.5ppm", level: "安全标准" },
+  { label: "患者数据换服务", relation: "蔡磊在渐冻症平台创造的运营方法论——借鉴电商逻辑（京东式精细运营），用有偿服务（优先招募入药物试验、稀缺辅助器具、专业护工、专家咨询）换取患者持续更新病情数据。这一方法论可迁移到任何"退行性"疾病的研究中", level: "方法论创新" }
+];
+
+// ==================== RENDER FUNCTIONS ====================
+
+var currentTab = 0;
+var currentFilter = 'all';
+
+var tabBar = document.getElementById('tabBar');
+tabBar.addEventListener('click', function(e) {
+  if (e.target.classList.contains('tab-btn')) {
+    var t = parseInt(e.target.getAttribute('data-tab'));
+    switchTab(t);
+  }
+});
+
+var filterWrap = document.getElementById('filterWrap');
+filterWrap.addEventListener('click', function(e) {
+  if (e.target.classList.contains('filter-tag')) {
+    document.querySelectorAll('.filter-tag').forEach(function(f) { f.classList.remove('active'); });
+    e.target.classList.add('active');
+    currentFilter = e.target.getAttribute('data-filter');
+    renderFilteredConcepts();
+  }
+});
+
+function switchTab(t) {
+  currentTab = t;
+  document.querySelectorAll('.tab-btn').forEach(function(b, i) { b.classList.toggle('active', i === t); });
+  document.querySelectorAll('.tab-panel').forEach(function(p, i) { p.classList.toggle('active', i === t); });
+  if (t === 0) renderOverviewTab();
+  if (t === 3) renderReview();
+  updateProgress();
+}
+
+function renderFilteredConcepts() {
+  var grid = document.getElementById('conceptGrid0');
+  var html = '';
+  concepts.forEach(function(c, i) {
+    if (currentFilter !== 'all' && !c.tags.includes(currentFilter)) return;
+    var tagHtml = c.tags.map(function(t) {
+      var cls = t === '概念' ? 'green' : (t === '工具' || t === '方法论' ? 'red' : (t === '数据' || t === '争议' ? 'warn' : 'green'));
+      return '<span class="tag ' + cls + '">' + t + '</span>';
+    }).join('');
+    html += '<div class="concept-card" onclick="toggleConcept(this)">' +
+      '<div class="c-name">' + (i+1) + '. ' + c.name + '</div>' +
+      '<div class="c-def">' + c.define + '</div>' +
+      '<div class="c-tags">' + tagHtml + '</div>' +
+      '<div class="c-extra"><strong>类比：</strong>' + c.analogy + '<br><br><strong>示例：</strong>' + c.example + '<br><br><strong>反例/边界：</strong>' + c.counter + '</div>' +
+      '<div class="c-hint">点击展开类比、示例与边界</div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+function renderOverviewTab() {
+  renderFilteredConcepts();
+
+  var mksHtml = '';
+  mksToolkit.forEach(function(tk) {
+    mksHtml += '<div class="mks-card"><div class="mks-badge">★ MKS 核心工具箱</div>' +
+      '<div class="mk-name">' + tk.name + '</div><div class="mk-desc">' + tk.desc + '</div></div>';
+  });
+  document.getElementById('mksGrid').innerHTML = mksHtml;
+
+  document.getElementById('svgMap').innerHTML = buildSVGMap();
+  document.getElementById('creativeSVG').innerHTML = buildCreativeSVG();
+  document.getElementById('boundaryTable').innerHTML = buildBoundaryTable();
+  document.getElementById('pathSteps').innerHTML = buildPathSteps();
+}
+
+function toggleConcept(el) {
+  var extra = el.querySelector('.c-extra');
+  var hint = el.querySelector('.c-hint');
+  if (extra) {
+    extra.classList.toggle('show');
+    if (hint) hint.style.display = extra.classList.contains('show') ? 'none' : '';
+  }
+}
+
+// ===== Concept Relationship Map (4-layer Graphviz-style SVG) =====
+function buildSVGMap() {
+  var w = 1500, h = 880;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1500px;">';
+  svg += '<defs><filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>';
+  svg += '<marker id="m0" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#66bb6a" opacity="0.5"/></marker>';
+  svg += '<marker id="m1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ef5350" opacity="0.5"/></marker>';
+  svg += '<marker id="m2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#ff9800" opacity="0.5"/></marker>';
+  svg += '<marker id="m3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4dd0e1" opacity="0.5"/></marker>';
+  svg += '</defs>';
+
+  svg += '<rect width="' + w + '" height="' + h + '" fill="#111820" rx="8"/>';
+
+  // Layer 1: Root
+  svg += '<rect x="530" y="20" width="440" height="56" rx="14" fill="#0a1620" stroke="#ef5350" stroke-width="3" filter="url(#s)"/>';
+  svg += '<text x="750" y="54" text-anchor="middle" fill="#ef5350" font-size="16" font-weight="900">健康风险的量化评估体系</text>';
+
+  // Layer 2: Four pillars
+  var L2 = [
+    { x: 80, y: 150, w: 280, label: "风险量化维度", sub: "基数·暴露量·剂量-反应·置信度", col: "#66bb6a", fill: "#0f1a18" },
+    { x: 420, y: 150, w: 280, label: "认知偏误陷阱", sub: "恐怖 novelty · 相关性幻觉 · 轶事放大", col: "#ef5350", fill: "#1a1015" },
+    { x: 760, y: 150, w: 280, label: "证据评估框架", sub: "证据金字塔 · 贝叶斯更新 · 科研通胀", col: "#ff9800", fill: "#1a1510" },
+    { x: 1100, y: 150, w: 280, label: "行为决策映射", sub: "避坑指南 · 资源分配 · 风险沟通", col: "#4dd0e1", fill: "#0f1a1a" }
+  ];
+  L2.forEach(function(n, ei) {
+    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="58" rx="10" fill="' + n.fill + '" stroke="' + n.col + '" stroke-width="2" filter="url(#s)"/>';
+    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 24) + '" text-anchor="middle" fill="#e4e9f0" font-size="13" font-weight="700">' + n.label + '</text>';
+    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 44) + '" text-anchor="middle" fill="#5e6b7c" font-size="10">' + n.sub + '</text>';
+    svg += '<line x1="750" y1="76" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="' + n.col + '" stroke-width="1.2" opacity="0.3" marker-end="url(#m' + ei + ')"/>';
+  });
+
+  // Layer 3: Concepts
+  var L3 = [
+    // Under 风险量化维度
+    { x: 50, y: 290, w: 155, label: "R₀基本再生数", p: 0 }, { x: 215, y: 290, w: 155, label: "死亡率vs传播力", p: 0 },
+    { x: 50, y: 350, w: 155, label: "剂量决定毒性", p: 0 }, { x: 215, y: 350, w: 155, label: "安全阈值计算", p: 0 },
+    // Under 认知偏误陷阱
+    { x: 390, y: 290, w: 155, label: "恐怖novelty偏误", p: 1 }, { x: 555, y: 290, w: 155, label: "轶事证据放大", p: 1 },
+    { x: 390, y: 350, w: 155, label: "认知振荡困境", p: 1 }, { x: 555, y: 350, w: 155, label: "恐惧营销识别", p: 1 },
+    // Under 证据评估框架
+    { x: 730, y: 290, w: 155, label: "相关≠因果", p: 2 }, { x: 895, y: 290, w: 155, label: "贝叶斯更新", p: 2 },
+    { x: 730, y: 350, w: 155, label: "证据金字塔", p: 2 }, { x: 895, y: 350, w: 155, label: "科研通货膨胀", p: 2 },
+    // Under 行为决策映射
+    { x: 1070, y: 290, w: 155, label: "健康信息素养", p: 3 }, { x: 1235, y: 290, w: 155, label: "量化风险决策树", p: 3 },
+    { x: 1070, y: 350, w: 155, label: "信号-噪声比", p: 3 }, { x: 1235, y: 350, w: 155, label: "传播动力学应用", p: 3 }
+  ];
+  L3.forEach(function(n) {
+    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="42" rx="8" fill="#1a2a20" stroke="#5e6b7c" stroke-width="1" opacity="0.9"/>';
+    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 26) + '" text-anchor="middle" fill="#c5cdd8" font-size="10.5">' + n.label + '</text>';
+    var parent = L2[n.p];
+    svg += '<line x1="' + (parent.x + parent.w/2) + '" y1="' + (parent.y + 58) + '" x2="' + (n.x + n.w/2) + '" y2="' + n.y + '" stroke="#5e6b7c" stroke-width="0.8" opacity="0.3"/>';
+  });
+
+  // Layer 4: Real-world cases
+  var L4 = [
+    { x: 50, y: 460, w: 155, label: "汉坦病毒游轮爆发" }, { x: 215, y: 460, w: 155, label: "埃博拉PHEIC" },
+    { x: 50, y: 510, w: 155, label: "毒杨梅事件" }, { x: 215, y: 510, w: 155, label: "冰箱除味器分析" },
+    { x: 390, y: 460, w: 155, label: "微塑料大脑恐慌" }, { x: 555, y: 460, w: 155, label: "鱼油痴呆研究" },
+    { x: 390, y: 510, w: 155, label: "基因筛查焦虑" }, { x: 555, y: 510, w: 155, label: "防晒服伪需求" },
+    { x: 730, y: 460, w: 155, label: "维生素D性价比" }, { x: 895, y: 460, w: 155, label: "不锈钢餐具检测" },
+    { x: 730, y: 510, w: 155, label: "脑机接口泡沫" }, { x: 895, y: 510, w: 155, label: "数字果蝇大脑" },
+    { x: 1070, y: 460, w: 155, label: "蔡磊渐冻症平台" }, { x: 1235, y: 460, w: 155, label: "人造肉节约分析" },
+    { x: 1070, y: 510, w: 155, label: "文班亚马少林寺" }, { x: 1235, y: 510, w: 155, label: "耿同学学术打假" }
+  ];
+  L4.forEach(function(n) {
+    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="36" rx="6" fill="#0d1a20" stroke="#1a2a20" stroke-width="0.8"/>';
+    svg += '<text x="' + (n.x + n.w/2) + '" y="' + (n.y + 22) + '" text-anchor="middle" fill="#5e6b7c" font-size="9">' + n.label + '</text>';
+  });
+
+  // Feedback loops
+  svg += '<path d="M140,550 Q40,420 140,300" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.25" marker-end="url(#m0)"/>';
+  svg += '<text x="45" y="440" fill="#66bb6a" font-size="8" opacity="0.4" transform="rotate(-90,45,440)">案例反馈→量化修正</text>';
+
+  svg += '<path d="M1320,550 Q1400,420 1320,300" stroke="#4dd0e1" stroke-width="1.5" stroke-dasharray="8,5" fill="none" opacity="0.25" marker-end="url(#m3)"/>';
+  svg += '<text x="1350" y="440" fill="#4dd0e1" font-size="8" opacity="0.4" transform="rotate(90,1380,440)">决策反馈→认知更新</text>';
+
+  // Legend
+  var lx = 420, ly = 10;
+  svg += '<rect x="' + lx + '" y="' + ly + '" width="14" height="14" rx="3" fill="#0a1620" stroke="#ef5350" stroke-width="2"/>';
+  svg += '<text x="' + (lx+20) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">根概念</text>';
+  svg += '<rect x="' + (lx+130) + '" y="' + ly + '" width="14" height="14" rx="3" fill="#132520" stroke="#66bb6a" stroke-width="1"/>';
+  svg += '<text x="' + (lx+150) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">四大支柱</text>';
+  svg += '<rect x="' + (lx+280) + '" y="' + ly + '" width="14" height="14" rx="3" fill="#1a2a20" stroke="#5e6b7c" stroke-width="1"/>';
+  svg += '<text x="' + (lx+300) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">核心概念</text>';
+  svg += '<rect x="' + (lx+410) + '" y="' + ly + '" width="14" height="14" rx="3" fill="#0d1a20" stroke="#1a2a20" stroke-width="1"/>';
+  svg += '<text x="' + (lx+430) + '" y="' + (ly+11) + '" fill="#c5cdd8" font-size="10">12篇案例</text>';
+  svg += '<text x="' + (lx+560) + '" y="' + (ly+11) + '" fill="#5e6b7c" font-size="9">虚线表示反馈回路：案例检验理论，理论修正认知 | 四层递进 · 量化→评估→决策</text>';
+
+  svg += '</svg>';
+  return svg;
+}
+
+// ===== Creative SVG: Fear Amplifier =====
+function buildCreativeSVG() {
+  var w = 1050, h = 620;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="100%" style="max-width:1500px;">';
+  svg += '<defs><filter id="s2"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>';
+  svg += '<filter id="glow-green"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+  svg += '</defs>';
+
+  svg += '<rect width="' + w + '" height="' + h + '" fill="#0a0e14" rx="10"/>';
+
+  // Title
+  svg += '<text x="525" y="32" text-anchor="middle" fill="#ef5350" font-size="17" font-weight="900">恐惧放大器：健康风险的真实信号与噪声</text>';
+  svg += '<text x="525" y="52" text-anchor="middle" fill="#5e6b7c" font-size="9">The Fear Amplifier — How Real Risk Signals Get Drowned in Noise</text>';
+
+  // Center: The amplifier device
+  var cx = 525, cy = 340;
+
+  // Outer shell (amplifier)
+  svg += '<rect x="310" y="180" width="430" height="320" rx="20" fill="#1a1018" stroke="#ef5350" stroke-width="2.5" opacity="0.7" filter="url(#s2)"/>';
+  svg += '<text x="525" y="208" text-anchor="middle" fill="#ef5350" font-size="13" font-weight="700">📢 恐惧放大器</text>';
+
+  // Inner risk-o-meter gauge
+  svg += '<rect x="350" y="230" width="350" height="140" rx="12" fill="#0f0f18" stroke="#1a2330" stroke-width="1.5"/>';
+
+  // Gauge background - green to red gradient blocks
+  var blocks = [
+    { x: 370, w: 60, color: '#1b5e20', label: '低' },
+    { x: 434, w: 60, color: '#33691e', label: '' },
+    { x: 498, w: 60, color: '#f9a825', label: '中' },
+    { x: 562, w: 60, color: '#e65100', label: '' },
+    { x: 626, w: 60, color: '#b71c1c', label: '高' }
+  ];
+  blocks.forEach(function(b) {
+    svg += '<rect x="' + b.x + '" y="290" width="' + b.w + '" height="40" rx="4" fill="' + b.color + '" opacity="0.3"/>';
+    if (b.label) svg += '<text x="' + (b.x + b.w/2) + '" y="315" text-anchor="middle" fill="#c5cdd8" font-size="10">' + b.label + '</text>';
+  });
+
+  // Gauge needle
+  svg += '<polygon points="525,285 515,340 535,340" fill="#ef5350" opacity="0.85"/>';
+  svg += '<circle cx="525" cy="340" r="12" fill="#ef5350" opacity="0.6"/>';
+  svg += '<circle cx="525" cy="340" r="5" fill="#e4e9f0"/>';
+
+  // Labels on the gauge
+  svg += '<text x="525" y="274" text-anchor="middle" fill="#5e6b7c" font-size="10">风险感知仪表盘</text>';
+  svg += '<text x="370" y="375" text-anchor="middle" fill="#66bb6a" font-size="8">理性区</text>';
+  svg += '<text x="660" y="375" text-anchor="middle" fill="#ef5350" font-size="8">恐慌区</text>';
+
+  // Left side: Real signal inputs (green)
+  var signals = [
+    { x: 45, y: 200, label: "真实风险信号", examples: "病毒R₀=18.6 → 高", sub: "证据：RCT/流行病学硬数据", color: "#66bb6a" },
+    { x: 45, y: 280, label: "真实风险信号", examples: "重金属/石棉污染 → 中高", sub: "证据：明确剂量-反应因果链", color: "#66bb6a" },
+    { x: 45, y: 360, label: "真实风险信号", examples: "违规添加剂杂质 → 未知但低", sub: "证据：剂量在安全范围内", color: "#66bb6a" },
+    { x: 45, y: 440, label: "真实风险信号", examples: "正规渠道杨梅 → 极低", sub: "证据：全程冷链无添加", color: "#66bb6a" }
+  ];
+  signals.forEach(function(s) {
+    svg += '<rect x="' + s.x + '" y="' + s.y + '" width="22" height="40" rx="4" fill="' + s.color + '" opacity="0.4"/>';
+    svg += '<text x="' + (s.x + 75) + '" y="' + (s.y + 14) + '" fill="' + s.color + '" font-size="9" font-weight="700">' + s.label + '</text>';
+    svg += '<text x="' + (s.x + 75) + '" y="' + (s.y + 28) + '" fill="#c5cdd8" font-size="8">' + s.examples + '</text>';
+    // Arrow to amplifier
+    svg += '<line x1="' + (s.x + 155) + '" y1="' + (s.y + 20) + '" x2="305" y2="' + (s.y + 15) + '" stroke="' + s.color + '" stroke-width="1" opacity="0.3"/>';
+  });
+
+  // Right side: Noise inputs (red)
+  var noises = [
+    { x: 790, y: 200, label: "噪声放大", examples: "微塑料入侵大脑!", sub: "噪声源：Py-GC-MS假阳性", color: "#ef5350" },
+    { x: 790, y: 280, label: "噪声放大", examples: "鱼油导致痴呆!", sub: "噪声源：低质量相关性研究", color: "#ef5350" },
+    { x: 790, y: 360, label: "噪声放大", examples: "毒杨梅! 千万别买!", sub: "噪声源：个例放大+恐惧标题", color: "#ef5350" },
+    { x: 790, y: 440, label: "噪声放大", examples: "汉坦病毒=下一个新冠!", sub: "噪声源：忽视传播动力学差异", color: "#ef5350" }
+  ];
+  noises.forEach(function(n) {
+    svg += '<rect x="' + n.x + '" y="' + n.y + '" width="22" height="40" rx="4" fill="' + n.color + '" opacity="0.4"/>';
+    svg += '<text x="' + (n.x + 30) + '" y="' + (n.y + 14) + '" text-anchor="start" fill="' + n.color + '" font-size="9" font-weight="700">' + n.label + '</text>';
+    svg += '<text x="' + (n.x + 30) + '" y="' + (n.y + 28) + '" text-anchor="start" fill="#c5cdd8" font-size="8">' + n.examples + '</text>';
+    svg += '<line x1="780" y1="' + (n.y + 15) + '" x2="745" y2="' + (n.y + 20) + '" stroke="' + n.color + '" stroke-width="1" opacity="0.3"/>';
+  });
+
+  // Bottom: Output
+  svg += '<rect x="310" y="535" width="430" height="40" rx="10" fill="#0f1a18" stroke="#66bb6a" stroke-width="1.5"/>';
+  svg += '<text x="525" y="560" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700">输出：量化后的风险评估 → "我该做什么？"而不是"好可怕！"</text>';
+
+  // Left side label
+  svg += '<text x="180" y="140" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700">📊 真实信号输入</text>';
+  svg += '<text x="180" y="156" text-anchor="middle" fill="#5e6b7c" font-size="8">信噪比高 · 可量化 · 可操作</text>';
+
+  // Right side label
+  svg += '<text x="860" y="140" text-anchor="middle" fill="#ef5350" font-size="11" font-weight="700">📢 噪声放大输入</text>';
+  svg += '<text x="860" y="156" text-anchor="middle" fill="#5e6b7c" font-size="8">信噪比低 · 情感驱动 · 行动模糊</text>';
+
+  // MKS lens at bottom
+  svg += '<text x="525" y="600" text-anchor="middle" fill="#ff9800" font-size="10" font-weight="600">MKS洞察：恐惧放大器的工作原理 → 噪声强度远超信号强度，但信号的质量远超噪声 | 你的任务是：把耳朵贴在信号源上，把噪声过滤掉</text>';
+
+  svg += '</svg>';
+  return svg;
+}
+
+function buildBoundaryTable() {
+  var html = '<thead><tr><th>概念</th><th>与核心体系的关系</th><th>层级</th></tr></thead><tbody>';
+  boundaryData.forEach(function(b) {
+    html += '<tr><td class="bd-label">' + b.label + '</td><td>' + b.relation + '</td><td>' + b.level + '</td></tr>';
+  });
+  html += '</tbody>';
+  return html;
+}
+
+function buildPathSteps() {
+  var steps = [
+    { icon: '🔢', title: '量化风险入门', desc: '学会追问：基数？暴露量？剂量？置信度？——把"好可怕"转化为"让我算算"。重点文章：汉坦病毒、毒杨梅。' },
+    { icon: '🔄', title: '识别认知偏误', desc: '识别恐惧营销套路、"恐怖novelty"偏误、轶事证据放大——为什么你的恐惧总被放大。重点文章：微塑料、鱼油痴呆。' },
+    { icon: '📊', title: '评估证据质量', desc: '掌握证据金字塔、贝叶斯更新、科研通货膨胀识别——"最新研究"不等于"可靠结论"。重点文章：基因筛查、脑机接口。' },
+    { icon: '🎯', title: '做出理性决策', desc: '将量化风险转化为可操作行为——买不买防晒服？吃不吃鱼油？囤不囤物资？从"信息焦虑"到"信息素养"。重点文章：防晒服、冰箱除味器、维生素D。' }
+  ];
+  var html = '';
+  steps.forEach(function(s, i) {
+    html += '<div class="path-step"><div class="step-dot">' + s.icon + '</div><h4>阶段' + (i+1) + '：' + s.title + '</h4><p>' + s.desc + '</p></div>';
+  });
+  return html;
+}
+
+// ==================== FLIP CARDS ====================
+var currentCardIdx = 0;
+var learnedCards = [];
+var LS = 'mks_tech5_health_';
+try { var raw = localStorage.getItem(LS + 'learned'); if (raw) learnedCards = JSON.parse(raw); } catch(e) { learnedCards = []; }
+
+function initFlipCards() { setCard(0); }
+function setCard(idx) {
+  currentCardIdx = idx;
+  var c = concepts[idx];
+  document.getElementById('ffName').textContent = c.name;
+  document.getElementById('cardIdx').textContent = (idx+1) + ' / ' + concepts.length;
+  document.getElementById('flipInner').classList.remove('flipped');
+  var backHtml = '';
+  backHtml += '<div class="fb-row"><div class="fb-label">定义</div><div class="fb-text">' + c.define + '</div></div>';
+  backHtml += '<div class="fb-row"><div class="fb-label">类比</div><div class="fb-text">' + c.analogy + '</div></div>';
+  backHtml += '<div class="fb-row"><div class="fb-label">示例</div><div class="fb-text">' + c.example + '</div></div>';
+  backHtml += '<div class="fb-row"><div class="fb-label">反例/边界</div><div class="fb-text">' + c.counter + '</div></div>';
+  document.getElementById('flipBack').innerHTML = backHtml;
+  updateMarkBtn();
+}
+function flipCard() { document.getElementById('flipInner').classList.toggle('flipped'); }
+function prevCard() { setCard((currentCardIdx - 1 + concepts.length) % concepts.length); }
+function nextCard() { setCard((currentCardIdx + 1) % concepts.length); }
+function markLearned() {
+  learnedCards[currentCardIdx] = !learnedCards[currentCardIdx];
+  localStorage.setItem(LS + 'learned', JSON.stringify(learnedCards));
+  updateMarkBtn(); updateProgress();
+}
+function updateMarkBtn() {
+  var btn = document.getElementById('markLearnedBtn');
+  var learned = !!learnedCards[currentCardIdx];
+  btn.textContent = learned ? '✅ 已学习（点击取消）' : '⭐ 标记已学习';
+  btn.style.background = learned ? 'var(--accent)' : 'var(--danger)';
+}
+
+// ==================== QUIZ SYSTEM ====================
+var mcqData = [
+  { q: "安第斯病毒死亡率高达25-38%，但WHO评估'当前公共卫生风险很低'。最关键的原因是什么？", opts: ["安第斯病毒潜伏期无传染性，且R₀仅为2.1，传染链可控","安第斯病毒只在南美洲传播","已有有效的安第斯病毒疫苗","死亡率25%在现代医学中不算高"], ans: 0, exp: "安第斯病毒潜伏期（中位数18天）无传染性，传染高峰在症状出现的第一二天——这让'检测-追踪-隔离'体系非常有效。R₀=2.1，隔离后降至0.96。死亡率高但不等于公共卫生风险高——风险的公式是'死亡率×感染人数'，后者被传播动力学锁死了。" },
+  { q: "在微塑料研究中，导致大量'耸人听闻'结论的核心方法缺陷是什么？", opts: ["Py-GC-MS方法中人体脂肪热解产物与微塑料热解产物高度相似，产生假阳性","研究者故意伪造数据","样本量太小","没有进行双盲实验"], ans: 0, exp: "昆士兰大学卡珊德拉团队系统分析后得出结论：人体脂肪和聚乙烯本质上都是一长串碳氢链，热解后都产生烷烃、烯烃等小分子——Py-GC-MS方法因此产生大量假阳性。70%耸人听闻的微塑料风险报告使用了这种不可靠的方法。" },
+  { q: "2026年廖正兵团队的研究声称'鱼油促进痴呆'，同一ADNI数据库在2023年却得出'鱼油降低AD风险64%'。这个矛盾最能说明什么？", opts: ["观察性研究中的'相关≠因果'——不同入组标准可产生完全相反的结论","其中一个研究一定是造假的","鱼油的效果随时间发生了变化","ADNI数据库本身不可靠"], ans: 0, exp: "两个研究用的是同一个数据库（ADNI），但入组标准不同（选择哪些受试者纳入分析），就得出相反的结论。这说明在观察性研究中，相关性结论对分析方法高度敏感，远非'铁证'。需要RCT级别的因果证据才能可靠回答'鱼油到底有没有用'。" },
+  { q: "毒杨梅事件中，违规添加的纽甜（8000倍甜味剂）和脱氢乙酸钠（防腐剂）的实际危害为什么'极低'？", opts: ["纽甜本身是合法食品添加剂安全余量高，脱氢乙酸钠安全余量也高——剂量在安全范围内","这些添加剂都是天然物质","杨梅本身可以中和这些添加剂","违规商家实际并未添加这些物质"], ans: 0, exp: "纽甜是第六代合法甜味剂，脱氢乙酸钠虽然使用范围收窄但安全余量很高。果农凭手感添加，实际剂量受'市场反馈'约束（太甜会被发现）。真正危险的是小作坊生产中可能混入的甲醇、重金属、霉菌毒素等杂质——问题不在添加剂本身，而在生产过程的不规范。" },
+  { q: "以下哪种方法可以最有效地判断一款冰箱除味'抑菌保鲜器'是否是智商税？", opts: ["计算其臭氧产量：5200mAh÷80天÷臭氧产生效率→冰箱臭氧浓度远超安全限值或远低于有效浓度","看产品在京东/淘宝的评价数量和好评率","看产品是否标注'臭氧杀菌率99.9%'","看产品是否通过了CE认证"], ans: 0, exp: "臭氧浓度为达到抑菌效果需0.1-0.5ppm，但人体安全限值仅0.1ppm。一个198元的设备充满电最多产生0.6g臭氧，80天每天7.5mg——在400L冰箱中浓度≈10ppm，超标70倍（会被鼻子闻到）。厂商只能降到'闻不到'的浓度（<0.005ppm），而这个浓度对细菌几乎无影响。安全就无效，有效就不安全——典型智商税。" },
+  { q: "2026年刚果埃博拉被宣布为PHEIC，但这次疫情大概率不会发展到2014年西非埃博拉那么严重。核心理由是什么？", opts: ["疫苗开发平台可复用——针对本迪布焦型重新设计表面糖蛋白，10个月内可能完成","本次埃博拉病毒的死亡率比2014年低很多","刚果的医疗系统比2014年西非要好得多","美国CDC已经派出了大量援助人员"], ans: 0, exp: "2014年西非埃博拉后开发了针对扎伊尔型的疫苗（有效率近100%）。本次本迪布焦型虽使原疫苗无效，但疫苗开发平台（设计表面糖蛋白的方法）可直接复用——重新设计+紧急审批，预计10个月内可用。加上过去10年的经验积累，这次大概率不会蔓延到2014年的规模。" },
+  { q: "一个声称'95%的人大脑中都有微塑料'的研究发表在《自然·医学》上。你应该如何评估这个结论？", opts: ["先问：用的什么检测方法？有没有独立验证？发表在好期刊≠结论可靠","既然发表在顶级期刊上，结论一定是经过严格验证的","立即采取行动减少塑料使用","转发给朋友提醒他们注意"], ans: 0, exp: "《自然·医学》的这篇大脑微塑料论文正是被同行公开批评'测到的可能是脂肪而非微塑料'的那篇。高影响因子期刊也可能发表存在方法论缺陷的研究——尤其是在一个方法论共识尚未形成的新兴领域。贝叶斯更新：把'期刊等级'作为证据强度的一个参考因素，但不是唯一因素。" },
+  { q: "关于BRCA1基因筛查，以下哪项陈述是正确的？", opts: ["BRCA1有约20万种可能的突变错误，但仅60种被确认致病——筛查漏报率极高","BRCA1检测可以100%预测一个人是否会得乳腺癌","所有BRCA1突变都会导致乳腺癌","只要携带BRCA1突变就应该预防性切除"], ans: 0, exp: "BRCA1参与编码蛋白质的有5592个碱基，每个碱基都有3种错误可能→仅单点错误就有16776种，加上插入/缺失/重复，突变类型约20万种。但其中19万种即使错了也不会致病。真正致病的约1万种中，我们仅识别了约60种——还有9000多种致病突变是'已知未知'。这就是为什么基因筛查不能作为常规产前检查的原因之一。" },
+  { q: "在评估一种新的传染病的威胁时，传播动力学三要素不包括哪个？", opts: ["病毒核酸序列的长度","R₀（基本再生数）","潜伏期传染性","'检测-追踪-隔离'体系完整性"], ans: 0, exp: "传播动力学三要素：R₀、潜伏期传染性、检测-追踪-隔离体系。核酸序列长度决定了病毒基因组的大小，但与传播力无直接因果关系——新冠和埃博拉都是RNA病毒，核酸长度相近但传播动力学完全不同。" },
+  { q: "以下哪种做法最符合'量化风险'的思维？", opts: ["看到健康恐吓新闻后先问：风险基数？暴露量？剂量-反应？置信度？然后决定行为","相信所有科学研究，因为它们是科学的","不相信任何健康新闻，因为它们都是营销","只在医生建议下才改变自己的健康行为"], ans: 0, exp: "量化风险不是盲信也不是全盘否定——而是用系统的追问框架评估每一个健康主张：风险基数多大（多少人受影响）？暴露量多少（我接触了多少）？剂量-反应关系是什么（多少剂量开始有害）？置信度多高（证据等级）？然后做出符合自己情况的决策。" },
+  { q: "防晒服的'伪需求'逻辑是什么？", opts: ["日常通勤<3小时烈日暴露，任何薄长袖可挡90%紫外线（20分钟→200分钟安全），不需要特殊防晒服","防晒服完全没用","防晒服穿几次就没效果了","防晒服只适合在室内穿"], ans: 0, exp: "完全裸露的皮肤在烈日下20分钟开始晒伤。普通薄长袖可挡90%→安全暴露时间延长到200分钟（3+小时）。大部分人通勤/接孩子在烈日下的实际暴露时间远短于此。防晒服的真正应用场景是夏天海边/徒步等需要1/30以下紫外线透射率的场景——此时才需要考虑防晒服的UPF和耐久性。" },
+  { q: "蔡磊的'渐愈互助之家'平台之所以成为全球质量第一的渐冻症数据库，核心方法论是？", opts: ["'患者数据换服务'——借鉴电商逻辑，用有偿服务（优先招募入药试、稀缺辅助器具等）换患者持续更新数据","强制所有渐冻症患者登记","政府拨款支持","药企付费购买数据"], ans: 0, exp: "蔡磊从京东电商经验中提炼的方法论：患者最需要的是求生的机会（被招募入药物试验）+辅助器具+专业护工+专家咨询。平台提供这些稀缺资源，患者用持续更新病情数据来交换。这套正向激励确保数据新鲜和真实——而其他全球平台（美国NIH的28000人登记处、辉瑞的10700人平台）都以一次性登记为主。" },
+  { q: "关于'科研通货膨胀'的描述，以下哪项最准确？", opts: ["当论文模板化、评审标准降低、后来者军备竞赛式加码时，论文数量暴增但平均信息量下降","科研经费过度投入导致的资源浪费","所有研究领域论文数量增加都是泡沫","中国特有的科研现象"], ans: 0, exp: "科研通货膨胀有清晰的特征：①存在性证明模板化（'在X中发现Y'可无限替换X）→②高影响因子期刊的早期接纳（编辑对新奇领域的宽容）→③后来者军备竞赛（'你在大脑发现一勺？我发现一勺半！'）→④方法论质疑从边缘走向中心。微塑料研究是教科书级案例，但类似模式也出现在电磁辐射恐慌、PFAS危害等赛道。" },
+  { q: "不锈钢餐具用201号钢冒充304号钢，最大的实际问题是什么？", opts: ["实际危害极低——201号钢可安全用于日常餐具，但违反标注法规且存在极罕见的个别情况风险","201号钢含有剧毒物质","201号钢会导致癌症","201号钢的强度不足以制造餐具"], ans: 0, exp: "201号钢（9元/公斤）vs 304号钢（15元/公斤）——成本差异驱动冒充。但201号钢并非不安全：全球不锈钢餐具3/4中国制造，大多数国家日常使用的就是201号钢。问题的核心是标注不实而非健康风险。极端个例可能涉及重金属析出，但需要酸性极强+长时间浸泡的特殊条件。日常使用风险极低——量化风险后，这不值得过度担忧。" },
+  { q: "埃博拉本迪布焦型与安第斯病毒在公共卫生风险上的关键差异在于？", opts: ["安第斯病毒有有效的疫苗，而本迪布焦型没有","安第斯病毒在游轮上爆发（可追踪），本迪布焦型在战乱区爆发（不可追踪）——后者的'检测-追踪-隔离'体系完全失效","安第斯病毒的死亡率远高于本迪布焦型","本迪布焦型病毒的R₀远高于安第斯病毒"], ans: 1, exp: "本迪布焦型在刚果战乱区爆发——政府、地方武装、卢旺达国防军混战，连国际红十字会的医生进入都需要多方许可+现金买路。感染者无法被追踪，疑似病例无法被检测，密接者无法被隔离——'检测-追踪-隔离'体系完全崩溃。而安第斯病毒在游轮上，每个旅客的信息、接触史、检测结果、隔离进度都精确掌握。同样的高死亡率，完全不同的可管控性。" },
+  { q: "关于'贝叶斯更新'在健康信息评估中的应用，以下哪个例子最恰当？", opts: ["看到'大脑微塑料'新闻→检查检测方法→发现70%耸人听闻研究用了不可靠方法→仅小幅上调对微塑料风险的置信度","看到一条健康新闻就完全相信它","完全不相信任何健康新闻","把所有健康新闻都转发给朋友"], ans: 0, exp: "贝叶斯更新的核心不是'信或不信'的二元选择，而是根据证据力度按比例调整信念：先验（微塑料致病证据弱）→新证据（大脑微塑料论文）→评估证据力度（方法有缺陷）→小幅上调后验概率（仍远未到'值得恐慌'的阈值）。这个过程让你在保持开放的同时不被噪声牵引。" },
+  { q: "毒杨梅事件中，漳州杨梅产业受损最严重的是谁？", opts: ["95%的正规果农——他们的全冷链体系杨梅被'毒杨梅'标签株连","泡药水的小作坊","广州批发市场的中间商","消费者"], ans: 0, exp: "泡药水的只有3-5%的末端小作坊——他们没有接入冷链体系，果差，只能靠违规添加在低端直播渠道拼低价。而95%的正规果农建立了成熟的'采摘-冷链-运输-销售'体系，品牌果园的杨梅全程不经药水。但新闻曝光后，'漳州杨梅'订单断崖式下跌，95%的好果农被3%的坏作坊株连——这就是'一颗老鼠屎坏一锅粥'。" },
+  { q: "一个人每天补充400IU维生素D3，选择以下哪种产品最合理？", opts: ["大品牌中价格最低的维生素D3——原料成本极低（约0.05元/粒），品牌溢价是主要差异","进口的4000+IU维生素D3——量越大越划算","国内OTC渠道1元/粒的维生素D3——越贵质量越好","不需要补充维生素D，饮食就够了"], ans: 0, exp: "维生素D3的原料成本约0.05元/粒（动物脂肪提取胆固醇→脱氢→紫外照射，工艺成熟几十年）。1元/粒的价格中大部分是药店的渠道利润。选大品牌中价格最低的即可。4000+IU虽然是性价比更高的选择，但已达到美国人日常补充的上限——每天几百IU就足够了，没必要激进补充。" },
+  { q: "脑机接口'浇凉水'的核心论点是？", opts: ["脑机接口扎实的部分仅限于当前临床试验的那些应用——医疗修复（帮助瘫痪者控制光标），其他所有'智能增强/意识上传/心灵感应'都是泡沫","脑机接口技术完全不可能实现","马斯克的Neuralink公司只是一个骗局","脑机接口的研究应该被禁止"], ans: 0, exp: "脑机接口站在2026年的真实进展：可帮助瘫痪者控制计算机光标（这是经过FDA批准的临床试验），在癫痫预测、帕金森深部脑刺激方面有应用。但'意识上传''记忆转移''心灵感应'——这些依赖对大脑编码方式的全新理解，而非仅仅信号采集的进步。差距类似于'能读硬盘的0/1信号'和'能理解操作系统源代码'之间的鸿沟。" },
+  { q: "'数字果蝇大脑'实验的核心局限是什么？", opts: ["精确复刻神经元的静态连接不代表能复现意识/行为——神经元动态活动远比静态连接图复杂","果蝇根本没有大脑","实验完全是造假的","数字果蝇的行为表现没有任何意义"], ans: 0, exp: "这个实验确实完成了果蝇大脑神经连接的完整映射——这是了不起的神经科学成就。但'数字果蝇展现出学习/决策等涌现行为'的说法被严重夸大了——复刻神经元的静态连接图就像复制了一个城市所有建筑的地图，跟复制城市居民的日常活动（意识/行为）是两码事。动态神经活动、神经递质调节、环境反馈——这些远比静态连接复杂。" }
+];
+
+var currentMCQ = [];
+var quizAnswers = {};
+
+function startQuiz() {
+  document.getElementById('staticQuiz').style.display = 'none';
+  currentMCQ = mcqData.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 5);
+  quizAnswers = {};
+  var html = '';
+  currentMCQ.forEach(function(q, qi) {
+    html += '<div class="quiz-q" id="qq' + qi + '"><div class="q-title">' + (qi+1) + '. ' + q.q + '</div><div class="q-opts">';
+    q.opts.forEach(function(o, oi) {
+      html += '<button class="q-opt" onclick="selectMCQ(' + qi + ',' + oi + ')" id="qo' + qi + '_' + oi + '">' + ['A','B','C','D'][oi] + '. ' + o + '</button>';
+    });
+    html += '</div><div class="q-feedback" id="qf' + qi + '"></div></div>';
+  });
+  document.getElementById('quizContainer').innerHTML = html;
+}
+
+function selectMCQ(qi, oi) {
+  if (quizAnswers[qi] !== undefined) return; // already answered
+  var q = currentMCQ[qi];
+  var correct = q.ans === oi;
+  quizAnswers[qi] = correct;
+  var opts = document.querySelectorAll('#qq' + qi + ' .q-opt');
+  opts.forEach(function(o, i) {
+    o.disabled = true;
+    if (i === q.ans) o.classList.add('correct');
+    if (i === oi && !correct) o.classList.add('wrong');
+    if (i === oi) o.classList.add('chosen');
+  });
+  var fb = document.getElementById('qf' + qi);
+  fb.className = 'q-feedback show ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = (correct ? '✅ 正确！' : '❌ 错误。') + ' ' + q.exp;
+  saveQuizResult('mcq_' + qi, correct ? 1 : 0);
+  updateProgress();
+}
+
+function resetQuiz() {
+  currentMCQ = [];
+  quizAnswers = {};
+  document.getElementById('quizContainer').innerHTML = '';
+}
+
+// ==================== REVIEW ====================
+var quizResults = {};
+try { var raw = localStorage.getItem(LS + 'results'); if (raw) quizResults = JSON.parse(raw); } catch(e) { quizResults = {}; }
+function saveQuizResult(id, correct) { quizResults[id] = correct ? 1 : 0; localStorage.setItem(LS + 'results', JSON.stringify(quizResults)); }
+
+function renderReview() {
+  var results = quizResults;
+  var keys = Object.keys(results);
+  var total = keys.length;
+  var correct = keys.filter(function(k) { return results[k] === 1; }).length;
+  var html = '<div style="text-align:center;margin-bottom:24px;">';
+  html += '<div style="font-size:2rem;font-weight:900;color:var(--accent2);">' + correct + ' / ' + total + '</div>';
+  html += '<div style="font-size:0.85rem;color:var(--text-dim);">正确 / 总答题数</div>';
+  if (total > 0) {
+    html += '<div style="margin-top:8px;font-size:0.8rem;color:var(--warn);">正确率 ' + Math.round(correct/total*100) + '%</div>';
+  }
+  html += '</div>';
+  document.getElementById('reviewStats').innerHTML = html;
+
+  if (total === 0) {
+    document.getElementById('reviewList').innerHTML = '<p style="text-align:center;color:var(--text-dim);">还没有答题记录。去<strong>题库系统</strong>做几道题吧！</p>';
+    return;
+  }
+
+  var listHtml = '<h4 style="color:var(--text-dim);margin-bottom:12px;">答题记录（最近20条）</h4>';
+  keys.slice(-20).reverse().forEach(function(k) {
+    var r = results[k];
+    var icon = r === 1 ? '✅' : '❌';
+    var cls = r === 1 ? 'var(--accent)' : 'var(--danger)';
+    listHtml += '<div class="review-item"><span class="r-q" style="color:' + cls + '">' + icon + ' ' + k + '</span></div>';
+  });
+  document.getElementById('reviewList').innerHTML = listHtml;
+}
+
+// ==================== MINDMAP ====================
+function renderMindmap() {
+  var html = '<div class="mindmap">';
+  html += '<div class="mm-node mm-root"><span class="mm-toggle" onclick="toggleMM(this)">▸</span><span class="mm-label">健康祛魅：量化风险思维体系</span>';
+  html += '<div class="mm-children">';
+  html += '<div class="mm-node mm-branch"><span class="mm-toggle" onclick="toggleMM(this)">▸</span><span class="mm-label">风险量化维度</span><div class="mm-children"><div class="mm-leaf">R₀基本再生数 · 死亡率vs传播力</div><div class="mm-leaf danger-leaf">剂量决定毒性 · 安全阈值计算</div><div class="mm-leaf">风险基数 · 暴露量 · 剂量-反应 · 置信度</div></div></div>';
+  html += '<div class="mm-node mm-branch"><span class="mm-toggle" onclick="toggleMM(this)">▸</span><span class="mm-label">认知偏误陷阱</span><div class="mm-children"><div class="mm-leaf">恐怖novelty偏误 · 轶事放大</div><div class="mm-leaf">认知振荡（周一黑周二白）</div><div class="mm-leaf danger-leaf">恐惧营销识别 · 信号vs噪声</div></div></div>';
+  html += '<div class="mm-node mm-branch"><span class="mm-toggle" onclick="toggleMM(this)">▸</span><span class="mm-label">证据评估框架</span><div class="mm-children"><div class="mm-leaf danger-leaf">相关≠因果 · 贝叶斯更新</div><div class="mm-leaf">证据金字塔 · 科研通货膨胀</div><div class="mm-leaf">Py-GC-MS缺陷 · 观察性vs RCT</div></div></div>';
+  html += '<div class="mm-node mm-branch"><span class="mm-toggle" onclick="toggleMM(this)">▸</span><span class="mm-label">行为决策映射</span><div class="mm-children"><div class="mm-leaf">健康信息素养 · 量化风险决策</div><div class="mm-leaf danger-leaf">防晒服 · 冰箱除味器 · 维生素D · 鱼油</div><div class="mm-leaf">毒杨梅选购 · 基因筛查 · 疫苗评估</div></div></div>';
+  html += '<div class="mm-node mm-branch"><span class="mm-toggle" onclick="toggleMM(this)">▸</span><span class="mm-label">12篇案例矩阵</span><div class="mm-children"><div class="mm-leaf">病毒：汉坦病毒 · 埃博拉PHEIC</div><div class="mm-leaf">恐慌：微塑料通货膨胀 · 鱼油痴呆</div><div class="mm-leaf">消费：毒杨梅 · 冰箱除味器 · 防晒服 · 维生素D · 不锈钢餐具</div><div class="mm-leaf danger-leaf">前沿：脑机接口 · 数字果蝇 · 蔡磊渐冻症 · 基因筛查</div></div></div>';
+  html += '</div></div>';
+  html += '</div>';
+  document.getElementById('mindmapContainer').innerHTML = html;
+}
+
+function toggleMM(el) {
+  var children = el.parentElement.querySelector('.mm-children');
+  if (children) {
+    children.classList.toggle('open');
+    el.textContent = children.classList.contains('open') ? '▾' : '▸';
+  }
+}
+
+// ==================== SOCRATIC ====================
+function renderSocratic() {
+  var qas = [
+    { q: "为什么死亡率25%的安第斯病毒是'低风险'，但媒体报道给人的感觉是'极度危险'？", a: "因为媒体和人类直觉都是'死亡率驱动'的——一个杀死1/4感染者的病毒，直觉上就应该很可怕。但公共卫生风险≠死亡率——它是死亡率×感染人数×传播可控性三个变量的乘积。安第斯病毒虽然死亡率高，但传播被锁死了（潜伏期无传染性+R₀低+游轮隔离），感染人数被限制在个位数。媒体标题写'致死率25%的病毒爆发'比'传播力有限的病毒被成功控制'更能获得点击——这就是噪声放大信号。" },
+    { q: "如果微塑料真的在每个人大脑里都有一勺，这意味着什么？如果没有呢？", a: "如果真的存在且有害——这意味着全球几十亿人都暴露在神经毒性之下，PPE/塑料禁令/医学筛查的紧急程度应该像应对核辐射一样——但我们观察不到对应的疾病信号（没有确认的微塑料致病案例）。如果不存在（更可能的情况）——这意味着当前70%耸人听闻的微塑料研究在测量误差（脂肪信号被误读为微塑料），我们需要重新校准整个研究领域的方法论。两种可能都有深远影响，但答案取决于我们在检测方法上是否诚实——而当前证据指向后者。" },
+    { q: "如果有一天你发现你每天吃的保健品，周一的研究说它好，周三的研究说它坏——这是你作为消费者的失败，还是科学体制的失败？", a: "两者都有，但最终是你的信息处理策略的失败。科学体制确实有缺陷——'发表或灭亡'驱动低质量相关性研究的通货膨胀，好期刊也有方法论盲区。但作为信息消费者，工具就在你手上：证据金字塔（这个是观察性研究还是RCT？）、贝叶斯更新（不要每个新研究都重置你的信念）、相关≠因果（吃鱼油的人可能本来就有病）。工具不用，怪刀钝——这不是理性的选择。" },
+    { q: "既然'剂量决定毒性'，那我们是不是不应该担心任何微量污染物？", a: "不是。'剂量决定毒性'是框架，不是免死金牌。它要求我们：①测量实际剂量（而不是泛泛的'存在'）②对照已知的安全阈值③考虑累积效应和个体差异④保持对'非单调剂量-反应'的警惕（某些激素样物质在低剂量下效应反而更强）。关键区别：毒杨梅中的纽甜剂量在安全范围内，因为甜度约束了添加量；但小作坊杂质（甲醇、重金属）的剂量是完全未知的——不能因为'剂量决定毒性'就放松对未知污染的警惕。" },
+    { q: "科技参考5的12篇文章加起来，如果你只能说一条最重要的'健康祛魅'原则，它会是什么？", a: "永远把你的第一反应从'这个好可怕'改写为'这个风险基数多大？置信度多高？我该做什么？'——不是在脑子里模糊地想，而是真的试着回答这三个问题。你会发现，大多数让你恐惧的健康新闻，你连第一个问题（风险基数）都回答不出来。而回答不出来的恐惧，不值得改变你的行为。" }
+  ];
+  var html = '';
+  qas.forEach(function(qa) {
+    html += '<div class="soc-item"><div class="soc-q" onclick="toggleSoc(this)">' + qa.q + '</div><div class="soc-a">' + qa.a + '</div></div>';
+  });
+  document.getElementById('socraticContainer').innerHTML = html;
+}
+
+function toggleSoc(el) {
+  el.classList.toggle('open');
+  var a = el.parentElement.querySelector('.soc-a');
+  if (a) a.classList.toggle('show');
+}
+
+// ==================== DECISION SCENES ====================
+function decide(sceneId, choice) {
+  var resultEl = document.getElementById('decision' + sceneId + 'Result');
+  // Highlight selected option
+  document.querySelectorAll('#decision' + sceneId + ' .scene-opt').forEach(function(o) { o.classList.remove('selected'); });
+  event.target.classList.add('selected');
+
+  var results = {
+    '1': {
+      'A': '<p><strong>❌ 情绪反应。</strong>你在没有评估证据质量的情况下就做出了行为改变。廖正兵团队的鱼油研究是基于同一ADNI数据库中1814人的问卷分析——这是一个观察性研究，入组标准的一个微小调整就能得出相反结论（事实上2023年的同类分析确实得出了"鱼油降低AD风险64%"的结论）。用观察性研究改变健康行为，就像因为明天的天气预报就搬家——过度反应了。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：相关≠因果。等待RCT级别的证据再修改行为。</p>',
+      'B': '<p><strong>✅ 理性反应。</strong>你首先追问了证据的质量。这个研究的本质是：从一个20年的老数据库（ADNI）中筛选出273个"在问卷里说过自己吃鱼油"的人，和1541个"没说过"的人，比较认知衰退速度。关键问题：吃鱼油的人为什么吃？是医生建议的（说明他们有心脑血管基础病）？还是一直在吃（说明有健康意识）？这些混杂因素与认知衰退的关系比鱼油本身强得多。同一数据库里的不同入组标准可以得出完全相反的结论——这种脆弱的关联性不值得改变行为。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：贝叶斯更新——这个证据太弱，不改变你的先验信念。</p>',
+      'C': '<p><strong>⚠️ 放大噪声。</strong>你从一个低质量的相关性研究中提取了"鱼油有害"的信号，然后通过转发行为将它放大。一篇基于ADNI数据库二次分析的文章（且该数据库2023年被同类分析得出过相反结论），不是公共健康警报的材料。转发前请先追问：这个结论的可复现性如何？其他研究怎么说？证据金字塔上它在哪一层？</p><p style="margin-top:6px;color:var(--warn);">MKS提示：你的每一次转发都在影响其他人的健康决策——确保信号>噪声。</p>',
+      'D': '<p><strong>✅ 很好的补充步骤。</strong>搜索相反结论的研究是贝叶斯更新的核心操作——你不是只收集支持某个结论的证据（确认偏误），而是主动寻找反驳证据。你很快会发现：2023年同一ADNI数据库的分析得出"长期使用Omega-3降低AD风险64%"。两个相反结论来自同一数据库——这告诉你相关性分析的脆弱性，也告诉你为什么需要RCT级别的证据。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：主动寻找反面证据是抗认知偏误的疫苗。</p>'
+    },
+    '2': {
+      'A': '<p><strong>❌ 被好评数量误导。</strong>8000+好评在电商平台上并不罕见——大多数消费者无法验证"保鲜7天"的声称。需要记住：如果你闻不到"消毒水味"，那臭氧浓度在0.005ppm以下——远低于抑菌所需的最低浓度（0.006ppm）。如果闻到了，那浓度已经超标几十倍。好评率高≠产品有效。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：量化！5200mAh÷80天÷臭氧产生效率=？</p>',
+      'B': '<p><strong>✅ 量化风险思维的教科书级应用！</strong>你算了一笔账：5200mAh=19瓦时÷80天≈每天0.24瓦时→分成一半风扇一半臭氧→每天0.12瓦时用于臭氧→臭氧产生效率约20倍→产生约7.5mg臭氧/天。400L冰箱中≈10ppm。中国职业安全限值：0.15ppm。超标约70倍——意味着一开冰箱门就闻到浓烈"消毒水味"。所以厂商只能把浓度降到"闻不到"的水平（<0.005ppm）——而这个浓度对细菌几乎没有影响。</p><p style="margin-top:6px;color:var(--accent2);">结论：安全就无效，有效就不安全。纯智商税。</p>',
+      'C': '<p><strong>✅ 最佳性价比选择。</strong>活性炭/硅藻土：工业化量产100+年，成本极低，吸附乙烯延缓果蔬成熟（冰箱低温+无催熟信号=双保险）。唯一的也是真实的作用就是吸附——不要指望它"除菌""保鲜"。缺点是需要定期更换。但一小包活性炭的成本可能只有198元臭氧除味器的1/50。把钱花在真正的机制上，而不是花在"科技感"上。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：理解底层机制（乙烯促进成熟→活性炭吸附乙烯），就能识别智商税。</p>',
+      'D': '<p><strong>⚠️ 间接判断。</strong>"闻不到消毒水味=安全"这个逻辑部分正确——厂商确实会控制在嗅觉阈值以下以避免差评。但嗅觉阈值（0.01ppm）实际上已经接近有效抑菌的最低浓度（0.006ppm），并且在阈值以下你无法感知浓度波动。更可靠的判断方式是：如果它的工作原理是产生臭氧，那就存在“安全就无效、有效就不安全”的难题——这是一个结构性困境，不是一个"厂商做得好不好"的问题。</p><p style="margin-top:6px;color:var(--warn);">MKS提示：理解产品原理的结构性约束，比依赖感官反馈更可靠。</p>'
+    },
+    '3': {
+      'A': '<p><strong>✅ 有道理但可能过度。</strong>35元3斤确实显著低于市场均价——这暗示这批杨梅可能来自非冷链体系的末端渠道。但"价格低=毒杨梅"的推理也有问题：正常5月尾货也卖这个价。关键是渠道——如果是不知名的直播电商、拼低价的店铺，风险确实高于京东/盒马等全程冷链的主流渠道。你的警惕有基础，但"不买"比"以后所有杨梅都不买"更合理。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：区分"这个渠道风险高"和"这个品类风险高"——前者精准，后者株连无辜。</p>',
+      'B': '<p><strong>⚠️ 有风险。</strong>在5月下旬或6月初还卖"头茬果"本身就是可疑的——漳州杨梅的早熟产季在5月初到中旬，6月的市场主力已经是浙江东魁杨梅了。这个时间点的"头茬果"可能是滞销货——虽然不是所有滞销货都泡了药水，但它脱离冷链的概率更高。35元3斤的价格在杨梅这个品类中确实偏低。</p><p style="margin-top:6px;color:var(--warn);">MKS提示：新鲜农产品中"违反季节规律的低价"是一个值得警惕的信号。</p>',
+      'C': '<p><strong>✅ 最佳决策。</strong>你做出了一个基于"风险量化+成本效益"的理性选择：①风险：毒杨梅集中在不知名电商直播的低价渠道（3-5%小作坊），在京东/盒马等主流渠道几乎不存在（全程冷链体系杜绝了泡药水的动机）。②成本：东魁杨梅虽然贵，但品质和安全性有保障——而且6月正是它的产季，新鲜度和口感都处于最佳状态。③效益：你避免了被"毒杨梅"新闻吓到"所有杨梅都不敢吃"，也避免了因追求极致低价而踩雷。这是"量化风险+可操作决策"的范本。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：最好的健康决策不是"最安全的"（什么都不吃），也不是"最便宜的"，而是"在风险可接受的范围内最大化生活质量"。</p>',
+      'D': '<p><strong>❌ 过度反应。</strong>因为3-5%小作坊的违规行为而放弃整个杨梅品类——这是让噪声绑架了你的行为。毒杨梅的真实风险：①违规添加剂本身危害极低（剂量在安全范围内）②95%漳州杨梅不走药水路线③6月的主力供给（浙江杨梅占全国70%+）完全不受毒杨梅事件影响。你因为一个被媒体放大的小概率风险，放弃了当季最美味的东魁杨梅——这是恐惧放大器正在工作的典型案例。</p><p style="margin-top:6px;color:var(--accent2);">MKS提示：量化风险后做决策，而不是被标题驱动——你错过的东魁杨梅比毒杨梅多100倍。</p>'
+    }
+  };
+
+  resultEl.innerHTML = results[sceneId] ? (results[sceneId][choice] || '<p>请选择一个选项。</p>') : '<p>请选择一个选项。</p>';
+  resultEl.classList.add('show');
+}
+
+// ==================== PROGRESS ====================
+function updateProgress() {
+  var learned = learnedCards.filter(Boolean).length;
+  var answered = Object.keys(quizResults).length;
+  var totalPossible = concepts.length * 2; // cards + quiz
+  var actual = Math.min(learned + answered, totalPossible);
+  var pct = Math.round(actual / totalPossible * 100);
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ==================== INIT ====================
+function initAll() {
+  initFlipCards();
+  renderMindmap();
+  renderSocratic();
+  updateProgress();
+}
+
+// Initial render
+renderOverviewTab();
+initAll();
+</script>
+
+</body>
+</html>
