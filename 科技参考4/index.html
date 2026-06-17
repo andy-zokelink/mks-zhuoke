@@ -497,6 +497,80 @@
     .podcast-hook { font-size: 12px; }
   }
 
+  /* ── Podcast player section ── */
+  .podcast-section {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto;
+    padding: 40px 28px;
+  }
+  .podcast-section h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; letter-spacing: 0.2em;
+    color: var(--text-muted); text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .podcast-episodes {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .podcast-ep {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px; border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    background: var(--space-card);
+    transition: all 0.3s;
+  }
+  .podcast-ep:hover { border-color: rgba(255,255,255,0.15); }
+  .podcast-ep-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-muted);
+    width: 32px; text-align: center; flex-shrink: 0;
+  }
+  .podcast-ep-info { flex: 1; min-width: 0; }
+  .podcast-ep-title { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .podcast-ep-desc { font-size: 12px; color: var(--text-secondary); }
+  .podcast-ep-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .podcast-play-btn {
+    flex-shrink: 0; width: 40px; height: 40px;
+    border-radius: 50%; border: 2px solid var(--signal-cyan);
+    background: rgba(0,212,255,0.1); color: var(--signal-cyan);
+    font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .podcast-play-btn:hover { background: rgba(0,212,255,0.25); box-shadow: 0 0 16px rgba(0,212,255,0.2); }
+  .podcast-play-btn.playing { background: var(--signal-cyan); color: var(--space-black); }
+
+  /* ── Bottom player bar ── */
+  .player-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+    display: none; align-items: center; gap: 16px;
+    padding: 12px 24px;
+    backdrop-filter: blur(12px);
+    background: rgba(10,12,20,0.96);
+    border-top: 1px solid var(--border-light);
+  }
+  .player-bar.active { display: flex; }
+  .player-bar .bar-title {
+    flex: 1; min-width: 0;
+    font-size: 13px; color: var(--text-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .player-bar .bar-ctrl {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--border-light);
+    background: rgba(255,255,255,0.05); color: var(--text-secondary);
+    font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .player-bar .bar-ctrl:hover { color: var(--signal-cyan); border-color: var(--signal-cyan); }
+  @media (max-width: 768px) {
+    .podcast-section { padding: 24px 16px; }
+    .podcast-ep { padding: 12px 14px; gap: 10px; }
+    .podcast-ep-title { font-size: 13px; }
+    .player-bar { padding: 10px 16px; gap: 10px; }
+  }
+
   /* ── Footer signal bar ── */
   .signal-bar {
     position: relative;
@@ -796,6 +870,65 @@
   <div class="bar" style="height:44px;animation-delay:1.05s"></div>
 </div>
 
+<!-- Podcast section -->
+<section class="podcast-section" id="podcast">
+  <h2>▸ 收听播客 · 5期限时信号解码</h2>
+  <div class="podcast-episodes">
+    <div class="podcast-ep">
+      <div class="podcast-ep-num">01</div>
+      <div class="podcast-ep-info">
+        <div class="podcast-ep-title">AI与数字革命</div>
+        <div class="podcast-ep-desc">从DeepSeek到AGI——当AI开始写代码、做科研、甚至骗人</div>
+        <div class="podcast-ep-meta">14分26秒</div>
+      </div>
+      <button class="podcast-play-btn" data-audio="podcast/audio/ep1.mp3" data-title="AI与数字革命" onclick="playPodcast(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="podcast-ep-num">02</div>
+      <div class="podcast-ep-info">
+        <div class="podcast-ep-title">生命科学的边界</div>
+        <div class="podcast-ep-desc">疫苗、基因、保健品——在灰色地带里找到确定性</div>
+        <div class="podcast-ep-meta">12分36秒</div>
+      </div>
+      <button class="podcast-play-btn" data-audio="podcast/audio/ep2.mp3" data-title="生命科学的边界" onclick="playPodcast(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="podcast-ep-num">03</div>
+      <div class="podcast-ep-info">
+        <div class="podcast-ep-title">硬核科技引擎</div>
+        <div class="podcast-ep-desc">芯片、电池、火箭、量子计算——不讲神话，只讲物理和工程</div>
+        <div class="podcast-ep-meta">16分04秒</div>
+      </div>
+      <button class="podcast-play-btn" data-audio="podcast/audio/ep3.mp3" data-title="硬核科技引擎" onclick="playPodcast(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="podcast-ep-num">04</div>
+      <div class="podcast-ep-info">
+        <div class="podcast-ep-title">科学方法解毒剂</div>
+        <div class="podcast-ep-desc">灵芝、安宫牛黄丸——用科学方法把伪科学分解成光谱</div>
+        <div class="podcast-ep-meta">15分04秒</div>
+      </div>
+      <button class="podcast-play-btn" data-audio="podcast/audio/ep4.mp3" data-title="科学方法解毒剂" onclick="playPodcast(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="podcast-ep-num">05</div>
+      <div class="podcast-ep-info">
+        <div class="podcast-ep-title">科技重塑社会</div>
+        <div class="podcast-ep-desc">AI职业、数字货币——科技正悄无声息地重写社会规则</div>
+        <div class="podcast-ep-meta">11分38秒</div>
+      </div>
+      <button class="podcast-play-btn" data-audio="podcast/audio/ep5.mp3" data-title="科技重塑社会" onclick="playPodcast(this)">▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom player bar -->
+<div class="player-bar" id="playerBar">
+  <span class="bar-title" id="barTitle">选择一期播客</span>
+  <button class="bar-ctrl" onclick="togglePlayer()" id="barPlayBtn">⏯</button>
+  <button class="bar-ctrl" onclick="closePlayer()">✕</button>
+</div>
+
 <!-- Footer -->
 <footer class="site-footer">
   <p>卓克 · 科技参考4 · 2024–2025 · <a href="../index.html">MKS 知识体系</a></p>
@@ -847,6 +980,51 @@
     }
   });
 })();
+
+// ── Podcast player ──
+let currentAudio = null, currentBtn = null;
+
+function playPodcast(btn) {
+  const src = btn.dataset.audio, title = btn.dataset.title;
+  if (currentAudio && currentBtn === btn) {
+    togglePlayer(); return;
+  }
+  // Stop previous
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.textContent = '▶'; }
+  // Start new
+  currentAudio = new Audio(src);
+  currentAudio.play();
+  currentBtn = btn;
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+  document.getElementById('barTitle').textContent = title;
+  document.getElementById('playerBar').classList.add('active');
+  currentAudio.onended = () => {
+    btn.classList.remove('playing'); btn.textContent = '▶';
+    document.getElementById('playerBar').classList.remove('active');
+    currentAudio = null; currentBtn = null;
+  };
+}
+
+function togglePlayer() {
+  if (!currentAudio) return;
+  if (currentAudio.paused) {
+    currentAudio.play();
+    document.getElementById('barPlayBtn').textContent = '⏯';
+    if (currentBtn) { currentBtn.classList.add('playing'); currentBtn.textContent = '⏸'; }
+  } else {
+    currentAudio.pause();
+    document.getElementById('barPlayBtn').textContent = '▶';
+    if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.textContent = '▶'; }
+  }
+}
+
+function closePlayer() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.textContent = '▶'; currentBtn = null; }
+  document.getElementById('playerBar').classList.remove('active');
+}
 </script>
 
 </body>
