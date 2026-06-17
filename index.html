@@ -3,86 +3,1630 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卓克 · 最小知识集</title>
+<title>卓克知识光谱仪 · Knowledge Spectrometer</title>
 <style>
-  :root { --amber: #F59E0B; --bg: #fefcf8; --card-bg: #fff; --text: #333; --muted: #666; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: "PingFang SC","Noto Sans SC",sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-  header { text-align: center; margin-bottom: 48px; }
-  header h1 { font-size: 2rem; margin-bottom: 8px; }
-  header p { color: var(--muted); font-size: 1rem; }
-  .stats { display: flex; justify-content: center; gap: 32px; margin: 24px 0; }
-  .stat { text-align: center; }
-  .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--amber); }
-  .stat-label { font-size: .85rem; color: var(--muted); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-  .card { background: var(--card-bg); border-radius: 12px; padding: 24px; border-left: 4px solid var(--amber); box-shadow: 0 2px 8px rgba(0,0,0,.06); transition: transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: block; }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.1); }
-  .card h3 { font-size: 1.1rem; margin-bottom: 6px; }
-  .card .emoji { font-size: 1.4rem; margin-right: 4px; }
-  .card .desc { font-size: .88rem; color: var(--muted); margin-bottom: 8px; }
-  .card .count { font-size: .8rem; color: var(--amber); font-weight: 600; }
-  footer { text-align: center; margin-top: 48px; color: var(--muted); font-size: .85rem; }
-  @media (max-width: 640px) { .container { padding: 24px 16px; } .stats { gap: 16px; } .grid { grid-template-columns: 1fr; } }
+/* ============================================================
+   KNOWLEDGE SPECTROMETER — 知识光谱仪
+   母隐喻：光谱仪将入射光分解为特征谱线
+   卓克的方法论：用科学理性拆解复杂问题，呈现真相
+   ============================================================ */
+
+/* ===== FOUNDATIONS ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: #060d1a;
+  color: #c8d0dc;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --bg: #060d1a;
+  --bg-card: rgba(10,20,40,0.6);
+  --bg-card-hover: rgba(14,26,50,0.85);
+  --text: #c8d0dc;
+  --text-bright: #e8edf8;
+  --text-muted: #6b7388;
+  --border: rgba(255,255,255,0.06);
+  --border-glow: rgba(255,255,255,0.1);
+
+  --cyan: #00ccff;
+  --cyan-glow: rgba(0,204,255,0.2);
+  --orange: #ff5c3a;
+  --orange-glow: rgba(255,92,58,0.2);
+  --green: #00e676;
+  --green-glow: rgba(0,230,118,0.2);
+  --purple: #b366ff;
+  --purple-glow: rgba(179,102,255,0.2);
+  --gold: #e0a840;
+  --gold-glow: rgba(224,168,64,0.2);
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ===== ANIMATED BG STARS ===== */
+.stars-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.stars-bg .star {
+  position: absolute; border-radius: 50%;
+  background: #fff;
+  animation: twinkle var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.6; }
+}
+
+/* ===== NAV ===== */
+.nav-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(6,13,26,0.88); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--cyan); text-decoration: none; font-size: 0.88rem;
+  font-weight: 500; transition: color 0.2s; white-space: nowrap;
+}
+.nav-back:hover { color: var(--gold); }
+.nav-back svg { width: 16px; height: 16px; }
+.nav-title {
+  font-size: 0.92rem; font-weight: 600; color: var(--text-bright);
+  white-space: nowrap;
+}
+.nav-links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 0.82rem;
+  transition: color 0.2s; white-space: nowrap;
+}
+.nav-links a:hover { color: var(--cyan); }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; z-index: 1;
+  text-align: center; padding: 72px 24px 56px;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -160px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(0,204,255,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(0,204,255,0.12); color: var(--cyan);
+  padding: 4px 16px; border-radius: 20px; font-size: 0.82rem;
+  font-weight: 500; margin-bottom: 20px;
+  border: 1px solid rgba(0,204,255,0.2);
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800; color: var(--text-bright);
+  letter-spacing: 0.02em; line-height: 1.3;
+  position: relative;
+}
+.hero h1 .accent-cyan { color: var(--cyan); }
+.hero h1 .accent-gold { color: var(--gold); }
+.hero .subtitle {
+  margin-top: 16px; font-size: 1.05rem; color: var(--text-muted);
+  max-width: 620px; margin-left: auto; margin-right: auto;
+}
+.hero .stats {
+  display: flex; justify-content: center; gap: 36px; margin-top: 36px;
+  flex-wrap: wrap;
+}
+.hero .stat { text-align: center; }
+.hero .stat-num {
+  font-size: 2rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+.hero .stat-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+
+/* ===== SPECTROMETER SVG ===== */
+.spectrometer-wrap {
+  position: relative; z-index: 1;
+  max-width: 800px; margin: 0 auto 16px;
+  padding: 0 24px;
+}
+.spectrometer-wrap svg { width: 100%; height: auto; display: block; }
+
+/* ===== SECTION HEADERS ===== */
+.section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 56px auto; padding: 0 24px;
+}
+.section-head {
+  text-align: center; margin-bottom: 36px;
+}
+.section-head h2 {
+  font-size: 1.5rem; font-weight: 700; color: var(--text-bright);
+  margin-bottom: 6px;
+}
+.section-head p { color: var(--text-muted); font-size: 0.9rem; }
+
+/* ===== SPECTRAL LINES (Cross-Course Analysis) ===== */
+.spectral-lines { display: flex; flex-direction: column; gap: 14px; }
+.spectral-line {
+  position: relative;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--ease);
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+.spectral-line::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; border-radius: 0 2px 2px 0;
+}
+.spectral-line.line-ai {
+  background: linear-gradient(90deg, rgba(0,204,255,0.08) 0%, rgba(0,204,255,0.01) 100%);
+  border-color: rgba(0,204,255,0.1);
+}
+.spectral-line.line-ai::before { background: var(--cyan); }
+.spectral-line.line-deepspace {
+  background: linear-gradient(90deg, rgba(255,92,58,0.08) 0%, rgba(255,92,58,0.01) 100%);
+  border-color: rgba(255,92,58,0.1);
+}
+.spectral-line.line-deepspace::before { background: var(--orange); }
+.spectral-line.line-life {
+  background: linear-gradient(90deg, rgba(0,230,118,0.08) 0%, rgba(0,230,118,0.01) 100%);
+  border-color: rgba(0,230,118,0.1);
+}
+.spectral-line.line-life::before { background: var(--green); }
+.spectral-line.line-wisdom {
+  background: linear-gradient(90deg, rgba(179,102,255,0.08) 0%, rgba(179,102,255,0.01) 100%);
+  border-color: rgba(179,102,255,0.1);
+}
+.spectral-line.line-wisdom::before { background: var(--purple); }
+
+.spectral-line:hover {
+  transform: translateX(6px);
+  box-shadow: 0 4px 24px var(--glow-color, rgba(0,204,255,0.1));
+}
+.spectral-line.line-ai:hover { box-shadow: 0 4px 24px var(--cyan-glow); border-color: rgba(0,204,255,0.25); }
+.spectral-line.line-deepspace:hover { box-shadow: 0 4px 24px var(--orange-glow); border-color: rgba(255,92,58,0.25); }
+.spectral-line.line-life:hover { box-shadow: 0 4px 24px var(--green-glow); border-color: rgba(0,230,118,0.25); }
+.spectral-line.line-wisdom:hover { box-shadow: 0 4px 24px var(--purple-glow); border-color: rgba(179,102,255,0.25); }
+
+.line-header { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
+.line-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+}
+.line-ai .line-icon { background: rgba(0,204,255,0.18); color: var(--cyan); }
+.line-deepspace .line-icon { background: rgba(255,92,58,0.18); color: var(--orange); }
+.line-life .line-icon { background: rgba(0,230,118,0.18); color: var(--green); }
+.line-wisdom .line-icon { background: rgba(179,102,255,0.18); color: var(--purple); }
+
+.line-info { flex: 1; min-width: 0; }
+.line-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-bright); margin-bottom: 2px; }
+.line-info p { font-size: 0.85rem; color: var(--text-muted); }
+.line-courses { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.line-course-tag {
+  font-size: 0.73rem; padding: 2px 10px; border-radius: 10px;
+  font-weight: 500;
+}
+.line-ai .line-course-tag { background: rgba(0,204,255,0.12); color: var(--cyan); }
+.line-deepspace .line-course-tag { background: rgba(255,92,58,0.12); color: var(--orange); }
+.line-life .line-course-tag { background: rgba(0,230,118,0.12); color: var(--green); }
+.line-wisdom .line-course-tag { background: rgba(179,102,255,0.12); color: var(--purple); }
+
+.line-expand-hint {
+  font-size: 0.76rem; color: var(--text-muted);
+  display: flex; align-items: center; gap: 4px; margin-top: 6px;
+}
+.line-expand-hint .arrow {
+  display: inline-block; transition: transform 0.3s;
+  font-size: 0.7rem;
+}
+.spectral-line.expanded .line-expand-hint .arrow { transform: rotate(180deg); }
+
+/* Expanded connections */
+.line-connections {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin 0.35s, opacity 0.35s;
+  opacity: 0;
+}
+.spectral-line.expanded .line-connections {
+  max-height: 600px; opacity: 1; margin-top: 18px;
+}
+.conn-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.conn-card {
+  background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);
+  padding: 14px 16px; border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.2s;
+}
+.conn-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-1px);
+}
+.conn-card h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-bright); margin-bottom: 4px; }
+.conn-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+.conn-card a { color: inherit; text-decoration: none; }
+
+/* ===== COURSE GALAXY ===== */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.course-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all var(--ease);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  overflow: hidden;
+}
+.course-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 30% 20%, var(--card-glow, transparent) 0%, transparent 70%);
+  opacity: 0; transition: opacity var(--ease); pointer-events: none;
+}
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border-color: var(--card-border-glow, rgba(255,255,255,0.15));
+}
+.course-card:hover::after { opacity: 1; }
+
+.course-card.card-ai { --card-glow: rgba(0,204,255,0.06); --card-border-glow: rgba(0,204,255,0.25); }
+.course-card.card-deepspace { --card-glow: rgba(255,92,58,0.06); --card-border-glow: rgba(255,92,58,0.25); }
+.course-card.card-life { --card-glow: rgba(0,230,118,0.06); --card-border-glow: rgba(0,230,118,0.25); }
+.course-card.card-wisdom { --card-glow: rgba(179,102,255,0.06); --card-border-glow: rgba(179,102,255,0.25); }
+
+.course-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+.course-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-bright); margin-bottom: 6px; }
+.course-card .course-desc { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.6; }
+.course-card .course-meta {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  font-size: 0.76rem; color: var(--text-muted);
+}
+.course-card .course-meta span {
+  padding: 2px 10px; border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+}
+
+/* Spectral dots on course cards */
+.spectral-dots {
+  display: flex; gap: 5px; margin-top: 12px;
+}
+.spectral-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  opacity: 0.6; transition: opacity 0.2s;
+}
+.spectral-dot.active { opacity: 1; box-shadow: 0 0 6px currentColor; }
+.spectral-dot.dot-ai { background: var(--cyan); color: var(--cyan); }
+.spectral-dot.dot-deepspace { background: var(--orange); color: var(--orange); }
+.spectral-dot.dot-life { background: var(--green); color: var(--green); }
+.spectral-dot.dot-wisdom { background: var(--purple); color: var(--purple); }
+
+/* ===== PODCAST SECTION ===== */
+.podcast-wrap {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.podcast-course-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  transition: all var(--ease);
+}
+.podcast-course-group:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.podcast-course-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.podcast-course-header .pc-emoji { font-size: 1.3rem; }
+.podcast-course-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-bright); }
+.podcast-course-header .pc-count {
+  font-size: 0.78rem; color: var(--text-muted);
+  margin-left: auto;
+}
+.podcast-ep-list { display: flex; flex-direction: column; gap: 8px; }
+.podcast-ep-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.podcast-ep-item:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.06);
+}
+.podcast-ep-item .ep-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.7rem; color: #fff;
+  flex-shrink: 0;
+}
+.podcast-ep-item .ep-info { flex: 1; min-width: 0; }
+.podcast-ep-item .ep-title { font-size: 0.86rem; font-weight: 600; color: var(--text-bright); margin-bottom: 1px; }
+.podcast-ep-item .ep-desc { font-size: 0.78rem; color: var(--text-muted); }
+.podcast-ep-item .ep-duration { font-size: 0.73rem; color: var(--text-muted); opacity: 0.7; margin-top: 1px; }
+.ep-play-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; cursor: pointer; color: #fff;
+  font-size: 0.8rem; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.ep-play-btn:hover { transform: scale(1.1); }
+.ep-play-btn.cyan { background: var(--cyan); }
+.ep-play-btn.orange { background: var(--orange); }
+.ep-play-btn.green { background: var(--green); }
+.ep-play-btn.purple { background: var(--purple); }
+.ep-play-btn.gold { background: var(--gold); }
+.ep-play-btn.playing { opacity: 0.7; }
+
+/* ===== PLAYER BAR ===== */
+.player-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(6,13,26,0.95); backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 12px 24px;
+  display: none; align-items: center; gap: 14px;
+  z-index: 200;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+}
+.player-bar.active { display: flex; }
+.player-now { flex: 1; min-width: 0; }
+.player-now .player-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.player-now .player-title { font-weight: 600; font-size: 0.88rem; color: var(--text-bright); }
+.player-controls { display: flex; align-items: center; gap: 10px; }
+.player-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: none; cursor: pointer; color: #fff;
+  font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  background: var(--cyan);
+}
+.player-btn:hover { transform: scale(1.08); }
+.player-btn.close-btn { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ===== AI ASSISTANT ===== */
+.ai-fab {
+  position: fixed; bottom: 28px; right: 28px; z-index: 300;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border: none; cursor: pointer; color: #fff;
+  font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,204,255,0.3);
+  transition: all 0.3s;
+}
+.ai-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(0,204,255,0.45); }
+
+.ai-panel {
+  position: fixed; bottom: 96px; right: 28px; z-index: 300;
+  width: 380px; max-width: calc(100vw - 56px); max-height: 520px;
+  background: rgba(10,18,36,0.96); backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,204,255,0.2);
+  border-radius: 16px;
+  display: none; flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+.ai-panel.open { display: flex; }
+.ai-panel-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ai-panel-header h3 {
+  font-size: 0.95rem; font-weight: 700; color: var(--text-bright);
+  display: flex; align-items: center; gap: 8px;
+}
+.ai-panel-header h3 .ai-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.ai-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-muted); cursor: pointer; font-size: 0.8rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.ai-close:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+.ai-messages {
+  flex: 1; overflow-y: auto; padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 12px;
+  max-height: 320px;
+}
+.ai-msg {
+  font-size: 0.84rem; line-height: 1.65;
+  padding: 10px 14px; border-radius: 12px;
+  max-width: 88%;
+  animation: msgIn 0.3s ease;
+}
+@keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.ai-msg.user {
+  align-self: flex-end;
+  background: rgba(0,204,255,0.12); color: var(--text-bright);
+  border: 1px solid rgba(0,204,255,0.15);
+}
+.ai-msg.assistant {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.04); color: var(--text);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.ai-msg.assistant .thinking-tag {
+  display: inline-block;
+  font-size: 0.72rem; padding: 2px 8px; border-radius: 8px;
+  background: rgba(179,102,255,0.15); color: var(--purple);
+  margin-bottom: 6px;
+}
+.ai-input-row {
+  padding: 12px 16px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px;
+}
+.ai-input-row input {
+  flex: 1; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 8px 16px; color: var(--text-bright); font-size: 0.84rem;
+  outline: none; font-family: inherit;
+  transition: border-color 0.2s;
+}
+.ai-input-row input:focus { border-color: rgba(0,204,255,0.3); }
+.ai-input-row input::placeholder { color: var(--text-muted); }
+.ai-send {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: none; background: linear-gradient(135deg, var(--cyan), var(--purple));
+  color: #fff; cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.ai-send:hover { transform: scale(1.08); }
+.ai-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.ai-suggestions {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 12px;
+}
+.ai-suggestion {
+  font-size: 0.73rem; padding: 4px 12px; border-radius: 12px;
+  background: rgba(255,255,255,0.03); color: var(--text-muted);
+  border: 1px solid rgba(255,255,255,0.06); cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.ai-suggestion:hover {
+  background: rgba(0,204,255,0.08); color: var(--cyan);
+  border-color: rgba(0,204,255,0.2);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 48px 24px 100px;
+  border-top: 1px solid var(--border);
+  max-width: 1100px; margin: 0 auto;
+}
+.footer p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 4px; }
+.footer-links {
+  display: flex; justify-content: center; gap: 18px; margin-top: 12px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  color: var(--cyan); text-decoration: none; font-size: 0.82rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero { padding: 48px 16px 36px; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero .stats { gap: 18px; }
+  .hero .stat-num { font-size: 1.5rem; }
+  .nav-bar { padding: 8px 12px; }
+  .nav-links { gap: 8px; }
+  .nav-links a { font-size: 0.75rem; }
+  .nav-title { font-size: 0.82rem; }
+  .course-grid { grid-template-columns: 1fr; }
+  .spectral-line { padding: 16px; }
+  .line-header { gap: 10px; }
+  .line-icon { width: 36px; height: 36px; border-radius: 10px; font-size: 1.1rem; }
+  .conn-grid { grid-template-columns: 1fr; }
+  .ai-panel { width: calc(100vw - 32px); right: 16px; bottom: 88px; }
+  .ai-fab { bottom: 20px; right: 20px; }
+  .podcast-course-group { padding: 16px; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.35rem; }
+  .hero .stats { gap: 10px; }
+  .hero .stat-num { font-size: 1.2rem; }
+  .nav-links { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>卓克 · 最小知识集</h1>
-    <p>得到App卓克课程体系 · 知识蒸馏与重构</p>
-    <div class="stats">
-      <div class="stat"><div class="stat-num">8</div><div class="stat-label">已完成课程</div></div>
-      <div class="stat"><div class="stat-num">1,631</div><div class="stat-label">文章</div></div>
-      <div class="stat"><div class="stat-num">38</div><div class="stat-label">知识专题</div></div>
-    </div>
-  </header>
 
-  <div class="grid">
-    <a href="科学思维课/" class="card">
-      <h3><span class="emoji">🧠</span>科学思维课</h3>
-      <p class="desc">极限思维·演化论·医学真相·伪科学鉴别·科学史——334篇构建科学世界观</p>
-      <p class="count">334 篇文章 · 7 专题</p>
-    </a>
-    <a href="科技参考基础版/" class="card">
-      <h3><span class="emoji">📡</span>科技参考1</h3>
-      <p class="desc">AI·生物医学·疫情·能源·芯片——317篇日更科技新闻深度解读</p>
-      <p class="count">317 篇文章 · 8 专题</p>
-    </a>
-    <a href="科技参考3/" class="card">
-      <h3><span class="emoji">🔬</span>科技参考3</h3>
-      <p class="desc">AI芯片·航天·医学·消费品·人类演化——311篇年度科技前沿追踪</p>
-      <p class="count">311 篇文章 · 7 专题</p>
-    </a>
-    <a href="科技参考4/" class="card">
-      <h3><span class="emoji">🛰️</span>科技参考4</h3>
-      <p class="desc">AI·生命科学·芯片·航天·辟谣·社会变革——318篇沉浸叙事前沿科技追踪</p>
-      <p class="count">318 篇文章 · 5 专题</p>
-    </a>
-    <a href="科技参考5/" class="card">
-      <h3><span class="emoji">🗼</span>科技参考5</h3>
-      <p class="desc">AI信号·芯片硬件·生命健康·深空能源——53篇2026年全球科技信号塔解码</p>
-      <p class="count">53 篇文章 · 4 专题</p>
-    </a>
-    <a href="卓老板聊科技/" class="card">
-      <h3><span class="emoji">🛋️</span>卓老板聊科技</h3>
-      <p class="desc">黑洞·基因·疫苗·AI·博弈论·航天史——298篇科普播客的知识蒸馏</p>
-      <p class="count">298 篇文章 · 7 专题</p>
-    </a>
-    <a href="人物专题/" class="card">
-      <h3><span class="emoji">🔷</span>人物专题</h3>
-      <p class="desc">达尔文·冯·诺伊曼·杨振宁——三位叛徒的思想光谱 + 25位思想者群星谱</p>
-      <p class="count">45 篇文章 · 3 专题 · 跨7门课程</p>
-    </a>
-    <a href="AI专题/" class="card">
-      <h3><span class="emoji">🧬</span>AI专题</h3>
-      <p class="desc">涌现·智能的进化树——从图灵到GPT-5，两线交织的AI全史·时间之河叙事</p>
-      <p class="count">178 篇核心文章 · 5 章节 · 跨6门课程</p>
-    </a>
+<!-- ===== STARS BACKGROUND ===== -->
+<div class="stars-bg" id="starsBg"></div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav-bar">
+  <a href="#" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    知识主板
+  </a>
+  <span class="nav-title">卓克知识光谱仪</span>
+  <span class="nav-links">
+    <a href="#spectral-lines">光谱分析</a>
+    <a href="#course-galaxy">课程星图</a>
+    <a href="#podcast">🎙️ 播客</a>
+  </span>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-badge">Knowledge Spectrometer</div>
+  <h1>卓克<span class="accent-cyan">知识</span><span class="accent-gold">光谱仪</span></h1>
+  <p class="subtitle">
+    用科学理性之光穿透复杂问题——8门课程解构成四条特征谱线，呈现知识的真实光谱
+  </p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">8</div>
+      <div class="stat-label">已完成课程</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1,631</div>
+      <div class="stat-label">篇文章</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">38</div>
+      <div class="stat-label">知识专题</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">贯穿谱线</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPECTROMETER SVG ANIMATION ===== -->
+<div class="spectrometer-wrap">
+  <svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#fff" stop-opacity="0.95"/>
+      </linearGradient>
+      <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+        <stop offset="40%" stop-color="rgba(255,255,255,0.08)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+      </linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="glowStrong"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+
+    <!-- Source light (left) -->
+    <circle cx="60" cy="130" r="8" fill="#fff" opacity="0.9" filter="url(#glowStrong)">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="60" cy="130" r="20" fill="#fff" opacity="0.06">
+      <animate attributeName="r" values="18;24;18" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.04;0.08;0.04" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- 4 input beams converging to prism -->
+    <line x1="68" y1="112" x2="340" y2="118" stroke="#00ccff" stroke-width="1.5" opacity="0.6" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2.2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="68" y1="122" x2="340" y2="124" stroke="#ff5c3a" stroke-width="1.5" opacity="0.6" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="2.4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="68" y1="132" x2="340" y2="130" stroke="#00e676" stroke-width="1.5" opacity="0.6" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2.1s" repeatCount="indefinite"/>
+    </line>
+    <line x1="68" y1="142" x2="340" y2="136" stroke="#b366ff" stroke-width="1.5" opacity="0.6" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.45;0.75;0.45" dur="2.3s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Prism -->
+    <polygon points="340,80 420,130 340,180" fill="url(#prismGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+    <!-- 4 output spectral lines (refracted) -->
+    <line x1="420" y1="95" x2="740" y2="70" stroke="#00ccff" stroke-width="2" opacity="0.8" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2.2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="420" y1="115" x2="740" y2="105" stroke="#ff5c3a" stroke-width="2" opacity="0.8" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2.4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="420" y1="135" x2="740" y2="140" stroke="#00e676" stroke-width="2" opacity="0.8" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2.1s" repeatCount="indefinite"/>
+    </line>
+    <line x1="420" y1="155" x2="740" y2="175" stroke="#b366ff" stroke-width="2" opacity="0.8" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2.3s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Spectral labels at output -->
+    <text x="745" y="66" fill="#00ccff" font-size="11" font-weight="600" text-anchor="start">AI</text>
+    <text x="745" y="101" fill="#ff5c3a" font-size="11" font-weight="600" text-anchor="start">深空</text>
+    <text x="745" y="136" fill="#00e676" font-size="11" font-weight="600" text-anchor="start">生命</text>
+    <text x="745" y="171" fill="#b366ff" font-size="11" font-weight="600" text-anchor="start">智性</text>
+
+    <!-- Input labels -->
+    <text x="140" y="106" fill="rgba(255,255,255,0.25)" font-size="9" text-anchor="middle">知识光源</text>
+    <text x="380" y="200" fill="rgba(255,255,255,0.2)" font-size="9" text-anchor="middle">棱镜·拆解</text>
+    <text x="580" y="52" fill="rgba(255,255,255,0.2)" font-size="9" text-anchor="middle">特征谱线输出</text>
+  </svg>
+</div>
+
+<!-- ===== CROSS-COURSE SPECTRAL ANALYSIS ===== -->
+<section class="section" id="spectral-lines">
+  <div class="section-head">
+    <h2>⚡ 跨课光谱分析 · 四条贯穿谱线</h2>
+    <p>科学理性之光穿过卓克八门课程棱镜，分解为四条特征谱线——每一条都照亮一个贯穿全局的核心主题。点击展开查看关联课程。</p>
   </div>
 
-  <footer>卓克 · 最小知识集 · MKS</footer>
+  <div class="spectral-lines">
+
+    <!-- LINE 1: AI -->
+    <div class="spectral-line line-ai" onclick="toggleSpectralLine(this)">
+      <div class="line-header">
+        <div class="line-icon">🤖</div>
+        <div class="line-info">
+          <h3>AI 与智能技术 · 电光青谱线</h3>
+          <p>从图灵到 GPT-5，从深度学习到 AGI——追踪智能的演化轨迹，理解 AI 如何重塑一切</p>
+          <div class="line-courses">
+            <span class="line-course-tag">AI专题</span>
+            <span class="line-course-tag">科技参考1-5</span>
+            <span class="line-course-tag">科学思维课</span>
+          </div>
+        </div>
+      </div>
+      <div class="line-expand-hint">点击展开关联课程详情 <span class="arrow">▾</span></div>
+      <div class="line-connections">
+        <div class="conn-grid">
+          <a href="AI专题/" class="conn-card">
+            <h4>🧬 AI专题 · 涌现：智能的进化树</h4>
+            <p>178篇核心文章 · 5章时间之河叙事 · 跨6门课综合</p>
+          </a>
+          <a href="科技参考4/" class="conn-card">
+            <h4>🛰️ 科技参考4</h4>
+            <p>AI与数字革命深度追踪——从DeepSeek到AGI</p>
+          </a>
+          <a href="科技参考5/" class="conn-card">
+            <h4>🗼 科技参考5</h4>
+            <p>AI信号频段——大模型训练·AI公司博弈·智能时代底层脉动</p>
+          </a>
+          <a href="科技参考基础版/" class="conn-card">
+            <h4>📡 科技参考1</h4>
+            <p>智能时代的底层代码——从晶体管到AI的算法与物理法则</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE 2: Deep Space / Frontier Science -->
+    <div class="spectral-line line-deepspace" onclick="toggleSpectralLine(this)">
+      <div class="line-header">
+        <div class="line-icon">🚀</div>
+        <div class="line-info">
+          <h3>深空与前沿科技 · 火箭橙谱线</h3>
+          <p>芯片、航天、能源、量子——硬核科技的底层逻辑，不讲神话，只讲物理与工程</p>
+          <div class="line-courses">
+            <span class="line-course-tag">科技参考1-5</span>
+            <span class="line-course-tag">卓老板聊科技</span>
+            <span class="line-course-tag">科学思维课</span>
+          </div>
+        </div>
+      </div>
+      <div class="line-expand-hint">点击展开关联课程详情 <span class="arrow">▾</span></div>
+      <div class="line-connections">
+        <div class="conn-grid">
+          <a href="科技参考3/" class="conn-card">
+            <h4>🔬 科技参考3</h4>
+            <p>室温超导、火箭发动机流派、体内基因编辑——311篇年度科技前沿</p>
+          </a>
+          <a href="科技参考4/" class="conn-card">
+            <h4>🛰️ 科技参考4</h4>
+            <p>硬核科技引擎——芯片、电池、火箭、量子计算</p>
+          </a>
+          <a href="科技参考5/" class="conn-card">
+            <h4>🗼 科技参考5</h4>
+            <p>芯片信号与深空信号——内存暴涨·重返月球·固态电池</p>
+          </a>
+          <a href="卓老板聊科技/" class="conn-card">
+            <h4>🛋️ 卓老板聊科技</h4>
+            <p>黑洞、博弈论、航天史——298篇科普知识蒸馏</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE 3: Life Science -->
+    <div class="spectral-line line-life" onclick="toggleSpectralLine(this)">
+      <div class="line-header">
+        <div class="line-icon">🧬</div>
+        <div class="line-info">
+          <h3>生命科学与健康 · 生命绿谱线</h3>
+          <p>演化论、基因编辑、疫苗、医学真相——把健康焦虑还原为科学事实</p>
+          <div class="line-courses">
+            <span class="line-course-tag">科学思维课</span>
+            <span class="line-course-tag">科技参考1-5</span>
+            <span class="line-course-tag">卓老板聊科技</span>
+          </div>
+        </div>
+      </div>
+      <div class="line-expand-hint">点击展开关联课程详情 <span class="arrow">▾</span></div>
+      <div class="line-connections">
+        <div class="conn-grid">
+          <a href="科学思维课/" class="conn-card">
+            <h4>🧠 科学思维课</h4>
+            <p>演化论·医学真相·伪科学鉴别——334篇构建科学世界观</p>
+          </a>
+          <a href="科技参考基础版/" class="conn-card">
+            <h4>📡 科技参考1</h4>
+            <p>生命科学与医学前沿——mRNA、CAR-T、基因编辑</p>
+          </a>
+          <a href="科技参考5/" class="conn-card">
+            <h4>🗼 科技参考5</h4>
+            <p>生命信号频段——病毒预警·微塑料迷思·基因筛查边界</p>
+          </a>
+          <a href="科技参考4/" class="conn-card">
+            <h4>🛰️ 科技参考4</h4>
+            <p>生命科学的边界——疫苗、基因、保健品</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE 4: Intellectual / Scientific Thinking -->
+    <div class="spectral-line line-wisdom" onclick="toggleSpectralLine(this)">
+      <div class="line-header">
+        <div class="line-icon">💡</div>
+        <div class="line-info">
+          <h3>智性与科学方法 · 智性紫谱线</h3>
+          <p>科学思维、信息鉴别、底层逻辑——用科学理性拆解一切，卓克方法论的核心</p>
+          <div class="line-courses">
+            <span class="line-course-tag">科学思维课</span>
+            <span class="line-course-tag">人物专题</span>
+            <span class="line-course-tag">全部8门课</span>
+          </div>
+        </div>
+      </div>
+      <div class="line-expand-hint">点击展开关联课程详情 <span class="arrow">▾</span></div>
+      <div class="line-connections">
+        <div class="conn-grid">
+          <a href="科学思维课/" class="conn-card">
+            <h4>🧠 科学思维课</h4>
+            <p>极限思维·数量级感知·变量分析·模型建构——给大脑安装认知操作系统</p>
+          </a>
+          <a href="人物专题/" class="conn-card">
+            <h4>🔷 人物专题</h4>
+            <p>达尔文·冯·诺伊曼·杨振宁——三位叛徒的思想光谱 + 25位思想者群星谱</p>
+          </a>
+          <a href="科技参考基础版/" class="conn-card">
+            <h4>📡 科技参考1</h4>
+            <p>科学思维的操作系统——可证伪性、贝叶斯更新、二阶效应</p>
+          </a>
+          <a href="卓老板聊科技/" class="conn-card">
+            <h4>🛋️ 卓老板聊科技</h4>
+            <p>思维的武器——32章科普播客的知识系统化重组</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== COURSE GALAXY ===== -->
+<section class="section" id="course-galaxy">
+  <div class="section-head">
+    <h2>🌟 课程星图 · 八门课的谱线标记</h2>
+    <p>每门课都是一颗星，下方的彩色标记点显示它关联了哪些贯穿谱线</p>
+  </div>
+
+  <div class="course-grid">
+
+    <a href="科学思维课/" class="course-card card-wisdom">
+      <span class="course-emoji">🧠</span>
+      <h3>科学思维课</h3>
+      <p class="course-desc">极限思维·演化论·医学真相·伪科学鉴别·科学史——334篇构建科学世界观</p>
+      <div class="course-meta">
+        <span>334 篇文章</span><span>7 专题</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai"></span>
+        <span class="spectral-dot dot-deepspace active"></span>
+        <span class="spectral-dot dot-life active"></span>
+        <span class="spectral-dot dot-wisdom active"></span>
+      </div>
+    </a>
+
+    <a href="科技参考基础版/" class="course-card card-ai">
+      <span class="course-emoji">📡</span>
+      <h3>科技参考1</h3>
+      <p class="course-desc">AI·生物医学·疫情·能源·芯片——317篇日更科技新闻深度解读</p>
+      <div class="course-meta">
+        <span>317 篇文章</span><span>8 专题</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai active"></span>
+        <span class="spectral-dot dot-deepspace active"></span>
+        <span class="spectral-dot dot-life active"></span>
+        <span class="spectral-dot dot-wisdom active"></span>
+      </div>
+    </a>
+
+    <a href="科技参考3/" class="course-card card-deepspace">
+      <span class="course-emoji">🔬</span>
+      <h3>科技参考3</h3>
+      <p class="course-desc">AI芯片·航天·医学·消费品·人类演化——311篇年度科技前沿追踪</p>
+      <div class="course-meta">
+        <span>311 篇文章</span><span>7 专题</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai active"></span>
+        <span class="spectral-dot dot-deepspace active"></span>
+        <span class="spectral-dot dot-life active"></span>
+        <span class="spectral-dot dot-wisdom"></span>
+      </div>
+    </a>
+
+    <a href="科技参考4/" class="course-card card-ai">
+      <span class="course-emoji">🛰️</span>
+      <h3>科技参考4</h3>
+      <p class="course-desc">AI·生命科学·芯片·航天·辟谣·社会变革——318篇沉浸叙事前沿科技追踪</p>
+      <div class="course-meta">
+        <span>318 篇文章</span><span>5 专题</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai active"></span>
+        <span class="spectral-dot dot-deepspace active"></span>
+        <span class="spectral-dot dot-life active"></span>
+        <span class="spectral-dot dot-wisdom active"></span>
+      </div>
+    </a>
+
+    <a href="科技参考5/" class="course-card card-ai">
+      <span class="course-emoji">🗼</span>
+      <h3>科技参考5</h3>
+      <p class="course-desc">AI信号·芯片硬件·生命健康·深空能源——53篇2026年全球科技信号塔解码</p>
+      <div class="course-meta">
+        <span>53 篇文章</span><span>4 专题</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai active"></span>
+        <span class="spectral-dot dot-deepspace active"></span>
+        <span class="spectral-dot dot-life active"></span>
+        <span class="spectral-dot dot-wisdom"></span>
+      </div>
+    </a>
+
+    <a href="卓老板聊科技/" class="course-card card-life">
+      <span class="course-emoji">🛋️</span>
+      <h3>卓老板聊科技</h3>
+      <p class="course-desc">黑洞·基因·疫苗·AI·博弈论·航天史——298篇科普播客的知识蒸馏</p>
+      <div class="course-meta">
+        <span>298 篇文章</span><span>7 专题</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai active"></span>
+        <span class="spectral-dot dot-deepspace active"></span>
+        <span class="spectral-dot dot-life active"></span>
+        <span class="spectral-dot dot-wisdom active"></span>
+      </div>
+    </a>
+
+    <a href="人物专题/" class="course-card card-wisdom">
+      <span class="course-emoji">🔷</span>
+      <h3>人物专题</h3>
+      <p class="course-desc">达尔文·冯·诺伊曼·杨振宁——三位叛徒的思想光谱 + 25位思想者群星谱</p>
+      <div class="course-meta">
+        <span>45 篇文章</span><span>3 专题</span><span>跨7门课</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai"></span>
+        <span class="spectral-dot dot-deepspace"></span>
+        <span class="spectral-dot dot-life"></span>
+        <span class="spectral-dot dot-wisdom active"></span>
+      </div>
+    </a>
+
+    <a href="AI专题/" class="course-card card-ai">
+      <span class="course-emoji">🧬</span>
+      <h3>AI专题</h3>
+      <p class="course-desc">涌现·智能的进化树——从图灵到GPT-5，两线交织的AI全史·时间之河叙事</p>
+      <div class="course-meta">
+        <span>178 篇文章</span><span>5 章节</span><span>跨6门课</span>
+      </div>
+      <div class="spectral-dots">
+        <span class="spectral-dot dot-ai active"></span>
+        <span class="spectral-dot dot-deepspace"></span>
+        <span class="spectral-dot dot-life"></span>
+        <span class="spectral-dot dot-wisdom active"></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ===== PODCAST COLLECTION ===== -->
+<section class="section" id="podcast">
+  <div class="section-head">
+    <h2>🎙️ 播客集合 · 7门课的声音版</h2>
+    <p>每门课精选播客——用听的方式，吸收卓克的知识体系</p>
+  </div>
+
+  <div class="podcast-wrap">
+
+    <!-- 科学思维课 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">🧠</span>
+        <h3>科学思维课</h3>
+        <span class="pc-count">6 期</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">1</span>
+          <div class="ep-info">
+            <div class="ep-title">EP1 · 科学思维的工具箱</div>
+            <div class="ep-desc">掌握科学家的方法论武器——极限思维、数量级感知、变量分析与模型建构</div>
+            <div class="ep-duration">11m47s</div>
+          </div>
+          <button class="ep-play-btn purple" data-audio="科学思维课/podcast/audio/ep1.mp3" data-title="科学思维课 EP1 · 科学思维的工具箱" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">2</span>
+          <div class="ep-info">
+            <div class="ep-title">EP2 · 演化论：世界的源代码</div>
+            <div class="ep-desc">变异-选择-遗传——从自然选择到人类迁徙，重新理解万物的来处</div>
+            <div class="ep-duration">14m52s</div>
+          </div>
+          <button class="ep-play-btn green" data-audio="科学思维课/podcast/audio/ep2.mp3" data-title="科学思维课 EP2 · 演化论：世界的源代码" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">3</span>
+          <div class="ep-info">
+            <div class="ep-title">EP3 · 医学简史</div>
+            <div class="ep-desc">从疾病视角看科学方法的胜利——天花、流感、免疫与癌症认知的演变</div>
+            <div class="ep-duration">11m21s</div>
+          </div>
+          <button class="ep-play-btn orange" data-audio="科学思维课/podcast/audio/ep3.mp3" data-title="科学思维课 EP3 · 医学简史" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">4</span>
+          <div class="ep-info">
+            <div class="ep-title">EP4 · 识破伪科学与信息鉴别</div>
+            <div class="ep-desc">在信息洪流中守住理性底线——识别伪科学、破除泡沫、辨析常见谬误</div>
+            <div class="ep-duration">9m36s</div>
+          </div>
+          <button class="ep-play-btn cyan" data-audio="科学思维课/podcast/audio/ep4.mp3" data-title="科学思维课 EP4 · 识破伪科学与信息鉴别" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--gold)">5</span>
+          <div class="ep-info">
+            <div class="ep-title">EP5 · 科学文明史：中西对话</div>
+            <div class="ep-desc">科学作为社会制度的生长——大学、科学院、中西科学分流的历史逻辑</div>
+            <div class="ep-duration">13m57s</div>
+          </div>
+          <button class="ep-play-btn gold" data-audio="科学思维课/podcast/audio/ep5.mp3" data-title="科学思维课 EP5 · 科学文明史：中西对话" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">6</span>
+          <div class="ep-info">
+            <div class="ep-title">EP6 · 心智、衰老与认知科学</div>
+            <div class="ep-desc">用科学理解"我是谁"——心理学科学化、双盲实验、线粒体与自由基假说</div>
+            <div class="ep-duration">17m19s</div>
+          </div>
+          <button class="ep-play-btn purple" data-audio="科学思维课/podcast/audio/ep6.mp3" data-title="科学思维课 EP6 · 心智、衰老与认知科学" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 科技参考基础版 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">📡</span>
+        <h3>科技参考1</h3>
+        <span class="pc-count">6 期</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">1</span>
+          <div class="ep-info">
+            <div class="ep-title">智能时代的底层代码</div>
+            <div class="ep-desc">从晶体管到AI——理解驱动数字世界的算法、架构与物理法则</div>
+            <div class="ep-duration">约 11 分钟</div>
+          </div>
+          <button class="ep-play-btn cyan" data-audio="科技参考基础版/podcast/audio/ep01.mp3" data-title="科技参考1 · 智能时代的底层代码" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">2</span>
+          <div class="ep-info">
+            <div class="ep-title">生命科学与医学前沿</div>
+            <div class="ep-desc">mRNA、CAR-T、基因编辑——重新理解生命的编码与修复</div>
+            <div class="ep-duration">约 8 分钟</div>
+          </div>
+          <button class="ep-play-btn green" data-audio="科技参考基础版/podcast/audio/ep02.mp3" data-title="科技参考1 · 生命科学与医学前沿" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">3</span>
+          <div class="ep-info">
+            <div class="ep-title">能源博弈与地球系统</div>
+            <div class="ep-desc">碳中和、核聚变、电池突围——追踪地球能量脉搏</div>
+            <div class="ep-duration">约 10 分钟</div>
+          </div>
+          <button class="ep-play-btn orange" data-audio="科技参考基础版/podcast/audio/ep03.mp3" data-title="科技参考1 · 能源博弈与地球系统" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">4</span>
+          <div class="ep-info">
+            <div class="ep-title">星辰大海·航天与工程探索</div>
+            <div class="ep-desc">火箭方程、轨道力学、太空移民——仰望星空的工程师视角</div>
+            <div class="ep-duration">约 11 分钟</div>
+          </div>
+          <button class="ep-play-btn purple" data-audio="科技参考基础版/podcast/audio/ep04.mp3" data-title="科技参考1 · 星辰大海·航天与工程探索" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--gold)">5</span>
+          <div class="ep-info">
+            <div class="ep-title">饮食健康与生活科学</div>
+            <div class="ep-desc">剂量决定毒性、相关≠因果——把身体当作最精密的实验室</div>
+            <div class="ep-duration">约 10 分钟</div>
+          </div>
+          <button class="ep-play-btn gold" data-audio="科技参考基础版/podcast/audio/ep05.mp3" data-title="科技参考1 · 饮食健康与生活科学" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">6</span>
+          <div class="ep-info">
+            <div class="ep-title">科学思维的操作系统</div>
+            <div class="ep-desc">可证伪性、贝叶斯更新、二阶效应——给大脑安装认知操作系统</div>
+            <div class="ep-duration">约 10 分钟</div>
+          </div>
+          <button class="ep-play-btn cyan" data-audio="科技参考基础版/podcast/audio/ep06.mp3" data-title="科技参考1 · 科学思维的操作系统" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 科技参考4 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">🛰️</span>
+        <h3>科技参考4</h3>
+        <span class="pc-count">5 期</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">1</span>
+          <div class="ep-info">
+            <div class="ep-title">AI与数字革命</div>
+            <div class="ep-desc">从DeepSeek到AGI——当AI开始写代码、做科研、甚至骗人</div>
+            <div class="ep-duration">14m26s</div>
+          </div>
+          <button class="ep-play-btn cyan" data-audio="科技参考4/podcast/audio/ep1.mp3" data-title="科技参考4 · AI与数字革命" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">2</span>
+          <div class="ep-info">
+            <div class="ep-title">生命科学的边界</div>
+            <div class="ep-desc">疫苗、基因、保健品——在灰色地带里找到确定性</div>
+            <div class="ep-duration">12m36s</div>
+          </div>
+          <button class="ep-play-btn green" data-audio="科技参考4/podcast/audio/ep2.mp3" data-title="科技参考4 · 生命科学的边界" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">3</span>
+          <div class="ep-info">
+            <div class="ep-title">硬核科技引擎</div>
+            <div class="ep-desc">芯片、电池、火箭、量子计算——不讲神话，只讲物理和工程</div>
+            <div class="ep-duration">16m04s</div>
+          </div>
+          <button class="ep-play-btn orange" data-audio="科技参考4/podcast/audio/ep3.mp3" data-title="科技参考4 · 硬核科技引擎" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">4</span>
+          <div class="ep-info">
+            <div class="ep-title">科学方法解毒剂</div>
+            <div class="ep-desc">灵芝、安宫牛黄丸——用科学方法把伪科学分解成光谱</div>
+            <div class="ep-duration">15m04s</div>
+          </div>
+          <button class="ep-play-btn purple" data-audio="科技参考4/podcast/audio/ep4.mp3" data-title="科技参考4 · 科学方法解毒剂" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--gold)">5</span>
+          <div class="ep-info">
+            <div class="ep-title">科技重塑社会</div>
+            <div class="ep-desc">AI职业、数字货币——科技正悄无声息地重写社会规则</div>
+            <div class="ep-duration">11m38s</div>
+          </div>
+          <button class="ep-play-btn gold" data-audio="科技参考4/podcast/audio/ep5.mp3" data-title="科技参考4 · 科技重塑社会" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 科技参考5 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">🗼</span>
+        <h3>科技参考5</h3>
+        <span class="pc-count">4 期 · 前往课程页收听</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">1</span>
+          <div class="ep-info">
+            <div class="ep-title">AI信号：智能浪潮</div>
+            <div class="ep-desc">大模型训练·AI公司博弈·OpenClaw的真相——解码智能时代的底层脉动</div>
+            <div class="ep-duration">约 11 分钟</div>
+          </div>
+          <a href="科技参考5/" class="ep-play-btn cyan" style="text-decoration:none">→</a>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">2</span>
+          <div class="ep-info">
+            <div class="ep-title">芯片信号：硬件真相</div>
+            <div class="ep-desc">内存暴涨·华为韬定律·手机评测作弊——穿透硬件世界的营销迷雾</div>
+            <div class="ep-duration">约 12 分钟</div>
+          </div>
+          <a href="科技参考5/" class="ep-play-btn orange" style="text-decoration:none">→</a>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">3</span>
+          <div class="ep-info">
+            <div class="ep-title">生命信号：健康祛魅</div>
+            <div class="ep-desc">病毒预警·微塑料迷思·基因筛查边界——把健康焦虑还原为科学事实</div>
+            <div class="ep-duration">约 10 分钟</div>
+          </div>
+          <a href="科技参考5/" class="ep-play-btn green" style="text-decoration:none">→</a>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">4</span>
+          <div class="ep-info">
+            <div class="ep-title">深空信号：能源与前沿</div>
+            <div class="ep-desc">重返月球·固态电池·中国摩托车崛起——追踪远方的信号脉冲</div>
+            <div class="ep-duration">约 10 分钟</div>
+          </div>
+          <a href="科技参考5/" class="ep-play-btn purple" style="text-decoration:none">→</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 人物专题 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">🔷</span>
+        <h3>人物专题</h3>
+        <span class="pc-count">5 期 (B面)</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">B0</span>
+          <div class="ep-info">
+            <div class="ep-title">EP0 · 总览：三位叛徒，三次越狱</div>
+            <div class="ep-desc">达尔文·冯·诺伊曼·杨振宁——他们如何打破各自领域的边界</div>
+            <div class="ep-duration">约 8 分钟</div>
+          </div>
+          <button class="ep-play-btn purple" data-audio="人物专题/podcast_b/audio/epb0.mp3" data-title="人物专题 · 总览：三位叛徒，三次越狱" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">B1</span>
+          <div class="ep-info">
+            <div class="ep-title">EP1 · 达尔文：生命的算法</div>
+            <div class="ep-desc">变异-选择-遗传——最简单的三条规则，演化出整个生物界的复杂性</div>
+            <div class="ep-duration">约 12 分钟</div>
+          </div>
+          <button class="ep-play-btn green" data-audio="人物专题/podcast_b/audio/epb1.mp3" data-title="人物专题 · 达尔文：生命的算法" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">B2</span>
+          <div class="ep-info">
+            <div class="ep-title">EP2 · 冯·诺伊曼：思维的机器</div>
+            <div class="ep-desc">计算机之父·博弈论创始人·原子弹设计师——20世纪最被低估的天才</div>
+            <div class="ep-duration">约 11 分钟</div>
+          </div>
+          <button class="ep-play-btn cyan" data-audio="人物专题/podcast_b/audio/epb2.mp3" data-title="人物专题 · 冯·诺伊曼：思维的机器" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">B3</span>
+          <div class="ep-info">
+            <div class="ep-title">EP3 · 杨振宁：对称的破缺</div>
+            <div class="ep-desc">规范场论——统一三种基本力的框架，理论物理学的里程碑</div>
+            <div class="ep-duration">约 10 分钟</div>
+          </div>
+          <button class="ep-play-btn orange" data-audio="人物专题/podcast_b/audio/epb3.mp3" data-title="人物专题 · 杨振宁：对称的破缺" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--gold)">B4</span>
+          <div class="ep-info">
+            <div class="ep-title">EP4 · 群星谱：25位思想者的光谱</div>
+            <div class="ep-desc">从伽利略到图灵——25位塑造现代世界观的思想者速写</div>
+            <div class="ep-duration">约 15 分钟</div>
+          </div>
+          <button class="ep-play-btn gold" data-audio="人物专题/podcast_b/audio/epb4.mp3" data-title="人物专题 · 群星谱：25位思想者" onclick="playPodcastBtn(this)">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI专题 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">🧬</span>
+        <h3>AI专题 · 涌现</h3>
+        <span class="pc-count">5 章 · 时间之河</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--gold)">1</span>
+          <div class="ep-info">
+            <div class="ep-title">火种：图灵、香农与一个问题的诞生</div>
+            <div class="ep-desc">1940s-1950s——智能的数学种子在战争与密码学中萌芽</div>
+            <div class="ep-duration">第1章</div>
+          </div>
+          <button class="ep-play-btn gold" onclick="window.open('AI专题/ch1-fire.html','_blank')" title="进入第1章">→</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">2</span>
+          <div class="ep-info">
+            <div class="ep-title">苏醒：反向传播与辛顿的40年等待</div>
+            <div class="ep-desc">1980s-2010s——神经网络的寒冬、坚守与最终爆发</div>
+            <div class="ep-duration">第2章</div>
+          </div>
+          <button class="ep-play-btn cyan" onclick="window.open('AI专题/ch2-awakening.html','_blank')" title="进入第2章">→</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">3</span>
+          <div class="ep-info">
+            <div class="ep-title">涌现：Transformer、GPT与智能的诞生</div>
+            <div class="ep-desc">2017-2023——当规模突破阈值，智能从数据中自然涌现</div>
+            <div class="ep-duration">第3章</div>
+          </div>
+          <button class="ep-play-btn green" onclick="window.open('AI专题/ch3-emergence.html','_blank')" title="进入第3章">→</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">4</span>
+          <div class="ep-info">
+            <div class="ep-title">裂变：开源革命与AI的无处不在</div>
+            <div class="ep-desc">2023-2025——开源模型民主化，AI渗透进每一个行业</div>
+            <div class="ep-duration">第4章</div>
+          </div>
+          <button class="ep-play-btn orange" onclick="window.open('AI专题/ch4-fission.html','_blank')" title="进入第4章">→</button>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--purple)">5</span>
+          <div class="ep-info">
+            <div class="ep-title">彼岸：AGI到来前的人类黄昏</div>
+            <div class="ep-desc">2025→——当AI逼近人类智能，我们该如何定义自己</div>
+            <div class="ep-duration">第5章</div>
+          </div>
+          <button class="ep-play-btn purple" onclick="window.open('AI专题/ch5-fission.html','_blank')" title="进入第5章">→</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 科技参考3 -->
+    <div class="podcast-course-group">
+      <div class="podcast-course-header">
+        <span class="pc-emoji">🔬</span>
+        <h3>科技参考3</h3>
+        <span class="pc-count">6 篇 · 精选试听</span>
+      </div>
+      <div class="podcast-ep-list">
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--cyan)">001</span>
+          <div class="ep-info">
+            <div class="ep-title">室温超导：只是实验室内的突破</div>
+            <div class="ep-desc">15°C室温超导——267GPa高压，距离商用还有多远？</div>
+            <div class="ep-duration">AI与芯片</div>
+          </div>
+          <a href="科技参考3/" class="ep-play-btn cyan" style="text-decoration:none">→</a>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--orange)">170</span>
+          <div class="ep-info">
+            <div class="ep-title">马斯克与火箭3：造火箭的几种技术门派</div>
+            <div class="ep-desc">全流量分级燃烧 vs 燃气发生器——SpaceX为何选"实习款"</div>
+            <div class="ep-duration">航天</div>
+          </div>
+          <a href="科技参考3/" class="ep-play-btn orange" style="text-decoration:none">→</a>
+        </div>
+        <div class="podcast-ep-item">
+          <span class="ep-dot" style="background:var(--green)">234</span>
+          <div class="ep-info">
+            <div class="ep-title">准诺奖：体内基因编辑技术</div>
+            <div class="ep-desc">单剂注射，TTR蛋白最高下降96%——基因编辑首次在活人体内成功</div>
+            <div class="ep-duration">医学</div>
+          </div>
+          <a href="科技参考3/" class="ep-play-btn green" style="text-decoration:none">→</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== AI ASSISTANT FAB ===== -->
+<button class="ai-fab" id="aiFab" onclick="toggleAIPanel()" title="卓克知识助手">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+</button>
+
+<div class="ai-panel" id="aiPanel">
+  <div class="ai-panel-header">
+    <h3><span class="ai-dot"></span>卓克知识助手</h3>
+    <button class="ai-close" onclick="toggleAIPanel()">✕</button>
+  </div>
+  <div class="ai-suggestions">
+    <button class="ai-suggestion" onclick="askSuggestion('卓克的科学思维方法论核心是什么？')">科学方法论</button>
+    <button class="ai-suggestion" onclick="askSuggestion('AI专题讲了什么？涌现是什么意思？')">AI专题解读</button>
+    <button class="ai-suggestion" onclick="askSuggestion('卓克的人物专题里有哪些思想者？')">人物专题</button>
+    <button class="ai-suggestion" onclick="askSuggestion('帮我总结一下8门课分别讲什么')">课程总览</button>
+    <button class="ai-suggestion" onclick="askSuggestion('卓克如何鉴别伪科学？')">伪科学鉴别</button>
+  </div>
+  <div class="ai-messages" id="aiMessages">
+    <div class="ai-msg assistant">
+      你好！我是卓克知识光谱仪助手。<br>我可以帮你理解卓克的8门课程、解答科学问题、梳理知识专题。随时提问！
+    </div>
+  </div>
+  <div class="ai-input-row">
+    <input type="text" id="aiInput" placeholder="问任何关于卓克知识体系的问题…" onkeydown="if(event.key==='Enter')sendMessage()">
+    <button class="ai-send" id="aiSend" onclick="sendMessage()">↑</button>
+  </div>
 </div>
+
+<!-- ===== PLAYER BAR ===== -->
+<div class="player-bar" id="playerBar">
+  <div class="player-now">
+    <div class="player-label">正在播放</div>
+    <div class="player-title" id="playerTitle">选择播客开始收听</div>
+  </div>
+  <div class="player-controls">
+    <button class="player-btn" onclick="togglePlayer()" title="播放/暂停">⏯</button>
+    <button class="player-btn close-btn" onclick="closePlayer()" title="关闭">✕</button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p>卓克知识光谱仪 · Knowledge Spectrometer</p>
+  <p>8门课程 · 1,631篇文章 · 38个知识专题 · 4条贯穿谱线</p>
+  <div class="footer-links">
+    <a href="#spectral-lines">光谱分析</a>
+    <a href="#course-galaxy">课程星图</a>
+    <a href="#podcast">🎙️ 播客</a>
+    <a href="科学思维课/">科学思维课</a>
+    <a href="科技参考基础版/">科技参考1</a>
+    <a href="科技参考3/">科技参考3</a>
+    <a href="科技参考4/">科技参考4</a>
+    <a href="科技参考5/">科技参考5</a>
+    <a href="卓老板聊科技/">卓老板聊科技</a>
+    <a href="人物专题/">人物专题</a>
+    <a href="AI专题/">AI专题</a>
+  </div>
+</footer>
+
+<script>
+// ===== STARS BACKGROUND =====
+(function() {
+  const bg = document.getElementById('starsBg');
+  const count = 80;
+  let html = '';
+  for (let i = 0; i < count; i++) {
+    const size = Math.random() * 2 + 0.5;
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const dur = Math.random() * 3 + 2;
+    const delay = Math.random() * 5;
+    html += `<div class="star" style="width:${size}px;height:${size}px;left:${x}%;top:${y}%;--dur:${dur}s;--delay:${delay}s"></div>`;
+  }
+  bg.innerHTML = html;
+})();
+
+// ===== SPECTRAL LINE TOGGLE =====
+function toggleSpectralLine(el) {
+  const wasExpanded = el.classList.contains('expanded');
+  document.querySelectorAll('.spectral-line').forEach(l => l.classList.remove('expanded'));
+  if (!wasExpanded) {
+    el.classList.add('expanded');
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.spectral-line.expanded').forEach(l => l.classList.remove('expanded'));
+  }
+});
+
+// ===== PODCAST PLAYER =====
+let currentAudio = null;
+let currentPodBtn = null;
+
+function playPodcastBtn(btn) {
+  const src = btn.dataset.audio;
+  const title = btn.dataset.title;
+
+  if (currentPodBtn === btn && currentAudio) {
+    if (currentAudio.paused) { currentAudio.play(); btn.textContent = '⏸'; btn.classList.add('playing'); }
+    else { currentAudio.pause(); btn.textContent = '▶'; btn.classList.remove('playing'); }
+    return;
+  }
+
+  if (currentAudio) { currentAudio.pause(); currentAudio.remove(); }
+  if (currentPodBtn) { currentPodBtn.textContent = '▶'; currentPodBtn.classList.remove('playing'); }
+
+  currentAudio = new Audio(src);
+  currentPodBtn = btn;
+  document.getElementById('playerTitle').textContent = title;
+  document.getElementById('playerBar').classList.add('active');
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  currentAudio.play().catch(e => { btn.textContent = '⚠'; console.error('Playback error:', e); });
+  currentAudio.onended = () => { btn.textContent = '▶'; btn.classList.remove('playing'); currentAudio = null; currentPodBtn = null; };
+  currentAudio.onerror = () => { btn.textContent = '⚠'; btn.classList.remove('playing'); };
+}
+
+function togglePlayer() {
+  if (currentAudio) {
+    if (currentAudio.paused) { currentAudio.play(); if (currentPodBtn) { currentPodBtn.textContent = '⏸'; currentPodBtn.classList.add('playing'); } }
+    else { currentAudio.pause(); if (currentPodBtn) { currentPodBtn.textContent = '▶'; currentPodBtn.classList.remove('playing'); } }
+  }
+}
+
+function closePlayer() {
+  if (currentAudio) { currentAudio.pause(); currentAudio.remove(); currentAudio = null; }
+  if (currentPodBtn) { currentPodBtn.textContent = '▶'; currentPodBtn.classList.remove('playing'); currentPodBtn = null; }
+  document.getElementById('playerBar').classList.remove('active');
+}
+
+// ===== AI ASSISTANT =====
+function toggleAIPanel() {
+  document.getElementById('aiPanel').classList.toggle('open');
+  if (document.getElementById('aiPanel').classList.contains('open')) {
+    setTimeout(() => document.getElementById('aiInput').focus(), 200);
+  }
+}
+
+function askSuggestion(q) {
+  document.getElementById('aiInput').value = q;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('aiInput');
+  const question = input.value.trim();
+  if (!question) return;
+
+  const msgs = document.getElementById('aiMessages');
+  const sendBtn = document.getElementById('aiSend');
+
+  // Add user message
+  msgs.appendChild(createMsgEl(question, 'user'));
+  input.value = '';
+  sendBtn.disabled = true;
+
+  // Add thinking placeholder
+  const thinkingEl = createMsgEl('<span class="thinking-tag">⚡ 思考中…</span>分析卓克知识体系…', 'assistant');
+  msgs.appendChild(thinkingEl);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Build system prompt
+  const systemPrompt = `你是卓克知识光谱仪助手。你熟悉卓克的8门MKS课程体系：
+
+1. 科学思维课（334篇/7专题）——极限思维、演化论、医学真相、伪科学鉴别、科学史
+2. 科技参考基础版（317篇/8专题）——AI、生物医学、疫情、能源、芯片
+3. 科技参考3（311篇/7专题）——AI芯片、航天、医学、消费品、人类演化
+4. 科技参考4（318篇/5专题）——AI、生命科学、芯片、航天、辟谣
+5. 科技参考5（53篇/4专题）——AI信号、芯片硬件、生命健康、深空能源
+6. 卓老板聊科技（298篇/7专题）——黑洞、基因、疫苗、AI、博弈论、航天史
+7. 人物专题（45篇跨7门课）——达尔文、冯·诺伊曼、杨振宁 + 25位思想者群星谱
+8. AI专题（178篇跨6门课）——涌现·智能的进化树，5章时间之河叙事
+
+总数据：8门课 · 1,631篇文章 · 38个专题 · 4条贯穿谱线（AI、深空、生命、智性）。
+
+四条贯穿谱线：
+- AI（电光青）：从图灵到GPT-5的智能演化
+- 深空（火箭橙）：芯片、航天、能源等硬核科技
+- 生命（生命绿）：演化论、基因、医学、健康
+- 智性（智性紫）：科学思维、信息鉴别、底层逻辑
+
+请用卓克的风格回答——理性、清晰、有结构，善用"光谱仪"的隐喻：把复杂问题分解为清晰的谱线。回答简洁有力，每条回答控制在200字以内。`;
+
+  try {
+    const resp = await fetch('https://api.siliconflow.cn/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getApiKey()}` },
+      body: JSON.stringify({
+        model: 'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: question }
+        ],
+        max_tokens: 600,
+        temperature: 0.7,
+        stream: false
+      })
+    });
+
+    if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+
+    const data = await resp.json();
+    let reply = data.choices?.[0]?.message?.content || '抱歉，我暂时无法回答这个问题。';
+
+    // Clean up thinking tags from DeepSeek R1
+    reply = reply.replace(/<\/?think>/g, '').trim();
+
+    thinkingEl.remove();
+    msgs.appendChild(createMsgEl(reply, 'assistant'));
+  } catch (err) {
+    thinkingEl.remove();
+    msgs.appendChild(createMsgEl('⚠️ 连接知识库失败，请稍后重试。错误：' + err.message, 'assistant'));
+  }
+
+  msgs.scrollTop = msgs.scrollHeight;
+  sendBtn.disabled = false;
+  input.focus();
+}
+
+function getApiKey() {
+  // Try to read from meta env var first, then embedded key
+  if (typeof SILICONFLOW_API_KEY !== 'undefined') return SILICONFLOW_API_KEY;
+  // Embedded API key for GitHub Pages static hosting
+  return 'REDACTED';
+}
+
+function createMsgEl(html, role) {
+  const div = document.createElement('div');
+  div.className = 'ai-msg ' + role;
+  div.innerHTML = html;
+  return div;
+}
+
+// ===== ENTRY ANIMATIONS =====
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.spectral-line').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateX(0)'; }, 200 + i * 120);
+  });
+
+  document.querySelectorAll('.course-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, 600 + i * 80);
+  });
+});
+</script>
+
 </body>
 </html>
