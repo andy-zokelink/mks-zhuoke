@@ -1597,10 +1597,13 @@ async function sendMessage() {
 }
 
 function getApiKey() {
-  // Try to read from meta env var first, then embedded key
-  if (typeof SILICONFLOW_API_KEY !== 'undefined') return SILICONFLOW_API_KEY;
-  // Embedded API key for GitHub Pages static hosting
-  return 'REDACTED';
+  // Use localStorage to persist user's API key (never hardcoded in source)
+  var key = localStorage.getItem('zhuoke_siliconflow_key');
+  if (!key) {
+    key = prompt('请输入 SiliconFlow API Key（仅存储在本地浏览器，不会上传）：');
+    if (key) localStorage.setItem('zhuoke_siliconflow_key', key);
+  }
+  return key || '';
 }
 
 function createMsgEl(html, role) {
