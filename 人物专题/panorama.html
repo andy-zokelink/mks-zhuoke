@@ -775,6 +775,28 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ===== Podcast Player ===== */
+.podcast-section { max-width: 800px; margin: 60px auto 40px; padding: 0 28px; z-index: 1; position: relative; }
+.sec-title { font-family: 'Orbitron', monospace; font-size: 1rem; color: var(--text-bright); text-align: center; margin-bottom: 4px; }
+.sec-subtitle { text-align: center; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 24px; }
+.podcast-list { display: flex; flex-direction: column; gap: 8px; }
+.podcast-ep { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); background: rgba(20,25,40,0.5); transition: all 0.3s; }
+.podcast-ep:hover { border-color: rgba(255,255,255,0.12); background: rgba(30,35,55,0.6); }
+.pe-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(245,158,11,0.2); color: var(--amber); font-family: 'Orbitron', monospace; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pe-info { flex: 1; min-width: 0; }
+.pe-title { font-size: 0.82rem; font-weight: 600; color: var(--text-bright); margin-bottom: 2px; }
+.pe-desc { font-size: 0.7rem; color: var(--text-dim); }
+.pe-dur { font-size: 0.65rem; color: var(--amber); margin-top: 2px; }
+.pe-play { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--amber); background: rgba(245,158,11,0.1); color: var(--amber); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s; }
+.pe-play:hover { background: rgba(245,158,11,0.3); box-shadow: 0 0 12px rgba(245,158,11,0.2); }
+.pe-play.playing { background: var(--amber); color: #0a0c14; }
+.player-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 300; display: none; align-items: center; gap: 12px; padding: 10px 20px; backdrop-filter: blur(12px); background: rgba(10,12,20,0.96); border-top: 1px solid rgba(255,255,255,0.08); }
+.player-bar.active { display: flex; }
+.player-bar span { flex: 1; font-size: 0.78rem; color: var(--text-bright); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-bar button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: var(--text-dim); font-size: 12px; cursor: pointer; }
+.player-bar button:hover { color: var(--amber); border-color: var(--amber); }
+@media (max-width: 640px) { .podcast-section { padding: 0 14px; } .podcast-ep { padding: 10px 12px; gap: 8px; } }
 </style>
 </head>
 <body>
@@ -1254,7 +1276,98 @@ function getCoursesForStar(eraName, name) {
     return (info?.courses || []).join(' ');
   } catch { return ''; }
 }
+
+// ===== Podcast Player =====
+let pAudio = null, pBtn = null;
+function playP(btn) {
+  const src = btn.dataset.audio, title = btn.dataset.title;
+  if (pAudio && pBtn === btn) { toggleP(); return; }
+  if (pAudio) { pAudio.pause(); pAudio = null; }
+  if (pBtn) { pBtn.classList.remove('playing'); pBtn.textContent = '▶'; }
+  pAudio = new Audio(src);
+  pAudio.play();
+  pBtn = btn;
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+  document.getElementById('pbarTitle').textContent = title;
+  document.getElementById('pbar').classList.add('active');
+  pAudio.onended = () => {
+    btn.classList.remove('playing'); btn.textContent = '▶';
+    document.getElementById('pbar').classList.remove('active');
+    pAudio = null; pBtn = null;
+  };
+}
+function toggleP() {
+  if (!pAudio) return;
+  if (pAudio.paused) { pAudio.play(); document.getElementById('pbarBtn').textContent = '⏯'; if (pBtn) { pBtn.classList.add('playing'); pBtn.textContent = '⏸'; } }
+  else { pAudio.pause(); document.getElementById('pbarBtn').textContent = '▶'; if (pBtn) { pBtn.classList.remove('playing'); pBtn.textContent = '▶'; } }
+}
+function closeP() {
+  if (pAudio) { pAudio.pause(); pAudio = null; }
+  if (pBtn) { pBtn.classList.remove('playing'); pBtn.textContent = '▶'; pBtn = null; }
+  document.getElementById('pbar').classList.remove('active');
+}
 </script>
+
+<!-- ===== Podcast Section ===== -->
+<section class="podcast-section" id="podcast">
+  <div class="sec-title">🎙 收听播客 · 思想者星座</div>
+  <div class="sec-subtitle">5期音频 · 每期10-13分钟 · 从古典到当代的星空巡礼</div>
+  <div class="podcast-list">
+    <div class="podcast-ep">
+      <div class="pe-num">0</div>
+      <div class="pe-info">
+        <div class="pe-title">总览：站在山巅看星空</div>
+        <div class="pe-desc">400年科学史，25颗恒星——人类认知的夜空为什么值得你抬头</div>
+        <div class="pe-dur">12分35秒</div>
+      </div>
+      <button class="pe-play" data-audio="podcast_b/audio/epb0.mp3" data-title="总览：站在山巅看星空" onclick="playP(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="pe-num">1</div>
+      <div class="pe-info">
+        <div class="pe-title">古典星座：牛顿的苹果与达尔文的雀鸟</div>
+        <div class="pe-desc">牛顿到拉马努金——点亮现代科学的第一批火焰</div>
+        <div class="pe-dur">10分51秒</div>
+      </div>
+      <button class="pe-play" data-audio="podcast_b/audio/epb1.mp3" data-title="古典星座" onclick="playP(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="pe-num">2</div>
+      <div class="pe-info">
+        <div class="pe-title">黄金星座：当物理学爆炸，计算苏醒</div>
+        <div class="pe-desc">爱因斯坦到费曼——20世纪最璀璨的知识星河</div>
+        <div class="pe-dur">13分04秒</div>
+      </div>
+      <button class="pe-play" data-audio="podcast_b/audio/epb2.mp3" data-title="黄金星座" onclick="playP(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="pe-num">3</div>
+      <div class="pe-info">
+        <div class="pe-title">当代星座：改变你日常生活的那些头脑</div>
+        <div class="pe-desc">马斯克到屠呦呦——正在改写我们世界的头脑</div>
+        <div class="pe-dur">12分23秒</div>
+      </div>
+      <button class="pe-play" data-audio="podcast_b/audio/epb3.mp3" data-title="当代星座" onclick="playP(this)">▶</button>
+    </div>
+    <div class="podcast-ep">
+      <div class="pe-num">4</div>
+      <div class="pe-info">
+        <div class="pe-title">华人星座：从边缘到前沿的百年</div>
+        <div class="pe-desc">丘成桐到潘建伟——华人科学家的百年迁徙</div>
+        <div class="pe-dur">11分52秒</div>
+      </div>
+      <button class="pe-play" data-audio="podcast_b/audio/epb4.mp3" data-title="华人星座" onclick="playP(this)">▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom bar -->
+<div class="player-bar" id="pbar">
+  <span id="pbarTitle">选择一期播客</span>
+  <button onclick="toggleP()" id="pbarBtn">⏯</button>
+  <button onclick="closeP()">✕</button>
+</div>
 
 </body>
 </html>
