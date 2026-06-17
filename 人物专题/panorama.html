@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>思想者星座 · 人类认知的星空全景</title>
+<style>
+/* ==============================
+   CSS RESET & BASE
+   ============================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --era-classical: #d4a843;
+  --era-classical-glow: rgba(212, 168, 67, 0.6);
+  --era-golden: #4da6ff;
+  --era-golden-glow: rgba(77, 166, 255, 0.6);
+  --era-contemporary: #00e5ff;
+  --era-contemporary-glow: rgba(0, 229, 255, 0.6);
+  --era-chinese: #ff6b9d;
+  --era-chinese-glow: rgba(255, 107, 157, 0.6);
+  --space-bg: #05081a;
+  --card-bg: rgba(10, 15, 40, 0.95);
+  --text-primary: #e8e6f0;
+  --text-secondary: #9a97b0;
+  --text-muted: #6a6880;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--space-bg);
+  color: var(--text-primary);
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', 'Songti SC', Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ==============================
+   SPACE CANVAS - Background
+   ============================== */
+#space-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==============================
+   MAIN CONTAINER
+   ============================== */
+#main-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ==============================
+   HEADER / HERO
+   ============================== */
+.hero {
+  text-align: center;
+  padding: 60px 20px 30px;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  background: linear-gradient(180deg, #fff 20%, #a0c4ff 50%, #6b8cce 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  margin-bottom: 12px;
+}
+
+.hero .subtitle {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  font-style: italic;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding: 16px 24px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+}
+
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Georgia', serif;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ==============================
+   SEARCH / FILTER
+   ============================== */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 30px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.search-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 1rem;
+  width: 260px;
+  outline: none;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.search-input:focus {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+}
+.search-input::placeholder { color: var(--text-muted); }
+
+.filter-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary);
+  padding: 10px 18px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-color: rgba(255,255,255,0.25);
+}
+.filter-btn.classical.active { border-color: var(--era-classical); color: var(--era-classical); }
+.filter-btn.golden.active { border-color: var(--era-golden); color: var(--era-golden); }
+.filter-btn.contemporary.active { border-color: var(--era-contemporary); color: var(--era-contemporary); }
+.filter-btn.chinese.active { border-color: var(--era-chinese); color: var(--era-chinese); }
+
+/* ==============================
+   CONSTELLATION MAP
+   ============================== */
+.constellation-map {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  margin: 20px 0 40px;
+  z-index: 1;
+}
+
+.constellation-region {
+  position: relative;
+  min-height: 280px;
+  margin-bottom: 8px;
+  padding: 16px;
+  border-radius: 20px;
+  transition: all 0.5s;
+}
+
+.region-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.7;
+  padding-left: 8px;
+  border-left: 3px solid;
+}
+
+.region-classical .region-label { color: var(--era-classical); border-color: var(--era-classical); }
+.region-golden .region-label { color: var(--era-golden); border-color: var(--era-golden); }
+.region-contemporary .region-label { color: var(--era-contemporary); border-color: var(--era-contemporary); }
+.region-chinese .region-label { color: var(--era-chinese); border-color: var(--era-chinese); }
+
+.stars-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 0;
+  min-height: 200px;
+}
+
+/* ==============================
+   INDIVIDUAL STAR
+   ============================== */
+.star {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.star-dot {
+  border-radius: 50%;
+  transition: all 0.4s;
+  position: relative;
+}
+
+.star-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  animation: starPulse 3s ease-in-out infinite;
+  opacity: 0;
+}
+
+.star:hover .star-dot::before {
+  opacity: 0.5;
+}
+
+.star:hover {
+  transform: scale(1.25);
+  z-index: 10;
+}
+
+.star-name {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: color 0.3s;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.star:hover .star-name {
+  color: #fff;
+}
+
+.star-count {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.star.hidden {
+  opacity: 0.1;
+  pointer-events: none;
+  transform: scale(0.7);
+}
+
+/* Star era colors */
+.star.classical .star-dot {
+  background: radial-gradient(circle at 30% 30%, #f0d060, var(--era-classical));
+  box-shadow: 0 0 18px var(--era-classical-glow), 0 0 40px rgba(212,168,67,0.2);
+}
+.star.golden .star-dot {
+  background: radial-gradient(circle at 30% 30%, #a0d8ff, var(--era-golden));
+  box-shadow: 0 0 18px var(--era-golden-glow), 0 0 40px rgba(77,166,255,0.2);
+}
+.star.contemporary .star-dot {
+  background: radial-gradient(circle at 30% 30%, #80ffff, var(--era-contemporary));
+  box-shadow: 0 0 18px var(--era-contemporary-glow), 0 0 40px rgba(0,229,255,0.2);
+}
+.star.chinese .star-dot {
+  background: radial-gradient(circle at 30% 30%, #ffb0d0, var(--era-chinese));
+  box-shadow: 0 0 18px var(--era-chinese-glow), 0 0 40px rgba(255,107,157,0.2);
+}
+
+/* Size classes based on article count */
+.star.size-xs .star-dot { width: 12px; height: 12px; }
+.star.size-sm .star-dot { width: 18px; height: 18px; }
+.star.size-md .star-dot { width: 26px; height: 26px; }
+.star.size-lg .star-dot { width: 36px; height: 36px; }
+.star.size-xl .star-dot { width: 48px; height: 48px; }
+
+@keyframes starPulse {
+  0%, 100% { box-shadow: inherit; }
+  50% { box-shadow: 0 0 30px currentColor, 0 0 60px currentColor; }
+}
+
+/* ==============================
+   CONSTELLATION SVG LINES
+   ============================== */
+.constellation-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  transition: opacity 0.5s;
+}
+
+.region-classical:hover .constellation-svg,
+.region-golden:hover .constellation-svg,
+.region-contemporary:hover .constellation-svg,
+.region-chinese:hover .constellation-svg {
+  opacity: 0.5;
+}
+
+.constellation-line {
+  stroke: rgba(255,255,255,0.3);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  transition: all 0.5s;
+}
+
+/* ==============================
+   STAR MODAL
+   ============================== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,20,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 520px;
+  width: 90%;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.35s;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.open .modal-card {
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.modal-close:hover { color: #fff; }
+
+.modal-era-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+.modal-era-badge.classical { background: rgba(212,168,67,0.2); color: var(--era-classical); }
+.modal-era-badge.golden { background: rgba(77,166,255,0.2); color: var(--era-golden); }
+.modal-era-badge.contemporary { background: rgba(0,229,255,0.2); color: var(--era-contemporary); }
+.modal-era-badge.chinese { background: rgba(255,107,157,0.2); color: var(--era-chinese); }
+
+.modal-card h2 {
+  font-size: 1.8rem;
+  margin: 8px 0 4px;
+  color: #fff;
+}
+
+.modal-card .modal-tagline {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.modal-card .modal-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.modal-card .modal-stats span {
+  background: rgba(255,255,255,0.04);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.modal-courses {
+  margin-bottom: 16px;
+}
+.modal-courses h4 {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.modal-courses .course-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.06);
+  padding: 2px 10px;
+  border-radius: 10px;
+  margin: 2px 4px 2px 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.modal-insight {
+  border-left: 2px solid rgba(255,255,255,0.2);
+  padding-left: 14px;
+  margin: 16px 0;
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.7;
+}
+
+.modal-titles {
+  margin-top: 12px;
+}
+.modal-titles h4 {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.modal-titles li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 3px 0;
+  list-style: circle inside;
+}
+
+/* ==============================
+   CHARACTER SHOWCASE CARDS
+   ============================== */
+.showcase-section {
+  margin: 60px 0 40px;
+}
+
+.showcase-section h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+.showcase-section .showcase-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  font-size: 0.95rem;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 0 8px;
+}
+
+.flip-card {
+  perspective: 1200px;
+  height: 380px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.flip-card-front {
+  background: linear-gradient(145deg, rgba(20,25,55,0.95), rgba(15,18,40,0.95));
+}
+
+.flip-card-back {
+  background: linear-gradient(145deg, rgba(15,18,40,0.95), rgba(20,25,55,0.95));
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  text-align: left;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.flip-card-back h3 {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+
+.flip-card-back p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.flip-card-back .insight-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-top: 8px;
+}
+
+.flip-card-back .flip-hint {
+  position: absolute;
+  bottom: 14px;
+  right: 20px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.flip-hint-top {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* Portrait SVGs */
+.portrait-svg {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+}
+
+.flip-card-front .figure-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.flip-card-front .figure-era {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.flip-card-front .figure-quote {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 240px;
+}
+
+.flip-card-front .figure-quote::before { content: '"'; }
+.flip-card-front .figure-quote::after { content: '"'; }
+
+.flip-card.newton .figure-era { color: var(--era-classical); }
+.flip-card.einstein .figure-era { color: var(--era-golden); }
+.flip-card.musk .figure-era { color: var(--era-contemporary); }
+.flip-card.yau .figure-era { color: var(--era-chinese); }
+
+.flip-card.newton { border-top: 2px solid var(--era-classical); }
+.flip-card.einstein { border-top: 2px solid var(--era-golden); }
+.flip-card.musk { border-top: 2px solid var(--era-contemporary); }
+.flip-card.yau { border-top: 2px solid var(--era-chinese); }
+
+/* ==============================
+   PODCAST PLAYER
+   ============================== */
+.podcast-section {
+  margin: 50px 0 40px;
+  padding: 32px 24px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.podcast-section h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.podcast-section .podcast-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+}
+
+.episode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.episode-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+
+.episode-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+}
+
+.episode-num {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: center;
+}
+
+.episode-info { flex: 1; }
+.episode-info .ep-title {
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.episode-info .ep-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.episode-play {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #fff;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.episode-play:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+/* ==============================
+   FOOTER
+   ============================== */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.footer a:hover { color: #fff; }
+
+/* ==============================
+   MOBILE RESPONSIVE
+   ============================== */
+@media (max-width: 768px) {
+  .constellation-map {
+    min-height: auto;
+  }
+
+  .constellation-region {
+    min-height: auto;
+  }
+
+  .stars-container {
+    gap: 14px;
+  }
+
+  .star.size-xl .star-dot { width: 32px; height: 32px; }
+  .star.size-lg .star-dot { width: 26px; height: 26px; }
+
+  .showcase-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flip-card {
+    height: 340px;
+  }
+
+  .stats-bar { gap: 16px; }
+  .stat-num { font-size: 1.4rem; }
+
+  .hero { padding: 32px 12px 20px; }
+
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-input { width: 100%; max-width: 300px; }
+}
+
+/* ==============================
+   SCROLLBAR
+   ============================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<canvas id="space-canvas"></canvas>
+
+<div id="main-container">
+
+  <!-- HERO -->
+  <header class="hero">
+    <h1>思想者星座</h1>
+    <p class="subtitle">Constellation of Thinkers · 人类认知的夜空</p>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num" id="stat-figures">25</div><div class="stat-label">恒星</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-articles">159</div><div class="stat-label">光点</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">星座</div></div>
+      <div class="stat-item"><div class="stat-num">11</div><div class="stat-label">门课</div></div>
+    </div>
+  </header>
+
+  <!-- SEARCH / FILTER -->
+  <div class="controls">
+    <input type="text" class="search-input" id="searchInput" placeholder="搜索名字、领域、课程…">
+    <button class="filter-btn active" data-era="all">全部星座</button>
+    <button class="filter-btn classical" data-era="classical">🔭 古典星座</button>
+    <button class="filter-btn golden" data-era="golden">⚡ 黄金星座</button>
+    <button class="filter-btn contemporary" data-era="contemporary">🚀 当代星座</button>
+    <button class="filter-btn chinese" data-era="chinese">🌟 华人星座</button>
+  </div>
+
+  <!-- CONSTELLATION MAP -->
+  <div class="constellation-map" id="constellationMap">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- CHARACTER SHOWCASE -->
+  <section class="showcase-section">
+    <h2>🔍 聚焦 · 四颗恒星</h2>
+    <p class="showcase-subtitle">点击卡片翻转，看卓克的洞见</p>
+    <div class="showcase-grid">
+      <!-- Newton -->
+      <div class="flip-card newton" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <svg class="portrait-svg" viewBox="0 0 120 120">
+              <defs><radialGradient id="gN"><stop offset="0%" stop-color="#f0d060"/><stop offset="100%" stop-color="#d4a843"/></radialGradient></defs>
+              <circle cx="60" cy="42" r="30" fill="url(#gN)" opacity="0.9"/>
+              <circle cx="60" cy="42" r="24" fill="none" stroke="#d4a843" stroke-width="0.8" opacity="0.5"/>
+              <circle cx="48" cy="36" r="4" fill="#05081a" opacity="0.6"/>
+              <circle cx="72" cy="36" r="4" fill="#05081a" opacity="0.6"/>
+              <path d="M50 54 Q60 64 70 54" fill="none" stroke="#05081a" stroke-width="1.5" opacity="0.5"/>
+              <circle cx="70" cy="90" r="16" fill="url(#gN)" opacity="0.7"/>
+              <line x1="60" y1="72" x2="60" y2="90" stroke="#d4a843" stroke-width="2"/>
+              <text x="60" y="110" text-anchor="middle" fill="#d4a843" font-size="10" opacity="0.6">🍎</text>
+            </svg>
+            <div class="figure-name">艾萨克·牛顿</div>
+            <div class="figure-era">🔭 古典星座 · 1643-1727</div>
+            <div class="figure-quote">我可以计算天体运行的轨道，但无法计算人性的疯狂</div>
+          </div>
+          <div class="flip-card-back">
+            <h3>牛顿：现代科学的奇点</h3>
+            <p><strong>核心贡献：</strong>万有引力定律、三大运动定律、微积分（与莱布尼茨独立发明）、光学色彩理论。牛顿用数学统一了天上和地上的运动规律。</p>
+            <p class="insight-label">💡 卓克的洞见</p>
+            <p>牛顿53岁成为皇家造币厂督办，用破案的方式追查假币犯，甚至亲自去酒吧收集证词。一个计算天体的人，也计算人心的阴暗面——他破获了当时英国最大的假币案。晚年炒股亏了6500万（现值），说出那句名言。</p>
+            <p>牛顿的葬礼是国葬级别，两位公爵三位伯爵抬棺。从他开始，科学家可以葬在西敏寺——这是现代文明一个里程碑式的转变。</p>
+            <span class="flip-hint">点击翻回 →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Einstein -->
+      <div class="flip-card einstein" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <svg class="portrait-svg" viewBox="0 0 120 120">
+              <defs><radialGradient id="gE"><stop offset="0%" stop-color="#a0d8ff"/><stop offset="100%" stop-color="#4da6ff"/></radialGradient></defs>
+              <circle cx="60" cy="42" r="30" fill="url(#gE)" opacity="0.9"/>
+              <!-- Wild hair -->
+              <ellipse cx="40" cy="18" rx="18" ry="10" fill="none" stroke="#4da6ff" stroke-width="1.5" opacity="0.6"/>
+              <ellipse cx="80" cy="18" rx="18" ry="10" fill="none" stroke="#4da6ff" stroke-width="1.5" opacity="0.6"/>
+              <ellipse cx="60" cy="12" rx="12" ry="8" fill="none" stroke="#4da6ff" stroke-width="1.5" opacity="0.6"/>
+              <circle cx="48" cy="36" r="3.5" fill="#05081a" opacity="0.5"/>
+              <circle cx="72" cy="36" r="3.5" fill="#05081a" opacity="0.5"/>
+              <path d="M53 50 Q60 55 67 50" fill="none" stroke="#05081a" stroke-width="1" opacity="0.4"/>
+              <text x="60" y="95" text-anchor="middle" fill="#4da6ff" font-size="11" font-weight="bold">E=mc²</text>
+              <text x="60" y="112" text-anchor="middle" fill="#4da6ff" font-size="8" opacity="0.5">1905</text>
+            </svg>
+            <div class="figure-name">阿尔伯特·爱因斯坦</div>
+            <div class="figure-era">⚡ 黄金星座 · 1879-1955</div>
+            <div class="figure-quote">想象力比知识更重要。知识是有限的，想象力环绕世界</div>
+          </div>
+          <div class="flip-card-back">
+            <h3>爱因斯坦：时空的雕塑家</h3>
+            <p><strong>核心贡献：</strong>狭义相对论（E=mc²）、广义相对论（引力=时空弯曲）、光电效应（量子论基石）。1905奇迹年，26岁，四篇论文改变世界。</p>
+            <p class="insight-label">💡 卓克的洞见</p>
+            <p>爱因斯坦晚年每天跟库尔特·哥德尔一起下班回家，两人走同一条路，却思考着完全不同的宇宙——一个在想时空的弯曲，一个在证数学的不完备。他们在普林斯顿的散步，可能是人类智力史上最昂贵的通勤。</p>
+            <p>他极度讨厌"奇点"这个概念——黑洞中心的无限密度让他觉得不舒服。他用后半生试图从方程中去掉奇点。但他去世后，霍金证明了奇点是不可避免的。</p>
+            <span class="flip-hint">点击翻回 →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Musk -->
+      <div class="flip-card musk" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <svg class="portrait-svg" viewBox="0 0 120 120">
+              <defs><radialGradient id="gM"><stop offset="0%" stop-color="#80ffff"/><stop offset="100%" stop-color="#00e5ff"/></radialGradient></defs>
+              <!-- Rocket body -->
+              <rect x="52" y="15" width="16" height="55" rx="8" fill="url(#gM)" opacity="0.8"/>
+              <polygon points="60,2 48,18 72,18" fill="url(#gM)" opacity="0.8"/>
+              <!-- Fins -->
+              <polygon points="52,55 36,70 52,65" fill="url(#gM)" opacity="0.5"/>
+              <polygon points="68,55 84,70 68,65" fill="url(#gM)" opacity="0.5"/>
+              <!-- Flame -->
+              <ellipse cx="60" cy="78" rx="8" ry="14" fill="#ff6600" opacity="0.5"/>
+              <ellipse cx="60" cy="82" rx="4" ry="8" fill="#ffcc00" opacity="0.7"/>
+              <!-- Stars -->
+              <circle cx="30" cy="28" r="1.5" fill="#00e5ff" opacity="0.8"/>
+              <circle cx="90" cy="22" r="1" fill="#00e5ff" opacity="0.6"/>
+              <circle cx="25" cy="45" r="1" fill="#00e5ff" opacity="0.4"/>
+              <circle cx="95" cy="48" r="1.5" fill="#00e5ff" opacity="0.5"/>
+              <!-- Chip pattern -->
+              <rect x="20" y="90" width="24" height="18" rx="3" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+              <line x1="26" y1="95" x2="38" y2="95" stroke="#00e5ff" stroke-width="0.5" opacity="0.3"/>
+              <line x1="26" y1="100" x2="38" y2="100" stroke="#00e5ff" stroke-width="0.5" opacity="0.3"/>
+              <text x="60" y="114" text-anchor="middle" fill="#00e5ff" font-size="9" opacity="0.5">🚀 SpaceX · xAI</text>
+            </svg>
+            <div class="figure-name">埃隆·马斯克</div>
+            <div class="figure-era">🚀 当代星座 · 1971-</div>
+            <div class="figure-quote">如果你早上起来，觉得未来会变得更好，那就是光明的一天</div>
+          </div>
+          <div class="flip-card-back">
+            <h3>马斯克：未来引擎的司炉工</h3>
+            <p><strong>核心贡献：</strong>SpaceX（可回收火箭）、特斯拉（电动车革命）、Neuralink（脑机接口）、xAI/Grok、星链计划。正在尝试用第一性原理重构航天、能源、AI三个行业。</p>
+            <p class="insight-label">💡 卓克的洞见</p>
+            <p>马斯克造火箭的起点不是"我要改变世界"，而是"我去俄罗斯买一枚退役导弹做火星绿洲计划，发现所有人都在骗我"。他的第一性原理不是哲学——是愤怒驱使的。"如果你被骗了三次，你会自己动手算一遍。"</p>
+            <p>29篇文章覆盖火箭、AI、脑机接口、芯片——卓克跟踪的不是一个商人，而是一个正在同时下五盘棋的人。</p>
+            <span class="flip-hint">点击翻回 →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 丘成桐 -->
+      <div class="flip-card yau" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <svg class="portrait-svg" viewBox="0 0 120 120">
+              <defs><radialGradient id="gY"><stop offset="0%" stop-color="#ffb0d0"/><stop offset="100%" stop-color="#ff6b9d"/></radialGradient></defs>
+              <!-- Calabi-Yau manifold stylized -->
+              <ellipse cx="60" cy="50" rx="35" ry="25" fill="none" stroke="#ff6b9d" stroke-width="1.5" opacity="0.7"/>
+              <ellipse cx="60" cy="50" rx="25" ry="15" fill="none" stroke="#ff6b9d" stroke-width="1" opacity="0.5" stroke-dasharray="4 3"/>
+              <path d="M35 35 Q50 20 70 30 Q85 40 80 60" fill="none" stroke="#ff6b9d" stroke-width="1.2" opacity="0.6"/>
+              <path d="M40 60 Q55 75 75 65 Q85 55 80 45" fill="none" stroke="#ff6b9d" stroke-width="0.8" opacity="0.4"/>
+              <!-- Center point -->
+              <circle cx="58" cy="48" r="3" fill="#ff6b9d" opacity="0.8"/>
+              <circle cx="58" cy="48" r="8" fill="none" stroke="#ff6b9d" stroke-width="0.5" opacity="0.3"/>
+              <!-- Labels -->
+              <text x="30" y="85" fill="#ff6b9d" font-size="8" opacity="0.4">Calabi-Yau</text>
+              <text x="60" y="110" text-anchor="middle" fill="#ff6b9d" font-size="9" opacity="0.5">微分几何</text>
+            </svg>
+            <div class="figure-name">丘成桐</div>
+            <div class="figure-era">🌟 华人星座 · 1949-</div>
+            <div class="figure-quote">中国的数学水平还没有达到美国40年代的水平</div>
+          </div>
+          <div class="flip-card-back">
+            <h3>丘成桐：几何边界的拓荒者</h3>
+            <p><strong>核心贡献：</strong>卡拉比-丘流形（弦论基石）、证明正质量猜想、创立几何分析。菲尔兹奖首位华人得主，沃尔夫奖得主。</p>
+            <p class="insight-label">💡 卓克的洞见</p>
+            <p>2024年，丘成桐在华中科大说"中国的数学水平还没有达到美国40年代的水平"，全网哗然。但卓克告诉我们：这恰恰是一个真正爱国者的声音——他不是在贬低中国，而是在说"你们必须知道真正的差距在哪里，才能追上去"。</p>
+            <p>卡拉比-丘流形是六维空间——我们无法想象它，但宇宙的基本结构可能就藏在这些看不见的几何形状里。丘成桐给了弦理论一个可以居住的房子。</p>
+            <span class="flip-hint">点击翻回 →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PODCAST PLAYER -->
+  <section class="podcast-section">
+    <h2>🎙️ 播客 · 群星谱</h2>
+    <p class="podcast-subtitle">五期节目，走进人类认知的夜空</p>
+    <div class="episode-list" id="episodeList">
+      <div class="episode-item" data-ep="0">
+        <div class="episode-num">EP0</div>
+        <div class="episode-info">
+          <div class="ep-title">站在山巅看星空 · 总览篇</div>
+          <div class="ep-desc">25位思想者、159篇文章、400年人类认知史的一幅星图</div>
+        </div>
+        <button class="episode-play" onclick="alert('播客脚本见 podcast_b/EP0_总览篇.txt')">▶</button>
+      </div>
+      <div class="episode-item" data-ep="1">
+        <div class="episode-num">EP1</div>
+        <div class="episode-info">
+          <div class="ep-title">古典星座 · 牛顿的苹果与达尔文的雀鸟</div>
+          <div class="ep-desc">现代科学的第一批火焰——从牛顿力学到演化论革命</div>
+        </div>
+        <button class="episode-play" onclick="alert('播客脚本见 podcast_b/EP1_古典星座.txt')">▶</button>
+      </div>
+      <div class="episode-item" data-ep="2">
+        <div class="episode-num">EP2</div>
+        <div class="episode-info">
+          <div class="ep-title">黄金星座 · 当物理学爆炸，计算苏醒</div>
+          <div class="ep-desc">爱因斯坦、冯·诺伊曼、图灵——20世纪的头脑风暴</div>
+        </div>
+        <button class="episode-play" onclick="alert('播客脚本见 podcast_b/EP2_黄金星座.txt')">▶</button>
+      </div>
+      <div class="episode-item" data-ep="3">
+        <div class="episode-num">EP3</div>
+        <div class="episode-info">
+          <div class="ep-title">当代星座 · 改变你日常生活的那些头脑</div>
+          <div class="ep-desc">马斯克、辛顿、特斯拉——正在发生的未来</div>
+        </div>
+        <button class="episode-play" onclick="alert('播客脚本见 podcast_b/EP3_当代星座.txt')">▶</button>
+      </div>
+      <div class="episode-item" data-ep="4">
+        <div class="episode-num">EP4</div>
+        <div class="episode-info">
+          <div class="ep-title">华人星座 · 从边缘到前沿的百年</div>
+          <div class="ep-desc">杨振宁、丘成桐、潘建伟——华人在科学前沿的旅程</div>
+        </div>
+        <button class="episode-play" onclick="alert('播客脚本见 podcast_b/EP4_华人星座.txt')">▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>思想者星座 · 卓克知识宇宙人物全景 | 基于卓克11门课程159篇文章 | <a href="https://andy-zokelink.github.io/mks-zhuoke/index.html">返回导航主页</a></p>
+  </footer>
+</div>
+
+<!-- MODAL OVERLAY -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-card" id="modalCard" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// ==============================
+// STAR DATA — embedded from compact_stars.json
+// ==============================
+const ERA_MAP = {
+  '古典奠基者': { slug: 'classical', label: '🔭 古典星座', desc: '深空区 · 点亮现代科学的第一批火焰' },
+  '20世纪黄金一代': { slug: 'golden', label: '⚡ 黄金星座', desc: '高能区 · 20世纪物理学与计算的爆炸' },
+  '当代变革者': { slug: 'contemporary', label: '🚀 当代星座', desc: '近地区 · 正在改写我们日常生活的头脑' },
+  '华人科学群像': { slug: 'chinese', label: '🌟 华人星座', desc: '东方区 · 从边缘到前沿的百年迁徙' }
+};
+
+// Inline compact data — 25 figures
+const STARS_DATA = {"古典奠基者":{"牛顿":{"count":16,"courses":["卓老板聊科技","卓克·科学思维课","科技参考3","科技参考4","科技参考基础版"],"preview":"艾萨克·牛顿\n\n英国皇家学会会长，著名物理学家，由他描述的万有引力定律和三大运动定律是经典物理学的基础。\n\n牛顿葬礼的荣光\n\n1.牛顿的葬礼达到了国葬级别，由两位公爵、三位伯爵和一位大法官抬棺下葬。","titles":["人类文明的"10亿米"台阶","了解黑洞必备的几个知识点","NASA发明违反牛顿定律的引擎了吗？","怎么看懂牛顿的《原理》？","下季预告06丨达尔文的墓碑"]},"达尔文":{"count":20,"courses":["卓老板聊科技","卓克·科学思维课","密码学30讲","科技参考3","科技参考基础版"],"preview":"第一位计算机学博士\n\n1.约翰·霍兰德是世界上第一位计算机科学博士，毕业于密歇根大学，他的老师是计算机工程师巴克斯，巴克斯曾经协助冯·诺依曼建造EDVAC，这台计算机是世界上第一台计算机ENIAC的改进版，采用的是二进制算法。","titles":["计算机如何模拟进化？","计算机如何模拟进化","进化比你想象的更快","视觉竟然进化出了障眼法","大脑的进化就是一连串的意外"]},"拉马努金":{"count":4,"courses":["科技参考基础版","卓克·科学思维修炼手册"],"preview":"你好，你好，我是卓克。\n\n2021年2月3日，《自然》杂志上刊登了一篇文章，题目是《用拉马努金机生成关于基本常数的猜想》。这个研究是什么意思呢？\n\n什么是拉马努金机？","titles":["拉马努金机1：只猜想，不证明","拉马努金机2：另类数学家","拉马努金机4：直觉产生器","拉马努金：另类数学家"]},"伽利略":{"count":2,"courses":["卓老板聊科技"],"preview":"Rosa Han：\n把关于伽利略的辟谣和后面月球自由落体实验，讲给身边的一个人，他反问我，耻笑到，所以你知道什么是加速度吗？我不知道他在嘲笑什么，卓老板可以解释一下吗？","titles":["加速度是什么？","下季预告10｜一位不会说英语的英国国王"]},"开普勒":{"count":1,"courses":["卓克·科学思维课"],"preview":"问答\n最近有一条新闻是人工智能帮助我们发现了另外一个小太阳系，有同学想问问，我们能不能用这种方法发现外星人？\n\n| 这条新闻说的是什么？\n\n天文学家一直在用望远镜寻找有可能存在生命条件的行星，比如大家总听说的开普勒望远镜，其实它最重要的任务就是干这个。","titles":["问答：人工智能找到第二太阳系，会有外星人吗？"]},"黎曼":{"count":5,"courses":["卓老板聊科技","卓克·科学思维课"],"preview":"23+7个数学难题\n\n1.1900年希尔伯特提出23个数学难题，其中第八个是黎曼猜想。希尔伯特凭借自己的威望让全世界数学界都重视起这些问题。\n\n\n2.2000年克雷研究所提出了千禧年7大数学难题，其中也有黎曼猜想，克雷研究所凭借每个难题100万美元奖金引起了媒体的重视。","titles":["世界上最难的数学题是什么？","人工智能与黎曼的较量","40%的黎曼猜想","数学是精英们用来秀智商用的？","加餐｜黎曼猜想要被证明了吗？"]}},"20世纪黄金一代":{"爱因斯坦":{"count":5,"courses":["卓老板聊科技","卓克·科学思维课","杨振宁","科技参考4"],"preview":"本期你将听到↓\n\n白洞是什么？\n\n虫洞是什么？\n\n虫洞可以实现时空穿越吗？\n\n本期知识清单↓\n\n1\n\n爱因斯坦-罗森桥\n\n1.在广义相对论场方程的计算中会出现奇点，但爱因斯坦很不喜欢奇点，在中年以后还希望用坐标变换的方式去掉奇点。","titles":["虫洞的来龙去脉","爱因斯坦为什么称赞佛教呢？","计算：爱因斯坦每天跟谁一起下班？","师承交往：真诚源于超强的实力","有趣的理论：语言相对论"]},"冯·诺伊曼":{"count":14,"courses":["冯·诺伊曼","卓克·科学思维修炼手册"],"preview":"你好，欢迎来到《科学人物课：冯·诺伊曼》，我是卓克。\n\n提到冯·诺伊曼，可能很多人并不太熟悉。即使稍微了解一点的，估计除了知道冯·诺伊曼是计算机之父和博弈论之父外，也并不了解他到底是个什么样的人。","titles":["发刊词 | 掌握一个"一通百通"的秘诀","贵族底色：天才究竟是如何诞生的？","深度跨界：怎样才能做到终身高产？","计算机之父：到底有什么重大贡献？","NBG公理体系：怎样构建数学大厦？"]},"杨振宁":{"count":18,"courses":["卓老板聊科技","卓克·科学思维课","杨振宁","卓克·科学思维修炼手册"],"preview":"费曼物理学讲义来历\n\n1.加州大学理工学院在1960年酝酿教育改革，物理学方面的教授请来了费曼，在1961年9月-1963年5月主讲大一、大二物理课。院领导安排教师做笔记和录音，之后几年整理成套，并出版了这套教材。","titles":["费曼和杨振宁讲的物理课","聊聊杨振宁转中国科学院院士","想学物理，要先学数学吗？","杨振宁提出的宇称不守恒定律是什么？","问答：杨振宁童年接受的是什么教育？"]},"图灵":{"count":5,"courses":["卓老板聊科技","密码学30讲","科技参考4","科技参考基础版"],"preview":"No.1  人工智能之父-图灵\n\n智力超群 同性恋 自杀\n\n虽然我们听说图灵大都是因为他和计算机、人工智能、破解密码有关，但其实作为数学家，数学研究也是他的主业。","titles":["专题丨有故事的科学家","人性弱点：图灵破解恩尼格玛机的关键","图灵：从零创造知识","为了AI的安全，杀红眼了也能合作","验证码：想法证明你是人类吧"]},"费曼":{"count":1,"courses":["卓克·科学思维修炼手册"],"preview":"你好，你好，我是卓克。\n1965年，费曼和朱利安·施温格（Julian Schwinger），还有日本物理学家朝永振一郎，一同获得诺贝尔物理学奖，理由是他们在量子电动力学上的贡献。","titles":["费曼：参与建立现代量子理论"]},"香农":{"count":2,"courses":["卓老板聊科技","密码学30讲"],"preview":"我问卓老板\n潘峰：卓老板，能不能讲讲香农，人工智能这么火，我们有必要从源头看看信息技术。\n\n问题来自"得到"订阅产品《卓老板聊科技》"发胖不一定因为又懒又馋"。","titles":["人工智能技术是怎么回事？","香农：让信息成为一门科学"]},"薛定谔":{"count":3,"courses":["卓老板聊科技"],"preview":"大名鼎鼎的薛定谔\n\n1.关于薛定谔，文科生知道"薛定谔的猫"，理科生知道"薛定谔方程"，科学史学家知道他是情圣，生物学家知道他的科普书《生命是什么》。\n\n\n\n2.在物理学界，薛定谔是量子力学的奠基人，但随后又走向了反对量子力学发展的道路上。","titles":["大科学家薛定谔是情圣？","微波炉的辐射危险吗？","科学发展需要考虑人的影响吗？"]},"费米":{"count":2,"courses":["卓老板聊科技","科技参考基础版"],"preview":"塞格雷在穷大学教物理\n\n1.塞格雷之前一直跟着费米在罗马搞物理研究，职位是助理研究员。1935年的时候，他有了一个升迁的好机会，是去西西里岛的巴勒莫大学，做物理学教授，并且负责整个物理学研究所。","titles":["最大序号元素在哪里","又一片乌云：标准模型不标准了？"]},"居里":{"count":6,"courses":["卓老板聊科技","科技参考4"],"preview":"物理学家也是性情中人\n\n1927年的索尔维会议，参会者29人，17人获诺贝尔奖，其中1人获奖2次，她就是居里夫人。居里夫人在丈夫皮埃尔去世后，曾和物理学家郎之万有过恋情。","titles":["史上最牛科学家合影，以及物理学中的不确定性","居里夫人（1）：钋是波兰的意思","居里夫人（2）：前两段恋情","居里夫人（3）：43岁婚外恋","居里夫人（4）：不公的待遇"]}},"当代变革者":{"霍金":{"count":5,"courses":["卓老板聊科技","卓克·科学思维课","科技参考5","卓克·科学思维修炼手册"],"preview":"本期你将听到↓\n\n黑洞是如何被描述出来的？\n\n黑洞有哪几种形式？\n\n年轻时的霍金是怎么和宇宙学扯上关系的？\n\n本期知识清单↓","titles":["4种黑洞与年轻的霍金","时间的终点与霍金的黑洞","纪念霍金：伟大的科学家和科普人","蔡磊的渐冻症改变了什么？","霍金：奇点定理和霍金辐射"]},"马斯克":{"count":29,"courses":["科技参考3","科技参考4","科技参考5","科技参考基础版"],"preview":"你好，你好。\n\n欢迎回到《科技参考》，我是卓克。\n\n2023年4月，马斯克在接受采访时带着抱怨的口气嘲讽到：现在每个人和他们的狗都在买GPU。他讽刺的其实是当下抢购GPU的风潮，带着抱怨的口气是因为马斯克自己的公司抢不到多少。","titles":["新一代黄金，下一代帝国","马斯克在AI世界的恩怨","星舰第二次发射复盘","当前马斯克的星舰很难登月","月球基地，更务实的目标"]},"辛顿":{"count":4,"courses":["科技参考3","科技参考4"],"preview":"你好，你好。\n\n欢迎回到《科技参考》，我是卓克。\n\n前段时间，咱们仔细说了阿尔特曼被解雇又重返OpenAI的大瓜，但OpenAI公司内斗的剧情还没有讲完。","titles":["AI保守派故事（1）：辛顿的灰暗人生","AI保守派故事（2）：AI威胁论",""超级对齐"是怎么对齐的？","诺奖解读：2024年的物理奖为什么颁发给了AI？"]},"屠呦呦":{"count":1,"courses":["科技参考4"],"preview":"你好，你好。\n\n欢迎回到《科技参考》，我是卓克。\n\n2025年5月1日传来个好消息，95岁的屠呦呦当选了美国科学院外籍院士，理由和2015年获得诺贝尔奖是一样的：她发现了青蒿素，对疟疾的治疗做出了重大贡献。","titles":["屠呦呦为什么评不上中科院院士？"]},"袁隆平":{"count":1,"courses":["科技参考基础版"],"preview":"你好，你好，我是卓克。\n\n5月22日，"杂交水稻之父"袁隆平逝世。对于我们来说，缅怀他的最好方式是了解他。所以这篇《科技参考》，我们来说说袁隆平的杂交水稻是怎么杂交的。","titles":["三系法：杂交水稻是怎么杂交的？"]},"黄仁勋":{"count":2,"courses":["科技参考3","科技参考基础版"],"preview":"你好，你好。\n\n欢迎回到《科技参考》，我是卓克。\n\n这个系列的节目，我将带你回顾AI领域最重要的硬件厂商——英伟达，看看它崛起的过程。\n\n英伟达的创始人黄仁勋1963年出生在台南市水仙宫。","titles":["英伟达简史1：为游戏而生","元宇宙：能模拟真实世界吗？"]},"特斯拉":{"count":9,"courses":["卓老板聊科技","科技参考3","科技参考基础版"],"preview":"特斯拉发生自动驾驶致死案\n\n1、第一起与特斯拉自动驾驶功能有关的致命交通事故被曝光。事件发生在半封闭高速道路上，驾驶员和特斯拉的自动驾驶功能没有发现一辆冲过来的拖挂车，导致发生撞击。","titles":["无人驾驶汽车是更安全了，还是更危险了？","问答：特斯拉自动驾驶水平如何+护眼仪怎么买？","问答：端到端是今后智驾主流吗？河南火箭发射失败是怎么回事？","特斯拉新型电池：究竟提升在哪儿？","自动驾驶6：哪种路线今后会成为主流？"]}},"华人科学群像":{"丘成桐":{"count":1,"courses":["科技参考3"],"preview":"你好，你好。\n\n欢迎回到《科技参考》，我是卓克。\n\n2024年4月30日，丘成桐在华中科技大学演讲的时候说，中国的数学水平还没有达到美国40年代的水平。一句话引发了大家的热议，很多媒体大V痛批丘成桐。","titles":["丘成桐的批评值得认真听"]},"李政道":{"count":1,"courses":["科技参考3"],"preview":"你好，你好。\n\n欢迎回到《科技参考》，我是卓克。又到了本周问答时间。\n\n同学提问听说李政道先生去世了，但是对他还没有多少了解呢！希望卓老板介绍一下。\n\n卓克","titles":["问答：缅怀李政道先生+如何给屋里降温？"]},"潘建伟":{"count":2,"courses":["卓老板聊科技","科技参考基础版"],"preview":"墨子号卫星的性质是科研\n\n墨子号量子卫星的主要任务是做量子通讯的科学实验，就目前而言，量子通讯离实际应用还比较远。这项科学实验是潘建伟团队与奥地利的维也纳大学合作的，潘建伟团队有技术上的优势。","titles":["量子卫星大揭秘","量子计算机："九章"到底强在哪里？"]}}};
+
+// ==============================
+// SPACE BACKGROUND CANVAS
+// ==============================
+const canvas = document.getElementById('space-canvas');
+const ctx = canvas.getContext('2d');
+let bgStars = [];
+let nebulae = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', () => {
+  resizeCanvas();
+  initBgStars();
+});
+
+function initBgStars() {
+  const count = Math.floor((canvas.width * canvas.height) / 2000);
+  bgStars = [];
+  for (let i = 0; i < count; i++) {
+    bgStars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      twinkle: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.01 + 0.003,
+      opacity: Math.random() * 0.6 + 0.2
+    });
+  }
+
+  // Nebulae (colored blobs)
+  nebulae = [];
+  const eraColors = [
+    { x: 0.2, y: 0.3, color: '212,168,67', r: 160 },   // classical
+    { x: 0.65, y: 0.25, color: '77,166,255', r: 140 },  // golden
+    { x: 0.35, y: 0.7, color: '0,229,255', r: 150 },    // contemporary
+    { x: 0.75, y: 0.7, color: '255,107,157', r: 120 },  // chinese
+    { x: 0.5, y: 0.5, color: '100,130,200', r: 200 }    // central
+  ];
+  nebulae = eraColors.map(n => ({
+    x: n.x * canvas.width,
+    y: n.y * canvas.height,
+    r: n.r,
+    color: n.color,
+    opacity: 0.03 + Math.random() * 0.02
+  }));
+}
+
+function drawSpace() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw nebulae
+  nebulae.forEach(n => {
+    const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+    grad.addColorStop(0, `rgba(${n.color},${n.opacity * 1.4})`);
+    grad.addColorStop(0.5, `rgba(${n.color},${n.opacity * 0.6})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Draw background stars
+  bgStars.forEach(s => {
+    s.twinkle += s.speed;
+    const alpha = s.opacity + Math.sin(s.twinkle) * 0.2;
+    ctx.fillStyle = `rgba(255,255,255,${Math.max(0.1, alpha)})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function animate() {
+  drawSpace();
+  requestAnimationFrame(animate);
+}
+
+initBgStars();
+animate();
+
+// ==============================
+// BUILD CONSTELLATION MAP
+// ==============================
+const mapContainer = document.getElementById('constellationMap');
+const eraOrder = ['古典奠基者', '20世纪黄金一代', '当代变革者', '华人科学群像'];
+
+function getStarSizeClass(count) {
+  if (count <= 1) return 'size-xs';
+  if (count <= 3) return 'size-sm';
+  if (count <= 7) return 'size-md';
+  if (count <= 15) return 'size-lg';
+  return 'size-xl';
+}
+
+eraOrder.forEach(era => {
+  const eraInfo = ERA_MAP[era];
+  const figures = STARS_DATA[era];
+
+  const region = document.createElement('div');
+  region.className = `constellation-region region-${eraInfo.slug}`;
+  region.dataset.era = eraInfo.slug;
+
+  const label = document.createElement('div');
+  label.className = 'region-label';
+  label.textContent = `${eraInfo.label} · ${eraInfo.desc}`;
+  region.appendChild(label);
+
+  const starsContainer = document.createElement('div');
+  starsContainer.className = 'stars-container';
+
+  Object.entries(figures).forEach(([name, info]) => {
+    const star = document.createElement('div');
+    star.className = `star ${eraInfo.slug} ${getStarSizeClass(info.count)}`;
+    star.dataset.name = name;
+    star.dataset.era = eraInfo.slug;
+    star.dataset.eraName = era;
+    star.dataset.count = info.count;
+    star.title = `${name} (${info.count}篇)`;
+
+    star.innerHTML = `
+      <div class="star-dot"></div>
+      <div class="star-name">${name}<br><span class="star-count">${info.count}篇</span></div>
+    `;
+
+    star.addEventListener('click', () => openStarModal(era, name, info));
+    starsContainer.appendChild(star);
+  });
+
+  region.appendChild(starsContainer);
+  mapContainer.appendChild(region);
+});
+
+// ==============================
+// STAR MODAL
+// ==============================
+function openStarModal(era, name, info) {
+  const eraInfo = ERA_MAP[era];
+  const content = document.getElementById('modalContent');
+  const preview = (info.preview || '').replace(/\n/g, '<br>');
+  const courses = (info.courses || []).map(c => `<span class="course-tag">${c}</span>`).join('');
+  const titles = (info.titles || []).map(t => `<li>${t}</li>`).join('');
+
+  content.innerHTML = `
+    <span class="modal-era-badge ${eraInfo.slug}">${eraInfo.label}</span>
+    <h2>${name}</h2>
+    <div class="modal-tagline">${eraInfo.desc}</div>
+    <div class="modal-stats">
+      <span>📄 ${info.count}篇文章</span>
+      <span>📚 ${info.courses.length}门课程</span>
+    </div>
+    <div class="modal-courses">
+      <h4>来源课程</h4>
+      ${courses}
+    </div>
+    <div class="modal-insight">${preview.substring(0, 400)}</div>
+    <div class="modal-titles">
+      <h4>代表文章</h4>
+      <ul>${titles}</ul>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+
+// ==============================
+// SEARCH / FILTER
+// ==============================
+const searchInput = document.getElementById('searchInput');
+const filterBtns = document.querySelectorAll('.filter-btn');
+let activeEra = 'all';
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeEra = btn.dataset.era;
+    applyFilters();
+  });
+});
+
+searchInput.addEventListener('input', applyFilters);
+
+function applyFilters() {
+  const query = searchInput.value.toLowerCase().trim();
+  const allStars = document.querySelectorAll('.star');
+
+  allStars.forEach(star => {
+    const name = star.dataset.name || '';
+    const era = star.dataset.era || '';
+    const eraName = star.dataset.eraName || '';
+    const courses = getCoursesForStar(eraName, name);
+
+    const matchesEra = activeEra === 'all' || activeEra === era;
+    const matchesSearch = !query ||
+      name.toLowerCase().includes(query) ||
+      eraName.toLowerCase().includes(query) ||
+      courses.toLowerCase().includes(query);
+
+    if (matchesEra && matchesSearch) {
+      star.classList.remove('hidden');
+    } else {
+      star.classList.add('hidden');
+    }
+  });
+}
+
+function getCoursesForStar(eraName, name) {
+  try {
+    const info = STARS_DATA[eraName]?.[name];
+    return (info?.courses || []).join(' ');
+  } catch { return ''; }
+}
+</script>
+
+</body>
+</html>

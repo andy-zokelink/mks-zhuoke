@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卓克·人物专题 — 三位叛徒 · 思想的三种形状</title>
+<style>
+/* ===== Foundations ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080c14;
+  --bg-elevated: #0d1220;
+  --bg-card: #fefcf8;
+  --bg-card-hover: #fffdf7;
+  --text: #bcc5d4;
+  --text-bright: #e2e8f4;
+  --text-card: #2d2d2d;
+  --text-card-muted: #666;
+  --text-dim: #5e6b80;
+  --border: #1a2740;
+  --border-light: #243350;
+  --amber: #F59E0B;
+  --amber-glow: rgba(245,158,11,0.2);
+  --amber-dark: #d97706;
+
+  /* Three spectra */
+  --darwin: #10b981; --darwin-glow: rgba(16,185,129,0.25);
+  --neumann: #0ea5e9; --neumann-glow: rgba(14,165,233,0.25);
+  --yang: #8b5cf6; --yang-glow: rgba(139,92,246,0.25);
+
+  --shadow: 0 2px 12px rgba(0,0,0,0.45);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.35);
+  --shadow-card: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 4px 20px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ===== Ambient Background ===== */
+.ambient {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 25%, rgba(245,158,11,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 25% 30% at 20% 55%, rgba(16,185,129,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 25% 30% at 80% 55%, rgba(139,92,246,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 15% at 50% 85%, rgba(14,165,233,0.03) 0%, transparent 50%);
+}
+.ambient::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.4;
+}
+
+/* ===== Particles ===== */
+.particles {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.particle {
+  position: absolute; border-radius: 50%;
+  animation: particle-float linear infinite; opacity: 0;
+}
+@keyframes particle-float {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  50%  { opacity: 0.2; }
+  90%  { opacity: 0.03; }
+  100% { transform: translateY(-100vh) translateX(var(--drift)); opacity: 0; }
+}
+
+/* ===== Top Nav ===== */
+.top-nav {
+  position: relative; z-index: 10;
+  padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+  max-width: 1100px; margin: 0 auto;
+}
+.top-nav a {
+  color: var(--text-dim); text-decoration: none; font-size: 0.78rem;
+  letter-spacing: 2px; transition: color var(--ease);
+  display: flex; align-items: center; gap: 6px;
+}
+.top-nav a:hover { color: var(--amber); }
+.top-nav .sep { color: var(--border-light); font-size: 0.7rem; }
+
+/* ===== Prism Hero ===== */
+.hero-section {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto;
+  padding: 40px 24px 30px; text-align: center;
+}
+
+/* Prism Visual */
+.prism-display {
+  position: relative;
+  width: 300px; height: 300px;
+  margin: 0 auto 36px;
+}
+
+/* Prism core */
+.prism-core {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.prism-triangle {
+  width: 0; height: 0;
+  border-left: 36px solid transparent;
+  border-right: 36px solid transparent;
+  border-bottom: 62px solid rgba(255,255,255,0.85);
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+  animation: prism-glow 3s ease-in-out infinite;
+}
+@keyframes prism-glow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.25)); }
+  50%      { filter: drop-shadow(0 0 35px rgba(255,255,255,0.5)); }
+}
+
+/* Input beam - white light from left */
+.input-beam {
+  position: absolute;
+  top: 50%; left: 10px;
+  width: 80px; height: 4px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.9), rgba(255,255,255,0.6));
+  border-radius: 2px;
+  transform: translateY(-50%);
+  box-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 60px rgba(255,255,255,0.15);
+}
+.input-beam::before {
+  content: ''; position: absolute; top: -6px; left: -4px;
+  width: 12px; height: 16px;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: beam-pulse 2s ease-in-out infinite;
+}
+@keyframes beam-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.3); }
+}
+
+/* Output beams - three colored spectra */
+.spectrum-beam {
+  position: absolute;
+  top: 50%; right: 10px;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.8;
+  animation: spectrum-shift 4s ease-in-out infinite;
+}
+.beam-green {
+  width: 90px;
+  background: linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,0.9));
+  box-shadow: 0 0 24px var(--darwin-glow);
+  transform: translateY(-50%) rotate(-8deg);
+  transform-origin: left center;
+}
+.beam-cyan {
+  width: 95px;
+  background: linear-gradient(90deg, rgba(14,165,233,0.6), rgba(14,165,233,0.9));
+  box-shadow: 0 0 24px var(--neumann-glow);
+  transform: translateY(-50%);
+  transform-origin: left center;
+}
+.beam-violet {
+  width: 100px;
+  background: linear-gradient(90deg, rgba(139,92,246,0.6), rgba(139,92,246,0.9));
+  box-shadow: 0 0 24px var(--yang-glow);
+  transform: translateY(-50%) rotate(8deg);
+  transform-origin: left center;
+}
+@keyframes spectrum-shift {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* Light particles along beams */
+.beam-particle {
+  position: absolute; width: 3px; height: 3px;
+  border-radius: 50%; opacity: 0;
+  animation: beam-sparkle 2.5s ease-in-out infinite;
+}
+@keyframes beam-sparkle {
+  0%   { opacity: 0; transform: translateX(0); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(80px); }
+}
+
+/* Labels */
+.spectrum-label {
+  position: absolute; font-size: 0.65rem;
+  letter-spacing: 2px; color: var(--text-dim);
+  opacity: 0.7; transition: opacity var(--ease);
+}
+.spectrum-label:hover { opacity: 1; }
+
+/* Hero text */
+.hero-title { position: relative; z-index: 1; }
+.hero-title .pre-title {
+  font-size: 0.85rem; color: var(--amber); letter-spacing: 6px;
+  font-weight: 400; text-transform: uppercase; margin-bottom: 8px;
+}
+.hero-title h1 {
+  font-size: 2.6rem; font-weight: 900; letter-spacing: 3px;
+  color: var(--text-bright); margin-bottom: 6px;
+  background: linear-gradient(135deg, #e2e8f4 0%, #a0b4cc 50%, #e2e8f4 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-title .tagline {
+  font-size: 0.95rem; color: var(--text-dim); letter-spacing: 2px;
+  max-width: 600px; margin: 0 auto; line-height: 1.8;
+}
+.hero-title .stat-line {
+  margin-top: 18px;
+  display: flex; justify-content: center; gap: 28px;
+  flex-wrap: wrap;
+}
+.hero-title .stat-item { text-align: center; }
+.hero-title .stat-num {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 1.55rem; font-weight: 900;
+  background: linear-gradient(135deg, var(--amber), #fbbf24);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-title .stat-label {
+  font-size: 0.7rem; color: var(--text-dim); letter-spacing: 2px;
+}
+
+/* Prism metaphor explanation */
+.prism-explanation {
+  position: relative; z-index: 1;
+  max-width: 700px; margin: 10px auto 0;
+  padding: 20px 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.82rem; color: var(--text-dim);
+  line-height: 1.8; letter-spacing: 0.5px;
+}
+.prism-explanation .highlight { color: var(--amber); font-weight: 600; }
+.prism-explanation .g { color: var(--darwin); }
+.prism-explanation .c { color: var(--neumann); }
+.prism-explanation .v { color: var(--yang); }
+
+/* ===== Character Cards ===== */
+.characters-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 40px 24px 60px;
+}
+.characters-section h2 {
+  text-align: center; font-size: 1.15rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 36px; font-weight: 500;
+}
+
+.chars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.char-card {
+  display: block; text-decoration: none;
+  background: var(--bg-card); border-radius: var(--radius-lg);
+  border-left: 5px solid var(--amber);
+  padding: 32px 24px 24px;
+  position: relative; overflow: hidden;
+  transition: all var(--ease);
+  box-shadow: var(--shadow-card);
+  color: var(--text-card);
+}
+.char-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  background: var(--bg-card-hover);
+}
+
+/* Spectrum-specific left border override */
+.char-card.darwin { border-left-color: var(--darwin); }
+.char-card.neumann { border-left-color: var(--neumann); }
+.char-card.yang { border-left-color: var(--yang); }
+
+/* Glow orb on hover */
+.char-card::after {
+  content: ''; position: absolute;
+  top: -30px; right: -30px;
+  width: 100px; height: 100px; border-radius: 50%;
+  opacity: 0; transition: opacity var(--ease); pointer-events: none;
+}
+.char-card.darwin::after { background: var(--darwin-glow); }
+.char-card.neumann::after { background: var(--neumann-glow); }
+.char-card.yang::after { background: var(--yang-glow); }
+.char-card:hover::after { opacity: 1; }
+
+/* Watermark number */
+.char-card .char-num {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 4rem; font-weight: 900;
+  position: absolute; top: 0; right: 12px;
+  opacity: 0.04; pointer-events: none; line-height: 1;
+  transition: opacity var(--ease);
+}
+.char-card:hover .char-num { opacity: 0.08; }
+.char-card.darwin .char-num { color: var(--darwin); }
+.char-card.neumann .char-num { color: var(--neumann); }
+.char-card.yang .char-num { color: var(--yang); }
+
+.char-card .char-icon { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+.char-card h3 {
+  font-size: 1.2rem; font-weight: 700; color: var(--text-card);
+  margin-bottom: 6px; letter-spacing: 1px;
+}
+.char-card .char-spectrum {
+  display: inline-block; font-size: 0.72rem; letter-spacing: 2px;
+  padding: 2px 10px; border-radius: 20px;
+  margin-bottom: 12px; font-weight: 600;
+}
+.char-card.darwin .char-spectrum { color: var(--darwin); background: rgba(16,185,129,0.08); }
+.char-card.neumann .char-spectrum { color: var(--neumann); background: rgba(14,165,233,0.08); }
+.char-card.yang .char-spectrum { color: var(--yang); background: rgba(139,92,246,0.08); }
+
+.char-card .char-desc {
+  font-size: 0.85rem; color: var(--text-card-muted);
+  line-height: 1.65; margin-bottom: 16px;
+}
+.char-card .char-quote {
+  font-size: 0.8rem; color: var(--text-card-muted);
+  font-style: italic; padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  line-height: 1.6;
+}
+.char-card .char-stats {
+  display: flex; gap: 16px; margin-top: 14px;
+  font-size: 0.75rem; color: var(--text-card-muted);
+}
+.char-card .char-stats span { display: flex; align-items: center; gap: 4px; }
+.char-card .char-stats .num { font-weight: 700; font-size: 0.9rem; }
+.char-card.darwin .char-stats .num { color: var(--darwin); }
+.char-card.neumann .char-stats .num { color: var(--neumann); }
+.char-card.yang .char-stats .num { color: var(--yang); }
+
+.char-arrow {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 16px; font-size: 0.82rem; font-weight: 600;
+  transition: gap var(--ease);
+}
+.char-card.darwin .char-arrow { color: var(--darwin); }
+.char-card.neumann .char-arrow { color: var(--neumann); }
+.char-card.yang .char-arrow { color: var(--yang); }
+.char-card:hover .char-arrow { gap: 10px; }
+
+/* ===== Podcast Section ===== */
+.podcast-section {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto; padding: 20px 24px 50px;
+}
+.podcast-section h2 {
+  text-align: center; font-size: 1.15rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 28px; font-weight: 500;
+}
+
+.podcast-player {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px;
+  display: flex; align-items: center; gap: 24px; box-shadow: var(--shadow);
+}
+.podcast-play-btn {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 2px solid var(--amber);
+  background: rgba(245,158,11,0.08); color: var(--amber);
+  font-size: 1.5rem; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--ease);
+}
+.podcast-play-btn:hover {
+  background: rgba(245,158,11,0.2); box-shadow: 0 0 30px var(--amber-glow);
+}
+.podcast-info { flex: 1; min-width: 0; }
+.podcast-info .podcast-title { font-size: 1.05rem; font-weight: 700; color: var(--text-bright); margin-bottom: 4px; }
+.podcast-info .podcast-ep { font-size: 0.8rem; color: var(--amber); letter-spacing: 2px; }
+.podcast-wave { display: flex; align-items: flex-end; gap: 3px; height: 32px; margin-top: 10px; }
+.podcast-wave .bar {
+  width: 3px; border-radius: 2px;
+  animation: wave 0.8s ease-in-out infinite; opacity: 0.4;
+}
+.podcast-wave .bar:nth-child(1) { height: 12px; animation-delay: 0s; background: var(--darwin); }
+.podcast-wave .bar:nth-child(2) { height: 22px; animation-delay: 0.1s; background: var(--neumann); }
+.podcast-wave .bar:nth-child(3) { height: 15px; animation-delay: 0.2s; background: var(--yang); }
+.podcast-wave .bar:nth-child(4) { height: 28px; animation-delay: 0.3s; background: var(--darwin); }
+.podcast-wave .bar:nth-child(5) { height: 18px; animation-delay: 0.4s; background: var(--neumann); }
+.podcast-wave .bar:nth-child(6) { height: 24px; animation-delay: 0.5s; background: var(--yang); }
+.podcast-wave .bar:nth-child(7) { height: 10px; animation-delay: 0.6s; background: var(--darwin); }
+.podcast-wave .bar:nth-child(8) { height: 20px; animation-delay: 0.7s; background: var(--neumann); }
+@keyframes wave {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.4); }
+}
+
+.podcast-episodes { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.podcast-ep {
+  display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+  border-radius: var(--radius); background: var(--bg-elevated);
+  border: 1px solid var(--border); transition: all var(--ease);
+}
+.podcast-ep:hover { border-color: var(--amber); box-shadow: 0 0 20px var(--amber-glow); }
+.ep-num {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+  color: #fff;
+}
+.ep-info { flex: 1; min-width: 0; }
+.ep-title { font-weight: 700; font-size: 0.9rem; color: var(--text-bright); }
+.ep-desc { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
+.ep-duration { font-size: 0.72rem; color: var(--text-dim); opacity: 0.7; margin-top: 2px; }
+.ep-play {
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  cursor: pointer; font-size: 0.85rem; color: #fff; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--ease);
+}
+.ep-play:hover { transform: scale(1.15); }
+.ep-play.playing { animation: playPulse 1.5s ease-in-out infinite; }
+@keyframes playPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(245,158,11,0); }
+}
+
+/* Bottom player bar */
+.player-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(8,12,20,0.96); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-light); padding: 12px 24px;
+  display: none; align-items: center; gap: 14px; z-index: 300;
+}
+.player-bar.active { display: flex; }
+.player-now { flex: 1; min-width: 0; }
+.player-title { font-weight: 600; font-size: 0.88rem; color: var(--text-bright); }
+.player-controls { display: flex; align-items: center; gap: 10px; }
+.player-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border-light); background: var(--bg-elevated);
+  cursor: pointer; font-size: 0.8rem; color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--ease);
+}
+.player-btn:hover { border-color: var(--amber); color: var(--amber); }
+.player-close { color: var(--text-dim); }
+
+/* ===== Understand Section ===== */
+.understand-section {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto; padding: 30px 24px 50px;
+}
+.understand-section h2 {
+  text-align: center; font-size: 1.15rem; letter-spacing: 4px;
+  color: var(--text-dim); margin-bottom: 28px; font-weight: 500;
+}
+.understand-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; text-align: center;
+}
+.understand-item {
+  padding: 24px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  transition: all var(--ease);
+}
+.understand-item:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 20px var(--amber-glow);
+}
+.understand-item .u-icon { font-size: 2rem; margin-bottom: 10px; }
+.understand-item .u-title {
+  font-size: 0.9rem; font-weight: 700; color: var(--text-bright);
+  margin-bottom: 6px;
+}
+.understand-item .u-desc {
+  font-size: 0.78rem; color: var(--text-dim); line-height: 1.6;
+}
+
+/* ===== Footer ===== */
+.footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 40px 24px;
+  font-size: 0.75rem; color: var(--text-dim); letter-spacing: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .chars-grid { grid-template-columns: repeat(2, 1fr); }
+  .char-card:last-child { grid-column: span 2; max-width: 400px; justify-self: center; }
+  .understand-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .hero-title h1 { font-size: 2rem; }
+}
+@media (max-width: 768px) {
+  .chars-grid { grid-template-columns: 1fr; }
+  .char-card:last-child { grid-column: span 1; max-width: none; }
+  .podcast-player { flex-direction: column; text-align: center; }
+  .podcast-ep { flex-wrap: wrap; gap: 8px; }
+  .player-bar { padding: 10px 16px; }
+}
+@media (max-width: 640px) {
+  .hero-title h1 { font-size: 1.5rem; letter-spacing: 2px; }
+  .hero-title .pre-title { font-size: 0.72rem; letter-spacing: 3px; }
+  .prism-display { width: 220px; height: 220px; }
+  .prism-triangle { border-left-width: 28px; border-right-width: 28px; border-bottom-width: 48px; }
+  .input-beam { width: 50px; }
+  .beam-green, .beam-cyan, .beam-violet { width: 60px; }
+  .hero-title .stat-line { gap: 16px; }
+  .podcast-episodes { gap: 8px; }
+  .chars-grid { gap: 16px; }
+  .char-card { padding: 24px 18px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+<div class="particles" id="particles"></div>
+
+<!-- Top Navigation -->
+<nav class="top-nav">
+  <a href="../index.html">🏠 卓克 · MKS</a>
+  <span class="sep">/</span>
+  <a href="index.html" style="color:var(--amber)">人物专题</a>
+</nav>
+
+<!-- Prism Hero -->
+<section class="hero-section">
+  <div class="prism-display">
+    <!-- Input white light -->
+    <div class="input-beam"></div>
+
+    <!-- Center prism -->
+    <div class="prism-core">
+      <div class="prism-triangle"></div>
+    </div>
+
+    <!-- Three output spectra -->
+    <div class="spectrum-beam beam-green" style="top:calc(50% - 18px); right:10px;"></div>
+    <div class="spectrum-beam beam-cyan" style="top:50%; right:10px;"></div>
+    <div class="spectrum-beam beam-violet" style="top:calc(50% + 18px); right:10px;"></div>
+
+    <!-- Beam sparkle particles -->
+    <div class="beam-particle" style="top:calc(50% - 18px + 1px); left:65%; background:var(--darwin); animation-delay:0s;"></div>
+    <div class="beam-particle" style="top:calc(50% + 1px); left:68%; background:var(--neumann); animation-delay:0.8s;"></div>
+    <div class="beam-particle" style="top:calc(50% + 18px + 1px); left:62%; background:var(--yang); animation-delay:1.6s;"></div>
+  </div>
+
+  <div class="hero-title">
+    <div class="pre-title">THE PRISM OF THOUGHT</div>
+    <h1>三位叛徒 · 思想的三种形状</h1>
+    <p class="tagline">
+      一道白光穿过三面棱镜，分解成三条光谱<br>
+      达尔文、冯·诺伊曼、杨振宁 —— 三种敢于站到全人类对面的思想
+    </p>
+    <div class="stat-line">
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">位人物</div></div>
+      <div class="stat-item"><div class="stat-num">45</div><div class="stat-label">篇文章</div></div>
+      <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">门课程</div></div>
+    </div>
+  </div>
+
+  <div class="prism-explanation">
+    <span class="highlight">母隐喻：三棱镜</span> ——
+    一道白光穿过三面棱镜，分解成三条光谱。达尔文、冯·诺伊曼、杨振宁，三人各是一面棱镜，把人类对世界的理解折射到了不同方向。<br>
+    <span class="g">● 翠绿色光谱：生命的算法</span> —— 演化论把人类从"万物之灵"拉回动物界<br>
+    <span class="c">● 青蓝色光谱：思维的机器</span> —— 计算可以模拟思想，大脑不是魔法<br>
+    <span class="v">● 紫罗兰光谱：对称的破缺</span> —— 自然并不偏爱对称，宇称可以不守恒
+  </div>
+</section>
+
+<!-- Three Character Cards -->
+<section class="characters-section">
+  <h2>◆ 三 面 棱 镜 ◆</h2>
+  <div class="chars-grid">
+
+    <!-- Darwin -->
+    <a href="darwin.html" class="char-card darwin">
+      <span class="char-num">Ⅰ</span>
+      <span class="char-icon">🧬</span>
+      <h3>查尔斯·达尔文</h3>
+      <span class="char-spectrum">翠绿色光谱 · 生命的算法</span>
+      <p class="char-desc">
+        一个本该做牧师的英国绅士，却在加拉帕戈斯的雀鸟嘴里看到了生命最残酷的真相。他用"自然选择"这把手术刀，切断了人类与神之间的脐带——人不是按上帝形象造的，而是从猴子变的。
+      </p>
+      <p class="char-quote">"他站在上帝的对面，把人类从创世神话中解放出来。"</p>
+      <div class="char-stats">
+        <span><span class="num">14</span> 篇文章</span>
+        <span>来自 <span class="num">3</span> 门课程</span>
+      </div>
+      <span class="char-arrow">进入专题 →</span>
+    </a>
+
+    <!-- von Neumann -->
+    <a href="von-neumann.html" class="char-card neumann">
+      <span class="char-num">Ⅱ</span>
+      <span class="char-icon">💻</span>
+      <h3>约翰·冯·诺伊曼</h3>
+      <span class="char-spectrum">青蓝色光谱 · 思维的机器</span>
+      <p class="char-desc">
+        一个穿西服骑驴的犹太贵族，用数学这把万能钥匙撬开了量子力学、计算机、博弈论和原子弹的大门。他证明了思维可以被机器模拟——意识不是神圣的火花，而是一套可计算的操作。
+      </p>
+      <p class="char-quote">"他站在直觉的对面，证明大脑不过是一台可以复制的机器。"</p>
+      <div class="char-stats">
+        <span><span class="num">14</span> 篇文章</span>
+        <span>来自 <span class="num">2</span> 门课程</span>
+      </div>
+      <span class="char-arrow">进入专题 →</span>
+    </a>
+
+    <!-- Yang Zhenning -->
+    <a href="yang-zhenning.html" class="char-card yang">
+      <span class="char-num">Ⅲ</span>
+      <span class="char-icon">⚛️</span>
+      <h3>杨振宁</h3>
+      <span class="char-spectrum">紫罗兰光谱 · 对称的破缺</span>
+      <p class="char-desc">
+        一个从西南联大走出来的中国青年，用一支笔推翻了物理学界奉为圭臬的宇称守恒。他告诉全世界：大自然并不偏爱对称——在弱相互作用下，左手和右手是不平等的。这是物理学最优雅的反叛。
+      </p>
+      <p class="char-quote">"他站在完美对称的信仰对面，证明宇宙天生就是不对称的。"</p>
+      <div class="char-stats">
+        <span><span class="num">17</span> 篇文章</span>
+        <span>来自 <span class="num">3</span> 门课程</span>
+      </div>
+      <span class="char-arrow">进入专题 →</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- Three Forms of Rebellion -->
+<section class="understand-section">
+  <h2>◆ 理 解 他 们 ◆</h2>
+  <div class="understand-grid">
+    <div class="understand-item">
+      <div class="u-icon">🚫</div>
+      <div class="u-title">达尔文 · 站在上帝对面</div>
+      <div class="u-desc">人类不是被创造的，而是演化出来的。演化没有方向，没有目的，没有"进步"——只有适应或灭绝。</div>
+    </div>
+    <div class="understand-item">
+      <div class="u-icon">🧩</div>
+      <div class="u-title">冯·诺伊曼 · 站在直觉对面</div>
+      <div class="u-desc">大脑不过是一个信息处理系统。博弈、计算、数学——所有看似神奇的思维活动，都有其可复制的底层逻辑。</div>
+    </div>
+    <div class="understand-item">
+      <div class="u-icon">↔️</div>
+      <div class="u-title">杨振宁 · 站在完美对面</div>
+      <div class="u-desc">自然不偏爱对称。在最深的层面上，宇宙是偏手性的。对称是一种错觉，破缺才是真相。</div>
+    </div>
+  </div>
+</section>
+
+<!-- Podcast Section -->
+<section class="podcast-section">
+  <h2>◆ 播 客 收 听 ◆</h2>
+  <div class="podcast-player" id="podcastPlayer">
+    <button class="podcast-play-btn" id="podcastPlayBtn" onclick="togglePodcast()" title="播放/暂停">▶</button>
+    <div class="podcast-info">
+      <div class="podcast-title">人物专题 · 三位叛徒</div>
+      <div class="podcast-ep">卓克解读 · 思想的三种形状</div>
+      <div class="podcast-wave">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <div class="podcast-episodes" id="podcastEpisodes">
+        <div class="podcast-ep" data-audio="podcast/ep0-overview.txt">
+          <div class="ep-num" style="background:var(--amber)">0</div>
+          <div class="ep-info">
+            <div class="ep-title">EP0 · 总览：三位叛徒，三次越狱</div>
+            <div class="ep-desc">为什么这三个人是人类认知史上的三次越狱？</div>
+            <div class="ep-duration">约 12 分钟</div>
+          </div>
+          <button class="ep-play" onclick="playPodcast(this)" style="background:var(--amber)">▶</button>
+        </div>
+        <div class="podcast-ep" data-audio="podcast/ep1-darwin.txt">
+          <div class="ep-num" style="background:var(--darwin)">1</div>
+          <div class="ep-info">
+            <div class="ep-title">EP1 · 达尔文：生命的算法</div>
+            <div class="ep-desc">从加拉帕戈斯到威斯敏斯特——演化思维如何改写人类自我认知</div>
+            <div class="ep-duration">约 12 分钟</div>
+          </div>
+          <button class="ep-play" onclick="playPodcast(this)" style="background:var(--darwin)">▶</button>
+        </div>
+        <div class="podcast-ep" data-audio="podcast/ep2-neumann.txt">
+          <div class="ep-num" style="background:var(--neumann)">2</div>
+          <div class="ep-info">
+            <div class="ep-title">EP2 · 冯·诺伊曼：思维的机器</div>
+            <div class="ep-desc">穿西服骑驴的犹太贵族——用数学撬动世界的人</div>
+            <div class="ep-duration">约 12 分钟</div>
+          </div>
+          <button class="ep-play" onclick="playPodcast(this)" style="background:var(--neumann)">▶</button>
+        </div>
+        <div class="podcast-ep" data-audio="podcast/ep3-yang.txt">
+          <div class="ep-num" style="background:var(--yang)">3</div>
+          <div class="ep-info">
+            <div class="ep-title">EP3 · 杨振宁：对称的破缺</div>
+            <div class="ep-desc">宇宙天生不对称——一个中国人如何推翻物理学的完美信仰</div>
+            <div class="ep-duration">约 12 分钟</div>
+          </div>
+          <button class="ep-play" onclick="playPodcast(this)" style="background:var(--yang)">▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  卓克 · 人物专题 · 三位叛徒 —— 思想的三种形状<br>
+  <span style="opacity:0.5">Prism of Thought — Darwin · von Neumann · Yang</span>
+</div>
+
+<!-- Bottom player bar -->
+<div class="player-bar" id="playerBar">
+  <div class="player-now"><div class="player-title" id="playerTitle"></div></div>
+  <div class="player-controls">
+    <button class="player-btn" onclick="togglePlayer()">⏯</button>
+    <button class="player-btn player-close" onclick="closePlayer()">✕</button>
+  </div>
+</div>
+
+<script>
+// Particles
+(function() {
+  var container = document.getElementById('particles');
+  var colors = ['var(--darwin)', 'var(--neumann)', 'var(--yang)', 'var(--amber)'];
+  for (var i = 0; i < 30; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = (Math.random() * 94 + 3) + '%';
+    p.style.bottom = -(Math.random() * 20 + 5) + 'px';
+    p.style.width = p.style.height = (Math.random() * 3 + 1.5) + 'px';
+    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    p.style.animationDuration = (Math.random() * 12 + 8) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    container.appendChild(p);
+  }
+})();
+
+// Main podcast toggle
+var podcastPlaying = false;
+function togglePodcast() {
+  podcastPlaying = !podcastPlaying;
+  document.getElementById('podcastPlayBtn').textContent = podcastPlaying ? '⏸' : '▶';
+}
+
+// Episode player
+var currentAudio = null;
+var currentButton = null;
+
+function playPodcast(btn) {
+  var ep = btn.closest('.podcast-ep');
+  var src = ep.dataset.audio;
+  var title = ep.querySelector('.ep-title').textContent;
+  if (currentButton === btn && currentAudio) {
+    if (currentAudio.paused) { currentAudio.play(); btn.textContent = '⏸'; btn.classList.add('playing'); }
+    else { currentAudio.pause(); btn.textContent = '▶'; btn.classList.remove('playing'); }
+    return;
+  }
+  if (currentAudio) { currentAudio.pause(); currentAudio.remove(); }
+  if (currentButton) { currentButton.textContent = '▶'; currentButton.classList.remove('playing'); }
+  currentAudio = new Audio(src);
+  currentButton = btn;
+  document.getElementById('playerTitle').textContent = '🎙 ' + title;
+  document.getElementById('playerBar').classList.add('active');
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  currentAudio.play().catch(function() {
+    // Audio file not available — show placeholder
+    document.getElementById('playerTitle').textContent = '📝 播客脚本可查看: ' + src;
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+  });
+  currentAudio.onended = function() { btn.textContent = '▶'; btn.classList.remove('playing'); currentAudio = null; currentButton = null; };
+  currentAudio.onerror = function() { btn.textContent = '📝'; btn.classList.remove('playing'); };
+}
+
+function togglePlayer() {
+  if (currentAudio) {
+    if (currentAudio.paused) { currentAudio.play(); if (currentButton) { currentButton.textContent = '⏸'; currentButton.classList.add('playing'); } }
+    else { currentAudio.pause(); if (currentButton) { currentButton.textContent = '▶'; currentButton.classList.remove('playing'); } }
+  }
+}
+
+function closePlayer() {
+  if (currentAudio) { currentAudio.pause(); currentAudio.remove(); currentAudio = null; }
+  if (currentButton) { currentButton.textContent = '▶'; currentButton.classList.remove('playing'); currentButton = null; }
+  document.getElementById('playerBar').classList.remove('active');
+}
+</script>
+
+</body>
+</html>

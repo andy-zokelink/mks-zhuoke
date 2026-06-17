@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杨振宁 · 对称的破缺 — 卓克人物专题</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #080c14; --bg-elevated: #0d1220; --bg-card: #111827; --bg-card-hover: #162032;
+  --text: #bcc5d4; --text-bright: #e2e8f4; --text-dim: #5e6b80;
+  --border: #1a2740; --border-light: #243350;
+  --accent: #8b5cf6; --accent-glow: rgba(139,92,246,0.25); --accent-dim: #4c1d95;
+  --shadow: 0 2px 12px rgba(0,0,0,0.45); --shadow-lg: 0 8px 40px rgba(0,0,0,0.55);
+  --radius: 12px; --radius-lg: 20px;
+  --ease: 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+body { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,BlinkMacSystemFont,sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden; padding-bottom: 80px; }
+.ambient { position: fixed; top:0;left:0;right:0;bottom:0; pointer-events:none; z-index:0;
+  background: radial-gradient(ellipse 50% 40% at 50% 20%, rgba(139,92,246,0.06) 0%, transparent 55%),
+              radial-gradient(ellipse 25% 30% at 25% 55%, rgba(139,92,246,0.03) 0%, transparent 50%),
+              radial-gradient(ellipse 25% 30% at 75% 55%, rgba(139,92,246,0.03) 0%, transparent 50%); }
+.ambient::after { content:''; position:absolute; top:0;left:0;right:0;bottom:0;
+  background-image: linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size:64px 64px; opacity:0.4; }
+.top-nav { position:relative; z-index:10; padding:16px 24px; display:flex; align-items:center; gap:12px; max-width:1100px; margin:0 auto; }
+.top-nav a { color:var(--text-dim); text-decoration:none; font-size:.78rem; letter-spacing:2px; transition:color var(--ease); }
+.top-nav a:hover { color:var(--accent); } .top-nav .sep { color:var(--border-light); font-size:.7rem; }
+.hero { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:24px 24px 30px; text-align:center; }
+/* Symmetry-breaking mirror visual */
+.mirror-visual { position:relative; width:260px; height:260px; margin:0 auto 28px; }
+.mirror-line { position:absolute; top:0; bottom:0; left:50%; width:2px; background:rgba(255,255,255,0.1); transform:translateX(-50%); }
+.mirror-left, .mirror-right { position:absolute; width:8px; height:8px; border-radius:50%; top:50%; transform:translateY(-50%); }
+.mirror-left { left:35%; background:var(--accent); box-shadow:0 0 20px var(--accent-glow); animation:left-spin 4s ease-in-out infinite; }
+.mirror-right { right:35%; background:var(--accent); box-shadow:0 0 20px var(--accent-glow); animation:right-drift 4s ease-in-out infinite; }
+@keyframes left-spin { 0%,100%{transform:translateY(-50%) rotate(0deg);} 50%{transform:translateY(-50%) rotate(180deg);} }
+@keyframes right-drift { 0%,100%{transform:translateY(-50%) translateX(0);} 50%{transform:translateY(-50%) translateX(15px);opacity:0.5;} }
+.mirror-particle { position:absolute; width:3px; height:3px; border-radius:50%; background:var(--accent); opacity:0; animation:asym-flash 3s ease-in-out infinite; }
+@keyframes asym-flash { 0%,100%{opacity:0;transform:scale(0);} 30%{opacity:1;transform:scale(1.5);} 70%{opacity:0.2;} }
+.mirror-glow { position:absolute; top:50%;left:50%;transform:translate(-50%,-50%); width:60px;height:60px; border-radius:50%; background:radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%); animation:glow-pulse 3s ease-in-out infinite; }
+@keyframes glow-pulse { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5;} 50%{transform:translate(-50%,-50%) scale(1.8);opacity:0.15;} }
+.hero h1 { font-size:2.6rem; font-weight:900; letter-spacing:3px; color:var(--text-bright); background:linear-gradient(135deg, #e2e8f4 0%, #a0b4cc 50%, #e2e8f4 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero .subtitle { font-size:.9rem; color:var(--accent); letter-spacing:4px; margin-bottom:8px; }
+.hero .tagline { font-size:.9rem; color:var(--text-dim); max-width:560px; margin:0 auto; line-height:1.8; }
+.hero .stats { display:flex; justify-content:center; gap:24px; margin-top:16px; flex-wrap:wrap; }
+.hero .stat-num { font-family:Georgia,serif; font-size:1.5rem; font-weight:900; color:var(--accent); }
+.hero .stat-label { font-size:.7rem; color:var(--text-dim); letter-spacing:2px; }
+.intro { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:20px 24px 40px; }
+.intro-block { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; box-shadow:var(--shadow); }
+.intro-block p { font-size:.9rem; color:var(--text-dim); line-height:2; margin-bottom:16px; text-indent:2em; }
+.intro-block p:first-child { text-indent:0; }
+.intro-block .highlight { color:var(--accent); font-weight:600; }
+.section-title { position:relative; z-index:1; text-align:center; padding:30px 24px 20px; }
+.section-title h2 { font-size:1.15rem; letter-spacing:4px; color:var(--text-dim); font-weight:500; }
+.cards-section { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 24px 40px; }
+.cards-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.flip-card { perspective:1000px; height:220px; cursor:pointer; }
+.flip-inner { position:relative; width:100%; height:100%; transition:transform 0.6s; transform-style:preserve-3d; }
+.flip-card.flipped .flip-inner { transform:rotateY(180deg); }
+.flip-front, .flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius); padding:20px 16px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+.flip-front { background:var(--bg-card); border:1px solid var(--border); border-top:3px solid var(--accent); }
+.flip-front:hover { background:var(--bg-card-hover); box-shadow:0 0 20px var(--accent-glow); }
+.flip-back { background:var(--accent-dim); border:1px solid var(--accent); transform:rotateY(180deg); color:#ddd6fe; }
+.flip-front .card-icon { font-size:2rem; margin-bottom:8px; }
+.flip-front h4 { font-size:.9rem; font-weight:700; color:var(--text-bright); margin-bottom:4px; }
+.flip-front .card-hint { font-size:.68rem; color:var(--text-dim); margin-top:6px; }
+.flip-back h4 { font-size:.85rem; font-weight:700; margin-bottom:6px; color:#fff; }
+.flip-back p { font-size:.75rem; line-height:1.6; color:#c4b5fd; }
+.toolkit-section { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 24px 40px; }
+.toolkit-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.tool-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; transition:all var(--ease); }
+.tool-card:hover { border-color:var(--accent); box-shadow:0 0 20px var(--accent-glow); transform:translateY(-3px); }
+.tool-card .tool-num { font-family:Georgia,serif; font-size:3rem; font-weight:900; color:var(--accent); opacity:0.15; line-height:1; margin-bottom:-20px; }
+.tool-card h4 { font-size:1rem; font-weight:700; color:var(--text-bright); margin-bottom:6px; }
+.tool-card .tool-sub { font-size:.75rem; color:var(--accent); letter-spacing:2px; margin-bottom:10px; }
+.tool-card p { font-size:.82rem; color:var(--text-dim); line-height:1.7; }
+.diagram-section { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 40px; }
+.diagram-wrap { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; overflow-x:auto; text-align:center; }
+.diagram-wrap img { max-width:100%; height:auto; }
+.diagram-caption { text-align:center; font-size:.75rem; color:var(--text-dim); margin-top:12px; letter-spacing:1px; }
+.creative-section { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 40px; }
+.creative-wrap { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; }
+.creative-wrap h3 { text-align:center; font-size:1.1rem; color:var(--text-bright); margin-bottom:20px; }
+.taste-timeline { display:flex; flex-direction:column; gap:0; position:relative; padding-left:30px; }
+.taste-timeline::before { content:''; position:absolute; left:14px; top:0; bottom:0; width:2px; background:var(--accent); opacity:0.3; }
+.taste-node { position:relative; padding:16px 0 16px 30px; }
+.taste-node::before { content:''; position:absolute; left:-21px; top:22px; width:12px; height:12px; border-radius:50%; background:var(--accent); box-shadow:0 0 10px var(--accent-glow); }
+.taste-node h5 { font-size:.9rem; font-weight:700; color:var(--text-bright); margin-bottom:4px; }
+.taste-node .t-year { font-size:.7rem; color:var(--accent); letter-spacing:2px; }
+.taste-node p { font-size:.8rem; color:var(--text-dim); line-height:1.7; margin-top:6px; }
+.boundary-section { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 24px 40px; }
+.boundary-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.boundary-item { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; transition:all var(--ease); }
+.boundary-item:hover { border-color:var(--accent); box-shadow:0 0 12px var(--accent-glow); }
+.boundary-item .b-num { display:inline-block; width:24px; height:24px; line-height:24px; text-align:center; border-radius:50%; background:var(--accent-dim); color:var(--accent); font-size:.72rem; font-weight:700; margin-right:8px; flex-shrink:0; }
+.boundary-item h5 { font-size:.85rem; font-weight:700; color:var(--text-bright); margin-bottom:4px; display:flex; align-items:center; }
+.boundary-item p { font-size:.75rem; color:var(--text-dim); line-height:1.6; }
+.path-section { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 40px; }
+.path-track { display:flex; align-items:flex-start; justify-content:center; gap:0; position:relative; flex-wrap:wrap; }
+.path-track::before { content:''; position:absolute; top:24px; left:8%; right:8%; height:2px; background:var(--accent); opacity:0.2; z-index:0; }
+.path-node { display:flex; flex-direction:column; align-items:center; gap:10px; position:relative; z-index:1; flex:1; min-width:100px; max-width:150px; }
+.path-dot { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; background:var(--bg-card); border:2px solid var(--accent); transition:all var(--ease); cursor:pointer; }
+.path-dot:hover { transform:scale(1.15); box-shadow:0 0 20px var(--accent-glow); }
+.path-label { font-size:.7rem; color:var(--text-dim); text-align:center; line-height:1.4; }
+.tags-section { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 40px; text-align:center; }
+.tags-wrap { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.tag { padding:6px 16px; border-radius:20px; border:1px solid var(--border); font-size:.75rem; color:var(--text-dim); cursor:pointer; transition:all var(--ease); background:var(--bg-card); }
+.tag:hover, .tag.active { border-color:var(--accent); color:var(--accent); background:var(--accent-dim); }
+.quiz-section { position:relative; z-index:1; max-width:700px; margin:0 auto; padding:0 24px 50px; }
+.quiz-box { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px; box-shadow:var(--shadow); }
+.quiz-box .q-num { font-size:.78rem; color:var(--accent); letter-spacing:2px; margin-bottom:12px; }
+.quiz-box .q-text { font-size:1rem; font-weight:700; color:var(--text-bright); margin-bottom:20px; line-height:1.7; }
+.quiz-options { display:flex; flex-direction:column; gap:10px; }
+.quiz-opt { padding:14px 18px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); cursor:pointer; font-size:.85rem; color:var(--text); text-align:left; transition:all var(--ease); }
+.quiz-opt:hover { border-color:var(--accent); background:var(--bg-card-hover); }
+.quiz-opt.correct { border-color:var(--accent); background:var(--accent-dim); color:#ddd6fe; }
+.quiz-opt.wrong { border-color:#ef4444; background:rgba(239,68,68,0.1); color:#fca5a5; }
+.quiz-opt.disabled { pointer-events:none; }
+.quiz-actions { display:flex; gap:12px; margin-top:20px; justify-content:center; }
+.quiz-btn { padding:10px 28px; border-radius:20px; border:1px solid var(--accent); background:transparent; color:var(--accent); cursor:pointer; font-size:.82rem; transition:all var(--ease); }
+.quiz-btn:hover { background:var(--accent-dim); }
+.quiz-btn.primary { background:var(--accent); color:#fff; border:none; }
+.quiz-btn.primary:hover { opacity:0.85; }
+.quiz-feedback { text-align:center; margin-top:16px; font-size:.85rem; color:var(--text-dim); min-height:24px; }
+.footer { position:relative; z-index:1; text-align:center; padding:40px 24px; font-size:.75rem; color:var(--text-dim); letter-spacing:2px; }
+.footer a { color:var(--accent); text-decoration:none; }
+@media (max-width:900px) { .cards-grid { grid-template-columns:repeat(3,1fr); } .toolkit-grid { grid-template-columns:1fr; } }
+@media (max-width:768px) { .cards-grid { grid-template-columns:repeat(2,1fr); } .boundary-grid { grid-template-columns:1fr; } .hero h1 { font-size:2rem; } }
+@media (max-width:640px) { .cards-grid { grid-template-columns:1fr; } .path-track { flex-direction:column; align-items:center; gap:16px; } .path-track::before { display:none; } .path-node { flex-direction:row; max-width:none; width:100%; } .hero h1 { font-size:1.5rem; } }
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+
+<nav class="top-nav">
+  <a href="../index.html">🏠 MKS</a><span class="sep">/</span>
+  <a href="index.html">人物专题</a><span class="sep">/</span>
+  <a href="yang-zhenning.html" style="color:var(--accent)">杨振宁</a>
+</nav>
+
+<section class="hero">
+  <div class="mirror-visual">
+    <div class="mirror-line"></div>
+    <div class="mirror-glow"></div>
+    <div class="mirror-left"></div>
+    <div class="mirror-right"></div>
+    <div class="mirror-particle" style="top:35%;left:42%;animation-delay:0s;"></div>
+    <div class="mirror-particle" style="top:60%;left:48%;animation-delay:0.7s;"></div>
+    <div class="mirror-particle" style="top:45%;right:40%;animation-delay:1.4s;"></div>
+    <div class="mirror-particle" style="top:55%;right:45%;animation-delay:2.1s;"></div>
+  </div>
+  <div class="subtitle">THE BROKEN SYMMETRY</div>
+  <h1>杨振宁</h1>
+  <p class="tagline">一个从西南联大走出来的中国青年，用一支笔推翻了物理学界奉为圭臬的宇称守恒<br>他告诉全世界：大自然并不偏爱对称——左手和右手是不平等的</p>
+  <div class="stats">
+    <div><span class="stat-num">17</span><br><span class="stat-label">篇文章</span></div>
+    <div><span class="stat-num">3</span><br><span class="stat-label">门课程</span></div>
+    <div><span class="stat-num">7+</span><br><span class="stat-label">后续诺奖</span></div>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="intro-block">
+    <p><span class="highlight">1956年夏天，34岁的杨振宁敲开了吴健雄的实验室。</span>他手里只有一个想法：物理学界已经默认了三百年的宇称守恒——物理定律在镜子里的表现应该和镜子外完全一样——但在弱相互作用中，从来没有人真正验证过。泡利听说吴健雄要做这个实验，嗤之以鼻："以吴的实力应该做更重要的事，犯不着在这种明显荒谬的理论上瞎耽误功夫。"十个月后，吴健雄在接近绝对零度的低温下，用钴-60证明了杨振宁是对的。第二年，诺贝尔奖。</p>
+    <p>从论文发表到获得诺贝尔奖，只用了12个月——这是诺贝尔奖历史上最快的记录。但对于杨振宁来说，这甚至不是他最重要的成就。他后来的杨-米尔斯规范场论导致了<span class="highlight">7个后续诺贝尔物理学奖</span>和<span class="highlight">6个菲尔兹奖</span>——杨-米尔斯方程的证明至今还是千禧年七大数学难题之一。夸克之父盖尔曼对费曼不服不忿，但对杨振宁毕恭毕敬。</p>
+    <p>杨振宁最常说的两个词是<span class="highlight">"品味"</span>和<span class="highlight">"物理之美"</span>。他不认为科学成就靠纯粹智力——靠的是积累效果，而积累需要一个早期的、准确的品味来引导。他在西南联大的老师（吴大猷、王竹溪）帮他建立了这种品味。到了美国后，当导师泰勒给他分配他不喜欢的课题时，他凭品味拒绝——然后用了50年时间，把当初因为"太难"而搁置的三个课题全部做出了诺奖级的成果。</p>
+    <p>我把他称为<span class="highlight">"保守的革命者"</span>——在渐进的事情上极其保守（他父亲不让他跳级学数学，他后来也劝别人不要拔苗助长），在根本性问题上则完全不受传统的约束（挑战宇称守恒、82岁娶28岁的翁帆）。理解了这种矛盾统一，你就理解了杨振宁。</p>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ 核 心 概 念 ◆</h2></div>
+<section class="cards-section">
+  <div class="cards-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">🪞</span><h4>宇称不守恒</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>推翻三百年共识</h4><p>1956年前，所有物理学家认为镜子里和镜子外的物理定律完全一样。杨振宁和李政道发现：在弱相互作用中，从来没人验证过这一点。12个月后，诺奖。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">🧲</span><h4>杨-米尔斯理论</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>比诺奖更重要的成就</h4><p>1954年和米尔斯共同提出的规范场论，是粒子物理标准模型的理论基石。后续7个诺贝尔物理奖和6个菲尔兹奖建立在这一基础之上。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">🎨</span><h4>学术品味</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>Taste</h4><p>杨振宁认为成就不是智商比拼——是积累效果。而积累需要一个早期形成的品味来引导。他拒绝过一个15岁天才少年，因为少年回答不出"量子物理中哪个问题最美"。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">✨</span><h4>物理之美</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>美是判断标准</h4><p>杨振宁用"美"来判断物理方向。纯数学没有实验的是空中楼阁；纯实验没有理论框架的是标本采集。美的物理：从现象出发→创造数学框架→预言→实验验证。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">🔗</span><h4>杨-巴克斯特方程</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>第三个诺奖级成就</h4><p>在统计力学中提出的杨-巴克斯特方程，是杨振宁当初在西南联大就开始思考的问题——50年后终于攻克。这个方程在数学上催生了6个菲尔兹奖。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">🌏</span><h4>西南联大</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>战火中锻造的品味</h4><p>西南联大的教授们是中国物理学第一代宗师：赵忠尧、吴有训、王竹溪、周培源、吴大猷、陈省身。战争让实验物理不可能——这反而让杨振宁专注于理论，形成了他的品味。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">👁️</span><h4>眼光</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>Vision</h4><p>杨振宁和李政道不是在"赌"宇称不守恒。他们的眼光在于：证明宇称在弱相互作用中守不守恒，这件事本身就极有价值。无论结果如何，这个实验都值得做。</p></div>
+    </div></div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+      <div class="flip-front"><span class="card-icon">🏛️</span><h4>世界是数学结构</h4><p class="card-hint">点击翻转</p></div>
+      <div class="flip-back"><h4>物理学的世界观结论</h4><p>物理学定律都用数学框架来表达，而我们承认世界就是这些定律所描述的样子。因此——世界是数学结构的。这不是神秘主义，这是物理学三百年发展的逻辑终点。</p></div>
+    </div></div>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ MKS 核 心 工 具 箱 ◆</h2></div>
+<section class="toolkit-section">
+  <div class="toolkit-grid">
+    <div class="tool-card">
+      <div class="tool-num">01</div>
+      <h4>品味培养</h4>
+      <div class="tool-sub">Cultivating Taste</div>
+      <p>品味不是天赋——它是早期教育、导师影响和个人经验的沉淀。杨振宁的品味来自西南联大的教授们和父亲杨武之的数学训练。在你自己的领域里，找到那些让你觉得"美"的问题，而不是那些"热"的问题。美的东西才能支撑你研究五十年。</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-num">02</div>
+      <h4>保守的革命</h4>
+      <div class="tool-sub">Conservative Revolutionary</div>
+      <p>在渐进的事情上极其保守——不急功近利，不拔苗助长，扎实积累；在根本性问题上不受传统束缚——敢于挑战三百年共识。杨振宁的人生和学术都在这个框架里运行。问自己：这件事是渐进的还是根本性的？然后选择保守或革命。</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-num">03</div>
+      <h4>美的物理学</h4>
+      <div class="tool-sub">Beauty as Heuristic</div>
+      <p>杨振宁的判断框架：纯数学+无实验=空中楼阁；纯实验+无理论框架=标本采集。好的物理学从真实现象出发，创造数学框架，做出预言，实验验证。这个循环如果在你的领域也能运转，你就找到了正确的方向。</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-num">04</div>
+      <h4>韧性</h4>
+      <div class="tool-sub">Resilience · 韧性</div>
+      <p>这不是固执，也不是退让——是在极端压力下弯曲而不折断，在其他所有困难下持续坚持。杨振宁的博士课题失败了三个——但他没有放弃其中任何一个。50年后，那三个"失败"全部变成了诺奖级的成果。不是因为他比别人聪明，是因为他比别人有韧性。</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ 概 念 关 系 图 ◆</h2></div>
+<section class="diagram-section">
+  <div class="diagram-wrap">
+    <img src="yang_diagram.svg" alt="杨振宁概念关系图" loading="lazy">
+  </div>
+  <div class="diagram-caption">Graphviz dot 生成 · 杨振宁理论体系与思维方法</div>
+</section>
+
+<div class="section-title"><h2>◆ 原 创 创 意 图 ◆</h2></div>
+<section class="creative-section">
+  <div class="creative-wrap">
+    <h3>🌱 杨振宁的品味形成史 —— 一个"保守的革命者"是怎样炼成的</h3>
+    <div class="taste-timeline">
+      <div class="taste-node">
+        <h5>4岁 · 母亲教识字</h5><div class="t-year">1926</div>
+        <p>不识字的母亲陪着他一起学，一年内学了3000个字。母亲是裹小脚的旧式妇女，但在家道中落时展现出了钢铁般的隐忍——杨振宁的韧性从这里开始。</p>
+      </div>
+      <div class="taste-node">
+        <h5>12岁 · 父亲说"慢慢来"</h5><div class="t-year">1934</div>
+        <p>数学家父亲杨武之看出了儿子的天赋——但拒绝教他微积分。两个暑假，他请来清华历史系的研究生教杨振宁背诵《孟子》。杨振宁今天还能全文背诵。父亲的信条：基础要广，根基要深，不必着急。</p>
+      </div>
+      <div class="taste-node">
+        <h5>20岁 · 西南联大</h5><div class="t-year">1942</div>
+        <p>日军轰炸昆明，实验物理不可能做。这反而成就了杨振宁——只能做理论。王竹溪教他统计力学，吴大猷教他对称性和群论。品味在这时成形。他的四个博士课题都是在联大时期自己挑的。</p>
+      </div>
+      <div class="taste-node">
+        <h5>27岁 · 拒绝导师的课题</h5><div class="t-year">1949</div>
+        <p>泰勒给他分配了一个只能得到近似解的问题。杨振宁拒绝了——他喜欢精确解。这是一个危险的举动，大多数导师会视为冒犯。泰勒不仅接受了，后来还求杨振宁把一篇三页的短文扩展成博士论文。实力说话。</p>
+      </div>
+      <div class="taste-node">
+        <h5>35岁 · 一年诺奖</h5><div class="t-year">1957</div>
+        <p>宇称不守恒：论文发表到诺奖只用了12个月。泡利、费曼、朗道全都反对过这个想法。吴健雄取消旅行计划来做实验。诺贝尔奖史上最快。但这不是杨振宁最伟大的成就。</p>
+      </div>
+      <div class="taste-node">
+        <h5>82岁 · 给大一学生上物理课</h5><div class="t-year">2004</div>
+        <p>在清华大学，30节课一堂未缺，亲自监考。这是他酝酿了五年的计划，期间经历了夫人病重和自己四次手术。最后一堂课上，他讲了自己和米尔斯1954年的故事。夕阳无限好，何须惆怅近黄昏。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ 边 界 知 识 ◆</h2></div>
+<section class="boundary-section">
+  <div class="boundary-grid">
+    <div class="boundary-item"><h5><span class="b-num">1</span>诺奖史上最快记录</h5><p>从成果发表到获奖仅12个月。正常周期是13-18年。不是评委会偏袒——是这个成果太重要太响亮了，必须尽快给。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">2</span>吴健雄的牺牲</h5><p>她取消了和丈夫的旅行（庆祝出国二十周年），退掉了船票，用10个月做了极低温钴-60实验。泡利说她会"瞎耽误功夫"——结果她的实验数据差异大到没有任何争议。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">3</span>父亲的遗愿</h5><p>杨武之至死没有原谅儿子加入美国国籍（1964年入籍，父亲1973年去世）。杨振宁在94岁转回中国国籍，很大程度上是为了了结这个心结。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">4</span>四次见爱因斯坦</h5><p>杨振宁听过爱因斯坦的讲座，和爱因斯坦有过一次1.5小时的私人交谈。他对这段经历毫无粉饰："我太激动了，根本无法集中注意力。出来后别人问我爱因斯坦说了什么，我真的说不上来。"这种诚实来自极度的自信。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">5</span>杨李之争的真相</h5><p>两人合作13年，合写37篇论文，李政道名字在前的有22篇。1962年《纽约客》一篇偏向李政道的文章导致决裂。学术界的共识是：两人都有贡献，但杨振宁是主导者——他的杨-米尔斯理论远超诺奖成就。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">6</span>救了邓稼先</h5><p>杨振宁每次回国，中方会请他列出想见的人的名单。他故意在名单上填了正在"劳改"的科学家的名字。邓稼先和他的整个研究团队因此获释。这在那个年代是救命之恩。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">7</span>反对超级对撞机</h5><p>1972年回国时，杨振宁独自反对花1亿美元建加速器——国家太穷，钱应该给计算机和生物。此后四十年间，他不断重复这个立场。当时骂他的人，在改革开放后沉默了。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">8</span>朗道排名</h5><p>朗道的物理学家等级：0级=牛顿，0.5级=爱因斯坦，1级=玻尔/海森堡/狄拉克。朗道给自己评2.5级。他在1962年车祸后不能再工作，没来得及评估杨振宁的杨-米尔斯理论。卓克推测：杨振宁在1-2级之间。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">9</span>Party is over</h5><p>2019年杨振宁在国科大演讲时说"高能物理的Party is over"，认为这个领域已经衰落三十年。中科院高能所所长公开反驳他。但杨振宁从1972年就一直在说同样的话。</p></div>
+    <div class="boundary-item"><h5><span class="b-num">10</span>世界是数学结构</h5><p>这是杨振宁的世界观核心结论。物理定律用数学框架表达→世界是定律描述的样子→所以世界是数学结构的。这不是神秘主义——是物理学三百年的逻辑终点。</p></div>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ 学 习 路 径 ◆</h2></div>
+<section class="path-section">
+  <div class="path-track">
+    <div class="path-node"><div class="path-dot">📖</div><div class="path-label">第1阶段<br>了解杨振宁的<br>三大科学成就</div></div>
+    <div class="path-node"><div class="path-dot">🎨</div><div class="path-label">第2阶段<br>理解"品味"在<br>成就中的作用</div></div>
+    <div class="path-node"><div class="path-dot">🧩</div><div class="path-label">第3阶段<br>学习"保守的<br>革命者"思维方式</div></div>
+    <div class="path-node"><div class="path-dot">🌉</div><div class="path-label">第4阶段<br>理解中西文化<br>在科学中的融合</div></div>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ 标 签 系 统 ◆</h2></div>
+<section class="tags-section">
+  <div class="tags-wrap">
+    <span class="tag active">杨振宁</span><span class="tag">宇称不守恒</span><span class="tag">杨-米尔斯</span><span class="tag">学术品味</span><span class="tag">物理之美</span><span class="tag">西南联大</span><span class="tag">规范场论</span><span class="tag">保守的革命者</span><span class="tag">对称性</span><span class="tag">诺贝尔奖</span>
+  </div>
+</section>
+
+<div class="section-title"><h2>◆ 题 库 系 统 ◆</h2></div>
+<section class="quiz-section">
+  <div class="quiz-box" id="quizBox">
+    <div class="q-num" id="qNum">第 1/5 题</div>
+    <div class="q-text" id="qText"></div>
+    <div class="quiz-options" id="qOptions"></div>
+    <div class="quiz-actions">
+      <button class="quiz-btn primary" id="btnNext" style="display:none" onclick="nextQuestion()">下一题 ▶</button>
+      <button class="quiz-btn" onclick="resetQuiz()">🔄 重新出题</button>
+    </div>
+    <div class="quiz-feedback" id="qFeedback"></div>
+  </div>
+</section>
+
+<div class="footer">
+  卓克 · 人物专题 · 杨振宁 —— 对称的破缺<br>
+  <a href="index.html">← 返回三棱镜导航</a>
+</div>
+
+<script>
+const quizData = [
+  { q: "杨振宁和李政道的宇称不守恒论文从发表到获诺贝尔奖用了多久？", opts: ["3年", "6年", "12个月", "18年"], ans: 2,
+    expl: "只用了12个月——诺贝尔奖史上最快记录。正常的诺贝尔奖周期是13-18年。这不是评委会偏袒——是这个成果太重要太响亮了，必须尽快给。" },
+  { q: "杨振宁认为一个人的成就主要靠什么？", opts: ["纯粹智商", "勤奋程度", "积累效果", "运气"], ans: 2,
+    expl: "他不认为科学成就靠纯粹智力比拼——靠的是积累效果。而积累需要一个早期形成的品味来引导。越早培养出个人品味，一生可能积累的就越多。" },
+  { q: "杨振宁的父亲在他幼年时做了什么关键的教育决定？", opts: ["让他跳级学数学", "送他去美国留学", "不让他提前学微积分", "让他专攻实验物理"], ans: 2,
+    expl: "父亲杨武之看出了儿子的数学天赋，但坚决不教他微积分。两个暑假都请历史系研究生教他背诵《孟子》。杨振宁说：'他当时如果肯教我解析几何和微积分，我一定会学得很快。可是他并没有这样做。'" },
+  { q: "杨-米尔斯理论导致了多少个后续诺贝尔物理奖？", opts: ["3个", "5个", "7个", "10个"], ans: 2,
+    expl: "7个后续诺贝尔物理奖是直接使用杨-米尔斯方程做出的。另外还有6个菲尔兹奖是研究杨-米尔斯和杨-巴克斯特方程而获得的。杨-米尔斯方程的证明至今是千禧年七大数学难题之一。" },
+  { q: "杨振宁最常说的两个词是什么？", opts: ["勤奋和天才", "品味和物理之美", "实验和理论", "对称和守恒"], ans: 1,
+    expl: "杨振宁最常说的就是'品味'和'物理之美'。他用美来判断物理学方向：纯数学没有实验的是空中楼阁；纯实验没有理论框架的是标本采集。真正的物理之美：从现象出发→创造数学→预言→验证。" },
+  { q: "杨振宁的博士导师是谁？", opts: ["费米", "奥本海默", "泰勒", "爱因斯坦"], ans: 2,
+    expl: "爱德华·泰勒（'氢弹之父'）是他名义上的导师，但杨振宁最主要跟随费米学习。泰勒给他分配的课题他凭品味拒绝了——然后自己找了四个。泰勒不仅没生气，后来还求他把一篇三页的短文扩展成博士论文。" },
+  { q: "吴健雄用什么实验验证了宇称不守恒？", opts: ["对撞机实验", "钴-60极低温β衰变", "铀裂变", "质子轰击"], ans: 1,
+    expl: "她用钴-60在仅比绝对零度高百分之一度的极低温下做β衰变实验。左旋和右旋的钴-60放射出的电子数量和方向完全不同——差异大到没有任何争议。泡利说她'瞎耽误功夫'，结果证明她做出了世纪实验。" },
+  { q: "'保守的革命者'这个描述指什么？", opts: ["政治上保守科学上革命", "渐进事保守根本事革命", "对美国保守对中国革命", "理论保守实验革命"], ans: 1,
+    expl: "在渐进的事情上极其保守——不跳级、不拔苗助长、扎实积累；在根本性问题上完全不受传统约束——挑战宇称守恒、娶翁帆。这种矛盾统一形成了杨振宁独特的人生和学术路径。" }
+];
+
+let currentQuestions = [], currentIdx = 0, answered = false;
+function shuffle(arr) { var a = arr.slice(); for (var i = a.length-1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function startQuiz() { currentQuestions = shuffle(quizData).slice(0, 5); currentIdx = 0; answered = false; showQuestion(); }
+function showQuestion() {
+  if (currentIdx >= currentQuestions.length) { finishQuiz(); return; }
+  answered = false; var q = currentQuestions[currentIdx];
+  document.getElementById('qNum').textContent = '第 ' + (currentIdx+1) + '/5 题';
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qFeedback').textContent = '';
+  document.getElementById('btnNext').style.display = 'none';
+  var optsHtml = '';
+  q.opts.forEach(function(o, i) { optsHtml += '<button class="quiz-opt" onclick="selectAnswer('+i+',this)">'+String.fromCharCode(65+i)+'. '+o+'</button>'; });
+  document.getElementById('qOptions').innerHTML = optsHtml;
+}
+function selectAnswer(idx, btn) {
+  if (answered) return; answered = true;
+  var q = currentQuestions[currentIdx];
+  var allOpts = document.querySelectorAll('.quiz-opt');
+  allOpts.forEach(function(o) { o.classList.add('disabled'); });
+  if (idx === q.ans) { btn.classList.add('correct'); document.getElementById('qFeedback').innerHTML = '✅ 正确！' + q.expl; }
+  else { btn.classList.add('wrong'); allOpts[q.ans].classList.add('correct'); document.getElementById('qFeedback').innerHTML = '❌ 不对。' + q.expl; }
+  document.getElementById('btnNext').style.display = 'inline-block';
+}
+function nextQuestion() { currentIdx++; showQuestion(); window.scrollTo({ top: document.getElementById('quizBox').offsetTop - 100, behavior: 'smooth' }); }
+function resetQuiz() { startQuiz(); window.scrollTo({ top: document.getElementById('quizBox').offsetTop - 100, behavior: 'smooth' }); }
+function finishQuiz() {
+  document.getElementById('qNum').textContent = '🎉 完成！';
+  document.getElementById('qText').textContent = '恭喜完成全部5道题。杨振宁的故事告诉我们：最伟大的科学成就来自品味、美感和韧性——而不是纯粹的智商。下一次面对选择时，问问自己：哪个方向更美？这个问题值得我投入五十年吗？';
+  document.getElementById('qOptions').innerHTML = '';
+  document.getElementById('btnNext').style.display = 'none';
+  document.getElementById('qFeedback').textContent = '';
+}
+document.querySelectorAll('.tag').forEach(function(t) { t.addEventListener('click', function() { this.classList.toggle('active'); }); });
+startQuiz();
+</script>
+</body>
+</html>
