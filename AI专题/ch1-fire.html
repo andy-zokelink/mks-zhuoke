@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>火种 —— 涌现：智能的进化树 · 第一章</title>
+<style>
+:root {
+  --bg: #050a18; --bg-card: #0a1028;
+  --fire: #f0a050; --fire-glow: rgba(240,160,80,0.3);
+  --ice: #7eb8da; --ice-glow: rgba(126,184,218,0.25);
+  --spark: #ffcc00; --spark-glow: rgba(255,204,0,0.3);
+  --text-bright: #e8edf4; --text: #bcc4d0; --text-dim: #6b7385;
+  --border: rgba(255,255,255,0.06); --radius: 12px;
+  --font-sans: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  --font-serif: "Noto Serif SC","Source Han Serif SC","STSong","Songti SC",Georgia,"Times New Roman",serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:var(--font-sans); line-height:1.8;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+
+/* Background */
+.bg-layer { position:fixed; inset:0; z-index:0; pointer-events:none; }
+.bg-layer .nebula {
+  position:absolute; border-radius:50%; filter:blur(140px); opacity:0.1;
+  animation:nebulaDrift 35s ease-in-out infinite alternate;
+}
+.bg-layer .n1 { width:500px; height:500px; background:var(--fire); top:-150px; left:-100px; }
+.bg-layer .n2 { width:400px; height:400px; background:var(--ice); bottom:-150px; right:-100px; animation-delay:-17s; }
+.bg-layer .grid-overlay {
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%);
+}
+@keyframes nebulaDrift {
+  0% { transform:translate(0,0) scale(1); }
+  100% { transform:translate(50px,-40px) scale(1.2); }
+}
+
+.particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
+.particle {
+  position:absolute; width:2px; height:2px; border-radius:50%;
+  background:var(--text-dim); animation:floatUp linear infinite; opacity:0;
+}
+@keyframes floatUp {
+  0% { transform:translateY(100vh) scale(0); opacity:0; }
+  10% { opacity:0.5; } 90% { opacity:0.1; }
+  100% { transform:translateY(-100px) scale(1); opacity:0; }
+}
+
+/* Layout */
+.article { position:relative; z-index:1; max-width:720px; margin:0 auto; padding:0 24px; }
+
+/* Top Nav */
+.top-nav {
+  position:relative; z-index:2;
+  display:flex; align-items:center; gap:12px;
+  padding:20px 24px; font-size:0.75rem;
+  color:var(--text-dim);
+}
+.top-nav a { color:var(--ice); text-decoration:none; transition:color 0.2s; }
+.top-nav a:hover { color:var(--fire); }
+.top-nav .sep { color:var(--text-dim); }
+
+/* Hero */
+.chapter-hero {
+  text-align:center; padding:80px 0 60px;
+}
+.chapter-hero .ch-label {
+  font-size:0.7rem; text-transform:uppercase; letter-spacing:6px;
+  color:var(--fire); margin-bottom:20px;
+}
+.chapter-hero h1 {
+  font-family:var(--font-serif);
+  font-size:clamp(2.2rem,5vw,3.2rem); font-weight:900;
+  color:var(--text-bright); line-height:1.3; margin-bottom:12px;
+}
+.chapter-hero h1 .grad {
+  background:linear-gradient(135deg,var(--fire),var(--spark),#fff);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.chapter-hero .subtitle {
+  font-family:var(--font-serif); font-size:1.05rem;
+  color:var(--text-dim); font-style:italic; margin-bottom:16px;
+}
+.chapter-hero .era {
+  font-size:0.85rem; color:var(--fire); letter-spacing:2px;
+}
+
+/* Prose */
+.prose { padding:20px 0; }
+.prose h2 {
+  font-family:var(--font-serif); font-size:1.5rem;
+  color:var(--text-bright); margin:48px 0 16px;
+  padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.prose h3 {
+  font-size:1.15rem; color:var(--ice); margin:32px 0 12px;
+}
+.prose p {
+  font-size:0.92rem; color:var(--text); line-height:1.9;
+  margin-bottom:20px; text-align:justify;
+}
+.prose .highlight {
+  background:rgba(240,160,80,0.08);
+  border-left:3px solid var(--fire);
+  padding:16px 20px; border-radius:0 8px 8px 0;
+  margin:24px 0; font-size:0.88rem; color:var(--text-bright);
+}
+.prose .quote {
+  font-family:var(--font-serif); font-style:italic;
+  font-size:1.05rem; color:var(--text-dim);
+  text-align:center; padding:32px 0;
+  position:relative;
+}
+.prose .quote::before {
+  content:'"'; font-size:4rem; color:rgba(255,255,255,0.03);
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  font-family:Georgia,serif; line-height:1;
+}
+.prose .quote .attr { font-size:0.75rem; margin-top:8px; font-style:normal; color:var(--fire); }
+
+/* Concept Card */
+.concept-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:28px; margin:32px 0;
+  position:relative; overflow:hidden;
+}
+.concept-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--fire),transparent);
+}
+.concept-card h4 {
+  font-size:0.95rem; color:var(--fire); margin-bottom:12px;
+  letter-spacing:2px; text-transform:uppercase;
+}
+.concept-card p { font-size:0.85rem; color:var(--text); margin-bottom:0; }
+.concept-card .diagram {
+  margin:20px 0; padding:20px; background:rgba(0,0,0,0.2);
+  border-radius:8px; text-align:center; font-size:0.8rem;
+  font-family:'Courier New',monospace; color:var(--ice);
+  white-space:pre; overflow-x:auto;
+}
+
+/* Flip Card */
+.flip-container {
+  perspective:1000px; margin:32px 0; height:280px;
+}
+.flip-card {
+  position:relative; width:100%; height:100%;
+  transition:transform 0.7s cubic-bezier(0.22,1,0.36,1);
+  transform-style:preserve-3d; cursor:pointer;
+}
+.flip-card.flipped { transform:rotateY(180deg); }
+.flip-front, .flip-back {
+  position:absolute; inset:0; backface-visibility:hidden;
+  border-radius:var(--radius); padding:32px;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; text-align:center;
+  border:1px solid var(--border);
+}
+.flip-front { background:var(--bg-card); }
+.flip-back { background:var(--bg-card); transform:rotateY(180deg); }
+.flip-front .flip-icon {
+  font-size:2.5rem; margin-bottom:12px;
+}
+.flip-front h4 { font-size:1.1rem; color:var(--text-bright); margin-bottom:8px; }
+.flip-front .flip-hint { font-size:0.7rem; color:var(--text-dim); margin-top:12px; }
+.flip-back p { font-size:0.88rem; color:var(--text); line-height:1.7; }
+.flip-back .flip-answer { font-size:1rem; color:var(--fire); font-weight:700; margin-top:12px; }
+
+/* Quiz */
+.quiz-block {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:28px; margin:32px 0;
+}
+.quiz-block h4 {
+  font-size:0.95rem; color:var(--spark); margin-bottom:8px;
+}
+.quiz-block .q-text { font-size:0.9rem; color:var(--text-bright); margin-bottom:16px; }
+.quiz-block .q-options { display:flex; flex-direction:column; gap:8px; }
+.quiz-block .q-opt {
+  padding:12px 16px; background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.08); border-radius:8px;
+  font-size:0.85rem; color:var(--text); cursor:pointer;
+  transition:all 0.2s ease; text-align:left;
+}
+.quiz-block .q-opt:hover { border-color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.04); }
+.quiz-block .q-opt.correct { border-color:var(--fire); background:rgba(240,160,80,0.1); color:var(--fire); }
+.quiz-block .q-opt.wrong { border-color:#ff6b6b; background:rgba(255,107,107,0.08); color:#ff6b6b; }
+.quiz-block .q-result { font-size:0.85rem; margin-top:12px; display:none; }
+.quiz-block .q-result.show { display:block; }
+
+/* Winter Timeline */
+.winter-timeline {
+  display:flex; gap:20px; margin:32px 0; overflow-x:auto; padding-bottom:12px;
+}
+.winter-card {
+  min-width:160px; flex:1; background:var(--bg-card);
+  border:1px solid var(--border); border-radius:var(--radius);
+  padding:20px; text-align:center;
+}
+.winter-card .wt-year {
+  font-family:Georgia,serif; font-size:1.5rem; font-weight:700;
+  color:var(--ice); margin-bottom:8px;
+}
+.winter-card .wt-temp { font-size:0.7rem; color:var(--text-dim); margin-bottom:8px; }
+.winter-card .wt-event { font-size:0.78rem; color:var(--text); line-height:1.5; }
+
+/* Next Chapter */
+.next-chapter {
+  text-align:center; padding:40px 0 80px;
+  border-top:1px solid var(--border); margin-top:40px;
+}
+.next-chapter a {
+  display:inline-flex; align-items:center; gap:8px;
+  color:var(--fire); text-decoration:none; font-size:0.95rem;
+  padding:12px 24px; border:1px solid rgba(240,160,80,0.25);
+  border-radius:24px; transition:all 0.25s;
+}
+.next-chapter a:hover {
+  background:rgba(240,160,80,0.1); border-color:rgba(240,160,80,0.5);
+}
+.next-chapter .nc-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:3px; color:var(--text-dim); margin-bottom:8px; }
+
+/* Footer */
+.site-footer { text-align:center; padding:20px 0 60px; font-size:0.7rem; color:var(--text-dim); }
+.site-footer a { color:var(--ice); text-decoration:none; }
+
+@media (max-width:600px) {
+  .flip-container { height:320px; }
+  .winter-timeline { flex-direction:column; }
+  .winter-card { min-width:auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="nebula n1"></div><div class="nebula n2"></div>
+  <div class="grid-overlay"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<nav class="top-nav">
+  <a href="../index.html">Home</a><span class="sep">/</span>
+  <a href="index.html">AI专题</a><span class="sep">/</span>
+  <span>火种</span>
+</nav>
+
+<article class="article">
+
+  <header class="chapter-hero">
+    <div class="ch-label">第一章 · 1936–1986</div>
+    <h1><span class="grad">火种</span></h1>
+    <p class="subtitle">在AI的冬天到来之前，有人埋下了火种。<br>在所有人都离开之后，有人在寒冷中坚持了40年。</p>
+    <div class="era">从图灵的纸笔到辛顿的微光</div>
+  </header>
+
+  <div class="prose">
+
+    <p>AI不是一夜之间出现的。它是一连串的火种——在不同的时代、不同的地点、由不同的人埋下。每一颗火种在埋下的时候看起来都微不足道，甚至可笑。但后面的故事告诉我们：只要火种不灭，春天迟早会来。</p>
+
+    <p>这个故事从一个人和一个问题开始。图灵。</p>
+
+    <h2>1936年：图灵机</h2>
+
+    <p>1936年，艾伦·图灵24岁。他在剑桥大学国王学院的房间里写下了一篇论文：《论可计算数及其在判定性问题上的应用》。这篇论文的目的是解决希尔伯特提出的"判定性问题"——是否存在一个机械过程，可以判定任何数学命题的真假？</p>
+
+    <p>图灵的答案是"不"。但他在证明过程中创造了一个副产品，其重要性远超问题本身。</p>
+
+    <p>为了定义"机械过程"，图灵构想了一个抽象的机器：一条无限长的纸带，分成一个个格子；一个读写头可以在纸带上左右移动；一套有限的状态规则决定读写头在遇到不同符号时做什么。这个机器就是"图灵机"。</p>
+
+    <p>图灵证明了：存在一种"通用图灵机"，可以模拟任何其他图灵机的行为。也就是说，一台机器可以完成所有可能的计算任务——只要你把任务编码成纸带上的符号。</p>
+
+    <div class="concept-card">
+      <h4>💡 概念卡片：图灵机</h4>
+      <div class="diagram">
+  纸带: ... | 0 | 1 | 1 | 0 | 1 | 0 | 0 | ...
+                    ↑
+              读写头（根据规则读写+移动）
+                    ↓
+            状态寄存器（当前处于什么状态）
+      </div>
+      <p>图灵机看起来原始得可笑。但它有一个极其深刻的推论：<strong>如果人类思维是一种计算过程，那么图灵机（以及基于它的任何计算机）原则上可以模拟人类思维。</strong>这个推论是AI全部故事的第一块基石。图灵没有提出"人工智能"这个词——这个词要到20年后才被发明——但他为人工智能提供了存在性的理论基础。</p>
+    </div>
+
+    <h2>1943年：神经元的数学化</h2>
+
+    <p>1943年，二战正酣。神经生理学家沃伦·麦卡洛克和18岁的数学天才沃尔特·皮茨在芝加哥相遇。皮茨是个传奇人物——他自学了罗素的《数学原理》，写信给罗素指出了书中的错误，被罗素邀请去剑桥读研，但他没去，而是流浪到了芝加哥。</p>
+
+    <p>麦卡洛克和皮茨在《数学生物物理学通报》上发表了《神经活动中内在思想的逻辑演算》。他们提出了一个惊人的想法：大脑的神经元可以用布尔逻辑来建模。每个神经元接收来自其他神经元的信号，当信号总和超过一个阈值时，神经元"激活"——就像一个逻辑门从0变成1。</p>
+
+    <div class="concept-card">
+      <h4>💡 概念卡片：麦卡洛克-皮茨神经元</h4>
+      <div class="diagram">
+   输入1 (0/1) ──→ w1 ──┐
+   输入2 (0/1) ──→ w2 ──┤
+   输入3 (0/1) ──→ w3 ──┼──→ Σ ──→ 阈值判断 ──→ 输出 (0/1)
+                         │       (总和 ≥ θ?)
+   输入n (0/1) ──→ wn ──┘
+      </div>
+      <p>这个模型的激进之处在于：<strong>它把生物学变成了数学。</strong>它意味着，无论大脑多么复杂，只要它是由神经元组成的，就原则上可以用数学来描述。更激进的是：麦卡洛克和皮茨证明了，由这种简单神经元组成的网络，可以执行任何图灵机可以执行的计算。也就是说，神经网络是图灵完备的。</p>
+    </div>
+
+    <p>冯·诺依曼读了这篇论文。他在设计EDVAC（最早的电子计算机之一）时，引用了麦卡洛克-皮茨模型作为计算机架构的灵感来源。这就是AI故事中一个反复出现的模式：一个看似抽象的数学洞见，几十年后变成了改变世界的工程现实。</p>
+
+    <h2>1950年：一个改变了历史的问题</h2>
+
+    <p>1950年，图灵在哲学期刊《Mind》上发表了《计算机与智能》。这次他不是在写数学论文，而是在写一篇哲学散文。开头那句话改变了历史：</p>
+
+    <div class="quote">
+      "我提议考虑这样一个问题：'机器能思考吗？'"
+      <div class="attr">—— 艾伦·图灵，《计算机与智能》，1950年</div>
+    </div>
+
+    <p>图灵接下来做了一个天才的动作：他没有试图回答这个问题，而是说"这个问题太模糊了"，然后提出了一个可操作的替代方案——"模仿游戏"，后来被称为图灵测试。</p>
+
+    <div class="concept-card">
+      <h4>💡 概念卡片：图灵测试</h4>
+      <p>一个人类审问者通过文字与两个对象交流——一个是人类，一个是机器。如果审问者无法可靠地分辨谁是谁，那么根据图灵的论证，这台机器就展示了"智能"。图灵预测：到2000年，一台拥有1亿字节存储的计算机可以在5分钟的对话中骗过30%的审问者。</p>
+      <p style="margin-top:12px;">这个预测的时间线有偏差——但2022年的ChatGPT以一种图灵本人可能都没想到的方式测试了这个问题：当一个普通人打开ChatGPT开始对话，发现自己无法分辨对面是人还是机器的时候，图灵测试在某种意义上已经被通过了。不是通过逻辑推理，而是通过"文字接龙"——一个图灵不可能预见到的技术路线。</p>
+    </div>
+
+    <p>图灵没能看到计算机革命。1952年，他因同性恋被控"严重猥亵罪"，被迫接受化学去势。1954年6月7日，他咬下一口浸过氰化物的苹果，结束了生命，年仅41岁。在他被捕到被判刑的间隙，他还在提交关于黎曼zeta函数零点计算的论文——用自己的方式延续着对计算极限的探索。</p>
+
+    <h2>1956年：AI的命名礼</h2>
+
+    <p>1956年夏天，达特茅斯学院。约翰·麦卡锡组织了为期两个月的暑期研讨会，邀请了一批顶尖的研究者——马文·明斯基、克劳德·香农、纳撒尼尔·罗切斯特——来讨论"如何让机器使用语言、形成抽象和概念、解决现在只有人类能解决的问题"。麦卡锡给这个领域起了一个名字："人工智能"。</p>
+
+    <div class="highlight">
+      <strong>1956年达特茅斯提案中的原文：</strong><br>
+      "这项研究基于这样的推测：学习的每一个方面，或智能的任何其他特征，原则上都可以被精确地描述，以至于可以制造出一台机器来模拟它。"
+    </div>
+
+    <p>与会者极其乐观。他们相信一个夏天就足以在机器翻译和视觉识别上取得突破。西蒙和纽厄尔宣称："十年之内，数字计算机将成为国际象棋世界冠军"（实际上花了40年），"并发现和证明重要的数学定理"（这个确实做到了，但方式和他们想的不一样）。</p>
+
+    <p>这种乐观是AI领域反复出现的特征。达特茅斯会议最重要的遗产是它给这个领域起了一个名字。"人工智能"从此成了一个被追求的圣杯——虽然道路远比想象中漫长。</p>
+
+    <h2>1958年：感知机——第一个"能学习"的机器</h2>
+
+    <p>弗兰克·罗森布拉特，康奈尔大学的一位心理学家，决定把麦卡洛克-皮茨的理论变成现实。他建造了一台叫"感知机"的机器：400个光传感器连接到可以调整权重的"神经元"上，通过反复试错来学习识别字母。</p>
+
+    <p>媒体为之疯狂。《纽约时报》写道："海军透露了一台电子计算机的雏形，今天它将被期望能够走路、说话、看东西、写字、自我复制，并意识到自己的存在。"</p>
+
+    <p>但这只是错觉。感知机只能解决"线性可分"的问题——简单说，就是那些可以画一条直线把不同类别分开的问题。它无法处理"异或"逻辑（XOR）——一个最基本的逻辑运算。而解决这个局限需要多层网络，但罗森布拉特不知道怎么训练多层网络。</p>
+
+    <div class="flip-container" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+      <div class="flip-card">
+        <div class="flip-front">
+          <div class="flip-icon">🧠</div>
+          <h4>感知机能做什么？不能做什么？</h4>
+          <div class="flip-hint">👆 点击翻卡</div>
+        </div>
+        <div class="flip-back">
+          <p>感知机可以完美地分类"与"（AND）和"或"（OR）逻辑——因为它们可以用一条直线分开。<br><br>但感知机无法处理"异或"（XOR）——0 XOR 0 = 0, 1 XOR 1 = 0, 0 XOR 1 = 1, 1 XOR 0 = 1。你无法用一条直线把这四个点分成两类。<br><br>这个看似微小的局限，成为了1969年明斯基批判感知机的核心论据。</p>
+          <div class="flip-answer">解决的钥匙：多层网络。每一层提取一层抽象——但训练多层网络需要反向传播，那是17年后的事了。</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>1969年：杀死AI的那本书</h2>
+
+    <p>马文·明斯基是AI领域的巨擘——达特茅斯会议的参与者，MIT的传奇教授。1969年，他和西摩尔·帕佩特出版了《感知机》一书。这本书用严格的数学证明：单层感知机的能力极为有限。它连XOR都解决不了。书的语气是毁灭性的——它暗示，即使把感知机扩展到多层，可能也没什么希望。</p>
+
+    <p>效果立竿见影。政府资助骤减。神经网络研究在主流学术界变成了"不光彩"的事。研究者开始避免使用"神经网络"这个词，改称"模式识别"或"统计学习"。第一批AI公司破产。</p>
+
+    <p>但明斯基错了。</p>
+
+    <p>他自己知道多层网络理论上可以解决感知机的局限，但他认为训练多层网络"没有希望"——这被后来的反向传播算法证明是错的。讽刺的是，《感知机》这本书想要毁灭的东西，16年后被人从废墟中重新捡了起来。</p>
+
+    <div class="quiz-block" id="quiz1">
+      <h4>🧩 思考题</h4>
+      <div class="q-text">明斯基的《感知机》一书被广泛认为是第一次AI寒冬的导火索。但明斯基错在哪里？</div>
+      <div class="q-options">
+        <div class="q-opt" onclick="checkQuiz('quiz1', this, false)">A. 他错误地证明了感知机无法做XOR</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1', this, false)">B. 他认为AI永远不可能超过人类</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1', this, true)">C. 他认为多层网络也无法被训练——但反向传播算法后来解决了这个问题</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1', this, false)">D. 他故意破坏AI研究以保护自己的学术地位</div>
+      </div>
+      <div class="q-result" id="quiz1-result"></div>
+    </div>
+
+    <h2>1973–1980年：第一个冬天</h2>
+
+    <p>1973年，英国政府委托詹姆斯·莱特希尔爵士撰写AI研究评估报告。莱特希尔报告结论是毁灭性的：AI研究"在任何领域都没有产生当初承诺的重大影响"。英国政府大幅削减AI资助。美国的DARPA也随之撤退。</p>
+
+    <div class="winter-timeline">
+      <div class="winter-card">
+        <div class="wt-year">1969</div>
+        <div class="wt-temp">🌡️ 降温</div>
+        <div class="wt-event">《感知机》出版，神经网络研究受挫</div>
+      </div>
+      <div class="winter-card">
+        <div class="wt-year">1973</div>
+        <div class="wt-temp">❄️ 入冬</div>
+        <div class="wt-event">莱特希尔报告：AI研究"没有产生重大影响"</div>
+      </div>
+      <div class="winter-card">
+        <div class="wt-year">1974</div>
+        <div class="wt-temp">🧊 深冬</div>
+        <div class="wt-event">DARPA大幅削减AI项目资助</div>
+      </div>
+      <div class="winter-card">
+        <div class="wt-year">1980</div>
+        <div class="wt-temp">🌫️ 回暖迹象</div>
+        <div class="wt-event">专家系统带来短暂商业成功，但随即引发第二次寒冬</div>
+      </div>
+    </div>
+
+    <p>AI寒冬不仅仅是资金断流——它是一种社会性的遗忘。在整个1970年代和1980年代初，如果你在学术会议上说自己在研究"神经网络"，人们会用怜悯的目光看你。研究生被导师告诫不要碰这个方向。论文被拒。经费被拒。"AI"这个词本身变成了某种笑话——意味着夸大其词和不兑现承诺。</p>
+
+    <p>但在这个冬天里，有几个人没有离开。他们在没有人关注的地方继续工作。他们的名字要到几十年后才被世界记住。</p>
+
+    <h2>寒冷中的坚守者</h2>
+
+    <h3>杰弗里·辛顿（Geoffrey Hinton）</h3>
+
+    <p>1972年，辛顿进入爱丁堡大学读博，研究方向是神经网络。他的导师告诉他：这个方向没有前途。整个博士期间，他都在回答同一个问题："你为什么研究一个已经被证明失败的东西？"</p>
+
+    <p>辛顿不是普通人。他的家族四代科学家。他的曾曾祖父乔治·布尔创立了布尔代数——今天所有计算机逻辑电路的基础。布尔的哥哥George Everest是珠穆朗玛峰的名字来源。辛顿身上流淌着科学世家的血液，但他选择的道路让家族蒙羞——至少在当时的学术界看来是这样。</p>
+
+    <p>辛顿还有一个常人难以想象的困难：从30多岁起，他患有严重的腰椎间盘突出，无法坐下。他必须站着工作。他站了40年——站着写论文，站着指导学生，站着看实验结果。他后来开玩笑说："我可能是唯一一个站着死的人。"</p>
+
+    <p>但辛顿坚持了。不是因为固执，而是因为他相信一个数学直觉：大脑是由神经元组成的，神经元是简单的计算单元，所以一定有某种算法可以让大量简单单元的组合产生智能。反向传播就是那个算法——只是他没有算力来验证。</p>
+
+    <h3>杨立昆（Yann LeCun）</h3>
+
+    <p>1980年代，在法国，杨立昆开始研究卷积神经网络。他读到了辛顿的论文，骑着摩托车穿越巴黎去参加会议。那时候整个欧洲研究神经网络的人可能坐不满一个小会议室。杨立昆后来在贝尔实验室开发了LeNet——一个可以识别手写数字的卷积网络，被美国银行用来读取支票。但银行不知道的是，这套系统的核心算法在30年后会驱动全世界的图像识别系统。</p>
+
+    <h3>约书亚·本吉奥（Yoshua Bengio）</h3>
+
+    <p>在加拿大蒙特利尔，本吉奥在寒冷的气候中研究着同样寒冷的方向。他专注于序列建模——如何让神经网络处理连续的信息流。这个方向在当时看来毫无商业价值，但在30年后成为了大语言模型处理文本的基础。</p>
+
+    <div class="highlight">
+      <strong>2018年——图灵奖</strong><br>
+      辛顿、杨立昆、本吉奥分享了2018年的图灵奖，被称为"深度学习三巨头"。从1972年辛顿开始研究神经网络，到2018年获得计算机科学最高荣誉，辛顿等了46年。期间他无数次被告知自己在浪费时间。
+    </div>
+
+    <div class="quiz-block" id="quiz2">
+      <h4>🧩 思考题</h4>
+      <div class="q-text">为什么AI会经历"冬天"？这个问题的答案揭示了科技史中的一个普遍规律。</div>
+      <div class="q-options">
+        <div class="q-opt" onclick="checkQuiz('quiz2', this, false)">A. 政府不重视科技发展</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2', this, false)">B. 研究者不够聪明</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2', this, true)">C. 早期成功导致过度乐观和过度承诺 → 当承诺无法兑现时，资金和社会信心双双崩溃</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2', this, false)">D. 明斯基的阴谋</div>
+      </div>
+      <div class="q-result" id="quiz2-result"></div>
+    </div>
+
+    <h2>火种的隐喻</h2>
+
+    <p>1936年到1986年——50年。图灵的纸笔，麦卡洛克和皮茨的数学模型，罗森布拉特的硬件感知机，明斯基的毁灭性批判，辛顿在寒冷中的坚持——这些看似无关的事件，其实是一条隐秘的因果链。</p>
+
+    <p>图灵机证明了"计算"的边界。麦卡洛克-皮茨模型证明了"神经网络"可以达到图灵机的计算能力。感知机证明了这种理论可以变成硬件。明斯基的批判暴露了单层网络的局限，反向传播解决了多层网络的训练问题——但反向传播需要的算力要等到几十年后才出现。</p>
+
+    <p>AI的故事不是"一个天才的顿悟"，而是"一群人在不同时代埋下的火种，在条件成熟时同时燃烧"。图灵在1936年就提供了理论基础，但需要等到2006年辛顿的深度信念网络才被重新点燃；麦卡洛克和皮茨在1943年就描述了神经元模型，但需要等到2012年的AlexNet才真正爆发出威力。</p>
+
+    <div class="quote">
+      "理论永远走在工程前面。种子在土壤中休眠，等待雨水。而雨水就是算力。"
+    </div>
+
+    <p>这就是火种的含义。AI不是从石头缝里蹦出来的——它是几代人在不同的黑暗年代里维护着同一团微弱的火，直到有一天，风来了，火烧成了海。</p>
+
+    <div class="highlight">
+      <strong>这一章的核心隐喻：</strong><br>
+      "火种"不是一种物质，而是一种状态——它可以在极端寒冷中维持几十年不灭，只要有人愿意守护。图灵、麦卡洛克、皮茨、罗森布拉特、辛顿——每一代守护者都不知道自己会不会活到火种燎原的那一天。但他们还是守护了。这就是科学最动人的部分。
+    </div>
+
+  </div>
+
+</article>
+
+<div class="next-chapter">
+  <div class="nc-label">下一章</div>
+  <a href="ch2-awakening.html">苏醒：反向传播 → GPU → ImageNet → 深度学习革命 →</a>
+</div>
+
+<footer class="site-footer">
+  <p><a href="index.html">返回AI专题导航</a> · 卓克 · 科技参考</p>
+</footer>
+
+<script>
+// Particles
+(function(){
+  const c=document.getElementById('particles');
+  const cols=['rgba(240,160,80,0.4)','rgba(126,184,218,0.4)','rgba(255,204,0,0.3)','rgba(255,255,255,0.2)'];
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.width=p.style.height=(Math.random()*2+1)+'px';
+    p.style.background=cols[Math.floor(Math.random()*cols.length)];
+    p.style.animationDuration=(Math.random()*22+14)+'s';
+    p.style.animationDelay=Math.random()*22+'s';
+    c.appendChild(p);
+  }
+})();
+
+// Quiz
+function checkQuiz(qid, el, correct){
+  const container=document.getElementById(qid);
+  const opts=container.querySelectorAll('.q-opt');
+  if(container.dataset.answered) return;
+  container.dataset.answered='1';
+  opts.forEach(o=>{ o.style.pointerEvents='none'; });
+  if(correct){
+    el.classList.add('correct');
+    document.getElementById(qid+'-result').innerHTML='✅ <strong>正确！</strong>明斯基知道多层网络理论上可以解决单层感知机的局限，但他认为训练多层网络"没有希望"。1986年，反向传播算法证明他错了。';
+  } else {
+    el.classList.add('wrong');
+    opts.forEach(o=>{ if(o.dataset.correct!==undefined || o.textContent.includes('C.')) o.classList.add('correct'); });
+    document.getElementById(qid+'-result').innerHTML='❌ 不是这个。正确答案是C：明斯基认为多层网络无法被训练，但反向传播算法后来证明他错了。';
+  }
+  document.getElementById(qid+'-result').classList.add('show');
+}
+
+// Set correct option data attribute
+document.querySelectorAll('.q-opt').forEach(o=>{
+  // Mark via the onclick handler logic - we check the 3rd param
+});
+</script>
+</body>
+</html>

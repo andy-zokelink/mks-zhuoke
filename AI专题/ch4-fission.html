@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>裂变 —— 涌现：智能的进化树 · 第四章</title>
+<style>
+:root {
+  --bg:#050a18; --bg-card:#0a1028;
+  --amber:#f0a050; --amber-glow:rgba(240,160,80,0.3);
+  --cyan:#00e5ff; --cyan-glow:rgba(0,229,255,0.3);
+  --purple:#a78bfa; --purple-glow:rgba(167,139,250,0.3);
+  --gold:#ffd54f; --gold-glow:rgba(255,213,79,0.3);
+  --text-bright:#e8edf4; --text:#bcc4d0; --text-dim:#6b7385;
+  --border:rgba(255,255,255,0.06); --radius:12px;
+  --font-sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  --font-serif:"Noto Serif SC","Source Han Serif SC","STSong","Songti SC",Georgia,"Times New Roman",serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer .nebula{position:absolute;border-radius:50%;filter:blur(150px);opacity:0.1;animation:drift 30s ease-in-out infinite alternate}
+.bg-layer .n1{width:500px;height:500px;background:var(--amber);top:-150px;left:-100px}
+.bg-layer .n2{width:450px;height:450px;background:var(--cyan);bottom:-120px;right:-100px;animation-delay:-15s}
+.bg-layer .n3{width:350px;height:350px;background:var(--purple);top:50%;left:60%;animation-delay:-7s}
+.bg-layer .grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,-30px) scale(1.2)}}
+
+.particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+.particle{position:absolute;border-radius:50%;background:var(--text-dim);animation:floatUp linear infinite;opacity:0}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.5}90%{opacity:.1}100%{transform:translateY(-100px) scale(1);opacity:0}}
+
+.article{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 24px}
+
+.top-nav{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:20px 24px;font-size:.75rem;color:var(--text-dim)}
+.top-nav a{color:var(--cyan);text-decoration:none;transition:color .2s}
+.top-nav a:hover{color:var(--amber)}
+.top-nav .sep{color:var(--text-dim)}
+
+.chapter-hero{text-align:center;padding:80px 0 60px}
+.chapter-hero .ch-label{font-size:.7rem;text-transform:uppercase;letter-spacing:6px;color:var(--cyan);margin-bottom:20px}
+.chapter-hero h1{font-family:var(--font-serif);font-size:clamp(2.2rem,5vw,3.2rem);font-weight:900;color:var(--text-bright);line-height:1.3;margin-bottom:12px}
+.chapter-hero h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--purple),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.chapter-hero .subtitle{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-dim);font-style:italic;margin-bottom:16px}
+.chapter-hero .era{font-size:.85rem;color:var(--cyan);letter-spacing:2px}
+
+.prose{padding:20px 0}
+.prose h2{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-bright);margin:48px 0 16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.prose h3{font-size:1.15rem;color:var(--cyan);margin:32px 0 12px}
+.prose p{font-size:.92rem;color:var(--text);line-height:1.9;margin-bottom:20px;text-align:justify}
+.prose .highlight{background:rgba(0,229,255,.06);border-left:3px solid var(--cyan);padding:16px 20px;border-radius:0 8px 8px 0;margin:24px 0;font-size:.88rem;color:var(--text-bright)}
+.prose .quote{font-family:var(--font-serif);font-style:italic;font-size:1.05rem;color:var(--text-dim);text-align:center;padding:32px 0;position:relative}
+.prose .quote::before{content:'"';font-size:4rem;color:rgba(255,255,255,.03);position:absolute;top:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;line-height:1}
+.prose .quote .attr{font-size:.75rem;margin-top:8px;font-style:normal;color:var(--cyan)}
+
+.concept-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:32px 0}
+.concept-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);margin-bottom:20px}
+.concept-card h4{font-size:.95rem;color:var(--cyan);margin-bottom:12px;letter-spacing:2px}
+.concept-card p{font-size:.85rem;color:var(--text);margin-bottom:0}
+.concept-card table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.8rem}
+.concept-card td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.concept-card td:first-child{color:var(--text-dim);white-space:nowrap}
+.concept-card td:last-child{color:var(--text-bright);text-align:right;font-family:Georgia,serif;font-weight:700}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px 0}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+
+.nobel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s}
+.nobel-card:hover{border-color:rgba(255,255,255,.12)}
+.nobel-card .nb-icon{font-size:2rem;margin-bottom:12px}
+.nobel-card h4{font-size:.9rem;color:var(--text-bright);margin-bottom:8px}
+.nobel-card .nb-field{font-size:.68rem;color:var(--gold);letter-spacing:3px;margin-bottom:8px}
+.nobel-card p{font-size:.78rem;color:var(--text);line-height:1.6}
+
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:32px 0}
+.tech-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
+.tech-card .tc-icon{font-size:1.8rem;margin-bottom:8px}
+.tech-card .tc-name{font-size:.8rem;color:var(--text-bright);font-weight:600}
+
+.quiz-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:32px 0}
+.quiz-block h4{font-size:.95rem;color:var(--purple);margin-bottom:8px}
+.quiz-block .q-text{font-size:.9rem;color:var(--text-bright);margin-bottom:16px}
+.quiz-block .q-options{display:flex;flex-direction:column;gap:8px}
+.quiz-block .q-opt{padding:12px 16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:8px;font-size:.85rem;color:var(--text);cursor:pointer;transition:all .2s ease;text-align:left}
+.quiz-block .q-opt:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
+.quiz-block .q-opt.correct{border-color:var(--cyan);background:rgba(0,229,255,.1);color:var(--cyan)}
+.quiz-block .q-opt.wrong{border-color:#ff6b6b;background:rgba(255,107,107,.08);color:#ff6b6b}
+.quiz-block .q-result{font-size:.85rem;margin-top:12px;display:none}
+.quiz-block .q-result.show{display:block}
+
+.next-chapter{text-align:center;padding:40px 0 80px;border-top:1px solid var(--border);margin-top:40px}
+.next-chapter a{display:inline-flex;align-items:center;gap:8px;color:var(--purple);text-decoration:none;font-size:.95rem;padding:12px 24px;border:1px solid rgba(167,139,250,.25);border-radius:24px;transition:all .25s}
+.next-chapter a:hover{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.5)}
+.next-chapter .nc-label{font-size:.7rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:8px}
+
+.site-footer{text-align:center;padding:20px 0 60px;font-size:.7rem;color:var(--text-dim)}
+.site-footer a{color:var(--cyan);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div>
+  <div class="grid-overlay"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<nav class="top-nav">
+  <a href="../index.html">Home</a><span class="sep">/</span>
+  <a href="index.html">AI专题</a><span class="sep">/</span>
+  <span>裂变</span>
+</nav>
+
+<article class="article">
+
+  <header class="chapter-hero">
+    <div class="ch-label">第四章 · 2023–2025</div>
+    <h1><span class="grad">裂变</span></h1>
+    <p class="subtitle">AI不再是某个公司的产品，<br>它是人类文明的新基础设施。</p>
+    <div class="era">从OpenAI的震荡到诺贝尔奖的加冕</div>
+  </header>
+
+  <div class="prose">
+
+    <p>ChatGPT之后，AI发生了裂变——从一个实验室里的模型变成一个覆盖人类生活方方面面的基础设施。这个过程充满戏剧性：OpenAI内部的权力斗争、开源社区的反击、科学家们对AI安全的激烈争论、以及诺贝尔奖委员会对AI的最高认可。AI的故事从"能不能做"变成了"谁能做"、"该不该做"、"做了会发生什么"。</p>
+
+    <h2>OpenAI的宫斗：理想主义vs.资本主义</h2>
+
+    <p>2023年11月17日，OpenAI董事会突然宣布解雇CEO山姆·阿尔特曼。理由是"他在与董事会的沟通中没有保持一贯的坦诚"。这个模糊的措辞掩盖了一场关于AI发展方向的深层冲突。</p>
+
+    <p>短短5天内发生的事情堪称硅谷史上最戏剧性的权力更迭：阿尔特曼被解雇 → 总裁布罗克曼辞职抗议 → 几乎所有员工签署联名信要求董事会辞职并恢复阿尔特曼的职务 → 微软CEO纳德拉介入 → 阿尔特曼复职，董事会重组。整个过程的核心矛盾是：<strong>AI应该发展得多快？由谁来决定？</strong></p>
+
+    <p>这个问题的背后是OpenAI的独特结构——一家非营利组织控制着一家营利公司。非营利的使命是"确保AGI造福全人类"；营利公司的现实是需要巨额资金来训练更大的模型。当非营利的"安全"与营利的"速度"发生冲突时，宫斗就会爆发。</p>
+
+    <div class="highlight">
+      <strong>阿尔特曼复职后的OpenAI：</strong><br>
+      权力更加集中，商业化加速。2024年发布GPT-4o（多模态实时交互）、o1推理模型、Sora视频生成。2025年发布GPT-5和o3。但同时，多位关注AI安全的核心成员离开了公司——包括首席科学家伊利亚·苏茨克维和"超级对齐"团队的负责人Jan Leike。OpenAI正在从一个研究实验室变成一家产品公司。
+    </div>
+
+    <h2>DeepSeek：在限制中寻找自由</h2>
+
+    <p>2025年初，一家中国的AI公司DeepSeek让硅谷感到了真正的震惊。他们的R1模型以不到OpenAI十分之一的成本，实现了接近GPT-4o的性能——而且完全开源。</p>
+
+    <div class="concept-card">
+      <h4>💡 DeepSeek的关键技术创新</h4>
+      <table>
+        <tr><td>R1训练方法</td><td>不需要人类标注数据的强化学习——让基础模型自己生成多个回答，根据数学对错和格式规范给自己打分，高分回答进入下一轮训练。类似AlphaGo Zero的"从零自学习"。</td></tr>
+        <tr><td>Mixture of Experts</td><td>不是整个模型处理每个问题，而是只激活相关的"专家"模块。大大降低推理成本。</td></tr>
+        <tr><td>Multi-head Latent Attention</td><td>对注意力机制的改进，减少内存占用。</td></tr>
+        <tr><td>DualPipe</td><td>一种GPU底层优化技术，让计算和通信并行进行，提高芯片利用率。</td></tr>
+        <tr><td>FP8混合精度</td><td>使用8位浮点数代替传统的16位，减少内存和带宽需求。</td></tr>
+        <tr><td>PTX底层编程</td><td>由于芯片出口限制，H800的通信能力被削减。团队用PTX语言直接对GPU底层编程，强制32个流处理器专门处理通信。</td></tr>
+      </table>
+    </div>
+
+    <p>杨立昆（Meta首席AI科学家）对DeepSeek的评论精准地抓住了本质："这不是两国AI谁超过谁的问题，而是开源模型战胜了专有模型。这是开源的胜利。"</p>
+
+    <p>DeepSeek的故事像极了86版《西游记》——用几十分之一的成本实现了欧美大片七八成的效果。在芯片出口管制的约束下，DeepSeek的工程师们不得不深入更底层做优化。约束逼出了创新。这是AI史上反复出现的模式：当资源受限时，人类的创造力反而会找到更优雅的解决方案。</p>
+
+    <div class="quiz-block" id="quiz1">
+      <h4>🧩 思考题</h4>
+      <div class="q-text">DeepSeek R1的训练不需要人类标注数据——它使用强化学习从零开始训练推理能力。这个思路最早可以追溯到哪个里程碑事件？</div>
+      <div class="q-options">
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,false)">A. GPT-3的涌现能力</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,true)">C. AlphaGo Zero的"从零自学习"——不需要人类棋谱，只靠规则和胜负信号</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,false)">B. AlexNet的GPU训练</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,false)">D. ChatGPT的RLHF技术</div>
+      </div>
+      <div class="q-result" id="quiz1-result"></div>
+    </div>
+
+    <h2>诺贝尔奖：科学界最保守的机构为AI敞开了大门</h2>
+
+    <p>诺贝尔奖委员会是一个极其保守的机构。从成果发表到获奖，平均需要16年。诺贝尔奖中没有计算机科学或数学——所以AI成就理论上"不能获奖"。但在2024年，委员会找到了方法。</p>
+
+    <div class="two-col">
+      <div class="nobel-card">
+        <div class="nb-icon">🔬</div>
+        <div class="nb-field">2024年诺贝尔物理学奖</div>
+        <h4>霍普菲尔德 & 辛顿</h4>
+        <p>表彰他们为利用人工神经网络进行机器学习作出的基础性发明和发现。委员会找到了神经网络和物理模型之间的深层联系——霍普菲尔德网络基于伊辛模型（磁性的物理模型），辛顿的玻尔兹曼机基于玻尔兹曼分布（粒子能量分布的物理规律）。</p>
+      </div>
+      <div class="nobel-card">
+        <div class="nb-icon">🧪</div>
+        <div class="nb-field">2024年诺贝尔化学奖</div>
+        <h4>贝克 & 哈萨比斯 & 江珀</h4>
+        <p>表彰计算蛋白质设计和蛋白质结构预测。DeepMind的AlphaFold2解决了困扰生物学50年的蛋白质折叠问题——在几个月内预测了2.14亿个蛋白质结构，将人类蛋白质中结构未知的比例从83%骤降到接近0%。</p>
+      </div>
+    </div>
+
+    <p>卓克在解读诺奖时提出了一个精辟的分类：诺贝尔奖分为两类。第一类是"诺奖让某个成果更加荣耀"——这类占95%以上。第二类是"某个成果让诺奖更加荣耀"——这类不超过5%。2024年的两个AI奖项属于第二类。委员会如此用心地找到神经网络算法和物理模型的关联，就是为了能及时表彰AI的革命——他们不想等到16年后再颁奖。</p>
+
+    <div class="highlight">
+      <strong>诺贝尔奖双料颁给AI的深远意义：</strong><br>
+      它标志着AI从一个"工程领域"正式进入"基础科学"的荣誉殿堂。诺贝尔奖的承认意味着——AI不仅是一个有用的工具，它是一种新的科学范式。它在改变我们理解蛋白质的方式、理解智能的方式、理解世界的方式。
+    </div>
+
+    <h2>AI无处不在：裂变的碎片</h2>
+
+    <p>2023-2025年，AI以惊人的速度渗透进人类文明的每一个角落。很难找到一个不受AI影响的领域。</p>
+
+    <div class="tech-grid">
+      <div class="tech-card"><div class="tc-icon">🏥</div><div class="tc-name">医疗诊断</div></div>
+      <div class="tech-card"><div class="tc-icon">⚖️</div><div class="tc-name">法律文书</div></div>
+      <div class="tech-card"><div class="tc-icon">🏫</div><div class="tc-name">教育辅导</div></div>
+      <div class="tech-card"><div class="tc-icon">💻</div><div class="tc-name">编程助手</div></div>
+      <div class="tech-card"><div class="tc-icon">🎨</div><div class="tc-name">创意设计</div></div>
+      <div class="tech-card"><div class="tc-icon">🚗</div><div class="tc-name">自动驾驶</div></div>
+      <div class="tech-card"><div class="tc-icon">🔬</div><div class="tc-name">科学发现</div></div>
+      <div class="tech-card"><div class="tc-icon">🎵</div><div class="tc-name">音乐创作</div></div>
+      <div class="tech-card"><div class="tc-icon">📊</div><div class="tc-name">金融分析</div></div>
+      <div class="tech-card"><div class="tc-icon">🌾</div><div class="tc-name">农业优化</div></div>
+      <div class="tech-card"><div class="tc-icon">🏭</div><div class="tc-name">工业质检</div></div>
+      <div class="tech-card"><div class="tc-icon">🛡️</div><div class="tc-name">网络安全</div></div>
+    </div>
+
+    <p>裂变的一个含义是：<strong>AI不再是需要被"应用"的东西——它正在变成基础设施。</strong>就像电力一样——我们今天不会说"电力应用于烘烤面包"，电力就是面包房运转的一部分。AI正在经历同样的转变。它从"一个需要被集成到产品里的功能"变成了"产品默认就有的能力"。就像你不需要考虑"要不要给这个产品加个屏"——屏幕已经是默认的了。AI将成为同样的默认能力。</p>
+
+    <div class="quiz-block" id="quiz2">
+      <h4>🧩 思考题</h4>
+      <div class="q-text">辛顿在2023年说："我对自己毕生的工作感到非常后悔。"为什么一个为AI贡献了一生的人会有这样的感慨？</div>
+      <div class="q-options">
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,false)">A. 他认为他的工作没有价值</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,false)">B. 他嫉妒年轻一代AI研究者的成功</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,true)">C. 他在AI领域工作了50年，亲眼看到AI从一个无关紧要的学术方向变成了可能威胁人类存在的东西——这种速度超出了他的预期</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,false)">D. 他后悔没有早点进入产业界</div>
+      </div>
+      <div class="q-result" id="quiz2-result"></div>
+    </div>
+
+    <h2>辛顿的离开：保守派扛大旗者</h2>
+
+    <p>2023年5月1日，75岁的杰弗里·辛顿宣布从谷歌辞职。他说了一句沉重的话："我对自己毕生的工作感到非常后悔，希望用辞职提醒科技界警惕AI。"</p>
+
+    <p>辛顿不是在否定AI的价值。他是在警告AI的速度。辛顿从1972年开始研究神经网络，经历了AI的整个冬天。他花了40年等待这个领域被认可。当认可终于到来时，他却成为了最警惕AI的人。</p>
+
+    <p>辛顿担心的是：AI可能比人脑有更好的算法来理解和传播知识。GPT-4的神经元连接大约是1万亿个，人脑是100-1000万亿个——GPT-4的规模小了一千倍到一万倍。但它几乎掌握了所有常识，远超任何单个人类。辛顿的推论是：反向传播算法可能比生物大脑的学习机制更高效。如果这是真的，那么AI超越人类不是"会不会"的问题，而是"多快"的问题。</p>
+
+    <p>他还担心另外两件事：AI可以轻易地操纵人类（因为它的情商正在快速增长）；AI的"副本"之间可以瞬间共享知识——10000个AI副本中只要有一个学会了任何新东西，所有副本都可以立刻掌握。人类做不到这一点。</p>
+
+    <div class="highlight">
+      <strong>辛顿的保守不是反对AI，而是对AI的速度充满敬畏：</strong><br>
+      一个在AI寒冬中守望了40年的人，最终成为了AI发展速度的最强批评者。这不是讽刺。这是真诚。他比任何人都更了解AI的潜力，所以也比任何人都更清楚它的风险。
+    </div>
+
+    <h2>裂变的隐喻</h2>
+
+    <p>"裂变"有两层含义。</p>
+
+    <p>第一层：AI本身在裂变。从一个集中的技术（大公司的封闭模型）分裂为开源的、多极的生态（DeepSeek、Llama、Mistral等开源模型 + 无数基于开源的衍生产品）。这降低了AI的门槛，让全世界的研究者和创业者都能参与其中。</p>
+
+    <p>第二层：AI在让人类社会裂变。它正在重塑每一个行业、每一种职业、每一种权力结构。有些工作会消失，有些会新生。有些人会获得前所未有的能力，有些人会因为不会使用AI而被边缘化。这不是一个"好"或"坏"的过程——它是一个正在发生的现实。适应它的速度将决定每个个人和每个社会的未来。</p>
+
+    <div class="quote">
+      "我们怎么应对？首先我认为，通用人工智能的到来，一定会让所有人在相当久的一段时间不知所措。<br>在这次转折到来前，保持好身体健康和心情愉快，其他一切困难交给几年后出现的AGI。"
+      <div class="attr">—— 卓克，《科技参考》</div>
+    </div>
+
+  </div>
+
+</article>
+
+<div class="next-chapter">
+  <div class="nc-label">下一章</div>
+  <a href="ch5-farshore.html">彼岸：AGI争论 → 对齐问题 → 1000天后的人类世界 →</a>
+</div>
+
+<footer class="site-footer">
+  <p><a href="index.html">返回AI专题导航</a> · 卓克 · 科技参考</p>
+</footer>
+
+<script>
+(function(){
+  const c=document.getElementById('particles');
+  const cols=['rgba(0,229,255,0.4)','rgba(167,139,250,0.4)','rgba(240,160,80,0.3)','rgba(255,255,255,0.2)'];
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.width=p.style.height=(Math.random()*2+1)+'px';
+    p.style.background=cols[Math.floor(Math.random()*cols.length)];
+    p.style.animationDuration=(Math.random()*22+14)+'s';
+    p.style.animationDelay=Math.random()*22+'s';
+    c.appendChild(p);
+  }
+})();
+
+function checkQuiz(qid,el,correct){
+  const container=document.getElementById(qid);
+  if(container.dataset.answered) return;
+  container.dataset.answered='1';
+  const opts=container.querySelectorAll('.q-opt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  const result=document.getElementById(qid+'-result');
+  if(correct){
+    el.classList.add('correct');
+    result.innerHTML='✅ <strong>正确！</strong>AlphaGo Zero的"不需要人类知识，只靠规则和试错"的思路在8年后被DeepSeek R1重新应用到语言模型的推理训练中。这是AI史上最动人的思想传承之一。';
+  } else {
+    el.classList.add('wrong');
+    opts.forEach(o=>{if(o.textContent.includes('C.'))o.classList.add('correct')});
+    result.innerHTML='❌ 正确答案是C。辛顿的后悔不是因为否定AI，而是因为他最了解AI的潜力。一个守望了40年的人，最终成为了最警惕AI的人——这是一种深刻的真诚。';
+  }
+  result.classList.add('show');
+}
+</script>
+</body>
+</html>

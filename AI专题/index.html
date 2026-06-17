@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>涌现：智能的进化树 —— AI专题</title>
+<style>
+:root {
+  --bg: #050a18;
+  --bg-card: #0a1028;
+  --time-color: #f0a050;
+  --time-glow: rgba(240,160,80,0.35);
+  --theory-color: #4da6ff;
+  --theory-glow: rgba(77,166,255,0.35);
+  --emerge-color: #00e5a0;
+  --emerge-glow: rgba(0,229,160,0.35);
+  --text-bright: #e8edf4;
+  --text: #bcc4d0;
+  --text-dim: #6b7385;
+  --border: rgba(255,255,255,0.06);
+  --radius: 12px;
+  --font-sans: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  --font-serif: "Noto Serif SC","Source Han Serif SC","STSong","Songti SC",Georgia,"Times New Roman",serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Ambient Background ── */
+.bg-layer {
+  position: fixed; inset:0; z-index:0; pointer-events:none;
+}
+.bg-layer .nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  animation: nebulaDrift 30s ease-in-out infinite alternate;
+}
+.bg-layer .nebula.n1 { width:600px; height:600px; background: var(--time-color); top:-200px; left:-150px; }
+.bg-layer .nebula.n2 { width:500px; height:500px; background: var(--theory-color); bottom:-200px; right:-150px; animation-delay:-15s; }
+.bg-layer .nebula.n3 { width:400px; height:400px; background: var(--emerge-color); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:-7s; }
+
+.bg-layer .grid-overlay {
+  position: absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+@keyframes nebulaDrift {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(40px,-30px) scale(1.15); }
+}
+
+/* ── Floating Particles ── */
+.particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
+.particle {
+  position:absolute; width:2px; height:2px; border-radius:50%;
+  background: var(--text-dim);
+  animation: floatUp linear infinite;
+  opacity:0;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0); opacity:0; }
+  10% { opacity:0.6; }
+  90% { opacity:0.1; }
+  100% { transform: translateY(-100px) scale(1); opacity:0; }
+}
+
+/* ── Main Content ── */
+.main-content { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:0 24px; }
+
+/* ── Hero ── */
+.hero {
+  text-align:center; padding:120px 0 80px;
+  position:relative;
+}
+.hero-meta {
+  font-size:0.75rem; text-transform:uppercase; letter-spacing:6px;
+  color: var(--emerge-color); margin-bottom:24px;
+}
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 900;
+  color: var(--text-bright);
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.hero h1 .em {
+  background: linear-gradient(135deg, var(--time-color), var(--emerge-color), var(--theory-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .subtitle {
+  font-family: var(--font-serif);
+  font-size:1.1rem; color: var(--text-dim);
+  font-style:italic;
+  max-width: 560px; margin:0 auto 40px;
+}
+.hero .river-meta {
+  display:flex; gap:32px; justify-content:center; flex-wrap:wrap;
+}
+.hero .river-meta span {
+  display:flex; align-items:center; gap:8px;
+  font-size:0.82rem; color: var(--text-dim);
+}
+.hero .river-meta .dot {
+  width:8px; height:8px; border-radius:50%; display:inline-block;
+}
+.hero .river-meta .dot.time { background:var(--time-color); box-shadow:0 0 8px var(--time-glow); }
+.hero .river-meta .dot.theory { background:var(--theory-color); box-shadow:0 0 8px var(--theory-glow); }
+.hero .river-meta .dot.emerge { background:var(--emerge-color); box-shadow:0 0 8px var(--emerge-glow); }
+
+.scroll-hint {
+  margin-top:60px; animation: bounceDown 2s ease-in-out infinite;
+}
+.scroll-hint svg { width:24px; height:24px; stroke: var(--text-dim); }
+@keyframes bounceDown {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(12px); }
+}
+
+/* ── Timeline ── */
+.timeline {
+  position:relative;
+  padding:40px 0 80px;
+}
+.timeline::before {
+  content:'';
+  position:absolute; left:50%; top:0; bottom:0;
+  width:2px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    var(--theory-color) 5%,
+    var(--theory-color) 15%,
+    var(--time-color) 25%,
+    var(--text-dim) 40%,
+    var(--time-color) 50%,
+    var(--emerge-color) 65%,
+    var(--theory-color) 75%,
+    var(--time-color) 85%,
+    var(--emerge-color) 95%,
+    transparent 100%
+  );
+  opacity:0.5;
+}
+
+/* Timeline Node */
+.tl-node {
+  position:relative;
+  margin: 48px 0;
+  opacity:0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+.tl-node.visible { opacity:1; transform:translateY(0); }
+
+.tl-node .node-inner {
+  position:relative;
+  width:44%;
+  padding:24px 28px;
+  background: var(--bg-card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+.tl-node .node-inner:hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Position: alternate left/right */
+.tl-node.left .node-inner { margin-left:0; margin-right:auto; }
+.tl-node.right .node-inner { margin-left:auto; margin-right:0; }
+
+/* Connector dot on timeline */
+.tl-node::after {
+  content:'';
+  position:absolute;
+  top:32px;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:14px; height:14px;
+  border-radius:50%;
+  background: var(--time-color);
+  box-shadow: 0 0 16px var(--time-glow);
+  z-index:2;
+  transition: all 0.3s ease;
+}
+.tl-node.theory::after { background: var(--theory-color); box-shadow:0 0 16px var(--theory-glow); }
+.tl-node.emerge::after { background: var(--emerge-color); box-shadow:0 0 16px var(--emerge-glow); }
+.tl-node:hover::after { transform:translate(-50%,-50%) scale(1.4); }
+
+/* Connector line from dot to card */
+.tl-node::before {
+  content:'';
+  position:absolute;
+  top:32px;
+  height:1px;
+  background: rgba(255,255,255,0.15);
+  z-index:1;
+}
+.tl-node.left::before { left:calc(50% + 7px); right:56%; }
+.tl-node.right::before { left:56%; right:calc(50% + 7px); }
+
+/* Node content */
+.tl-node .year {
+  font-family: Georgia, serif;
+  font-size:2rem; font-weight:700;
+  color: var(--time-color);
+  line-height:1;
+  margin-bottom:8px;
+  letter-spacing:-1px;
+}
+.tl-node.theory .year { color: var(--theory-color); }
+.tl-node.emerge .year { color: var(--emerge-color); }
+
+.tl-node .tag {
+  display:inline-block;
+  font-size:0.65rem; text-transform:uppercase; letter-spacing:3px;
+  padding:3px 10px; border-radius:20px;
+  margin-bottom:12px;
+}
+.tl-node .tag.time-tag { color:var(--time-color); border:1px solid rgba(240,160,80,0.3); }
+.tl-node .tag.theory-tag { color:var(--theory-color); border:1px solid rgba(77,166,255,0.3); }
+.tl-node .tag.emerge-tag { color:var(--emerge-color); border:1px solid rgba(0,229,160,0.3); }
+
+.tl-node h3 {
+  font-size:1.15rem; font-weight:700; color:var(--text-bright);
+  margin-bottom:8px; line-height:1.4;
+}
+.tl-node p {
+  font-size:0.85rem; color:var(--text-dim);
+  line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* Expanded node */
+.tl-node.expanded .node-inner {
+  width:100%;
+  margin:0 auto;
+  cursor:default;
+  border-color: rgba(255,255,255,0.12);
+}
+.tl-node.expanded::before { display:none; }
+.tl-node.expanded p {
+  display:block;
+  -webkit-line-clamp: unset;
+}
+.tl-node .expand-content {
+  display:none;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  margin-top:20px;
+}
+.tl-node.expanded .expand-content { display:block; }
+
+.expand-content .narrative {
+  font-size:0.9rem; color:var(--text);
+  line-height:1.8;
+  margin-bottom:20px;
+}
+.expand-content .connection {
+  font-size:0.8rem; color:var(--text-dim);
+  font-style:italic;
+  padding:12px 16px;
+  background: rgba(255,255,255,0.02);
+  border-left:3px solid var(--emerge-color);
+  border-radius:0 8px 8px 0;
+  margin-bottom:16px;
+}
+.expand-content .link-to-chapter {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem;
+  color: var(--theory-color);
+  text-decoration:none;
+  padding:8px 16px;
+  border:1px solid rgba(77,166,255,0.25);
+  border-radius:20px;
+  transition: all 0.25s ease;
+}
+.expand-content .link-to-chapter:hover {
+  background: rgba(77,166,255,0.1);
+  border-color: rgba(77,166,255,0.5);
+}
+.expand-content .link-to-chapter svg { width:14px; height:14px; }
+
+/* ── Section Divider ── */
+.section-divider {
+  text-align:center;
+  padding:60px 0 40px;
+  position:relative;
+}
+.section-divider h2 {
+  font-family: var(--font-serif);
+  font-size:1.8rem;
+  color: var(--text-bright);
+  margin-bottom:8px;
+}
+.section-divider .line {
+  width:60px; height:2px;
+  background: linear-gradient(90deg, transparent, var(--emerge-color), transparent);
+  margin:0 auto;
+}
+
+/* ── Chapters Grid ── */
+.chapters-section {
+  padding:20px 0 60px;
+}
+.chapters-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap:16px;
+}
+.chapter-card {
+  display:block;
+  text-decoration:none;
+  background: var(--bg-card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  padding:28px 24px;
+  transition: all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+.chapter-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  opacity:0;
+  transition: opacity 0.3s ease;
+}
+.chapter-card:hover::before { opacity:1; }
+.chapter-card.c1::before { background: var(--theory-color); }
+.chapter-card.c2::before { background: linear-gradient(90deg, var(--theory-color), var(--time-color)); }
+.chapter-card.c3::before { background: var(--emerge-color); }
+.chapter-card.c4::before { background: linear-gradient(90deg, var(--time-color), var(--emerge-color)); }
+.chapter-card.c5::before { background: linear-gradient(90deg, var(--theory-color), var(--emerge-color)); }
+
+.chapter-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+.chapter-card .ch-num {
+  font-family: Georgia, serif;
+  font-size:3rem; font-weight:900;
+  color: rgba(255,255,255,0.04);
+  position:absolute; top:8px; right:16px;
+  line-height:1;
+}
+.chapter-card h3 {
+  font-size:1.1rem; color:var(--text-bright); margin-bottom:8px;
+}
+.chapter-card .ch-desc {
+  font-size:0.78rem; color:var(--text-dim); line-height:1.5;
+}
+.chapter-card .ch-theme {
+  font-size:0.68rem; letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:12px;
+}
+.c1 .ch-theme { color: var(--theory-color); }
+.c2 .ch-theme { color: var(--time-color); }
+.c3 .ch-theme { color: var(--emerge-color); }
+.c4 .ch-theme { color: var(--time-color); }
+.c5 .ch-theme { color: var(--theory-color); }
+
+/* ── Podcast Section ── */
+.podcast-section {
+  padding:20px 0 80px;
+}
+.podcast-header {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:32px;
+}
+.podcast-header .podcast-icon {
+  width:40px; height:40px; border-radius:50%;
+  background: rgba(240,160,80,0.15);
+  display:flex; align-items:center; justify-content:center;
+  animation: podcastPulse 3s ease-in-out infinite;
+}
+@keyframes podcastPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(240,160,80,0.4); }
+  50% { box-shadow: 0 0 0 16px rgba(240,160,80,0); }
+}
+.podcast-header h2 { font-family: var(--font-serif); font-size:1.6rem; color:var(--text-bright); }
+
+.episode-list { display:flex; flex-direction:column; gap:12px; }
+.episode-card {
+  display:flex; align-items:center; gap:16px;
+  background: var(--bg-card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  padding:16px 20px;
+  transition: all 0.25s ease;
+}
+.episode-card:hover {
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.02);
+}
+.episode-card .ep-num {
+  font-family: Georgia, serif;
+  font-size:1.4rem; font-weight:700;
+  color: var(--text-dim);
+  min-width:32px;
+}
+.episode-card .ep-info { flex:1; min-width:0; }
+.episode-card .ep-title {
+  font-size:0.95rem; color:var(--text-bright);
+  font-weight:600; margin-bottom:4px;
+}
+.episode-card .ep-meta {
+  font-size:0.72rem; color:var(--text-dim);
+}
+.episode-card .ep-play {
+  width:40px; height:40px; border-radius:50%;
+  border:1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text-bright);
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: all 0.2s ease;
+  flex-shrink:0;
+}
+.episode-card .ep-play:hover {
+  background: rgba(240,160,80,0.15);
+  border-color: var(--time-color);
+  color: var(--time-color);
+}
+.episode-card .ep-play.playing {
+  background: var(--time-color);
+  border-color: var(--time-color);
+  color: #000;
+}
+
+/* ── Bottom Player Bar ── */
+.player-bar {
+  position:fixed; bottom:0; left:0; right:0;
+  background: rgba(10,15,40,0.95);
+  backdrop-filter: blur(20px);
+  border-top:1px solid var(--border);
+  padding:12px 24px;
+  z-index:100;
+  display:flex; align-items:center; gap:16px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.player-bar.active { transform: translateY(0); }
+.player-bar .pb-play {
+  width:44px; height:44px; border-radius:50%;
+  background: var(--time-color);
+  border:none; color:#000;
+  font-size:1.2rem;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  transition: all 0.2s ease;
+}
+.player-bar .pb-play:hover { transform:scale(1.05); }
+.player-bar .pb-info { flex:1; min-width:0; }
+.player-bar .pb-title {
+  font-size:0.85rem; color:var(--text-bright);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.player-bar .pb-meta { font-size:0.7rem; color:var(--text-dim); }
+.player-bar .pb-close {
+  background:none; border:none; color:var(--text-dim);
+  cursor:pointer; font-size:1.2rem; padding:4px;
+}
+
+/* ── Footer ── */
+.site-footer {
+  text-align:center;
+  padding:20px 0 100px;
+  font-size:0.7rem; color:var(--text-dim);
+  border-top:1px solid var(--border);
+}
+.site-footer a { color: var(--theory-color); text-decoration:none; }
+
+/* ── Responsive ── */
+@media (max-width:700px) {
+  .timeline::before { left:20px; }
+  .tl-node .node-inner { width:calc(100% - 56px); margin-left:56px !important; }
+  .tl-node::after { left:20px; }
+  .tl-node::before { left:27px !important; right:auto !important; width:29px; }
+  .tl-node.expanded .node-inner { width:calc(100% - 56px); margin-left:56px !important; }
+  .tl-node.expanded::before { display:block; }
+  .chapters-grid { grid-template-columns:1fr; }
+  .hero { padding:80px 0 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient Background -->
+<div class="bg-layer">
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+  <div class="grid-overlay"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-meta">Artificial Intelligence · A Biography</div>
+    <h1><span class="em">涌现</span><br>智能的进化树</h1>
+    <p class="subtitle">
+      生命从化学汤中涌现。意识从神经元中涌现。<br>
+      智能从矩阵乘法中涌现。
+    </p>
+    <div class="river-meta">
+      <span><span class="dot time"></span> 历史节点</span>
+      <span><span class="dot theory"></span> 理论基石</span>
+      <span><span class="dot emerge"></span> 涌现时刻</span>
+    </div>
+    <div class="scroll-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Timeline: River of Time -->
+  <div class="timeline" id="timeline">
+
+    <!-- 1936: Turing's Paper -->
+    <div class="tl-node left theory" data-year="1936">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">1936</div>
+        <h3>图灵机：一切计算的起点</h3>
+        <p>24岁的艾伦·图灵在《论可计算数》中提出了"图灵机"的概念——一个可以模拟任何计算过程的抽象机器。这篇论文不仅奠定了计算机科学的理论基础，更埋下了AI最深层的种子：如果思维可以被还原为计算，那么机器就能思考。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            1936年，图灵解决的不是一个工程问题，而是一个哲学问题：什么是"可计算的"？他证明了存在一种通用机器，可以执行任何可计算的任务。这个证明的副产品是——人类的思维过程，至少在原则上，可以被机器模拟。
+            <br><br>
+            但图灵的洞见在当时几乎没有引起AI方面的讨论。计算机还没有诞生，神经网络还要等7年。图灵自己也要等到14年后才会直接提出"机器能思考吗"。
+            <br><br>
+            <strong>这就是AI故事的第一条线索：理论永远走在工程前面。</strong>图灵机在1936年就被构想出来了，但要等到80年后，我们才拥有足够强大的硬件来逼近它的极限。
+          </div>
+          <div class="connection">
+            🔗 1936年的图灵机 → 1943年的神经元模型 → 1950年的图灵测试。理论的火种一旦点燃，就不会熄灭。
+          </div>
+          <a href="ch1-fire.html" class="link-to-chapter">
+            深度阅读：火种年代 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1943: McCulloch-Pitts -->
+    <div class="tl-node right theory" data-year="1943">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">1943</div>
+        <h3>麦卡洛克-皮茨：神经元的数学化</h3>
+        <p>神经生理学家麦卡洛克和数学家皮茨发表《神经活动中内在思想的逻辑演算》，第一次用数学语言描述了神经元的工作方式。他们证明：神经网络可以执行任何可计算函数。这是AI的"元细胞"。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            这篇论文的伟大之处在于，它把生物学现象转化为数学逻辑——神经元要么激活，要么不激活，就像布尔代数中的真与假。麦卡洛克和皮茨证明，由这种简单单元组成的网络，理论上可以计算任何可计算的东西。
+            <br><br>
+            这个洞见影响了两代人：冯·诺依曼在设计计算机架构时引用了它；罗森布拉特在1958年把它变成了第一个可运行的神经网络"感知机"。
+            <br><br>
+            <strong>这就是涌现的最原始版本：简单单元大量连接后，能产生设计者无法预料的复杂行为。</strong>一个神经元什么也做不了；1000亿个神经元就是人类大脑。
+          </div>
+          <div class="connection">
+            🔗 麦卡洛克-皮茨模型 → 感知机(1958) → 反向传播(1986) → 深度学习(2006)。一条跨越63年的理论链条。
+          </div>
+          <a href="ch1-fire.html" class="link-to-chapter">
+            深度阅读：火种年代 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1950: Turing Test -->
+    <div class="tl-node left time" data-year="1950">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag time-tag">历史节点</div>
+        <div class="year">1950</div>
+        <h3>图灵测试："机器能思考吗？"</h3>
+        <p>图灵在《计算机与智能》中提出了那个著名的问题。他没有试图定义"思考"，而是设计了一个可操作的测试：如果一台机器在对话中让人类无法分辨它是机器，那么它就是智能的。这个优雅的思想实验至今仍在被争论。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            图灵的智慧在于他绕过了哲学家的泥潭——他没有说"机器可以思考"或"机器不可以思考"，而是说"这个问题本身太模糊，我们换个问法"。他提出了"模仿游戏"：一个审问者通过文字与两个对象交流，一个是人，一个是机器。如果审问者无法可靠地区分谁是谁，那么机器就展示了智能。
+            <br><br>
+            70多年后，当人们与ChatGPT对话时，他们惊讶地发现自己无法分辨对方是人还是机器。图灵测试以一种他本人可能都未曾预料的方式被通过了——不是通过精密的逻辑推理，而是通过"文字接龙"。
+            <br><br>
+            图灵在1954年去世，没能看到计算机革命的到来，更没能看到AI的爆发。但他的问题比任何答案都更有生命力。
+          </div>
+          <div class="connection">
+            🔗 图灵测试(1950) → ChatGPT(2022)。72年的等待，一个问题的答案改变了世界。
+          </div>
+          <a href="ch1-fire.html" class="link-to-chapter">
+            深度阅读：火种年代 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1956: Dartmouth -->
+    <div class="tl-node right time" data-year="1956">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag time-tag">历史节点</div>
+        <div class="year">1956</div>
+        <h3>达特茅斯会议：AI的命名礼</h3>
+        <p>麦卡锡、明斯基、香农、罗切斯特在达特茅斯学院组织了一个为期两个月的暑期研讨会。"人工智能"这个名字被正式提出。与会者乐观地认为，一个夏天就能解决机器翻译和视觉识别问题。他们错了——错得非常离谱。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            1956年的夏天，一群最聪明的人聚集在达特茅斯。他们相信机器智能触手可及——麦卡锡认为"一个夏天"就足以让机器学会语言翻译，西蒙和纽厄尔宣称"十年之内，计算机将成为国际象棋冠军，并能发现重要的数学定理"。
+            <br><br>
+            这些预测都实现了——只是晚了40到60年。AI的发展遵循的从来不是线性节奏，而是一连串的"冬天"与"春天"交替。
+            <br><br>
+            达特茅斯会议最深远的影响是它给这个领域起了一个名字。从此，"人工智能"成了一个被追求的圣杯，哪怕道路远比想象中漫长。
+          </div>
+          <div class="connection">
+            🔗 达特茅斯的乐观(1956) → 第一次AI寒冬(1974)。泡沫与幻灭是AI成长的必修课。
+          </div>
+          <a href="ch1-fire.html" class="link-to-chapter">
+            深度阅读：火种年代 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1958: Perceptron -->
+    <div class="tl-node left theory" data-year="1958">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">1958</div>
+        <h3>感知机：第一个"学习"的机器</h3>
+        <p>罗森布拉特实现了麦卡洛克-皮茨的理论构想——一台叫"感知机"的机器，可以通过试错学习来识别简单的图像模式。媒体狂喜："海军期待一台能走、能说、能看、能写、能自我复制的机器"。期待远超出了现实。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            感知机是AI史上第一个"能学习"的硬件——它由400个光传感器组成，连接到"神经元"上，通过调整连接的权重来学习识别字母。这是神经网络的第一个物理化身。
+            <br><br>
+            但感知机有一个致命的局限——它只能处理线性可分的问题。1969年，明斯基和帕佩特出版《感知机》，数学上严格证明了单层感知机的无能。这本书被广泛认为是第一次AI寒冬的导火索。
+            <br><br>
+            讽刺的是，明斯基自己知道多层网络可以解决这些问题，但他认为训练多层网络"没有希望"。他错了——反向传播算法16年后就解决了这个问题。
+          </div>
+          <div class="connection">
+            🔗 感知机(1958) → 《感知机》批判(1969) → 反向传播(1986) → 深度学习崛起(2012)。最有毁灭性的批判往往催生最强大的突破。
+          </div>
+          <a href="ch1-fire.html" class="link-to-chapter">
+            深度阅读：火种年代 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1969-1980: AI Winter -->
+    <div class="tl-node right time" data-year="1969">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag time-tag">历史节点</div>
+        <div class="year">1969–1980</div>
+        <h3>第一次AI寒冬：被遗忘的40年</h3>
+        <p>明斯基的《感知机》一书证明单层神经网络的能力极为有限。政府资助骤减，研究者被迫改名换姓。神经网络被主流学术界抛弃，进入漫长而寒冷的冬天。但火种并没有熄灭——有人在寒冷中继续坚守。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            AI的第一个冬天来得又冷又长。英国政府的Lighthill报告（1973年）结论是"AI研究在任何领域都没有产生预期的重大影响"。DARPA大幅削减AI资助。研究者发现，连"找一个AI相关的职位"都变得困难。
+            <br><br>
+            但在这个冬天里，有三个人在默默坚守：
+            <br>• 杰弗里·辛顿——在英国爱丁堡大学攻读博士，研究神经网络，被导师告诫"这个方向没有前途"。
+            <br>• 杨立昆——在法国研究卷积神经网络的原型。
+            <br>• 约书亚·本吉奥——在加拿大开始研究序列建模。
+            <br><br>
+            他们三个人在30年后分享了图灵奖，被称为"深度学习三巨头"。AI的故事告诉我们：冬天不是结束，只是种子的休眠。
+          </div>
+          <div class="connection">
+            🔗 AI寒冬(1969-1980) → 辛顿的坚守 → 深度学习革命(2012)。最长的冬天孕育了最绚烂的春天。
+          </div>
+          <a href="ch1-fire.html" class="link-to-chapter">
+            深度阅读：火种年代 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1986: Backpropagation -->
+    <div class="tl-node left theory" data-year="1986">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">1986</div>
+        <h3>反向传播：让网络学会学习</h3>
+        <p>鲁梅尔哈特、辛顿和威廉姆斯发表了反向传播算法——一个让多层神经网络能够"从错误中学习"的方法。这个想法其实在1974年就被哈佛的沃伯斯提出了，但直到1986年才被重新发现并广为人知。这是深度学习最核心的引擎。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            反向传播的思想出奇地简单：网络前向计算一个输出，与正确答案比较得出误差，然后把误差沿着网络反向传播回去，调整每一层的连接权重。就像投篮——投出去，看到偏了多少，回来调整力度和角度，再投一次。
+            <br><br>
+            但这个"简单"的算法需要巨大的计算量来调整成千上万甚至数十亿的参数。1986年的计算机根本不够用。所以反向传播被发明后，又等了20多年才真正爆发——等待算力的追赶。
+            <br><br>
+            <strong>AI的叙事不是"谁先想出来"，而是"什么时候条件成熟"。</strong>反向传播、卷积网络、LSTM——这些今天大模型的核心组件，全都在1980-1990年代被想出来了。它们只是在等待GPU时代的到来。
+          </div>
+          <div class="connection">
+            🔗 反向传播(1986) → CNN(1989) → LSTM(1997) → GPU加速(2000s) → AlexNet(2012)。理论是种子，算力是水。
+          </div>
+          <a href="ch2-awakening.html" class="link-to-chapter">
+            深度阅读：苏醒 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1997: Deep Blue -->
+    <div class="tl-node right time" data-year="1997">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag time-tag">历史节点</div>
+        <div class="year">1997</div>
+        <h3>深蓝：机器的第一次"胜利"</h3>
+        <p>IBM的深蓝击败国际象棋世界冠军卡斯帕罗夫。全世界第一次被迫面对一个事实：机器可以在被视为"人类智慧巅峰"的领域击败人类。但深蓝使用的不是"学习"，而是暴力搜索——每秒评估2亿个局面。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            深蓝的胜利引发了第一次全球性的"AI恐惧"。媒体惊呼"人类完了"。但深蓝其实不是一个"智能"系统——它不会学习，不会推理，不会做任何下棋之外的事情。
+            <br><br>
+            卡斯帕罗夫在1997年之后提出了"人+机器"的合作模式——不是人与AI对抗，而是人与AI配合。这个洞见比当时任何技术评论都更深刻：AI不是人类的替代品，而是人类的放大器。
+            <br><br>
+            然而，深蓝确实完成了一件事：它向全世界证明了，在那个被称为"人类智慧皇冠"的领域，机器可以战胜冠军。这个心理冲击为20年后AlphaGo引发的更大震动埋下了伏笔。
+          </div>
+          <div class="connection">
+            🔗 深蓝(1997) → AlphaGo(2016) → AI战胜人类冠军从国际象棋扩展到围棋，从暴力搜索进化为深度学习。
+          </div>
+          <a href="ch2-awakening.html" class="link-to-chapter">
+            深度阅读：苏醒 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2006: Deep Learning Revival -->
+    <div class="tl-node left theory" data-year="2006">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">2006</div>
+        <h3>深度信念网络：辛顿点燃复兴之火</h3>
+        <p>辛顿发表深度信念网络的论文，证明多层神经网络可以逐层预训练。这篇论文重新点燃了学界对深度学习的兴趣。而此时距他进入这个领域已经过去了34年——其间他被无数人告知"神经网络没有前途"。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            辛顿的故事是AI史上最动人的个人叙事。他的家族四代科学家——祖父的祖父是布尔代数的创立者乔治·布尔。辛顿在1972年开始研究神经网络时，正是AI寒冬最冷的时候。他的博士导师告诫他放弃。整个学术界视神经网络为死路。
+            <br><br>
+            但辛顿坚持了下来。他患有严重的腰椎间盘突出，从30多岁起就无法坐下，必须站着工作。就是在这样的身体条件下，他带领学生做出了深度学习领域最重要的突破。
+            <br><br>
+            2006年的论文发表后，效果不会立刻显现。又等了6年，直到2012年的AlexNet，世界才真正开始相信辛顿是对的。但他已经等了40年——一个人的学术生涯几乎全部在等待中被消耗。他没有等到退休，而是等到了革命。
+          </div>
+          <div class="connection">
+            🔗 辛顿的34年坚守(1972-2006) → AlexNet(2012) → 图灵奖(2018) → 诺贝尔物理学奖(2024)。最长的坚持换来了最高的认可。
+          </div>
+          <a href="ch2-awakening.html" class="link-to-chapter">
+            深度阅读：苏醒 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2012: ImageNet -->
+    <div class="tl-node right emerge" data-year="2012">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag emerge-tag">涌现时刻</div>
+        <div class="year">2012</div>
+        <h3>AlexNet：ImageNet时刻</h3>
+        <p>辛顿的两个学生——亚历克斯·克里泽夫斯基和伊利亚·苏茨克维——使用GPU训练的卷积神经网络AlexNet，在ImageNet图像识别竞赛中以压倒性优势夺冠。错误率从25%降到16%。整个计算机视觉界一夜之间转向深度学习。这是AI的"iPhone时刻"。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            2012年的ImageNet竞赛是AI史上最戏剧性的转折点。在此之前，计算机视觉领域使用的是手工设计的特征——研究人员花费数年时间设计边缘检测器、纹理描述子。AlexNet的胜利宣告了"手工设计特征"时代的终结——机器自己学习特征，效果远超人类设计师。
+            <br><br>
+            两个关键因素促成了这次突破：GPU——英伟达的游戏显卡，意外地成为深度学习的完美引擎；ImageNet——李飞飞团队标注的1400万张图像，提供了前所未有的训练数据。
+            <br><br>
+            这个时刻还隐藏了一条暗线：AlexNet的作者之一伊利亚·苏茨克维，后来成为OpenAI的首席科学家，主导了GPT系列的开发。从ImageNet到ChatGPT，是同一条技术路线的延伸。
+            <br><br>
+            辛顿带着这两个学生创立了DNNresearch公司。四家公司竞相收购——谷歌、微软、百度、DeepMind。最终谷歌以4400万美元买下了这家只有3个人、没有产品、没有收入的公司。买的不是产品，是人才和未来。
+          </div>
+          <div class="connection">
+            🔗 AlexNet(2012) → 深度学习全面爆发 → 伊利亚加入OpenAI → GPT系列。ImageNet的胜利是后来一切的基础。
+          </div>
+          <a href="ch2-awakening.html" class="link-to-chapter">
+            深度阅读：苏醒 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2016: AlphaGo -->
+    <div class="tl-node left time" data-year="2016">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag time-tag">历史节点</div>
+        <div class="year">2016</div>
+        <h3>AlphaGo：围棋的"神之一手"</h3>
+        <p>DeepMind的AlphaGo以4:1击败李世石。围棋曾被视为AI的最后堡垒——它的搜索空间比宇宙中的原子数还多。但AlphaGo的"第37手"让所有职业棋手目瞪口呆：那不是人类的走法，那是机器自己发现的策略。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            AlphaGo的意义远超围棋。它证明了深度强化学习可以在人类最复杂的博弈中产生超越人类理解的策略。当AlphaGo下出第37手时，解说员李世石的对手方沉默了——那一手棋在人类几千年的围棋历史中从未出现过。
+            <br><br>
+            这还不是最可怕的。2017年，DeepMind发布了AlphaGo Zero——不再需要人类棋谱，只通过自己和自己下棋，3天后就超越了AlphaGo击败李世石时的水平，21天后超越了AlphaGo Master，40天后超越了所有之前的版本。
+            <br><br>
+            <strong>AlphaGo Zero揭示了一个深刻的事实：AI不需要人类的"知识"来超越人类。</strong>从零开始，只靠规则和试错，它能发现人类从未想到的策略。这个事实对之后的大语言模型发展产生了深远影响——DeepSeek R1后来用类似的方法，让模型在没有人类标注数据的情况下学会了推理。
+          </div>
+          <div class="connection">
+            🔗 AlphaGo(2016) → AlphaGo Zero(2017) → DeepSeek R1(2025)。从围棋到语言，从需要人类数据到从零自学习。
+          </div>
+          <a href="ch3-emergence.html" class="link-to-chapter">
+            深度阅读：涌现 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2017: Transformer -->
+    <div class="tl-node right theory" data-year="2017">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">2017</div>
+        <h3>Transformer：《Attention is All You Need》</h3>
+        <p>谷歌Brain团队的8位研究者发表了Transformer论文。这个标题像一首诗——"注意力就是你所需要的一切"。论文最初想叫《All You Need Is Love》（致敬披头士），但最终选择了更学术的名字。这篇论文改变了AI的一切。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            Transformer的诞生是一个"创新土壤"的完美案例。8位作者来自不同国家、不同背景——德国人、英国人、印度人、乌克兰人；有人刚本科毕业，有人是谷歌副总裁。他们的讨论发生在餐厅和走廊上，而不是正式的会议室里。
+            <br><br>
+            核心思想"自注意力机制"最初被所有人反对——包括提出者老四的爸爸，一位著名的德国计算机语言学家。但论文发表后的第一天，OpenAI的首席科学家伊利亚就理解了它的含金量。他立刻停掉OpenAI当时做的一切项目——玩DOTA的游戏AI、机械手臂控制——把所有力量集中在基于Transformer的GPT-2开发上。后面的故事我们都知道了。
+            <br><br>
+            谷歌的高管在2023年懊悔地承认：如果当年重视Transformer，谷歌可能在2019年就已经做出GPT-3.5了。但这恰恰说明了Transformer的伟大——它是一个范式转换，连创造它的人都没有立刻理解它。
+          </div>
+          <div class="connection">
+            🔗 Transformer(2017) → BERT/GPT(2018) → GPT-3(2020) → ChatGPT(2022) → GPT-4(2023)。所有现代大语言模型都是Transformer的子孙。
+          </div>
+          <a href="ch3-emergence.html" class="link-to-chapter">
+            深度阅读：涌现 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2020: GPT-3 -->
+    <div class="tl-node left emerge" data-year="2020">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag emerge-tag">涌现时刻</div>
+        <div class="year">2020</div>
+        <h3>GPT-3：涌现的降临</h3>
+        <p>OpenAI发布了GPT-3——1750亿参数。没有人告诉它怎么推理，它自己学会了。没有人教它翻译，它自己会了。这就是"涌现"——当参数超过某个阈值，模型突然展现出训练数据中从未直接教过的能力。世界第一次真正害怕了。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            GPT-3是AI史上最令人不安的发布。它的前身GPT-2（15亿参数）被OpenAI"出于安全考虑"暂缓发布，引发了"AI威胁论"的第一波公众讨论。但GPT-3的发布彻底改变了这个局面。
+            <br><br>
+            1750亿参数——这个数字本身没有意义。有意义的是GPT-3展现出的"涌现能力"：当参数量从15亿增加到1750亿，模型突然开始能做它在训练中从未被明确教过的事情——算术推理、语言翻译、代码生成、类比推理。这些能力不是被设计进去的，是"涌现"出来的。
+            <br><br>
+            就像生命游戏中简单的4条规则能产生滑翔机、高斯帕机枪等复杂结构，GPT-3的简单训练目标——"预测下一个词"——在足够大的规模下，产生了类似推理的复杂行为。
+            <br><br>
+            这个发现彻底改变了AI研究的方向。"缩放定律"成为了新的圣经——不需要发明更聪明的算法，只需要更多的数据、更大的模型、更强的算力。"大力出奇迹"。
+          </div>
+          <div class="connection">
+            🔗 GPT-3的涌现(2020) → 缩放定律成为共识 → ChatGPT引爆全球(2022) → AGI不再只是科幻。
+          </div>
+          <a href="ch3-emergence.html" class="link-to-chapter">
+            深度阅读：涌现 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2022: ChatGPT -->
+    <div class="tl-node right emerge" data-year="2022">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag emerge-tag">涌现时刻</div>
+        <div class="year">2022</div>
+        <h3>ChatGPT：AI走进每个人的生活</h3>
+        <p>2022年11月30日，OpenAI发布了ChatGPT。2个月内用户突破1亿——史上增长最快的产品。AI不再是实验室里的论文，不再是围棋棋盘上的对手，不再是科技公司的专利。它变成了每一个人都可以对话的存在。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            ChatGPT的发布是一个偶然。OpenAI最初只是想做一个"展示RLHF技术"的demo。没有人预料到它会成为历史上增长最快的消费产品。
+            <br><br>
+            ChatGPT的成功不仅是技术上的，更是交互上的。在此之前，与AI交互需要写代码或使用API。ChatGPT提供了一个聊天框——就像和一个人说话一样。这个看似简单的改变，让AI从"工具"变成了"对话者"。
+            <br><br>
+            教育界慌了，学术界紧急调整考试方式，白宫召开AI安全峰会。"提示工程"成为新的职业技能。学生们用ChatGPT写论文，程序员用它写代码，作家用它寻找灵感。
+            <br><br>
+            AI时代确实来了——不是通过某种神秘的AGI降临，而是通过一个聊天框。
+          </div>
+          <div class="connection">
+            🔗 ChatGPT(2022) → 全球AI竞赛白热化 → GPT-4(2023) → AI安全辩论 → 诺贝尔奖(2024)。对话框背后是整个人类文明的拐点。
+          </div>
+          <a href="ch3-emergence.html" class="link-to-chapter">
+            深度阅读：涌现 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2024: Nobel Prize -->
+    <div class="tl-node left theory" data-year="2024">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag theory-tag">理论基石</div>
+        <div class="year">2024</div>
+        <h3>诺贝尔奖：物理学奖和化学奖都给了AI</h3>
+        <p>2024年的诺贝尔物理学奖颁给了霍普菲尔德和辛顿——表彰他们为人工神经网络做出的基础贡献。化学奖颁给了哈萨比斯和江珀——表彰AlphaFold在蛋白质结构预测上的革命性突破。AI获得了科学界最高权威的承认。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            诺贝尔奖委员会是一个极其保守的机构——从成果发表到获奖，平均需要16年。但在2024年，他们同时把物理学奖和化学奖颁给了AI领域。这不是一个巧合，而是一个信号。
+            <br><br>
+            物理学奖的颁发尤为巧妙——委员会找到了神经网络和物理模型之间的深层联系：霍普菲尔德的变分自编码器基于伊辛模型（描述磁性的物理模型），辛顿的深度神经网络基于玻尔兹曼分布（描述粒子能量分布的物理规律）。AI不是凭空产生的，它根植于物理学的深厚土壤。
+            <br><br>
+            化学奖则更加直白——AlphaFold解决了困扰生物学50年的蛋白质折叠问题，在几个月内完成了人类几十年才能完成的工作。2.14亿个蛋白质结构被一次性公开，人类蛋白质中结构未知的比例从83%骤降到接近0%。
+            <br><br>
+            <strong>诺贝尔奖对AI的承认意味着：AI不仅是一个工程成就，更是一种科学范式的转变。</strong>它正在被纳入基础科学的荣誉殿堂。
+          </div>
+          <div class="connection">
+            🔗 神经网络的物理学根基(1924年伊辛模型) → 辛顿的生涯(1972-2024) → 诺贝尔奖(2024)。52年的等待，最光荣的承认。
+          </div>
+          <a href="ch4-fission.html" class="link-to-chapter">
+            深度阅读：裂变 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2025: DeepSeek -->
+    <div class="tl-node right emerge" data-year="2025">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag emerge-tag">涌现时刻</div>
+        <div class="year">2025</div>
+        <h3>DeepSeek：开源的胜利</h3>
+        <p>DeepSeek R1以不到OpenAI十分之一的成本实现了接近GPT-4o的性能，并且完全开源。杨立昆说："这不是两国AI谁超过谁的问题，而是开源模型战胜了专有模型。"像86版《西游记》用几十分之一成本实现好莱坞大片的七八成效果。</p>
+        <div class="expand-content">
+          <div class="narrative">
+            DeepSeek的故事是一个"在约束下创造奇迹"的故事。受芯片出口限制，DeepSeek使用的H800芯片在通信能力上被大幅削减。团队不得不深入底层——用PTX语言直接对GPU进行编程，强制32个流处理器专门处理通信任务，自创DualPipe技术来优化计算和通信的并行。
+            <br><br>
+            更惊人的是R1的训练方法——不依赖人类标注数据，直接使用强化学习，让模型自己生成答案然后根据数学对错和格式规范给自己打分，高分答案进入下一轮训练。这很像AlphaGo Zero的"从零自学习"——不需要人类知识，只需要规则。
+            <br><br>
+            最终实现的效果是：数学能力从基础模型的100分提升到微调后的450分——而此前所有微调方法最多只能保持原有水平不降。DeepSeek证明了开源社区的力量，也证明了在资源受限的情况下，创新不会停止，反而更加活跃。
+          </div>
+          <div class="connection">
+            🔗 AlphaGo Zero的"自学习"思想(2017) → DeepSeek R1的RL微调(2025) → 开源AI与专有AI的竞赛才刚刚开始。
+          </div>
+          <a href="ch4-fission.html" class="link-to-chapter">
+            深度阅读：裂变 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Now: the threshold -->
+    <div class="tl-node left emerge" data-year="NOW">
+      <div class="node-inner" onclick="toggleNode(this)">
+        <div class="tag emerge-tag">涌现时刻</div>
+        <div class="year">此刻</div>
+        <h3>AGI的门槛：我们站在哪里？</h3>
+        <p>DeepMind创始人预测AGI的均值年份是2028年。伊利亚说"缩放定律已经结束了"——我们需要新的范式。我们站在一个悬崖边上：往前看，是AGI的未知领域；回头看，是几代人埋下的火种终于烧成了火海。而问题是——下一步是什么？</p>
+        <div class="expand-content">
+          <div class="narrative">
+            我们正处于一个奇特的时刻。AI的能力每天都在进化，但它的方向却越来越不确定。
+            <br><br>
+            缩放定律的极限正在显现——简单地增加参数量带来的边际收益在递减。业界的共识是：下一个突破不会来自"更大的模型"，而会来自"更聪明的架构"。可能是一个全新的算法，可能是脑科学与AI的深度融合，可能是某种我们现在还无法想象的形式。
+            <br><br>
+            但有一件事是确定的：AI的故事是人类智慧的故事。图灵在纸上写下的问题，麦卡洛克和皮茨的神经元模型，辛顿在寒冷中的坚持，8个背景各异的年轻人在谷歌走廊上的讨论，DeepSeek工程师在芯片限制下的底层优化——这些人的接力，把一个哲学玩笑变成了诺贝尔奖。
+            <br><br>
+            <strong>人类这个物种最伟大的地方，不是创造了智能，而是创造了一种可以创造智能的智能。</strong>我们站在这个进化树的顶端，既是观察者，也是参与者。AI的下一步，也就是人类的下一步。
+          </div>
+          <div class="connection">
+            🔗 1936年图灵的论文 → 2025年的GPT-5和DeepSeek → 2028年可能的AGI。90年的接力，从一个人笔下的抽象概念到改变整个文明的力量。
+          </div>
+          <a href="ch5-farshore.html" class="link-to-chapter">
+            深度阅读：彼岸 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- Section Divider -->
+  <div class="section-divider">
+    <h2>深度章节</h2>
+    <div class="line"></div>
+    <p style="color:var(--text-dim);font-size:0.85rem;margin-top:12px;">每一章都是一次潜入AI灵魂的旅程</p>
+  </div>
+
+  <!-- Chapters -->
+  <section class="chapters-section">
+    <div class="chapters-grid">
+      <a href="ch1-fire.html" class="chapter-card c1">
+        <div class="ch-num">01</div>
+        <div class="ch-theme">1936–1986</div>
+        <h3>火种</h3>
+        <p class="ch-desc">图灵的纸笔 → 神经元的数学化 → 第一次AI寒冬 → 辛顿在寒冷中点亮微光</p>
+      </a>
+      <a href="ch2-awakening.html" class="chapter-card c2">
+        <div class="ch-num">02</div>
+        <div class="ch-theme">1986–2017</div>
+        <h3>苏醒</h3>
+        <p class="ch-desc">反向传播 → GPU革命 → ImageNet时刻 → 深度学习三巨头登上历史舞台</p>
+      </a>
+      <a href="ch3-emergence.html" class="chapter-card c3">
+        <div class="ch-num">03</div>
+        <div class="ch-theme">2017–2023</div>
+        <h3>涌现</h3>
+        <p class="ch-desc">Transformer诞生 → GPT的进化 → 缩放定律 → ChatGPT点燃世界</p>
+      </a>
+      <a href="ch4-fission.html" class="chapter-card c4">
+        <div class="ch-num">04</div>
+        <div class="ch-theme">2023–2025</div>
+        <h3>裂变</h3>
+        <p class="ch-desc">DeepSeek → 开源革命 → 诺奖加冕 → AI渗透人类文明的每一个角落</p>
+      </a>
+      <a href="ch5-farshore.html" class="chapter-card c5">
+        <div class="ch-num">05</div>
+        <div class="ch-theme">2025 →</div>
+        <h3>彼岸</h3>
+        <p class="ch-desc">AGI的争论与焦虑 → 对齐问题 → 1000天后的人类世界</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Podcast Section -->
+  <div class="section-divider">
+    <h2>播客</h2>
+    <div class="line"></div>
+  </div>
+  <section class="podcast-section">
+    <a href="podcast.html" style="text-decoration:none;color:inherit;">
+    <div class="podcast-header">
+      <div class="podcast-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--time-color)">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.5 16.5v-9l7 4.5-7 4.5z"/>
+        </svg>
+      </div>
+      <h2>AI专题 · 音频叙事</h2>
+    </div>
+    </a>
+    <div class="episode-list">
+      <div class="episode-card" data-audio="">
+        <div class="ep-num">E1</div>
+        <div class="ep-info">
+          <div class="ep-title">火种：图灵、香农与一个问题的诞生</div>
+          <div class="ep-meta">1936–1969 · 约25分钟</div>
+        </div>
+        <button class="ep-play" onclick="toggleEpisode(this)" aria-label="播放">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <div class="episode-card" data-audio="">
+        <div class="ep-num">E2</div>
+        <div class="ep-info">
+          <div class="ep-title">苏醒：反向传播与辛顿的40年等待</div>
+          <div class="ep-meta">1969–2012 · 约28分钟</div>
+        </div>
+        <button class="ep-play" onclick="toggleEpisode(this)" aria-label="播放">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <div class="episode-card" data-audio="">
+        <div class="ep-num">E3</div>
+        <div class="ep-info">
+          <div class="ep-title">涌现：Transformer、GPT与智能的诞生</div>
+          <div class="ep-meta">2017–2023 · 约30分钟</div>
+        </div>
+        <button class="ep-play" onclick="toggleEpisode(this)" aria-label="播放">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <div class="episode-card" data-audio="">
+        <div class="ep-num">E4</div>
+        <div class="ep-info">
+          <div class="ep-title">裂变：开源革命与AI的无处不在</div>
+          <div class="ep-meta">2023–2025 · 约25分钟</div>
+        </div>
+        <button class="ep-play" onclick="toggleEpisode(this)" aria-label="播放">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <div class="episode-card" data-audio="">
+        <div class="ep-num">E5</div>
+        <div class="ep-info">
+          <div class="ep-title">彼岸：AGI到来前的人类黄昏</div>
+          <div class="ep-meta">2025→ · 约32分钟</div>
+        </div>
+        <button class="ep-play" onclick="toggleEpisode(this)" aria-label="播放">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>AI专题 —— 卓克 · <a href="../index.html">科技参考</a></p>
+    <p style="margin-top:4px;">人类智慧的进化树，由几代人接力浇灌</p>
+  </footer>
+
+</div><!-- /main-content -->
+
+<!-- Bottom Player Bar -->
+<div class="player-bar" id="playerBar">
+  <button class="pb-play" id="pbPlay" onclick="togglePlayerBar()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+  <div class="pb-info">
+    <div class="pb-title" id="pbTitle">选择一期播客</div>
+    <div class="pb-meta" id="pbMeta">AI专题</div>
+  </div>
+  <button class="pb-close" onclick="closePlayer()">✕</button>
+</div>
+
+<script>
+// ── Particles ──
+(function(){
+  const container = document.getElementById('particles');
+  const colors = ['rgba(240,160,80,0.5)', 'rgba(77,166,255,0.5)', 'rgba(0,229,160,0.4)', 'rgba(255,255,255,0.3)'];
+  for(let i=0;i<40;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.width = p.style.height = (Math.random()*3+1)+'px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (Math.random()*20+15)+'s';
+    p.style.animationDelay = Math.random()*20+'s';
+    container.appendChild(p);
+  }
+})();
+
+// ── Scroll Observer for Timeline Nodes ──
+(function(){
+  const nodes = document.querySelectorAll('.tl-node');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+  nodes.forEach(n => observer.observe(n));
+})();
+
+// ── Toggle Node Expansion ──
+function toggleNode(inner){
+  const node = inner.parentElement;
+  const wasExpanded = node.classList.contains('expanded');
+  // Close all
+  document.querySelectorAll('.tl-node.expanded').forEach(n => n.classList.remove('expanded'));
+  // Toggle this one if it wasn't expanded
+  if(!wasExpanded) {
+    node.classList.add('expanded');
+    // Smooth scroll to expanded node
+    setTimeout(() => {
+      node.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 100);
+  }
+}
+
+// ── Podcast Player ──
+let currentAudio = null;
+let currentPlayBtn = null;
+
+function toggleEpisode(btn){
+  const card = btn.parentElement;
+  const title = card.querySelector('.ep-title').textContent;
+  const meta = card.querySelector('.ep-meta').textContent;
+  const audioUrl = card.dataset.audio;
+
+  if(currentPlayBtn === btn && currentAudio && !currentAudio.paused){
+    // Pause
+    currentAudio.pause();
+    btn.classList.remove('playing');
+    updatePlayerBarPlayIcon(false);
+    return;
+  }
+
+  // Stop previous
+  if(currentAudio){ currentAudio.pause(); }
+  if(currentPlayBtn){ currentPlayBtn.classList.remove('playing'); }
+
+  if(!audioUrl){
+    // No audio yet — show player bar anyway with info
+    btn.classList.add('playing');
+    currentPlayBtn = btn;
+    showPlayerBar(title, meta);
+    return;
+  }
+
+  // Play new audio
+  currentAudio = new Audio(audioUrl);
+  currentAudio.play().catch(() => {});
+  btn.classList.add('playing');
+  currentPlayBtn = btn;
+  showPlayerBar(title, meta);
+  updatePlayerBarPlayIcon(true);
+
+  currentAudio.onended = () => {
+    btn.classList.remove('playing');
+    currentPlayBtn = null;
+    updatePlayerBarPlayIcon(false);
+  };
+
+  // Sync player bar button
+  document.getElementById('pbPlay').onclick = () => {
+    if(currentAudio.paused){
+      currentAudio.play();
+      updatePlayerBarPlayIcon(true);
+      if(currentPlayBtn) currentPlayBtn.classList.add('playing');
+    } else {
+      currentAudio.pause();
+      updatePlayerBarPlayIcon(false);
+      if(currentPlayBtn) currentPlayBtn.classList.remove('playing');
+    }
+  };
+}
+
+function showPlayerBar(title, meta){
+  document.getElementById('pbTitle').textContent = title;
+  document.getElementById('pbMeta').textContent = meta;
+  document.getElementById('playerBar').classList.add('active');
+}
+
+function updatePlayerBarPlayIcon(playing){
+  const btn = document.getElementById('pbPlay');
+  if(playing){
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  } else {
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  }
+}
+
+function togglePlayerBar(){
+  if(!currentAudio) return;
+  if(currentAudio.paused){
+    currentAudio.play();
+    updatePlayerBarPlayIcon(true);
+    if(currentPlayBtn) currentPlayBtn.classList.add('playing');
+  } else {
+    currentAudio.pause();
+    updatePlayerBarPlayIcon(false);
+    if(currentPlayBtn) currentPlayBtn.classList.remove('playing');
+  }
+}
+
+function closePlayer(){
+  if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+  if(currentPlayBtn){ currentPlayBtn.classList.remove('playing'); currentPlayBtn = null; }
+  document.getElementById('playerBar').classList.remove('active');
+}
+</script>
+</body>
+</html>

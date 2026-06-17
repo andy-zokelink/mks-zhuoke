@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏醒 —— 涌现：智能的进化树 · 第二章</title>
+<style>
+:root {
+  --bg:#050a18; --bg-card:#0a1028;
+  --dawn:#f0a050; --dawn-glow:rgba(240,160,80,0.3);
+  --electric:#4da6ff; --electric-glow:rgba(77,166,255,0.3);
+  --life:#00e5a0; --life-glow:rgba(0,229,160,0.25);
+  --text-bright:#e8edf4; --text:#bcc4d0; --text-dim:#6b7385;
+  --border:rgba(255,255,255,0.06); --radius:12px;
+  --font-sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  --font-serif:"Noto Serif SC","Source Han Serif SC","STSong","Songti SC",Georgia,"Times New Roman",serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer .nebula{position:absolute;border-radius:50%;filter:blur(140px);opacity:0.1;animation:drift 30s ease-in-out infinite alternate}
+.bg-layer .n1{width:500px;height:500px;background:var(--dawn);top:-150px;left:-100px}
+.bg-layer .n2{width:400px;height:400px;background:var(--electric);bottom:-100px;right:-100px;animation-delay:-15s}
+.bg-layer .n3{width:300px;height:300px;background:var(--life);top:40%;left:50%;animation-delay:-7s}
+.bg-layer .grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,-30px) scale(1.2)}}
+
+.particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+.particle{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--text-dim);animation:floatUp linear infinite;opacity:0}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.5}90%{opacity:.1}100%{transform:translateY(-100px) scale(1);opacity:0}}
+
+.article{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 24px}
+
+.top-nav{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:20px 24px;font-size:.75rem;color:var(--text-dim)}
+.top-nav a{color:var(--electric);text-decoration:none;transition:color .2s}
+.top-nav a:hover{color:var(--dawn)}
+.top-nav .sep{color:var(--text-dim)}
+
+.chapter-hero{text-align:center;padding:80px 0 60px}
+.chapter-hero .ch-label{font-size:.7rem;text-transform:uppercase;letter-spacing:6px;color:var(--dawn);margin-bottom:20px}
+.chapter-hero h1{font-family:var(--font-serif);font-size:clamp(2.2rem,5vw,3.2rem);font-weight:900;color:var(--text-bright);line-height:1.3;margin-bottom:12px}
+.chapter-hero h1 .grad{background:linear-gradient(135deg,var(--dawn),var(--electric),var(--life));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.chapter-hero .subtitle{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-dim);font-style:italic;margin-bottom:16px}
+.chapter-hero .era{font-size:.85rem;color:var(--electric);letter-spacing:2px}
+
+.prose{padding:20px 0}
+.prose h2{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-bright);margin:48px 0 16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.prose h3{font-size:1.15rem;color:var(--electric);margin:32px 0 12px}
+.prose p{font-size:.92rem;color:var(--text);line-height:1.9;margin-bottom:20px;text-align:justify}
+.prose .highlight{background:rgba(77,166,255,.06);border-left:3px solid var(--electric);padding:16px 20px;border-radius:0 8px 8px 0;margin:24px 0;font-size:.88rem;color:var(--text-bright)}
+.prose .quote{font-family:var(--font-serif);font-style:italic;font-size:1.05rem;color:var(--text-dim);text-align:center;padding:32px 0;position:relative}
+.prose .quote::before{content:'"';font-size:4rem;color:rgba(255,255,255,.03);position:absolute;top:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;line-height:1}
+.prose .quote .attr{font-size:.75rem;margin-top:8px;font-style:normal;color:var(--electric)}
+
+.concept-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:32px 0}
+.concept-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--electric),transparent);margin-bottom:20px}
+.concept-card h4{font-size:.95rem;color:var(--electric);margin-bottom:12px;letter-spacing:2px}
+.concept-card p{font-size:.85rem;color:var(--text);margin-bottom:0}
+
+.diagram-box{background:rgba(0,0,0,.2);border-radius:8px;padding:24px;margin:24px 0;text-align:center;font-family:'Courier New',monospace;font-size:.82rem;color:var(--electric);white-space:pre;overflow-x:auto;line-height:1.6}
+
+.step-flow{display:flex;gap:12px;margin:32px 0;overflow-x:auto;padding-bottom:8px}
+.step-card{min-width:140px;flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
+.step-card .step-num{font-family:Georgia,serif;font-size:2rem;font-weight:900;color:rgba(77,166,255,.15);margin-bottom:8px}
+.step-card .step-title{font-size:.85rem;color:var(--text-bright);font-weight:600;margin-bottom:6px}
+.step-card .step-desc{font-size:.72rem;color:var(--text-dim);line-height:1.5}
+.step-card .step-arrow{color:var(--electric);font-size:1.2rem;margin-top:8px}
+
+.battle-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px 0}
+.battle-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.battle-card.winner{border-color:rgba(0,229,160,.3);box-shadow:0 0 30px rgba(0,229,160,.06)}
+.battle-card h4{font-size:.95rem;color:var(--text-bright);margin-bottom:8px}
+.battle-card .bc-stat{font-family:Georgia,serif;font-size:2.4rem;font-weight:900;margin:12px 0}
+.battle-card.winner .bc-stat{color:var(--life)}
+.battle-card .bc-meta{font-size:.72rem;color:var(--text-dim);line-height:1.6}
+
+.flip-container{perspective:1000px;margin:32px 0;height:260px}
+.flip-card{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.22,1,.36,1);transform-style:preserve-3d;cursor:pointer}
+.flip-card.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);padding:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid var(--border)}
+.flip-front{background:var(--bg-card)}
+.flip-back{background:var(--bg-card);transform:rotateY(180deg)}
+.flip-front .flip-icon{font-size:2.5rem;margin-bottom:12px}
+.flip-front h4{font-size:1.1rem;color:var(--text-bright);margin-bottom:8px}
+.flip-front .flip-hint{font-size:.7rem;color:var(--text-dim);margin-top:12px}
+.flip-back p{font-size:.88rem;color:var(--text);line-height:1.7}
+.flip-back .flip-answer{font-size:1rem;color:var(--life);font-weight:700;margin-top:12px}
+
+.quiz-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:32px 0}
+.quiz-block h4{font-size:.95rem;color:var(--dawn);margin-bottom:8px}
+.quiz-block .q-text{font-size:.9rem;color:var(--text-bright);margin-bottom:16px}
+.quiz-block .q-options{display:flex;flex-direction:column;gap:8px}
+.quiz-block .q-opt{padding:12px 16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:8px;font-size:.85rem;color:var(--text);cursor:pointer;transition:all .2s ease;text-align:left}
+.quiz-block .q-opt:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
+.quiz-block .q-opt.correct{border-color:var(--life);background:rgba(0,229,160,.1);color:var(--life)}
+.quiz-block .q-opt.wrong{border-color:#ff6b6b;background:rgba(255,107,107,.08);color:#ff6b6b}
+.quiz-block .q-result{font-size:.85rem;margin-top:12px;display:none}
+.quiz-block .q-result.show{display:block}
+
+.next-chapter{text-align:center;padding:40px 0 80px;border-top:1px solid var(--border);margin-top:40px}
+.next-chapter a{display:inline-flex;align-items:center;gap:8px;color:var(--electric);text-decoration:none;font-size:.95rem;padding:12px 24px;border:1px solid rgba(77,166,255,.25);border-radius:24px;transition:all .25s}
+.next-chapter a:hover{background:rgba(77,166,255,.1);border-color:rgba(77,166,255,.5)}
+.next-chapter .nc-label{font-size:.7rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:8px}
+
+.site-footer{text-align:center;padding:20px 0 60px;font-size:.7rem;color:var(--text-dim)}
+.site-footer a{color:var(--electric);text-decoration:none}
+
+@media(max-width:600px){
+  .battle-grid{grid-template-columns:1fr}
+  .step-flow{flex-direction:column}
+  .step-card{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div>
+  <div class="grid-overlay"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<nav class="top-nav">
+  <a href="../index.html">Home</a><span class="sep">/</span>
+  <a href="index.html">AI专题</a><span class="sep">/</span>
+  <span>苏醒</span>
+</nav>
+
+<article class="article">
+
+  <header class="chapter-hero">
+    <div class="ch-label">第二章 · 1986–2017</div>
+    <h1><span class="grad">苏醒</span></h1>
+    <p class="subtitle">算法在1986年就已经准备好了。<br>它只是在等硬件追上来。</p>
+    <div class="era">从反向传播到AlphaGo的惊天一战</div>
+  </header>
+
+  <div class="prose">
+
+    <p>1986年，AI从冬眠中醒来。不是慢慢地醒来，而是被一个算法唤醒——反向传播。这个算法让多层神经网络第一次有了训练的可能。但真正的苏醒要等到26年后——当GPU遇上了ImageNet，当深度学习终于拥有了足够的数据和算力。这是AI史上最漫长的"醒来"。而醒来之后，它开始奔跑。</p>
+
+    <h2>反向传播：让网络学会从错误中学习</h2>
+
+    <p>1986年，大卫·鲁梅尔哈特、杰弗里·辛顿和罗纳德·威廉姆斯在《自然》杂志上发表了反向传播算法。这篇论文的核心思想出奇地简单，但在当时却是革命性的。</p>
+
+    <div class="diagram-box">
+   前向传播（Forward Pass）
+   ┌──────────────────────────────────────┐
+   │ 输入 → [层1] → [层2] → [层3] → 输出 │
+   │  x      h₁       h₂       h₃     ŷ   │
+   └──────────────────────────────────────┘
+                     ↓
+             计算误差：Loss = (ŷ - y)²
+                     ↓
+   反向传播（Backward Pass）
+   ┌──────────────────────────────────────┐
+   │ 输出 ← [层1] ← [层2] ← [层3] ← 误差 │
+   │ 更新    更新     更新     更新    梯度 │
+   └──────────────────────────────────────┘
+   每一层根据"自己对这个错误的贡献"来调整权重。
+   贡献大的多调，贡献小的少调。
+   就像投篮——投出去，看偏了多少，回来调整，再投。
+   重复几百万次。
+    </div>
+
+    <p>这个"简单"的算法有一个致命的要求：它需要海量的计算。1986年的计算机可以训练一个几百个神经元的网络——对于人脸识别或者语言翻译来说，这就像用一把勺子挖一座山。</p>
+
+    <div class="highlight">
+      <strong>AI历史上最重要的时间差：</strong><br>
+      反向传播在1986年被重新发现（它最早在1974年就被哈佛的保罗·沃伯斯提出了，但没有人注意）。然而，真正让它产生巨大影响力的硬件——GPU——要到20年后才普及。这不是算法的问题，这是算力的问题。在AI的故事里，<strong>理论总是领先于工程，有时领先几十年。</strong>
+    </div>
+
+    <h2>1989–1998年：三个在黑暗中点亮的东西</h2>
+
+    <p>在1980年代末到1990年代末，发生了三件对后来AI爆发至关重要的事，但当时几乎无人关注。</p>
+
+    <h3>1989年：LeNet——杨立昆的卷积神经网络</h3>
+
+    <p>杨立昆在贝尔实验室开发了LeNet——一个使用卷积核在图像上滑动来提取特征的网络。它的原理很简单：对于图像中的一个小方块（比如5×5像素），用一个叫"卷积核"的数学算子扫描整张图，提取出边缘、纹理等初级特征。然后叠多层，逐层提取更高级的特征——从边缘到形状，从形状到物体。</p>
+
+    <p>美国银行在1990年代用LeNet来读取支票上的手写数字。每天数百万张支票被机器自动读取。银行不知道的是，他们使用的这套系统在20年后会成为所有图像识别系统的基础架构。</p>
+
+    <h3>1997年：LSTM——长短期记忆网络</h3>
+
+    <p>在德国慕尼黑，赛普·霍克莱特和尤尔根·施米德胡伯提出了LSTM——一种可以"记住"很久以前的信息的循环网络变体。普通的循环网络有"遗忘"问题：随着信息在网络中传递，早期的信息会逐渐消失。LSTM引入了"门"机制——遗忘门、输入门、输出门——让网络有选择地记住重要的东西。</p>
+
+    <p>2017年的Transformer淘汰了LSTM作为语言模型的主流架构。但LSTM的思想——"选择性地记忆和遗忘"——深刻地影响了后来所有的序列模型设计。</p>
+
+    <h3>1998年：LeNet-5——手写识别的工业级应用</h3>
+
+    <p>杨立昆发布了LeNet-5，一个更成熟的卷积网络，用于识别手写邮政编码。这个网络有了今天深度学习的几乎所有关键组件：卷积层、池化层（下采样）、全连接层。它是后来AlexNet的直接祖先。</p>
+
+    <p>但1998年之后，神经网络再次陷入相对的低谷——不是因为原理有问题，而是因为数据不够、算力不够。支持向量机（SVM）等"浅层"方法在当时的硬件和数据条件下表现得更好。神经网络再次被主流的注意力绕过。</p>
+
+    <div class="quiz-block" id="quiz1">
+      <h4>🧩 思考题</h4>
+      <div class="q-text">反向传播、CNN、LSTM——这三个今天大模型的核心组件，全部在1986-1997年间就被发明了。为什么它们要等到2010年代才真正爆发？</div>
+      <div class="q-options">
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,false)">A. 算法本身有根本缺陷，后来被修复了</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,false)">B. 学术界故意压制神经网络研究</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,true)">C. 算力和数据都不够——GPU在2000年代后才逐渐普及，大规模标注数据集（如ImageNet）在2010年后才出现</div>
+        <div class="q-opt" onclick="checkQuiz('quiz1',this,false)">D. 互联网诞生后才有了训练数据</div>
+      </div>
+      <div class="q-result" id="quiz1-result"></div>
+    </div>
+
+    <h2>2006年：辛顿扔出的火炬</h2>
+
+    <p>2006年，辛顿发表了一篇论文，介绍"深度信念网络"。论文的核心贡献是一个训练技巧：不是直接训练一个很深的网络，而是"逐层预训练"——先训练第一层，让它学会最基础的表示；然后固定第一层，训练第二层；以此类推。这个方法绕开了训练深层网络时的梯度消失问题。</p>
+
+    <p>论文在学术界引起了波动，但不是海啸。大多数计算机视觉研究者仍然认为"手工设计特征"是正道。但辛顿的论文给了那些还记得神经网络的人一个信号：这条路还没有死。</p>
+
+    <p>这篇论文还做了一件微妙的事：它把领域名称从"神经网络"改成了"深度学习"。这是一个聪明的品牌重塑——"神经网络"已经被明斯基的批评玷污了30多年，"深度学习"听起来新鲜、不同、值得关注。有时候，改变一个名字就能改变一个领域的命运。</p>
+
+    <h2>2009年：ImageNet——李飞飞的数据赌注</h2>
+
+    <p>斯坦福大学的李飞飞教授做了一个在当时看来极其疯狂的决定：创建一个包含1400万张图像的数据集，每张都由人工标注了其中的物体类别。这个项目需要大量的人力，而当时没有人相信更多的数据能带来质的改变——主流观点是"改进算法"比"增加数据"更重要。</p>
+
+    <p>李飞飞的同事劝她不要做这个"职业生涯自杀"的项目。她坚持了。2010年，ImageNet竞赛第一次举办——参赛者从1000个类别中识别图像。前两年的冠军使用的仍然是手工设计特征+传统分类器的组合。没有人想到接下来会发生什么。</p>
+
+    <h2>2012年：AlexNet——那一声惊雷</h2>
+
+    <p>2012年，多伦多大学。辛顿的两个学生——亚历克斯·克里泽夫斯基和伊利亚·苏茨克维——用两台英伟达GTX 580游戏显卡训练了一个卷积神经网络。他们把这个网络命名为AlexNet。当他们把结果提交给ImageNet竞赛时，主办方不相信这个数字——错误率从上一年的25%骤降到16%。他们要求重新验证。结果是真的。</p>
+
+    <div class="battle-grid">
+      <div class="battle-card">
+        <h4>🏛️ 传统方法（2011年冠军）</h4>
+        <div class="bc-stat">25.8%</div>
+        <div class="bc-meta">错误率<br>手工设计SIFT特征<br>+ 费舍尔向量编码<br>+ 支持向量机分类<br>人类多年积累的智慧</div>
+      </div>
+      <div class="battle-card winner">
+        <h4>🚀 AlexNet（2012年冠军）</h4>
+        <div class="bc-stat">16.4%</div>
+        <div class="bc-meta">错误率<br>8层卷积神经网络<br>6000万参数<br>两台GTX 580训练6天<br>机器自己学会的智慧</div>
+      </div>
+    </div>
+
+    <p>这不是一次普通的胜利。这是一次范式转换。在AlexNet之前，计算机视觉研究者花数年时间手工设计"特征提取器"——怎么检测边缘、纹理、形状。AlexNet不需要任何人告诉它什么是边缘——它自己学会了。而且它学会的特征比人类设计的更好。</p>
+
+    <div class="highlight">
+      <strong>2012年ImageNet竞赛的历史意义：</strong><br>
+      第二年的ImageNet竞赛，所有的参赛者都使用了深度学习。手工设计特征的方法从此灭绝。一个领域在一夜之间被彻底改变。AlexNet是AI的"iPhone时刻"——在那个时刻之前和之后，世界完全不同。
+    </div>
+
+    <p>但AlexNet的成功背后隐藏着一个关键因素，大多数人当时没有注意到：GPU。</p>
+
+    <h2>GPU：意外成为AI引擎的游戏显卡</h2>
+
+    <p>英伟达的游戏显卡GPU本来的目的是渲染3D画面——生成上百万个像素的颜色值。这个任务恰好需要大量的并行矩阵运算。神经网络的核心运算——矩阵乘法——恰好也是大量的并行浮点运算。这是一个美丽的巧合：游戏玩家对更真实画面的需求，意外地创造了AI需要的计算引擎。</p>
+
+    <div class="concept-card">
+      <h4>💡 概念卡片：为什么GPU适合深度学习？</h4>
+      <p>CPU（中央处理器）：4-16个强大的核心，擅长顺序执行复杂任务。<br>GPU（图形处理器）：数千个简单的核心，擅长同时执行大量简单任务。</p>
+      <p style="margin-top:12px">神经网络的训练需要执行数十亿次矩阵乘法——每次乘法都很简单，但数量极其庞大。这正是GPU的强项。一块GPU训练AlexNet比用CPU快了几十倍到几百倍。没有GPU，深度学习至今仍是一个理论玩具。</p>
+    </div>
+
+    <h2>2012年还有一件小事</h2>
+
+    <p>AlexNet的两位作者，克里泽夫斯基和苏茨克维，连同导师辛顿，成立了一家叫DNNresearch的公司。公司只有3个人，没有产品，没有收入。但四家科技巨头竞相收购——谷歌、微软、百度、DeepMind。最终谷歌以4400万美元的价格将这家公司收入囊中。</p>
+
+    <p>这不是在买产品。这是在买未来。谷歌看中的是三个人脑中与深度学习有关的一切知识。</p>
+
+    <p>这其中最关键的是伊利亚·苏茨克维。几年后，他离开谷歌，加入了山姆·阿尔特曼和埃隆·马斯克共同创立的OpenAI，成为首席科学家。在OpenAI，伊利亚将主导开发GPT系列——从GPT-2到GPT-4。2012年的AlexNet和2022年的ChatGPT，中间有一条直通的道路，而这条路就是伊利亚。</p>
+
+    <div class="flip-container" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+      <div class="flip-card">
+        <div class="flip-front">
+          <div class="flip-icon">🔗</div>
+          <h4>AlexNet和ChatGPT有什么关系？</h4>
+          <div class="flip-hint">👆 点击翻卡，发现隐藏的连接</div>
+        </div>
+        <div class="flip-back">
+          <p>AlexNet的作者之一伊利亚·苏茨克维后来成为OpenAI的首席科学家。<br><br>就是他在2017年看到Transformer论文后，第一时间停掉了OpenAI当时的一切项目，把全部力量集中在大语言模型的开发上。<br><br>从AlexNet（2012）到Transformer（2017）到GPT-3（2020）到ChatGPT（2022）——这是一条技术路线上的持续延伸。而伊利亚是这条线上唯一的贯穿始终的人物。</p>
+          <div class="flip-answer">一条线索：亚历克斯+伊利亚→辛顿→谷歌→伊利亚→OpenAI→GPT→ChatGPT</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>2014–2015年：深度学习全面爆发</h2>
+
+    <p>AlexNet之后，深度学习以前所未有的速度席卷了AI的每一个领域。</p>
+
+    <div class="step-flow">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">GAN（2014）</div>
+        <div class="step-desc">伊恩·古德费洛发明生成对抗网络——两个网络相互博弈，一个生成假图像，一个判别真假。最终生成器学会了创造以假乱真的图像。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">DeepFace（2014）</div>
+        <div class="step-desc">Facebook的DeepFace在人脸识别上达到97.35%准确率，接近人类水平。人脸解锁、监控识别从此进入AI时代。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Seq2Seq（2014）</div>
+        <div class="step-desc">序列到序列模型——一个网络将输入序列编码为向量，另一个网络解码为目标语言。机器翻译的质量从此大幅跃升。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-title">Attention（2015）</div>
+        <div class="step-desc">巴赫达努等人提出注意力机制——让模型在翻译时"知道"要看输入的哪个部分。这是Transformer的核心前身。</div>
+      </div>
+    </div>
+
+    <h2>2016年：AlphaGo——围棋的"神之一手"</h2>
+
+    <p>2016年3月，韩国首尔。DeepMind的AlphaGo对阵世界围棋冠军李世石。围棋被视为AI的"最后堡垒"——它的搜索空间是10¹⁷⁰，比宇宙中的原子数还多。不可能被暴力搜索攻破。人类几千年来用一种被称为"棋感"的直觉来驾驭这种复杂性——而这种直觉被认为是最纯粹的人类智慧的体现。</p>
+
+    <p>AlphaGo以4:1获胜。但比分不重要。重要的是第二局第37手。</p>
+
+    <div class="quote">
+      "那一手棋不是人类的走法。它挑战了人类几千年来对围棋的战略直觉。<br>当AlphaGo下出那一手时，李世石离开了房间15分钟。"
+      <div class="attr">—— 第二局第37手，被围棋界称为"神之一手"</div>
+    </div>
+
+    <div class="concept-card">
+      <h4>💡 AlphaGo的工作原理</h4>
+      <p><strong>策略网络：</strong>学习人类棋谱，预测高手在给定局面下会下哪里。训练数据：3000万个人类对局。<br><strong>价值网络：</strong>评估任何局面的胜率。<br><strong>蒙特卡洛树搜索：</strong>在策略网络和价值网络的指导下，探索最有可能的走法。<br><br>AlphaGo的三大组件各自都有先驱者的贡献。但把它们组合在一起，并让它们协同工作——这是DeepMind团队的工程壮举。</p>
+    </div>
+
+    <p>但真正让世界震惊的是2017年的AlphaGo Zero。</p>
+
+    <p>AlphaGo Zero不需要人类棋谱。它只知道自己和自己下棋的规则——赢了得1分，输了得0分。从零开始，随机下子。每下一盘，就更新一次网络，让下一次比上一次好一点点。3天后，AlphaGo Zero超越了AlphaGo击败李世石时的水平。21天后，超越了AlphaGo Master。40天后，超越了所有之前版本的AlphaGo。</p>
+
+    <div class="highlight">
+      <strong>AlphaGo Zero的哲学冲击：</strong><br>
+      人类几千年来积累了围棋的知识——定式、布局理论、生死题。AlphaGo Zero在40天内超越了这一切，不需要任何人类知识。它只靠规则和试错，发现了人类从未想到的策略。<br><br>
+      这个事实暗示了一个深刻的真相：<strong>人类的"知识"可能是一种瓶颈。</strong>AI从零开始，不受人类偏见的限制，可能找到更好的解。这个思想——"不需要人类标注数据"——后来被DeepSeek R1用于大语言模型的推理训练。
+    </div>
+
+    <div class="quiz-block" id="quiz2">
+      <h4>🧩 思考题</h4>
+      <div class="q-text">AlphaGo Zero不需要人类棋谱就能击败AlphaGo。它靠的是什么？这个问题的答案对后来的大语言模型发展产生了深远影响。</div>
+      <div class="q-options">
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,false)">A. 更快的计算机</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,false)">B. 更多的围棋规则</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,true)">C. 强化学习——只通过自己和自己对弈，用胜负作为唯一信号，不断迭代优化</div>
+        <div class="q-opt" onclick="checkQuiz('quiz2',this,false)">D. 秘密的人类棋谱数据库</div>
+      </div>
+      <div class="q-result" id="quiz2-result"></div>
+    </div>
+
+    <h2>苏醒的含义</h2>
+
+    <p>1986年的反向传播是苏醒的第一个信号。但真正的苏醒花了几十年——等到GPU提供了算力，等到互联网提供了数据，等到辛顿的学生们证明了这一切都行得通。</p>
+
+    <p>AI的苏醒不是"它突然变聪明了"。它是无数块拼图终于在正确的时间找到了正确的位置：反向传播（1986）+ CNN（1989）+ LSTM（1997）+ GPU（2000s）+ ImageNet（2010）+ AlexNet（2012）+ GAN（2014）+ Attention（2015）+ AlphaGo（2016）。每一块单独看都不足以改变世界。但把它们放在一起——这就是一场革命。</p>
+
+    <p>而在2017年，另一块拼图即将落下。它叫Transformer。它会改变一切。</p>
+
+    <div class="highlight">
+      <strong>这一章的核心隐喻：</strong><br>
+      "苏醒"不是一个瞬间，而是一个过程。就像春天不是在某一天的某个时刻突然到来的——它是在你注意到之前，冰已经在融化了。AI的苏醒从1986年的反向传播开始，到2012年的AlexNet加速，到2016年的AlphaGo达到第一个高潮。但真正的海啸还在后面——它叫Transformer。
+    </div>
+
+  </div>
+
+</article>
+
+<div class="next-chapter">
+  <div class="nc-label">下一章</div>
+  <a href="ch3-emergence.html">涌现：Transformer → GPT → 缩放定律 → ChatGPT时刻 →</a>
+</div>
+
+<footer class="site-footer">
+  <p><a href="index.html">返回AI专题导航</a> · 卓克 · 科技参考</p>
+</footer>
+
+<script>
+(function(){
+  const c=document.getElementById('particles');
+  const cols=['rgba(240,160,80,0.4)','rgba(77,166,255,0.4)','rgba(0,229,160,0.3)','rgba(255,255,255,0.2)'];
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.width=p.style.height=(Math.random()*2+1)+'px';
+    p.style.background=cols[Math.floor(Math.random()*cols.length)];
+    p.style.animationDuration=(Math.random()*22+14)+'s';
+    p.style.animationDelay=Math.random()*22+'s';
+    c.appendChild(p);
+  }
+})();
+
+function checkQuiz(qid,el,correct){
+  const container=document.getElementById(qid);
+  if(container.dataset.answered) return;
+  container.dataset.answered='1';
+  const opts=container.querySelectorAll('.q-opt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  const result=document.getElementById(qid+'-result');
+  if(correct){
+    el.classList.add('correct');
+    result.innerHTML='✅ <strong>正确！</strong>AlphaGo Zero的核心创新是纯粹的强化学习——只靠自我对弈和胜负信号来学习。这个思路后来被DeepSeek R1借鉴用于语言模型的推理训练。';
+  } else {
+    el.classList.add('wrong');
+    opts.forEach(o=>{if(o.textContent.includes('C.'))o.classList.add('correct')});
+    result.innerHTML='❌ 正确答案是C。强化学习的"从零自学习"范式不仅改变了围棋，也影响了后来大语言模型的发展方向。';
+  }
+  result.classList.add('show');
+}
+</script>
+</body>
+</html>
