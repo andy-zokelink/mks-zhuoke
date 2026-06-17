@@ -19,6 +19,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
+/* ── background ambient ── */
 .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
 .bg-layer .nebula{position:absolute;border-radius:50%;filter:blur(150px);opacity:0.1;animation:drift 30s ease-in-out infinite alternate}
 .bg-layer .n1{width:500px;height:500px;background:var(--amber);top:-150px;left:-100px}
@@ -31,29 +32,80 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
 .particle{position:absolute;border-radius:50%;background:var(--text-dim);animation:floatUp linear infinite;opacity:0}
 @keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.5}90%{opacity:.1}100%{transform:translateY(-100px) scale(1);opacity:0}}
 
-.article{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 24px}
+/* ── layout ── */
+.article{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 24px}
 
+/* ── top nav ── */
 .top-nav{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:20px 24px;font-size:.75rem;color:var(--text-dim)}
 .top-nav a{color:var(--cyan);text-decoration:none;transition:color .2s}
 .top-nav a:hover{color:var(--amber)}
 .top-nav .sep{color:var(--text-dim)}
 
-.chapter-hero{text-align:center;padding:80px 0 60px}
-.chapter-hero .ch-label{font-size:.7rem;text-transform:uppercase;letter-spacing:6px;color:var(--cyan);margin-bottom:20px}
-.chapter-hero h1{font-family:var(--font-serif);font-size:clamp(2.2rem,5vw,3.2rem);font-weight:900;color:var(--text-bright);line-height:1.3;margin-bottom:12px}
+/* ── hero ── */
+.chapter-hero{text-align:center;padding:60px 0 20px;position:relative}
+.chapter-hero .ch-label{font-size:.7rem;text-transform:uppercase;letter-spacing:6px;color:var(--cyan);margin-bottom:8px}
+.chapter-hero .big-num{font-family:var(--font-serif);font-size:clamp(8rem,18vw,14rem);font-weight:900;line-height:0.85;background:linear-gradient(180deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.01) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:absolute;top:20px;left:50%;transform:translateX(-50%);pointer-events:none;user-select:none}
+.chapter-hero h1{font-family:var(--font-serif);font-size:clamp(2.4rem,6vw,3.6rem);font-weight:900;color:var(--text-bright);line-height:1.2;position:relative;z-index:1}
 .chapter-hero h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--purple),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.chapter-hero .subtitle{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-dim);font-style:italic;margin-bottom:16px}
-.chapter-hero .era{font-size:.85rem;color:var(--cyan);letter-spacing:2px}
+.chapter-hero .subtitle{font-family:var(--font-serif);font-size:1.05rem;color:var(--text-dim);font-style:italic;margin:12px 0 8px;position:relative;z-index:1}
+.chapter-hero .era{font-size:.85rem;color:var(--cyan);letter-spacing:2px;position:relative;z-index:1}
+.chapter-hero .years-badge{display:inline-block;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);border-radius:20px;padding:6px 16px;font-size:.75rem;color:var(--cyan);letter-spacing:3px;margin-top:10px;position:relative;z-index:1}
 
+/* ── fission explosion SVG ── */
+.fission-diagram{display:flex;justify-content:center;margin:0 0 10px;padding:10px 0}
+.fission-diagram svg{max-width:100%;height:auto}
+.fission-node{transition:all 0.4s ease;cursor:default}
+.fission-node:hover{filter:brightness(1.4)}
+.fission-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 20px;margin:0 0 32px;font-size:.7rem}
+.fission-legend span{display:inline-flex;align-items:center;gap:5px}
+.fission-legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── big number insight blocks ── */
+.insight-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:36px 0}
+.insight-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden;transition:all .3s}
+.insight-block:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-2px)}
+.insight-block::after{content:'';position:absolute;top:0;right:0;width:80px;height:100%;background:linear-gradient(90deg,transparent,var(--bg-card));pointer-events:none}
+.insight-block .bn-num{font-family:var(--font-serif);font-size:clamp(2rem,4vw,2.8rem);font-weight:900;line-height:1;min-width:70px;text-align:center;flex-shrink:0}
+.insight-block .bn-num.cyan{color:var(--cyan)}
+.insight-block .bn-num.purple{color:var(--purple)}
+.insight-block .bn-num.gold{color:var(--gold)}
+.insight-block .bn-num.amber{color:var(--amber)}
+.insight-block .bn-text{font-size:.78rem;color:var(--text);line-height:1.5}
+.insight-block .bn-text strong{color:var(--text-bright)}
+@media(max-width:600px){.insight-row{grid-template-columns:1fr}}
+
+/* ── prose ── */
 .prose{padding:20px 0}
-.prose h2{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-bright);margin:48px 0 16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.prose h2{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-bright);margin:48px 0 16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.prose h2 .sec-num{font-size:.65rem;color:var(--cyan);letter-spacing:3px;font-family:var(--font-sans);opacity:.7}
 .prose h3{font-size:1.15rem;color:var(--cyan);margin:32px 0 12px}
 .prose p{font-size:.92rem;color:var(--text);line-height:1.9;margin-bottom:20px;text-align:justify}
-.prose .highlight{background:rgba(0,229,255,.06);border-left:3px solid var(--cyan);padding:16px 20px;border-radius:0 8px 8px 0;margin:24px 0;font-size:.88rem;color:var(--text-bright)}
-.prose .quote{font-family:var(--font-serif);font-style:italic;font-size:1.05rem;color:var(--text-dim);text-align:center;padding:32px 0;position:relative}
-.prose .quote::before{content:'"';font-size:4rem;color:rgba(255,255,255,.03);position:absolute;top:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;line-height:1}
-.prose .quote .attr{font-size:.75rem;margin-top:8px;font-style:normal;color:var(--cyan)}
 
+/* ── highlight block ── */
+.highlight{background:rgba(0,229,255,.04);border-left:3px solid var(--cyan);padding:18px 22px;border-radius:0 8px 8px 0;margin:28px 0;font-size:.85rem;color:var(--text-bright);line-height:1.7}
+
+/* ── quote ── */
+.quote{font-family:var(--font-serif);font-style:italic;font-size:1.05rem;color:var(--text-dim);text-align:center;padding:32px 0;position:relative}
+.quote::before{content:'"';font-size:4rem;color:rgba(255,255,255,.03);position:absolute;top:0;left:50%;transform:translateX(-50%);font-family:Georgia,serif;line-height:1}
+.quote .attr{font-size:.75rem;margin-top:8px;font-style:normal;color:var(--cyan)}
+
+/* ── DeepSeek innovation cards ── */
+.ds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}
+.ds-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;transition:all .3s;border-top:2px solid transparent}
+.ds-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.1)}
+.ds-card:nth-child(1){border-top-color:var(--cyan)}
+.ds-card:nth-child(2){border-top-color:var(--purple)}
+.ds-card:nth-child(3){border-top-color:var(--gold)}
+.ds-card:nth-child(4){border-top-color:var(--amber)}
+.ds-card:nth-child(5){border-top-color:var(--cyan)}
+.ds-card:nth-child(6){border-top-color:var(--purple)}
+.ds-card .ds-num{font-family:var(--font-serif);font-size:2rem;font-weight:900;color:rgba(255,255,255,0.06);position:absolute;top:8px;right:14px;line-height:1;pointer-events:none}
+.ds-card .ds-icon{font-size:1.5rem;margin-bottom:8px}
+.ds-card .ds-title{font-size:.82rem;color:var(--text-bright);font-weight:700;margin-bottom:6px}
+.ds-card .ds-desc{font-size:.72rem;color:var(--text-dim);line-height:1.5}
+@media(max-width:600px){.ds-grid{grid-template-columns:1fr 1fr}}
+
+/* ── concept card ── */
 .concept-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:32px 0}
 .concept-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);margin-bottom:20px}
 .concept-card h4{font-size:.95rem;color:var(--cyan);margin-bottom:12px;letter-spacing:2px}
@@ -63,21 +115,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
 .concept-card td:first-child{color:var(--text-dim);white-space:nowrap}
 .concept-card td:last-child{color:var(--text-bright);text-align:right;font-family:Georgia,serif;font-weight:700}
 
+/* ── Nobel comparison ── */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px 0}
 @media(max-width:600px){.two-col{grid-template-columns:1fr}}
-
-.nobel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s}
-.nobel-card:hover{border-color:rgba(255,255,255,.12)}
+.nobel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s;position:relative}
+.nobel-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-2px)}
+.nobel-card .nb-badge{display:inline-block;font-size:.65rem;letter-spacing:3px;padding:4px 10px;border-radius:12px;margin-bottom:12px}
+.nobel-card .nb-badge.physics{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.2)}
+.nobel-card .nb-badge.chem{background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.2)}
 .nobel-card .nb-icon{font-size:2rem;margin-bottom:12px}
-.nobel-card h4{font-size:.9rem;color:var(--text-bright);margin-bottom:8px}
-.nobel-card .nb-field{font-size:.68rem;color:var(--gold);letter-spacing:3px;margin-bottom:8px}
+.nobel-card h4{font-size:.95rem;color:var(--text-bright);margin-bottom:6px}
+.nobel-card .nb-winners{font-size:.78rem;color:var(--gold);margin-bottom:10px}
 .nobel-card p{font-size:.78rem;color:var(--text);line-height:1.6}
+.nobel-card .nb-svg{width:100%;height:60px;margin:10px 0;opacity:.6}
 
-.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:32px 0}
-.tech-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
-.tech-card .tc-icon{font-size:1.8rem;margin-bottom:8px}
-.tech-card .tc-name{font-size:.8rem;color:var(--text-bright);font-weight:600}
+/* ── AI Everywhere grid ── */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:32px 0}
+.tech-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 14px;text-align:center;transition:all .3s;position:relative}
+.tech-card:hover{border-color:rgba(255,255,255,0.15);transform:translateY(-2px)}
+.tech-card .tc-icon{font-size:2rem;margin-bottom:8px;display:block}
+.tech-card .tc-name{font-size:.78rem;color:var(--text-bright);font-weight:600}
+.tech-card .tc-glow{position:absolute;top:50%;left:50%;width:40px;height:40px;border-radius:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity .4s}
+.tech-card:hover .tc-glow{opacity:.08}
+.tech-card:nth-child(odd) .tc-glow{background:var(--cyan)}
+.tech-card:nth-child(even) .tc-glow{background:var(--purple)}
 
+/* ── Hinton warning block ── */
+.hinton-warn{background:var(--bg-card);border:1px solid rgba(255,107,107,0.15);border-radius:var(--radius);padding:28px 24px;margin:32px 0;position:relative;overflow:hidden}
+.hinton-warn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#ff6b6b,var(--amber))}
+.hinton-warn .hw-quote{font-family:var(--font-serif);font-size:1.1rem;color:var(--text-bright);font-style:italic;line-height:1.7;margin-bottom:12px}
+.hinton-warn .hw-quote::before{content:'\201C';font-size:3rem;color:rgba(255,107,107,0.2);line-height:0;vertical-align:-.4em}
+.hinton-warn .hw-attr{font-size:.78rem;color:var(--amber)}
+.hinton-warn .hw-context{font-size:.8rem;color:var(--text-dim);margin-top:10px;line-height:1.6}
+
+/* ── quiz ── */
 .quiz-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:32px 0}
 .quiz-block h4{font-size:.95rem;color:var(--purple);margin-bottom:8px}
 .quiz-block .q-text{font-size:.9rem;color:var(--text-bright);margin-bottom:16px}
@@ -89,13 +160,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
 .quiz-block .q-result{font-size:.85rem;margin-top:12px;display:none}
 .quiz-block .q-result.show{display:block}
 
-.next-chapter{text-align:center;padding:40px 0 80px;border-top:1px solid var(--border);margin-top:40px}
+/* ── next chapter / footer ── */
+.next-chapter{text-align:center;padding:40px 0 80px;border-top:1px solid var(--border);margin-top:40px;position:relative;z-index:1}
 .next-chapter a{display:inline-flex;align-items:center;gap:8px;color:var(--purple);text-decoration:none;font-size:.95rem;padding:12px 24px;border:1px solid rgba(167,139,250,.25);border-radius:24px;transition:all .25s}
 .next-chapter a:hover{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.5)}
 .next-chapter .nc-label{font-size:.7rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:8px}
 
-.site-footer{text-align:center;padding:20px 0 60px;font-size:.7rem;color:var(--text-dim)}
+.site-footer{text-align:center;padding:20px 0 60px;font-size:.7rem;color:var(--text-dim);position:relative;z-index:1}
 .site-footer a{color:var(--cyan);text-decoration:none}
+
+/* ── timeline visual ── */
+.timeline-svg{display:flex;justify-content:center;margin:20px 0 30px}
+.timeline-svg svg{max-width:100%}
+
+/* ── section divider ── */
+.section-divider{display:flex;align-items:center;gap:12px;margin:40px 0 10px}
+.section-divider .line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent)}
+.section-divider .icon{font-size:1.2rem;opacity:.6}
 </style>
 </head>
 <body>
@@ -114,18 +195,232 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
 
 <article class="article">
 
+  <!-- ═══ HERO ═══ -->
   <header class="chapter-hero">
+    <div class="big-num" aria-hidden="true">2</div>
     <div class="ch-label">第四章 · 2023–2025</div>
     <h1><span class="grad">裂变</span></h1>
     <p class="subtitle">AI不再是某个公司的产品，<br>它是人类文明的新基础设施。</p>
-    <div class="era">从OpenAI的震荡到诺贝尔奖的加冕</div>
+    <div class="years-badge">2023 — 2025</div>
+    <div class="era" style="margin-top:10px">仅仅两年，AI世界完成了一次核裂变式的爆炸</div>
   </header>
 
+  <!-- ═══ FISSION EXPLOSION DIAGRAM ═══ -->
+  <div class="fission-diagram">
+    <svg viewBox="0 0 700 520" width="700" height="520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.3)"/>
+          <stop offset="40%" stop-color="rgba(0,229,255,0.15)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="burstGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="50%" stop-color="var(--cyan)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="softGlow"><feGaussianBlur stdDeviation="6"/></filter>
+      </defs>
+
+      <!-- background ring -->
+      <circle cx="350" cy="250" r="180" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1" stroke-dasharray="4 8"/>
+      <circle cx="350" cy="250" r="140" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <circle cx="350" cy="250" r="210" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1" stroke-dasharray="2 6"/>
+
+      <!-- outer burst rays -->
+      <g opacity="0.4">
+        <line x1="350" y1="250" x2="350" y2="60" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="550" y2="100" stroke="rgba(167,139,250,0.5)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="610" y2="250" stroke="rgba(240,160,80,0.5)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="530" y2="410" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="350" y2="460" stroke="rgba(167,139,250,0.5)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="120" y2="400" stroke="rgba(240,160,80,0.5)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="80" y2="250" stroke="rgba(255,213,79,0.4)" stroke-width="1.5"/>
+        <line x1="350" y1="250" x2="140" y2="100" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
+      </g>
+
+      <!-- particle trails (small dots along rays) -->
+      <g opacity="0.6">
+        <circle cx="390" cy="190" r="2.5" fill="var(--cyan)"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="420" cy="155" r="2" fill="var(--purple)"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.5s" repeatCount="indefinite"/></circle>
+        <circle cx="450" cy="290" r="2.5" fill="var(--amber)"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.8s" repeatCount="indefinite"/></circle>
+        <circle cx="300" cy="180" r="2" fill="var(--gold)"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="3s" repeatCount="indefinite"/></circle>
+        <circle cx="280" cy="340" r="2.5" fill="var(--cyan)"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.2s" repeatCount="indefinite"/></circle>
+        <circle cx="410" cy="340" r="2" fill="var(--purple)"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.8s" repeatCount="indefinite"/></circle>
+        <circle cx="330" cy="140" r="1.8" fill="#fff"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="1.5s" repeatCount="indefinite"/></circle>
+        <circle cx="500" cy="220" r="1.8" fill="#fff"><animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.7s" repeatCount="indefinite"/></circle>
+      </g>
+
+      <!-- central core -->
+      <circle cx="350" cy="250" r="55" fill="url(#coreGlow)" filter="url(#softGlow)"/>
+      <circle cx="350" cy="250" r="22" fill="var(--cyan)" opacity="0.8" filter="url(#glow)">
+        <animate attributeName="r" values="22;26;22" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8;0.5;0.8" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="350" cy="250" r="12" fill="#fff" opacity="0.9">
+        <animate attributeName="r" values="12;14;12" dur="2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- node: OpenAI -->
+      <g class="fission-node" transform="translate(332, 68)">
+        <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
+        <circle cx="18" cy="18" r="10" fill="rgba(0,229,255,0.12)"/>
+        <text x="18" y="22" text-anchor="middle" font-size="11" fill="var(--cyan)" font-weight="700">O</text>
+        <text x="42" y="22" font-size="9" fill="var(--text)">OpenAI</text>
+      </g>
+
+      <!-- node: DeepSeek -->
+      <g class="fission-node" transform="translate(530, 120)">
+        <circle cx="14" cy="14" r="16" fill="none" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+        <circle cx="14" cy="14" r="10" fill="rgba(167,139,250,0.12)"/>
+        <text x="14" y="18" text-anchor="middle" font-size="10" fill="var(--purple)" font-weight="700">DS</text>
+        <text x="36" y="18" font-size="9" fill="var(--text)">DeepSeek</text>
+      </g>
+
+      <!-- node: Nobel Prizes -->
+      <g class="fission-node" transform="translate(570, 270)">
+        <circle cx="12" cy="12" r="16" fill="none" stroke="rgba(255,213,79,0.3)" stroke-width="1"/>
+        <circle cx="12" cy="12" r="10" fill="rgba(255,213,79,0.1)"/>
+        <text x="12" y="16" text-anchor="middle" font-size="10" fill="var(--gold)">N</text>
+        <text x="34" y="16" font-size="9" fill="var(--text)">诺贝尔奖</text>
+      </g>
+
+      <!-- node: AI Everywhere -->
+      <g class="fission-node" transform="translate(490, 390)">
+        <circle cx="14" cy="14" r="16" fill="none" stroke="rgba(240,160,80,0.3)" stroke-width="1"/>
+        <circle cx="14" cy="14" r="10" fill="rgba(240,160,80,0.1)"/>
+        <text x="14" y="18" text-anchor="middle" font-size="10" fill="var(--amber)">◆</text>
+        <text x="36" y="18" font-size="9" fill="var(--text)">AI渗透</text>
+      </g>
+
+      <!-- node: Open Source -->
+      <g class="fission-node" transform="translate(290, 430)">
+        <circle cx="12" cy="12" r="16" fill="none" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+        <circle cx="12" cy="12" r="10" fill="rgba(167,139,250,0.1)"/>
+        <text x="12" y="16" text-anchor="middle" font-size="10" fill="var(--purple)">OS</text>
+        <text x="34" y="16" font-size="9" fill="var(--text)">开源运动</text>
+      </g>
+
+      <!-- node: AI Safety -->
+      <g class="fission-node" transform="translate(100, 380)">
+        <circle cx="14" cy="14" r="16" fill="none" stroke="rgba(255,107,107,0.3)" stroke-width="1"/>
+        <circle cx="14" cy="14" r="10" fill="rgba(255,107,107,0.1)"/>
+        <text x="14" y="18" text-anchor="middle" font-size="9" fill="#ff6b6b">⚠</text>
+        <text x="36" y="18" font-size="9" fill="var(--text)">AI安全</text>
+      </g>
+
+      <!-- node: Hinton -->
+      <g class="fission-node" transform="translate(120, 250)">
+        <circle cx="12" cy="12" r="14" fill="none" stroke="rgba(240,160,80,0.3)" stroke-width="1"/>
+        <circle cx="12" cy="12" r="9" fill="rgba(240,160,80,0.1)"/>
+        <text x="12" y="16" text-anchor="middle" font-size="9" fill="var(--amber)">GH</text>
+        <text x="30" y="16" font-size="9" fill="var(--text)">Hinton</text>
+      </g>
+
+      <!-- node: AlphaFold -->
+      <g class="fission-node" transform="translate(120, 140)">
+        <circle cx="12" cy="12" r="14" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
+        <circle cx="12" cy="12" r="9" fill="rgba(0,229,255,0.1)"/>
+        <text x="12" y="16" text-anchor="middle" font-size="9" fill="var(--cyan)">AF</text>
+        <text x="30" y="16" font-size="9" fill="var(--text)">AlphaFold</text>
+      </g>
+
+      <!-- connecting lines from core to nodes -->
+      <g opacity="0.15" stroke-width="0.8">
+        <line x1="350" y1="250" x2="350" y2="86" stroke="var(--cyan)"/>
+        <line x1="350" y1="250" x2="544" y2="134" stroke="var(--purple)"/>
+        <line x1="350" y1="250" x2="582" y2="282" stroke="var(--gold)"/>
+        <line x1="350" y1="250" x2="504" y2="404" stroke="var(--amber)"/>
+        <line x1="350" y1="250" x2="302" y2="442" stroke="var(--purple)"/>
+        <line x1="350" y1="250" x2="114" y2="394" stroke="#ff6b6b"/>
+        <line x1="350" y1="250" x2="132" y2="262" stroke="var(--amber)"/>
+        <line x1="350" y1="250" x2="132" y2="152" stroke="var(--cyan)"/>
+      </g>
+
+      <!-- center label -->
+      <text x="350" y="305" text-anchor="middle" font-size="11" fill="var(--text-dim)" font-family="var(--font-serif)">AI 裂变 · 2023—2025</text>
+    </svg>
+  </div>
+
+  <div class="fission-legend">
+    <span><span class="dot" style="background:var(--cyan)"></span> OpenAI</span>
+    <span><span class="dot" style="background:var(--purple)"></span> 开源 / DeepSeek</span>
+    <span><span class="dot" style="background:var(--gold)"></span> 诺贝尔奖</span>
+    <span><span class="dot" style="background:var(--amber)"></span> AI渗透 / Hinton</span>
+    <span><span class="dot" style="background:#ff6b6b"></span> AI安全</span>
+  </div>
+
+  <!-- ═══ KEY INSIGHT BLOCKS ═══ -->
+  <div class="insight-row">
+    <div class="insight-block">
+      <div class="bn-num cyan">5天</div>
+      <div class="bn-text"><strong>Altman被解雇又复职</strong><br>硅谷史上最戏剧性的权力更迭，5天内员工联名信+微软介入+董事会重组</div>
+    </div>
+    <div class="insight-block">
+      <div class="bn-num purple">1/10</div>
+      <div class="bn-text"><strong>DeepSeek R1成本</strong><br>以不到OpenAI十分之一的成本，实现接近GPT-4o性能——且完全开源</div>
+    </div>
+    <div class="insight-block">
+      <div class="bn-num gold">52年</div>
+      <div class="bn-text"><strong>Hinton的等待</strong><br>从1972年开始研究神经网络，到2024年获得诺贝尔物理学奖，历时52年</div>
+    </div>
+    <div class="insight-block">
+      <div class="bn-num amber">2.14亿</div>
+      <div class="bn-text"><strong>AlphaFold预测蛋白质</strong><br>在数月内预测2.14亿个蛋白质结构，人类蛋白质结构未知比例从83%→接近0%</div>
+    </div>
+  </div>
+
+  <!-- ═══ PROSE: OPENING ═══ -->
   <div class="prose">
 
     <p>ChatGPT之后，AI发生了裂变——从一个实验室里的模型变成一个覆盖人类生活方方面面的基础设施。这个过程充满戏剧性：OpenAI内部的权力斗争、开源社区的反击、科学家们对AI安全的激烈争论、以及诺贝尔奖委员会对AI的最高认可。AI的故事从"能不能做"变成了"谁能做"、"该不该做"、"做了会发生什么"。</p>
 
-    <h2>OpenAI的宫斗：理想主义vs.资本主义</h2>
+    <!-- ═══ SECTION 1: OPENAI DRAMA ═══ -->
+    <h2><span class="sec-num">I</span> OpenAI的宫斗：理想主义 vs. 资本主义</h2>
+
+    <!-- Open AI drama timeline SVG -->
+    <div class="timeline-svg">
+      <svg viewBox="0 0 700 120" width="700" height="120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="timelineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(255,107,107,0.6)"/>
+            <stop offset="50%" stop-color="var(--amber)"/>
+            <stop offset="100%" stop-color="var(--cyan)"/>
+          </linearGradient>
+        </defs>
+        <line x1="50" y1="60" x2="650" y2="60" stroke="url(#timelineGrad)" stroke-width="2"/>
+        <!-- day markers -->
+        <g>
+          <circle cx="50" cy="60" r="6" fill="#ff6b6b"><animate attributeName="r" values="6;9;6" dur="2s" repeatCount="indefinite"/></circle>
+          <text x="50" y="40" text-anchor="middle" font-size="9" fill="#ff6b6b" font-weight="700">11月17日</text>
+          <text x="50" y="88" text-anchor="middle" font-size="8" fill="var(--text-dim)">Altman被解雇</text>
+        </g>
+        <g>
+          <circle cx="200" cy="60" r="5" fill="var(--amber)"/>
+          <text x="200" y="40" text-anchor="middle" font-size="9" fill="var(--amber)" font-weight="700">11月18日</text>
+          <text x="200" y="88" text-anchor="middle" font-size="8" fill="var(--text-dim)">Brockman辞职</text>
+        </g>
+        <g>
+          <circle cx="350" cy="60" r="5" fill="var(--purple)"/>
+          <text x="350" y="40" text-anchor="middle" font-size="9" fill="var(--purple)" font-weight="700">11月20日</text>
+          <text x="350" y="88" text-anchor="middle" font-size="8" fill="var(--text-dim)">员工联名信</text>
+        </g>
+        <g>
+          <circle cx="500" cy="60" r="5" fill="var(--cyan)"/>
+          <text x="500" y="40" text-anchor="middle" font-size="9" fill="var(--cyan)" font-weight="700">11月21日</text>
+          <text x="500" y="88" text-anchor="middle" font-size="8" fill="var(--text-dim)">微软介入</text>
+        </g>
+        <g>
+          <circle cx="650" cy="60" r="7" fill="var(--cyan)"><animate attributeName="r" values="7;10;7" dur="2.5s" repeatCount="indefinite"/></circle>
+          <text x="650" y="40" text-anchor="middle" font-size="9" fill="var(--cyan)" font-weight="700">11月22日</text>
+          <text x="650" y="88" text-anchor="middle" font-size="8" fill="var(--text-dim)">Altman复职</text>
+        </g>
+        <!-- 5天 label -->
+        <rect x="50" y="100" rx="8" ry="8" width="600" height="16" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <text x="350" y="112" text-anchor="middle" font-size="8" fill="var(--text-dim)" letter-spacing="4">仅 仅 五 天 ——硅 谷 史 上 最 疯 狂 的 一 周</text>
+      </svg>
+    </div>
 
     <p>2023年11月17日，OpenAI董事会突然宣布解雇CEO山姆·阿尔特曼。理由是"他在与董事会的沟通中没有保持一贯的坦诚"。这个模糊的措辞掩盖了一场关于AI发展方向的深层冲突。</p>
 
@@ -138,20 +433,49 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
       权力更加集中，商业化加速。2024年发布GPT-4o（多模态实时交互）、o1推理模型、Sora视频生成。2025年发布GPT-5和o3。但同时，多位关注AI安全的核心成员离开了公司——包括首席科学家伊利亚·苏茨克维和"超级对齐"团队的负责人Jan Leike。OpenAI正在从一个研究实验室变成一家产品公司。
     </div>
 
-    <h2>DeepSeek：在限制中寻找自由</h2>
+    <!-- ═══ SECTION 2: DEEPSEEK ═══ -->
+    <h2><span class="sec-num">II</span> DeepSeek：在限制中寻找自由</h2>
 
     <p>2025年初，一家中国的AI公司DeepSeek让硅谷感到了真正的震惊。他们的R1模型以不到OpenAI十分之一的成本，实现了接近GPT-4o的性能——而且完全开源。</p>
 
-    <div class="concept-card">
-      <h4>💡 DeepSeek的关键技术创新</h4>
-      <table>
-        <tr><td>R1训练方法</td><td>不需要人类标注数据的强化学习——让基础模型自己生成多个回答，根据数学对错和格式规范给自己打分，高分回答进入下一轮训练。类似AlphaGo Zero的"从零自学习"。</td></tr>
-        <tr><td>Mixture of Experts</td><td>不是整个模型处理每个问题，而是只激活相关的"专家"模块。大大降低推理成本。</td></tr>
-        <tr><td>Multi-head Latent Attention</td><td>对注意力机制的改进，减少内存占用。</td></tr>
-        <tr><td>DualPipe</td><td>一种GPU底层优化技术，让计算和通信并行进行，提高芯片利用率。</td></tr>
-        <tr><td>FP8混合精度</td><td>使用8位浮点数代替传统的16位，减少内存和带宽需求。</td></tr>
-        <tr><td>PTX底层编程</td><td>由于芯片出口限制，H800的通信能力被削减。团队用PTX语言直接对GPU底层编程，强制32个流处理器专门处理通信。</td></tr>
-      </table>
+    <!-- DeepSeek 6 innovation cards -->
+    <div class="ds-grid">
+      <div class="ds-card">
+        <div class="ds-num">01</div>
+        <div class="ds-icon">🧠</div>
+        <div class="ds-title">R1 训练方法</div>
+        <div class="ds-desc">不需要人类标注数据的强化学习——让基础模型自己生成多个回答，根据数学对错和格式规范给自己打分，高分进入下一轮训练。酷似AlphaGo Zero的"从零自学习"。</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-num">02</div>
+        <div class="ds-icon">🎯</div>
+        <div class="ds-title">MoE 混合专家</div>
+        <div class="ds-desc">不是整个模型处理每个问题，而是只激活相关的"专家"模块。大幅降低推理成本。</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-num">03</div>
+        <div class="ds-icon">🔍</div>
+        <div class="ds-title">MLA 注意力</div>
+        <div class="ds-desc">Multi-head Latent Attention——对注意力机制的低秩压缩改进，显著减少内存占用。</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-num">04</div>
+        <div class="ds-icon">⚡</div>
+        <div class="ds-title">DualPipe 并行</div>
+        <div class="ds-desc">GPU底层优化技术，让计算和通信并行进行，提高芯片利用率。</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-num">05</div>
+        <div class="ds-icon">📐</div>
+        <div class="ds-title">FP8 混合精度</div>
+        <div class="ds-desc">使用8位浮点数代替传统的16位，减少内存和带宽需求。</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-num">06</div>
+        <div class="ds-icon">🔧</div>
+        <div class="ds-title">PTX 底层编程</div>
+        <div class="ds-desc">因芯片出口限制，H800通信能力被削。团队用PTX语言直接编程GPU底层，强制32个流处理器专司通信。</div>
+      </div>
     </div>
 
     <p>杨立昆（Meta首席AI科学家）对DeepSeek的评论精准地抓住了本质："这不是两国AI谁超过谁的问题，而是开源模型战胜了专有模型。这是开源的胜利。"</p>
@@ -170,21 +494,49 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
       <div class="q-result" id="quiz1-result"></div>
     </div>
 
-    <h2>诺贝尔奖：科学界最保守的机构为AI敞开了大门</h2>
+    <!-- ═══ SECTION 3: NOBEL PRIZES ═══ -->
+    <h2><span class="sec-num">III</span> 诺贝尔奖：科学界最保守的机构为AI敞开了大门</h2>
 
     <p>诺贝尔奖委员会是一个极其保守的机构。从成果发表到获奖，平均需要16年。诺贝尔奖中没有计算机科学或数学——所以AI成就理论上"不能获奖"。但在2024年，委员会找到了方法。</p>
 
     <div class="two-col">
       <div class="nobel-card">
-        <div class="nb-icon">🔬</div>
-        <div class="nb-field">2024年诺贝尔物理学奖</div>
+        <div class="nb-badge physics">2024 诺贝尔物理学奖</div>
+        <div class="nb-icon">⚛️</div>
         <h4>霍普菲尔德 & 辛顿</h4>
-        <p>表彰他们为利用人工神经网络进行机器学习作出的基础性发明和发现。委员会找到了神经网络和物理模型之间的深层联系——霍普菲尔德网络基于伊辛模型（磁性的物理模型），辛顿的玻尔兹曼机基于玻尔兹曼分布（粒子能量分布的物理规律）。</p>
+        <div class="nb-winners">John Hopfield · Geoffrey Hinton</div>
+        <!-- mini physics SVG -->
+        <svg class="nb-svg" viewBox="0 0 300 50" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="25" r="8" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
+          <circle cx="150" cy="15" r="6" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="0.8"/>
+          <circle cx="150" cy="35" r="6" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="0.8"/>
+          <line x1="68" y1="25" x2="144" y2="17" stroke="rgba(0,229,255,0.15)" stroke-width="0.5"/>
+          <line x1="68" y1="25" x2="144" y2="33" stroke="rgba(0,229,255,0.15)" stroke-width="0.5"/>
+          <text x="20" y="29" font-size="8" fill="var(--text-dim)">伊辛模型</text>
+          <text x="140" y="10" font-size="7" fill="var(--text-dim)">Hopfield</text>
+          <text x="140" y="48" font-size="7" fill="var(--text-dim)">Boltzmann</text>
+          <text x="230" y="29" font-size="8" fill="var(--text-dim)">神经网络</text>
+          <line x1="156" y1="15" x2="220" y2="22" stroke="rgba(255,213,79,0.2)" stroke-width="0.5"/>
+          <line x1="156" y1="35" x2="220" y2="28" stroke="rgba(255,213,79,0.2)" stroke-width="0.5"/>
+        </svg>
+        <p>表彰利用人工神经网络进行机器学习的基础性发明和发现。委员会找到了神经网络与物理模型之间的深层联系——霍普菲尔德网络基于伊辛模型（磁性物理模型），辛顿的玻尔兹曼机基于玻尔兹曼分布（粒子能量分布的物理规律）。</p>
       </div>
+
       <div class="nobel-card">
-        <div class="nb-icon">🧪</div>
-        <div class="nb-field">2024年诺贝尔化学奖</div>
+        <div class="nb-badge chem">2024 诺贝尔化学奖</div>
+        <div class="nb-icon">🧬</div>
         <h4>贝克 & 哈萨比斯 & 江珀</h4>
+        <div class="nb-winners">David Baker · Demis Hassabis · John Jumper</div>
+        <!-- mini chemistry SVG -->
+        <svg class="nb-svg" viewBox="0 0 300 50" xmlns="http://www.w3.org/2000/svg">
+          <text x="150" y="8" text-anchor="middle" font-size="7" fill="var(--text-dim)">氨基酸序列</text>
+          <rect x="115" y="14" width="70" height="27" rx="4" fill="none" stroke="rgba(167,139,250,0.25)" stroke-width="1"/>
+          <text x="150" y="33" text-anchor="middle" font-size="11" fill="var(--purple)" font-weight="700">AlphaFold2</text>
+          <path d="M185 27 L215 27" stroke="rgba(255,213,79,0.3)" stroke-width="1" marker-end="url(#arrowGold)"/>
+          <text x="240" y="20" text-anchor="middle" font-size="7" fill="var(--text-dim)">3D结构</text>
+          <text x="240" y="33" text-anchor="middle" font-size="7" fill="var(--text-dim)">2.14亿</text>
+          <defs><marker id="arrowGold" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--gold)"/></marker></defs>
+        </svg>
         <p>表彰计算蛋白质设计和蛋白质结构预测。DeepMind的AlphaFold2解决了困扰生物学50年的蛋白质折叠问题——在几个月内预测了2.14亿个蛋白质结构，将人类蛋白质中结构未知的比例从83%骤降到接近0%。</p>
       </div>
     </div>
@@ -196,23 +548,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
       它标志着AI从一个"工程领域"正式进入"基础科学"的荣誉殿堂。诺贝尔奖的承认意味着——AI不仅是一个有用的工具，它是一种新的科学范式。它在改变我们理解蛋白质的方式、理解智能的方式、理解世界的方式。
     </div>
 
-    <h2>AI无处不在：裂变的碎片</h2>
+    <!-- ═══ SECTION 4: AI EVERYWHERE ═══ -->
+    <h2><span class="sec-num">IV</span> AI无处不在：裂变的碎片</h2>
 
     <p>2023-2025年，AI以惊人的速度渗透进人类文明的每一个角落。很难找到一个不受AI影响的领域。</p>
 
     <div class="tech-grid">
-      <div class="tech-card"><div class="tc-icon">🏥</div><div class="tc-name">医疗诊断</div></div>
-      <div class="tech-card"><div class="tc-icon">⚖️</div><div class="tc-name">法律文书</div></div>
-      <div class="tech-card"><div class="tc-icon">🏫</div><div class="tc-name">教育辅导</div></div>
-      <div class="tech-card"><div class="tc-icon">💻</div><div class="tc-name">编程助手</div></div>
-      <div class="tech-card"><div class="tc-icon">🎨</div><div class="tc-name">创意设计</div></div>
-      <div class="tech-card"><div class="tc-icon">🚗</div><div class="tc-name">自动驾驶</div></div>
-      <div class="tech-card"><div class="tc-icon">🔬</div><div class="tc-name">科学发现</div></div>
-      <div class="tech-card"><div class="tc-icon">🎵</div><div class="tc-name">音乐创作</div></div>
-      <div class="tech-card"><div class="tc-icon">📊</div><div class="tc-name">金融分析</div></div>
-      <div class="tech-card"><div class="tc-icon">🌾</div><div class="tc-name">农业优化</div></div>
-      <div class="tech-card"><div class="tc-icon">🏭</div><div class="tc-name">工业质检</div></div>
-      <div class="tech-card"><div class="tc-icon">🛡️</div><div class="tc-name">网络安全</div></div>
+      <div class="tech-card"><span class="tc-icon">🏥</span><span class="tc-name">医疗诊断</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">⚖️</span><span class="tc-name">法律文书</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🏫</span><span class="tc-name">教育辅导</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">💻</span><span class="tc-name">编程助手</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🎨</span><span class="tc-name">创意设计</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🚗</span><span class="tc-name">自动驾驶</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🔬</span><span class="tc-name">科学发现</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🎵</span><span class="tc-name">音乐创作</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">📊</span><span class="tc-name">金融分析</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🌾</span><span class="tc-name">农业优化</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🏭</span><span class="tc-name">工业质检</span><div class="tc-glow"></div></div>
+      <div class="tech-card"><span class="tc-icon">🛡️</span><span class="tc-name">网络安全</span><div class="tc-glow"></div></div>
     </div>
 
     <p>裂变的一个含义是：<strong>AI不再是需要被"应用"的东西——它正在变成基础设施。</strong>就像电力一样——我们今天不会说"电力应用于烘烤面包"，电力就是面包房运转的一部分。AI正在经历同样的转变。它从"一个需要被集成到产品里的功能"变成了"产品默认就有的能力"。就像你不需要考虑"要不要给这个产品加个屏"——屏幕已经是默认的了。AI将成为同样的默认能力。</p>
@@ -229,11 +582,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
       <div class="q-result" id="quiz2-result"></div>
     </div>
 
-    <h2>辛顿的离开：保守派扛大旗者</h2>
+    <!-- ═══ SECTION 5: HINTON'S WARNING ═══ -->
+    <h2><span class="sec-num">V</span> 辛顿的离开：保守派扛大旗者</h2>
 
-    <p>2023年5月1日，75岁的杰弗里·辛顿宣布从谷歌辞职。他说了一句沉重的话："我对自己毕生的工作感到非常后悔，希望用辞职提醒科技界警惕AI。"</p>
-
-    <p>辛顿不是在否定AI的价值。他是在警告AI的速度。辛顿从1972年开始研究神经网络，经历了AI的整个冬天。他花了40年等待这个领域被认可。当认可终于到来时，他却成为了最警惕AI的人。</p>
+    <div class="hinton-warn">
+      <div class="hw-quote">我对自己毕生的工作感到非常后悔，希望用辞职提醒科技界警惕AI。</div>
+      <div class="hw-attr">—— Geoffrey Hinton，2023年5月1日，宣布从谷歌辞职</div>
+      <div class="hw-context">
+        辛顿不是在否定AI的价值。他是在警告AI的速度。辛顿从1972年开始研究神经网络，经历了AI的整个冬天。他花了40年等待这个领域被认可。当认可终于到来时，他却成为了最警惕AI的人。
+      </div>
+    </div>
 
     <p>辛顿担心的是：AI可能比人脑有更好的算法来理解和传播知识。GPT-4的神经元连接大约是1万亿个，人脑是100-1000万亿个——GPT-4的规模小了一千倍到一万倍。但它几乎掌握了所有常识，远超任何单个人类。辛顿的推论是：反向传播算法可能比生物大脑的学习机制更高效。如果这是真的，那么AI超越人类不是"会不会"的问题，而是"多快"的问题。</p>
 
@@ -244,7 +602,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-he
       一个在AI寒冬中守望了40年的人，最终成为了AI发展速度的最强批评者。这不是讽刺。这是真诚。他比任何人都更了解AI的潜力，所以也比任何人都更清楚它的风险。
     </div>
 
-    <h2>裂变的隐喻</h2>
+    <!-- ═══ SECTION 6: FISSION METAPHOR ═══ -->
+    <h2><span class="sec-num">VI</span> 裂变的隐喻</h2>
 
     <p>"裂变"有两层含义。</p>
 
